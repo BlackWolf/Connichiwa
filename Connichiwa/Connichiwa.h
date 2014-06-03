@@ -7,7 +7,3 @@
 //
 
 #import <Foundation/Foundation.h>
-
-@interface Connichiwa : NSObject
-
-@end

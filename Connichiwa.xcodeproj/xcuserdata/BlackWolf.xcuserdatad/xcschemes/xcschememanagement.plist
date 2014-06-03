@@ -4,6 +4,11 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>Connichiwa Fat Binary.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
 		<key>Connichiwa.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
@@ -12,6 +17,11 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>330CBB76193E78110064AD99</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>33A05145193E61CC00FED071</key>
 		<dict>
 			<key>primary</key>
