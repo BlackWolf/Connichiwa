@@ -6,10 +6,25 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		330CBB76193E78110064AD99 /* Connichiwa Fat Binary */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 330CBB77193E78110064AD99 /* Build configuration list for PBXAggregateTarget "Connichiwa Fat Binary" */;
+			buildPhases = (
+				330CBB7C193E78A10064AD99 /* ShellScript */,
+			);
+			dependencies = (
+				330CBB7B193E78400064AD99 /* PBXTargetDependency */,
+			);
+			name = "Connichiwa Fat Binary";
+			productName = "Connichiwa Fat Binary";
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
+		330CBB74193E75890064AD99 /* Connichiwa.h in Headers */ = {isa = PBXBuildFile; fileRef = 33A0514E193E61CC00FED071 /* Connichiwa.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		33A0514A193E61CC00FED071 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33A05149193E61CC00FED071 /* Foundation.framework */; };
 		33A0514F193E61CC00FED071 /* Connichiwa.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 33A0514E193E61CC00FED071 /* Connichiwa.h */; };
-		33A05151193E61CC00FED071 /* Connichiwa.m in Sources */ = {isa = PBXBuildFile; fileRef = 33A05150193E61CC00FED071 /* Connichiwa.m */; };
 		33A05158193E61CC00FED071 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33A05157193E61CC00FED071 /* XCTest.framework */; };
 		33A05159193E61CC00FED071 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33A05149193E61CC00FED071 /* Foundation.framework */; };
 		33A0515B193E61CC00FED071 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33A0515A193E61CC00FED071 /* UIKit.framework */; };
@@ -19,6 +34,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		330CBB7A193E78400064AD99 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 33A0513E193E61CC00FED071 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 33A05145193E61CC00FED071;
+			remoteInfo = Connichiwa;
+		};
 		33A0515C193E61CC00FED071 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 33A0513E193E61CC00FED071 /* Project object */;
@@ -46,7 +68,6 @@
 		33A05149193E61CC00FED071 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		33A0514D193E61CC00FED071 /* Connichiwa-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Connichiwa-Prefix.pch"; sourceTree = "<group>"; };
 		33A0514E193E61CC00FED071 /* Connichiwa.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Connichiwa.h; sourceTree = "<group>"; };
-		33A05150193E61CC00FED071 /* Connichiwa.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Connichiwa.m; sourceTree = "<group>"; };
 		33A05156193E61CC00FED071 /* ConnichiwaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ConnichiwaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		33A05157193E61CC00FED071 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		33A0515A193E61CC00FED071 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -111,7 +132,6 @@
 			isa = PBXGroup;
 			children = (
 				33A0514E193E61CC00FED071 /* Connichiwa.h */,
-				33A05150193E61CC00FED071 /* Connichiwa.m */,
 				33A0514C193E61CC00FED071 /* Supporting Files */,
 			);
 			path = Connichiwa;
@@ -145,6 +165,17 @@
 		};
 /* End PBXGroup section */
 
+/* Begin PBXHeadersBuildPhase section */
+		330CBB73193E75850064AD99 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				330CBB74193E75890064AD99 /* Connichiwa.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
 /* Begin PBXNativeTarget section */
 		33A05145193E61CC00FED071 /* Connichiwa */ = {
 			isa = PBXNativeTarget;
@@ -153,6 +184,8 @@
 				33A05142193E61CC00FED071 /* Sources */,
 				33A05143193E61CC00FED071 /* Frameworks */,
 				33A05144193E61CC00FED071 /* CopyFiles */,
+				330CBB73193E75850064AD99 /* Headers */,
+				330CBB75193E758E0064AD99 /* Prepare Framework */,
 			);
 			buildRules = (
 			);
@@ -204,6 +237,7 @@
 			targets = (
 				33A05145193E61CC00FED071 /* Connichiwa */,
 				33A05155193E61CC00FED071 /* ConnichiwaTests */,
+				330CBB76193E78110064AD99 /* Connichiwa Fat Binary */,
 			);
 		};
 /* End PBXProject section */
@@ -219,12 +253,41 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		330CBB75193E758E0064AD99 /* Prepare Framework */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Prepare Framework";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e\n\nmkdir -p \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/A/Headers\"\n\n# Link the \"Current\" version to \"A\"\n/bin/ln -sfh A \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/Current\"\n/bin/ln -sfh Versions/Current/Headers \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Headers\"\n/bin/ln -sfh \"Versions/Current/${PRODUCT_NAME}\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/${PRODUCT_NAME}\"\n\n# The -a ensures that the headers maintain the source modification date so that we don't constantly\n# cause propagating rebuilds of files that import these headers.\n/bin/cp -a \"${TARGET_BUILD_DIR}/${PUBLIC_HEADERS_FOLDER_PATH}/\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/A/Headers\"\n";
+		};
+		330CBB7C193E78A10064AD99 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		33A05142193E61CC00FED071 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				33A05151193E61CC00FED071 /* Connichiwa.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -239,6 +302,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		330CBB7B193E78400064AD99 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 33A05145193E61CC00FED071 /* Connichiwa */;
+			targetProxy = 330CBB7A193E78400064AD99 /* PBXContainerItemProxy */;
+		};
 		33A0515D193E61CC00FED071 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 33A05145193E61CC00FED071 /* Connichiwa */;
@@ -258,6 +326,24 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		330CBB78193E78110064AD99 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALID_ARCHS = "arm64 armv7 armv7s i386 x86_64";
+			};
+			name = Debug;
+		};
+		330CBB79193E78110064AD99 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALID_ARCHS = "arm64 armv7 armv7s i386 x86_64";
+			};
+			name = Release;
+		};
 		33A05167193E61CC00FED071 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -332,9 +418,12 @@
 				DSTROOT = /tmp/Connichiwa.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Connichiwa/Connichiwa-Prefix.pch";
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "$(PROJECT_NAME)Headers";
 				SKIP_INSTALL = YES;
+				VALID_ARCHS = "arm64 armv7 armv7s x86_64 i386";
 			};
 			name = Debug;
 		};
@@ -344,9 +433,12 @@
 				DSTROOT = /tmp/Connichiwa.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Connichiwa/Connichiwa-Prefix.pch";
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "$(PROJECT_NAME)Headers";
 				SKIP_INSTALL = YES;
+				VALID_ARCHS = "arm64 armv7 armv7s x86_64 i386";
 			};
 			name = Release;
 		};
@@ -389,6 +481,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		330CBB77193E78110064AD99 /* Build configuration list for PBXAggregateTarget "Connichiwa Fat Binary" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				330CBB78193E78110064AD99 /* Debug */,
+				330CBB79193E78110064AD99 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		33A05141193E61CC00FED071 /* Build configuration list for PBXProject "Connichiwa" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -405,6 +505,7 @@
 				33A0516B193E61CC00FED071 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		33A0516C193E61CC00FED071 /* Build configuration list for PBXNativeTarget "ConnichiwaTests" */ = {
 			isa = XCConfigurationList;
@@ -413,6 +514,7 @@
 				33A0516E193E61CC00FED071 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
