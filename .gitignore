@@ -6,3 +6,15 @@
 #
 # Pods/
 
+# OS X invisibles
+*.DS_Store
+.Trashes
+*.swp
+
+# Xcode working files
+*~.nib
+
+# Xcode personal user state
+*.xcuserstate
+xcuserdata/
+
