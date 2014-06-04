@@ -1,0 +1,3 @@
+[submodule "Nodelike"]
+	path = Nodelike
+	url = git@github.com:BlackWolf/Nodelike.git
