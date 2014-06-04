@@ -11,7 +11,7 @@
 			isa = PBXAggregateTarget;
 			buildConfigurationList = 330CBB77193E78110064AD99 /* Build configuration list for PBXAggregateTarget "Connichiwa Fat Binary" */;
 			buildPhases = (
-				330CBB7C193E78A10064AD99 /* ShellScript */,
+				330CBB7C193E78A10064AD99 /* Build Framework */,
 			);
 			dependencies = (
 				330CBB7B193E78400064AD99 /* PBXTargetDependency */,
@@ -35,6 +35,7 @@
 		33A0515E193E61CC00FED071 /* libConnichiwa.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 33A05146193E61CC00FED071 /* libConnichiwa.a */; };
 		33A05164193E61CC00FED071 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 33A05162193E61CC00FED071 /* InfoPlist.strings */; };
 		33A05166193E61CC00FED071 /* ConnichiwaTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 33A05165193E61CC00FED071 /* ConnichiwaTests.m */; };
+		33ACBED3193F4A6900CD51BC /* libNodelike.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3381A027193F492600BDDF34 /* libNodelike.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,12 +53,47 @@
 			remoteGlobalIDString = 330CBB85193F14B60064AD99;
 			remoteInfo = ConnichiwaResources;
 		};
+		3381A026193F492600BDDF34 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3381A01E193F492600BDDF34 /* Nodelike.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = B59EA08E180CB587005BF5C1;
+			remoteInfo = Nodelike;
+		};
+		3381A028193F492600BDDF34 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3381A01E193F492600BDDF34 /* Nodelike.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = B54C1F52180D37280051F826;
+			remoteInfo = uv;
+		};
+		3381A02A193F492600BDDF34 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3381A01E193F492600BDDF34 /* Nodelike.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = B54173161894341600B6636B;
+			remoteInfo = "Nodelike Tests";
+		};
+		3381A02C193F492600BDDF34 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3381A01E193F492600BDDF34 /* Nodelike.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 33819FDB193F3F6100BDDF34;
+			remoteInfo = NodelikeResources;
+		};
 		33A0515C193E61CC00FED071 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 33A0513E193E61CC00FED071 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 33A05145193E61CC00FED071;
 			remoteInfo = Connichiwa;
+		};
+		33ACBECC193F4A3800CD51BC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3381A01E193F492600BDDF34 /* Nodelike.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = B59EA08D180CB587005BF5C1;
+			remoteInfo = Nodelike;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -82,6 +118,7 @@
 		330CBB8B193F14B60064AD99 /* ConnichiwaResources-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ConnichiwaResources-Info.plist"; sourceTree = "<group>"; };
 		330CBB8D193F14B60064AD99 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		330CBB8F193F14B60064AD99 /* ConnichiwaResources-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ConnichiwaResources-Prefix.pch"; sourceTree = "<group>"; };
+		3381A01E193F492600BDDF34 /* Nodelike.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Nodelike.xcodeproj; path = Nodelike/Nodelike.xcodeproj; sourceTree = "<group>"; };
 		33A05146193E61CC00FED071 /* libConnichiwa.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libConnichiwa.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		33A05149193E61CC00FED071 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		33A0514D193E61CC00FED071 /* Connichiwa-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Connichiwa-Prefix.pch"; sourceTree = "<group>"; };
@@ -107,6 +144,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				33ACBED3193F4A6900CD51BC /* libNodelike.a in Frameworks */,
 				33A0514A193E61CC00FED071 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -143,6 +181,17 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		3381A01F193F492600BDDF34 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3381A027193F492600BDDF34 /* libNodelike.a */,
+				3381A029193F492600BDDF34 /* libuv.a */,
+				3381A02B193F492600BDDF34 /* Nodelike Tests.xctest */,
+				3381A02D193F492600BDDF34 /* NodelikeResources.bundle */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		33A0513D193E61CC00FED071 = {
 			isa = PBXGroup;
 			children = (
@@ -167,6 +216,7 @@
 		33A05148193E61CC00FED071 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3381A01E193F492600BDDF34 /* Nodelike.xcodeproj */,
 				33A05149193E61CC00FED071 /* Foundation.framework */,
 				33A05157193E61CC00FED071 /* XCTest.framework */,
 				33A0515A193E61CC00FED071 /* UIKit.framework */,
@@ -257,6 +307,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				33ACBECD193F4A3800CD51BC /* PBXTargetDependency */,
 				330CBB94193F17A40064AD99 /* PBXTargetDependency */,
 			);
 			name = Connichiwa;
@@ -301,6 +352,12 @@
 			mainGroup = 33A0513D193E61CC00FED071;
 			productRefGroup = 33A05147193E61CC00FED071 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 3381A01F193F492600BDDF34 /* Products */;
+					ProjectRef = 3381A01E193F492600BDDF34 /* Nodelike.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				33A05145193E61CC00FED071 /* Connichiwa */,
@@ -310,6 +367,37 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		3381A027193F492600BDDF34 /* libNodelike.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libNodelike.a;
+			remoteRef = 3381A026193F492600BDDF34 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		3381A029193F492600BDDF34 /* libuv.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libuv.a;
+			remoteRef = 3381A028193F492600BDDF34 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		3381A02B193F492600BDDF34 /* Nodelike Tests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "Nodelike Tests.xctest";
+			remoteRef = 3381A02A193F492600BDDF34 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		3381A02D193F492600BDDF34 /* NodelikeResources.bundle */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = NodelikeResources.bundle;
+			remoteRef = 3381A02C193F492600BDDF34 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		330CBB84193F14B60064AD99 /* Resources */ = {
@@ -345,13 +433,14 @@
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nmkdir -p \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/A/Headers\"\n\n# Link the \"Current\" version to \"A\"\n/bin/ln -sfh A \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/Current\"\n/bin/ln -sfh Versions/Current/Headers \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Headers\"\n/bin/ln -sfh \"Versions/Current/${PRODUCT_NAME}\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/${PRODUCT_NAME}\"\n\n# The -a ensures that the headers maintain the source modification date so that we don't constantly\n# cause propagating rebuilds of files that import these headers.\n/bin/cp -a \"${TARGET_BUILD_DIR}/${PUBLIC_HEADERS_FOLDER_PATH}/\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/A/Headers\"\n";
 		};
-		330CBB7C193E78A10064AD99 /* ShellScript */ = {
+		330CBB7C193E78A10064AD99 /* Build Framework */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
+			name = "Build Framework";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -401,6 +490,11 @@
 			isa = PBXTargetDependency;
 			target = 33A05145193E61CC00FED071 /* Connichiwa */;
 			targetProxy = 33A0515C193E61CC00FED071 /* PBXContainerItemProxy */;
+		};
+		33ACBECD193F4A3800CD51BC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = Nodelike;
+			targetProxy = 33ACBECC193F4A3800CD51BC /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -627,6 +721,7 @@
 				330CBB79193E78110064AD99 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		330CBB90193F14B60064AD99 /* Build configuration list for PBXNativeTarget "ConnichiwaResources" */ = {
 			isa = XCConfigurationList;
@@ -635,6 +730,7 @@
 				330CBB92193F14B60064AD99 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		33A05141193E61CC00FED071 /* Build configuration list for PBXProject "Connichiwa" */ = {
 			isa = XCConfigurationList;

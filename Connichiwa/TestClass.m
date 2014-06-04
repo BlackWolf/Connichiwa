@@ -10,4 +10,8 @@
 
 @implementation TestClass
 
++(void)test {
+    //[[NLContext alloc] init];
+}
+
 @end

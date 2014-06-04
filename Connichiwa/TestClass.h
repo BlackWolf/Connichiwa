@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
-@interface TestClass : NSObject
+#import <Nodelike/NLContext.h>
 
+@interface TestClass : NSObject
++(void)test;
 @end
