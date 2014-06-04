@@ -7,7 +7,7 @@
 		<key>Connichiwa Fat Binary.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>1</integer>
+			<integer>4</integer>
 		</dict>
 		<key>Connichiwa.xcscheme</key>
 		<dict>
@@ -17,7 +17,7 @@
 		<key>ConnichiwaResources.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>2</integer>
+			<integer>6</integer>
 		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>

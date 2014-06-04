@@ -12,7 +12,6 @@
 			buildConfigurationList = 330CBB77193E78110064AD99 /* Build configuration list for PBXAggregateTarget "Connichiwa Fat Binary" */;
 			buildPhases = (
 				330CBB7C193E78A10064AD99 /* Build Framework */,
-				335239DC193F5A5F006627FA /* ShellScript */,
 			);
 			dependencies = (
 				330CBB7B193E78400064AD99 /* PBXTargetDependency */,
@@ -23,13 +22,13 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		330BA3D3193F8CB300D9E54C /* CWWebserver.h in Headers */ = {isa = PBXBuildFile; fileRef = 330BA3D1193F8CB300D9E54C /* CWWebserver.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		330BA3D4193F8CB300D9E54C /* CWWebserver.m in Sources */ = {isa = PBXBuildFile; fileRef = 330BA3D2193F8CB300D9E54C /* CWWebserver.m */; };
 		330CBB74193E75890064AD99 /* Connichiwa.h in Headers */ = {isa = PBXBuildFile; fileRef = 33A0514E193E61CC00FED071 /* Connichiwa.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		330CBB80193E8CF40064AD99 /* TestClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 330CBB7E193E8CF40064AD99 /* TestClass.m */; };
-		330CBB81193F02850064AD99 /* TestClass.h in Headers */ = {isa = PBXBuildFile; fileRef = 330CBB7D193E8CF40064AD99 /* TestClass.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		330CBB88193F14B60064AD99 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 330CBB87193F14B60064AD99 /* CoreFoundation.framework */; };
 		330CBB8E193F14B60064AD99 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 330CBB8C193F14B60064AD99 /* InfoPlist.strings */; };
+		334AB741193FABAA00A15999 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 334AB740193FABAA00A15999 /* JavaScriptCore.framework */; };
 		33A0514A193E61CC00FED071 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33A05149193E61CC00FED071 /* Foundation.framework */; };
-		33A0514F193E61CC00FED071 /* Connichiwa.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 33A0514E193E61CC00FED071 /* Connichiwa.h */; };
 		33A05158193E61CC00FED071 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33A05157193E61CC00FED071 /* XCTest.framework */; };
 		33A05159193E61CC00FED071 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33A05149193E61CC00FED071 /* Foundation.framework */; };
 		33A0515B193E61CC00FED071 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33A0515A193E61CC00FED071 /* UIKit.framework */; };
@@ -37,6 +36,7 @@
 		33A05164193E61CC00FED071 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 33A05162193E61CC00FED071 /* InfoPlist.strings */; };
 		33A05166193E61CC00FED071 /* ConnichiwaTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 33A05165193E61CC00FED071 /* ConnichiwaTests.m */; };
 		33ACBED3193F4A6900CD51BC /* libNodelike.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3381A027193F492600BDDF34 /* libNodelike.a */; };
+		33D33FDA193F656500AB734E /* server.js in Resources */ = {isa = PBXBuildFile; fileRef = 33D33FD9193F656500AB734E /* server.js */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -98,27 +98,15 @@
 		};
 /* End PBXContainerItemProxy section */
 
-/* Begin PBXCopyFilesBuildPhase section */
-		33A05144193E61CC00FED071 /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "include/$(PRODUCT_NAME)";
-			dstSubfolderSpec = 16;
-			files = (
-				33A0514F193E61CC00FED071 /* Connichiwa.h in CopyFiles */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
-
 /* Begin PBXFileReference section */
-		330CBB7D193E8CF40064AD99 /* TestClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestClass.h; sourceTree = "<group>"; };
-		330CBB7E193E8CF40064AD99 /* TestClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestClass.m; sourceTree = "<group>"; };
+		330BA3D1193F8CB300D9E54C /* CWWebserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWWebserver.h; sourceTree = "<group>"; };
+		330BA3D2193F8CB300D9E54C /* CWWebserver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWWebserver.m; sourceTree = "<group>"; };
 		330CBB86193F14B60064AD99 /* ConnichiwaResources.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ConnichiwaResources.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		330CBB87193F14B60064AD99 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		330CBB8B193F14B60064AD99 /* ConnichiwaResources-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ConnichiwaResources-Info.plist"; sourceTree = "<group>"; };
 		330CBB8D193F14B60064AD99 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		330CBB8F193F14B60064AD99 /* ConnichiwaResources-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ConnichiwaResources-Prefix.pch"; sourceTree = "<group>"; };
+		334AB740193FABAA00A15999 /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		3381A01E193F492600BDDF34 /* Nodelike.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Nodelike.xcodeproj; path = Nodelike/Nodelike.xcodeproj; sourceTree = "<group>"; };
 		33A05146193E61CC00FED071 /* libConnichiwa.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libConnichiwa.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		33A05149193E61CC00FED071 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -130,6 +118,7 @@
 		33A05161193E61CC00FED071 /* ConnichiwaTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ConnichiwaTests-Info.plist"; sourceTree = "<group>"; };
 		33A05163193E61CC00FED071 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		33A05165193E61CC00FED071 /* ConnichiwaTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ConnichiwaTests.m; sourceTree = "<group>"; };
+		33D33FD9193F656500AB734E /* server.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = server.js; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -147,6 +136,7 @@
 			files = (
 				33ACBED3193F4A6900CD51BC /* libNodelike.a in Frameworks */,
 				33A0514A193E61CC00FED071 /* Foundation.framework in Frameworks */,
+				334AB741193FABAA00A15999 /* JavaScriptCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -217,6 +207,7 @@
 		33A05148193E61CC00FED071 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				334AB740193FABAA00A15999 /* JavaScriptCore.framework */,
 				3381A01E193F492600BDDF34 /* Nodelike.xcodeproj */,
 				33A05149193E61CC00FED071 /* Foundation.framework */,
 				33A05157193E61CC00FED071 /* XCTest.framework */,
@@ -230,9 +221,10 @@
 			isa = PBXGroup;
 			children = (
 				33A0514E193E61CC00FED071 /* Connichiwa.h */,
+				33D33FD9193F656500AB734E /* server.js */,
+				330BA3D1193F8CB300D9E54C /* CWWebserver.h */,
+				330BA3D2193F8CB300D9E54C /* CWWebserver.m */,
 				33A0514C193E61CC00FED071 /* Supporting Files */,
-				330CBB7D193E8CF40064AD99 /* TestClass.h */,
-				330CBB7E193E8CF40064AD99 /* TestClass.m */,
 			);
 			path = Connichiwa;
 			sourceTree = "<group>";
@@ -271,7 +263,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				330CBB74193E75890064AD99 /* Connichiwa.h in Headers */,
-				330CBB81193F02850064AD99 /* TestClass.h in Headers */,
+				330BA3D3193F8CB300D9E54C /* CWWebserver.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -301,9 +293,10 @@
 			buildPhases = (
 				33A05142193E61CC00FED071 /* Sources */,
 				33A05143193E61CC00FED071 /* Frameworks */,
-				33A05144193E61CC00FED071 /* CopyFiles */,
 				330CBB73193E75850064AD99 /* Headers */,
 				330CBB75193E758E0064AD99 /* Prepare Framework */,
+				33163302193F722300EED43E /* Objective-Clean Run Script */,
+				33294104193F958000337D00 /* Create Documentation Script */,
 			);
 			buildRules = (
 			);
@@ -406,6 +399,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				330CBB8E193F14B60064AD99 /* InfoPlist.strings in Resources */,
+				33D33FDA193F656500AB734E /* server.js in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -448,18 +442,33 @@
 			shellPath = /bin/sh;
 			shellScript = "set -e\nset +u\n# Avoid recursively calling this script.\nif [[ $SF_MASTER_SCRIPT_RUNNING ]]\nthen\nexit 0\nfi\nset -u\nexport SF_MASTER_SCRIPT_RUNNING=1\n\nSF_TARGET_NAME=${PROJECT_NAME}\nSF_EXECUTABLE_PATH=\"lib${SF_TARGET_NAME}.a\"\nSF_WRAPPER_NAME=\"${SF_TARGET_NAME}.framework\"\n\n# The following conditionals come from\n# https://github.com/kstenerud/iOS-Universal-Framework\n\nif [[ \"$SDK_NAME\" =~ ([A-Za-z]+) ]]\nthen\nSF_SDK_PLATFORM=${BASH_REMATCH[1]}\nelse\necho \"Could not find platform name from SDK_NAME: $SDK_NAME\"\nexit 1\nfi\n\nif [[ \"$SDK_NAME\" =~ ([0-9]+.*$) ]]\nthen\nSF_SDK_VERSION=${BASH_REMATCH[1]}\nelse\necho \"Could not find sdk version from SDK_NAME: $SDK_NAME\"\nexit 1\nfi\n\nif [[ \"$SF_SDK_PLATFORM\" = \"iphoneos\" ]]\nthen\nSF_OTHER_PLATFORM=iphonesimulator\nelse\nSF_OTHER_PLATFORM=iphoneos\nfi\n\nif [[ \"$BUILT_PRODUCTS_DIR\" =~ (.*)$SF_SDK_PLATFORM$ ]]\nthen\nSF_OTHER_BUILT_PRODUCTS_DIR=\"${BASH_REMATCH[1]}${SF_OTHER_PLATFORM}\"\nelse\necho \"Could not find platform name from build products directory: $BUILT_PRODUCTS_DIR\"\nexit 1\nfi\n\n# Build the other platform.\nxcrun xcodebuild -project \"${PROJECT_FILE_PATH}\" -target \"${TARGET_NAME}\" -configuration \"${CONFIGURATION}\" -sdk ${SF_OTHER_PLATFORM}${SF_SDK_VERSION} BUILD_DIR=\"${BUILD_DIR}\" OBJROOT=\"${OBJROOT}\" BUILD_ROOT=\"${BUILD_ROOT}\" SYMROOT=\"${SYMROOT}\" $ACTION\n\n# Smash the two static libraries into one fat binary and store it in the .framework\nxcrun lipo -create \"${BUILT_PRODUCTS_DIR}/${SF_EXECUTABLE_PATH}\" \"${SF_OTHER_BUILT_PRODUCTS_DIR}/${SF_EXECUTABLE_PATH}\" -output \"${BUILT_PRODUCTS_DIR}/${SF_WRAPPER_NAME}/Versions/A/${SF_TARGET_NAME}\"\n\n# Copy the binary to the other architecture folder to have a complete framework in both.\ncp -a \"${BUILT_PRODUCTS_DIR}/${SF_WRAPPER_NAME}/Versions/A/${SF_TARGET_NAME}\" \"${SF_OTHER_BUILT_PRODUCTS_DIR}/${SF_WRAPPER_NAME}/Versions/A/${SF_TARGET_NAME}\"\n";
 		};
-		335239DC193F5A5F006627FA /* ShellScript */ = {
+		33163302193F722300EED43E /* Objective-Clean Run Script */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
+			name = "Objective-Clean Run Script";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [[ -z ${SKIP_OBJCLEAN} || ${SKIP_OBJCLEAN} != 1 ]]; then\nif [[ -d \"${LOCAL_APPS_DIR}/Objective-Clean.app\" ]]; then\n\"${LOCAL_APPS_DIR}\"/Objective-Clean.app/Contents/Resources/ObjClean.app/Contents/MacOS/ObjClean \"${SRCROOT}\"?CW\nelse\necho \"warning: You have to install and set up Objective-Clean to use its features!\"\nfi\nfi";
+			shellScript = "if [[ -z ${SKIP_OBJCLEAN} || ${SKIP_OBJCLEAN} != 1 ]]; then\nif [[ -d \"${LOCAL_APPS_DIR}/Objective-Clean.app\" ]]; then\n\"${LOCAL_APPS_DIR}\"/Objective-Clean.app/Contents/Resources/ObjClean.app/Contents/MacOS/ObjClean \"${SRCROOT}\"?!Nodelike\nelse\necho \"warning: You have to install and set up Objective-Clean to use its features!\"\nfi\nfi";
+		};
+		33294104193F958000337D00 /* Create Documentation Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Create Documentation Script";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Runs appledoc command is on release build and it is installed\n# On Release builds, we actually create the documentation\n# ON Debug builds, we only run appledoc to create warnings about missing documentation\n# If the project grows, we will have to see if appledoc takes to long - then we might have to remove it from debug builds\n\n# Look at appledoc --help for all the parameters\n\nAPPLEDOC_PATH=\"/usr/local/bin/appledoc\"\nif [ -x $APPLEDOC_PATH ]; then\n\nif [ ${CONFIGURATION} == \"Release\" ]; then\n$APPLEDOC_PATH \\\n--project-name ${PRODUCT_NAME} \\\n--project-company \"Mario Schreiner\" \\\n--company-id \"com.marioschreiner\" \\\n--output ${PRODUCT_NAME}Docs \\\n--create-html \\\n--create-docset \\\n--install-docset \\\n--keep-undocumented-objects \\\n--keep-undocumented-members \\\n--keep-intermediate-files \\\n--no-repeat-first-par \\\n--warn-undocumented-object \\\n--warn-undocumented-member \\\n--warn-empty-description \\\n--warn-unknown-directive  \\\n--warn-missing-arg \\\n--warn-invalid-crossref \\\n--logformat xcode \\\n--exit-threshold 2 \\\n${PROJECT_DIR}/${PRODUCT_NAME}\nfi;\n\nif [ ${CONFIGURATION} == \"Debug\" ]; then\n$APPLEDOC_PATH \\\n--project-name ${PRODUCT_NAME} \\\n--project-company \"Mario Schreiner\" \\\n--company-id \"com.marioschreiner\" \\\n--output ${PRODUCT_NAME}Docs \\\n--no-create-html \\\n--no-create-docset \\\n--no-install-docset \\\n--keep-undocumented-objects \\\n--keep-undocumented-members \\\n--no-keep-intermediate-files \\\n--no-repeat-first-par \\\n--warn-undocumented-object \\\n--warn-undocumented-member \\\n--warn-empty-description \\\n--warn-unknown-directive  \\\n--warn-missing-arg \\\n--warn-invalid-crossref \\\n--logformat xcode \\\n--exit-threshold 2 \\\n${PROJECT_DIR}/${PRODUCT_NAME}\nfi;\n\nelse\necho \"install appledoc to create a documentation\"\nfi;";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -475,7 +484,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				330CBB80193E8CF40064AD99 /* TestClass.m in Sources */,
+				330BA3D4193F8CB300D9E54C /* CWWebserver.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

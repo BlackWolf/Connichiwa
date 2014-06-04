@@ -8,8 +8,6 @@
 <false/>
 <key>kRequireOpenBraceOnConditionalStatementLine</key>
 <false/>
-<key>kRequireEmptyLineAboveConditionalStatement</key>
-<true/>
 <key>kRequireNoEmptyLineAsFirstLineInMethod</key>
 <false/>
 <key>kRequireSpaceBeforeOpeningBrace</key>
@@ -23,15 +21,15 @@
 <key>kMethodParameterPrefix</key>
 <string></string>
 <key>kElseFormatRule</key>
-<integer>0</integer>
+<integer>2</integer>
 <key>kEqualSpacingRule</key>
 <integer>1</integer>
 <key>kRequireSpaceAfterConditionalStatement</key>
-<false/>
+<true/>
 <key>kMathSpacingRule</key>
 <integer>1</integer>
 <key>kElseIfFormatRule</key>
-<integer>0</integer>
+<integer>2</integer>
 <key>kRequireSpaceAboveBreak</key>
 <false/>
 <key>kInterfaceColonSpacingRule</key>
@@ -57,7 +55,7 @@
 <key>kNumberOfEmptyLinesAfterPragma</key>
 <integer>2</integer>
 <key>kNumberOfEmptyLinesAboveEnd</key>
-<integer>3</integer>
+<integer>1</integer>
 <key>kComparisonSpacingRule</key>
 <integer>1</integer>
 <key>kNumberOfEmptyLinesAboveCategory</key>
