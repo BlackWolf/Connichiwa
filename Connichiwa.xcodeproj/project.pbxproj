@@ -26,7 +26,8 @@
 		3306A78E1940746A001B999A /* CWConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 3306A78C1940746A001B999A /* CWConstants.m */; };
 		3306A79219409234001B999A /* CWBeacon.h in Headers */ = {isa = PBXBuildFile; fileRef = 3306A79019409234001B999A /* CWBeacon.h */; };
 		3306A79319409234001B999A /* CWBeacon.m in Sources */ = {isa = PBXBuildFile; fileRef = 3306A79119409234001B999A /* CWBeacon.m */; };
-		3306A79719409E25001B999A /* test.html in Resources */ = {isa = PBXBuildFile; fileRef = 3306A79619409E25001B999A /* test.html */; };
+		3306A79A1940A2DF001B999A /* server.js in Sources */ = {isa = PBXBuildFile; fileRef = 3306A7981940A2DF001B999A /* server.js */; };
+		3306A79B1940A2DF001B999A /* test.html in Resources */ = {isa = PBXBuildFile; fileRef = 3306A7991940A2DF001B999A /* test.html */; };
 		330BA3D3193F8CB300D9E54C /* CWWebserver.h in Headers */ = {isa = PBXBuildFile; fileRef = 330BA3D1193F8CB300D9E54C /* CWWebserver.h */; };
 		330BA3D4193F8CB300D9E54C /* CWWebserver.m in Sources */ = {isa = PBXBuildFile; fileRef = 330BA3D2193F8CB300D9E54C /* CWWebserver.m */; };
 		330CBB74193E75890064AD99 /* Connichiwa.h in Headers */ = {isa = PBXBuildFile; fileRef = 33A0514E193E61CC00FED071 /* Connichiwa.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -53,7 +54,6 @@
 		33A05164193E61CC00FED071 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 33A05162193E61CC00FED071 /* InfoPlist.strings */; };
 		33A05166193E61CC00FED071 /* ConnichiwaTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 33A05165193E61CC00FED071 /* ConnichiwaTests.m */; };
 		33ACBED3193F4A6900CD51BC /* libNodelike.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3381A027193F492600BDDF34 /* libNodelike.a */; };
-		33D33FDA193F656500AB734E /* server.js in Resources */ = {isa = PBXBuildFile; fileRef = 33D33FD9193F656500AB734E /* server.js */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -121,7 +121,8 @@
 		3306A78F194091DD001B999A /* CWBeaconMonitorDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CWBeaconMonitorDelegate.h; sourceTree = "<group>"; };
 		3306A79019409234001B999A /* CWBeacon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWBeacon.h; sourceTree = "<group>"; };
 		3306A79119409234001B999A /* CWBeacon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWBeacon.m; sourceTree = "<group>"; };
-		3306A79619409E25001B999A /* test.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = test.html; path = ../test.html; sourceTree = "<group>"; };
+		3306A7981940A2DF001B999A /* server.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = server.js; sourceTree = "<group>"; };
+		3306A7991940A2DF001B999A /* test.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = test.html; sourceTree = "<group>"; };
 		330BA3D1193F8CB300D9E54C /* CWWebserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWWebserver.h; sourceTree = "<group>"; };
 		330BA3D2193F8CB300D9E54C /* CWWebserver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWWebserver.m; sourceTree = "<group>"; };
 		330CBB86193F14B60064AD99 /* ConnichiwaResources.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ConnichiwaResources.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -153,7 +154,6 @@
 		33A05161193E61CC00FED071 /* ConnichiwaTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ConnichiwaTests-Info.plist"; sourceTree = "<group>"; };
 		33A05163193E61CC00FED071 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		33A05165193E61CC00FED071 /* ConnichiwaTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ConnichiwaTests.m; sourceTree = "<group>"; };
-		33D33FD9193F656500AB734E /* server.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = server.js; path = ../Connichiwa/server.js; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -221,8 +221,8 @@
 		330CBB89193F14B60064AD99 /* ConnichiwaResources */ = {
 			isa = PBXGroup;
 			children = (
-				33D33FD9193F656500AB734E /* server.js */,
-				3306A79619409E25001B999A /* test.html */,
+				3306A7981940A2DF001B999A /* server.js */,
+				3306A7991940A2DF001B999A /* test.html */,
 				330CBB8A193F14B60064AD99 /* Supporting Files */,
 			);
 			path = ConnichiwaResources;
@@ -476,9 +476,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3306A79B1940A2DF001B999A /* test.html in Resources */,
 				330CBB8E193F14B60064AD99 /* InfoPlist.strings in Resources */,
-				33D33FDA193F656500AB734E /* server.js in Resources */,
-				3306A79719409E25001B999A /* test.html in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -556,6 +555,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3306A79A1940A2DF001B999A /* server.js in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
