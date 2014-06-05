@@ -12,6 +12,7 @@
 
 @implementation CWDebug
 
+
 + (void)executeInDebug:(void (^)(void))block
 {
     #ifdef CWDEBUG

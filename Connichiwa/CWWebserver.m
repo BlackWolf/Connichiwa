@@ -41,7 +41,7 @@
 }
 
 
-- (void)start
+- (void)startWithDocumentRoot:(NSString *)documentRoot
 {
     self.nodelikeContext = [[NLContext alloc] initWithVirtualMachine:[[JSVirtualMachine alloc] init]];
     
@@ -51,16 +51,18 @@
             DLog(@"%@ stack: %@", e, [e valueForProperty:@"stack"]);
         });
     };
+    
     //Register JS logger handler
     id logger = ^(JSValue *thing) {
         [JSContext.currentArguments enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            DLog(@"log: %@", [obj toString]);
+            DLog(@"%@", [obj toString]);
         }];
     };
     self.nodelikeContext[@"console"] = @{@"log": logger, @"error": logger};
     
     //Pass some infos to the webserver
     self.nodelikeContext[@"SERVER_PORT"] = [NSString stringWithFormat:@"%d", WEBSERVER_PORT];
+    self.nodelikeContext[@"DOCUMENT_ROOT"] = documentRoot;
     self.nodelikeContext[@"RESOURCES_PATH"] = [[CWBundle bundle] bundlePath];
     
     //Start the actual webserver by executing our Node.JS server script
@@ -70,10 +72,7 @@
     
     [NLContext runEventLoopAsyncInContext:self.nodelikeContext];
     
-    if (![serverScriptReturn isUndefined])
-    {
-        DLog(@"executed code, result is %@", [serverScriptReturn toString]);
-    }
+    if (![serverScriptReturn isUndefined]) DLog(@"executed server.js, result is %@", [serverScriptReturn toString]);
 }
 
 

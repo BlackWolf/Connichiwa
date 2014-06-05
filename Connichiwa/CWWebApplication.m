@@ -22,21 +22,27 @@
 @end
 
 
+
 @implementation CWWebApplication
 
 
-- (void)launchOnWebView:(UIWebView *)webView
+- (instancetype)initWithDocumentRoot:(NSString *)documentRoot onWebView:(UIWebView *)webView
 {
+    self = [super init];
+    
+    self.documentRoot = documentRoot;
     self.localWebView = webView;
     
     self.webserver = [CWWebserver sharedServer];
-    [self.webserver start];
+    [self.webserver startWithDocumentRoot:self.documentRoot];
     
     //The webserver started - now show the master's view by opening 127.0.0.1, which will also load the Connichiwa Web Library on this device
     NSURL *localhostURL = [NSURL URLWithString:[NSString stringWithFormat:@"http://127.0.0.1:%d", WEBSERVER_PORT]];
     NSURLRequest *localhostURLRequest = [NSURLRequest requestWithURL:localhostURL];
     
     [self.localWebView loadRequest:localhostURLRequest];
+    
+    return self;
 }
 
 @end

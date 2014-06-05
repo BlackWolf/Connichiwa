@@ -8,6 +8,9 @@
 
 #import "CWBeacon.h"
 
+
+
 @implementation CWBeacon
+
 
 @end

@@ -27,10 +27,7 @@
  */
 + (instancetype)sharedServer;
 
-/**
- *  Starts the Nodelike webserver
- */
-- (void)start;
+- (void)startWithDocumentRoot:(NSString *)documentRoot;
 
 - (void)sendBeaconInfo:(CWBeacon *)beacon;
 

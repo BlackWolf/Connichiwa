@@ -17,6 +17,8 @@
  */
 @interface CWWebApplication : NSObject
 
-- (void)launchOnWebView:(UIWebView *)webView;
+@property (readwrite, strong) NSString *documentRoot;
+
+- (instancetype)initWithDocumentRoot:(NSString *)documentRoot onWebView:(UIWebView *)webView;
 
 @end
