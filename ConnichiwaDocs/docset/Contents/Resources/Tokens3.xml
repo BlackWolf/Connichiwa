@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Classes/CWBundle.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/cl/CWBundle</TokenIdentifier>
+			<Abstract type="html">Class for working with Connichiwa-related resources that can be found in the ConnichiwaResources.bundle</Abstract>
+			<DeclaredIn>CWBundle.h</DeclaredIn>
+            
+			
+			<NodeRef refid="3"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/CWBundle/bundle</TokenIdentifier>
+			<Abstract type="html">Returns the NSBundle object for the ConnichiwaResources.bundle</Abstract>
+			<DeclaredIn>CWBundle.h</DeclaredIn>
+			
+			<Declaration>+ (NSBundle *)bundle</Declaration>
+			
+			<ReturnValue><Abstract type="html">an NSBundle for the Connichiwa resource bundle</Abstract></ReturnValue>
+			<Anchor>//api/name/bundle</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+        
+	</File>
+</Tokens>

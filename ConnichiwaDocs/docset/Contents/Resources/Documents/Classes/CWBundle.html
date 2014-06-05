@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="html/html; charset=utf-8" />
-		<title>CWWebserver Class Reference</title>
+		<title>CWBundle Class Reference</title>
 		<meta id="xcode-display" name="xcode-display" content="render"/>
 		<link rel="stylesheet" type="text/css" href="../css/styles.css" media="all" />
 		<link rel="stylesheet" type="text/css" media="print" href="../css/stylesPrint.css" />
@@ -16,7 +16,7 @@
 			</div>
 			
 			<div id="title" role="banner">
-				<h1 class="hideInXcode">CWWebserver Class Reference</h1>
+				<h1 class="hideInXcode">CWBundle Class Reference</h1>
 			</div>
 			<ul id="headerButtons" role="toolbar">
 				<li id="toc_button">
@@ -37,23 +37,13 @@
 	
 	
 	
-	<option value="properties">Properties</option>
-	
-	<option value="//api/name/nodelikeContext">&nbsp;&nbsp;&nbsp;&nbsp;nodelikeContext</option>
-	
-	
 	
 	
 	<option value="class_methods">Class Methods</option>
 	
-	<option value="//api/name/sharedServer">&nbsp;&nbsp;&nbsp;&nbsp;+ sharedServer</option>
+	<option value="//api/name/bundle">&nbsp;&nbsp;&nbsp;&nbsp;+ bundle</option>
 	
 	
-	
-	
-	<option value="instance_methods">Instance Methods</option>
-	
-	<option value="//api/name/start">&nbsp;&nbsp;&nbsp;&nbsp;- start</option>
 	
 	
 	
@@ -71,42 +61,28 @@
 
 <li role="treeitem" id="task_treeitem"><span class="nodisclosure"></span><span class="sectionName"><a href="#tasks">Tasks</a></span><ul>
 	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Extension Methods">Extension Methods</a></span></li>
-	
 </ul></li>
 
 
 
 
-
-<li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#properties">Properties</a></span><ul>
-	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/nodelikeContext">nodelikeContext</a></span></li>
-	
-</ul></li>
 
 
 
 <li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#class_methods">Class Methods</a></span><ul>
 	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/sharedServer">sharedServer</a></span></li>
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/bundle">bundle</a></span></li>
 	
 </ul></li>
 
 
-
-<li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#instance_methods">Instance Methods</a></span><ul>
-	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/start">start</a></span></li>
-	
-</ul></li>
 
 
 			</ul>
 		</nav>
 		<article>
 			<div id="contents" class="isShowingTOC" role="main">
-				<a title="CWWebserver Class Reference" name="top"></a>
+				<a title="CWBundle Class Reference" name="top"></a>
 				<div class="main-navigation navigation-top">
 					<ul>
 	<li><a href="../index.html">Index</a></li>
@@ -115,7 +91,7 @@
 				</div>
 				<div id="header">
 					<div class="section-header">
-						<h1 class="title title-header">CWWebserver Class Reference</h1>
+						<h1 class="title title-header">CWBundle Class Reference</h1>
 					</div>		
 				</div>
 				<div id="container">	
@@ -126,7 +102,7 @@
 	<td class="specification-value">NSObject</td>
 </tr><tr>
 	<td class="specification-title">Declared in</td>
-	<td class="specification-value">CWWebserver.h<br />CWWebserver.m</td>
+	<td class="specification-value">CWBundle.h<br />CWBundle.m</td>
 </tr>
 						</tbody></table></div>
 					
@@ -136,8 +112,7 @@
 					<div class="section section-overview">
 						<a title="Overview" name="overview"></a>
 						<h2 class="subtitle subtitle-overview">Overview</h2>
-						<p>The CWWebserver class represents the local webserver run by Connichiwa in order to run local web applications.
-Only one instance of a CWWebserver can run in an application - use the <a href="#//api/name/sharedServer">sharedServer</a> method to retrieve that instance.</p>
+						<p>Class for working with Connichiwa-related resources that can be found in the ConnichiwaResources.<a href="#//api/name/bundle">bundle</a></p>
 					</div>
 					
 					
@@ -150,34 +125,14 @@ Only one instance of a CWWebserver can run in an application - use the <a href="
 						
 						
 						
-						<h3 class="subsubtitle task-title">Other Methods</h3>
+						
 
 						<ul class="task-list">
 							<li>
 	<span class="tooltip">
-		<code><a href="#//api/name/sharedServer">+&nbsp;sharedServer</a></code>
+		<code><a href="#//api/name/bundle">+&nbsp;bundle</a></code>
 	</span>
 	
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/start">&ndash;&nbsp;start</a></code>
-	</span>
-	
-	
-</li>
-						</ul>
-						
-						
-						<a title="Extension Methods" name="task_Extension Methods"></a>
-						<h3 class="subsubtitle task-title">Extension Methods</h3>
-
-						<ul class="task-list">
-							<li>
-	<span class="tooltip">
-		<code><a href="#//api/name/nodelikeContext">&nbsp;&nbsp;nodelikeContext</a></code>
-	</span>
-	<span class="task-item-suffix">property</span>
 	
 </li>
 						</ul>
@@ -187,48 +142,6 @@ Only one instance of a CWWebserver can run in an application - use the <a href="
 					
 					
 					
-					
-					<div class="section section-methods">
-						<a title="Properties" name="properties"></a>
-						<h2 class="subtitle subtitle-methods">Properties</h2>
-						
-						<div class="section-method">
-	<a name="//api/name/nodelikeContext" title="nodelikeContext"></a>
-	<h3 class="subsubtitle method-title">nodelikeContext</h3>
-	
-	
-	
-	<div class="method-subsection brief-description">
-		<p>A Nodelike-specific subclass of JSContext that is used to execute code and for communication between Objective-C and the Nodelike server</p>
-	</div>		
-	
-    
-
-	<div class="method-subsection method-declaration"><code>@property (strong, readwrite) NLContext *nodelikeContext</code></div>
-
-    
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<div class="method-subsection declared-in-section">
-		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">CWWebserver.m</code><br />
-	</div>				
-	
-	
-</div>
-						
-					</div>
 					
 					
 					
@@ -237,18 +150,18 @@ Only one instance of a CWWebserver can run in an application - use the <a href="
 						<h2 class="subtitle subtitle-methods">Class Methods</h2>
 						
 						<div class="section-method">
-	<a name="//api/name/sharedServer" title="sharedServer"></a>
-	<h3 class="subsubtitle method-title">sharedServer</h3>
+	<a name="//api/name/bundle" title="bundle"></a>
+	<h3 class="subsubtitle method-title">bundle</h3>
 	
 	
 	
 	<div class="method-subsection brief-description">
-		<p>Returns Retrieves the shared instance of this class. Only one CWWebserver should be used so always use this method to retrieve an instance of CWWebserver.</p>
+		<p>Returns the NSBundle object for the ConnichiwaResources.bundle</p>
 	</div>		
 	
     
 
-	<div class="method-subsection method-declaration"><code>+ (instancetype)sharedServer</code></div>
+	<div class="method-subsection method-declaration"><code>+ (NSBundle *)bundle</code></div>
 
     
 	
@@ -256,7 +169,7 @@ Only one instance of a CWWebserver can run in an application - use the <a href="
 	
 	<div class="method-subsection return">
 		<h4 class="method-subtitle parameter-title">Return Value</h4>
-		<p>the shared instance of CWWebserver</p>
+		<p>an NSBundle for the Connichiwa resource bundle</p>
 	</div>
 	
 	
@@ -271,7 +184,7 @@ Only one instance of a CWWebserver can run in an application - use the <a href="
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">CWWebserver.h</code><br />
+		<code class="declared-in-ref">CWBundle.h</code><br />
 	</div>				
 	
 	
@@ -280,48 +193,6 @@ Only one instance of a CWWebserver can run in an application - use the <a href="
 					</div>
 					
 					
-					
-					<div class="section section-methods">
-						<a title="Instance Methods" name="instance_methods"></a>
-						<h2 class="subtitle subtitle-methods">Instance Methods</h2>
-						
-						<div class="section-method">
-	<a name="//api/name/start" title="start"></a>
-	<h3 class="subsubtitle method-title">start</h3>
-	
-	
-	
-	<div class="method-subsection brief-description">
-		<p>Starts the Nodelike webserver</p>
-	</div>		
-	
-    
-
-	<div class="method-subsection method-declaration"><code>- (void)start</code></div>
-
-    
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<div class="method-subsection declared-in-section">
-		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">CWWebserver.h</code><br />
-	</div>				
-	
-	
-</div>
-						
-					</div>
 					
 					
                     

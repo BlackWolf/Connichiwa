@@ -8,6 +8,10 @@
 
 #import "CWWebserver.h"
 #import <Nodelike/NLContext.h>
+#import "CWBundle.h"
+#import "CWBeacon.h"
+#import "CWConstants.h"
+#import "CWDebug.h"
 
 
 
@@ -41,40 +45,41 @@
 {
     self.nodelikeContext = [[NLContext alloc] initWithVirtualMachine:[[JSVirtualMachine alloc] init]];
     
-    //Register error handler
-    _nodelikeContext.exceptionHandler = ^(JSContext *c, JSValue *e) {
+    //Register JS error handler
+    self.nodelikeContext.exceptionHandler = ^(JSContext *c, JSValue *e) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            NSLog(@"%@ stack: %@", e, [e valueForProperty:@"stack"]);
+            DLog(@"%@ stack: %@", e, [e valueForProperty:@"stack"]);
         });
     };
-    //Register logger handler
+    //Register JS logger handler
     id logger = ^(JSValue *thing) {
         [JSContext.currentArguments enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            NSLog(@"log: %@", [obj toString]);
+            DLog(@"log: %@", [obj toString]);
         }];
     };
-    _nodelikeContext[@"console"] = @{@"log": logger, @"error": logger};
+    self.nodelikeContext[@"console"] = @{@"log": logger, @"error": logger};
     
-    //Grab framework bundle
-    NSString *mainBundlePath = [[NSBundle mainBundle] resourcePath];
-    NSString *frameworkBundlePath = [mainBundlePath stringByAppendingPathComponent:@"ConnichiwaResources.bundle"];
-    NSBundle *frameworkBundle = [NSBundle bundleWithPath:frameworkBundlePath];
+    //Pass some infos to the webserver
+    self.nodelikeContext[@"SERVER_PORT"] = [NSString stringWithFormat:@"%d", WEBSERVER_PORT];
+    self.nodelikeContext[@"RESOURCES_PATH"] = [[CWBundle bundle] bundlePath];
     
-    NSString *mainJsPath = [frameworkBundle pathForResource:@"server" ofType:@"js"];
+    //Start the actual webserver by executing our Node.JS server script
+    NSString *serverScriptPath = [[CWBundle bundle] pathForResource:@"server" ofType:@"js"];
+    NSString *serverScript = [NSString stringWithContentsOfFile:serverScriptPath encoding:NSUTF8StringEncoding error:nil];
+    JSValue *serverScriptReturn = [self.nodelikeContext evaluateScript:serverScript];
     
-    //Find the JS-file that will start our server and
-    //NSString *mainJsPath = [[NSBundle mainBundle] pathForResource:@"server" ofType:@"js"];
-    
-    NSString *mainJs = [NSString stringWithContentsOfFile:mainJsPath encoding:NSUTF8StringEncoding error:nil];
-    
-    //Actually execute the JS and by that start our NodeJS server
-    JSValue *ret = [_nodelikeContext evaluateScript:mainJs];
     [NLContext runEventLoopAsyncInContext:self.nodelikeContext];
     
-    if (![ret isUndefined])
+    if (![serverScriptReturn isUndefined])
     {
-        NSLog(@"executed code, result is %@", [ret toString]);
+        DLog(@"executed code, result is %@", [serverScriptReturn toString]);
     }
+}
+
+
+- (void)sendBeaconInfo:(CWBeacon *)beacon
+{
+    
 }
 
 @end

@@ -5,36 +5,72 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>0734E956-A848-4831-9410-A9BFCCF2E436</string>
+	<string>750622AD-77CB-4DEE-9C68-82651879F5F2</string>
 	<key>IDESourceControlProjectName</key>
 	<string>Connichiwa</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>5FAD8155-47F7-4B68-8A17-0D26D718FDE4</key>
+		<key>2B283760-502C-4127-A78E-E9C923EF3261</key>
+		<string>https://github.com/joyent/libuv.git</string>
+		<key>953FE1CF-1504-4F3A-A4B5-9A652F833314</key>
+		<string>https://github.com/joyent/http-parser.git</string>
+		<key>CCBA713F-4C1E-4968-BEB6-9B887B0858AC</key>
 		<string>ssh://github.com/BlackWolf/Connichiwa.git</string>
+		<key>F128CFC2-7399-409D-9491-29A973C81328</key>
+		<string>ssh://github.com/BlackWolf/Nodelike.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>Connichiwa.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>5FAD8155-47F7-4B68-8A17-0D26D718FDE4</key>
+		<key>2B283760-502C-4127-A78E-E9C923EF3261</key>
+		<string>../../Nodelike/libuv</string>
+		<key>953FE1CF-1504-4F3A-A4B5-9A652F833314</key>
+		<string>../../Nodelike/http-parser</string>
+		<key>CCBA713F-4C1E-4968-BEB6-9B887B0858AC</key>
 		<string>../..</string>
+		<key>F128CFC2-7399-409D-9491-29A973C81328</key>
+		<string>../../Nodelike</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>ssh://github.com/BlackWolf/Connichiwa.git</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>110</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>5FAD8155-47F7-4B68-8A17-0D26D718FDE4</string>
+	<string>CCBA713F-4C1E-4968-BEB6-9B887B0858AC</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>5FAD8155-47F7-4B68-8A17-0D26D718FDE4</string>
+			<string>CCBA713F-4C1E-4968-BEB6-9B887B0858AC</string>
 			<key>IDESourceControlWCCName</key>
 			<string>Connichiwa</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>953FE1CF-1504-4F3A-A4B5-9A652F833314</string>
+			<key>IDESourceControlWCCName</key>
+			<string>http-parser</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>2B283760-502C-4127-A78E-E9C923EF3261</string>
+			<key>IDESourceControlWCCName</key>
+			<string>libuv</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>F128CFC2-7399-409D-9491-29A973C81328</string>
+			<key>IDESourceControlWCCName</key>
+			<string>Nodelike</string>
 		</dict>
 	</array>
 </dict>

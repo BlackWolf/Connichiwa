@@ -22,12 +22,29 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		330BA3D3193F8CB300D9E54C /* CWWebserver.h in Headers */ = {isa = PBXBuildFile; fileRef = 330BA3D1193F8CB300D9E54C /* CWWebserver.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3306A78D1940746A001B999A /* CWConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 3306A78B1940746A001B999A /* CWConstants.h */; };
+		3306A78E1940746A001B999A /* CWConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 3306A78C1940746A001B999A /* CWConstants.m */; };
+		3306A79219409234001B999A /* CWBeacon.h in Headers */ = {isa = PBXBuildFile; fileRef = 3306A79019409234001B999A /* CWBeacon.h */; };
+		3306A79319409234001B999A /* CWBeacon.m in Sources */ = {isa = PBXBuildFile; fileRef = 3306A79119409234001B999A /* CWBeacon.m */; };
+		3306A79719409E25001B999A /* test.html in Resources */ = {isa = PBXBuildFile; fileRef = 3306A79619409E25001B999A /* test.html */; };
+		330BA3D3193F8CB300D9E54C /* CWWebserver.h in Headers */ = {isa = PBXBuildFile; fileRef = 330BA3D1193F8CB300D9E54C /* CWWebserver.h */; };
 		330BA3D4193F8CB300D9E54C /* CWWebserver.m in Sources */ = {isa = PBXBuildFile; fileRef = 330BA3D2193F8CB300D9E54C /* CWWebserver.m */; };
 		330CBB74193E75890064AD99 /* Connichiwa.h in Headers */ = {isa = PBXBuildFile; fileRef = 33A0514E193E61CC00FED071 /* Connichiwa.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		330CBB88193F14B60064AD99 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 330CBB87193F14B60064AD99 /* CoreFoundation.framework */; };
 		330CBB8E193F14B60064AD99 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 330CBB8C193F14B60064AD99 /* InfoPlist.strings */; };
 		334AB741193FABAA00A15999 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 334AB740193FABAA00A15999 /* JavaScriptCore.framework */; };
+		334AB747193FDADC00A15999 /* CWWebApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = 334AB745193FDADC00A15999 /* CWWebApplication.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		334AB748193FDADC00A15999 /* CWWebApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 334AB746193FDADC00A15999 /* CWWebApplication.m */; };
+		334AB74B193FDAE500A15999 /* CWBeaconAdvertiser.h in Headers */ = {isa = PBXBuildFile; fileRef = 334AB749193FDAE500A15999 /* CWBeaconAdvertiser.h */; };
+		334AB74C193FDAE500A15999 /* CWBeaconAdvertiser.m in Sources */ = {isa = PBXBuildFile; fileRef = 334AB74A193FDAE500A15999 /* CWBeaconAdvertiser.m */; };
+		334AB74F193FDAF200A15999 /* CWBeaconMonitor.h in Headers */ = {isa = PBXBuildFile; fileRef = 334AB74D193FDAF200A15999 /* CWBeaconMonitor.h */; };
+		334AB750193FDAF200A15999 /* CWBeaconMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = 334AB74E193FDAF200A15999 /* CWBeaconMonitor.m */; };
+		334AB753193FDDF800A15999 /* CWDebug.h in Headers */ = {isa = PBXBuildFile; fileRef = 334AB751193FDDF800A15999 /* CWDebug.h */; };
+		334AB754193FDDF800A15999 /* CWDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = 334AB752193FDDF800A15999 /* CWDebug.m */; };
+		334AB757193FEC6000A15999 /* CWBundle.h in Headers */ = {isa = PBXBuildFile; fileRef = 334AB755193FEC6000A15999 /* CWBundle.h */; };
+		334AB758193FEC6000A15999 /* CWBundle.m in Sources */ = {isa = PBXBuildFile; fileRef = 334AB756193FEC6000A15999 /* CWBundle.m */; };
+		334AB76D19405F0C00A15999 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 334AB76C19405F0C00A15999 /* CoreBluetooth.framework */; };
+		334AB77319405F1100A15999 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 334AB77219405F1000A15999 /* CoreLocation.framework */; };
 		33A0514A193E61CC00FED071 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33A05149193E61CC00FED071 /* Foundation.framework */; };
 		33A05158193E61CC00FED071 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33A05157193E61CC00FED071 /* XCTest.framework */; };
 		33A05159193E61CC00FED071 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33A05149193E61CC00FED071 /* Foundation.framework */; };
@@ -99,6 +116,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3306A78B1940746A001B999A /* CWConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWConstants.h; sourceTree = "<group>"; };
+		3306A78C1940746A001B999A /* CWConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWConstants.m; sourceTree = "<group>"; };
+		3306A78F194091DD001B999A /* CWBeaconMonitorDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CWBeaconMonitorDelegate.h; sourceTree = "<group>"; };
+		3306A79019409234001B999A /* CWBeacon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWBeacon.h; sourceTree = "<group>"; };
+		3306A79119409234001B999A /* CWBeacon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWBeacon.m; sourceTree = "<group>"; };
+		3306A79619409E25001B999A /* test.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = test.html; path = ../test.html; sourceTree = "<group>"; };
 		330BA3D1193F8CB300D9E54C /* CWWebserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWWebserver.h; sourceTree = "<group>"; };
 		330BA3D2193F8CB300D9E54C /* CWWebserver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWWebserver.m; sourceTree = "<group>"; };
 		330CBB86193F14B60064AD99 /* ConnichiwaResources.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ConnichiwaResources.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -107,6 +130,18 @@
 		330CBB8D193F14B60064AD99 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		330CBB8F193F14B60064AD99 /* ConnichiwaResources-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ConnichiwaResources-Prefix.pch"; sourceTree = "<group>"; };
 		334AB740193FABAA00A15999 /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		334AB745193FDADC00A15999 /* CWWebApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWWebApplication.h; sourceTree = "<group>"; };
+		334AB746193FDADC00A15999 /* CWWebApplication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWWebApplication.m; sourceTree = "<group>"; };
+		334AB749193FDAE500A15999 /* CWBeaconAdvertiser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWBeaconAdvertiser.h; sourceTree = "<group>"; };
+		334AB74A193FDAE500A15999 /* CWBeaconAdvertiser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWBeaconAdvertiser.m; sourceTree = "<group>"; };
+		334AB74D193FDAF200A15999 /* CWBeaconMonitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWBeaconMonitor.h; sourceTree = "<group>"; };
+		334AB74E193FDAF200A15999 /* CWBeaconMonitor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWBeaconMonitor.m; sourceTree = "<group>"; };
+		334AB751193FDDF800A15999 /* CWDebug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWDebug.h; sourceTree = "<group>"; };
+		334AB752193FDDF800A15999 /* CWDebug.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWDebug.m; sourceTree = "<group>"; };
+		334AB755193FEC6000A15999 /* CWBundle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWBundle.h; sourceTree = "<group>"; };
+		334AB756193FEC6000A15999 /* CWBundle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWBundle.m; sourceTree = "<group>"; };
+		334AB76C19405F0C00A15999 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
+		334AB77219405F1000A15999 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		3381A01E193F492600BDDF34 /* Nodelike.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Nodelike.xcodeproj; path = Nodelike/Nodelike.xcodeproj; sourceTree = "<group>"; };
 		33A05146193E61CC00FED071 /* libConnichiwa.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libConnichiwa.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		33A05149193E61CC00FED071 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -118,7 +153,7 @@
 		33A05161193E61CC00FED071 /* ConnichiwaTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ConnichiwaTests-Info.plist"; sourceTree = "<group>"; };
 		33A05163193E61CC00FED071 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		33A05165193E61CC00FED071 /* ConnichiwaTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ConnichiwaTests.m; sourceTree = "<group>"; };
-		33D33FD9193F656500AB734E /* server.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = server.js; sourceTree = "<group>"; };
+		33D33FD9193F656500AB734E /* server.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = server.js; path = ../Connichiwa/server.js; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -134,9 +169,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				33ACBED3193F4A6900CD51BC /* libNodelike.a in Frameworks */,
+				334AB77319405F1100A15999 /* CoreLocation.framework in Frameworks */,
+				334AB76D19405F0C00A15999 /* CoreBluetooth.framework in Frameworks */,
 				33A0514A193E61CC00FED071 /* Foundation.framework in Frameworks */,
 				334AB741193FABAA00A15999 /* JavaScriptCore.framework in Frameworks */,
+				33ACBED3193F4A6900CD51BC /* libNodelike.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -154,9 +191,38 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3306A794194096F6001B999A /* iBeacon */ = {
+			isa = PBXGroup;
+			children = (
+				3306A79019409234001B999A /* CWBeacon.h */,
+				3306A79119409234001B999A /* CWBeacon.m */,
+				334AB749193FDAE500A15999 /* CWBeaconAdvertiser.h */,
+				334AB74A193FDAE500A15999 /* CWBeaconAdvertiser.m */,
+				334AB74D193FDAF200A15999 /* CWBeaconMonitor.h */,
+				334AB74E193FDAF200A15999 /* CWBeaconMonitor.m */,
+				3306A78F194091DD001B999A /* CWBeaconMonitorDelegate.h */,
+			);
+			name = iBeacon;
+			sourceTree = "<group>";
+		};
+		3306A7951940970D001B999A /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				334AB751193FDDF800A15999 /* CWDebug.h */,
+				334AB752193FDDF800A15999 /* CWDebug.m */,
+				334AB755193FEC6000A15999 /* CWBundle.h */,
+				334AB756193FEC6000A15999 /* CWBundle.m */,
+				3306A78B1940746A001B999A /* CWConstants.h */,
+				3306A78C1940746A001B999A /* CWConstants.m */,
+			);
+			name = Helper;
+			sourceTree = "<group>";
+		};
 		330CBB89193F14B60064AD99 /* ConnichiwaResources */ = {
 			isa = PBXGroup;
 			children = (
+				33D33FD9193F656500AB734E /* server.js */,
+				3306A79619409E25001B999A /* test.html */,
 				330CBB8A193F14B60064AD99 /* Supporting Files */,
 			);
 			path = ConnichiwaResources;
@@ -207,6 +273,8 @@
 		33A05148193E61CC00FED071 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				334AB77219405F1000A15999 /* CoreLocation.framework */,
+				334AB76C19405F0C00A15999 /* CoreBluetooth.framework */,
 				334AB740193FABAA00A15999 /* JavaScriptCore.framework */,
 				3381A01E193F492600BDDF34 /* Nodelike.xcodeproj */,
 				33A05149193E61CC00FED071 /* Foundation.framework */,
@@ -220,10 +288,13 @@
 		33A0514B193E61CC00FED071 /* Connichiwa */ = {
 			isa = PBXGroup;
 			children = (
+				3306A794194096F6001B999A /* iBeacon */,
 				33A0514E193E61CC00FED071 /* Connichiwa.h */,
-				33D33FD9193F656500AB734E /* server.js */,
+				334AB745193FDADC00A15999 /* CWWebApplication.h */,
+				334AB746193FDADC00A15999 /* CWWebApplication.m */,
 				330BA3D1193F8CB300D9E54C /* CWWebserver.h */,
 				330BA3D2193F8CB300D9E54C /* CWWebserver.m */,
+				3306A7951940970D001B999A /* Helper */,
 				33A0514C193E61CC00FED071 /* Supporting Files */,
 			);
 			path = Connichiwa;
@@ -263,7 +334,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				330CBB74193E75890064AD99 /* Connichiwa.h in Headers */,
+				3306A78D1940746A001B999A /* CWConstants.h in Headers */,
+				334AB747193FDADC00A15999 /* CWWebApplication.h in Headers */,
 				330BA3D3193F8CB300D9E54C /* CWWebserver.h in Headers */,
+				334AB74B193FDAE500A15999 /* CWBeaconAdvertiser.h in Headers */,
+				334AB757193FEC6000A15999 /* CWBundle.h in Headers */,
+				3306A79219409234001B999A /* CWBeacon.h in Headers */,
+				334AB74F193FDAF200A15999 /* CWBeaconMonitor.h in Headers */,
+				334AB753193FDDF800A15999 /* CWDebug.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -400,6 +478,7 @@
 			files = (
 				330CBB8E193F14B60064AD99 /* InfoPlist.strings in Resources */,
 				33D33FDA193F656500AB734E /* server.js in Resources */,
+				3306A79719409E25001B999A /* test.html in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -485,6 +564,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				330BA3D4193F8CB300D9E54C /* CWWebserver.m in Sources */,
+				334AB758193FEC6000A15999 /* CWBundle.m in Sources */,
+				334AB750193FDAF200A15999 /* CWBeaconMonitor.m in Sources */,
+				334AB754193FDDF800A15999 /* CWDebug.m in Sources */,
+				334AB74C193FDAE500A15999 /* CWBeaconAdvertiser.m in Sources */,
+				334AB748193FDADC00A15999 /* CWWebApplication.m in Sources */,
+				3306A78E1940746A001B999A /* CWConstants.m in Sources */,
+				3306A79319409234001B999A /* CWBeacon.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -670,6 +756,11 @@
 				DSTROOT = /tmp/Connichiwa.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Connichiwa/Connichiwa-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+					"CWDEBUG=1",
+				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
