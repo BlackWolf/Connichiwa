@@ -48,7 +48,6 @@
 		33A0514A193E61CC00FED071 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33A05149193E61CC00FED071 /* Foundation.framework */; };
 		33A05158193E61CC00FED071 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33A05157193E61CC00FED071 /* XCTest.framework */; };
 		33A05159193E61CC00FED071 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33A05149193E61CC00FED071 /* Foundation.framework */; };
-		33A0515B193E61CC00FED071 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33A0515A193E61CC00FED071 /* UIKit.framework */; };
 		33A0515E193E61CC00FED071 /* libConnichiwa.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 33A05146193E61CC00FED071 /* libConnichiwa.a */; };
 		33A05164193E61CC00FED071 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 33A05162193E61CC00FED071 /* InfoPlist.strings */; };
 		33A05166193E61CC00FED071 /* ConnichiwaTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 33A05165193E61CC00FED071 /* ConnichiwaTests.m */; };
@@ -149,7 +148,6 @@
 		33A0514E193E61CC00FED071 /* Connichiwa.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Connichiwa.h; sourceTree = "<group>"; };
 		33A05156193E61CC00FED071 /* ConnichiwaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ConnichiwaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		33A05157193E61CC00FED071 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		33A0515A193E61CC00FED071 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		33A05161193E61CC00FED071 /* ConnichiwaTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ConnichiwaTests-Info.plist"; sourceTree = "<group>"; };
 		33A05163193E61CC00FED071 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		33A05165193E61CC00FED071 /* ConnichiwaTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ConnichiwaTests.m; sourceTree = "<group>"; };
@@ -183,7 +181,6 @@
 			files = (
 				33A0515E193E61CC00FED071 /* libConnichiwa.a in Frameworks */,
 				33A05158193E61CC00FED071 /* XCTest.framework in Frameworks */,
-				33A0515B193E61CC00FED071 /* UIKit.framework in Frameworks */,
 				33A05159193E61CC00FED071 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -279,7 +276,6 @@
 				3381A01E193F492600BDDF34 /* Nodelike.xcodeproj */,
 				33A05149193E61CC00FED071 /* Foundation.framework */,
 				33A05157193E61CC00FED071 /* XCTest.framework */,
-				33A0515A193E61CC00FED071 /* UIKit.framework */,
 				330CBB87193F14B60064AD99 /* CoreFoundation.framework */,
 			);
 			name = Frameworks;
