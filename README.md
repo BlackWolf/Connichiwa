@@ -33,5 +33,7 @@ Furthermore, the following Node.js modules have been used either as provided or 
 * [qs](https://github.com/visionmedia/node-querystring)
 * [type-is](https://github.com/expressjs/type-is)
 * [utils-merge](https://github.com/jaredhanson/utils-merge)
+* [options](https://github.com/einaros/options.js)
+* [ws](https://github.com/einaros/ws)
 
 Also, I want to thank the people behind [VVDocumenter-Xcode](https://github.com/onevcat/VVDocumenter-Xcode) and [appledoc](https://github.com/tomaz/appledoc) that helped make that nice documentation possible that you find in the `ConnichiwaDocs` folder.

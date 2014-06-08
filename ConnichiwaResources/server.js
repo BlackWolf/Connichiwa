@@ -2,105 +2,70 @@
  *
  * Constants passed from CWWebserver:
  *     SERVER_PORT -- the port the HTTP server is supposed to run on
- *     DOCUMENT_ROOT -- the root of the web application. Must be put before file paths of the web application.
- *     RESOURCES_PATH -- Full path to the root of ConnichiwaResources.bundle. Must be used to access Connichiwa resource files.
+ *     DOCUMENT_ROOT -- the root of the web application, defined by the iOS application.
+ *     RESOURCES_PATH -- Full path to the root of ConnichiwaResources.bundle.
  *
 **/
 
-var express = require('express');
-var connect = require('connect');
-var fs   = require('fs');
-var path    = require('path');
+var WEBSOCKET_PORT = parseInt(SERVER_PORT)+1;
 
-//var server = connect.createServer();
-var app = express();
+var Express = require('express');
+var Morgan = require('morgan');
+var Path = require('path');
+var WebsocketServer = require('ws').Server;
 
+///////////////
+// WEBSERVER //
+///////////////
+
+var app = Express();
+
+//Activate logging
+app.use(Morgan( {immediate: true, format: ':date :remote-addr -- :url (:response-time ms)'} ));
+
+//Make sure the server only delivers "safe" filetypes
 app.use(function(req, res, next) {
-        console.log("SUPERLOL "+req.url);
-        next();
-        });
-
-//app.use(connect.logger());
-//server.use(connect.logger());
-
-//We want DOCUMENT_ROOT to be our document root, so preprend the request url with it
-/*server.use(function(req, res, next) {
-  req.url = DOCUMENT_ROOT+req.url;
-  next();
-});*/
-
-/*
-server.use(function(req, res, next) {
-  var files = fs.readdirSync(req.url);
-  console.log(JSON.stringify(files));
-  next();
-});
-*/
-
-//First things first - only serve safe filetypes
-// server.use(function(req, res, next) {
-//   if (/.*/.test(path.extname(req.url))) {
-//     next();
-//   }
-// });
-
-/*
-server.use(function(req, res, next) {
-  if (req.url != "/5650.png") {
-    next();
+  var validExtensionRegexp = /\.(html|htm|js|jpg|jpeg|png|gif|ico|pdf)$/;
+  if (validExtensionRegexp.test(Path.extname(req.url)) === false && req.url !== '/') {
+    console.log(req.url+" rejected because of file extension");
+    res.status(404).send("File not found");
     return;
   }
 
-  //var blah = req.url.replace(/%20/g, " ");
-  //console.log("READING "+DOCUMENT_ROOT + blah);
-  var data = fs.readFileSync(DOCUMENT_ROOT + req.url);
-
-  res.writeHead(200, {'Content-Type': 'image/jpeg'});
-  res.write(data);
-  res.end();
-});
- */
-
-//server.use(connect.static(DOCUMENT_ROOT));
-app.use('/', express.static(DOCUMENT_ROOT));
-
-/*
-server.use('/public', function(req, res) {
-  res.write("public!");
-  res.end();
-});
-
-server.use(function(req, res, next) {
-  console.log("LOL!");
   next();
 });
 
-server.use(function(req, res, next) {
-  res.write("hallo!");
-  res.end();
-});*/
+//Make sure we serve the necessary Connichiwa files to the web app unter /connichiwa/
+app.use('/connichiwa', Express.static(RESOURCES_PATH+"/public"));
 
-/*
-var server = http.createServer(function(req, res) {
-  console.log((new Date()) + ' Received request for ' + req.url);
+//DOCUMENT_ROOT is now served as /
+app.use('/', Express.static(DOCUMENT_ROOT));
 
-  var file;
-  if (req.url == '/') file = '/index.html'
-  else file = req.url;
-
-  if (file.charAt(0) != '/') file = '/'+file;
-
-  var data = fs.readFileSync(DOCUMENT_ROOT + file);
-
-  if (file == '/logown6.png') res.writeHead(200, {'Content-Type': 'image/png'});
-  else res.writeHead(200, {'Content-Type': 'text/html'});
-  res.write(data);
-  res.end();
-});
- */
-
-//server.listen(SERVER_PORT);
 app.listen(SERVER_PORT);
+
+///////////////
+// WEBSOCKET //
+///////////////
+
+var websocket = new WebsocketServer({port: WEBSOCKET_PORT});
+
+websocket.on('connection', function(websocketConnection) {
+  console.log("WEBSOCKET connection");
+
+  websocketConnection.on('message', function(message) {
+    console.log("WEBSOCKET received "+message);
+  });
+});
+
+//////////
+// MISC //
+//////////
+
+function fromNative_sendMessage(message) {
+  //Redirect the message to our own webview (the master webview) unaltered
+  //We leave parsing or rejecting the message to the Connichiwa Web Library
+  //this server.js should only work as a mere relay for redirecting messages
+}
 
 /*
 function sendMessageToMaster(message) {

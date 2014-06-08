@@ -53,6 +53,7 @@
 		33A05166193E61CC00FED071 /* ConnichiwaTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 33A05165193E61CC00FED071 /* ConnichiwaTests.m */; };
 		33ACBED3193F4A6900CD51BC /* libNodelike.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3381A027193F492600BDDF34 /* libNodelike.a */; };
 		33C3127E1940AEF600F2541C /* node_modules in Resources */ = {isa = PBXBuildFile; fileRef = 33C3127D1940AEF600F2541C /* node_modules */; };
+		33C313341944917800F2541C /* public in Resources */ = {isa = PBXBuildFile; fileRef = 33C313331944917800F2541C /* public */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -152,6 +153,7 @@
 		33A05163193E61CC00FED071 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		33A05165193E61CC00FED071 /* ConnichiwaTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ConnichiwaTests.m; sourceTree = "<group>"; };
 		33C3127D1940AEF600F2541C /* node_modules */ = {isa = PBXFileReference; lastKnownFileType = folder; path = node_modules; sourceTree = "<group>"; };
+		33C313331944917800F2541C /* public */ = {isa = PBXFileReference; lastKnownFileType = folder; path = public; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -218,6 +220,7 @@
 		330CBB89193F14B60064AD99 /* ConnichiwaResources */ = {
 			isa = PBXGroup;
 			children = (
+				33C313331944917800F2541C /* public */,
 				33C3127D1940AEF600F2541C /* node_modules */,
 				3306A7981940A2DF001B999A /* server.js */,
 				330CBB8A193F14B60064AD99 /* Supporting Files */,
@@ -364,10 +367,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 33A05169193E61CC00FED071 /* Build configuration list for PBXNativeTarget "Connichiwa" */;
 			buildPhases = (
+				33F240AA1944A369004B5C96 /* Touch Resources Script */,
 				33A05142193E61CC00FED071 /* Sources */,
 				33A05143193E61CC00FED071 /* Frameworks */,
 				330CBB73193E75850064AD99 /* Headers */,
-				330CBB75193E758E0064AD99 /* Prepare Framework */,
+				330CBB75193E758E0064AD99 /* Prepare Framework Script */,
 				33163302193F722300EED43E /* Objective-Clean Run Script */,
 				33294104193F958000337D00 /* Create Documentation Script */,
 			);
@@ -472,6 +476,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3306A79E1940A386001B999A /* server.js in Resources */,
+				33C313341944917800F2541C /* public in Resources */,
 				33C3127E1940AEF600F2541C /* node_modules in Resources */,
 				330CBB8E193F14B60064AD99 /* InfoPlist.strings in Resources */,
 			);
@@ -488,14 +493,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		330CBB75193E758E0064AD99 /* Prepare Framework */ = {
+		330CBB75193E758E0064AD99 /* Prepare Framework Script */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Prepare Framework";
+			name = "Prepare Framework Script";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -543,6 +548,20 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Runs appledoc command is on release build and it is installed\n# On Release builds, we actually create the documentation\n# ON Debug builds, we only run appledoc to create warnings about missing documentation\n# If the project grows, we will have to see if appledoc takes to long - then we might have to remove it from debug builds\n\n# Look at appledoc --help for all the parameters\n\nAPPLEDOC_PATH=\"/usr/local/bin/appledoc\"\nif [ -x $APPLEDOC_PATH ]; then\n\nif [ ${CONFIGURATION} == \"Release\" ]; then\n$APPLEDOC_PATH \\\n--project-name ${PRODUCT_NAME} \\\n--project-company \"Mario Schreiner\" \\\n--company-id \"com.marioschreiner\" \\\n--output ${PRODUCT_NAME}Docs \\\n--create-html \\\n--create-docset \\\n--install-docset \\\n--keep-undocumented-objects \\\n--keep-undocumented-members \\\n--keep-intermediate-files \\\n--no-repeat-first-par \\\n--warn-undocumented-object \\\n--warn-undocumented-member \\\n--warn-empty-description \\\n--warn-unknown-directive  \\\n--warn-missing-arg \\\n--warn-invalid-crossref \\\n--logformat xcode \\\n--exit-threshold 2 \\\n${PROJECT_DIR}/${PRODUCT_NAME}\nfi;\n\nif [ ${CONFIGURATION} == \"Debug\" ]; then\n$APPLEDOC_PATH \\\n--project-name ${PRODUCT_NAME} \\\n--project-company \"Mario Schreiner\" \\\n--company-id \"com.marioschreiner\" \\\n--output ${PRODUCT_NAME}Docs \\\n--no-create-html \\\n--no-create-docset \\\n--no-install-docset \\\n--keep-undocumented-objects \\\n--keep-undocumented-members \\\n--no-keep-intermediate-files \\\n--no-repeat-first-par \\\n--warn-undocumented-object \\\n--warn-undocumented-member \\\n--warn-empty-description \\\n--warn-unknown-directive  \\\n--warn-missing-arg \\\n--warn-invalid-crossref \\\n--logformat xcode \\\n--exit-threshold 2 \\\n${PROJECT_DIR}/${PRODUCT_NAME}\nfi;\n\nelse\necho \"install appledoc to create a documentation\"\nfi;";
+		};
+		33F240AA1944A369004B5C96 /* Touch Resources Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Touch Resources Script";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/tcsh;
+			shellScript = "touch -cm \"${PROJECT_DIR}/${PRODUCT_NAME}Resources\"\ntouch -cm \"${PROJECT_DIR}/${PRODUCT_NAME}Resources/public\"\ntouch -cm \"${PROJECT_DIR}/${PRODUCT_NAME}Resources/node_modules\"";
 		};
 /* End PBXShellScriptBuildPhase section */
 
