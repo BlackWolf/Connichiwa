@@ -12,3 +12,4 @@
 
 extern int const WEBSERVER_PORT;
 extern NSString *const BEACON_UUID;
+extern NSJSONWritingOptions const JSON_WRITING_OPTIONS;

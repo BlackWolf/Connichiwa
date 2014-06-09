@@ -9,14 +9,17 @@
 #import "CWWebApplication.h"
 #import "CWWebserver.h"
 #import "CWBeaconMonitor.h"
+#import "CWBeaconMonitorDelegate.h"
 #import "CWBeaconAdvertiser.h"
 #import "CWConstants.h"
+#import "CWDebug.h"
 
 
 
-@interface CWWebApplication ()
+@interface CWWebApplication () <CWBeaconMonitorDelegate>
 
 @property (readwrite, strong) CWWebserver *webserver;
+@property (readwrite, strong) CWBeaconMonitor *beaconMonitor;
 @property (readwrite, strong) UIWebView *localWebView;
 
 @end
@@ -42,7 +45,21 @@
     
     [self.localWebView loadRequest:localhostURLRequest];
     
+    [[CWBeaconAdvertiser mainBeacon] startAdvertising];
+    self.beaconMonitor = [CWBeaconMonitor mainMonitor];
+    [self.beaconMonitor setDelegate:self];
+    [self.beaconMonitor startMonitoring];
+    
     return self;
+}
+
+
+#pragma mark CWBeaconMonitorDelegate
+
+
+- (void)beaconUpdated:(CWBeacon *)beacon
+{
+    [self.webserver sendBeaconInfo:beacon];
 }
 
 @end

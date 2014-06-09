@@ -13,3 +13,9 @@
 
 int const WEBSERVER_PORT = 8000;
 NSString *const BEACON_UUID = @"715DD7E3-5AA4-4A3A-B9A6-46CBB9A01901";
+
+#ifdef CWDEBUG
+    NSJSONWritingOptions const JSON_WRITING_OPTIONS = NSJSONWritingPrettyPrinted;
+#else
+    NSJSONWritingOptions const JSON_WRITING_OPTIONS = kNilOptions;
+#endif

@@ -22,6 +22,8 @@
  */
 @property (strong, readwrite) NLContext *nodelikeContext;
 
+- (void)_sendToWeblib:(NSString *)message;
+
 @end
 
 
@@ -76,9 +78,53 @@
 }
 
 
+#pragma mark Web Library Communication Protocol
+
+
 - (void)sendBeaconInfo:(CWBeacon *)beacon
 {
+    //Convert Beacon to JSON
+    NSDictionary *sendData = @{
+                               @"major": beacon.major,
+                               @"minor": beacon.minor,
+                               @"proximity": beacon.proximity
+                               };
+    NSString *json = [self JSONFromDictionary:sendData];
     
+    [self _sendToWeblib:json];
+}
+
+
+#pragma mark Helper
+
+
+- (void)_sendToWeblib:(NSString *)message
+{
+    [self.nodelikeContext evaluateScript:[NSString stringWithFormat:@"fromNative_relayMessage('%@')", message]];
+}
+
+
+- (NSString *)JSONFromDictionary:(NSDictionary *)dictionary
+{
+    NSError *error;
+    NSData *data = [NSJSONSerialization dataWithJSONObject:dictionary options:JSON_WRITING_OPTIONS error:&error];
+    
+    if (error)
+    {
+        DLog("!! WARNING: JSON SERIALIZATION FAILED");
+        
+        return @"";
+    }
+    
+    //Create the actual JSON
+    //The JSON spec says that quotes and newlines must be escaped - not doing so will produce an "unexpected EOF" error
+    NSString *json = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    json = [json stringByReplacingOccurrencesOfString:@"\'" withString:@"\\\'"];
+    json = [json stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
+    json = [json stringByReplacingOccurrencesOfString:@"\n" withString:@"\\n"];
+    json = [json stringByReplacingOccurrencesOfString:@"\r" withString:@""];
+    
+    return json;
 }
 
 @end

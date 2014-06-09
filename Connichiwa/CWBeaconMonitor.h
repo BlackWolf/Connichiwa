@@ -17,9 +17,9 @@
  */
 @interface CWBeaconMonitor : NSObject <CLLocationManagerDelegate>
 
-@property (readwrite, weak) id<CWBeaconMonitorDelegate> delegate;
+@property (readwrite, strong) id<CWBeaconMonitorDelegate> delegate;
 
-+ (instancetype)mainDetector;
++ (instancetype)mainMonitor;
 - (void)startMonitoring;
 
 @end

@@ -32,6 +32,8 @@
 		330CBB74193E75890064AD99 /* Connichiwa.h in Headers */ = {isa = PBXBuildFile; fileRef = 33A0514E193E61CC00FED071 /* Connichiwa.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		330CBB88193F14B60064AD99 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 330CBB87193F14B60064AD99 /* CoreFoundation.framework */; };
 		330CBB8E193F14B60064AD99 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 330CBB8C193F14B60064AD99 /* InfoPlist.strings */; };
+		331F2DE31944F4ED007609B9 /* weblib in Resources */ = {isa = PBXBuildFile; fileRef = 331F2DE21944F4ED007609B9 /* weblib */; };
+		331F2DE41944FC01007609B9 /* CWBeaconMonitorDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 3306A78F194091DD001B999A /* CWBeaconMonitorDelegate.h */; };
 		334AB741193FABAA00A15999 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 334AB740193FABAA00A15999 /* JavaScriptCore.framework */; };
 		334AB747193FDADC00A15999 /* CWWebApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = 334AB745193FDADC00A15999 /* CWWebApplication.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		334AB748193FDADC00A15999 /* CWWebApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 334AB746193FDADC00A15999 /* CWWebApplication.m */; };
@@ -53,7 +55,6 @@
 		33A05166193E61CC00FED071 /* ConnichiwaTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 33A05165193E61CC00FED071 /* ConnichiwaTests.m */; };
 		33ACBED3193F4A6900CD51BC /* libNodelike.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3381A027193F492600BDDF34 /* libNodelike.a */; };
 		33C3127E1940AEF600F2541C /* node_modules in Resources */ = {isa = PBXBuildFile; fileRef = 33C3127D1940AEF600F2541C /* node_modules */; };
-		33C313341944917800F2541C /* public in Resources */ = {isa = PBXBuildFile; fileRef = 33C313331944917800F2541C /* public */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -129,6 +130,7 @@
 		330CBB8B193F14B60064AD99 /* ConnichiwaResources-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ConnichiwaResources-Info.plist"; sourceTree = "<group>"; };
 		330CBB8D193F14B60064AD99 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		330CBB8F193F14B60064AD99 /* ConnichiwaResources-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ConnichiwaResources-Prefix.pch"; sourceTree = "<group>"; };
+		331F2DE21944F4ED007609B9 /* weblib */ = {isa = PBXFileReference; lastKnownFileType = folder; path = weblib; sourceTree = "<group>"; };
 		334AB740193FABAA00A15999 /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		334AB745193FDADC00A15999 /* CWWebApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWWebApplication.h; sourceTree = "<group>"; };
 		334AB746193FDADC00A15999 /* CWWebApplication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWWebApplication.m; sourceTree = "<group>"; };
@@ -153,7 +155,6 @@
 		33A05163193E61CC00FED071 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		33A05165193E61CC00FED071 /* ConnichiwaTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ConnichiwaTests.m; sourceTree = "<group>"; };
 		33C3127D1940AEF600F2541C /* node_modules */ = {isa = PBXFileReference; lastKnownFileType = folder; path = node_modules; sourceTree = "<group>"; };
-		33C313331944917800F2541C /* public */ = {isa = PBXFileReference; lastKnownFileType = folder; path = public; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -220,7 +221,7 @@
 		330CBB89193F14B60064AD99 /* ConnichiwaResources */ = {
 			isa = PBXGroup;
 			children = (
-				33C313331944917800F2541C /* public */,
+				331F2DE21944F4ED007609B9 /* weblib */,
 				33C3127D1940AEF600F2541C /* node_modules */,
 				3306A7981940A2DF001B999A /* server.js */,
 				330CBB8A193F14B60064AD99 /* Supporting Files */,
@@ -340,6 +341,7 @@
 				334AB757193FEC6000A15999 /* CWBundle.h in Headers */,
 				3306A79219409234001B999A /* CWBeacon.h in Headers */,
 				334AB74F193FDAF200A15999 /* CWBeaconMonitor.h in Headers */,
+				331F2DE41944FC01007609B9 /* CWBeaconMonitorDelegate.h in Headers */,
 				334AB753193FDDF800A15999 /* CWDebug.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -476,9 +478,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				3306A79E1940A386001B999A /* server.js in Resources */,
-				33C313341944917800F2541C /* public in Resources */,
 				33C3127E1940AEF600F2541C /* node_modules in Resources */,
 				330CBB8E193F14B60064AD99 /* InfoPlist.strings in Resources */,
+				331F2DE31944F4ED007609B9 /* weblib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

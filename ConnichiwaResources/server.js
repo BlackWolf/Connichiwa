@@ -35,10 +35,10 @@ app.use(function(req, res, next) {
   next();
 });
 
-//Make sure we serve the necessary Connichiwa files to the web app unter /connichiwa/
-app.use('/connichiwa', Express.static(RESOURCES_PATH+"/public"));
+//Make sure we serve the Connichiwa Web Library to the web app under /connichiwa/
+app.use('/connichiwa', Express.static(RESOURCES_PATH+"/weblib"));
 
-//DOCUMENT_ROOT is now served as /
+//DOCUMENT_ROOT is served as /
 app.use('/', Express.static(DOCUMENT_ROOT));
 
 app.listen(SERVER_PORT);
@@ -48,9 +48,19 @@ app.listen(SERVER_PORT);
 ///////////////
 
 var websocket = new WebsocketServer({port: WEBSOCKET_PORT});
+var wsMasterConnection = undefined;
+var wsRemoteConnections = [];
 
 websocket.on('connection', function(websocketConnection) {
-  console.log("WEBSOCKET connection");
+  if (wsMasterConnection === undefined) {
+    //For now, we just assume this means we are the master device
+    //TODO We should probably check the source IP here
+    wsMasterConnection = websocketConnection;
+    console.log("WEBSOCKET got master connection");
+  } else {
+    wsRemoteConnections.push(websocketConnection);
+    console.log("WEBSOCKET got remote connection");
+  }
 
   websocketConnection.on('message', function(message) {
     console.log("WEBSOCKET received "+message);
@@ -61,22 +71,13 @@ websocket.on('connection', function(websocketConnection) {
 // MISC //
 //////////
 
-function fromNative_sendMessage(message) {
+function fromNative_relayMessage(message) {
   //Redirect the message to our own webview (the master webview) unaltered
   //We leave parsing or rejecting the message to the Connichiwa Web Library
   //this server.js should only work as a mere relay for redirecting messages
+
+    console.log("DOING IT");
+  if (wsMasterConnection === undefined) return;
+    console.log("SENDING "+message);
+  wsMasterConnection.send(message);
 }
-
-/*
-function sendMessageToMaster(message) {
-	if (includeServer == undefined) includeServer = true;
-
-	for (var i=0; i<wsConnections.length; i++) {
-		wsConnections[i].sendUTF(message);
-	}
-
-	if (includeServer) {
-		objc_receivedMessage(message);
-	}
-}
-*/

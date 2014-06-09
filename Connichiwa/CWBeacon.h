@@ -7,9 +7,16 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreLocation/CoreLocation.h>
 
 
 
 @interface CWBeacon : NSObject
+
+@property (readonly) NSNumber *major;
+@property (readonly) NSNumber *minor;
+@property (readonly) NSString *proximity;
+
+- (instancetype)initWithMajor:(NSNumber *)major minor:(NSNumber *)minor proximity:(CLProximity)proximity;
 
 @end

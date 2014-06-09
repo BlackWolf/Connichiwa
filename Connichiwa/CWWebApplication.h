@@ -13,7 +13,6 @@
 
 /**
  *  This class represents the web applicatin that is run by Connichiwa. It is the main public interface exposed by the Connichiwa Framework. Through this class, the web application can be controlled, for example by setting or receiving callbacks.
- *  @TODO more to come
  */
 @interface CWWebApplication : NSObject
 

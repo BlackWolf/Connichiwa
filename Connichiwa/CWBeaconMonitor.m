@@ -7,6 +7,7 @@
 //
 
 #import "CWBeaconMonitor.h"
+#import "CWBeacon.h"
 #import "CWConstants.h"
 #import "CWDebug.h"
 
@@ -31,7 +32,7 @@
 @implementation CWBeaconMonitor
 
 
-+ (instancetype)mainDetector
++ (instancetype)mainMonitor
 {
     static dispatch_once_t token;
     static id sharedInstance;
@@ -120,8 +121,12 @@
     for (CLBeacon *beacon in beacons)
     {
         if (beacon.proximity == CLProximityUnknown) continue;
+        //TODO check if this beacon is us by checking major/minor... just in case
         
+        CWBeacon *connichiwaBeacon = [[CWBeacon alloc] initWithMajor:beacon.major minor:beacon.minor proximity:beacon.proximity];
         
+        DLog(@"DELEGATE IS %@", self.delegate);
+        [self.delegate beaconUpdated:connichiwaBeacon];
         
         [CWDebug executeInDebug:^{
             NSString *distanceString;
