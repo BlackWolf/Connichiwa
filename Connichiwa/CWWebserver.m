@@ -88,6 +88,7 @@
 {
     //Convert Beacon to JSON
     NSDictionary *sendData = @{
+                               @"type": @"ibeacon",
                                @"major": beacon.major,
                                @"minor": beacon.minor,
                                @"proximity": beacon.proximity
