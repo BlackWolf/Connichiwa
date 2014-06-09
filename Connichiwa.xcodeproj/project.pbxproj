@@ -336,12 +336,12 @@
 				330CBB74193E75890064AD99 /* Connichiwa.h in Headers */,
 				3306A78D1940746A001B999A /* CWConstants.h in Headers */,
 				334AB747193FDADC00A15999 /* CWWebApplication.h in Headers */,
+				331F2DE41944FC01007609B9 /* CWBeaconMonitorDelegate.h in Headers */,
 				330BA3D3193F8CB300D9E54C /* CWWebserver.h in Headers */,
 				334AB74B193FDAE500A15999 /* CWBeaconAdvertiser.h in Headers */,
 				334AB757193FEC6000A15999 /* CWBundle.h in Headers */,
 				3306A79219409234001B999A /* CWBeacon.h in Headers */,
 				334AB74F193FDAF200A15999 /* CWBeaconMonitor.h in Headers */,
-				331F2DE41944FC01007609B9 /* CWBeaconMonitorDelegate.h in Headers */,
 				334AB753193FDDF800A15999 /* CWDebug.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

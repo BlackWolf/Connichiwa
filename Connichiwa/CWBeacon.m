@@ -30,7 +30,8 @@
     self.major = major;
     self.minor = minor;
     
-    switch (proximity) {
+    switch (proximity)
+    {
         case CLProximityImmediate: self.proximity = @"immediate"; break;
         case CLProximityNear: self.proximity = @"near"; break;
         case CLProximityFar: self.proximity = @"far"; break;

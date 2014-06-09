@@ -18,8 +18,24 @@
 
 @interface CWWebApplication () <CWBeaconMonitorDelegate>
 
+/**
+ *  The Connichiwa Webserver instance that runs our local webserver and communicates with the web library
+ */
 @property (readwrite, strong) CWWebserver *webserver;
+
+/**
+ *  The CWBeaconAdvertiser instance that makes this device discoverable over iBeacon
+ */
+@property (readwrite, strong) CWBeaconAdvertiser *beaconAdvertiser;
+
+/**
+ *  The CWBeaconMonitor instance that looks for other Connichiwa devices
+ */
 @property (readwrite, strong) CWBeaconMonitor *beaconMonitor;
+
+/**
+ *  The local UIWebView where the web application will be displayed on
+ */
 @property (readwrite, strong) UIWebView *localWebView;
 
 @end
@@ -33,11 +49,10 @@
 {
     self = [super init];
     
-    self.documentRoot = documentRoot;
     self.localWebView = webView;
     
     self.webserver = [CWWebserver sharedServer];
-    [self.webserver startWithDocumentRoot:self.documentRoot];
+    [self.webserver startWithDocumentRoot:documentRoot];
     
     //The webserver started - now show the master's view by opening 127.0.0.1, which will also load the Connichiwa Web Library on this device
     NSURL *localhostURL = [NSURL URLWithString:[NSString stringWithFormat:@"http://127.0.0.1:%d", WEBSERVER_PORT]];
@@ -45,7 +60,9 @@
     
     [self.localWebView loadRequest:localhostURLRequest];
     
-    [[CWBeaconAdvertiser mainBeacon] startAdvertising];
+    self.beaconAdvertiser = [CWBeaconAdvertiser mainAdvertiser];
+    [self.beaconAdvertiser startAdvertising];
+    
     self.beaconMonitor = [CWBeaconMonitor mainMonitor];
     [self.beaconMonitor setDelegate:self];
     [self.beaconMonitor startMonitoring];
@@ -57,6 +74,11 @@
 #pragma mark CWBeaconMonitorDelegate
 
 
+/**
+ *  See [CWBeaconMonitorDelegate beaconUpdated:]
+ *
+ * @param beacon See [CWBeaconMonitorDelegate beaconUpdated:]
+ */
 - (void)beaconUpdated:(CWBeacon *)beacon
 {
     [self.webserver sendBeaconInfo:beacon];

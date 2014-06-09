@@ -13,13 +13,26 @@
 
 
 /**
- *  An instance of this class is responsible for detecting and managing other Connichiwa devices via iBeacon. Devices are stored in CWRemoteDevice objects. If a device is detected, leaves or its properties change, this is reported to CWBeaconMonitor's delegate. 
+ *  Monitors the proximity for other Connichiwa beacons. If found, it reports beacons to its delegate.
+ *  Only one instance of the monitor should be active at all time, therefore always use mainMonitor to get an instance of this class.
  */
 @interface CWBeaconMonitor : NSObject <CLLocationManagerDelegate>
 
+/**
+ *  The delegate object to receive events.
+ */
 @property (readwrite, strong) id<CWBeaconMonitorDelegate> delegate;
 
+/**
+ *  Returns the main instance of this class. Should always be used to retrieve an instance of CWBeaconMonitor.
+ *
+ *  @return the main monitor instance
+ */
 + (instancetype)mainMonitor;
+
+/**
+ *  Starts monitor for other devices and sending events to the delegate if devices are found, lost or change.
+ */
 - (void)startMonitoring;
 
 @end

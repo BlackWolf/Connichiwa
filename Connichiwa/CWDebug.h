@@ -28,6 +28,11 @@
  */
 @interface CWDebug : NSObject
 
+/**
+ *  Executes the given code only when we are in debug mode
+ *
+ *  @param block The code to execute in debug
+ */
 + (void)executeInDebug:(void (^)(void))block;
 
 @end

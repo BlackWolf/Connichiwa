@@ -14,6 +14,9 @@
 
 @interface CWBeaconAdvertiser ()
 
+@property (readwrite, strong) NSNumber *major;
+@property (readwrite, strong) NSNumber *minor;
+
 /**
  *  Core Bluetooth Peripheral Manager, responsible for advertising the iBeacon
  */
@@ -31,7 +34,7 @@
 @implementation CWBeaconAdvertiser
 
 
-+ (instancetype)mainBeacon
++ (instancetype)mainAdvertiser
 {
     static dispatch_once_t token;
     static id sharedInstance;
@@ -87,6 +90,36 @@
         else if ([manager state] == CBPeripheralManagerStateUnauthorized) DLog(@"Peripheral Manager state changed to Unauthorized");
         else if ([manager state] == CBPeripheralManagerStatePoweredOff) DLog(@"Peripheral Manager state changed to PoweredOff");
     }];
+}
+
+
+#pragma mark Setter & Getter
+
+
+@synthesize major = _major, minor = _minor; //TODO why do we need this?
+
+
+- (NSNumber *)major
+{
+    return _major;
+}
+
+
+- (void)setMajor:(NSNumber *)major
+{
+    _major = major;
+}
+
+
+- (NSNumber *)minor
+{
+    return _minor;
+}
+
+
+- (void)setMinor:(NSNumber *)minor
+{
+    _minor = minor;
 }
 
 @end

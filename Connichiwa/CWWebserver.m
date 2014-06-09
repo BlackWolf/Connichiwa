@@ -17,6 +17,8 @@
 
 @interface CWWebserver ()
 
+@property (readwrite, strong) NSString *documentRoot;
+
 /**
  *  A Nodelike-specific subclass of JSContext that is used to execute code and for communication between Objective-C and the Nodelike server
  */
@@ -45,6 +47,7 @@
 
 - (void)startWithDocumentRoot:(NSString *)documentRoot
 {
+    self.documentRoot = documentRoot;
     self.nodelikeContext = [[NLContext alloc] initWithVirtualMachine:[[JSVirtualMachine alloc] init]];
     
     //Register JS error handler
@@ -64,7 +67,7 @@
     
     //Pass some infos to the webserver
     self.nodelikeContext[@"SERVER_PORT"] = [NSString stringWithFormat:@"%d", WEBSERVER_PORT];
-    self.nodelikeContext[@"DOCUMENT_ROOT"] = documentRoot;
+    self.nodelikeContext[@"DOCUMENT_ROOT"] = self.documentRoot;
     self.nodelikeContext[@"RESOURCES_PATH"] = [[CWBundle bundle] bundlePath];
     
     //Start the actual webserver by executing our Node.JS server script
@@ -98,12 +101,25 @@
 #pragma mark Helper
 
 
+/**
+ *  Sends the given message to the web library through the Nodelike server.
+ *
+ *  @param message The message to send to the web library.
+ */
 - (void)_sendToWeblib:(NSString *)message
 {
     [self.nodelikeContext evaluateScript:[NSString stringWithFormat:@"fromNative_relayMessage('%@')", message]];
 }
 
 
+/**
+ *  Creates a JSON string from a NSDictionary that can be safely send over JavaScriptCore's evaluteScript:.
+ *  The dictionary must be convertable to JSON as defined by NSJSONSerialization
+ *
+ *  @param dictionary The dictionary to translate into JSON
+ *
+ *  @return The JSON string representing the Dictionary.
+ */
 - (NSString *)JSONFromDictionary:(NSDictionary *)dictionary
 {
     NSError *error;
