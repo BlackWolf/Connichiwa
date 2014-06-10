@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import <CoreBluetooth/CoreBluetooth.h>
 #import <CoreLocation/CoreLocation.h>
+#import "CWBeaconAdvertiseDelegate.h"
+@class CWBeacon;
 
 
 
@@ -20,17 +22,9 @@
  */
 @interface CWBeaconAdvertiser : NSObject <CBPeripheralManagerDelegate>
 
-/**
- *  The major value of the beacon's identifier number that is also broadcasted to other devices.
- *  This number is determined at random.
- */
-@property (readonly) NSNumber *major;
+@property (readwrite, strong) id<CWBeaconAdvertiserDelegate> delegate;
 
-/**
- *  The minor value of the beacon's identifier number that is also broadcasted to other devices.
- *  This number is determined at random.
- */
-@property (readonly) NSNumber *minor;
+@property (readonly) CWBeacon *localBeacon;
 
 /**
  *  Returns the main advertiser instance. Since a device should only act as a single iBeacon, this should always be used to get an instance of CWBeaconAdvertiser

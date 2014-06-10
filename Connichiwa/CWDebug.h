@@ -10,16 +10,19 @@
 
 
 
+void cwLog(NSString *format, ...);
+
+
 //Define extended logging functions
 //DLog() will only log if the debuglog compiler flag is set to 1, ALog() will always log
 //Thanks http://stackoverflow.com/questions/969130/how-to-print-out-the-method-name-and-line-number-and-conditionally-disable-nslog
 #ifdef CWDEBUG
-#    define DLog(fmt, ...) NSLog((@"%s:%d %s -- " fmt), (strrchr(__FILE__, '/') ? : __FILE__ - 1) + 1, __LINE__, __PRETTY_FUNCTION__, ##__VA_ARGS__)
+#    define DLog(fmt, ...) cwLog((@"%s:%d -- " fmt), (strrchr(__FILE__, '/') ? : __FILE__ - 1) + 1, __LINE__, ##__VA_ARGS__)
 #else
 #    define DLog(...)
 #endif
 
-#define ALog(fmt, ...) NSLog((@"%s:%d %s -- " fmt), (strrchr(__FILE__, '/') ? : __FILE__ - 1) + 1, __LINE__, __PRETTY_FUNCTION__, ##__VA_ARGS__)
+#define ALog(fmt, ...) cwLog((@"%s:%d -- " fmt), (strrchr(__FILE__, '/') ? : __FILE__ - 1) + 1, __LINE__, ##__VA_ARGS__)
 
 
 

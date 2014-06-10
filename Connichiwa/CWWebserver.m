@@ -65,10 +65,16 @@
     };
     self.nodelikeContext[@"console"] = @{@"log": logger, @"error": logger};
     
+    [self _registerWebserverCallbacks];
+    
     //Pass some infos to the webserver
     self.nodelikeContext[@"SERVER_PORT"] = [NSString stringWithFormat:@"%d", WEBSERVER_PORT];
     self.nodelikeContext[@"DOCUMENT_ROOT"] = self.documentRoot;
     self.nodelikeContext[@"RESOURCES_PATH"] = [[CWBundle bundle] bundlePath];
+    self.nodelikeContext[@"CWDEBUG"] = [JSValue valueWithBool:NO inContext:self.nodelikeContext];;
+    [CWDebug executeInDebug:^{
+        self.nodelikeContext[@"CWDEBUG"] = [JSValue valueWithBool:YES inContext:self.nodelikeContext];
+    }];
     
     //Start the actual webserver by executing our Node.JS server script
     NSString *serverScriptPath = [[CWBundle bundle] pathForResource:@"server" ofType:@"js"];
@@ -84,9 +90,20 @@
 #pragma mark Web Library Communication Protocol
 
 
+- (void)sendLocalInfo:(CWBeacon *)localBeacon
+{
+    NSDictionary *sendData = @{
+                               @"type": @"localinfo",
+                               @"major": localBeacon.major,
+                               @"minor": localBeacon.minor,
+                               };
+    NSString *json = [self JSONFromDictionary:sendData];
+    [self _sendToWeblib:json];
+}
+
+
 - (void)sendBeaconInfo:(CWBeacon *)beacon
 {
-    //Convert Beacon to JSON
     NSDictionary *sendData = @{
                                @"type": @"ibeacon",
                                @"major": beacon.major,
@@ -94,7 +111,6 @@
                                @"proximity": beacon.proximity
                                };
     NSString *json = [self JSONFromDictionary:sendData];
-    
     [self _sendToWeblib:json];
 }
 
@@ -109,7 +125,8 @@
  */
 - (void)_sendToWeblib:(NSString *)message
 {
-    [self.nodelikeContext evaluateScript:[NSString stringWithFormat:@"fromNative_relayMessage('%@')", message]];
+    DLog(@"Sending %@", message);
+    [self.nodelikeContext evaluateScript:[NSString stringWithFormat:@"sendToWeblib('%@')", message]];
 }
 
 
@@ -128,9 +145,7 @@
     
     if (error)
     {
-        DLog("!! WARNING: JSON SERIALIZATION FAILED");
-        
-        return @"";
+        [NSException raise:@"Invalid Dictionary for serialization" format:@"Dictionary could not be serialized to JSON: %@", dictionary];
     }
     
     //Create the actual JSON
@@ -142,6 +157,27 @@
     json = [json stringByReplacingOccurrencesOfString:@"\r" withString:@""];
     
     return json;
+}
+
+
+#pragma mark Webserver Callbacks
+
+
+- (void)_registerWebserverCallbacks
+{
+    __weak typeof(self) weakSelf = self;
+    self.nodelikeContext[@"native_localWebsocketWasOpened"] = ^{
+        [weakSelf _localWebsocketWasOpened];
+    };
+}
+
+
+- (void)_localWebsocketWasOpened
+{
+    if ([self.delegate respondsToSelector:@selector(localWebsocketWasOpened)])
+    {
+        [self.delegate localWebsocketWasOpened];
+    }
 }
 
 @end

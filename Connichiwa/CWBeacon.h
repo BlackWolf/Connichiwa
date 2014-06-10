@@ -28,6 +28,7 @@
 
 /**
  *  A string determining a rough distance from this device to the beacon. Can be "far", "near", "immediate" or "unknown".
+ *  For a beacon that represents the local device, this will always be "unknown"
  */
 @property (readonly) NSString *proximity;
 

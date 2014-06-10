@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "CWWebserverDelegate.h"
 @class NLContext, CWBeacon;
 
 
@@ -16,6 +17,8 @@
  *  Only one instance of a CWWebserver can run in an application - always use the sharedServer method to retrieve that instance.
  */
 @interface CWWebserver : NSObject
+
+@property (readwrite, strong) id<CWWebserverDelegate> delegate;
 
 /**
  *  Path to the folder acting as the root of the web server. '/' on the web server will be mapped to this path. 
@@ -38,6 +41,8 @@
  *  @param documentRoot A path that will be mapped to the root path of the web server. Your web application should be there.
  */
 - (void)startWithDocumentRoot:(NSString *)documentRoot;
+
+- (void)sendLocalInfo:(CWBeacon *)localBeacon;
 
 /**
  *  Sends information about a CWBeacon to the web library.

@@ -11,12 +11,14 @@
 #import "CWBeaconMonitor.h"
 #import "CWBeaconMonitorDelegate.h"
 #import "CWBeaconAdvertiser.h"
+#import "CWBeaconAdvertiseDelegate.h"
+#import "CWWebserverDelegate.h"
 #import "CWConstants.h"
 #import "CWDebug.h"
 
 
 
-@interface CWWebApplication () <CWBeaconMonitorDelegate>
+@interface CWWebApplication () <CWWebserverDelegate, CWBeaconMonitorDelegate, CWBeaconAdvertiserDelegate>
 
 /**
  *  The Connichiwa Webserver instance that runs our local webserver and communicates with the web library
@@ -52,6 +54,7 @@
     self.localWebView = webView;
     
     self.webserver = [CWWebserver sharedServer];
+    [self.webserver setDelegate:self];
     [self.webserver startWithDocumentRoot:documentRoot];
     
     //The webserver started - now show the master's view by opening 127.0.0.1, which will also load the Connichiwa Web Library on this device
@@ -60,14 +63,32 @@
     
     [self.localWebView loadRequest:localhostURLRequest];
     
+    return self;
+}
+
+
+#pragma mark CWWebserverDelegate
+
+
+- (void)localWebsocketWasOpened
+{
+    //Start up iBeacon: Advertise this device and start looking for other devices
     self.beaconAdvertiser = [CWBeaconAdvertiser mainAdvertiser];
+    [self.beaconAdvertiser setDelegate:self];
     [self.beaconAdvertiser startAdvertising];
     
     self.beaconMonitor = [CWBeaconMonitor mainMonitor];
     [self.beaconMonitor setDelegate:self];
     [self.beaconMonitor startMonitoring];
-    
-    return self;
+}
+
+
+#pragma mark CWBeaconAdvertiserDelegate
+
+
+- (void)didStartAdvertising:(CWBeacon *)localBeacon
+{
+    [self.webserver sendLocalInfo:localBeacon];
 }
 
 

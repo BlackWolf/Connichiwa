@@ -1,15 +1,19 @@
-/* global RemoteDevice, DeviceManager, NativeCommunicationParser */
+/* global LazyLoad, RemoteDevice, DeviceManager, NativeCommunicationParser */
 "use strict";
 
+var deviceManager, websocket;
+
 //Code is splitted among a few files, get them all together
-$.when(
-	$.getScript("./remoteDevice.js"),
-	$.getScript("./deviceManager.js"),
-	$.getScript("./nativeCommunicationParser.js")
-).done(function()
+LazyLoad.js(
+[
+	"/connichiwa/debug.js",
+	"/connichiwa/device.js",
+	"/connichiwa/deviceManager.js",
+	"/connichiwa/nativeCommunicationParser.js"
+], function ()
 {
-	var deviceManager = new DeviceManager();
-	var websocket = new WebSocket("ws://127.0.0.1:8001");
+	deviceManager = new DeviceManager();
+	websocket = new WebSocket("ws://127.0.0.1:8001");
 
 	/**
 	 * Called when the websocket connection is established
@@ -25,9 +29,10 @@ $.when(
 	websocket.onmessage = function(e)
 	{
 		var message = e.data;
-		NativeCommunicationParser.parse(message);
+		//Debug.log("message: "+message);
 
-		console.log("message: "+message);
+		var object = JSON.parse(message);
+		NativeCommunicationParser.parse(object);
 	};
 
 	/**
@@ -35,6 +40,7 @@ $.when(
 	 */
 	websocket.onerror = function()
 	{
+		alert("WEBSOCKET ERROR");
 		console.log("error");
 	};
 

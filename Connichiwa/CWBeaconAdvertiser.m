@@ -7,6 +7,7 @@
 //
 
 #import "CWBeaconAdvertiser.h"
+#import "CWBeacon.h"
 #import "CWDebug.h"
 #import "CWConstants.h"
 
@@ -14,8 +15,7 @@
 
 @interface CWBeaconAdvertiser ()
 
-@property (readwrite, strong) NSNumber *major;
-@property (readwrite, strong) NSNumber *minor;
+@property (readwrite, strong) CWBeacon *localBeacon;
 
 /**
  *  Core Bluetooth Peripheral Manager, responsible for advertising the iBeacon
@@ -69,18 +69,29 @@
     if ([manager state] == CBPeripheralManagerStatePoweredOn)
     {
         //Powered On - We can start advertising as an iBeacon
-        //To identify beacons, we randomize the major/minor and pray to god no other beacon happens to have the same major/minor
-        uint16_t randomMajor = arc4random();
-        uint16_t randomMinor = arc4random();
+        //To identify beacons, we randomize the major/minor and pray to god no other beacon happens to have the same
+        NSNumber *major = [NSNumber numberWithUnsignedShort:(uint16_t)arc4random()];
+        NSNumber *minor = [NSNumber numberWithUnsignedShort:(uint16_t)arc4random()];
+        self.localBeacon = [[CWBeacon alloc] initWithMajor:major minor:minor proximity:CLProximityUnknown];
         self.beaconRegion = [[CLBeaconRegion alloc] initWithProximityUUID:[[NSUUID alloc] initWithUUIDString:BEACON_UUID]
-                                                                    major:randomMajor
-                                                                    minor:randomMinor
+                                                                    major:(uint16_t)self.localBeacon.major
+                                                                    minor:(uint16_t)self.localBeacon.minor
                                                                identifier:@""];
         NSDictionary *advertismentData = [self.beaconRegion peripheralDataWithMeasuredPower:nil];
         
+        DLog(@"Peripheral Manager state changed to PoweredOn - Advertising as iBeacon (%@.%@)...", self.localBeacon.major, self.localBeacon.minor);
+        
+        if ([self.delegate respondsToSelector:@selector(willStartAdvertising:)])
+        {
+            [self.delegate willStartAdvertising:self.localBeacon];
+        }
+        
         [self.peripheralManager startAdvertising:advertismentData];
         
-        DLog(@"Peripheral Manager state changed to PoweredOn - Advertising as iBeacon (%d.%d)...", randomMajor, randomMinor);
+        if ([self.delegate respondsToSelector:@selector(didStartAdvertising:)])
+        {
+            [self.delegate didStartAdvertising:self.localBeacon];
+        }
     }
     
     [CWDebug executeInDebug:^{
@@ -90,36 +101,6 @@
         else if ([manager state] == CBPeripheralManagerStateUnauthorized) DLog(@"Peripheral Manager state changed to Unauthorized");
         else if ([manager state] == CBPeripheralManagerStatePoweredOff) DLog(@"Peripheral Manager state changed to PoweredOff");
     }];
-}
-
-
-#pragma mark Setter & Getter
-
-
-@synthesize major = _major, minor = _minor; //TODO why do we need this?
-
-
-- (NSNumber *)major
-{
-    return _major;
-}
-
-
-- (void)setMajor:(NSNumber *)major
-{
-    _major = major;
-}
-
-
-- (NSNumber *)minor
-{
-    return _minor;
-}
-
-
-- (void)setMinor:(NSNumber *)minor
-{
-    _minor = minor;
 }
 
 @end

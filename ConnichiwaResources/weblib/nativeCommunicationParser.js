@@ -6,7 +6,15 @@
 *
 * Here we describe the protocol used to communicate between this library and the native layer. The communication is done via JSON.
 *
-* iBeacon Detected (type="ibeacon")
+*
+*
+* Local Device Information | type="localinfo"
+* Contains information about the local device
+* Format: major -- the major number of this device
+*         minor -- the minor number of this device
+*
+*
+* iBeacon Detected | type="ibeacon"
 * When an iBeacon was detected by the native layer, or iBeacon data changed, it will send us the beacon data.
 * Format: major -- The major number of the beacon
 *         minor -- The minor number of the beacon
@@ -16,13 +24,18 @@
 
 function NativeCommunicationParser()
 {
-	return null;
+	throw "NativeCommunicationParser should not be instantiated. Use the static .parse()";
 }
 
-NativeCommunicationParser.parse = function(message)
+NativeCommunicationParser.parse = function(object)
 {
-	if (message.type === "ibeacon")
+	switch (object.type)
 	{
-		deviceManager.updateBeacon(message);
+		case "localinfo":
+			deviceManager.initLocalDeviceWithData(object);
+			break;
+		case "ibeacon":
+			deviceManager.addOrUpdateDevice(object);
+			break;
 	}
 };

@@ -114,19 +114,23 @@
  */
 - (void)locationManager:(CLLocationManager *)manager didRangeBeacons:(NSArray *)beacons inRegion:(CLBeaconRegion *)region
 {
-    [CWDebug executeInDebug:^{
-        if ([beacons count] > 0) DLog(@"%lu iBeacons found nearby", (unsigned long)[beacons count]);
-    }];
+//    [CWDebug executeInDebug:^{
+//        if ([beacons count] > 0) DLog(@"%lu iBeacons found nearby", (unsigned long)[beacons count]);
+//    }];
     
     for (CLBeacon *beacon in beacons)
     {
         if (beacon.proximity == CLProximityUnknown) continue;
         //TODO check if this beacon is us by checking major/minor... just in case
         
-        CWBeacon *connichiwaBeacon = [[CWBeacon alloc] initWithMajor:beacon.major minor:beacon.minor proximity:beacon.proximity];
+        CWBeacon *connichiwaBeacon = [[CWBeacon alloc] initWithMajor:beacon.major
+                                                               minor:beacon.minor
+                                                           proximity:beacon.proximity];
         
-        DLog(@"DELEGATE IS %@", self.delegate);
-        [self.delegate beaconUpdated:connichiwaBeacon];
+        if ([self.delegate respondsToSelector:@selector(beaconUpdated:)])
+        {
+            [self.delegate beaconUpdated:connichiwaBeacon];
+        }
         
         [CWDebug executeInDebug:^{
             NSString *distanceString;
@@ -138,8 +142,8 @@
                 case CLProximityFar:        distanceString = @"far";        break;
             }
             
-            DLog(@"Detected beacon (%@.%@) at %@ distance",  beacon.major, beacon.minor, distanceString);
-            DLog(@"Signal strength is %li with an accuracy of %.2f", (long)beacon.rssi, beacon.accuracy);
+//            DLog(@"Detected beacon (%@.%@) at %@ distance",  beacon.major, beacon.minor, distanceString);
+//            DLog(@"Signal strength is %li with an accuracy of %.2f", (long)beacon.rssi, beacon.accuracy);
         }];
     }
 }
