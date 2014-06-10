@@ -47,6 +47,8 @@
 		334AB758193FEC6000A15999 /* CWBundle.m in Sources */ = {isa = PBXBuildFile; fileRef = 334AB756193FEC6000A15999 /* CWBundle.m */; };
 		334AB76D19405F0C00A15999 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 334AB76C19405F0C00A15999 /* CoreBluetooth.framework */; };
 		334AB77319405F1100A15999 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 334AB77219405F1000A15999 /* CoreLocation.framework */; };
+		3367186A19473827000A7164 /* CWBeaconAdvertiseDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 3367186919473827000A7164 /* CWBeaconAdvertiseDelegate.h */; };
+		3367186C194776C1000A7164 /* CWWebserverDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 3367186B194776C1000A7164 /* CWWebserverDelegate.h */; };
 		33A0514A193E61CC00FED071 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33A05149193E61CC00FED071 /* Foundation.framework */; };
 		33A05158193E61CC00FED071 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33A05157193E61CC00FED071 /* XCTest.framework */; };
 		33A05159193E61CC00FED071 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33A05149193E61CC00FED071 /* Foundation.framework */; };
@@ -144,6 +146,8 @@
 		334AB756193FEC6000A15999 /* CWBundle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWBundle.m; sourceTree = "<group>"; };
 		334AB76C19405F0C00A15999 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
 		334AB77219405F1000A15999 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		3367186919473827000A7164 /* CWBeaconAdvertiseDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWBeaconAdvertiseDelegate.h; sourceTree = "<group>"; };
+		3367186B194776C1000A7164 /* CWWebserverDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWWebserverDelegate.h; sourceTree = "<group>"; };
 		3381A01E193F492600BDDF34 /* Nodelike.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Nodelike.xcodeproj; path = Nodelike/Nodelike.xcodeproj; sourceTree = "<group>"; };
 		33A05146193E61CC00FED071 /* libConnichiwa.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libConnichiwa.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		33A05149193E61CC00FED071 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -198,6 +202,7 @@
 				3306A79119409234001B999A /* CWBeacon.m */,
 				334AB749193FDAE500A15999 /* CWBeaconAdvertiser.h */,
 				334AB74A193FDAE500A15999 /* CWBeaconAdvertiser.m */,
+				3367186919473827000A7164 /* CWBeaconAdvertiseDelegate.h */,
 				334AB74D193FDAF200A15999 /* CWBeaconMonitor.h */,
 				334AB74E193FDAF200A15999 /* CWBeaconMonitor.m */,
 				3306A78F194091DD001B999A /* CWBeaconMonitorDelegate.h */,
@@ -294,6 +299,7 @@
 				334AB746193FDADC00A15999 /* CWWebApplication.m */,
 				330BA3D1193F8CB300D9E54C /* CWWebserver.h */,
 				330BA3D2193F8CB300D9E54C /* CWWebserver.m */,
+				3367186B194776C1000A7164 /* CWWebserverDelegate.h */,
 				3306A7951940970D001B999A /* Helper */,
 				33A0514C193E61CC00FED071 /* Supporting Files */,
 			);
@@ -336,11 +342,13 @@
 				330CBB74193E75890064AD99 /* Connichiwa.h in Headers */,
 				3306A78D1940746A001B999A /* CWConstants.h in Headers */,
 				334AB747193FDADC00A15999 /* CWWebApplication.h in Headers */,
+				3367186A19473827000A7164 /* CWBeaconAdvertiseDelegate.h in Headers */,
 				331F2DE41944FC01007609B9 /* CWBeaconMonitorDelegate.h in Headers */,
 				330BA3D3193F8CB300D9E54C /* CWWebserver.h in Headers */,
 				334AB74B193FDAE500A15999 /* CWBeaconAdvertiser.h in Headers */,
 				334AB757193FEC6000A15999 /* CWBundle.h in Headers */,
 				3306A79219409234001B999A /* CWBeacon.h in Headers */,
+				3367186C194776C1000A7164 /* CWWebserverDelegate.h in Headers */,
 				334AB74F193FDAF200A15999 /* CWBeaconMonitor.h in Headers */,
 				334AB753193FDDF800A15999 /* CWDebug.h in Headers */,
 			);
@@ -563,7 +571,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/tcsh;
-			shellScript = "touch -cm \"${PROJECT_DIR}/${PRODUCT_NAME}Resources\"\ntouch -cm \"${PROJECT_DIR}/${PRODUCT_NAME}Resources/public\"\ntouch -cm \"${PROJECT_DIR}/${PRODUCT_NAME}Resources/node_modules\"";
+			shellScript = "touch -cm \"${PROJECT_DIR}/${PRODUCT_NAME}Resources\"\ntouch -cm \"${PROJECT_DIR}/${PRODUCT_NAME}Resources/weblib\"\ntouch -cm \"${PROJECT_DIR}/${PRODUCT_NAME}Resources/node_modules\"";
 		};
 /* End PBXShellScriptBuildPhase section */
 
