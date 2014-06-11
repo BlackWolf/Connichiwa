@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Protocols/CWWebserverDelegate.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intf/CWWebserverDelegate</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWWebserverDelegate.h</DeclaredIn>
+            
+			
+			<NodeRef refid="10"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/CWWebserverDelegate/localWebsocketWasOpened</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWWebserverDelegate.h</DeclaredIn>
+			
+			<Declaration>- (void)localWebsocketWasOpened</Declaration>
+			
+			
+			<Anchor>//api/name/localWebsocketWasOpened</Anchor>
+            <NodeRef refid="10"/>
+		</Token>
+		
+        
+	</File>
+</Tokens>

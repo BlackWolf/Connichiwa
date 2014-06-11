@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Protocols/CWBeaconMonitorDelegate.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intf/CWBeaconMonitorDelegate</TokenIdentifier>
+			<Abstract type="html">Delegate for CWBeaconMonitor. Implementing this protocol allows to receive events about discovered and changed beacons from CWBeaconMonitor.</Abstract>
+			<DeclaredIn>CWBeaconMonitorDelegate.h</DeclaredIn>
+            
+			
+			<NodeRef refid="9"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/CWBeaconMonitorDelegate/beaconUpdated:</TokenIdentifier>
+			<Abstract type="html">Called by CWBeaconMonitor when the data of a beacon updated. This can mean that a new beacon arrived, left or an existing beacon changed (for example its proximity). This method might be called for a beacon even when no changes occured.</Abstract>
+			<DeclaredIn>CWBeaconMonitorDelegate.h</DeclaredIn>
+			
+			<Declaration>- (void)beaconUpdated:(CWBeacon *)beacon</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>beacon</Name>
+					<Abstract type="html">The beacon that changed</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/beaconUpdated:</Anchor>
+            <NodeRef refid="9"/>
+		</Token>
+		
+        
+	</File>
+</Tokens>

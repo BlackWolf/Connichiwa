@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Classes/CWBeaconAdvertiser.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/cl/CWBeaconAdvertiser</TokenIdentifier>
+			<Abstract type="html">An instance of CWBeaconAdvertiser sets this device up to act as an iBeacon and make itself discoverable by other devices running a CWBeaconMonitor.
+CWBeacon takes care of setting BT up and advertising the correct data.
+CWBeacon&apos;s can be identified by their major/minor numbers, which are randomly assigned.
+Every device should only act as a single iBeacon - therefore, it is recommended to use the mainAdvertiser method to retrieve an instance of CWBeaconAdvertiser.</Abstract>
+			<DeclaredIn>CWBeaconAdvertiser.h</DeclaredIn>
+            
+			
+			<NodeRef refid="2"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBeaconAdvertiser/setDelegate:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBeaconAdvertiser.h</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) id&lt;CWBeaconAdvertiserDelegate&gt; delegate</Declaration>
+			
+			
+			<Anchor>//api/name/delegate</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBeaconAdvertiser/delegate</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBeaconAdvertiser.h</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) id&lt;CWBeaconAdvertiserDelegate&gt; delegate</Declaration>
+			
+			
+			<Anchor>//api/name/delegate</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CWBeaconAdvertiser/delegate</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBeaconAdvertiser.h</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) id&lt;CWBeaconAdvertiserDelegate&gt; delegate</Declaration>
+			
+			
+			<Anchor>//api/name/delegate</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBeaconAdvertiser/setLocalBeacon:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBeaconAdvertiser.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) CWBeacon *localBeacon</Declaration>
+			
+			
+			<Anchor>//api/name/localBeacon</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBeaconAdvertiser/localBeacon</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBeaconAdvertiser.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) CWBeacon *localBeacon</Declaration>
+			
+			
+			<Anchor>//api/name/localBeacon</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CWBeaconAdvertiser/localBeacon</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBeaconAdvertiser.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) CWBeacon *localBeacon</Declaration>
+			
+			
+			<Anchor>//api/name/localBeacon</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/CWBeaconAdvertiser/mainAdvertiser</TokenIdentifier>
+			<Abstract type="html">Returns the main advertiser instance. Since a device should only act as a single iBeacon, this should always be used to get an instance of CWBeaconAdvertiser</Abstract>
+			<DeclaredIn>CWBeaconAdvertiser.h</DeclaredIn>
+			
+			<Declaration>+ (instancetype)mainAdvertiser</Declaration>
+			
+			<ReturnValue><Abstract type="html">The main Beacon Advertiser</Abstract></ReturnValue>
+			<Anchor>//api/name/mainAdvertiser</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBeaconAdvertiser/startAdvertising</TokenIdentifier>
+			<Abstract type="html">Make this device start advertising as an iBeacon. It becomes detectable by other Connichiwa devices.</Abstract>
+			<DeclaredIn>CWBeaconAdvertiser.h</DeclaredIn>
+			
+			<Declaration>- (void)startAdvertising</Declaration>
+			
+			
+			<Anchor>//api/name/startAdvertising</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBeaconAdvertiser/peripheralManagerDidUpdateState:</TokenIdentifier>
+			<Abstract type="html">Called by CBPeripheralManager when its power state changes</Abstract>
+			<DeclaredIn>CWBeaconAdvertiser.m</DeclaredIn>
+			
+			<Declaration>- (void)peripheralManagerDidUpdateState:(CBPeripheralManager *)manager</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>manager</Name>
+					<Abstract type="html">The CBPeripheralManager instance that changed</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/peripheralManagerDidUpdateState:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBeaconAdvertiser/setPeripheralManager:</TokenIdentifier>
+			<Abstract type="html">Core Bluetooth Peripheral Manager, responsible for advertising the iBeacon</Abstract>
+			<DeclaredIn>CWBeaconAdvertiser.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) CBPeripheralManager *peripheralManager</Declaration>
+			
+			
+			<Anchor>//api/name/peripheralManager</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBeaconAdvertiser/peripheralManager</TokenIdentifier>
+			<Abstract type="html">Core Bluetooth Peripheral Manager, responsible for advertising the iBeacon</Abstract>
+			<DeclaredIn>CWBeaconAdvertiser.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) CBPeripheralManager *peripheralManager</Declaration>
+			
+			
+			<Anchor>//api/name/peripheralManager</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CWBeaconAdvertiser/peripheralManager</TokenIdentifier>
+			<Abstract type="html">Core Bluetooth Peripheral Manager, responsible for advertising the iBeacon</Abstract>
+			<DeclaredIn>CWBeaconAdvertiser.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) CBPeripheralManager *peripheralManager</Declaration>
+			
+			
+			<Anchor>//api/name/peripheralManager</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBeaconAdvertiser/setBeaconRegion:</TokenIdentifier>
+			<Abstract type="html">Represents the local region that our beacon creates</Abstract>
+			<DeclaredIn>CWBeaconAdvertiser.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) CLBeaconRegion *beaconRegion</Declaration>
+			
+			
+			<Anchor>//api/name/beaconRegion</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBeaconAdvertiser/beaconRegion</TokenIdentifier>
+			<Abstract type="html">Represents the local region that our beacon creates</Abstract>
+			<DeclaredIn>CWBeaconAdvertiser.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) CLBeaconRegion *beaconRegion</Declaration>
+			
+			
+			<Anchor>//api/name/beaconRegion</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CWBeaconAdvertiser/beaconRegion</TokenIdentifier>
+			<Abstract type="html">Represents the local region that our beacon creates</Abstract>
+			<DeclaredIn>CWBeaconAdvertiser.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) CLBeaconRegion *beaconRegion</Declaration>
+			
+			
+			<Anchor>//api/name/beaconRegion</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+        
+	</File>
+</Tokens>

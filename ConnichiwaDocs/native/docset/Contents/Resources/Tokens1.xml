@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Classes/CWBeacon.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/cl/CWBeacon</TokenIdentifier>
+			<Abstract type="html">Encapsulates Connichiwa-related information about an iBeacon</Abstract>
+			<DeclaredIn>CWBeacon.h</DeclaredIn>
+            
+			
+			<NodeRef refid="1"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBeacon/setMajor:</TokenIdentifier>
+			<Abstract type="html">The major value of the beacon&apos;s identifier number. Can be used to uniquely identify a beacon.</Abstract>
+			<DeclaredIn>CWBeacon.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) NSNumber *major</Declaration>
+			
+			
+			<Anchor>//api/name/major</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBeacon/major</TokenIdentifier>
+			<Abstract type="html">The major value of the beacon&apos;s identifier number. Can be used to uniquely identify a beacon.</Abstract>
+			<DeclaredIn>CWBeacon.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) NSNumber *major</Declaration>
+			
+			
+			<Anchor>//api/name/major</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CWBeacon/major</TokenIdentifier>
+			<Abstract type="html">The major value of the beacon&apos;s identifier number. Can be used to uniquely identify a beacon.</Abstract>
+			<DeclaredIn>CWBeacon.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) NSNumber *major</Declaration>
+			
+			
+			<Anchor>//api/name/major</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBeacon/setMinor:</TokenIdentifier>
+			<Abstract type="html">The minor value of the beacon&apos;s identifier number. Can be used to uniquely identify a beacon.</Abstract>
+			<DeclaredIn>CWBeacon.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) NSNumber *minor</Declaration>
+			
+			
+			<Anchor>//api/name/minor</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBeacon/minor</TokenIdentifier>
+			<Abstract type="html">The minor value of the beacon&apos;s identifier number. Can be used to uniquely identify a beacon.</Abstract>
+			<DeclaredIn>CWBeacon.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) NSNumber *minor</Declaration>
+			
+			
+			<Anchor>//api/name/minor</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CWBeacon/minor</TokenIdentifier>
+			<Abstract type="html">The minor value of the beacon&apos;s identifier number. Can be used to uniquely identify a beacon.</Abstract>
+			<DeclaredIn>CWBeacon.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) NSNumber *minor</Declaration>
+			
+			
+			<Anchor>//api/name/minor</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBeacon/setProximity:</TokenIdentifier>
+			<Abstract type="html">A string determining a rough distance from this device to the beacon. Can be &quot;far&quot;, &quot;near&quot;, &quot;immediate&quot; or &quot;unknown&quot;.
+For a beacon that represents the local device, this will always be &quot;unknown&quot;</Abstract>
+			<DeclaredIn>CWBeacon.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) NSString *proximity</Declaration>
+			
+			
+			<Anchor>//api/name/proximity</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBeacon/proximity</TokenIdentifier>
+			<Abstract type="html">A string determining a rough distance from this device to the beacon. Can be &quot;far&quot;, &quot;near&quot;, &quot;immediate&quot; or &quot;unknown&quot;.
+For a beacon that represents the local device, this will always be &quot;unknown&quot;</Abstract>
+			<DeclaredIn>CWBeacon.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) NSString *proximity</Declaration>
+			
+			
+			<Anchor>//api/name/proximity</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CWBeacon/proximity</TokenIdentifier>
+			<Abstract type="html">A string determining a rough distance from this device to the beacon. Can be &quot;far&quot;, &quot;near&quot;, &quot;immediate&quot; or &quot;unknown&quot;.
+For a beacon that represents the local device, this will always be &quot;unknown&quot;</Abstract>
+			<DeclaredIn>CWBeacon.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) NSString *proximity</Declaration>
+			
+			
+			<Anchor>//api/name/proximity</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBeacon/initWithMajor:minor:proximity:</TokenIdentifier>
+			<Abstract type="html">Create a new CWBeacon with the given information</Abstract>
+			<DeclaredIn>CWBeacon.h</DeclaredIn>
+			
+			<Declaration>- (instancetype)initWithMajor:(NSNumber *)major minor:(NSNumber *)minor proximity:(CLProximity)proximity</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>major</Name>
+					<Abstract type="html">The major value</Abstract>
+				</Parameter><Parameter>
+					<Name>minor</Name>
+					<Abstract type="html">The minor value</Abstract>
+				</Parameter><Parameter>
+					<Name>proximity</Name>
+					<Abstract type="html">The proximity string</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">A new instance of CWBeacon that stores the given information</Abstract></ReturnValue>
+			<Anchor>//api/name/initWithMajor:minor:proximity:</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+        
+	</File>
+</Tokens>

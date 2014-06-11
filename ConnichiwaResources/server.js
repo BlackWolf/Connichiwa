@@ -12,7 +12,7 @@
  *
 **/
 
-var WEBSOCKET_PORT = parseInt(SERVER_PORT)+1;
+var WEBSOCKET_PORT = parseInt(SERVER_PORT) + 1;
 
 var Express = require("express");
 var Morgan = require("morgan");
@@ -27,14 +27,14 @@ var app = Express();
 
 //Activate logging
 if (CWDEBUG === true) {
-  app.use(Morgan( {immediate: true, format: "WEBSERVER :date :remote-addr -- REQUEST :url (:response-time ms)"} ));
+  app.use(Morgan( { immediate: true, format: "WEBSERVER :date :remote-addr -- REQUEST :url (:response-time ms)" } ));
 }
 
 //Make sure the server only delivers "safe" filetypes
 app.use(function(req, res, next) {
   var validExtensionRegexp = /\.(html|htm|js|jpg|jpeg|png|gif|ico|pdf)\??.*$/;
   if (validExtensionRegexp.test(Path.extname(req.url)) === false && req.url !== "/") {
-    console.log(req.url+" rejected because of file extension");
+    console.log(req.url + " rejected because of file extension");
     res.status(404).send("File not found");
     return;
   }
@@ -43,7 +43,7 @@ app.use(function(req, res, next) {
 });
 
 //Make sure we serve the Connichiwa Web Library to the web app under /connichiwa/
-app.use("/connichiwa", Express.static(RESOURCES_PATH+"/weblib"));
+app.use("/connichiwa", Express.static(RESOURCES_PATH + "/weblib"));
 
 //DOCUMENT_ROOT is served as /
 app.use("/", Express.static(DOCUMENT_ROOT));
@@ -54,7 +54,7 @@ app.listen(SERVER_PORT);
 // WEBSOCKET //
 ///////////////
 
-var websocket = new WebsocketServer({port: WEBSOCKET_PORT});
+var websocket = new WebsocketServer({ port: WEBSOCKET_PORT });
 var wsLocalConnection;
 var wsRemoteConnections = [];
 
@@ -65,20 +65,22 @@ websocket.on("connection", function(wsConnection) {
     wsLocalConnection = wsConnection;
     log("WEBSOCKET", "Initialized local connection");
     native_localWebsocketWasOpened();
-  } else {
+  }
+  else
+  {
     wsRemoteConnections.push(wsConnection);
     log("WEBSOCKET", "Initialized remote connection");
   }
 
   wsConnection.on("message", function(message) {
-    log("WEBSOCKET", "Received mesage: "+message);
+    log("WEBSOCKET", "Received mesage: " + message);
   });
 });
 
 function sendToWeblib(message)
 {
   if (wsLocalConnection === undefined) return;
-  log("WEBSERVER", "Sending mesage to weblib: "+message);
+  log("WEBSERVER", "Sending mesage to weblib: " + message);
   wsLocalConnection.send(message);
 }
 
@@ -92,10 +94,10 @@ function log(type, message)
 
   while (type.length < 9)
   {
-    type += ' ';
+    type += " ";
   }
 
-  console.log(type+" "+getDateString()+" -- "+message);
+  console.log(type + " " + getDateString() + " -- " + message);
 }
 
 function getDateString(date)
@@ -103,17 +105,17 @@ function getDateString(date)
   if (date === undefined) date = new Date();
 
   var hours = date.getHours();
-  hours = (hours.length == 1) ? "0"+hours : hours;
+  hours = (hours.length === 1) ? "0" + hours : hours;
 
   var minutes = date.getMinutes();
-  minutes = (minutes.length == 1) ? "0"+minutes : minutes;
+  minutes = (minutes.length === 1) ? "0" + minutes : minutes;
 
   var seconds = date.getSeconds();
-  seconds = (seconds.length == 1) ? "0"+seconds : seconds;
+  seconds = (seconds.length === 1) ? "0" + seconds : seconds;
 
   var milliseconds = date.getMilliseconds();
-  milliseconds = (milliseconds.length == 1) ? "00"+milliseconds : milliseconds;
-  milliseconds = (milliseconds.length == 2) ? "0"+milliseconds : milliseconds;
+  milliseconds = (milliseconds.length === 1) ? "00" + milliseconds : milliseconds;
+  milliseconds = (milliseconds.length === 2) ? "0" + milliseconds : milliseconds;
 
-  return hours+":"+minutes+":"+seconds+"."+milliseconds;
+  return hours + ":" + minutes + ":" + seconds + "." + milliseconds;
 }

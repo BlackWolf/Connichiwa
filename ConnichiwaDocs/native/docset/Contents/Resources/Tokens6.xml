@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Classes/CWWebApplication.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/cl/CWWebApplication</TokenIdentifier>
+			<Abstract type="html">The representative of the web application in Objective-C. This is the main class responsible for setting the web application and everything it needs up. This includes setting up this device as an iBeacon and listening for iBeacons. It additionally is responsible for the communication between the different parts - for example it relays information about found iBeacons to the web application. This class can also be used to send information to the web server or web application. It can also be used to retrieve events coming from the web server or web application.</Abstract>
+			<DeclaredIn>CWWebApplication.h</DeclaredIn>
+            
+			
+			<NodeRef refid="6"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWWebApplication/initWithDocumentRoot:onWebView:</TokenIdentifier>
+			<Abstract type="html">Initializes a new web application. It fires up the web server and starts the web application at the given path. It also takes care of displaying the web application on a local UIWebView.</Abstract>
+			<DeclaredIn>CWWebApplication.h</DeclaredIn>
+			
+			<Declaration>- (instancetype)initWithDocumentRoot:(NSString *)documentRoot onWebView:(UIWebView *)webView</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>documentRoot</Name>
+					<Abstract type="html">The full path where the web application files are stored. Note that the web application files should usually get their own folder to prevent access to other files through the webserver. Also see [CWWebserver documentRoot].</Abstract>
+				</Parameter><Parameter>
+					<Name>webView</Name>
+					<Abstract type="html">The local webview on which the local content of the web application is displayed.</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">A new CWWebApplication instance</Abstract></ReturnValue>
+			<Anchor>//api/name/initWithDocumentRoot:onWebView:</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWWebApplication/localWebsocketWasOpened</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWWebApplication.m</DeclaredIn>
+			
+			<Declaration>- (void)localWebsocketWasOpened</Declaration>
+			
+			
+			<Anchor>//api/name/localWebsocketWasOpened</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWWebApplication/didStartAdvertising:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWWebApplication.m</DeclaredIn>
+			
+			<Declaration>- (void)didStartAdvertising:(CWBeacon *)localBeacon</Declaration>
+			
+			
+			<Anchor>//api/name/didStartAdvertising:</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWWebApplication/beaconUpdated:</TokenIdentifier>
+			<Abstract type="html">See [CWBeaconMonitorDelegate beaconUpdated:]</Abstract>
+			<DeclaredIn>CWWebApplication.m</DeclaredIn>
+			
+			<Declaration>- (void)beaconUpdated:(CWBeacon *)beacon</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>beacon</Name>
+					<Abstract type="html">See [CWBeaconMonitorDelegate beaconUpdated:]</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/beaconUpdated:</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWWebApplication/setWebserver:</TokenIdentifier>
+			<Abstract type="html">The Connichiwa Webserver instance that runs our local webserver and communicates with the web library</Abstract>
+			<DeclaredIn>CWWebApplication.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) CWWebserver *webserver</Declaration>
+			
+			
+			<Anchor>//api/name/webserver</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWWebApplication/webserver</TokenIdentifier>
+			<Abstract type="html">The Connichiwa Webserver instance that runs our local webserver and communicates with the web library</Abstract>
+			<DeclaredIn>CWWebApplication.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) CWWebserver *webserver</Declaration>
+			
+			
+			<Anchor>//api/name/webserver</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CWWebApplication/webserver</TokenIdentifier>
+			<Abstract type="html">The Connichiwa Webserver instance that runs our local webserver and communicates with the web library</Abstract>
+			<DeclaredIn>CWWebApplication.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) CWWebserver *webserver</Declaration>
+			
+			
+			<Anchor>//api/name/webserver</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWWebApplication/setBeaconAdvertiser:</TokenIdentifier>
+			<Abstract type="html">The CWBeaconAdvertiser instance that makes this device discoverable over iBeacon</Abstract>
+			<DeclaredIn>CWWebApplication.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) CWBeaconAdvertiser *beaconAdvertiser</Declaration>
+			
+			
+			<Anchor>//api/name/beaconAdvertiser</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWWebApplication/beaconAdvertiser</TokenIdentifier>
+			<Abstract type="html">The CWBeaconAdvertiser instance that makes this device discoverable over iBeacon</Abstract>
+			<DeclaredIn>CWWebApplication.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) CWBeaconAdvertiser *beaconAdvertiser</Declaration>
+			
+			
+			<Anchor>//api/name/beaconAdvertiser</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CWWebApplication/beaconAdvertiser</TokenIdentifier>
+			<Abstract type="html">The CWBeaconAdvertiser instance that makes this device discoverable over iBeacon</Abstract>
+			<DeclaredIn>CWWebApplication.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) CWBeaconAdvertiser *beaconAdvertiser</Declaration>
+			
+			
+			<Anchor>//api/name/beaconAdvertiser</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWWebApplication/setBeaconMonitor:</TokenIdentifier>
+			<Abstract type="html">The CWBeaconMonitor instance that looks for other Connichiwa devices</Abstract>
+			<DeclaredIn>CWWebApplication.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) CWBeaconMonitor *beaconMonitor</Declaration>
+			
+			
+			<Anchor>//api/name/beaconMonitor</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWWebApplication/beaconMonitor</TokenIdentifier>
+			<Abstract type="html">The CWBeaconMonitor instance that looks for other Connichiwa devices</Abstract>
+			<DeclaredIn>CWWebApplication.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) CWBeaconMonitor *beaconMonitor</Declaration>
+			
+			
+			<Anchor>//api/name/beaconMonitor</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CWWebApplication/beaconMonitor</TokenIdentifier>
+			<Abstract type="html">The CWBeaconMonitor instance that looks for other Connichiwa devices</Abstract>
+			<DeclaredIn>CWWebApplication.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) CWBeaconMonitor *beaconMonitor</Declaration>
+			
+			
+			<Anchor>//api/name/beaconMonitor</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWWebApplication/setLocalWebView:</TokenIdentifier>
+			<Abstract type="html">The local UIWebView where the web application will be displayed on</Abstract>
+			<DeclaredIn>CWWebApplication.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) UIWebView *localWebView</Declaration>
+			
+			
+			<Anchor>//api/name/localWebView</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWWebApplication/localWebView</TokenIdentifier>
+			<Abstract type="html">The local UIWebView where the web application will be displayed on</Abstract>
+			<DeclaredIn>CWWebApplication.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) UIWebView *localWebView</Declaration>
+			
+			
+			<Anchor>//api/name/localWebView</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CWWebApplication/localWebView</TokenIdentifier>
+			<Abstract type="html">The local UIWebView where the web application will be displayed on</Abstract>
+			<DeclaredIn>CWWebApplication.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) UIWebView *localWebView</Declaration>
+			
+			
+			<Anchor>//api/name/localWebView</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+        
+	</File>
+</Tokens>

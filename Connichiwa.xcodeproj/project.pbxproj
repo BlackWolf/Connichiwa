@@ -383,7 +383,8 @@
 				330CBB73193E75850064AD99 /* Headers */,
 				330CBB75193E758E0064AD99 /* Prepare Framework Script */,
 				33163302193F722300EED43E /* Objective-Clean Run Script */,
-				33294104193F958000337D00 /* Create Documentation Script */,
+				33294104193F958000337D00 /* Create AppleDoc Script */,
+				3367186D19489121000A7164 /* Create JSDoc Script */,
 			);
 			buildRules = (
 			);
@@ -545,19 +546,33 @@
 			shellPath = /bin/sh;
 			shellScript = "if [[ -z ${SKIP_OBJCLEAN} || ${SKIP_OBJCLEAN} != 1 ]]; then\nif [[ -d \"${LOCAL_APPS_DIR}/Objective-Clean.app\" ]]; then\n\"${LOCAL_APPS_DIR}\"/Objective-Clean.app/Contents/Resources/ObjClean.app/Contents/MacOS/ObjClean \"${SRCROOT}\"?!Nodelike\nelse\necho \"warning: You have to install and set up Objective-Clean to use its features!\"\nfi\nfi";
 		};
-		33294104193F958000337D00 /* Create Documentation Script */ = {
+		33294104193F958000337D00 /* Create AppleDoc Script */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Create Documentation Script";
+			name = "Create AppleDoc Script";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Runs appledoc command is on release build and it is installed\n# On Release builds, we actually create the documentation\n# ON Debug builds, we only run appledoc to create warnings about missing documentation\n# If the project grows, we will have to see if appledoc takes to long - then we might have to remove it from debug builds\n\n# Look at appledoc --help for all the parameters\n\nAPPLEDOC_PATH=\"/usr/local/bin/appledoc\"\nif [ -x $APPLEDOC_PATH ]; then\n\nif [ ${CONFIGURATION} == \"Release\" ]; then\n$APPLEDOC_PATH \\\n--project-name ${PRODUCT_NAME} \\\n--project-company \"Mario Schreiner\" \\\n--company-id \"com.marioschreiner\" \\\n--output ${PRODUCT_NAME}Docs \\\n--create-html \\\n--create-docset \\\n--install-docset \\\n--keep-undocumented-objects \\\n--keep-undocumented-members \\\n--keep-intermediate-files \\\n--no-repeat-first-par \\\n--warn-undocumented-object \\\n--warn-undocumented-member \\\n--warn-empty-description \\\n--warn-unknown-directive  \\\n--warn-missing-arg \\\n--warn-invalid-crossref \\\n--logformat xcode \\\n--exit-threshold 2 \\\n${PROJECT_DIR}/${PRODUCT_NAME}\nfi;\n\nif [ ${CONFIGURATION} == \"Debug\" ]; then\n$APPLEDOC_PATH \\\n--project-name ${PRODUCT_NAME} \\\n--project-company \"Mario Schreiner\" \\\n--company-id \"com.marioschreiner\" \\\n--output ${PRODUCT_NAME}Docs \\\n--no-create-html \\\n--no-create-docset \\\n--no-install-docset \\\n--keep-undocumented-objects \\\n--keep-undocumented-members \\\n--no-keep-intermediate-files \\\n--no-repeat-first-par \\\n--warn-undocumented-object \\\n--warn-undocumented-member \\\n--warn-empty-description \\\n--warn-unknown-directive  \\\n--warn-missing-arg \\\n--warn-invalid-crossref \\\n--logformat xcode \\\n--exit-threshold 2 \\\n${PROJECT_DIR}/${PRODUCT_NAME}\nfi;\n\nelse\necho \"install appledoc to create a documentation\"\nfi;";
+			shellScript = "# Runs appledoc command is on release build and it is installed\n# On Release builds, we actually create the documentation\n# ON Debug builds, we only run appledoc to create warnings about missing documentation\n# If the project grows, we will have to see if appledoc takes to long - then we might have to remove it from debug builds\n\n# Look at appledoc --help for all the parameters\n\nAPPLEDOC_PATH=\"/usr/local/bin/appledoc\"\nif [ -x $APPLEDOC_PATH ]; then\n\nif [ ${CONFIGURATION} == \"Release\" ]; then\n$APPLEDOC_PATH \\\n--project-name ${PRODUCT_NAME} \\\n--project-company \"Mario Schreiner\" \\\n--company-id \"com.marioschreiner\" \\\n--output ${PRODUCT_NAME}Docs/native \\\n--create-html \\\n--create-docset \\\n--install-docset \\\n--keep-undocumented-objects \\\n--keep-undocumented-members \\\n--keep-intermediate-files \\\n--no-repeat-first-par \\\n--warn-undocumented-object \\\n--warn-undocumented-member \\\n--warn-empty-description \\\n--warn-unknown-directive  \\\n--warn-missing-arg \\\n--warn-invalid-crossref \\\n--logformat xcode \\\n--exit-threshold 2 \\\n${PROJECT_DIR}/${PRODUCT_NAME}\nfi;\n\nif [ ${CONFIGURATION} == \"Debug\" ]; then\n$APPLEDOC_PATH \\\n--project-name ${PRODUCT_NAME} \\\n--project-company \"Mario Schreiner\" \\\n--company-id \"com.marioschreiner\" \\\n--output ${PRODUCT_NAME}Docs \\\n--no-create-html \\\n--no-create-docset \\\n--no-install-docset \\\n--keep-undocumented-objects \\\n--keep-undocumented-members \\\n--no-keep-intermediate-files \\\n--no-repeat-first-par \\\n--warn-undocumented-object \\\n--warn-undocumented-member \\\n--warn-empty-description \\\n--warn-unknown-directive  \\\n--warn-missing-arg \\\n--warn-invalid-crossref \\\n--logformat xcode \\\n--exit-threshold 2 \\\n${PROJECT_DIR}/${PRODUCT_NAME}\nfi;\n\nelse\necho \"install appledoc to create the native documentation\"\nfi;";
+		};
+		3367186D19489121000A7164 /* Create JSDoc Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Create JSDoc Script";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "PATH=$(bash -l -c 'echo $PATH')\nJSDOC_PATH=\"/usr/local/bin/jsdoc\"\nif [ -x $JSDOC_PATH ]; then\n\nif [ ${CONFIGURATION} == \"Release\" ]; then\necho \"$JSDOC_PATH ${PROJECT_DIR}/${PRODUCT_NAME}Resources/weblib -r -d ${PROJECT_DIR}/${PRODUCT_NAME}Docs/weblib\"\n$JSDOC_PATH ${PROJECT_DIR}/${PRODUCT_NAME}Resources/weblib -r -d ${PROJECT_DIR}/${PRODUCT_NAME}Docs/weblib\nfi;\n\nelse\necho \"install jsdoc globally to create a web library documentation\"\nfi;";
 		};
 		33F240AA1944A369004B5C96 /* Touch Resources Script */ = {
 			isa = PBXShellScriptBuildPhase;

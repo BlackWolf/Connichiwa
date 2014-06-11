@@ -1,5 +1,27 @@
 "use strict";
 
+
+
+function DeviceID(major, minor) {
+  if (major === undefined || minor === undefined) throw "DeviceID must contain a major and a minor";
+
+  this.major = major;
+  this.minor = minor;
+}
+
+DeviceID.prototype.equalTo = function(obj)
+{
+  if (DeviceID.prototype.isPrototypeOf(obj) === false) return false;
+
+  return (this.major === obj.major && this.minor === obj.minor);
+};
+
+DeviceID.prototype.toString = function() {
+  return "(" + this.major + "." + this.minor + ")";
+};
+
+
+
 function Device(id, options)
 {
   if (id === undefined) throw "Cannot instantiate device without a valid ID";
@@ -8,8 +30,8 @@ function Device(id, options)
   var passedOptions = options;
   options = {};
   var defaultOptions = {
-    proximity: "unknown",
-    isRemote: true
+    proximity : "unknown",
+    isRemote  : true
   };
   $.extend(options, defaultOptions, passedOptions);
 
@@ -53,24 +75,4 @@ Device.prototype.equalTo = function(obj)
 
 Device.prototype.toString = function() {
   return this.id.toString();
-};
-
-
-
-function DeviceID(major, minor) {
-  if (major === undefined || minor === undefined) throw "DeviceID must contain a major and a minor";
-
-  this.major = major;
-  this.minor = minor;
-}
-
-DeviceID.prototype.equalTo = function(obj)
-{
-  if (DeviceID.prototype.isPrototypeOf(obj) === false) return false;
-
-  return (this.major === obj.major && this.minor === obj.minor);
-};
-
-DeviceID.prototype.toString = function() {
-  return "("+this.major+"."+this.minor+")";
 };

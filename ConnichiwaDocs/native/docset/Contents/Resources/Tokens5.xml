@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Classes/CWDebug.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/cl/CWDebug</TokenIdentifier>
+			<Abstract type="html">Class that holds everything we need to nicely debug</Abstract>
+			<DeclaredIn>CWDebug.h</DeclaredIn>
+            
+			
+			<NodeRef refid="5"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/CWDebug/executeInDebug:</TokenIdentifier>
+			<Abstract type="html">Executes the given code only when we are in debug mode</Abstract>
+			<DeclaredIn>CWDebug.h</DeclaredIn>
+			
+			<Declaration>+ (void)executeInDebug:(void ( ^ ) ( void ))block</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>block</Name>
+					<Abstract type="html">The code to execute in debug</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/executeInDebug:</Anchor>
+            <NodeRef refid="5"/>
+		</Token>
+		
+        
+	</File>
+</Tokens>

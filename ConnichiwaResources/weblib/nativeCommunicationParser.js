@@ -1,6 +1,8 @@
 /* global deviceManager */
 "use strict";
 
+
+
 /*****
 * The Connichiwa Web Library Communication Protocol (Native Layer)
 *
@@ -24,18 +26,18 @@
 
 function NativeCommunicationParser()
 {
-	throw "NativeCommunicationParser should not be instantiated. Use the static .parse()";
+  throw "NativeCommunicationParser should not be instantiated. Use the static .parse()";
 }
 
 NativeCommunicationParser.parse = function(object)
 {
-	switch (object.type)
+  switch (object.type)
 	{
-		case "localinfo":
-			deviceManager.initLocalDeviceWithData(object);
-			break;
-		case "ibeacon":
-			deviceManager.addOrUpdateDevice(object);
-			break;
-	}
+    case "localinfo":
+      deviceManager.initLocalDeviceWithData(object);
+      break;
+    case "ibeacon":
+      deviceManager.addOrUpdateDevice(object);
+      break;
+  }
 };

@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Classes/CWBeaconMonitor.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/cl/CWBeaconMonitor</TokenIdentifier>
+			<Abstract type="html">Monitors the proximity for other Connichiwa beacons. If found, it reports beacons to its delegate.
+Only one instance of the monitor should be active at all time, therefore always use mainMonitor to get an instance of this class.</Abstract>
+			<DeclaredIn>CWBeaconMonitor.h</DeclaredIn>
+            
+			
+			<NodeRef refid="3"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBeaconMonitor/setDelegate:</TokenIdentifier>
+			<Abstract type="html">The delegate object to receive events.</Abstract>
+			<DeclaredIn>CWBeaconMonitor.h</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) id&lt;CWBeaconMonitorDelegate&gt; delegate</Declaration>
+			
+			
+			<Anchor>//api/name/delegate</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBeaconMonitor/delegate</TokenIdentifier>
+			<Abstract type="html">The delegate object to receive events.</Abstract>
+			<DeclaredIn>CWBeaconMonitor.h</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) id&lt;CWBeaconMonitorDelegate&gt; delegate</Declaration>
+			
+			
+			<Anchor>//api/name/delegate</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CWBeaconMonitor/delegate</TokenIdentifier>
+			<Abstract type="html">The delegate object to receive events.</Abstract>
+			<DeclaredIn>CWBeaconMonitor.h</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) id&lt;CWBeaconMonitorDelegate&gt; delegate</Declaration>
+			
+			
+			<Anchor>//api/name/delegate</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/CWBeaconMonitor/mainMonitor</TokenIdentifier>
+			<Abstract type="html">Returns the main instance of this class. Should always be used to retrieve an instance of CWBeaconMonitor.</Abstract>
+			<DeclaredIn>CWBeaconMonitor.h</DeclaredIn>
+			
+			<Declaration>+ (instancetype)mainMonitor</Declaration>
+			
+			<ReturnValue><Abstract type="html">the main monitor instance</Abstract></ReturnValue>
+			<Anchor>//api/name/mainMonitor</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBeaconMonitor/startMonitoring</TokenIdentifier>
+			<Abstract type="html">Starts monitor for other devices and sending events to the delegate if devices are found, lost or change.</Abstract>
+			<DeclaredIn>CWBeaconMonitor.h</DeclaredIn>
+			
+			<Declaration>- (void)startMonitoring</Declaration>
+			
+			
+			<Anchor>//api/name/startMonitoring</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBeaconMonitor/locationManager:didEnterRegion:</TokenIdentifier>
+			<Abstract type="html">Called by CLLocationManager when we cross the border of a beacon and enter its range</Abstract>
+			<DeclaredIn>CWBeaconMonitor.m</DeclaredIn>
+			
+			<Declaration>- (void)locationManager:(CLLocationManager *)manager didEnterRegion:(CLRegion *)region</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>manager</Name>
+					<Abstract type="html">The CLLocationManager instance that detected the change</Abstract>
+				</Parameter><Parameter>
+					<Name>region</Name>
+					<Abstract type="html">The region that was entered</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/locationManager:didEnterRegion:</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBeaconMonitor/locationManager:didExitRegion:</TokenIdentifier>
+			<Abstract type="html">Called by CLLocationManager when we cross the border of a beacon and exit its range</Abstract>
+			<DeclaredIn>CWBeaconMonitor.m</DeclaredIn>
+			
+			<Declaration>- (void)locationManager:(CLLocationManager *)manager didExitRegion:(CLRegion *)region</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>manager</Name>
+					<Abstract type="html">The CLLocationManager instance that detected the change</Abstract>
+				</Parameter><Parameter>
+					<Name>region</Name>
+					<Abstract type="html">The region that was exited</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/locationManager:didExitRegion:</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBeaconMonitor/locationManager:didRangeBeacons:inRegion:</TokenIdentifier>
+			<Abstract type="html">Called by CLLocationManager constantly to report found beacons in our beaconRegion. We get an array of beacons here and then check for new and changed beacons, which we then report to our delegate.
+Note that this method is also called with an empty beacon array</Abstract>
+			<DeclaredIn>CWBeaconMonitor.m</DeclaredIn>
+			
+			<Declaration>- (void)locationManager:(CLLocationManager *)manager didRangeBeacons:(NSArray *)beacons inRegion:(CLBeaconRegion *)region</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>manager</Name>
+					<Abstract type="html">The CLLocationManager instance that detected the beacons</Abstract>
+				</Parameter><Parameter>
+					<Name>beacons</Name>
+					<Abstract type="html">The array of found beacons</Abstract>
+				</Parameter><Parameter>
+					<Name>region</Name>
+					<Abstract type="html">The region in which the beacons where detected - should be the same as our beaconRegion</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/locationManager:didRangeBeacons:inRegion:</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBeaconMonitor/setLocationManager:</TokenIdentifier>
+			<Abstract type="html">CLLocationManager looks for iBeacons and reports found beacons to its delegate</Abstract>
+			<DeclaredIn>CWBeaconMonitor.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) CLLocationManager *locationManager</Declaration>
+			
+			
+			<Anchor>//api/name/locationManager</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBeaconMonitor/locationManager</TokenIdentifier>
+			<Abstract type="html">CLLocationManager looks for iBeacons and reports found beacons to its delegate</Abstract>
+			<DeclaredIn>CWBeaconMonitor.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) CLLocationManager *locationManager</Declaration>
+			
+			
+			<Anchor>//api/name/locationManager</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CWBeaconMonitor/locationManager</TokenIdentifier>
+			<Abstract type="html">CLLocationManager looks for iBeacons and reports found beacons to its delegate</Abstract>
+			<DeclaredIn>CWBeaconMonitor.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) CLLocationManager *locationManager</Declaration>
+			
+			
+			<Anchor>//api/name/locationManager</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBeaconMonitor/setBeaconRegion:</TokenIdentifier>
+			<Abstract type="html">Represents a template of the beacons we are looking for</Abstract>
+			<DeclaredIn>CWBeaconMonitor.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) CLBeaconRegion *beaconRegion</Declaration>
+			
+			
+			<Anchor>//api/name/beaconRegion</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBeaconMonitor/beaconRegion</TokenIdentifier>
+			<Abstract type="html">Represents a template of the beacons we are looking for</Abstract>
+			<DeclaredIn>CWBeaconMonitor.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) CLBeaconRegion *beaconRegion</Declaration>
+			
+			
+			<Anchor>//api/name/beaconRegion</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CWBeaconMonitor/beaconRegion</TokenIdentifier>
+			<Abstract type="html">Represents a template of the beacons we are looking for</Abstract>
+			<DeclaredIn>CWBeaconMonitor.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) CLBeaconRegion *beaconRegion</Declaration>
+			
+			
+			<Anchor>//api/name/beaconRegion</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+        
+	</File>
+</Tokens>
