@@ -1,4 +1,4 @@
-/* global deviceManager */
+/* global CWDeviceManager */
 "use strict";
 
 
@@ -24,20 +24,22 @@
 *
 */
 
-function NativeCommunicationParser()
+var CWNativeCommunicationParser = (function()
 {
-  throw "NativeCommunicationParser should not be instantiated. Use the static .parse()";
-}
+  var parse = function(object)
+  {
+    switch (object.type)
+    {
+      case "localinfo":
+        CWDeviceManager.setLocalDeviceWithData(object);
+        break;
+      case "ibeacon":
+        CWDeviceManager.addOrUpdateDevice(object);
+        break;
+    }
+  };
 
-NativeCommunicationParser.parse = function(object)
-{
-  switch (object.type)
-	{
-    case "localinfo":
-      deviceManager.initLocalDeviceWithData(object);
-      break;
-    case "ibeacon":
-      deviceManager.addOrUpdateDevice(object);
-      break;
-  }
-};
+  return {
+    parse : parse
+  };
+})();

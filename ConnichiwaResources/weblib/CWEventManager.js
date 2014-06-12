@@ -1,0 +1,8 @@
+"use strict";
+
+
+
+function CWEventManager()
+{
+
+}
