@@ -57,7 +57,7 @@
     [self.webserver setDelegate:self];
     [self.webserver startWithDocumentRoot:documentRoot];
     
-    //The webserver started - now show the master's view by opening 127.0.0.1, which will also load the Connichiwa Web Library on this device
+    //The webserver started - now show the master's view by opening 127.0.0.1, which will also load the Connichiwa Web Library on this device and initiate the local websocket connection
     NSURL *localhostURL = [NSURL URLWithString:[NSString stringWithFormat:@"http://127.0.0.1:%d", WEBSERVER_PORT]];
     NSURLRequest *localhostURLRequest = [NSURLRequest requestWithURL:localhostURL];
     
@@ -67,19 +67,29 @@
 }
 
 
+- (void)_startBeaconAdvertising
+{
+    self.beaconAdvertiser = [CWBeaconAdvertiser mainAdvertiser];
+    [self.beaconAdvertiser setDelegate:self];
+    [self.beaconAdvertiser startAdvertising];
+}
+
+
+- (void)_startBeaconMonitoring
+{
+    //Start up iBeacon: Advertise this device and start looking for other devices
+    self.beaconMonitor = [CWBeaconMonitor mainMonitor];
+    [self.beaconMonitor setDelegate:self];
+    [self.beaconMonitor startMonitoring];
+}
+
+
 #pragma mark CWWebserverDelegate
 
 
 - (void)localWebsocketWasOpened
 {
-    //Start up iBeacon: Advertise this device and start looking for other devices
-    self.beaconAdvertiser = [CWBeaconAdvertiser mainAdvertiser];
-    [self.beaconAdvertiser setDelegate:self];
-    [self.beaconAdvertiser startAdvertising];
-    
-    self.beaconMonitor = [CWBeaconMonitor mainMonitor];
-    [self.beaconMonitor setDelegate:self];
-    [self.beaconMonitor startMonitoring];
+    [self _startBeaconAdvertising];
 }
 
 
@@ -89,6 +99,7 @@
 - (void)didStartAdvertising:(CWBeacon *)localBeacon
 {
     [self.webserver sendLocalInfo:localBeacon];
+    [self _startBeaconMonitoring];
 }
 
 

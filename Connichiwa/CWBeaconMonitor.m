@@ -67,7 +67,7 @@
     
     //Make the location manager look for that region
     [self.locationManager startMonitoringForRegion:self.beaconRegion];
-    [self.locationManager startRangingBeaconsInRegion:self.beaconRegion]; //TODO should this be moved to didEnter/ExitRegion?
+    [self.locationManager startRangingBeaconsInRegion:self.beaconRegion];
 }
 
 
@@ -132,19 +132,19 @@
             [self.delegate beaconUpdated:connichiwaBeacon];
         }
         
-        [CWDebug executeInDebug:^{
-            NSString *distanceString;
-            switch (beacon.proximity)
-            {
-                case CLProximityUnknown:    distanceString = @"unknown";    break;
-                case CLProximityImmediate:  distanceString = @"immediate";  break;
-                case CLProximityNear:       distanceString = @"near";       break;
-                case CLProximityFar:        distanceString = @"far";        break;
-            }
-            
+//        [CWDebug executeInDebug:^{
+//            NSString *distanceString;
+//            switch (beacon.proximity)
+//            {
+//                case CLProximityUnknown:    distanceString = @"unknown";    break;
+//                case CLProximityImmediate:  distanceString = @"immediate";  break;
+//                case CLProximityNear:       distanceString = @"near";       break;
+//                case CLProximityFar:        distanceString = @"far";        break;
+//            }
+//            
 //            DLog(@"Detected beacon (%@.%@) at %@ distance",  beacon.major, beacon.minor, distanceString);
 //            DLog(@"Signal strength is %li with an accuracy of %.2f", (long)beacon.rssi, beacon.accuracy);
-        }];
+//        }];
     }
 }
 

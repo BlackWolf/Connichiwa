@@ -572,7 +572,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "PATH=$(bash -l -c 'echo $PATH')\nJSDOC_PATH=\"/usr/local/bin/jsdoc\"\nif [ -x $JSDOC_PATH ]; then\n\nif [ ${CONFIGURATION} == \"Release\" ]; then\necho \"$JSDOC_PATH ${PROJECT_DIR}/${PRODUCT_NAME}Resources/weblib -r -d ${PROJECT_DIR}/${PRODUCT_NAME}Docs/weblib\"\n$JSDOC_PATH ${PROJECT_DIR}/${PRODUCT_NAME}Resources/weblib -r -d ${PROJECT_DIR}/${PRODUCT_NAME}Docs/weblib\nfi;\n\nelse\necho \"install jsdoc globally to create a web library documentation\"\nfi;";
+			shellScript = "PATH=$(bash -l -c 'echo $PATH')\nJSDOC_PATH=\"/usr/local/bin/jsdoc\"\nif [ -x $JSDOC_PATH ]; then\n\nif [ ${CONFIGURATION} == \"Release\" ]; then\n$JSDOC_PATH ${PROJECT_DIR}/${PRODUCT_NAME}Resources/weblib -r -d ${PROJECT_DIR}/${PRODUCT_NAME}Docs/weblib\nfi;\n\nelse\necho \"install jsdoc globally to create a web library documentation\"\nfi;";
 		};
 		33F240AA1944A369004B5C96 /* Touch Resources Script */ = {
 			isa = PBXShellScriptBuildPhase;

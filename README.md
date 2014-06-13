@@ -1,7 +1,9 @@
 Connichiwa
 ==========
 
-A framework for cross-device multi-display web applications
+A framework for local multi-device web applications
+
+**In development, not ready for use**
 
 Used Projects
 ==========
