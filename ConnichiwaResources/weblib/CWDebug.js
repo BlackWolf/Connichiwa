@@ -4,9 +4,11 @@
 
 var CWDebug = (function()
 {
+  var CWDEBUG = false;
+
   var log = function(message)
   {
-    console.log("WEBLIB    " + _getDateString() + " -- " + message);
+    if (CWDEBUG) console.log("WEBLIB    " + _getDateString() + " -- " + message);
   };
 
   var _getDateString = function(date)

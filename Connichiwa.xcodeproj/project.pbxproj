@@ -362,6 +362,8 @@
 			buildConfigurationList = 330CBB90193F14B60064AD99 /* Build configuration list for PBXNativeTarget "ConnichiwaResources" */;
 			buildPhases = (
 				330CBB83193F14B60064AD99 /* Frameworks */,
+				33CC8C2D194B1CD800D99851 /* Concatenate & Minify Web Library Script */,
+				33D197D9194B3D2100AE1E1D /* Touch Folder References Script */,
 				330CBB84193F14B60064AD99 /* Resources */,
 			);
 			buildRules = (
@@ -377,7 +379,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 33A05169193E61CC00FED071 /* Build configuration list for PBXNativeTarget "Connichiwa" */;
 			buildPhases = (
-				33F240AA1944A369004B5C96 /* Touch Resources Script */,
 				33A05142193E61CC00FED071 /* Sources */,
 				33A05143193E61CC00FED071 /* Frameworks */,
 				330CBB73193E75850064AD99 /* Headers */,
@@ -558,7 +559,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Runs appledoc command is on release build and it is installed\n# On Release builds, we actually create the documentation\n# ON Debug builds, we only run appledoc to create warnings about missing documentation\n# If the project grows, we will have to see if appledoc takes to long - then we might have to remove it from debug builds\n\n# Look at appledoc --help for all the parameters\n\nAPPLEDOC_PATH=\"/usr/local/bin/appledoc\"\nif [ -x $APPLEDOC_PATH ]; then\n\nif [ ${CONFIGURATION} == \"Release\" ]; then\n$APPLEDOC_PATH \\\n--project-name ${PRODUCT_NAME} \\\n--project-company \"Mario Schreiner\" \\\n--company-id \"com.marioschreiner\" \\\n--output ${PRODUCT_NAME}Docs/native \\\n--create-html \\\n--create-docset \\\n--install-docset \\\n--keep-undocumented-objects \\\n--keep-undocumented-members \\\n--keep-intermediate-files \\\n--no-repeat-first-par \\\n--warn-undocumented-object \\\n--warn-undocumented-member \\\n--warn-empty-description \\\n--warn-unknown-directive  \\\n--warn-missing-arg \\\n--warn-invalid-crossref \\\n--logformat xcode \\\n--exit-threshold 2 \\\n${PROJECT_DIR}/${PRODUCT_NAME}\nfi;\n\nif [ ${CONFIGURATION} == \"Debug\" ]; then\n$APPLEDOC_PATH \\\n--project-name ${PRODUCT_NAME} \\\n--project-company \"Mario Schreiner\" \\\n--company-id \"com.marioschreiner\" \\\n--output ${PRODUCT_NAME}Docs \\\n--no-create-html \\\n--no-create-docset \\\n--no-install-docset \\\n--keep-undocumented-objects \\\n--keep-undocumented-members \\\n--no-keep-intermediate-files \\\n--no-repeat-first-par \\\n--warn-undocumented-object \\\n--warn-undocumented-member \\\n--warn-empty-description \\\n--warn-unknown-directive  \\\n--warn-missing-arg \\\n--warn-invalid-crossref \\\n--logformat xcode \\\n--exit-threshold 2 \\\n${PROJECT_DIR}/${PRODUCT_NAME}\nfi;\n\nelse\necho \"install appledoc to create the native documentation\"\nfi;";
+			shellScript = "# Appledoc must be installed (from https://github.com/tomaz/appledoc)\n\n# Runs appledoc command is on release build and it is installed\n# On Release builds, we actually create the documentation\n# ON Debug builds, we only run appledoc to create warnings about missing documentation\n# If the project grows, we will have to see if appledoc takes to long - then we might have to remove it from debug builds\n\n# Look at appledoc --help for all the parameters\n\nAPPLEDOC_PATH=\"/usr/local/bin/appledoc\"\nif [ -x $APPLEDOC_PATH ]; then\n\nif [ ${CONFIGURATION} == \"Release\" ]; then\n$APPLEDOC_PATH \\\n--project-name ${PRODUCT_NAME} \\\n--project-company \"Mario Schreiner\" \\\n--company-id \"com.marioschreiner\" \\\n--output ${PRODUCT_NAME}Docs/native \\\n--create-html \\\n--create-docset \\\n--install-docset \\\n--keep-undocumented-objects \\\n--keep-undocumented-members \\\n--keep-intermediate-files \\\n--no-repeat-first-par \\\n--warn-undocumented-object \\\n--warn-undocumented-member \\\n--warn-empty-description \\\n--warn-unknown-directive  \\\n--warn-missing-arg \\\n--warn-invalid-crossref \\\n--logformat xcode \\\n--exit-threshold 2 \\\n${PROJECT_DIR}/${PRODUCT_NAME}\nfi;\n\nif [ ${CONFIGURATION} == \"Debug\" ]; then\n$APPLEDOC_PATH \\\n--project-name ${PRODUCT_NAME} \\\n--project-company \"Mario Schreiner\" \\\n--company-id \"com.marioschreiner\" \\\n--output ${PRODUCT_NAME}Docs \\\n--no-create-html \\\n--no-create-docset \\\n--no-install-docset \\\n--keep-undocumented-objects \\\n--keep-undocumented-members \\\n--no-keep-intermediate-files \\\n--no-repeat-first-par \\\n--warn-undocumented-object \\\n--warn-undocumented-member \\\n--warn-empty-description \\\n--warn-unknown-directive  \\\n--warn-missing-arg \\\n--warn-invalid-crossref \\\n--logformat xcode \\\n--exit-threshold 2 \\\n${PROJECT_DIR}/${PRODUCT_NAME}\nfi;\n\nelse\necho \"install appledoc to create the native documentation\"\nfi;";
 		};
 		3367186D19489121000A7164 /* Create JSDoc Script */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -572,21 +573,35 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "PATH=$(bash -l -c 'echo $PATH')\nJSDOC_PATH=\"/usr/local/bin/jsdoc\"\nif [ -x $JSDOC_PATH ]; then\n\nif [ ${CONFIGURATION} == \"Release\" ]; then\n$JSDOC_PATH ${PROJECT_DIR}/${PRODUCT_NAME}Resources/weblib -r -d ${PROJECT_DIR}/${PRODUCT_NAME}Docs/weblib\nfi;\n\nelse\necho \"install jsdoc globally to create a web library documentation\"\nfi;";
+			shellScript = "# CREATE JSDOC\n# Jsdoc needs to be installed (npm install jsdoc@\"<=3.3.0\")\n\nPATH=$(bash -l -c 'echo $PATH')\nJSDOC_PATH=\"/usr/local/bin/jsdoc\"\nif [ -x $JSDOC_PATH ]; then\n\nif [ ${CONFIGURATION} == \"Release\" ]; then\n$JSDOC_PATH ${PROJECT_DIR}/${PRODUCT_NAME}Resources/weblib -r -d ${PROJECT_DIR}/${PRODUCT_NAME}Docs/weblib\nfi;\n\nelse\necho \"install jsdoc globally via npm to create a web library documentation\"\nfi;";
 		};
-		33F240AA1944A369004B5C96 /* Touch Resources Script */ = {
+		33CC8C2D194B1CD800D99851 /* Concatenate & Minify Web Library Script */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Touch Resources Script";
+			name = "Concatenate & Minify Web Library Script";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/tcsh;
-			shellScript = "touch -cm \"${PROJECT_DIR}/${PRODUCT_NAME}Resources\"\ntouch -cm \"${PROJECT_DIR}/${PRODUCT_NAME}Resources/weblib\"\ntouch -cm \"${PROJECT_DIR}/${PRODUCT_NAME}Resources/node_modules\"";
+			shellPath = /bin/sh;
+			shellScript = "PATH=$(bash -l -c 'echo $PATH')\n\nCONCAT_FILE=\"${PROJECT_DIR}/${PRODUCT_NAME}/weblib/connichiwa.js\"\nCONCAT_FILE_MIN=\"${PROJECT_DIR}/${PRODUCT_NAME}/weblib/connichiwa.min.js\"\n\nrm -f ${CONCAT_FILE}\nrm -f ${CONCAT_FILE_MIN}\n\n# CONCATENATE\n# Concatenates everything in the weblib folder\nfor file in \"${PROJECT_DIR}/${PRODUCT_NAME}/weblib/*\"; do echo $file && cat $file >> ${CONCAT_FILE}; done\n\n# MINIFY\n# Minifyjs needs to be installed (npm install -g minifyjs)\nMINIFYJS_PATH=\"/usr/local/bin/minifyjs\"\nif [ -x $MINIFYJS_PATH ]; then\nif [ -f $CONCAT_FILE ]; then\n\n${MINIFYJS_PATH} -m -i ${CONCAT_FILE} -o ${CONCAT_FILE_MIN}\n\n# If we run in release, delete the non-minified version, we don't need it\nif [ ${CONFIGURATION} == \"Release\" ]; then\nrm -f ${CONCAT_FILE}\nfi;\nfi\nelse\necho \"install minifyjs globally via npm to create a web library documentation\"\nfi;";
+		};
+		33D197D9194B3D2100AE1E1D /* Touch Folder References Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Touch Folder References Script";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "touch -cm \"${PROJECT_DIR}/${PRODUCT_NAME}\"\ntouch -cm \"${PROJECT_DIR}/${PRODUCT_NAME}/weblib\"\ntouch -cm \"${PROJECT_DIR}/${PRODUCT_NAME}/node_modules\"";
 		};
 /* End PBXShellScriptBuildPhase section */
 

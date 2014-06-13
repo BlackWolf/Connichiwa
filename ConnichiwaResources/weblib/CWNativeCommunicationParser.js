@@ -21,8 +21,7 @@
 * Format: major -- The major number of the beacon
 *         minor -- The minor number of the beacon
 *         proximity -- a string describing the distance to the beacon (either "far", "near", "immediate" or "unknown")
-*
-*/
+*****/
 
 var CWNativeCommunicationParser = (function()
 {

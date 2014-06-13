@@ -8,7 +8,7 @@
  *     SERVER_PORT -- the port the HTTP server is supposed to run on
  *     DOCUMENT_ROOT -- the root of the web application, defined by the iOS application.
  *     RESOURCES_PATH -- Full path to the root of ConnichiwaResources.bundle.
- *     DEBUG -- true if the app runs in debug config, false for release
+ *     CWDEBUG -- true if the app runs in debug config, false for release
  *
 **/
 
@@ -64,6 +64,7 @@ websocket.on("connection", function(wsConnection) {
   if (wsLocalConnection === undefined) {
     wsLocalConnection = wsConnection;
     log("WEBSOCKET", "Initialized local connection");
+    sendToWeblib(JSON.stringify({ type: "debug", cwdebug: CWDEBUG }));
     native_localWebsocketWasOpened();
   }
   else
@@ -107,16 +108,16 @@ function getDateString(date)
 {
   if (date === undefined) date = new Date();
 
-  var hours = new String(date.getHours());
+  var hours = String(date.getHours());
   hours = (hours.length === 1) ? "0" + hours : hours;
 
-  var minutes = new String(date.getMinutes());
+  var minutes = String(date.getMinutes());
   minutes = (minutes.length === 1) ? "0" + minutes : minutes;
 
-  var seconds = new String(date.getSeconds());
+  var seconds = String(date.getSeconds());
   seconds = (seconds.length === 1) ? "0" + seconds : seconds;
 
-  var milliseconds = new String(date.getMilliseconds());
+  var milliseconds = String(date.getMilliseconds());
   milliseconds = (milliseconds.length === 1) ? "00" + milliseconds : milliseconds;
   milliseconds = (milliseconds.length === 2) ? "0" + milliseconds : milliseconds;
 
