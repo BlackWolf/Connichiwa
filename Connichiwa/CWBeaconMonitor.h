@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
-#import "CWBeaconMonitorDelegate.h"
 
 
 
@@ -17,11 +16,6 @@
  *  Only one instance of the monitor should be active at all time, therefore always use mainMonitor to get an instance of this class.
  */
 @interface CWBeaconMonitor : NSObject <CLLocationManagerDelegate>
-
-/**
- *  The delegate object to receive events.
- */
-@property (readwrite, strong) id<CWBeaconMonitorDelegate> delegate;
 
 /**
  *  Returns the main instance of this class. Should always be used to retrieve an instance of CWBeaconMonitor.

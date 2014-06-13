@@ -10,6 +10,7 @@
 #import <Nodelike/NLContext.h>
 #import "CWBundle.h"
 #import "CWBeacon.h"
+#import "CWDevice.h"
 #import "CWConstants.h"
 #import "CWDebug.h"
 
@@ -102,13 +103,14 @@
 }
 
 
-- (void)sendBeaconInfo:(CWBeacon *)beacon
+- (void)sendDeviceInfo:(CWDevice *)device
 {
+    //TODO change to type device
     NSDictionary *sendData = @{
                                @"type": @"ibeacon",
-                               @"major": beacon.major,
-                               @"minor": beacon.minor,
-                               @"proximity": beacon.proximity
+                               @"major": device.major,
+                               @"minor": device.minor,
+                               @"proximity": device.proximityString
                                };
     NSString *json = [self JSONFromDictionary:sendData];
     [self _sendToWeblib:json];
@@ -125,7 +127,7 @@
  */
 - (void)_sendToWeblib:(NSString *)message
 {
-//    DLog(@"Sending %@", message);
+    DLog(@"Sending %@", message);
     [self.nodelikeContext evaluateScript:[NSString stringWithFormat:@"sendToWeblib('%@')", message]];
 }
 

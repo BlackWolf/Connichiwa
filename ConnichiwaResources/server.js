@@ -23,11 +23,11 @@ var WebsocketServer = require("ws").Server;
 // WEBSERVER //
 ///////////////
 
-var app = Express();
+var app = new Express();
 
 //Activate logging
 if (CWDEBUG === true) {
-  app.use(Morgan( { immediate: true, format: "WEBSERVER :date :remote-addr -- REQUEST :url (:response-time ms)" } ));
+  app.use(new Morgan( { immediate: true, format: "WEBSERVER :date :remote-addr -- REQUEST :url (:response-time ms)" } ));
 }
 
 //Make sure the server only delivers "safe" filetypes
@@ -84,7 +84,7 @@ function sendToWeblib(message)
     log("Message lost because no local websocket connection exists: " + message);
     return;
   }
-  //log("WEBSERVER", "Sending mesage to weblib: " + message);
+  log("WEBSERVER", "Sending mesage to weblib: " + message);
   wsLocalConnection.send(message);
 }
 

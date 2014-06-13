@@ -8,6 +8,7 @@
 
 #import "CWBeaconMonitor.h"
 #import "CWBeacon.h"
+#import "CWDeviceManager.h"
 #import "CWConstants.h"
 #import "CWDebug.h"
 
@@ -19,6 +20,8 @@
  *  CLLocationManager looks for iBeacons and reports found beacons to its delegate
  */
 @property (readwrite, strong) CLLocationManager *locationManager;
+
+@property (readwrite, strong) CWDeviceManager *deviceManager;
 
 /**
  *  Represents a template of the beacons we are looking for
@@ -43,6 +46,18 @@
     return sharedInstance;
 }
 
+- (instancetype)init
+{
+    self = [super init];
+    
+    self.locationManager = [[CLLocationManager alloc] init];
+    self.locationManager.delegate = self;
+    
+    self.deviceManager = [CWDeviceManager sharedManager];
+    
+    return self;
+}
+
 
 - (void)startMonitoring
 {
@@ -55,9 +70,6 @@
         DLog(@"Device doesn't seem to have iBeacon capabilities. We cannot monitor!");
         return;
     }
-    
-    self.locationManager = [[CLLocationManager alloc] init];
-    self.locationManager.delegate = self;
     
     //Define the region template the location manager will search for - UUID is required
     self.beaconRegion = [[CLBeaconRegion alloc] initWithProximityUUID:[[NSUUID alloc] initWithUUIDString:BEACON_UUID] identifier:@""];
@@ -114,37 +126,38 @@
  */
 - (void)locationManager:(CLLocationManager *)manager didRangeBeacons:(NSArray *)beacons inRegion:(CLBeaconRegion *)region
 {
-//    [CWDebug executeInDebug:^{
-//        if ([beacons count] > 0) DLog(@"%lu iBeacons found nearby", (unsigned long)[beacons count]);
-//    }];
+    [self.deviceManager updateDeviceListWithBeaconList:beacons];
+    
+    [CWDebug executeInDebug:^{
+        if ([beacons count] > 0) DLog(@"%lu iBeacons found nearby", (unsigned long)[beacons count]);
+    }];
     
     for (CLBeacon *beacon in beacons)
     {
-        if (beacon.proximity == CLProximityUnknown) continue;
+        //if (beacon.proximity == CLProximityUnknown) continue;
         //TODO check if this beacon is us by checking major/minor... just in case
         
-        CWBeacon *connichiwaBeacon = [[CWBeacon alloc] initWithMajor:beacon.major
+        /*CWBeacon *connichiwaBeacon = [[CWBeacon alloc] initWithMajor:beacon.major
                                                                minor:beacon.minor
-                                                           proximity:beacon.proximity];
+                                                           proximity:beacon.proximity];*/
         
-        if ([self.delegate respondsToSelector:@selector(beaconUpdated:)])
-        {
-            [self.delegate beaconUpdated:connichiwaBeacon];
-        }
         
-//        [CWDebug executeInDebug:^{
-//            NSString *distanceString;
-//            switch (beacon.proximity)
-//            {
-//                case CLProximityUnknown:    distanceString = @"unknown";    break;
-//                case CLProximityImmediate:  distanceString = @"immediate";  break;
-//                case CLProximityNear:       distanceString = @"near";       break;
-//                case CLProximityFar:        distanceString = @"far";        break;
-//            }
-//            
-//            DLog(@"Detected beacon (%@.%@) at %@ distance",  beacon.major, beacon.minor, distanceString);
-//            DLog(@"Signal strength is %li with an accuracy of %.2f", (long)beacon.rssi, beacon.accuracy);
-//        }];
+        
+        
+        
+        [CWDebug executeInDebug:^{
+            NSString *distanceString;
+            switch (beacon.proximity)
+            {
+                case CLProximityUnknown:    distanceString = @"unknown";    break;
+                case CLProximityImmediate:  distanceString = @"immediate";  break;
+                case CLProximityNear:       distanceString = @"near";       break;
+                case CLProximityFar:        distanceString = @"far";        break;
+            }
+            
+            DLog(@"Detected beacon (%@.%@) at %@ distance",  beacon.major, beacon.minor, distanceString);
+            DLog(@"Signal strength is %li with an accuracy of %.2f", (long)beacon.rssi, beacon.accuracy);
+        }];
     }
 }
 

@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "CWWebserverDelegate.h"
-@class NLContext, CWBeacon;
+@class NLContext, CWBeacon, CWDevice;
 
 
 
@@ -49,6 +49,6 @@
  *
  *  @param beacon The CWBeacon to send
  */
-- (void)sendBeaconInfo:(CWBeacon *)beacon;
+- (void)sendDeviceInfo:(CWDevice *)device;
 
 @end
