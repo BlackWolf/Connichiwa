@@ -1,4 +1,4 @@
-/* global CWDevice, CWDeviceID */
+/* global CWDevice, CWDeviceID, CWEventManager */
 "use strict";
 
 
@@ -25,6 +25,7 @@ var CWDeviceManager = (function()
     {
       CWDebug.log("New remote device " + newDevice.toString() + " at distance " + newDevice.getProximity());
       _remoteDevices.push(newDevice);
+      CWEventManager.trigger("deviceChange", newDevice);
     }
 
     return true;
@@ -39,6 +40,7 @@ var CWDeviceManager = (function()
     CWDebug.log("Adding local device info: " + localDevice.toString());
 
     _localDevice = localDevice;
+    CWEventManager.trigger("localDeviceSet", _localDevice);
   };
 
 

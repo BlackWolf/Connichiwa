@@ -25,7 +25,7 @@
   "requireOperatorBeforeLineBreak": [ "?", "=", "+", "-", "/", "*", "==", "===", "!=", "!==", ">", ">=", "<", "<=" ],
   "disallowLeftStickedOperators": [ "?", "=", "+", "-", "/", "*", "==", "===", "!=", "!==", ">", ">=", "<", "<=" ],
   "requireRightStickedOperators": ["!"],
-  "disallowRightStickedOperators": [ "?", "=", "+", "-", "/", "*", "==", "===", "!=", "!==", ">", ">=", "<", "<=" ],
+  "disallowRightStickedOperators": [ "?", "=", "+", "/", "*", "==", "===", "!=", "!==", ">", ">=", "<", "<=" ],
   "requireLeftStickedOperators": [","],
   "disallowSpaceAfterPrefixUnaryOperators": ["++", "--", "+", "-", "~", "!"],
   "disallowSpaceBeforePostfixUnaryOperators": ["++", "--"],

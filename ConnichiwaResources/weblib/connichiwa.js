@@ -1,4 +1,4 @@
-/* global LazyLoad, CWDeviceManager, CWNativeCommunicationParser, CWDebug */
+/* global LazyLoad, CWDeviceManager, CWNativeCommunicationParser, CWDebug, CWUtil, CWEventManager */
 "use strict";
 
 
@@ -53,7 +53,6 @@ LazyLoad.js([
   Connichiwa = (function()
   {
     var _websocket = new WebSocket("ws://127.0.0.1:8001");
-    var _events = {};
 
 
     ///////////////
@@ -72,7 +71,7 @@ LazyLoad.js([
     {
       var message = e.data;
 
-      //CWDebug.log("message: "+message);
+      CWDebug.log("message: " + message);
 
       var object = JSON.parse(message);
       CWNativeCommunicationParser.parse(object);
@@ -98,11 +97,10 @@ LazyLoad.js([
 
     var on = function(event, callback)
     {
-      if (typeof(event) !== "string") throw "Event name must be a string";
-      if (typeof(callback) !== "function") throw "Event callback must be a function";
+      var validEvents = [ "localDeviceSet", "deviceChange" ];
+      if (CWUtil.inArray(event, validEvents) === false) throw "Registering for invalid event: " + event;
 
-      _events[event] = callback;
-      CWDebug.log("Attached callback to " + event);
+      CWEventManager.register(event, callback);
     };
 
 

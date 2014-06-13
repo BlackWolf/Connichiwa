@@ -16,8 +16,15 @@ var CWUtil = (function()
   };
 
 
+  var inArray = function(value, array)
+  {
+    return (array.indexOf(value) > -1);
+  };
+
+
   return {
     isInt    : isInt,
-    isObject : isObject
+    isObject : isObject,
+    inArray  : inArray
   };
 })();

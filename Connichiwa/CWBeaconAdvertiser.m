@@ -74,8 +74,8 @@
         NSNumber *minor = [NSNumber numberWithUnsignedShort:(uint16_t)arc4random()];
         self.localBeacon = [[CWBeacon alloc] initWithMajor:major minor:minor proximity:CLProximityUnknown];
         self.beaconRegion = [[CLBeaconRegion alloc] initWithProximityUUID:[[NSUUID alloc] initWithUUIDString:BEACON_UUID]
-                                                                    major:(uint16_t)self.localBeacon.major
-                                                                    minor:(uint16_t)self.localBeacon.minor
+                                                                    major:[self.localBeacon.major unsignedShortValue]
+                                                                    minor:[self.localBeacon.minor unsignedShortValue]
                                                                identifier:@""];
         NSDictionary *advertismentData = [self.beaconRegion peripheralDataWithMeasuredPower:nil];
         

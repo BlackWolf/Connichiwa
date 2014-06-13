@@ -1,4 +1,4 @@
-/* global CWUtil */
+/* global CWUtil, CWEventManager */
 "use strict";
 
 
@@ -58,7 +58,8 @@ function CWDevice(id, options)
     if (newData.proximity) _proximity = newData.proximity;
 
     if (oldProximity !== _proximity) {
-      Debug.log("Distance of " + this + " changed to " + _proximity);
+      CWDebug.log("Distance of " + this + " changed to " + _proximity);
+      CWEventManager.trigger("deviceChange", this);
     }
   };
 

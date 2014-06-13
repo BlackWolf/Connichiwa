@@ -79,8 +79,11 @@ websocket.on("connection", function(wsConnection) {
 
 function sendToWeblib(message)
 {
-  if (wsLocalConnection === undefined) return;
-  log("WEBSERVER", "Sending mesage to weblib: " + message);
+  if (wsLocalConnection === undefined) {
+    log("Message lost because no local websocket connection exists: " + message);
+    return;
+  }
+  //log("WEBSERVER", "Sending mesage to weblib: " + message);
   wsLocalConnection.send(message);
 }
 
@@ -104,16 +107,16 @@ function getDateString(date)
 {
   if (date === undefined) date = new Date();
 
-  var hours = date.getHours();
+  var hours = new String(date.getHours());
   hours = (hours.length === 1) ? "0" + hours : hours;
 
-  var minutes = date.getMinutes();
+  var minutes = new String(date.getMinutes());
   minutes = (minutes.length === 1) ? "0" + minutes : minutes;
 
-  var seconds = date.getSeconds();
+  var seconds = new String(date.getSeconds());
   seconds = (seconds.length === 1) ? "0" + seconds : seconds;
 
-  var milliseconds = date.getMilliseconds();
+  var milliseconds = new String(date.getMilliseconds());
   milliseconds = (milliseconds.length === 1) ? "00" + milliseconds : milliseconds;
   milliseconds = (milliseconds.length === 2) ? "0" + milliseconds : milliseconds;
 
