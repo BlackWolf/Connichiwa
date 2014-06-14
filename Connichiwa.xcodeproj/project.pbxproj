@@ -24,8 +24,6 @@
 /* Begin PBXBuildFile section */
 		3306A78D1940746A001B999A /* CWConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 3306A78B1940746A001B999A /* CWConstants.h */; };
 		3306A78E1940746A001B999A /* CWConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 3306A78C1940746A001B999A /* CWConstants.m */; };
-		3306A79219409234001B999A /* CWBeacon.h in Headers */ = {isa = PBXBuildFile; fileRef = 3306A79019409234001B999A /* CWBeacon.h */; };
-		3306A79319409234001B999A /* CWBeacon.m in Sources */ = {isa = PBXBuildFile; fileRef = 3306A79119409234001B999A /* CWBeacon.m */; };
 		3306A79E1940A386001B999A /* server.js in Resources */ = {isa = PBXBuildFile; fileRef = 3306A7981940A2DF001B999A /* server.js */; };
 		330BA3D3193F8CB300D9E54C /* CWWebserver.h in Headers */ = {isa = PBXBuildFile; fileRef = 330BA3D1193F8CB300D9E54C /* CWWebserver.h */; };
 		330BA3D4193F8CB300D9E54C /* CWWebserver.m in Sources */ = {isa = PBXBuildFile; fileRef = 330BA3D2193F8CB300D9E54C /* CWWebserver.m */; };
@@ -33,7 +31,9 @@
 		330CBB88193F14B60064AD99 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 330CBB87193F14B60064AD99 /* CoreFoundation.framework */; };
 		330CBB8E193F14B60064AD99 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 330CBB8C193F14B60064AD99 /* InfoPlist.strings */; };
 		331F2DE31944F4ED007609B9 /* weblib in Resources */ = {isa = PBXBuildFile; fileRef = 331F2DE21944F4ED007609B9 /* weblib */; };
-		331F2DE41944FC01007609B9 /* CWDeviceManagerDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 3306A78F194091DD001B999A /* CWDeviceManagerDelegate.h */; };
+		333BA84B194C93580046F5CB /* CWBeaconMonitorDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 333BA84A194C93580046F5CB /* CWBeaconMonitorDelegate.h */; };
+		333BA850194C9C360046F5CB /* CWDeviceID.h in Headers */ = {isa = PBXBuildFile; fileRef = 333BA84E194C9C360046F5CB /* CWDeviceID.h */; };
+		333BA851194C9C360046F5CB /* CWDeviceID.m in Sources */ = {isa = PBXBuildFile; fileRef = 333BA84F194C9C360046F5CB /* CWDeviceID.m */; };
 		334AB741193FABAA00A15999 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 334AB740193FABAA00A15999 /* JavaScriptCore.framework */; };
 		334AB747193FDADC00A15999 /* CWWebApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = 334AB745193FDADC00A15999 /* CWWebApplication.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		334AB748193FDADC00A15999 /* CWWebApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 334AB746193FDADC00A15999 /* CWWebApplication.m */; };
@@ -49,10 +49,6 @@
 		334AB77319405F1100A15999 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 334AB77219405F1000A15999 /* CoreLocation.framework */; };
 		3367186A19473827000A7164 /* CWBeaconAdvertiseDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 3367186919473827000A7164 /* CWBeaconAdvertiseDelegate.h */; };
 		3367186C194776C1000A7164 /* CWWebserverDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 3367186B194776C1000A7164 /* CWWebserverDelegate.h */; };
-		3372FEDD194B4FA900671983 /* CWDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 3372FEDB194B4FA900671983 /* CWDevice.h */; };
-		3372FEDE194B4FA900671983 /* CWDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 3372FEDC194B4FA900671983 /* CWDevice.m */; };
-		3372FEE1194B4FB200671983 /* CWDeviceManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 3372FEDF194B4FB200671983 /* CWDeviceManager.h */; };
-		3372FEE2194B4FB200671983 /* CWDeviceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3372FEE0194B4FB200671983 /* CWDeviceManager.m */; };
 		33A0514A193E61CC00FED071 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33A05149193E61CC00FED071 /* Foundation.framework */; };
 		33A05158193E61CC00FED071 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33A05157193E61CC00FED071 /* XCTest.framework */; };
 		33A05159193E61CC00FED071 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33A05149193E61CC00FED071 /* Foundation.framework */; };
@@ -125,9 +121,6 @@
 /* Begin PBXFileReference section */
 		3306A78B1940746A001B999A /* CWConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWConstants.h; sourceTree = "<group>"; };
 		3306A78C1940746A001B999A /* CWConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWConstants.m; sourceTree = "<group>"; };
-		3306A78F194091DD001B999A /* CWDeviceManagerDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CWDeviceManagerDelegate.h; sourceTree = "<group>"; };
-		3306A79019409234001B999A /* CWBeacon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWBeacon.h; sourceTree = "<group>"; };
-		3306A79119409234001B999A /* CWBeacon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWBeacon.m; sourceTree = "<group>"; };
 		3306A7981940A2DF001B999A /* server.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = server.js; sourceTree = "<group>"; };
 		330BA3D1193F8CB300D9E54C /* CWWebserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWWebserver.h; sourceTree = "<group>"; };
 		330BA3D2193F8CB300D9E54C /* CWWebserver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWWebserver.m; sourceTree = "<group>"; };
@@ -137,6 +130,9 @@
 		330CBB8D193F14B60064AD99 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		330CBB8F193F14B60064AD99 /* ConnichiwaResources-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ConnichiwaResources-Prefix.pch"; sourceTree = "<group>"; };
 		331F2DE21944F4ED007609B9 /* weblib */ = {isa = PBXFileReference; lastKnownFileType = folder; path = weblib; sourceTree = "<group>"; };
+		333BA84A194C93580046F5CB /* CWBeaconMonitorDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWBeaconMonitorDelegate.h; sourceTree = "<group>"; };
+		333BA84E194C9C360046F5CB /* CWDeviceID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWDeviceID.h; sourceTree = "<group>"; };
+		333BA84F194C9C360046F5CB /* CWDeviceID.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWDeviceID.m; sourceTree = "<group>"; };
 		334AB740193FABAA00A15999 /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		334AB745193FDADC00A15999 /* CWWebApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWWebApplication.h; sourceTree = "<group>"; };
 		334AB746193FDADC00A15999 /* CWWebApplication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWWebApplication.m; sourceTree = "<group>"; };
@@ -152,10 +148,6 @@
 		334AB77219405F1000A15999 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		3367186919473827000A7164 /* CWBeaconAdvertiseDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWBeaconAdvertiseDelegate.h; sourceTree = "<group>"; };
 		3367186B194776C1000A7164 /* CWWebserverDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWWebserverDelegate.h; sourceTree = "<group>"; };
-		3372FEDB194B4FA900671983 /* CWDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWDevice.h; sourceTree = "<group>"; };
-		3372FEDC194B4FA900671983 /* CWDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWDevice.m; sourceTree = "<group>"; };
-		3372FEDF194B4FB200671983 /* CWDeviceManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWDeviceManager.h; sourceTree = "<group>"; };
-		3372FEE0194B4FB200671983 /* CWDeviceManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWDeviceManager.m; sourceTree = "<group>"; };
 		3381A01E193F492600BDDF34 /* Nodelike.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Nodelike.xcodeproj; path = Nodelike/Nodelike.xcodeproj; sourceTree = "<group>"; };
 		33A05146193E61CC00FED071 /* libConnichiwa.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libConnichiwa.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		33A05149193E61CC00FED071 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -206,13 +198,12 @@
 		3306A794194096F6001B999A /* iBeacon */ = {
 			isa = PBXGroup;
 			children = (
-				3306A79019409234001B999A /* CWBeacon.h */,
-				3306A79119409234001B999A /* CWBeacon.m */,
 				334AB749193FDAE500A15999 /* CWBeaconAdvertiser.h */,
 				334AB74A193FDAE500A15999 /* CWBeaconAdvertiser.m */,
 				3367186919473827000A7164 /* CWBeaconAdvertiseDelegate.h */,
 				334AB74D193FDAF200A15999 /* CWBeaconMonitor.h */,
 				334AB74E193FDAF200A15999 /* CWBeaconMonitor.m */,
+				333BA84A194C93580046F5CB /* CWBeaconMonitorDelegate.h */,
 			);
 			name = iBeacon;
 			sourceTree = "<group>";
@@ -249,19 +240,6 @@
 				330CBB8F193F14B60064AD99 /* ConnichiwaResources-Prefix.pch */,
 			);
 			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		3372FED6194B4F9700671983 /* Device Detection */ = {
-			isa = PBXGroup;
-			children = (
-				3372FEDB194B4FA900671983 /* CWDevice.h */,
-				3372FEDC194B4FA900671983 /* CWDevice.m */,
-				3372FEDF194B4FB200671983 /* CWDeviceManager.h */,
-				3372FEE0194B4FB200671983 /* CWDeviceManager.m */,
-				3306A78F194091DD001B999A /* CWDeviceManagerDelegate.h */,
-				3306A794194096F6001B999A /* iBeacon */,
-			);
-			name = "Device Detection";
 			sourceTree = "<group>";
 		};
 		3381A01F193F492600BDDF34 /* Products */ = {
@@ -313,13 +291,15 @@
 		33A0514B193E61CC00FED071 /* Connichiwa */ = {
 			isa = PBXGroup;
 			children = (
-				3372FED6194B4F9700671983 /* Device Detection */,
 				33A0514E193E61CC00FED071 /* Connichiwa.h */,
 				334AB745193FDADC00A15999 /* CWWebApplication.h */,
 				334AB746193FDADC00A15999 /* CWWebApplication.m */,
 				330BA3D1193F8CB300D9E54C /* CWWebserver.h */,
 				330BA3D2193F8CB300D9E54C /* CWWebserver.m */,
 				3367186B194776C1000A7164 /* CWWebserverDelegate.h */,
+				333BA84E194C9C360046F5CB /* CWDeviceID.h */,
+				333BA84F194C9C360046F5CB /* CWDeviceID.m */,
+				3306A794194096F6001B999A /* iBeacon */,
 				3306A7951940970D001B999A /* Helper */,
 				33A0514C193E61CC00FED071 /* Supporting Files */,
 			);
@@ -360,19 +340,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				330CBB74193E75890064AD99 /* Connichiwa.h in Headers */,
+				333BA850194C9C360046F5CB /* CWDeviceID.h in Headers */,
 				3306A78D1940746A001B999A /* CWConstants.h in Headers */,
 				334AB747193FDADC00A15999 /* CWWebApplication.h in Headers */,
 				3367186A19473827000A7164 /* CWBeaconAdvertiseDelegate.h in Headers */,
-				331F2DE41944FC01007609B9 /* CWDeviceManagerDelegate.h in Headers */,
 				330BA3D3193F8CB300D9E54C /* CWWebserver.h in Headers */,
-				3372FEDD194B4FA900671983 /* CWDevice.h in Headers */,
 				334AB74B193FDAE500A15999 /* CWBeaconAdvertiser.h in Headers */,
-				3372FEE1194B4FB200671983 /* CWDeviceManager.h in Headers */,
 				334AB757193FEC6000A15999 /* CWBundle.h in Headers */,
-				3306A79219409234001B999A /* CWBeacon.h in Headers */,
 				3367186C194776C1000A7164 /* CWWebserverDelegate.h in Headers */,
 				334AB74F193FDAF200A15999 /* CWBeaconMonitor.h in Headers */,
 				334AB753193FDDF800A15999 /* CWDebug.h in Headers */,
+				333BA84B194C93580046F5CB /* CWBeaconMonitorDelegate.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -636,12 +614,10 @@
 				334AB758193FEC6000A15999 /* CWBundle.m in Sources */,
 				334AB750193FDAF200A15999 /* CWBeaconMonitor.m in Sources */,
 				334AB754193FDDF800A15999 /* CWDebug.m in Sources */,
-				3372FEDE194B4FA900671983 /* CWDevice.m in Sources */,
-				3372FEE2194B4FB200671983 /* CWDeviceManager.m in Sources */,
 				334AB74C193FDAE500A15999 /* CWBeaconAdvertiser.m in Sources */,
 				334AB748193FDADC00A15999 /* CWWebApplication.m in Sources */,
+				333BA851194C9C360046F5CB /* CWDeviceID.m in Sources */,
 				3306A78E1940746A001B999A /* CWConstants.m in Sources */,
-				3306A79319409234001B999A /* CWBeacon.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

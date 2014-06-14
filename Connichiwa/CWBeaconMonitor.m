@@ -7,8 +7,7 @@
 //
 
 #import "CWBeaconMonitor.h"
-#import "CWBeacon.h"
-#import "CWDeviceManager.h"
+#import "CWDeviceID.h"
 #import "CWConstants.h"
 #import "CWDebug.h"
 
@@ -21,12 +20,12 @@
  */
 @property (readwrite, strong) CLLocationManager *locationManager;
 
-@property (readwrite, strong) CWDeviceManager *deviceManager;
-
 /**
  *  Represents a template of the beacons we are looking for
  */
 @property (readwrite, strong) CLBeaconRegion *beaconRegion;
+
+@property (readwrite, strong) NSArray *currentBeacons;
 
 @end
 
@@ -53,7 +52,10 @@
     self.locationManager = [[CLLocationManager alloc] init];
     self.locationManager.delegate = self;
     
-    self.deviceManager = [CWDeviceManager sharedManager];
+    //Define the region template we will look for - UUID is required
+    self.beaconRegion = [[CLBeaconRegion alloc] initWithProximityUUID:[[NSUUID alloc] initWithUUIDString:BEACON_UUID] identifier:@""];
+    
+    self.currentBeacons = @[];
     
     return self;
 }
@@ -71,15 +73,26 @@
         return;
     }
     
-    //Define the region template the location manager will search for - UUID is required
-    self.beaconRegion = [[CLBeaconRegion alloc] initWithProximityUUID:[[NSUUID alloc] initWithUUIDString:BEACON_UUID] identifier:@""];
     [self.beaconRegion setNotifyOnEntry:YES];
     [self.beaconRegion setNotifyOnExit:YES];
     [self.beaconRegion setNotifyEntryStateOnDisplay:YES];
     
-    //Make the location manager look for that region
     [self.locationManager startMonitoringForRegion:self.beaconRegion];
     [self.locationManager startRangingBeaconsInRegion:self.beaconRegion];
+}
+
+
+- (NSString *)_stringForProximity:(CLProximity)proximity {
+    NSString *proximityString;
+    switch (proximity)
+    {
+        case CLProximityUnknown:    proximityString = @"unknown";    break;
+        case CLProximityImmediate:  proximityString = @"immediate";  break;
+        case CLProximityNear:       proximityString = @"near";       break;
+        case CLProximityFar:        proximityString = @"far";        break;
+    }
+    
+    return proximityString;
 }
 
 
@@ -126,38 +139,57 @@
  */
 - (void)locationManager:(CLLocationManager *)manager didRangeBeacons:(NSArray *)beacons inRegion:(CLBeaconRegion *)region
 {
-    [self.deviceManager updateDeviceListWithBeaconList:beacons];
-    
     [CWDebug executeInDebug:^{
-        if ([beacons count] > 0) DLog(@"%lu iBeacons found nearby", (unsigned long)[beacons count]);
+        if ([beacons count] > 0) DLog(@"%lu iBeacons detected nearby", (unsigned long)[beacons count]);
+        for (CLBeacon *beacon in beacons)
+        {
+           DLog(@"Beacon (%@.%@) ranged at %@ distance (Signal strength %li ; accuracy %.2f)",
+                beacon.major,
+                beacon.minor,
+                [self _stringForProximity:beacon.proximity],
+                (long)beacon.rssi,
+                beacon.accuracy);
+        }
     }];
     
-    for (CLBeacon *beacon in beacons)
+    //Compare the new beacon and old beacon list
+    //  Beacons only in the new list are new devices
+    //  Beacons only in the old list are lost devices
+    //  Beacons in both lists are updated devices
+    NSMutableArray *oldBeacons = [self.currentBeacons mutableCopy];
+    self.currentBeacons = beacons;
+    
+    for (CLBeacon *currentBeacon in self.currentBeacons)
     {
-        //if (beacon.proximity == CLProximityUnknown) continue;
-        //TODO check if this beacon is us by checking major/minor... just in case
-        
-        /*CWBeacon *connichiwaBeacon = [[CWBeacon alloc] initWithMajor:beacon.major
-                                                               minor:beacon.minor
-                                                           proximity:beacon.proximity];*/
-        
-        
-        
-        
-        
-        [CWDebug executeInDebug:^{
-            NSString *distanceString;
-            switch (beacon.proximity)
+        BOOL isNew = YES;
+        for (CLBeacon *oldBeacon in oldBeacons)
+        {
+            if ([currentBeacon.major isEqualToNumber:oldBeacon.major] && [currentBeacon.minor isEqualToNumber:oldBeacon.minor])
             {
-                case CLProximityUnknown:    distanceString = @"unknown";    break;
-                case CLProximityImmediate:  distanceString = @"immediate";  break;
-                case CLProximityNear:       distanceString = @"near";       break;
-                case CLProximityFar:        distanceString = @"far";        break;
+                if (currentBeacon.proximity != oldBeacon.proximity)
+                {
+                    CWDeviceID *currentBeaconID = [[CWDeviceID alloc] initWithMajor:currentBeacon.major minor:currentBeacon.minor];
+                    NSString *proximityString = [self _stringForProximity:currentBeacon.proximity];
+                    if ([self.delegate respondsToSelector:@selector(beaconWithID:changedProximity:)]) [self.delegate beaconWithID:currentBeaconID changedProximity:proximityString];
+                }
+                [oldBeacons removeObject:oldBeacon];
+                isNew = NO;
+                break;
             }
-            
-            DLog(@"Detected beacon (%@.%@) at %@ distance",  beacon.major, beacon.minor, distanceString);
-            DLog(@"Signal strength is %li with an accuracy of %.2f", (long)beacon.rssi, beacon.accuracy);
-        }];
+        }
+        
+        if (isNew)
+        {
+            CWDeviceID *currentBeaconID = [[CWDeviceID alloc] initWithMajor:currentBeacon.major minor:currentBeacon.minor];
+            NSString *proximityString = [self _stringForProximity:currentBeacon.proximity];
+            if ([self.delegate respondsToSelector:@selector(beaconDetectedWithID:inProximity:)]) [self.delegate beaconDetectedWithID:currentBeaconID inProximity:proximityString];
+        }
+    }
+    //All updated beacons were removed, therefore only lost beacons remain
+    for (CLBeacon *oldBeacon in oldBeacons)
+    {
+        CWDeviceID *oldBeaconID = [[CWDeviceID alloc] initWithMajor:oldBeacon.major minor:oldBeacon.minor];
+        if ([self.delegate respondsToSelector:@selector(beaconLostWithID:)]) [self.delegate beaconLostWithID:oldBeaconID];
     }
 }
 

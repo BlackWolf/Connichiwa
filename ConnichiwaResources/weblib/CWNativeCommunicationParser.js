@@ -10,7 +10,7 @@
 *
 *
 *
-* Local Device Information | type="localinfo"
+* Local ID Information | type="localid"
 * Contains information about the local device
 * Format: major -- the major number of this device
 *         minor -- the minor number of this device
@@ -29,11 +29,19 @@ var CWNativeCommunicationParser = (function()
   {
     switch (object.type)
     {
-      case "localinfo":
+      //TODO implement this
+      //lostbeacon is missing
+      //the CWDeviceManager should be rewritten :-)
+      case "localid":
         CWDeviceManager.setLocalDeviceWithData(object);
         break;
-      case "ibeacon":
+      case "newbeacon":
         CWDeviceManager.addOrUpdateDevice(object);
+        break;
+      case "beaconproximitychange":
+        CWDeviceManager.addOrUpdateDevice(object);
+        break;
+      case "lostbeacon":
         break;
     }
   };

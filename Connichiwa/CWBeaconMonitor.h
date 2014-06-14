@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
+#import "CWBeaconMonitorDelegate.h"
 
 
 
@@ -17,12 +18,7 @@
  */
 @interface CWBeaconMonitor : NSObject <CLLocationManagerDelegate>
 
-/**
- *  Returns the main instance of this class. Should always be used to retrieve an instance of CWBeaconMonitor.
- *
- *  @return the main monitor instance
- */
-+ (instancetype)mainMonitor;
+@property (readwrite, strong) id<CWBeaconMonitorDelegate> delegate;
 
 /**
  *  Starts monitor for other devices and sending events to the delegate if devices are found, lost or change.

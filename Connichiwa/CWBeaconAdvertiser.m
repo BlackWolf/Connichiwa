@@ -7,7 +7,7 @@
 //
 
 #import "CWBeaconAdvertiser.h"
-#import "CWBeacon.h"
+#import "CWDeviceID.h"
 #import "CWDebug.h"
 #import "CWConstants.h"
 
@@ -15,7 +15,7 @@
 
 @interface CWBeaconAdvertiser ()
 
-@property (readwrite, strong) CWBeacon *localBeacon;
+@property (readwrite, strong) CWDeviceID *myID;
 
 /**
  *  Core Bluetooth Peripheral Manager, responsible for advertising the iBeacon
@@ -32,18 +32,6 @@
 
 
 @implementation CWBeaconAdvertiser
-
-
-+ (instancetype)mainAdvertiser
-{
-    static dispatch_once_t token;
-    static id sharedInstance;
-    dispatch_once(&token, ^{
-        sharedInstance = [[self alloc] init];
-    });
-    
-    return sharedInstance;
-}
 
 
 - (void)startAdvertising
@@ -70,28 +58,21 @@
     {
         //Powered On - We can start advertising as an iBeacon
         //To identify beacons, we randomize the major/minor and pray to god no other beacon happens to have the same
-        NSNumber *major = [NSNumber numberWithUnsignedShort:(uint16_t)arc4random()];
-        NSNumber *minor = [NSNumber numberWithUnsignedShort:(uint16_t)arc4random()];
-        self.localBeacon = [[CWBeacon alloc] initWithMajor:major minor:minor proximity:CLProximityUnknown];
+        NSNumber *myMajor = [NSNumber numberWithUnsignedShort:(uint16_t)arc4random()];
+        NSNumber *myMinor = [NSNumber numberWithUnsignedShort:(uint16_t)arc4random()];
+        self.myID = [[CWDeviceID alloc] initWithMajor:myMajor minor:myMinor];
+
         self.beaconRegion = [[CLBeaconRegion alloc] initWithProximityUUID:[[NSUUID alloc] initWithUUIDString:BEACON_UUID]
-                                                                    major:[self.localBeacon.major unsignedShortValue]
-                                                                    minor:[self.localBeacon.minor unsignedShortValue]
+                                                                    major:[self.myID.major unsignedShortValue]
+                                                                    minor:[self.myID.minor unsignedShortValue]
                                                                identifier:@""];
         NSDictionary *advertismentData = [self.beaconRegion peripheralDataWithMeasuredPower:nil];
         
-        DLog(@"Peripheral Manager state changed to PoweredOn - Advertising as iBeacon (%@.%@)...", self.localBeacon.major, self.localBeacon.minor);
+        DLog(@"Peripheral Manager state changed to PoweredOn - Advertising as iBeacon (%@.%@)...", self.myID.major, self.myID.minor);
         
-        if ([self.delegate respondsToSelector:@selector(willStartAdvertising:)])
-        {
-            [self.delegate willStartAdvertising:self.localBeacon];
-        }
-        
+        if ([self.delegate respondsToSelector:@selector(willStartAdvertisingWithID:)]) [self.delegate willStartAdvertisingWithID:self.myID];
         [self.peripheralManager startAdvertising:advertismentData];
-        
-        if ([self.delegate respondsToSelector:@selector(didStartAdvertising:)])
-        {
-            [self.delegate didStartAdvertising:self.localBeacon];
-        }
+        if ([self.delegate respondsToSelector:@selector(didStartAdvertisingWithID:)]) [self.delegate didStartAdvertisingWithID:self.myID];
     }
     
     [CWDebug executeInDebug:^{

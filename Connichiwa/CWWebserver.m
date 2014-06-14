@@ -9,8 +9,7 @@
 #import "CWWebserver.h"
 #import <Nodelike/NLContext.h>
 #import "CWBundle.h"
-#import "CWBeacon.h"
-#import "CWDevice.h"
+#import "CWDeviceID.h"
 #import "CWConstants.h"
 #import "CWDebug.h"
 
@@ -32,18 +31,6 @@
 
 
 @implementation CWWebserver
-
-
-+ (instancetype)sharedServer
-{
-    static dispatch_once_t token;
-    static id sharedInstance;
-    dispatch_once(&token, ^{
-        sharedInstance = [[self alloc] init];
-    });
-    
-    return sharedInstance;
-}
 
 
 - (void)startWithDocumentRoot:(NSString *)documentRoot
@@ -91,26 +78,50 @@
 #pragma mark Web Library Communication Protocol
 
 
-- (void)sendLocalInfo:(CWBeacon *)localBeacon
+- (void)sendLocalID:(CWDeviceID *)ID
 {
     NSDictionary *sendData = @{
-                               @"type": @"localinfo",
-                               @"major": localBeacon.major,
-                               @"minor": localBeacon.minor,
+                               @"type": @"localid",
+                               @"major": ID.major,
+                               @"minor": ID.minor,
                                };
     NSString *json = [self JSONFromDictionary:sendData];
     [self _sendToWeblib:json];
 }
 
 
-- (void)sendDeviceInfo:(CWDevice *)device
+- (void)sendNewBeaconWithID:(CWDeviceID *)ID inProximity:(NSString *)proximity
 {
-    //TODO change to type device
     NSDictionary *sendData = @{
-                               @"type": @"ibeacon",
-                               @"major": device.major,
-                               @"minor": device.minor,
-                               @"proximity": device.proximityString
+                               @"type": @"newbeacon",
+                               @"major": ID.major,
+                               @"minor": ID.minor,
+                               @"proximity": proximity
+                               };
+    NSString *json = [self JSONFromDictionary:sendData];
+    [self _sendToWeblib:json];
+}
+
+
+- (void)sendBeaconWithID:(CWDeviceID *)ID newProximity:(NSString *)proximity
+{
+    NSDictionary *sendData = @{
+                               @"type": @"beaconproximitychange",
+                               @"major": ID.major,
+                               @"minor": ID.minor,
+                               @"proximity": proximity
+                               };
+    NSString *json = [self JSONFromDictionary:sendData];
+    [self _sendToWeblib:json];
+}
+
+
+- (void)sendLostBeaconWithID:(CWDeviceID *)ID
+{
+    NSDictionary *sendData = @{
+                               @"type": @"lostbeacon",
+                               @"major": ID.major,
+                               @"minor": ID.minor
                                };
     NSString *json = [self JSONFromDictionary:sendData];
     [self _sendToWeblib:json];
@@ -169,12 +180,12 @@
 {
     __weak typeof(self) weakSelf = self;
     self.nodelikeContext[@"native_localWebsocketWasOpened"] = ^{
-        [weakSelf _localWebsocketWasOpened];
+        [weakSelf localWebsocketWasOpened];
     };
 }
 
 
-- (void)_localWebsocketWasOpened
+- (void)localWebsocketWasOpened
 {
     if ([self.delegate respondsToSelector:@selector(localWebsocketWasOpened)])
     {

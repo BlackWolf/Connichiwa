@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "CWWebserverDelegate.h"
-@class NLContext, CWBeacon, CWDevice;
+@class NLContext, CWDeviceID;
 
 
 
@@ -25,16 +25,6 @@
  */
 @property (readonly) NSString *documentRoot;
 
-//CONTINUE HERE - MAKE SURE WE START ONLY ONCE
-//@property (readonly) BOOL started;
-
-/**
- *  Returns the shared instance of this class. Only one CWWebserver should be used so always use this method to retrieve an instance of CWWebserver.
- *
- *  @return the shared instance of CWWebserver
- */
-+ (instancetype)sharedServer;
-
 /**
  *  Launch the webserver with the given document root.
  *
@@ -42,13 +32,10 @@
  */
 - (void)startWithDocumentRoot:(NSString *)documentRoot;
 
-- (void)sendLocalInfo:(CWBeacon *)localBeacon;
+- (void)sendLocalID:(CWDeviceID *)ID;
 
-/**
- *  Sends information about a CWBeacon to the web library.
- *
- *  @param beacon The CWBeacon to send
- */
-- (void)sendDeviceInfo:(CWDevice *)device;
+- (void)sendNewBeaconWithID:(CWDeviceID *)ID inProximity:(NSString *)proximity;
+- (void)sendBeaconWithID:(CWDeviceID *)ID newProximity:(NSString *)proximity;
+- (void)sendLostBeaconWithID:(CWDeviceID *)ID;
 
 @end

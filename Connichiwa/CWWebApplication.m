@@ -8,9 +8,8 @@
 
 #import "CWWebApplication.h"
 #import "CWWebserver.h"
-#import "CWDeviceManager.h"
-#import "CWDeviceManagerDelegate.h"
 #import "CWBeaconMonitor.h"
+#import "CWBeaconMonitorDelegate.h"
 #import "CWBeaconAdvertiser.h"
 #import "CWBeaconAdvertiseDelegate.h"
 #import "CWWebserverDelegate.h"
@@ -19,14 +18,12 @@
 
 
 
-@interface CWWebApplication () <CWWebserverDelegate, CWBeaconAdvertiserDelegate, CWDeviceManagerDelegate>
+@interface CWWebApplication () <CWWebserverDelegate, CWBeaconAdvertiserDelegate, CWBeaconMonitorDelegate>
 
 /**
  *  The Connichiwa Webserver instance that runs our local webserver and communicates with the web library
  */
 @property (readwrite, strong) CWWebserver *webserver;
-
-@property (readwrite, strong) CWDeviceManager *deviceManager;
 
 /**
  *  The CWBeaconAdvertiser instance that makes this device discoverable over iBeacon
@@ -56,12 +53,8 @@
     
     self.localWebView = webView;
     
-    self.webserver = [CWWebserver sharedServer];
+    self.webserver = [[CWWebserver alloc] init];
     [self.webserver setDelegate:self];
-    
-    self.deviceManager = [CWDeviceManager sharedManager];
-    [self.deviceManager setDelegate:self];
-    
     [self.webserver startWithDocumentRoot:documentRoot];
     
     //The webserver started - now show the master's view by opening 127.0.0.1, which will also load the Connichiwa Web Library on this device and initiate the local websocket connection
@@ -76,7 +69,9 @@
 
 - (void)_startBeaconAdvertising
 {
-    self.beaconAdvertiser = [CWBeaconAdvertiser mainAdvertiser];
+    if (self.beaconAdvertiser != nil) return;
+    
+    self.beaconAdvertiser = [[CWBeaconAdvertiser alloc] init];
     [self.beaconAdvertiser setDelegate:self];
     [self.beaconAdvertiser startAdvertising];
 }
@@ -84,8 +79,10 @@
 
 - (void)_startBeaconMonitoring
 {
-    //Start up iBeacon: Advertise this device and start looking for other devices
-    self.beaconMonitor = [CWBeaconMonitor mainMonitor];
+    if (self.beaconMonitor != nil) return;
+    
+    self.beaconMonitor = [[CWBeaconMonitor alloc] init];
+    [self.beaconMonitor setDelegate:self];
     [self.beaconMonitor startMonitoring];
 }
 
@@ -102,25 +99,31 @@
 #pragma mark CWBeaconAdvertiserDelegate
 
 
-- (void)didStartAdvertising:(CWBeacon *)localBeacon
+- (void)didStartAdvertisingWithID:(CWDeviceID *)ID
 {
-    [self.webserver sendLocalInfo:localBeacon];
+    [self.webserver sendLocalID:ID];
     [self _startBeaconMonitoring];
 }
 
 
-#pragma mark CWDeviceManagerDelegate
+#pragma mark CWBeaconMonitorDelegate
 
 
-/**
- *  See [CWBeaconMonitorDelegate beaconUpdated:]
- *
- * @param beacon See [CWBeaconMonitorDelegate beaconUpdated:]
- */
-- (void)deviceUpdated:(CWDevice *)device
+- (void)beaconDetectedWithID:(CWDeviceID *)ID inProximity:(NSString *)proximity
 {
-    [self.webserver sendDeviceInfo:device];
-    //[self.webserver sendBeaconInfo:beacon];
+    [self.webserver sendNewBeaconWithID:ID inProximity:proximity];
+}
+
+
+- (void)beaconWithID:(CWDeviceID *)ID changedProximity:(NSString *)proximity
+{
+    [self.webserver sendBeaconWithID:ID newProximity:proximity];
+}
+
+
+- (void)beaconLostWithID:(CWDeviceID *)ID
+{
+    [self.webserver sendLostBeaconWithID:ID];
 }
 
 @end

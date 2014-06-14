@@ -10,7 +10,7 @@
 #import <CoreBluetooth/CoreBluetooth.h>
 #import <CoreLocation/CoreLocation.h>
 #import "CWBeaconAdvertiseDelegate.h"
-@class CWBeacon;
+@class CWDeviceID;
 
 
 
@@ -24,14 +24,7 @@
 
 @property (readwrite, strong) id<CWBeaconAdvertiserDelegate> delegate;
 
-@property (readonly) CWBeacon *localBeacon;
-
-/**
- *  Returns the main advertiser instance. Since a device should only act as a single iBeacon, this should always be used to get an instance of CWBeaconAdvertiser
- *
- *  @return The main Beacon Advertiser
- */
-+ (instancetype)mainAdvertiser;
+@property (readonly) CWDeviceID *myID;
 
 /**
  *  Make this device start advertising as an iBeacon. It becomes detectable by other Connichiwa devices.

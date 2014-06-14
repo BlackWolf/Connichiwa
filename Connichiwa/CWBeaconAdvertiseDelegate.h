@@ -7,14 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
-@class CWBeacon;
+#import "CWDeviceID.h"
 
 
 
 @protocol CWBeaconAdvertiserDelegate <NSObject>
 
 @optional
-- (void)willStartAdvertising:(CWBeacon *)localBeacon;
-- (void)didStartAdvertising:(CWBeacon *)localBeacon;
+- (void)willStartAdvertisingWithID:(CWDeviceID *)ID;
+- (void)didStartAdvertisingWithID:(CWDeviceID *)ID;
 
 @end
