@@ -40,49 +40,24 @@ function CWDevice(id, options)
 
   var defaultOptions = {
     proximity : "unknown",
-    isRemote  : true
   };
   $.extend(options, defaultOptions, passedOptions);
 
   var _id = id;
-  var _isRemote = options.isRemote;
   var _proximity = options.proximity;
 
-  this.updateData = function(newData)
+  this.updateProximity = function(newProximity)
   {
-    if (CWUtil.isObject(newData) === false) return;
+    //TODO check proximity string
 
-    //Proximity
-    var oldProximity = _proximity;
-
-    if (newData.proximity) _proximity = newData.proximity;
-
-    if (oldProximity !== _proximity) {
-      CWDebug.log("Distance of " + this + " changed to " + _proximity);
-      CWEventManager.trigger("deviceChange", this);
-    }
+    _proximity = newProximity;
   };
 
   this.getID        = function() { return _id; };
-  this.isRemote     = function() { return _isRemote; };
   this.getProximity = function() { return _proximity; };
 
   return this;
 }
-
-
-CWDevice.fromData = function(data)
-{
-  if (CWUtil.isObject(data) === false) throw "Cannot instantiate device without data";
-
-  var major = data.major;
-  var minor = data.minor;
-  delete data.major;
-  delete data.minor;
-  var id = new CWDeviceID(major, minor);
-
-  return new CWDevice(id, data);
-};
 
 
 CWDevice.prototype.equalTo = function(obj)

@@ -49,7 +49,7 @@ var Connichiwa = (function()
 
   var on = function(event, callback)
   {
-    var validEvents = [ "ready", "localDeviceSet", "deviceChange" ];
+    var validEvents = [ "ready", "localIDSet", "deviceDetected", "deviceProximityChanged", "deviceLost" ];
     if (CWUtil.inArray(event, validEvents) === false) throw "Registering for invalid event: " + event;
 
     CWEventManager.register(event, callback);

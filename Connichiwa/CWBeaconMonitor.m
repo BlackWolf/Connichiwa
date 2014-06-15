@@ -152,13 +152,21 @@
         }
     }];
     
+    //When a beacon is shut down, it first goes to unknown proximity and then disappears about 5-10 seconds later
+    //To speedup beacon loss events, we therefore treat beacons at unknown proximity as lost beacons
+    NSMutableArray *newBeacons = [beacons mutableCopy];
+    for (CLBeacon *beacon in newBeacons)
+    {
+        if (beacon.proximity == CLProximityUnknown) [newBeacons removeObject:beacon];
+    }
+    
+    NSMutableArray *oldBeacons = [self.currentBeacons mutableCopy];
+    self.currentBeacons = newBeacons;
+    
     //Compare the new beacon and old beacon list
     //  Beacons only in the new list are new devices
     //  Beacons only in the old list are lost devices
     //  Beacons in both lists are updated devices
-    NSMutableArray *oldBeacons = [self.currentBeacons mutableCopy];
-    self.currentBeacons = beacons;
-    
     for (CLBeacon *currentBeacon in self.currentBeacons)
     {
         BOOL isNew = YES;

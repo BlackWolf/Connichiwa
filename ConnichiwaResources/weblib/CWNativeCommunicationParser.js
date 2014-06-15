@@ -29,19 +29,19 @@ var CWNativeCommunicationParser = (function()
   {
     switch (object.type)
     {
-      //TODO implement this
-      //lostbeacon is missing
-      //the CWDeviceManager should be rewritten :-)
       case "localid":
-        CWDeviceManager.setLocalDeviceWithData(object);
+        var ID = new CWDeviceID(object.major, object.minor);
+        CWDeviceManager.setLocalID(ID);
         break;
       case "newbeacon":
-        CWDeviceManager.addOrUpdateDevice(object);
+        var device = new CWDevice(new CWDeviceID(object.major, object.minor), { proximity: object.proximity });
+        CWDeviceManager.addDevice(device);
         break;
       case "beaconproximitychange":
-        CWDeviceManager.addOrUpdateDevice(object);
+        CWDeviceManager.updateDeviceProximity(new CWDeviceID(object.major, object.minor), object.proximity);
         break;
       case "lostbeacon":
+        CWDeviceManager.removeDevice(new CWDeviceID(object.major, object.minor));
         break;
     }
   };

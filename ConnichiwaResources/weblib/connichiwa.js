@@ -77,49 +77,24 @@ function CWDevice(id, options)
 
   var defaultOptions = {
     proximity : "unknown",
-    isRemote  : true
   };
   $.extend(options, defaultOptions, passedOptions);
 
   var _id = id;
-  var _isRemote = options.isRemote;
   var _proximity = options.proximity;
 
-  this.updateData = function(newData)
+  this.updateProximity = function(newProximity)
   {
-    if (CWUtil.isObject(newData) === false) return;
+    //TODO check proximity string
 
-    //Proximity
-    var oldProximity = _proximity;
-
-    if (newData.proximity) _proximity = newData.proximity;
-
-    if (oldProximity !== _proximity) {
-      CWDebug.log("Distance of " + this + " changed to " + _proximity);
-      CWEventManager.trigger("deviceChange", this);
-    }
+    _proximity = newProximity;
   };
 
   this.getID        = function() { return _id; };
-  this.isRemote     = function() { return _isRemote; };
   this.getProximity = function() { return _proximity; };
 
   return this;
 }
-
-
-CWDevice.fromData = function(data)
-{
-  if (CWUtil.isObject(data) === false) throw "Cannot instantiate device without data";
-
-  var major = data.major;
-  var minor = data.minor;
-  delete data.major;
-  delete data.minor;
-  var id = new CWDeviceID(major, minor);
-
-  return new CWDevice(id, data);
-};
 
 
 CWDevice.prototype.equalTo = function(obj)
@@ -133,86 +108,72 @@ CWDevice.prototype.equalTo = function(obj)
 CWDevice.prototype.toString = function() {
   return this.getID().toString();
 };
-/* global CWDevice, CWDeviceID, CWEventManager */
+/* global CWDevice, CWDeviceID, CWEventManager, CWDebug */
 "use strict";
 
 
 
 var CWDeviceManager = (function()
 {
-  var _localDevice;
+  var _localID;
   var _remoteDevices = [];
+
+
+  var setLocalID = function(ID)
+  {
+    if (_localID !== undefined) throw "Local ID can only be set once";
+
+    _localID = ID;
+    CWDebug.log("Local ID set to " + _localID.toString());
+    CWEventManager.trigger("localIDSet", _localID);
+  };
 
 
   var addDevice = function(newDevice)
   {
     if (CWDevice.prototype.isPrototypeOf(newDevice) === false) throw "Cannot add a non-device";
+    if (_getDeviceWithID(newDevice.getID()) !== null) throw "Device with ID " + newDevice.getID() + " was added twice";
 
-    //Check if the device already exists
-    var existingDevice = getDevice(newDevice.getID());
-    if (existingDevice !== null) return existingDevice;
-
-    if (newDevice.isRemote() !== true)
-    {
-      setLocalDevice(newDevice);
-    }
-    else
-    {
-      CWDebug.log("New remote device " + newDevice.toString() + " at distance " + newDevice.getProximity());
-      _remoteDevices.push(newDevice);
-      CWEventManager.trigger("deviceChange", newDevice);
-    }
-
-    return true;
-  };
-
-  var setLocalDevice = function(localDevice)
-  {
-    if (CWDevice.prototype.isPrototypeOf(localDevice) === false) throw "Local device must be a device";
-    if (_localDevice !== undefined) throw "Local device cannot be set twice";
-    if (localDevice.isRemote() !== false) throw "Local device must be local";
-
-    CWDebug.log("Adding local device info: " + localDevice.toString());
-
-    _localDevice = localDevice;
-    CWEventManager.trigger("localDeviceSet", _localDevice);
+    _remoteDevices.push(newDevice);
+    CWDebug.log("Detected new device: " + newDevice);
+    CWEventManager.trigger("deviceDetected", newDevice);
   };
 
 
-  var setLocalDeviceWithData = function(localDeviceData)
+  var updateDeviceProximity = function(ID, newProximity)
   {
-    if (CWUtil.isObject(localDeviceData) === false) localDeviceData = {};
+    if (CWDeviceID.prototype.isPrototypeOf(ID) === false) throw "A DeviceID is needed to update a device";
 
-    localDeviceData.isRemote = false;
-    var localDevice = CWDevice.fromData(localDeviceData);
+    var device = _getDeviceWithID(ID);
+    if (device === null) throw "Tried to change proximity of an undetected device";
 
-    setLocalDevice(localDevice);
+    device.updateProximity(newProximity);
+    CWDebug.log("Distance of " + this + " changed to " + newProximity);
+    CWEventManager.trigger("deviceProximityChanged", device);
   };
 
 
-  var addOrUpdateDevice = function(deviceData)
+  var removeDevice = function(ID)
   {
-    var newDevice = CWDevice.fromData(deviceData);
-    var addResult = addDevice(newDevice);
+    if (CWDeviceID.prototype.isPrototypeOf(ID) === false) throw "A DeviceID is needed to remove a device";
 
-    if (addResult !== true)
-    {
-      //The beacon data was an update to an existing device
-      //addDevice() gives the existing device back to us
-      var existingDevice = addResult;
-      existingDevice.updateData(deviceData);
-    }
+    var device = _getDeviceWithID(ID);
+    if (device === null) throw "Tried to remove a device that doesn't exist";
+
+    var index = _remoteDevices.indexOf(device);
+    _remoteDevices.splice(index, 1);
+    CWEventManager.trigger("deviceLost", device);
   };
 
 
-  var getDevice = function(id)
+  var _getDeviceWithID = function(ID)
   {
-    if (CWDeviceID.prototype.isPrototypeOf(id) === false) throw "A DeviceID is needed to search for an existing device";
+    if (CWDeviceID.prototype.isPrototypeOf(ID) === false) throw "A DeviceID is needed to search for an existing device";
 
     for (var i = 0; i < _remoteDevices.length; i++)
     {
       var remoteDevice = _remoteDevices[i];
-      if (remoteDevice.getID().equalTo(id))
+      if (remoteDevice.getID().equalTo(ID))
       {
         return remoteDevice;
       }
@@ -222,11 +183,10 @@ var CWDeviceManager = (function()
   };
 
   return {
-    addDevice              : addDevice,
-    setLocalDevice         : setLocalDevice,
-    setLocalDeviceWithData : setLocalDeviceWithData,
-    addOrUpdateDevice      : addOrUpdateDevice,
-    getDevice              : getDevice
+    setLocalID            : setLocalID,
+    addDevice             : addDevice,
+    updateDeviceProximity : updateDeviceProximity,
+    removeDevice          : removeDevice
   };
 })();
 /* global CWDebug */
@@ -280,7 +240,7 @@ var CWEventManager = (function()
 *
 *
 *
-* Local Device Information | type="localinfo"
+* Local ID Information | type="localid"
 * Contains information about the local device
 * Format: major -- the major number of this device
 *         minor -- the minor number of this device
@@ -299,11 +259,19 @@ var CWNativeCommunicationParser = (function()
   {
     switch (object.type)
     {
-      case "localinfo":
-        CWDeviceManager.setLocalDeviceWithData(object);
+      case "localid":
+        var ID = new CWDeviceID(object.major, object.minor);
+        CWDeviceManager.setLocalID(ID);
         break;
-      case "ibeacon":
-        CWDeviceManager.addOrUpdateDevice(object);
+      case "newbeacon":
+        var device = new CWDevice(new CWDeviceID(object.major, object.minor), { proximity: object.proximity });
+        CWDeviceManager.addDevice(device);
+        break;
+      case "beaconproximitychange":
+        CWDeviceManager.updateDeviceProximity(new CWDeviceID(object.major, object.minor), object.proximity);
+        break;
+      case "lostbeacon":
+        CWDeviceManager.removeDevice(new CWDeviceID(object.major, object.minor));
         break;
     }
   };
@@ -387,6 +355,7 @@ var Connichiwa = (function()
   ///////////////
 
   var _websocket = new WebSocket("ws://127.0.0.1:8001");
+                  //var _websocket = new WebSocket("ws://192.168.1.100:8001");
 
   _websocket.onopen = function()
   {
@@ -425,7 +394,7 @@ var Connichiwa = (function()
 
   var on = function(event, callback)
   {
-    var validEvents = [ "ready", "localDeviceSet", "deviceChange" ];
+    var validEvents = [ "ready", "localIDSet", "deviceDetected", "deviceProximityChanged", "deviceLost" ];
     if (CWUtil.inArray(event, validEvents) === false) throw "Registering for invalid event: " + event;
 
     CWEventManager.register(event, callback);
