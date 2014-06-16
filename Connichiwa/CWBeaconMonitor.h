@@ -18,10 +18,13 @@
  */
 @interface CWBeaconMonitor : NSObject <CLLocationManagerDelegate>
 
+/**
+ *  Delegate to receive events by this class
+ */
 @property (readwrite, strong) id<CWBeaconMonitorDelegate> delegate;
 
 /**
- *  Starts monitor for other devices and sending events to the delegate if devices are found, lost or change.
+ *  Starts monitoring for other devices and sends events about changes in the proximity to the delegate
  */
 - (void)startMonitoring;
 

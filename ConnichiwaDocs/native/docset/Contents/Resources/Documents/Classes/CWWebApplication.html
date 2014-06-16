@@ -54,9 +54,17 @@
 	
 	<option value="instance_methods">Instance Methods</option>
 	
-	<option value="//api/name/beaconUpdated:">&nbsp;&nbsp;&nbsp;&nbsp;- beaconUpdated:</option>
+	<option value="//api/name/_startBeaconAdvertising">&nbsp;&nbsp;&nbsp;&nbsp;- _startBeaconAdvertising</option>
 	
-	<option value="//api/name/didStartAdvertising:">&nbsp;&nbsp;&nbsp;&nbsp;- didStartAdvertising:</option>
+	<option value="//api/name/_startBeaconMonitoring">&nbsp;&nbsp;&nbsp;&nbsp;- _startBeaconMonitoring</option>
+	
+	<option value="//api/name/beaconDetectedWithID:inProximity:">&nbsp;&nbsp;&nbsp;&nbsp;- beaconDetectedWithID:inProximity:</option>
+	
+	<option value="//api/name/beaconLostWithID:">&nbsp;&nbsp;&nbsp;&nbsp;- beaconLostWithID:</option>
+	
+	<option value="//api/name/beaconWithID:changedProximity:">&nbsp;&nbsp;&nbsp;&nbsp;- beaconWithID:changedProximity:</option>
+	
+	<option value="//api/name/didStartAdvertisingWithID:">&nbsp;&nbsp;&nbsp;&nbsp;- didStartAdvertisingWithID:</option>
 	
 	<option value="//api/name/initWithDocumentRoot:onWebView:">&nbsp;&nbsp;&nbsp;&nbsp;- initWithDocumentRoot:onWebView:</option>
 	
@@ -104,9 +112,17 @@
 
 <li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#instance_methods">Instance Methods</a></span><ul>
 	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/beaconUpdated:">beaconUpdated:</a></span></li>
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/_startBeaconAdvertising">_startBeaconAdvertising</a></span></li>
 	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/didStartAdvertising:">didStartAdvertising:</a></span></li>
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/_startBeaconMonitoring">_startBeaconMonitoring</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/beaconDetectedWithID:inProximity:">beaconDetectedWithID:inProximity:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/beaconLostWithID:">beaconLostWithID:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/beaconWithID:changedProximity:">beaconWithID:changedProximity:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/didStartAdvertisingWithID:">didStartAdvertisingWithID:</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/initWithDocumentRoot:onWebView:">initWithDocumentRoot:onWebView:</a></span></li>
 	
@@ -181,19 +197,43 @@
 						<ul class="task-list">
 							<li>
 	<span class="tooltip">
+		<code><a href="#//api/name/_startBeaconAdvertising">&ndash;&nbsp;_startBeaconAdvertising</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/_startBeaconMonitoring">&ndash;&nbsp;_startBeaconMonitoring</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
 		<code><a href="#//api/name/localWebsocketWasOpened">&ndash;&nbsp;localWebsocketWasOpened</a></code>
 	</span>
 	
 	
 </li><li>
 	<span class="tooltip">
-		<code><a href="#//api/name/didStartAdvertising:">&ndash;&nbsp;didStartAdvertising:</a></code>
+		<code><a href="#//api/name/didStartAdvertisingWithID:">&ndash;&nbsp;didStartAdvertisingWithID:</a></code>
 	</span>
 	
 	
 </li><li>
 	<span class="tooltip">
-		<code><a href="#//api/name/beaconUpdated:">&ndash;&nbsp;beaconUpdated:</a></code>
+		<code><a href="#//api/name/beaconDetectedWithID:inProximity:">&ndash;&nbsp;beaconDetectedWithID:inProximity:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/beaconWithID:changedProximity:">&ndash;&nbsp;beaconWithID:changedProximity:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/beaconLostWithID:">&ndash;&nbsp;beaconLostWithID:</a></code>
 	</span>
 	
 	
@@ -397,18 +437,90 @@
 						<h2 class="subtitle subtitle-methods">Instance Methods</h2>
 						
 						<div class="section-method">
-	<a name="//api/name/beaconUpdated:" title="beaconUpdated:"></a>
-	<h3 class="subsubtitle method-title">beaconUpdated:</h3>
+	<a name="//api/name/_startBeaconAdvertising" title="_startBeaconAdvertising"></a>
+	<h3 class="subsubtitle method-title">_startBeaconAdvertising</h3>
 	
 	
 	
 	<div class="method-subsection brief-description">
-		<p>See <a href="../Protocols/CWBeaconMonitorDelegate.html#//api/name/beaconUpdated:">[CWBeaconMonitorDelegate beaconUpdated:]</a></p>
+		<p>Advises the <a href="../Classes/CWBeaconAdvertiser.html">CWBeaconAdvertiser</a> to start advertising this device as a connichiwa beacon</p>
 	</div>		
 	
     
 
-	<div class="method-subsection method-declaration"><code>- (void)beaconUpdated:(CWBeacon *)<em>beacon</em></code></div>
+	<div class="method-subsection method-declaration"><code>- (void)_startBeaconAdvertising</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">CWWebApplication.m</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/_startBeaconMonitoring" title="_startBeaconMonitoring"></a>
+	<h3 class="subsubtitle method-title">_startBeaconMonitoring</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Advises this device to start looking for other connichiwa devices around it</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (void)_startBeaconMonitoring</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">CWWebApplication.m</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/beaconDetectedWithID:inProximity:" title="beaconDetectedWithID:inProximity:"></a>
+	<h3 class="subsubtitle method-title">beaconDetectedWithID:inProximity:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>See <a href="../Protocols/CWBeaconMonitorDelegate.html#//api/name/beaconDetectedWithID:inProximity:">[CWBeaconMonitorDelegate beaconDetectedWithID:inProximity:]</a></p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (void)beaconDetectedWithID:(CWDeviceID *)<em>ID</em> inProximity:(NSString *)<em>proximity</em></code></div>
 
     
 	
@@ -416,8 +528,13 @@
 		<h4 class="method-subtitle parameter-title">Parameters</h4>
 		
 		<dl class="argument-def parameter-def">
-			<dt><em>beacon</em></dt>
-			<dd><p>See <a href="../Protocols/CWBeaconMonitorDelegate.html#//api/name/beaconUpdated:">[CWBeaconMonitorDelegate beaconUpdated:]</a></p></dd>
+			<dt><em>ID</em></dt>
+			<dd><p>See <a href="../Protocols/CWBeaconMonitorDelegate.html#//api/name/beaconDetectedWithID:inProximity:">[CWBeaconMonitorDelegate beaconDetectedWithID:inProximity:]</a></p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>proximity</em></dt>
+			<dd><p>See <a href="../Protocols/CWBeaconMonitorDelegate.html#//api/name/beaconDetectedWithID:inProximity:">[CWBeaconMonitorDelegate beaconDetectedWithID:inProximity:]</a></p></dd>
 		</dl>
 		
 	</div>
@@ -443,14 +560,146 @@
 </div>
 						
 						<div class="section-method">
-	<a name="//api/name/didStartAdvertising:" title="didStartAdvertising:"></a>
-	<h3 class="subsubtitle method-title">didStartAdvertising:</h3>
+	<a name="//api/name/beaconLostWithID:" title="beaconLostWithID:"></a>
+	<h3 class="subsubtitle method-title">beaconLostWithID:</h3>
 	
 	
+	
+	<div class="method-subsection brief-description">
+		<p>See <a href="../Protocols/CWBeaconMonitorDelegate.html#//api/name/beaconLostWithID:">[CWBeaconMonitorDelegate beaconLostWithID:]</a></p>
+	</div>		
+	
+    
 
-	<div class="method-subsection method-declaration"><code>- (void)didStartAdvertising:(CWBeacon *)<em>localBeacon</em></code></div>
+	<div class="method-subsection method-declaration"><code>- (void)beaconLostWithID:(CWDeviceID *)<em>ID</em></code></div>
 
     
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>ID</em></dt>
+			<dd><p>See <a href="../Protocols/CWBeaconMonitorDelegate.html#//api/name/beaconLostWithID:">[CWBeaconMonitorDelegate beaconLostWithID:]</a></p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">CWWebApplication.m</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/beaconWithID:changedProximity:" title="beaconWithID:changedProximity:"></a>
+	<h3 class="subsubtitle method-title">beaconWithID:changedProximity:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>See <a href="../Protocols/CWBeaconMonitorDelegate.html#//api/name/beaconDetectedWithID:inProximity:">[CWBeaconMonitorDelegate beaconDetectedWithID:inProximity:]</a></p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (void)beaconWithID:(CWDeviceID *)<em>ID</em> changedProximity:(NSString *)<em>proximity</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>ID</em></dt>
+			<dd><p>See <a href="../Protocols/CWBeaconMonitorDelegate.html#//api/name/beaconDetectedWithID:inProximity:">[CWBeaconMonitorDelegate beaconDetectedWithID:inProximity:]</a></p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>proximity</em></dt>
+			<dd><p>See <a href="../Protocols/CWBeaconMonitorDelegate.html#//api/name/beaconDetectedWithID:inProximity:">[CWBeaconMonitorDelegate beaconDetectedWithID:inProximity:]</a></p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">CWWebApplication.m</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/didStartAdvertisingWithID:" title="didStartAdvertisingWithID:"></a>
+	<h3 class="subsubtitle method-title">didStartAdvertisingWithID:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>See <a href="../Protocols/CWBeaconAdvertiserDelegate.html#//api/name/didStartAdvertisingWithID:">[CWBeaconAdvertiserDelegate didStartAdvertisingWithID:]</a></p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (void)didStartAdvertisingWithID:(CWDeviceID *)<em>ID</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>ID</em></dt>
+			<dd><p>See <a href="../Protocols/CWBeaconAdvertiserDelegate.html#//api/name/didStartAdvertisingWithID:">[CWBeaconAdvertiserDelegate didStartAdvertisingWithID:]</a></p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">CWWebApplication.m</code><br />
+	</div>				
+	
+	
 </div>
 						
 						<div class="section-method">
@@ -514,10 +763,35 @@
 	<h3 class="subsubtitle method-title">localWebsocketWasOpened</h3>
 	
 	
+	
+	<div class="method-subsection brief-description">
+		<p>See <a href="../Protocols/CWWebserverDelegate.html#//api/name/localWebsocketWasOpened">[CWWebserverDelegate localWebsocketWasOpened]</a></p>
+	</div>		
+	
+    
 
 	<div class="method-subsection method-declaration"><code>- (void)localWebsocketWasOpened</code></div>
 
     
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">CWWebApplication.m</code><br />
+	</div>				
+	
+	
 </div>
 						
 					</div>
@@ -535,7 +809,7 @@
 				<div id="footer">
 					<hr />
 					<div class="footer-copyright">
-						<p><span class="copyright">&copy; 2014 Mario Schreiner. All rights reserved. (Last updated: 2014-06-11)</span><br />
+						<p><span class="copyright">&copy; 2014 Mario Schreiner. All rights reserved. (Last updated: 2014-06-16)</span><br />
 						
 						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2 (build 963)</a>.</span></p>
 						

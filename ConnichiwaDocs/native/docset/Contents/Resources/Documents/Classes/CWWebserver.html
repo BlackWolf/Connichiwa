@@ -48,26 +48,25 @@
 	
 	
 	
-	<option value="class_methods">Class Methods</option>
-	
-	<option value="//api/name/sharedServer">&nbsp;&nbsp;&nbsp;&nbsp;+ sharedServer</option>
-	
-	
 	
 	
 	<option value="instance_methods">Instance Methods</option>
 	
-	<option value="//api/name/JSONFromDictionary:">&nbsp;&nbsp;&nbsp;&nbsp;- JSONFromDictionary:</option>
-	
-	<option value="//api/name/_localWebsocketWasOpened">&nbsp;&nbsp;&nbsp;&nbsp;- _localWebsocketWasOpened</option>
+	<option value="//api/name/_JSONFromDictionary:">&nbsp;&nbsp;&nbsp;&nbsp;- _JSONFromDictionary:</option>
 	
 	<option value="//api/name/_registerWebserverCallbacks">&nbsp;&nbsp;&nbsp;&nbsp;- _registerWebserverCallbacks</option>
 	
 	<option value="//api/name/_sendToWeblib:">&nbsp;&nbsp;&nbsp;&nbsp;- _sendToWeblib:</option>
 	
-	<option value="//api/name/sendBeaconInfo:">&nbsp;&nbsp;&nbsp;&nbsp;- sendBeaconInfo:</option>
+	<option value="//api/name/localWebsocketWasOpened">&nbsp;&nbsp;&nbsp;&nbsp;- localWebsocketWasOpened</option>
 	
-	<option value="//api/name/sendLocalInfo:">&nbsp;&nbsp;&nbsp;&nbsp;- sendLocalInfo:</option>
+	<option value="//api/name/sendBeaconWithID:newProximity:">&nbsp;&nbsp;&nbsp;&nbsp;- sendBeaconWithID:newProximity:</option>
+	
+	<option value="//api/name/sendLocalID:">&nbsp;&nbsp;&nbsp;&nbsp;- sendLocalID:</option>
+	
+	<option value="//api/name/sendLostBeaconWithID:">&nbsp;&nbsp;&nbsp;&nbsp;- sendLostBeaconWithID:</option>
+	
+	<option value="//api/name/sendNewBeaconWithID:inProximity:">&nbsp;&nbsp;&nbsp;&nbsp;- sendNewBeaconWithID:inProximity:</option>
 	
 	<option value="//api/name/startWithDocumentRoot:">&nbsp;&nbsp;&nbsp;&nbsp;- startWithDocumentRoot:</option>
 	
@@ -107,27 +106,25 @@
 
 
 
-<li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#class_methods">Class Methods</a></span><ul>
-	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/sharedServer">sharedServer</a></span></li>
-	
-</ul></li>
-
 
 
 <li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#instance_methods">Instance Methods</a></span><ul>
 	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/JSONFromDictionary:">JSONFromDictionary:</a></span></li>
-	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/_localWebsocketWasOpened">_localWebsocketWasOpened</a></span></li>
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/_JSONFromDictionary:">_JSONFromDictionary:</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/_registerWebserverCallbacks">_registerWebserverCallbacks</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/_sendToWeblib:">_sendToWeblib:</a></span></li>
 	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/sendBeaconInfo:">sendBeaconInfo:</a></span></li>
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/localWebsocketWasOpened">localWebsocketWasOpened</a></span></li>
 	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/sendLocalInfo:">sendLocalInfo:</a></span></li>
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/sendBeaconWithID:newProximity:">sendBeaconWithID:newProximity:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/sendLocalID:">sendLocalID:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/sendLostBeaconWithID:">sendLostBeaconWithID:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/sendNewBeaconWithID:inProximity:">sendNewBeaconWithID:inProximity:</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/startWithDocumentRoot:">startWithDocumentRoot:</a></span></li>
 	
@@ -168,8 +165,9 @@
 					<div class="section section-overview">
 						<a title="Overview" name="overview"></a>
 						<h2 class="subtitle subtitle-overview">Overview</h2>
-						<p>The CWWebserver class represents the local webserver run by Connichiwa in order to run local web applications. It launches the webserver and acts as a bridge between Objective-C and the server, sending and receiving messages from it over the Connichiwa Communication Protocol (Native Layer).
-Only one instance of a CWWebserver can run in an application - always use the <a href="#//api/name/sharedServer">sharedServer</a> method to retrieve that instance.</p>
+						<p>The CWWebserver class represents the local webserver run by Connichiwa in order to run local web applications.
+It is responsible for launching and managing the webserver and acts as a bridge between Objective-C and the server, sending and receiving messages from it over the Connichiwa Communication Protocol (Native Layer).
+Only one instance of the webserver should be running on a device.</p>
 					</div>
 					
 					
@@ -199,25 +197,31 @@ Only one instance of a CWWebserver can run in an application - always use the <a
 	
 </li><li>
 	<span class="tooltip">
-		<code><a href="#//api/name/sharedServer">+&nbsp;sharedServer</a></code>
-	</span>
-	
-	
-</li><li>
-	<span class="tooltip">
 		<code><a href="#//api/name/startWithDocumentRoot:">&ndash;&nbsp;startWithDocumentRoot:</a></code>
 	</span>
 	
 	
 </li><li>
 	<span class="tooltip">
-		<code><a href="#//api/name/sendLocalInfo:">&ndash;&nbsp;sendLocalInfo:</a></code>
+		<code><a href="#//api/name/sendLocalID:">&ndash;&nbsp;sendLocalID:</a></code>
 	</span>
 	
 	
 </li><li>
 	<span class="tooltip">
-		<code><a href="#//api/name/sendBeaconInfo:">&ndash;&nbsp;sendBeaconInfo:</a></code>
+		<code><a href="#//api/name/sendNewBeaconWithID:inProximity:">&ndash;&nbsp;sendNewBeaconWithID:inProximity:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/sendBeaconWithID:newProximity:">&ndash;&nbsp;sendBeaconWithID:newProximity:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/sendLostBeaconWithID:">&ndash;&nbsp;sendLostBeaconWithID:</a></code>
 	</span>
 	
 	
@@ -237,7 +241,7 @@ Only one instance of a CWWebserver can run in an application - always use the <a
 	
 </li><li>
 	<span class="tooltip">
-		<code><a href="#//api/name/JSONFromDictionary:">&ndash;&nbsp;JSONFromDictionary:</a></code>
+		<code><a href="#//api/name/_JSONFromDictionary:">&ndash;&nbsp;_JSONFromDictionary:</a></code>
 	</span>
 	
 	
@@ -249,7 +253,7 @@ Only one instance of a CWWebserver can run in an application - always use the <a
 	
 </li><li>
 	<span class="tooltip">
-		<code><a href="#//api/name/_localWebsocketWasOpened">&ndash;&nbsp;_localWebsocketWasOpened</a></code>
+		<code><a href="#//api/name/localWebsocketWasOpened">&ndash;&nbsp;localWebsocketWasOpened</a></code>
 	</span>
 	
 	
@@ -285,10 +289,35 @@ Only one instance of a CWWebserver can run in an application - always use the <a
 	<h3 class="subsubtitle method-title">delegate</h3>
 	
 	
+	
+	<div class="method-subsection brief-description">
+		<p>The delegate to receive events send by CWWebserver</p>
+	</div>		
+	
+    
 
 	<div class="method-subsection method-declaration"><code>@property (readwrite, strong) id&lt;CWWebserverDelegate&gt; delegate</code></div>
 
     
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">CWWebserver.h</code><br />
+	</div>				
+	
+	
 </div>
 						
 						<div class="section-method">
@@ -367,53 +396,6 @@ Only one instance of a CWWebserver can run in an application - always use the <a
 					
 					
 					
-					<div class="section section-methods">
-						<a title="Class Methods" name="class_methods"></a>
-						<h2 class="subtitle subtitle-methods">Class Methods</h2>
-						
-						<div class="section-method">
-	<a name="//api/name/sharedServer" title="sharedServer"></a>
-	<h3 class="subsubtitle method-title">sharedServer</h3>
-	
-	
-	
-	<div class="method-subsection brief-description">
-		<p>Returns the shared instance of this class. Only one CWWebserver should be used so always use this method to retrieve an instance of CWWebserver.</p>
-	</div>		
-	
-    
-
-	<div class="method-subsection method-declaration"><code>+ (instancetype)sharedServer</code></div>
-
-    
-	
-	
-	
-	<div class="method-subsection return">
-		<h4 class="method-subtitle parameter-title">Return Value</h4>
-		<p>the shared instance of CWWebserver</p>
-	</div>
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<div class="method-subsection declared-in-section">
-		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">CWWebserver.h</code><br />
-	</div>				
-	
-	
-</div>
-						
-					</div>
-					
 					
 					
 					<div class="section section-methods">
@@ -421,8 +403,8 @@ Only one instance of a CWWebserver can run in an application - always use the <a
 						<h2 class="subtitle subtitle-methods">Instance Methods</h2>
 						
 						<div class="section-method">
-	<a name="//api/name/JSONFromDictionary:" title="JSONFromDictionary:"></a>
-	<h3 class="subsubtitle method-title">JSONFromDictionary:</h3>
+	<a name="//api/name/_JSONFromDictionary:" title="_JSONFromDictionary:"></a>
+	<h3 class="subsubtitle method-title">_JSONFromDictionary:</h3>
 	
 	
 	
@@ -433,7 +415,7 @@ The dictionary must be convertable to JSON as defined by NSJSONSerialization</p>
 	
     
 
-	<div class="method-subsection method-declaration"><code>- (NSString *)JSONFromDictionary:(NSDictionary *)<em>dictionary</em></code></div>
+	<div class="method-subsection method-declaration"><code>- (NSString *)_JSONFromDictionary:(NSDictionary *)<em>dictionary</em></code></div>
 
     
 	
@@ -473,25 +455,39 @@ The dictionary must be convertable to JSON as defined by NSJSONSerialization</p>
 </div>
 						
 						<div class="section-method">
-	<a name="//api/name/_localWebsocketWasOpened" title="_localWebsocketWasOpened"></a>
-	<h3 class="subsubtitle method-title">_localWebsocketWasOpened</h3>
-	
-	
-
-	<div class="method-subsection method-declaration"><code>- (void)_localWebsocketWasOpened</code></div>
-
-    
-</div>
-						
-						<div class="section-method">
 	<a name="//api/name/_registerWebserverCallbacks" title="_registerWebserverCallbacks"></a>
 	<h3 class="subsubtitle method-title">_registerWebserverCallbacks</h3>
 	
 	
+	
+	<div class="method-subsection brief-description">
+		<p>Registers the functions in Javascript that call native methods (and therefore allow the webserver to send messages to the native layer)</p>
+	</div>		
+	
+    
 
 	<div class="method-subsection method-declaration"><code>- (void)_registerWebserverCallbacks</code></div>
 
     
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">CWWebserver.m</code><br />
+	</div>				
+	
+	
 </div>
 						
 						<div class="section-method">
@@ -541,18 +537,54 @@ The dictionary must be convertable to JSON as defined by NSJSONSerialization</p>
 </div>
 						
 						<div class="section-method">
-	<a name="//api/name/sendBeaconInfo:" title="sendBeaconInfo:"></a>
-	<h3 class="subsubtitle method-title">sendBeaconInfo:</h3>
+	<a name="//api/name/localWebsocketWasOpened" title="localWebsocketWasOpened"></a>
+	<h3 class="subsubtitle method-title">localWebsocketWasOpened</h3>
 	
 	
 	
 	<div class="method-subsection brief-description">
-		<p>Sends information about a <a href="../Classes/CWBeacon.html">CWBeacon</a> to the web library.</p>
+		<p>Called by the webserver when the websocket connection to the local web view was established successfully</p>
 	</div>		
 	
     
 
-	<div class="method-subsection method-declaration"><code>- (void)sendBeaconInfo:(CWBeacon *)<em>beacon</em></code></div>
+	<div class="method-subsection method-declaration"><code>- (void)localWebsocketWasOpened</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">CWWebserver.m</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/sendBeaconWithID:newProximity:" title="sendBeaconWithID:newProximity:"></a>
+	<h3 class="subsubtitle method-title">sendBeaconWithID:newProximity:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Sends a message to the web application and informs it of a change of the proximity of a device nearby</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (void)sendBeaconWithID:(CWDeviceID *)<em>ID</em> newProximity:(NSString *)<em>proximity</em></code></div>
 
     
 	
@@ -560,8 +592,13 @@ The dictionary must be convertable to JSON as defined by NSJSONSerialization</p>
 		<h4 class="method-subtitle parameter-title">Parameters</h4>
 		
 		<dl class="argument-def parameter-def">
-			<dt><em>beacon</em></dt>
-			<dd><p>The <a href="../Classes/CWBeacon.html">CWBeacon</a> to send</p></dd>
+			<dt><em>ID</em></dt>
+			<dd><p>The ID of the device that changed</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>proximity</em></dt>
+			<dd><p>A string describing the new distance between this device and the detected device</p></dd>
 		</dl>
 		
 	</div>
@@ -587,14 +624,146 @@ The dictionary must be convertable to JSON as defined by NSJSONSerialization</p>
 </div>
 						
 						<div class="section-method">
-	<a name="//api/name/sendLocalInfo:" title="sendLocalInfo:"></a>
-	<h3 class="subsubtitle method-title">sendLocalInfo:</h3>
+	<a name="//api/name/sendLocalID:" title="sendLocalID:"></a>
+	<h3 class="subsubtitle method-title">sendLocalID:</h3>
 	
 	
+	
+	<div class="method-subsection brief-description">
+		<p>Sends a message to the web application with the ID this device is advertised under</p>
+	</div>		
+	
+    
 
-	<div class="method-subsection method-declaration"><code>- (void)sendLocalInfo:(CWBeacon *)<em>localBeacon</em></code></div>
+	<div class="method-subsection method-declaration"><code>- (void)sendLocalID:(CWDeviceID *)<em>ID</em></code></div>
 
     
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>ID</em></dt>
+			<dd><p>The ID of this device</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">CWWebserver.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/sendLostBeaconWithID:" title="sendLostBeaconWithID:"></a>
+	<h3 class="subsubtitle method-title">sendLostBeaconWithID:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Sends a message to the web application and informs it of a nearby device that was lost</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (void)sendLostBeaconWithID:(CWDeviceID *)<em>ID</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>ID</em></dt>
+			<dd><p>The ID of the lost device</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">CWWebserver.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/sendNewBeaconWithID:inProximity:" title="sendNewBeaconWithID:inProximity:"></a>
+	<h3 class="subsubtitle method-title">sendNewBeaconWithID:inProximity:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Sends a message to the web application and informs it of a new device detected nearby</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (void)sendNewBeaconWithID:(CWDeviceID *)<em>ID</em> inProximity:(NSString *)<em>proximity</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>ID</em></dt>
+			<dd><p>The ID of the detected device</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>proximity</em></dt>
+			<dd><p>A string describing the distance between this device and the detected device</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">CWWebserver.h</code><br />
+	</div>				
+	
+	
 </div>
 						
 						<div class="section-method">
@@ -658,7 +827,7 @@ The dictionary must be convertable to JSON as defined by NSJSONSerialization</p>
 				<div id="footer">
 					<hr />
 					<div class="footer-copyright">
-						<p><span class="copyright">&copy; 2014 Mario Schreiner. All rights reserved. (Last updated: 2014-06-11)</span><br />
+						<p><span class="copyright">&copy; 2014 Mario Schreiner. All rights reserved. (Last updated: 2014-06-16)</span><br />
 						
 						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2 (build 963)</a>.</span></p>
 						

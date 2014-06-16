@@ -40,6 +40,16 @@
  */
 @property (readwrite, strong) UIWebView *localWebView;
 
+/**
+ *  Advises the CWBeaconAdvertiser to start advertising this device as a connichiwa beacon
+ */
+- (void)_startBeaconAdvertising;
+
+/**
+ *  Advises this device to start looking for other connichiwa devices around it
+ */
+- (void)_startBeaconMonitoring;
+
 @end
 
 
@@ -90,6 +100,9 @@
 #pragma mark CWWebserverDelegate
 
 
+/**
+ *  See [CWWebserverDelegate localWebsocketWasOpened]
+ */
 - (void)localWebsocketWasOpened
 {
     [self _startBeaconAdvertising];
@@ -99,6 +112,11 @@
 #pragma mark CWBeaconAdvertiserDelegate
 
 
+/**
+ *  See [CWBeaconAdvertiserDelegate didStartAdvertisingWithID:]
+ *
+ *  @param ID See [CWBeaconAdvertiserDelegate didStartAdvertisingWithID:]
+ */
 - (void)didStartAdvertisingWithID:(CWDeviceID *)ID
 {
     [self.webserver sendLocalID:ID];
@@ -109,18 +127,35 @@
 #pragma mark CWBeaconMonitorDelegate
 
 
+/**
+ *  See [CWBeaconMonitorDelegate beaconDetectedWithID:inProximity:]
+ *
+ *  @param ID        See [CWBeaconMonitorDelegate beaconDetectedWithID:inProximity:]
+ *  @param proximity See [CWBeaconMonitorDelegate beaconDetectedWithID:inProximity:]
+ */
 - (void)beaconDetectedWithID:(CWDeviceID *)ID inProximity:(NSString *)proximity
 {
     [self.webserver sendNewBeaconWithID:ID inProximity:proximity];
 }
 
 
+/**
+ *  See [CWBeaconMonitorDelegate beaconDetectedWithID:inProximity:]
+ *
+ *  @param ID        See [CWBeaconMonitorDelegate beaconDetectedWithID:inProximity:]
+ *  @param proximity See [CWBeaconMonitorDelegate beaconDetectedWithID:inProximity:]
+ */
 - (void)beaconWithID:(CWDeviceID *)ID changedProximity:(NSString *)proximity
 {
     [self.webserver sendBeaconWithID:ID newProximity:proximity];
 }
 
 
+/**
+ *  See [CWBeaconMonitorDelegate beaconLostWithID:]
+ *
+ *  @param ID See [CWBeaconMonitorDelegate beaconLostWithID:]
+ */
 - (void)beaconLostWithID:(CWDeviceID *)ID
 {
     [self.webserver sendLostBeaconWithID:ID];

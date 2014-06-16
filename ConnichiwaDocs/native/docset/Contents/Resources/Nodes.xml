@@ -42,39 +42,6 @@
 	<Library>
 		
 		<Node id="1" type="file" documentType="reference">
-            <Name>CWBeacon</Name>
-            <Path>Classes/CWBeacon.html</Path>
-            
-                <Subnodes>
-                <Node type="section">
-                    <Path>Classes/CWBeacon.html</Path>
-                    <Name>Overview</Name>
-                    <Anchor>overview</Anchor>
-                </Node>
-                <Node type="section">
-                    <Path>Classes/CWBeacon.html</Path>
-                    <Name>Tasks</Name>
-                    <Anchor>tasks</Anchor>
-                </Node>
-                
-                <Node type="section">
-                    <Path>Classes/CWBeacon.html</Path>
-                    <Name>Properties</Name>
-                    <Anchor>properties</Anchor>
-                </Node>
-                
-                
-                
-                <Node type="section">
-                    <Path>Classes/CWBeacon.html</Path>
-                    <Name>Instance Methods</Name>
-                    <Anchor>instance_methods</Anchor>
-                </Node>
-                
-            </Subnodes>
-            
-        </Node>
-		<Node id="2" type="file" documentType="reference">
             <Name>CWBeaconAdvertiser</Name>
             <Path>Classes/CWBeaconAdvertiser.html</Path>
             
@@ -97,12 +64,6 @@
                 </Node>
                 
                 
-                <Node type="section">
-                    <Path>Classes/CWBeaconAdvertiser.html</Path>
-                    <Name>Class Methods</Name>
-                    <Anchor>class_methods</Anchor>
-                </Node>
-                
                 
                 <Node type="section">
                     <Path>Classes/CWBeaconAdvertiser.html</Path>
@@ -113,7 +74,7 @@
             </Subnodes>
             
         </Node>
-		<Node id="3" type="file" documentType="reference">
+		<Node id="2" type="file" documentType="reference">
             <Name>CWBeaconMonitor</Name>
             <Path>Classes/CWBeaconMonitor.html</Path>
             
@@ -136,12 +97,6 @@
                 </Node>
                 
                 
-                <Node type="section">
-                    <Path>Classes/CWBeaconMonitor.html</Path>
-                    <Name>Class Methods</Name>
-                    <Anchor>class_methods</Anchor>
-                </Node>
-                
                 
                 <Node type="section">
                     <Path>Classes/CWBeaconMonitor.html</Path>
@@ -152,7 +107,7 @@
             </Subnodes>
             
         </Node>
-		<Node id="4" type="file" documentType="reference">
+		<Node id="3" type="file" documentType="reference">
             <Name>CWBundle</Name>
             <Path>Classes/CWBundle.html</Path>
             
@@ -179,7 +134,7 @@
             </Subnodes>
             
         </Node>
-		<Node id="5" type="file" documentType="reference">
+		<Node id="4" type="file" documentType="reference">
             <Name>CWDebug</Name>
             <Path>Classes/CWDebug.html</Path>
             
@@ -202,6 +157,39 @@
                     <Anchor>class_methods</Anchor>
                 </Node>
                 
+                
+            </Subnodes>
+            
+        </Node>
+		<Node id="5" type="file" documentType="reference">
+            <Name>CWDeviceID</Name>
+            <Path>Classes/CWDeviceID.html</Path>
+            
+                <Subnodes>
+                <Node type="section">
+                    <Path>Classes/CWDeviceID.html</Path>
+                    <Name>Overview</Name>
+                    <Anchor>overview</Anchor>
+                </Node>
+                <Node type="section">
+                    <Path>Classes/CWDeviceID.html</Path>
+                    <Name>Tasks</Name>
+                    <Anchor>tasks</Anchor>
+                </Node>
+                
+                <Node type="section">
+                    <Path>Classes/CWDeviceID.html</Path>
+                    <Name>Properties</Name>
+                    <Anchor>properties</Anchor>
+                </Node>
+                
+                
+                
+                <Node type="section">
+                    <Path>Classes/CWDeviceID.html</Path>
+                    <Name>Instance Methods</Name>
+                    <Anchor>instance_methods</Anchor>
+                </Node>
                 
             </Subnodes>
             
@@ -261,12 +249,6 @@
                     <Anchor>properties</Anchor>
                 </Node>
                 
-                
-                <Node type="section">
-                    <Path>Classes/CWWebserver.html</Path>
-                    <Name>Class Methods</Name>
-                    <Anchor>class_methods</Anchor>
-                </Node>
                 
                 
                 <Node type="section">

@@ -2,22 +2,28 @@
 "use strict";
 
 
-/*****
-* The Connichiwa Web Library Communication Protocol (Webserver)
-*
-* Here we describe the protocol used to communicate between this library and the local webserver. These describe messages that are not triggered by the native layer. For those messages see CWNativeCommunicationParser. The communication is done via JSON.
-*
-*
-*
-* Debug Flag Information | type="debug"
-* Contains information about if we run in debug mode or not
-* Format: cwdebug -- true if we are debugging, otherwise false
-*****/
-
+/**
+ * The Connichiwa Communication Protocol Parser (Webserver).  
+ * Here the protocol used to communicate between this library and the webserver is parsed. Although all websocket messages are (obvisouly) send by the webserver, this class parses messages that are triggered by the webserver itself and not relayed through the webserver. The communication is done via JSON.
+ *
+ * **Debug Flag Information** -- type="debug"  
+ * Contains a flag telling us if we run in debug mode or not. Format:
+ * * cwdebug -- true if we are debugging, otherwise false
+ *
+ * @namespace CWWebserverCommunicationParser
+ */
 var CWWebserverCommunicationParser = (function()
 {
-  var parse = function(object)
+  /**
+   * Parses a message from the websocket. If the message is none of the messages described by this class, this method will do nothing. Otherwise the message will trigger an appropiate action.
+   *
+   * @param {string} message The message from the websocket
+   *
+   * @memberof CWWebserverCommunicationParser
+   */
+  var parse = function(message)
   {
+    var object = JSON.parse(message);
     switch (object.type)
     {
       case "debug":

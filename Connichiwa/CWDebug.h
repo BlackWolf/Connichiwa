@@ -24,6 +24,8 @@ void cwLog(NSString *format, ...);
 
 #define ALog(fmt, ...) cwLog((@"%s:%d -- " fmt), (strrchr(__FILE__, '/') ? : __FILE__ - 1) + 1, __LINE__, ##__VA_ARGS__)
 
+#define ResolveUnused(x) ((void)x)
+
 
 
 /**

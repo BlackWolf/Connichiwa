@@ -4,8 +4,9 @@
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/cl/CWWebserver</TokenIdentifier>
-			<Abstract type="html">The CWWebserver class represents the local webserver run by Connichiwa in order to run local web applications. It launches the webserver and acts as a bridge between Objective-C and the server, sending and receiving messages from it over the Connichiwa Communication Protocol (Native Layer).
-Only one instance of a CWWebserver can run in an application - always use the sharedServer method to retrieve that instance.</Abstract>
+			<Abstract type="html">The CWWebserver class represents the local webserver run by Connichiwa in order to run local web applications.
+It is responsible for launching and managing the webserver and acts as a bridge between Objective-C and the server, sending and receiving messages from it over the Connichiwa Communication Protocol (Native Layer).
+Only one instance of the webserver should be running on a device.</Abstract>
 			<DeclaredIn>CWWebserver.h</DeclaredIn>
             
 			
@@ -15,7 +16,7 @@ Only one instance of a CWWebserver can run in an application - always use the sh
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/instm/CWWebserver/setDelegate:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
+			<Abstract type="html">The delegate to receive events send by CWWebserver</Abstract>
 			<DeclaredIn>CWWebserver.h</DeclaredIn>
 			
 			<Declaration>@property (readwrite, strong) id&lt;CWWebserverDelegate&gt; delegate</Declaration>
@@ -27,7 +28,7 @@ Only one instance of a CWWebserver can run in an application - always use the sh
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/instm/CWWebserver/delegate</TokenIdentifier>
-			<Abstract type="html"></Abstract>
+			<Abstract type="html">The delegate to receive events send by CWWebserver</Abstract>
 			<DeclaredIn>CWWebserver.h</DeclaredIn>
 			
 			<Declaration>@property (readwrite, strong) id&lt;CWWebserverDelegate&gt; delegate</Declaration>
@@ -39,7 +40,7 @@ Only one instance of a CWWebserver can run in an application - always use the sh
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/instp/CWWebserver/delegate</TokenIdentifier>
-			<Abstract type="html"></Abstract>
+			<Abstract type="html">The delegate to receive events send by CWWebserver</Abstract>
 			<DeclaredIn>CWWebserver.h</DeclaredIn>
 			
 			<Declaration>@property (readwrite, strong) id&lt;CWWebserverDelegate&gt; delegate</Declaration>
@@ -86,18 +87,6 @@ Only one instance of a CWWebserver can run in an application - always use the sh
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/clm/CWWebserver/sharedServer</TokenIdentifier>
-			<Abstract type="html">Returns the shared instance of this class. Only one CWWebserver should be used so always use this method to retrieve an instance of CWWebserver.</Abstract>
-			<DeclaredIn>CWWebserver.h</DeclaredIn>
-			
-			<Declaration>+ (instancetype)sharedServer</Declaration>
-			
-			<ReturnValue><Abstract type="html">the shared instance of CWWebserver</Abstract></ReturnValue>
-			<Anchor>//api/name/sharedServer</Anchor>
-            <NodeRef refid="7"/>
-		</Token>
-		
-		<Token>
 			<TokenIdentifier>//apple_ref/occ/instm/CWWebserver/startWithDocumentRoot:</TokenIdentifier>
 			<Abstract type="html">Launch the webserver with the given document root.</Abstract>
 			<DeclaredIn>CWWebserver.h</DeclaredIn>
@@ -115,31 +104,76 @@ Only one instance of a CWWebserver can run in an application - always use the sh
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWWebserver/sendLocalInfo:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
+			<TokenIdentifier>//apple_ref/occ/instm/CWWebserver/sendLocalID:</TokenIdentifier>
+			<Abstract type="html">Sends a message to the web application with the ID this device is advertised under</Abstract>
 			<DeclaredIn>CWWebserver.h</DeclaredIn>
 			
-			<Declaration>- (void)sendLocalInfo:(CWBeacon *)localBeacon</Declaration>
+			<Declaration>- (void)sendLocalID:(CWDeviceID *)ID</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>ID</Name>
+					<Abstract type="html">The ID of this device</Abstract>
+				</Parameter>
+			</Parameters>
 			
-			
-			<Anchor>//api/name/sendLocalInfo:</Anchor>
+			<Anchor>//api/name/sendLocalID:</Anchor>
             <NodeRef refid="7"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWWebserver/sendBeaconInfo:</TokenIdentifier>
-			<Abstract type="html">Sends information about a CWBeacon to the web library.</Abstract>
+			<TokenIdentifier>//apple_ref/occ/instm/CWWebserver/sendNewBeaconWithID:inProximity:</TokenIdentifier>
+			<Abstract type="html">Sends a message to the web application and informs it of a new device detected nearby</Abstract>
 			<DeclaredIn>CWWebserver.h</DeclaredIn>
 			
-			<Declaration>- (void)sendBeaconInfo:(CWBeacon *)beacon</Declaration>
+			<Declaration>- (void)sendNewBeaconWithID:(CWDeviceID *)ID inProximity:(NSString *)proximity</Declaration>
 			<Parameters>
 				<Parameter>
-					<Name>beacon</Name>
-					<Abstract type="html">The CWBeacon to send</Abstract>
+					<Name>ID</Name>
+					<Abstract type="html">The ID of the detected device</Abstract>
+				</Parameter><Parameter>
+					<Name>proximity</Name>
+					<Abstract type="html">A string describing the distance between this device and the detected device</Abstract>
 				</Parameter>
 			</Parameters>
 			
-			<Anchor>//api/name/sendBeaconInfo:</Anchor>
+			<Anchor>//api/name/sendNewBeaconWithID:inProximity:</Anchor>
+            <NodeRef refid="7"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWWebserver/sendBeaconWithID:newProximity:</TokenIdentifier>
+			<Abstract type="html">Sends a message to the web application and informs it of a change of the proximity of a device nearby</Abstract>
+			<DeclaredIn>CWWebserver.h</DeclaredIn>
+			
+			<Declaration>- (void)sendBeaconWithID:(CWDeviceID *)ID newProximity:(NSString *)proximity</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>ID</Name>
+					<Abstract type="html">The ID of the device that changed</Abstract>
+				</Parameter><Parameter>
+					<Name>proximity</Name>
+					<Abstract type="html">A string describing the new distance between this device and the detected device</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/sendBeaconWithID:newProximity:</Anchor>
+            <NodeRef refid="7"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWWebserver/sendLostBeaconWithID:</TokenIdentifier>
+			<Abstract type="html">Sends a message to the web application and informs it of a nearby device that was lost</Abstract>
+			<DeclaredIn>CWWebserver.h</DeclaredIn>
+			
+			<Declaration>- (void)sendLostBeaconWithID:(CWDeviceID *)ID</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>ID</Name>
+					<Abstract type="html">The ID of the lost device</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/sendLostBeaconWithID:</Anchor>
             <NodeRef refid="7"/>
 		</Token>
 		
@@ -161,12 +195,12 @@ Only one instance of a CWWebserver can run in an application - always use the sh
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWWebserver/JSONFromDictionary:</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/instm/CWWebserver/_JSONFromDictionary:</TokenIdentifier>
 			<Abstract type="html">Creates a JSON string from a NSDictionary that can be safely send over JavaScriptCore&apos;s evaluteScript:.
 The dictionary must be convertable to JSON as defined by NSJSONSerialization</Abstract>
 			<DeclaredIn>CWWebserver.m</DeclaredIn>
 			
-			<Declaration>- (NSString *)JSONFromDictionary:(NSDictionary *)dictionary</Declaration>
+			<Declaration>- (NSString *)_JSONFromDictionary:(NSDictionary *)dictionary</Declaration>
 			<Parameters>
 				<Parameter>
 					<Name>dictionary</Name>
@@ -174,13 +208,13 @@ The dictionary must be convertable to JSON as defined by NSJSONSerialization</Ab
 				</Parameter>
 			</Parameters>
 			<ReturnValue><Abstract type="html">The JSON string representing the Dictionary.</Abstract></ReturnValue>
-			<Anchor>//api/name/JSONFromDictionary:</Anchor>
+			<Anchor>//api/name/_JSONFromDictionary:</Anchor>
             <NodeRef refid="7"/>
 		</Token>
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/instm/CWWebserver/_registerWebserverCallbacks</TokenIdentifier>
-			<Abstract type="html"></Abstract>
+			<Abstract type="html">Registers the functions in Javascript that call native methods (and therefore allow the webserver to send messages to the native layer)</Abstract>
 			<DeclaredIn>CWWebserver.m</DeclaredIn>
 			
 			<Declaration>- (void)_registerWebserverCallbacks</Declaration>
@@ -191,14 +225,14 @@ The dictionary must be convertable to JSON as defined by NSJSONSerialization</Ab
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWWebserver/_localWebsocketWasOpened</TokenIdentifier>
-			<Abstract type="html"></Abstract>
+			<TokenIdentifier>//apple_ref/occ/instm/CWWebserver/localWebsocketWasOpened</TokenIdentifier>
+			<Abstract type="html">Called by the webserver when the websocket connection to the local web view was established successfully</Abstract>
 			<DeclaredIn>CWWebserver.m</DeclaredIn>
 			
-			<Declaration>- (void)_localWebsocketWasOpened</Declaration>
+			<Declaration>- (void)localWebsocketWasOpened</Declaration>
 			
 			
-			<Anchor>//api/name/_localWebsocketWasOpened</Anchor>
+			<Anchor>//api/name/localWebsocketWasOpened</Anchor>
             <NodeRef refid="7"/>
 		</Token>
 		

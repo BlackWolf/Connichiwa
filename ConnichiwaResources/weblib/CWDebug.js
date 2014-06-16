@@ -2,15 +2,38 @@
 
 
 
+/**
+ * Gives us some nice debug convenience functions
+ *
+ * @namespace CWDebug
+ */
 var CWDebug = (function()
 {
+  /**
+   * true if debug mode is on, otherwise false
+   */
   var CWDEBUG = false;
 
+  /**
+   * Logs a message to the console if debug mode is on
+   *
+   * @param {string} message the message to log
+   *
+   * @memberof CWDebug
+   */
   var log = function(message)
   {
     if (CWDEBUG) console.log("WEBLIB    " + _getDateString() + " -- " + message);
   };
 
+  /**
+   * Gets a nicely formatted string of the given date
+   *
+   * @param {Date} date the date to format into a string. Defaults to the current date.
+   * @returns {string} a string describing the date
+   *
+   * @memberof CWDebug
+   */
   var _getDateString = function(date)
   {
     if (date === undefined) date = new Date();

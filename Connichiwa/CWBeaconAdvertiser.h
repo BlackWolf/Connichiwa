@@ -15,15 +15,20 @@
 
 
 /**
- *  An instance of CWBeaconAdvertiser sets this device up to act as an iBeacon and make itself discoverable by other devices running a CWBeaconMonitor. 
- *  CWBeacon takes care of setting BT up and advertising the correct data. 
- *  CWBeacon's can be identified by their major/minor numbers, which are randomly assigned.
- *  Every device should only act as a single iBeacon - therefore, it is recommended to use the mainAdvertiser method to retrieve an instance of CWBeaconAdvertiser.
+ *  An instance of CWBeaconAdvertiser sets this device up to act as an iBeacon over BTLE and make itself discoverable by other devices running a CWBeaconMonitor.
+ *  When advertising, CWBeaconAdvertiser assigns a random CWDeviceID to this beacon which is transmitted with the iBeacon package and can be picked up by other devices.
+ *  Every device should only act as a single iBeacon - it is not recommended to create multiple instances of this class, which will yield undefined results.
  */
 @interface CWBeaconAdvertiser : NSObject <CBPeripheralManagerDelegate>
 
+/**
+ *  Delegate that receives events from CWBeaconAdvertiser
+ */
 @property (readwrite, strong) id<CWBeaconAdvertiserDelegate> delegate;
 
+/**
+ *  The unique ID that this beacon advertises
+ */
 @property (readonly) CWDeviceID *myID;
 
 /**
