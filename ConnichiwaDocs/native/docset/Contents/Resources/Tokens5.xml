@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Classes/CWDebug.html">
+	<File path="Classes/CWDeviceID.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/cl/CWDebug</TokenIdentifier>
-			<Abstract type="html">Class that holds everything we need to nicely debug</Abstract>
-			<DeclaredIn>CWDebug.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/cl/CWDeviceID</TokenIdentifier>
+			<Abstract type="html">Represents a unique ID for a connichiwa device. Each ID is made up of a major and a minor part and need to be unique among the different devices.</Abstract>
+			<DeclaredIn>CWDeviceID.h</DeclaredIn>
             
 			
 			<NodeRef refid="5"/>
@@ -13,19 +13,106 @@
 		
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/clm/CWDebug/executeInDebug:</TokenIdentifier>
-			<Abstract type="html">Executes the given code only when we are in debug mode</Abstract>
-			<DeclaredIn>CWDebug.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWDeviceID/setMajor:</TokenIdentifier>
+			<Abstract type="html">The major part of the ID</Abstract>
+			<DeclaredIn>CWDeviceID.h</DeclaredIn>
 			
-			<Declaration>+ (void)executeInDebug:(void ( ^ ) ( void ))block</Declaration>
+			<Declaration>@property (readonly) NSNumber *major</Declaration>
+			
+			
+			<Anchor>//api/name/major</Anchor>
+            <NodeRef refid="5"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWDeviceID/major</TokenIdentifier>
+			<Abstract type="html">The major part of the ID</Abstract>
+			<DeclaredIn>CWDeviceID.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) NSNumber *major</Declaration>
+			
+			
+			<Anchor>//api/name/major</Anchor>
+            <NodeRef refid="5"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CWDeviceID/major</TokenIdentifier>
+			<Abstract type="html">The major part of the ID</Abstract>
+			<DeclaredIn>CWDeviceID.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) NSNumber *major</Declaration>
+			
+			
+			<Anchor>//api/name/major</Anchor>
+            <NodeRef refid="5"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWDeviceID/setMinor:</TokenIdentifier>
+			<Abstract type="html">The minor part of the ID</Abstract>
+			<DeclaredIn>CWDeviceID.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) NSNumber *minor</Declaration>
+			
+			
+			<Anchor>//api/name/minor</Anchor>
+            <NodeRef refid="5"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWDeviceID/minor</TokenIdentifier>
+			<Abstract type="html">The minor part of the ID</Abstract>
+			<DeclaredIn>CWDeviceID.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) NSNumber *minor</Declaration>
+			
+			
+			<Anchor>//api/name/minor</Anchor>
+            <NodeRef refid="5"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CWDeviceID/minor</TokenIdentifier>
+			<Abstract type="html">The minor part of the ID</Abstract>
+			<DeclaredIn>CWDeviceID.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) NSNumber *minor</Declaration>
+			
+			
+			<Anchor>//api/name/minor</Anchor>
+            <NodeRef refid="5"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWDeviceID/initWithMajor:minor:</TokenIdentifier>
+			<Abstract type="html">Creates a new ID with the given major and minor.</Abstract>
+			<DeclaredIn>CWDeviceID.h</DeclaredIn>
+			
+			<Declaration>- (instancetype)initWithMajor:(NSNumber *)major minor:(NSNumber *)minor</Declaration>
 			<Parameters>
 				<Parameter>
-					<Name>block</Name>
-					<Abstract type="html">The code to execute in debug</Abstract>
+					<Name>major</Name>
+					<Abstract type="html">The major part of the ID</Abstract>
+				</Parameter><Parameter>
+					<Name>minor</Name>
+					<Abstract type="html">The minor part of the ID</Abstract>
 				</Parameter>
 			</Parameters>
+			<ReturnValue><Abstract type="html">A new ID instance</Abstract></ReturnValue>
+			<Anchor>//api/name/initWithMajor:minor:</Anchor>
+            <NodeRef refid="5"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWDeviceID/init</TokenIdentifier>
+			<Abstract type="html">An ID without a major and minor part is invalid, therefore using this method will throw an exception immediatly.</Abstract>
+			<DeclaredIn>CWDeviceID.m</DeclaredIn>
 			
-			<Anchor>//api/name/executeInDebug:</Anchor>
+			<Declaration>- (instancetype)init</Declaration>
+			
+			<ReturnValue><Abstract type="html">nil</Abstract></ReturnValue>
+			<Anchor>//api/name/init</Anchor>
             <NodeRef refid="5"/>
 		</Token>
 		

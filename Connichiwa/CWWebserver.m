@@ -24,7 +24,27 @@
  */
 @property (strong, readwrite) NLContext *nodelikeContext;
 
+/**
+ *  Uses the webserver to sends the given message to the web library
+ *
+ *  @param message The message to send to the web library
+ */
 - (void)_sendToWeblib:(NSString *)message;
+
+/**
+ *  Creates a JSON string from a NSDictionary that can be safely send over JavaScriptCore's evaluteScript:.
+ *  The dictionary must be convertable to JSON as defined by NSJSONSerialization
+ *
+ *  @param dictionary The dictionary to translate into JSON
+ *
+ *  @return The JSON string representing the Dictionary.
+ */
+- (NSString *)_JSONFromDictionary:(NSDictionary *)dictionary;
+
+/**
+ *  Registers the functions in Javascript that call native methods (and therefore allow the webserver to send messages to the native layer)
+ */
+- (void)_registerWebserverCallbacks;
 
 @end
 
@@ -85,7 +105,7 @@
                                @"major": ID.major,
                                @"minor": ID.minor,
                                };
-    NSString *json = [self JSONFromDictionary:sendData];
+    NSString *json = [self _JSONFromDictionary:sendData];
     [self _sendToWeblib:json];
 }
 
@@ -93,12 +113,12 @@
 - (void)sendNewBeaconWithID:(CWDeviceID *)ID inProximity:(NSString *)proximity
 {
     NSDictionary *sendData = @{
-                               @"type": @"newbeacon",
+                               @"type": @"newdevice",
                                @"major": ID.major,
                                @"minor": ID.minor,
                                @"proximity": proximity
                                };
-    NSString *json = [self JSONFromDictionary:sendData];
+    NSString *json = [self _JSONFromDictionary:sendData];
     [self _sendToWeblib:json];
 }
 
@@ -106,12 +126,12 @@
 - (void)sendBeaconWithID:(CWDeviceID *)ID newProximity:(NSString *)proximity
 {
     NSDictionary *sendData = @{
-                               @"type": @"beaconproximitychange",
+                               @"type": @"deviceproximitychange",
                                @"major": ID.major,
                                @"minor": ID.minor,
                                @"proximity": proximity
                                };
-    NSString *json = [self JSONFromDictionary:sendData];
+    NSString *json = [self _JSONFromDictionary:sendData];
     [self _sendToWeblib:json];
 }
 
@@ -119,11 +139,11 @@
 - (void)sendLostBeaconWithID:(CWDeviceID *)ID
 {
     NSDictionary *sendData = @{
-                               @"type": @"lostbeacon",
+                               @"type": @"devicelost",
                                @"major": ID.major,
                                @"minor": ID.minor
                                };
-    NSString *json = [self JSONFromDictionary:sendData];
+    NSString *json = [self _JSONFromDictionary:sendData];
     [self _sendToWeblib:json];
 }
 
@@ -151,7 +171,7 @@
  *
  *  @return The JSON string representing the Dictionary.
  */
-- (NSString *)JSONFromDictionary:(NSDictionary *)dictionary
+- (NSString *)_JSONFromDictionary:(NSDictionary *)dictionary
 {
     NSError *error;
     NSData *data = [NSJSONSerialization dataWithJSONObject:dictionary options:JSON_WRITING_OPTIONS error:&error];
@@ -185,6 +205,9 @@
 }
 
 
+/**
+ *  Called by the webserver when the websocket connection to the local web view was established successfully
+ */
 - (void)localWebsocketWasOpened
 {
     if ([self.delegate respondsToSelector:@selector(localWebsocketWasOpened)])

@@ -21,11 +21,23 @@
 @property (readwrite, strong) CLLocationManager *locationManager;
 
 /**
- *  Represents a template of the beacons we are looking for
+ *  Represents a template of beacons we are searching for around us
  */
 @property (readwrite, strong) CLBeaconRegion *beaconRegion;
 
+/**
+ *  An array of currently detected beacons
+ */
 @property (readwrite, strong) NSArray *currentBeacons;
+
+/**
+ *  Returns a string describing the proximity of a beacon
+ *
+ *  @param proximity The CLProximity as returned by a CLBeacon
+ *
+ *  @return A string value describing the proximity
+ */
+- (NSString *)_stringForProximity:(CLProximity)proximity;
 
 @end
 
@@ -34,17 +46,11 @@
 @implementation CWBeaconMonitor
 
 
-+ (instancetype)mainMonitor
-{
-    static dispatch_once_t token;
-    static id sharedInstance;
-    dispatch_once(&token, ^{
-        sharedInstance = [[self alloc] init];
-    });
-    
-    return sharedInstance;
-}
-
+/**
+ *  Creates a new instance of this class. It is not advised to have multiple advertiser active on a single device, you should only create this class once.
+ *
+ *  @return A new instance of this class.
+ */
 - (instancetype)init
 {
     self = [super init];
@@ -82,7 +88,8 @@
 }
 
 
-- (NSString *)_stringForProximity:(CLProximity)proximity {
+- (NSString *)_stringForProximity:(CLProximity)proximity
+{
     NSString *proximityString;
     switch (proximity)
     {
@@ -143,12 +150,13 @@
         if ([beacons count] > 0) DLog(@"%lu iBeacons detected nearby", (unsigned long)[beacons count]);
         for (CLBeacon *beacon in beacons)
         {
-           DLog(@"Beacon (%@.%@) ranged at %@ distance (Signal strength %li ; accuracy %.2f)",
-                beacon.major,
-                beacon.minor,
-                [self _stringForProximity:beacon.proximity],
-                (long)beacon.rssi,
-                beacon.accuracy);
+            ResolveUnused(beacon);
+            DLog(@"Beacon (%@.%@) ranged at %@ distance (Signal strength %li ; accuracy %.2f)",
+                 beacon.major,
+                 beacon.minor,
+                 [self _stringForProximity:beacon.proximity],
+                 (long)beacon.rssi,
+                 beacon.accuracy);
         }
     }];
     

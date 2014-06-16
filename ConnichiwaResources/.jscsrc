@@ -38,7 +38,6 @@
   "validateQuoteMarks": { "mark": "\"", "escape": true },
   "validateIndentation": 2,
   "disallowMixedSpacesAndTabs": true,
-  "disallowTrailingWhitespace": true,
   //"requireTrailingComma": true,
   "requireKeywordsOnNewLine": [ "if", "else", "for", "while", "do", "switch", "try", "catch" ],
   "requireLineFeedAtFileEnd": true,

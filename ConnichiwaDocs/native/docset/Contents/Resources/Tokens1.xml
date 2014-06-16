@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Classes/CWBeacon.html">
+	<File path="Classes/CWBeaconAdvertiser.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/cl/CWBeacon</TokenIdentifier>
-			<Abstract type="html">Encapsulates Connichiwa-related information about an iBeacon</Abstract>
-			<DeclaredIn>CWBeacon.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/cl/CWBeaconAdvertiser</TokenIdentifier>
+			<Abstract type="html">An instance of CWBeaconAdvertiser sets this device up to act as an iBeacon over BTLE and make itself discoverable by other devices running a CWBeaconMonitor.
+When advertising, CWBeaconAdvertiser assigns a random CWDeviceID to this beacon which is transmitted with the iBeacon package and can be picked up by other devices.
+Every device should only act as a single iBeacon - it is not recommended to create multiple instances of this class, which will yield undefined results.</Abstract>
+			<DeclaredIn>CWBeaconAdvertiser.h</DeclaredIn>
             
 			
 			<NodeRef refid="1"/>
@@ -13,136 +15,187 @@
 		
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWBeacon/setMajor:</TokenIdentifier>
-			<Abstract type="html">The major value of the beacon&apos;s identifier number. Can be used to uniquely identify a beacon.</Abstract>
-			<DeclaredIn>CWBeacon.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBeaconAdvertiser/setDelegate:</TokenIdentifier>
+			<Abstract type="html">Delegate that receives events from CWBeaconAdvertiser</Abstract>
+			<DeclaredIn>CWBeaconAdvertiser.h</DeclaredIn>
 			
-			<Declaration>@property (readonly) NSNumber *major</Declaration>
+			<Declaration>@property (readwrite, strong) id&lt;CWBeaconAdvertiserDelegate&gt; delegate</Declaration>
 			
 			
-			<Anchor>//api/name/major</Anchor>
+			<Anchor>//api/name/delegate</Anchor>
             <NodeRef refid="1"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWBeacon/major</TokenIdentifier>
-			<Abstract type="html">The major value of the beacon&apos;s identifier number. Can be used to uniquely identify a beacon.</Abstract>
-			<DeclaredIn>CWBeacon.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBeaconAdvertiser/delegate</TokenIdentifier>
+			<Abstract type="html">Delegate that receives events from CWBeaconAdvertiser</Abstract>
+			<DeclaredIn>CWBeaconAdvertiser.h</DeclaredIn>
 			
-			<Declaration>@property (readonly) NSNumber *major</Declaration>
+			<Declaration>@property (readwrite, strong) id&lt;CWBeaconAdvertiserDelegate&gt; delegate</Declaration>
 			
 			
-			<Anchor>//api/name/major</Anchor>
+			<Anchor>//api/name/delegate</Anchor>
             <NodeRef refid="1"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/CWBeacon/major</TokenIdentifier>
-			<Abstract type="html">The major value of the beacon&apos;s identifier number. Can be used to uniquely identify a beacon.</Abstract>
-			<DeclaredIn>CWBeacon.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instp/CWBeaconAdvertiser/delegate</TokenIdentifier>
+			<Abstract type="html">Delegate that receives events from CWBeaconAdvertiser</Abstract>
+			<DeclaredIn>CWBeaconAdvertiser.h</DeclaredIn>
 			
-			<Declaration>@property (readonly) NSNumber *major</Declaration>
+			<Declaration>@property (readwrite, strong) id&lt;CWBeaconAdvertiserDelegate&gt; delegate</Declaration>
 			
 			
-			<Anchor>//api/name/major</Anchor>
+			<Anchor>//api/name/delegate</Anchor>
             <NodeRef refid="1"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWBeacon/setMinor:</TokenIdentifier>
-			<Abstract type="html">The minor value of the beacon&apos;s identifier number. Can be used to uniquely identify a beacon.</Abstract>
-			<DeclaredIn>CWBeacon.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBeaconAdvertiser/setMyID:</TokenIdentifier>
+			<Abstract type="html">The unique ID that this beacon advertises</Abstract>
+			<DeclaredIn>CWBeaconAdvertiser.h</DeclaredIn>
 			
-			<Declaration>@property (readonly) NSNumber *minor</Declaration>
+			<Declaration>@property (readonly) CWDeviceID *myID</Declaration>
 			
 			
-			<Anchor>//api/name/minor</Anchor>
+			<Anchor>//api/name/myID</Anchor>
             <NodeRef refid="1"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWBeacon/minor</TokenIdentifier>
-			<Abstract type="html">The minor value of the beacon&apos;s identifier number. Can be used to uniquely identify a beacon.</Abstract>
-			<DeclaredIn>CWBeacon.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBeaconAdvertiser/myID</TokenIdentifier>
+			<Abstract type="html">The unique ID that this beacon advertises</Abstract>
+			<DeclaredIn>CWBeaconAdvertiser.h</DeclaredIn>
 			
-			<Declaration>@property (readonly) NSNumber *minor</Declaration>
+			<Declaration>@property (readonly) CWDeviceID *myID</Declaration>
 			
 			
-			<Anchor>//api/name/minor</Anchor>
+			<Anchor>//api/name/myID</Anchor>
             <NodeRef refid="1"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/CWBeacon/minor</TokenIdentifier>
-			<Abstract type="html">The minor value of the beacon&apos;s identifier number. Can be used to uniquely identify a beacon.</Abstract>
-			<DeclaredIn>CWBeacon.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instp/CWBeaconAdvertiser/myID</TokenIdentifier>
+			<Abstract type="html">The unique ID that this beacon advertises</Abstract>
+			<DeclaredIn>CWBeaconAdvertiser.h</DeclaredIn>
 			
-			<Declaration>@property (readonly) NSNumber *minor</Declaration>
+			<Declaration>@property (readonly) CWDeviceID *myID</Declaration>
 			
 			
-			<Anchor>//api/name/minor</Anchor>
+			<Anchor>//api/name/myID</Anchor>
             <NodeRef refid="1"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWBeacon/setProximity:</TokenIdentifier>
-			<Abstract type="html">A string determining a rough distance from this device to the beacon. Can be &quot;far&quot;, &quot;near&quot;, &quot;immediate&quot; or &quot;unknown&quot;.
-For a beacon that represents the local device, this will always be &quot;unknown&quot;</Abstract>
-			<DeclaredIn>CWBeacon.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBeaconAdvertiser/startAdvertising</TokenIdentifier>
+			<Abstract type="html">Make this device start advertising as an iBeacon. It becomes detectable by other Connichiwa devices.</Abstract>
+			<DeclaredIn>CWBeaconAdvertiser.h</DeclaredIn>
 			
-			<Declaration>@property (readonly) NSString *proximity</Declaration>
+			<Declaration>- (void)startAdvertising</Declaration>
 			
 			
-			<Anchor>//api/name/proximity</Anchor>
+			<Anchor>//api/name/startAdvertising</Anchor>
             <NodeRef refid="1"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWBeacon/proximity</TokenIdentifier>
-			<Abstract type="html">A string determining a rough distance from this device to the beacon. Can be &quot;far&quot;, &quot;near&quot;, &quot;immediate&quot; or &quot;unknown&quot;.
-For a beacon that represents the local device, this will always be &quot;unknown&quot;</Abstract>
-			<DeclaredIn>CWBeacon.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBeaconAdvertiser/init</TokenIdentifier>
+			<Abstract type="html">Creates a new instance of this class. It is not advised to have multiple advertiser active on a single device, you should only create this class once.</Abstract>
+			<DeclaredIn>CWBeaconAdvertiser.m</DeclaredIn>
 			
-			<Declaration>@property (readonly) NSString *proximity</Declaration>
+			<Declaration>- (instancetype)init</Declaration>
 			
-			
-			<Anchor>//api/name/proximity</Anchor>
+			<ReturnValue><Abstract type="html">A new instance of this class.</Abstract></ReturnValue>
+			<Anchor>//api/name/init</Anchor>
             <NodeRef refid="1"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/CWBeacon/proximity</TokenIdentifier>
-			<Abstract type="html">A string determining a rough distance from this device to the beacon. Can be &quot;far&quot;, &quot;near&quot;, &quot;immediate&quot; or &quot;unknown&quot;.
-For a beacon that represents the local device, this will always be &quot;unknown&quot;</Abstract>
-			<DeclaredIn>CWBeacon.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBeaconAdvertiser/peripheralManagerDidUpdateState:</TokenIdentifier>
+			<Abstract type="html">Called by CBPeripheralManager when its power state changes</Abstract>
+			<DeclaredIn>CWBeaconAdvertiser.m</DeclaredIn>
 			
-			<Declaration>@property (readonly) NSString *proximity</Declaration>
-			
-			
-			<Anchor>//api/name/proximity</Anchor>
-            <NodeRef refid="1"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWBeacon/initWithMajor:minor:proximity:</TokenIdentifier>
-			<Abstract type="html">Create a new CWBeacon with the given information</Abstract>
-			<DeclaredIn>CWBeacon.h</DeclaredIn>
-			
-			<Declaration>- (instancetype)initWithMajor:(NSNumber *)major minor:(NSNumber *)minor proximity:(CLProximity)proximity</Declaration>
+			<Declaration>- (void)peripheralManagerDidUpdateState:(CBPeripheralManager *)manager</Declaration>
 			<Parameters>
 				<Parameter>
-					<Name>major</Name>
-					<Abstract type="html">The major value</Abstract>
-				</Parameter><Parameter>
-					<Name>minor</Name>
-					<Abstract type="html">The minor value</Abstract>
-				</Parameter><Parameter>
-					<Name>proximity</Name>
-					<Abstract type="html">The proximity string</Abstract>
+					<Name>manager</Name>
+					<Abstract type="html">The CBPeripheralManager instance that changed</Abstract>
 				</Parameter>
 			</Parameters>
-			<ReturnValue><Abstract type="html">A new instance of CWBeacon that stores the given information</Abstract></ReturnValue>
-			<Anchor>//api/name/initWithMajor:minor:proximity:</Anchor>
+			
+			<Anchor>//api/name/peripheralManagerDidUpdateState:</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBeaconAdvertiser/setPeripheralManager:</TokenIdentifier>
+			<Abstract type="html">Core Bluetooth Peripheral Manager, responsible for advertising the iBeacon</Abstract>
+			<DeclaredIn>CWBeaconAdvertiser.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) CBPeripheralManager *peripheralManager</Declaration>
+			
+			
+			<Anchor>//api/name/peripheralManager</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBeaconAdvertiser/peripheralManager</TokenIdentifier>
+			<Abstract type="html">Core Bluetooth Peripheral Manager, responsible for advertising the iBeacon</Abstract>
+			<DeclaredIn>CWBeaconAdvertiser.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) CBPeripheralManager *peripheralManager</Declaration>
+			
+			
+			<Anchor>//api/name/peripheralManager</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CWBeaconAdvertiser/peripheralManager</TokenIdentifier>
+			<Abstract type="html">Core Bluetooth Peripheral Manager, responsible for advertising the iBeacon</Abstract>
+			<DeclaredIn>CWBeaconAdvertiser.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) CBPeripheralManager *peripheralManager</Declaration>
+			
+			
+			<Anchor>//api/name/peripheralManager</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBeaconAdvertiser/setBeaconRegion:</TokenIdentifier>
+			<Abstract type="html">Represents the local region that our beacon creates</Abstract>
+			<DeclaredIn>CWBeaconAdvertiser.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) CLBeaconRegion *beaconRegion</Declaration>
+			
+			
+			<Anchor>//api/name/beaconRegion</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBeaconAdvertiser/beaconRegion</TokenIdentifier>
+			<Abstract type="html">Represents the local region that our beacon creates</Abstract>
+			<DeclaredIn>CWBeaconAdvertiser.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) CLBeaconRegion *beaconRegion</Declaration>
+			
+			
+			<Anchor>//api/name/beaconRegion</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CWBeaconAdvertiser/beaconRegion</TokenIdentifier>
+			<Abstract type="html">Represents the local region that our beacon creates</Abstract>
+			<DeclaredIn>CWBeaconAdvertiser.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) CLBeaconRegion *beaconRegion</Declaration>
+			
+			
+			<Anchor>//api/name/beaconRegion</Anchor>
             <NodeRef refid="1"/>
 		</Token>
 		

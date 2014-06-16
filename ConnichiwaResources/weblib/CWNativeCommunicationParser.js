@@ -1,32 +1,48 @@
-/* global CWDeviceManager */
+/* global CWDeviceManager, CWDeviceID, CWDevice */
 "use strict";
 
 
 
-/*****
-* The Connichiwa Web Library Communication Protocol (Native Layer)
-*
-* Here we describe the protocol used to communicate between this library and the native layer. The communication is done via JSON.
-*
-*
-*
-* Local ID Information | type="localid"
-* Contains information about the local device
-* Format: major -- the major number of this device
-*         minor -- the minor number of this device
-*
-*
-* iBeacon Detected | type="ibeacon"
-* When an iBeacon was detected by the native layer, or iBeacon data changed, it will send us the beacon data.
-* Format: major -- The major number of the beacon
-*         minor -- The minor number of the beacon
-*         proximity -- a string describing the distance to the beacon (either "far", "near", "immediate" or "unknown")
-*****/
-
+/**
+ * The Connichiwa Communication Protocol Parser (Native Layer).  
+ * Here the protocol used to communicate between this library and the native layer is parsed. This communication is done via JSON.
+ *
+ * **Local ID Information** -- type="localid"  
+ * Contains information about the local device. Format:
+ * * major -- the major number of this device
+ * * minor -- the minor number of this device
+ *
+ * **Device Detected** -- type="newdevice"   
+ * Contains information about a newly detected device. Format:   
+ * * major -- The major part of the device ID
+ * * minor -- The minor part of the device ID
+ * * proximity -- a string describing the distance of this device to the detected device (either "far", "near" or "immediate")
+ *
+ * **Device Proximity Changed** -- type="deviceproximitychanged"  
+ * Contains information about the new proximity of a previously detected device. Format:  
+ * * major -- The major part of the device ID
+ * * minor -- The minor part of the device ID
+ * * proximity -- a string describing the distance of this device to the device (either "far", "near" or "immediate")
+ *
+ * **Device Lost** -- type="devicelost"  
+ * Contains information about a device that went out of range or can not be detected anymore for other reasons. Format:  
+ * * major -- The major part of the device ID
+ * * minor -- The minor part of the device ID
+ *
+ * @namespace CWNativeCommunicationParser
+ */
 var CWNativeCommunicationParser = (function()
 {
-  var parse = function(object)
+  /**
+   * Parses a message from the websocket. If the message is none of the messages described by this class, this method will do nothing. Otherwise the message will trigger an appropiate action.
+   *
+   * @param {string} message The message from the websocket
+   *
+   * @memberof CWNativeCommunicationParser
+   */
+  var parse = function(message)
   {
+    var object = JSON.parse(message);
     switch (object.type)
     {
       case "localid":
@@ -37,10 +53,10 @@ var CWNativeCommunicationParser = (function()
         var device = new CWDevice(new CWDeviceID(object.major, object.minor), { proximity: object.proximity });
         CWDeviceManager.addDevice(device);
         break;
-      case "beaconproximitychange":
+      case "deviceproximitychanged":
         CWDeviceManager.updateDeviceProximity(new CWDeviceID(object.major, object.minor), object.proximity);
         break;
-      case "lostbeacon":
+      case "devicelost":
         CWDeviceManager.removeDevice(new CWDeviceID(object.major, object.minor));
         break;
     }

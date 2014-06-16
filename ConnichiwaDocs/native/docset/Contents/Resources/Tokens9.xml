@@ -4,7 +4,7 @@
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/intf/CWBeaconMonitorDelegate</TokenIdentifier>
-			<Abstract type="html">Delegate for CWBeaconMonitor. Implementing this protocol allows to receive events about discovered and changed beacons from CWBeaconMonitor.</Abstract>
+			<Abstract type="html">A delegate protocol that receives events about nearby detected connichiwa beacons (devices) by the CWBeaconMonitor instance</Abstract>
 			<DeclaredIn>CWBeaconMonitorDelegate.h</DeclaredIn>
             
 			
@@ -13,19 +13,59 @@
 		
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/intfm/CWBeaconMonitorDelegate/beaconUpdated:</TokenIdentifier>
-			<Abstract type="html">Called by CWBeaconMonitor when the data of a beacon updated. This can mean that a new beacon arrived, left or an existing beacon changed (for example its proximity). This method might be called for a beacon even when no changes occured.</Abstract>
+			<TokenIdentifier>//apple_ref/occ/intfm/CWBeaconMonitorDelegate/beaconDetectedWithID:inProximity:</TokenIdentifier>
+			<Abstract type="html">Called when a new, previously unknown beacon was detected nearby</Abstract>
 			<DeclaredIn>CWBeaconMonitorDelegate.h</DeclaredIn>
 			
-			<Declaration>- (void)beaconUpdated:(CWBeacon *)beacon</Declaration>
+			<Declaration>- (void)beaconDetectedWithID:(CWDeviceID *)ID inProximity:(NSString *)proximity</Declaration>
 			<Parameters>
 				<Parameter>
-					<Name>beacon</Name>
-					<Abstract type="html">The beacon that changed</Abstract>
+					<Name>ID</Name>
+					<Abstract type="html">The ID of the newly detected device</Abstract>
+				</Parameter><Parameter>
+					<Name>proximity</Name>
+					<Abstract type="html">A string describing the distance between this device and the detected device</Abstract>
 				</Parameter>
 			</Parameters>
 			
-			<Anchor>//api/name/beaconUpdated:</Anchor>
+			<Anchor>//api/name/beaconDetectedWithID:inProximity:</Anchor>
+            <NodeRef refid="9"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/CWBeaconMonitorDelegate/beaconWithID:changedProximity:</TokenIdentifier>
+			<Abstract type="html">Called when a known beacon changes its proximity</Abstract>
+			<DeclaredIn>CWBeaconMonitorDelegate.h</DeclaredIn>
+			
+			<Declaration>- (void)beaconWithID:(CWDeviceID *)ID changedProximity:(NSString *)proximity</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>ID</Name>
+					<Abstract type="html">The ID of the beacon that changed</Abstract>
+				</Parameter><Parameter>
+					<Name>proximity</Name>
+					<Abstract type="html">A string describing the new distance between this device and the detected device</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/beaconWithID:changedProximity:</Anchor>
+            <NodeRef refid="9"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/CWBeaconMonitorDelegate/beaconLostWithID:</TokenIdentifier>
+			<Abstract type="html">Called when a known beacon was shutdown or went out of range</Abstract>
+			<DeclaredIn>CWBeaconMonitorDelegate.h</DeclaredIn>
+			
+			<Declaration>- (void)beaconLostWithID:(CWDeviceID *)ID</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>ID</Name>
+					<Abstract type="html">The ID of the lost beacon</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/beaconLostWithID:</Anchor>
             <NodeRef refid="9"/>
 		</Token>
 		

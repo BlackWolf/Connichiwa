@@ -4,7 +4,7 @@
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/intf/CWBeaconAdvertiserDelegate</TokenIdentifier>
-			<Abstract type="html"></Abstract>
+			<Abstract type="html">A delegate protocol that receives events about this devices role as a connichiwa beacon by the CWBeaconAdvertiser instance</Abstract>
 			<DeclaredIn>CWBeaconAdvertiseDelegate.h</DeclaredIn>
             
 			
@@ -13,26 +13,36 @@
 		
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/intfm/CWBeaconAdvertiserDelegate/willStartAdvertising:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
+			<TokenIdentifier>//apple_ref/occ/intfm/CWBeaconAdvertiserDelegate/willStartAdvertisingWithID:</TokenIdentifier>
+			<Abstract type="html">Called before this device starts advertising itself to other devices</Abstract>
 			<DeclaredIn>CWBeaconAdvertiseDelegate.h</DeclaredIn>
 			
-			<Declaration>- (void)willStartAdvertising:(CWBeacon *)localBeacon</Declaration>
+			<Declaration>- (void)willStartAdvertisingWithID:(CWDeviceID *)ID</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>ID</Name>
+					<Abstract type="html">The ID under which this device will advertise itself</Abstract>
+				</Parameter>
+			</Parameters>
 			
-			
-			<Anchor>//api/name/willStartAdvertising:</Anchor>
+			<Anchor>//api/name/willStartAdvertisingWithID:</Anchor>
             <NodeRef refid="8"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/intfm/CWBeaconAdvertiserDelegate/didStartAdvertising:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
+			<TokenIdentifier>//apple_ref/occ/intfm/CWBeaconAdvertiserDelegate/didStartAdvertisingWithID:</TokenIdentifier>
+			<Abstract type="html">Called after this device started advertising itself to other devices</Abstract>
 			<DeclaredIn>CWBeaconAdvertiseDelegate.h</DeclaredIn>
 			
-			<Declaration>- (void)didStartAdvertising:(CWBeacon *)localBeacon</Declaration>
+			<Declaration>- (void)didStartAdvertisingWithID:(CWDeviceID *)ID</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>ID</Name>
+					<Abstract type="html">The ID under which the device is know advertising itself</Abstract>
+				</Parameter>
+			</Parameters>
 			
-			
-			<Anchor>//api/name/didStartAdvertising:</Anchor>
+			<Anchor>//api/name/didStartAdvertisingWithID:</Anchor>
             <NodeRef refid="8"/>
 		</Token>
 		

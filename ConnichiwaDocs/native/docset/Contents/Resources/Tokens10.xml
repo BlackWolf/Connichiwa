@@ -4,7 +4,7 @@
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/intf/CWWebserverDelegate</TokenIdentifier>
-			<Abstract type="html"></Abstract>
+			<Abstract type="html">A delegate protocol that receives different events from the CWWebserver instance</Abstract>
 			<DeclaredIn>CWWebserverDelegate.h</DeclaredIn>
             
 			
@@ -14,7 +14,7 @@
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/intfm/CWWebserverDelegate/localWebsocketWasOpened</TokenIdentifier>
-			<Abstract type="html"></Abstract>
+			<Abstract type="html">Clled after the webserver reported that the websocket connection to the local web view was successfully established. After that, messages can be send to the web library through that websocket connection.</Abstract>
 			<DeclaredIn>CWWebserverDelegate.h</DeclaredIn>
 			
 			<Declaration>- (void)localWebsocketWasOpened</Declaration>

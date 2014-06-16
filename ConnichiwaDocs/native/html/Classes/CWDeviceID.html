@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="html/html; charset=utf-8" />
-		<title>CWBeacon Class Reference</title>
+		<title>CWDeviceID Class Reference</title>
 		<meta id="xcode-display" name="xcode-display" content="render"/>
 		<link rel="stylesheet" type="text/css" href="../css/styles.css" media="all" />
 		<link rel="stylesheet" type="text/css" media="print" href="../css/stylesPrint.css" />
@@ -16,7 +16,7 @@
 			</div>
 			
 			<div id="title" role="banner">
-				<h1 class="hideInXcode">CWBeacon Class Reference</h1>
+				<h1 class="hideInXcode">CWDeviceID Class Reference</h1>
 			</div>
 			<ul id="headerButtons" role="toolbar">
 				<li id="toc_button">
@@ -43,8 +43,6 @@
 	
 	<option value="//api/name/minor">&nbsp;&nbsp;&nbsp;&nbsp;minor</option>
 	
-	<option value="//api/name/proximity">&nbsp;&nbsp;&nbsp;&nbsp;proximity</option>
-	
 	
 	
 	
@@ -52,7 +50,9 @@
 	
 	<option value="instance_methods">Instance Methods</option>
 	
-	<option value="//api/name/initWithMajor:minor:proximity:">&nbsp;&nbsp;&nbsp;&nbsp;- initWithMajor:minor:proximity:</option>
+	<option value="//api/name/init">&nbsp;&nbsp;&nbsp;&nbsp;- init</option>
+	
+	<option value="//api/name/initWithMajor:minor:">&nbsp;&nbsp;&nbsp;&nbsp;- initWithMajor:minor:</option>
 	
 	
 	
@@ -82,8 +82,6 @@
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/minor">minor</a></span></li>
 	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/proximity">proximity</a></span></li>
-	
 </ul></li>
 
 
@@ -92,7 +90,9 @@
 
 <li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#instance_methods">Instance Methods</a></span><ul>
 	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/initWithMajor:minor:proximity:">initWithMajor:minor:proximity:</a></span></li>
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/init">init</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/initWithMajor:minor:">initWithMajor:minor:</a></span></li>
 	
 </ul></li>
 
@@ -101,7 +101,7 @@
 		</nav>
 		<article>
 			<div id="contents" class="isShowingTOC" role="main">
-				<a title="CWBeacon Class Reference" name="top"></a>
+				<a title="CWDeviceID Class Reference" name="top"></a>
 				<div class="main-navigation navigation-top">
 					<ul>
 	<li><a href="../index.html">Index</a></li>
@@ -110,7 +110,7 @@
 				</div>
 				<div id="header">
 					<div class="section-header">
-						<h1 class="title title-header">CWBeacon Class Reference</h1>
+						<h1 class="title title-header">CWDeviceID Class Reference</h1>
 					</div>		
 				</div>
 				<div id="container">	
@@ -121,7 +121,7 @@
 	<td class="specification-value">NSObject</td>
 </tr><tr>
 	<td class="specification-title">Declared in</td>
-	<td class="specification-value">CWBeacon.h<br />CWBeacon.m</td>
+	<td class="specification-value">CWDeviceID.h<br />CWDeviceID.m</td>
 </tr>
 						</tbody></table></div>
 					
@@ -131,7 +131,7 @@
 					<div class="section section-overview">
 						<a title="Overview" name="overview"></a>
 						<h2 class="subtitle subtitle-overview">Overview</h2>
-						<p>Encapsulates Connichiwa-related information about an iBeacon</p>
+						<p>Represents a unique ID for a connichiwa device. Each ID is made up of a <a href="#//api/name/major">major</a> and a <a href="#//api/name/minor">minor</a> part and need to be unique among the different devices.</p>
 					</div>
 					
 					
@@ -144,7 +144,7 @@
 						
 						
 						
-						
+						<h3 class="subsubtitle task-title">Other Methods</h3>
 
 						<ul class="task-list">
 							<li>
@@ -161,13 +161,21 @@
 	
 </li><li>
 	<span class="tooltip">
-		<code><a href="#//api/name/proximity">&nbsp;&nbsp;proximity</a></code>
+		<code><a href="#//api/name/initWithMajor:minor:">&ndash;&nbsp;initWithMajor:minor:</a></code>
 	</span>
-	<span class="task-item-suffix">property</span>
 	
-</li><li>
+	
+</li>
+						</ul>
+						
+						
+						
+						<h3 class="subsubtitle task-title">Other Methods</h3>
+
+						<ul class="task-list">
+							<li>
 	<span class="tooltip">
-		<code><a href="#//api/name/initWithMajor:minor:proximity:">&ndash;&nbsp;initWithMajor:minor:proximity:</a></code>
+		<code><a href="#//api/name/init">&ndash;&nbsp;init</a></code>
 	</span>
 	
 	
@@ -191,7 +199,7 @@
 	
 	
 	<div class="method-subsection brief-description">
-		<p>The major value of the beacon&rsquo;s identifier number. Can be used to uniquely identify a beacon.</p>
+		<p>The major part of the ID</p>
 	</div>		
 	
     
@@ -214,7 +222,7 @@
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">CWBeacon.h</code><br />
+		<code class="declared-in-ref">CWDeviceID.h</code><br />
 	</div>				
 	
 	
@@ -227,7 +235,7 @@
 	
 	
 	<div class="method-subsection brief-description">
-		<p>The minor value of the beacon&rsquo;s identifier number. Can be used to uniquely identify a beacon.</p>
+		<p>The minor part of the ID</p>
 	</div>		
 	
     
@@ -250,44 +258,7 @@
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">CWBeacon.h</code><br />
-	</div>				
-	
-	
-</div>
-						
-						<div class="section-method">
-	<a name="//api/name/proximity" title="proximity"></a>
-	<h3 class="subsubtitle method-title">proximity</h3>
-	
-	
-	
-	<div class="method-subsection brief-description">
-		<p>A string determining a rough distance from this device to the beacon. Can be &ldquo;far&rdquo;, &ldquo;near&rdquo;, &ldquo;immediate&rdquo; or &ldquo;unknown&rdquo;.
-For a beacon that represents the local device, this will always be &ldquo;unknown&rdquo;</p>
-	</div>		
-	
-    
-
-	<div class="method-subsection method-declaration"><code>@property (readonly) NSString *proximity</code></div>
-
-    
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<div class="method-subsection declared-in-section">
-		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">CWBeacon.h</code><br />
+		<code class="declared-in-ref">CWDeviceID.h</code><br />
 	</div>				
 	
 	
@@ -304,46 +275,26 @@ For a beacon that represents the local device, this will always be &ldquo;unknow
 						<h2 class="subtitle subtitle-methods">Instance Methods</h2>
 						
 						<div class="section-method">
-	<a name="//api/name/initWithMajor:minor:proximity:" title="initWithMajor:minor:proximity:"></a>
-	<h3 class="subsubtitle method-title">initWithMajor:minor:proximity:</h3>
+	<a name="//api/name/init" title="init"></a>
+	<h3 class="subsubtitle method-title">init</h3>
 	
 	
 	
 	<div class="method-subsection brief-description">
-		<p>Create a new CWBeacon with the given information</p>
+		<p>An ID without a <a href="#//api/name/major">major</a> and <a href="#//api/name/minor">minor</a> part is invalid, therefore using this method will throw an exception immediatly.</p>
 	</div>		
 	
     
 
-	<div class="method-subsection method-declaration"><code>- (instancetype)initWithMajor:(NSNumber *)<em>major</em> minor:(NSNumber *)<em>minor</em> proximity:(CLProximity)<em>proximity</em></code></div>
+	<div class="method-subsection method-declaration"><code>- (instancetype)init</code></div>
 
     
-	
-	<div class="method-subsection arguments-section parameters">
-		<h4 class="method-subtitle parameter-title">Parameters</h4>
-		
-		<dl class="argument-def parameter-def">
-			<dt><em>major</em></dt>
-			<dd><p>The <a href="#//api/name/major">major</a> value</p></dd>
-		</dl>
-		
-		<dl class="argument-def parameter-def">
-			<dt><em>minor</em></dt>
-			<dd><p>The <a href="#//api/name/minor">minor</a> value</p></dd>
-		</dl>
-		
-		<dl class="argument-def parameter-def">
-			<dt><em>proximity</em></dt>
-			<dd><p>The <a href="#//api/name/proximity">proximity</a> string</p></dd>
-		</dl>
-		
-	</div>
 	
 	
 	
 	<div class="method-subsection return">
 		<h4 class="method-subtitle parameter-title">Return Value</h4>
-		<p>A new instance of CWBeacon that stores the given information</p>
+		<p>nil</p>
 	</div>
 	
 	
@@ -358,7 +309,63 @@ For a beacon that represents the local device, this will always be &ldquo;unknow
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">CWBeacon.h</code><br />
+		<code class="declared-in-ref">CWDeviceID.m</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/initWithMajor:minor:" title="initWithMajor:minor:"></a>
+	<h3 class="subsubtitle method-title">initWithMajor:minor:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Creates a new ID with the given <a href="#//api/name/major">major</a> and <a href="#//api/name/minor">minor</a>.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (instancetype)initWithMajor:(NSNumber *)<em>major</em> minor:(NSNumber *)<em>minor</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>major</em></dt>
+			<dd><p>The <a href="#//api/name/major">major</a> part of the ID</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>minor</em></dt>
+			<dd><p>The <a href="#//api/name/minor">minor</a> part of the ID</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>A new ID instance</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">CWDeviceID.h</code><br />
 	</div>				
 	
 	
@@ -379,7 +386,7 @@ For a beacon that represents the local device, this will always be &ldquo;unknow
 				<div id="footer">
 					<hr />
 					<div class="footer-copyright">
-						<p><span class="copyright">&copy; 2014 Mario Schreiner. All rights reserved. (Last updated: 2014-06-11)</span><br />
+						<p><span class="copyright">&copy; 2014 Mario Schreiner. All rights reserved. (Last updated: 2014-06-16)</span><br />
 						
 						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2 (build 963)</a>.</span></p>
 						

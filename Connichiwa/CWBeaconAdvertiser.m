@@ -34,6 +34,24 @@
 @implementation CWBeaconAdvertiser
 
 
+/**
+ *  Creates a new instance of this class. It is not advised to have multiple advertiser active on a single device, you should only create this class once.
+ *
+ *  @return A new instance of this class.
+ */
+- (instancetype)init
+{
+    self = [super init];
+    
+    //To identify beacons, we randomize the major/minor and pray to god no other beacon happens to have the same
+    NSNumber *myMajor = [NSNumber numberWithUnsignedShort:(uint16_t)arc4random()];
+    NSNumber *myMinor = [NSNumber numberWithUnsignedShort:(uint16_t)arc4random()];
+    self.myID = [[CWDeviceID alloc] initWithMajor:myMajor minor:myMinor];
+    
+    return self;
+}
+
+
 - (void)startAdvertising
 {
     DLog(@"Initializing CBPeripheralManager...");
@@ -57,11 +75,6 @@
     if ([manager state] == CBPeripheralManagerStatePoweredOn)
     {
         //Powered On - We can start advertising as an iBeacon
-        //To identify beacons, we randomize the major/minor and pray to god no other beacon happens to have the same
-        NSNumber *myMajor = [NSNumber numberWithUnsignedShort:(uint16_t)arc4random()];
-        NSNumber *myMinor = [NSNumber numberWithUnsignedShort:(uint16_t)arc4random()];
-        self.myID = [[CWDeviceID alloc] initWithMajor:myMajor minor:myMinor];
-
         self.beaconRegion = [[CLBeaconRegion alloc] initWithProximityUUID:[[NSUUID alloc] initWithUUIDString:BEACON_UUID]
                                                                     major:[self.myID.major unsignedShortValue]
                                                                     minor:[self.myID.minor unsignedShortValue]

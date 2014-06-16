@@ -33,8 +33,32 @@
 		</Token>
 		
 		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWWebApplication/_startBeaconAdvertising</TokenIdentifier>
+			<Abstract type="html">Advises the CWBeaconAdvertiser to start advertising this device as a connichiwa beacon</Abstract>
+			<DeclaredIn>CWWebApplication.m</DeclaredIn>
+			
+			<Declaration>- (void)_startBeaconAdvertising</Declaration>
+			
+			
+			<Anchor>//api/name/_startBeaconAdvertising</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWWebApplication/_startBeaconMonitoring</TokenIdentifier>
+			<Abstract type="html">Advises this device to start looking for other connichiwa devices around it</Abstract>
+			<DeclaredIn>CWWebApplication.m</DeclaredIn>
+			
+			<Declaration>- (void)_startBeaconMonitoring</Declaration>
+			
+			
+			<Anchor>//api/name/_startBeaconMonitoring</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
 			<TokenIdentifier>//apple_ref/occ/instm/CWWebApplication/localWebsocketWasOpened</TokenIdentifier>
-			<Abstract type="html"></Abstract>
+			<Abstract type="html">See [CWWebserverDelegate localWebsocketWasOpened]</Abstract>
 			<DeclaredIn>CWWebApplication.m</DeclaredIn>
 			
 			<Declaration>- (void)localWebsocketWasOpened</Declaration>
@@ -45,31 +69,76 @@
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWWebApplication/didStartAdvertising:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
+			<TokenIdentifier>//apple_ref/occ/instm/CWWebApplication/didStartAdvertisingWithID:</TokenIdentifier>
+			<Abstract type="html">See [CWBeaconAdvertiserDelegate didStartAdvertisingWithID:]</Abstract>
 			<DeclaredIn>CWWebApplication.m</DeclaredIn>
 			
-			<Declaration>- (void)didStartAdvertising:(CWBeacon *)localBeacon</Declaration>
+			<Declaration>- (void)didStartAdvertisingWithID:(CWDeviceID *)ID</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>ID</Name>
+					<Abstract type="html">See [CWBeaconAdvertiserDelegate didStartAdvertisingWithID:]</Abstract>
+				</Parameter>
+			</Parameters>
 			
-			
-			<Anchor>//api/name/didStartAdvertising:</Anchor>
+			<Anchor>//api/name/didStartAdvertisingWithID:</Anchor>
             <NodeRef refid="6"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWWebApplication/beaconUpdated:</TokenIdentifier>
-			<Abstract type="html">See [CWBeaconMonitorDelegate beaconUpdated:]</Abstract>
+			<TokenIdentifier>//apple_ref/occ/instm/CWWebApplication/beaconDetectedWithID:inProximity:</TokenIdentifier>
+			<Abstract type="html">See [CWBeaconMonitorDelegate beaconDetectedWithID:inProximity:]</Abstract>
 			<DeclaredIn>CWWebApplication.m</DeclaredIn>
 			
-			<Declaration>- (void)beaconUpdated:(CWBeacon *)beacon</Declaration>
+			<Declaration>- (void)beaconDetectedWithID:(CWDeviceID *)ID inProximity:(NSString *)proximity</Declaration>
 			<Parameters>
 				<Parameter>
-					<Name>beacon</Name>
-					<Abstract type="html">See [CWBeaconMonitorDelegate beaconUpdated:]</Abstract>
+					<Name>ID</Name>
+					<Abstract type="html">See [CWBeaconMonitorDelegate beaconDetectedWithID:inProximity:]</Abstract>
+				</Parameter><Parameter>
+					<Name>proximity</Name>
+					<Abstract type="html">See [CWBeaconMonitorDelegate beaconDetectedWithID:inProximity:]</Abstract>
 				</Parameter>
 			</Parameters>
 			
-			<Anchor>//api/name/beaconUpdated:</Anchor>
+			<Anchor>//api/name/beaconDetectedWithID:inProximity:</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWWebApplication/beaconWithID:changedProximity:</TokenIdentifier>
+			<Abstract type="html">See [CWBeaconMonitorDelegate beaconDetectedWithID:inProximity:]</Abstract>
+			<DeclaredIn>CWWebApplication.m</DeclaredIn>
+			
+			<Declaration>- (void)beaconWithID:(CWDeviceID *)ID changedProximity:(NSString *)proximity</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>ID</Name>
+					<Abstract type="html">See [CWBeaconMonitorDelegate beaconDetectedWithID:inProximity:]</Abstract>
+				</Parameter><Parameter>
+					<Name>proximity</Name>
+					<Abstract type="html">See [CWBeaconMonitorDelegate beaconDetectedWithID:inProximity:]</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/beaconWithID:changedProximity:</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWWebApplication/beaconLostWithID:</TokenIdentifier>
+			<Abstract type="html">See [CWBeaconMonitorDelegate beaconLostWithID:]</Abstract>
+			<DeclaredIn>CWWebApplication.m</DeclaredIn>
+			
+			<Declaration>- (void)beaconLostWithID:(CWDeviceID *)ID</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>ID</Name>
+					<Abstract type="html">See [CWBeaconMonitorDelegate beaconLostWithID:]</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/beaconLostWithID:</Anchor>
             <NodeRef refid="6"/>
 		</Token>
 		
