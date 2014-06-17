@@ -6,14 +6,17 @@
 //  Copyright (c) 2014 Mario Schreiner. All rights reserved.
 //
 
-#import "CWBluetoothPeripheral.h"
+#import "CWBluetoothAdvertiser.h"
 #import "CWConstants.h"
+#import "CWDeviceID.h"
 #import "CWDebug.h"
 #import <CoreLocation/CoreLocation.h>
 
 
 
-@interface CWBluetoothPeripheral () <CBPeripheralManagerDelegate>
+@interface CWBluetoothAdvertiser () <CBPeripheralManagerDelegate>
+
+@property (readwrite, strong) CWDeviceID *myID;
 
 @property (readwrite, strong) CBPeripheralManager *peripheralManager;
 @property (readwrite, strong) CBMutableService *service;
@@ -23,11 +26,16 @@
 
 
 
-@implementation CWBluetoothPeripheral
+@implementation CWBluetoothAdvertiser
 
 - (void)startAdvertising
 {
     DLog(@"Initializing CBPeripheralManager...");
+    
+    NSNumber *myMajor = [NSNumber numberWithUnsignedShort:(uint16_t)arc4random()];
+    NSNumber *myMinor = [NSNumber numberWithUnsignedShort:(uint16_t)arc4random()];
+    self.myID = [[CWDeviceID alloc] initWithMajor:myMajor minor:myMinor];
+    
     self.peripheralManager = [[CBPeripheralManager alloc] initWithDelegate:self queue:nil];
 }
 
@@ -40,6 +48,8 @@
     {
         DLog(@"Peripheral Manager Powered On - Advertising Service with Characteristic...");
         
+        //TODO add willAdvertise
+        
         [self.peripheralManager startAdvertising:@{ CBAdvertisementDataServiceUUIDsKey : @[[CBUUID UUIDWithString:BLUETOOTH_SERVICE_UUID]] }];
         
         //TODO can we already send major/minor here to shorten the process?
@@ -49,6 +59,9 @@
         self.service.characteristics = @[ self.characteristic ];
         
         [self.peripheralManager addService:self.service];
+        
+        //TODO add selector check
+        [self.delegate didStartAdvertisingWithID:self.myID];
     }
 }
 

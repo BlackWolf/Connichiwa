@@ -126,7 +126,7 @@
 - (void)sendBeaconWithID:(CWDeviceID *)ID newProximity:(NSString *)proximity
 {
     NSDictionary *sendData = @{
-                               @"type": @"deviceproximitychange",
+                               @"type": @"deviceproximitychanged",
                                @"major": ID.major,
                                @"minor": ID.minor,
                                @"proximity": proximity

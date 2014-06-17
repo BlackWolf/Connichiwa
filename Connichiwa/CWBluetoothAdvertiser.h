@@ -8,8 +8,11 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreBluetooth/CoreBluetooth.h>
+#import "CWBluetoothAdvertiserDelegate.h"
 
-@interface CWBluetoothPeripheral : NSObject
+@interface CWBluetoothAdvertiser : NSObject
+
+@property (readwrite, strong) id<CWBluetoothAdvertiserDelegate> delegate;
 
 - (void)startAdvertising;
 

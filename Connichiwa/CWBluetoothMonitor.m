@@ -6,13 +6,13 @@
 //  Copyright (c) 2014 Mario Schreiner. All rights reserved.
 //
 
-#import "CWBluetoothCentral.h"
+#import "CWBluetoothMonitor.h"
 #import "CWConstants.h"
 #import "CWDebug.h"
 
 
 
-@interface CWBluetoothCentral () <CBCentralManagerDelegate, CBPeripheralDelegate>
+@interface CWBluetoothMonitor () <CBCentralManagerDelegate, CBPeripheralDelegate>
 
 @property (readwrite, strong) CBCentralManager *centralManager;
 @property (readwrite, strong) NSMutableArray *peripherals;
@@ -21,7 +21,7 @@
 
 
 
-@implementation CWBluetoothCentral
+@implementation CWBluetoothMonitor
 
 
 - (void)startSearching
@@ -61,7 +61,7 @@
     {
         DLog(@"Central Manager state changed to PoweredOn - Start scanning for other Bluetooth devices...");
         [self.centralManager scanForPeripheralsWithServices:@[[CBUUID UUIDWithString:BLUETOOTH_SERVICE_UUID]]
-                                                    options:@{ CBCentralManagerScanOptionAllowDuplicatesKey : @NO }];
+                                                    options:@{ CBCentralManagerScanOptionAllowDuplicatesKey : @YES }];
     }
     
     
@@ -74,17 +74,68 @@
     }];
 }
 
+static NSString *lastDistance = @"";
+static BOOL wasAdded = NO;
+static int counter = 0;
 
 - (void)centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI
 {
-    DLog(@"DETECTED %@", peripheral);
-    //TODO containsObject will not work ^^
-    if ([self.peripherals containsObject:peripheral] == NO)
+    //Check if we detected this peripheral before
+    CBPeripheral *existingPeripheral;
+    for (CBPeripheral *peripheralToCheck in self.peripherals)
+    {
+        if ([peripheralToCheck.identifier.UUIDString isEqualToString:peripheral.identifier.UUIDString])
+        {
+            existingPeripheral = peripheralToCheck;
+            break;
+        }
+    }
+    
+    CWDeviceID *blahID = [[CWDeviceID alloc] initWithMajor:@17 minor:@18];
+    
+    NSString *distance = [self calculateProximityWithTxPower:-59 rssi:[RSSI doubleValue]];
+    if (existingPeripheral == nil)
     {
         DLog(@"Discovered Peripheral %@, connecting...", peripheral.name);
         [self.peripherals addObject:peripheral];
         [self.centralManager connectPeripheral:peripheral options:nil];
+        
+                if (wasAdded == NO) {
+        [self.delegate beaconDetectedWithID:blahID inProximity:distance];
+                    wasAdded = YES;
+                }
+    } else
+    {
+        if ([distance isEqualToString:lastDistance] == NO) {
+            [self.delegate beaconWithID:blahID changedProximity:distance];
+        }
     }
+    
+    lastDistance = distance;
+    
+    //TODO we need to set a timeout to detect lost beacons
+}
+
+- (NSString *)calculateProximityWithTxPower:(int)txPower rssi:(double)rssi
+{
+    if (rssi == 0) {
+//        return -1.0; // if we cannot determine accuracy, return -1.
+        return @"unknown";
+    }
+    
+    double ratio = rssi*1.0/txPower;
+    double accuracy = -1;
+    if (ratio < 1.0) {
+        accuracy = pow(ratio,10);
+    }
+    else {
+        accuracy =  (0.89976)*pow(ratio,7.7095) + 0.111;
+    }
+    
+    if (accuracy <= 0) return @"unknown";
+    else if (accuracy < 0.5) return @"immediate";
+    else if (accuracy < 4.0) return @"near";
+    else return @"far";
 }
 
 
@@ -125,8 +176,10 @@
     //Let's see if the peripheral contains our connichiwa service
     for (CBService *service in peripheral.services)
     {
-        DLog(@"Comparing %@ to %@", service.UUID.UUIDString, BLUETOOTH_SERVICE_UUID);
-        if ([service.UUID.UUIDString isEqualToString:BLUETOOTH_SERVICE_UUID])
+        //if (service.UUID != nil && [service.UUID.UUIDString isEqualToString:BLUETOOTH_SERVICE_UUID])
+        NSString *uuidString = [[NSString alloc] initWithData:service.UUID.data encoding:NSUTF8StringEncoding];
+        DLog(@"Comparing %@ to %@", uuidString, BLUETOOTH_SERVICE_UUID);
+        if ([uuidString isEqualToString:BLUETOOTH_SERVICE_UUID])
         {
             [peripheral discoverCharacteristics:@[[CBUUID UUIDWithString:BLUETOOTH_CHARACTERISTIC_UUID]] forService:service];
         }
@@ -146,8 +199,9 @@
     //Wohoo, we are finally there! Now enable notifications for the characteristics we found
     for (CBCharacteristic *characteristic in service.characteristics)
     {
-        DLog(@"Comparing CH %@ to %@", characteristic.UUID.UUIDString, BLUETOOTH_CHARACTERISTIC_UUID);
-        if ([characteristic.UUID.UUIDString isEqualToString:BLUETOOTH_CHARACTERISTIC_UUID])
+        //if (characteristic.UUID != nil && [characteristic.UUID.UUIDString isEqualToString:BLUETOOTH_CHARACTERISTIC_UUID])
+        NSString *uuidString = [[NSString alloc] initWithData:service.UUID.data encoding:NSUTF8StringEncoding];
+        if ([uuidString isEqualToString:BLUETOOTH_CHARACTERISTIC_UUID])
         {
             [peripheral setNotifyValue:YES forCharacteristic:characteristic];
         }

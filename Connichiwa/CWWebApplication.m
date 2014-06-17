@@ -13,14 +13,16 @@
 #import "CWBeaconAdvertiser.h"
 #import "CWBeaconAdvertiseDelegate.h"
 #import "CWWebserverDelegate.h"
-#import "CWBluetoothCentral.h"
-#import "CWBluetoothPeripheral.h"
+#import "CWBluetoothMonitor.h"
+#import "CWBluetoothMonitorDelegate.h"
+#import "CWBluetoothAdvertiser.h"
+#import "CWBluetoothAdvertiserDelegate.h"
 #import "CWConstants.h"
 #import "CWDebug.h"
 
 
 
-@interface CWWebApplication () <CWWebserverDelegate, CWBeaconAdvertiserDelegate, CWBeaconMonitorDelegate>
+@interface CWWebApplication () <CWWebserverDelegate, CWBeaconAdvertiserDelegate, CWBeaconMonitorDelegate, CWBluetoothAdvertiserDelegate, CWBluetoothMonitorDelegate>
 
 /**
  *  The Connichiwa Webserver instance that runs our local webserver and communicates with the web library
@@ -37,9 +39,9 @@
  */
 @property (readwrite, strong) CWBeaconMonitor *beaconMonitor;
 
-@property (readwrite, strong) CWBluetoothCentral *bluetoothCentral;
+@property (readwrite, strong) CWBluetoothMonitor *bluetoothCentral;
 
-@property (readwrite, strong) CWBluetoothPeripheral *bluetoothPeripheral;
+@property (readwrite, strong) CWBluetoothAdvertiser *bluetoothPeripheral;
 
 /**
  *  The local UIWebView where the web application will be displayed on
@@ -87,11 +89,12 @@
 {
     if (self.beaconAdvertiser != nil) return;
     
-    self.beaconAdvertiser = [[CWBeaconAdvertiser alloc] init];
-    [self.beaconAdvertiser setDelegate:self];
-    [self.beaconAdvertiser startAdvertising];
+//    self.beaconAdvertiser = [[CWBeaconAdvertiser alloc] init];
+//    [self.beaconAdvertiser setDelegate:self];
+//    [self.beaconAdvertiser startAdvertising];
     
-    self.bluetoothPeripheral = [[CWBluetoothPeripheral alloc] init];
+    self.bluetoothPeripheral = [[CWBluetoothAdvertiser alloc] init];
+    [self.bluetoothPeripheral setDelegate:self];
     [self.bluetoothPeripheral startAdvertising];
 }
 
@@ -100,11 +103,12 @@
 {
     if (self.beaconMonitor != nil) return;
     
-    self.beaconMonitor = [[CWBeaconMonitor alloc] init];
-    [self.beaconMonitor setDelegate:self];
-    [self.beaconMonitor startMonitoring];
+//    self.beaconMonitor = [[CWBeaconMonitor alloc] init];
+//    [self.beaconMonitor setDelegate:self];
+//    [self.beaconMonitor startMonitoring];
     
-    self.bluetoothCentral = [[CWBluetoothCentral alloc] init];
+    self.bluetoothCentral = [[CWBluetoothMonitor alloc] init];
+    [self.bluetoothCentral setDelegate:self];
     [self.bluetoothCentral startSearching];
 }
 

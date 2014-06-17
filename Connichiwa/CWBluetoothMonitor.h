@@ -8,8 +8,11 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreBluetooth/CoreBluetooth.h>
+#import "CWBluetoothMonitorDelegate.h"
 
-@interface CWBluetoothCentral : NSObject
+@interface CWBluetoothMonitor : NSObject
+
+@property (readwrite, strong) id<CWBluetoothMonitorDelegate> delegate;
 
 - (void)startSearching;
 
