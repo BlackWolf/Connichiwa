@@ -146,29 +146,30 @@
  */
 - (void)locationManager:(CLLocationManager *)manager didRangeBeacons:(NSArray *)beacons inRegion:(CLBeaconRegion *)region
 {
-    [CWDebug executeInDebug:^{
-        if ([beacons count] > 0) DLog(@"%lu iBeacons detected nearby", (unsigned long)[beacons count]);
-        for (CLBeacon *beacon in beacons)
-        {
-            ResolveUnused(beacon);
-            DLog(@"Beacon (%@.%@) ranged at %@ distance (Signal strength %li ; accuracy %.2f)",
-                 beacon.major,
-                 beacon.minor,
-                 [self _stringForProximity:beacon.proximity],
-                 (long)beacon.rssi,
-                 beacon.accuracy);
-        }
-    }];
+//    [CWDebug executeInDebug:^{
+//        if ([beacons count] > 0) DLog(@"%lu iBeacons detected nearby", (unsigned long)[beacons count]);
+//        for (CLBeacon *beacon in beacons)
+//        {
+//            ResolveUnused(beacon);
+//            DLog(@"Beacon (%@.%@) ranged at %@ distance (Signal strength %li ; accuracy %.2f)",
+//                 beacon.major,
+//                 beacon.minor,
+//                 [self _stringForProximity:beacon.proximity],
+//                 (long)beacon.rssi,
+//                 beacon.accuracy);
+//        }
+//    }];
     
     //When a beacon is shut down, it first goes to unknown proximity and then disappears about 5-10 seconds later
     //To speedup beacon loss events, we therefore treat beacons at unknown proximity as lost beacons
     NSMutableArray *newBeacons = [beacons mutableCopy];
-    for (CLBeacon *beacon in newBeacons)
+    for (CLBeacon *beacon in beacons)
     {
         if (beacon.proximity == CLProximityUnknown) [newBeacons removeObject:beacon];
     }
     
     NSMutableArray *oldBeacons = [self.currentBeacons mutableCopy];
+    NSArray *oldBeaconsEnumeration = [oldBeacons copy];
     self.currentBeacons = newBeacons;
     
     //Compare the new beacon and old beacon list
@@ -178,7 +179,7 @@
     for (CLBeacon *currentBeacon in self.currentBeacons)
     {
         BOOL isNew = YES;
-        for (CLBeacon *oldBeacon in oldBeacons)
+        for (CLBeacon *oldBeacon in oldBeaconsEnumeration)
         {
             if ([currentBeacon.major isEqualToNumber:oldBeacon.major] && [currentBeacon.minor isEqualToNumber:oldBeacon.minor])
             {
@@ -201,6 +202,7 @@
             if ([self.delegate respondsToSelector:@selector(beaconDetectedWithID:inProximity:)]) [self.delegate beaconDetectedWithID:currentBeaconID inProximity:proximityString];
         }
     }
+    
     //All updated beacons were removed, therefore only lost beacons remain
     for (CLBeacon *oldBeacon in oldBeacons)
     {

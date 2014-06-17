@@ -158,7 +158,7 @@
  */
 - (void)_sendToWeblib:(NSString *)message
 {
-    DLog(@"Sending %@", message);
+//    DLog(@"Sending %@", message);
     [self.nodelikeContext evaluateScript:[NSString stringWithFormat:@"sendToWeblib('%@')", message]];
 }
 

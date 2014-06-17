@@ -49,6 +49,10 @@
 		334AB77319405F1100A15999 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 334AB77219405F1000A15999 /* CoreLocation.framework */; };
 		3367186A19473827000A7164 /* CWBeaconAdvertiseDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 3367186919473827000A7164 /* CWBeaconAdvertiseDelegate.h */; };
 		3367186C194776C1000A7164 /* CWWebserverDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 3367186B194776C1000A7164 /* CWWebserverDelegate.h */; };
+		339A4BC4195024110072A4FC /* CWBluetoothCentral.h in Headers */ = {isa = PBXBuildFile; fileRef = 339A4BC2195024110072A4FC /* CWBluetoothCentral.h */; };
+		339A4BC5195024110072A4FC /* CWBluetoothCentral.m in Sources */ = {isa = PBXBuildFile; fileRef = 339A4BC3195024110072A4FC /* CWBluetoothCentral.m */; };
+		339A4BC8195037460072A4FC /* CWBluetoothPeripheral.h in Headers */ = {isa = PBXBuildFile; fileRef = 339A4BC6195037460072A4FC /* CWBluetoothPeripheral.h */; };
+		339A4BC9195037460072A4FC /* CWBluetoothPeripheral.m in Sources */ = {isa = PBXBuildFile; fileRef = 339A4BC7195037460072A4FC /* CWBluetoothPeripheral.m */; };
 		33A0514A193E61CC00FED071 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33A05149193E61CC00FED071 /* Foundation.framework */; };
 		33A05158193E61CC00FED071 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33A05157193E61CC00FED071 /* XCTest.framework */; };
 		33A05159193E61CC00FED071 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33A05149193E61CC00FED071 /* Foundation.framework */; };
@@ -149,6 +153,10 @@
 		3367186919473827000A7164 /* CWBeaconAdvertiseDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWBeaconAdvertiseDelegate.h; sourceTree = "<group>"; };
 		3367186B194776C1000A7164 /* CWWebserverDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWWebserverDelegate.h; sourceTree = "<group>"; };
 		3381A01E193F492600BDDF34 /* Nodelike.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Nodelike.xcodeproj; path = Nodelike/Nodelike.xcodeproj; sourceTree = "<group>"; };
+		339A4BC2195024110072A4FC /* CWBluetoothCentral.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWBluetoothCentral.h; sourceTree = "<group>"; };
+		339A4BC3195024110072A4FC /* CWBluetoothCentral.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWBluetoothCentral.m; sourceTree = "<group>"; };
+		339A4BC6195037460072A4FC /* CWBluetoothPeripheral.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWBluetoothPeripheral.h; sourceTree = "<group>"; };
+		339A4BC7195037460072A4FC /* CWBluetoothPeripheral.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWBluetoothPeripheral.m; sourceTree = "<group>"; };
 		33A05146193E61CC00FED071 /* libConnichiwa.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libConnichiwa.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		33A05149193E61CC00FED071 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		33A0514D193E61CC00FED071 /* Connichiwa-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Connichiwa-Prefix.pch"; sourceTree = "<group>"; };
@@ -253,6 +261,17 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		339A4BBD194F8D6C0072A4FC /* Bluetooth */ = {
+			isa = PBXGroup;
+			children = (
+				339A4BC2195024110072A4FC /* CWBluetoothCentral.h */,
+				339A4BC3195024110072A4FC /* CWBluetoothCentral.m */,
+				339A4BC6195037460072A4FC /* CWBluetoothPeripheral.h */,
+				339A4BC7195037460072A4FC /* CWBluetoothPeripheral.m */,
+			);
+			name = Bluetooth;
+			sourceTree = "<group>";
+		};
 		33A0513D193E61CC00FED071 = {
 			isa = PBXGroup;
 			children = (
@@ -300,6 +319,7 @@
 				333BA84E194C9C360046F5CB /* CWDeviceID.h */,
 				333BA84F194C9C360046F5CB /* CWDeviceID.m */,
 				3306A794194096F6001B999A /* iBeacon */,
+				339A4BBD194F8D6C0072A4FC /* Bluetooth */,
 				3306A7951940970D001B999A /* Helper */,
 				33A0514C193E61CC00FED071 /* Supporting Files */,
 			);
@@ -342,9 +362,11 @@
 				330CBB74193E75890064AD99 /* Connichiwa.h in Headers */,
 				333BA850194C9C360046F5CB /* CWDeviceID.h in Headers */,
 				3306A78D1940746A001B999A /* CWConstants.h in Headers */,
+				339A4BC4195024110072A4FC /* CWBluetoothCentral.h in Headers */,
 				334AB747193FDADC00A15999 /* CWWebApplication.h in Headers */,
 				3367186A19473827000A7164 /* CWBeaconAdvertiseDelegate.h in Headers */,
 				330BA3D3193F8CB300D9E54C /* CWWebserver.h in Headers */,
+				339A4BC8195037460072A4FC /* CWBluetoothPeripheral.h in Headers */,
 				334AB74B193FDAE500A15999 /* CWBeaconAdvertiser.h in Headers */,
 				334AB757193FEC6000A15999 /* CWBundle.h in Headers */,
 				3367186C194776C1000A7164 /* CWWebserverDelegate.h in Headers */,
@@ -612,6 +634,8 @@
 			files = (
 				330BA3D4193F8CB300D9E54C /* CWWebserver.m in Sources */,
 				334AB758193FEC6000A15999 /* CWBundle.m in Sources */,
+				339A4BC9195037460072A4FC /* CWBluetoothPeripheral.m in Sources */,
+				339A4BC5195024110072A4FC /* CWBluetoothCentral.m in Sources */,
 				334AB750193FDAF200A15999 /* CWBeaconMonitor.m in Sources */,
 				334AB754193FDDF800A15999 /* CWDebug.m in Sources */,
 				334AB74C193FDAE500A15999 /* CWBeaconAdvertiser.m in Sources */,

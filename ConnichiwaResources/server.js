@@ -84,7 +84,7 @@ function sendToWeblib(message)
     log("Message lost because no local websocket connection exists: " + message);
     return;
   }
-  log("WEBSERVER", "Sending mesage to weblib: " + message);
+//  log("WEBSERVER", "Sending mesage to weblib: " + message);
   wsLocalConnection.send(message);
 }
 

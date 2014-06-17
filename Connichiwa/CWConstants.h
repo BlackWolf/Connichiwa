@@ -12,4 +12,9 @@
 
 extern int const WEBSERVER_PORT;
 extern NSString *const BEACON_UUID;
+
+extern NSString *const BLUETOOTH_SERVICE_UUID;
+extern NSString *const BLUETOOTH_CHARACTERISTIC_UUID;
+
 extern NSJSONWritingOptions const JSON_WRITING_OPTIONS;
+

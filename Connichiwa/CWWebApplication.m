@@ -13,6 +13,8 @@
 #import "CWBeaconAdvertiser.h"
 #import "CWBeaconAdvertiseDelegate.h"
 #import "CWWebserverDelegate.h"
+#import "CWBluetoothCentral.h"
+#import "CWBluetoothPeripheral.h"
 #import "CWConstants.h"
 #import "CWDebug.h"
 
@@ -34,6 +36,10 @@
  *  The CWBeaconMonitor instance that looks for other Connichiwa devices
  */
 @property (readwrite, strong) CWBeaconMonitor *beaconMonitor;
+
+@property (readwrite, strong) CWBluetoothCentral *bluetoothCentral;
+
+@property (readwrite, strong) CWBluetoothPeripheral *bluetoothPeripheral;
 
 /**
  *  The local UIWebView where the web application will be displayed on
@@ -84,6 +90,9 @@
     self.beaconAdvertiser = [[CWBeaconAdvertiser alloc] init];
     [self.beaconAdvertiser setDelegate:self];
     [self.beaconAdvertiser startAdvertising];
+    
+    self.bluetoothPeripheral = [[CWBluetoothPeripheral alloc] init];
+    [self.bluetoothPeripheral startAdvertising];
 }
 
 
@@ -94,6 +103,9 @@
     self.beaconMonitor = [[CWBeaconMonitor alloc] init];
     [self.beaconMonitor setDelegate:self];
     [self.beaconMonitor startMonitoring];
+    
+    self.bluetoothCentral = [[CWBluetoothCentral alloc] init];
+    [self.bluetoothCentral startSearching];
 }
 
 

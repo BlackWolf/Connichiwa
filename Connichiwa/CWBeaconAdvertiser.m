@@ -82,10 +82,13 @@
         NSDictionary *advertismentData = [self.beaconRegion peripheralDataWithMeasuredPower:nil];
         
         DLog(@"Peripheral Manager state changed to PoweredOn - Advertising as iBeacon (%@.%@)...", self.myID.major, self.myID.minor);
+        DLog(@"Data Advertised: %@", advertismentData);
         
         if ([self.delegate respondsToSelector:@selector(willStartAdvertisingWithID:)]) [self.delegate willStartAdvertisingWithID:self.myID];
         [self.peripheralManager startAdvertising:advertismentData];
         if ([self.delegate respondsToSelector:@selector(didStartAdvertisingWithID:)]) [self.delegate didStartAdvertisingWithID:self.myID];
+        
+        [self performSelector:@selector(test) withObject:nil afterDelay:2];
     }
     
     [CWDebug executeInDebug:^{
@@ -95,6 +98,12 @@
         else if ([manager state] == CBPeripheralManagerStateUnauthorized) DLog(@"Peripheral Manager state changed to Unauthorized");
         else if ([manager state] == CBPeripheralManagerStatePoweredOff) DLog(@"Peripheral Manager state changed to PoweredOff");
     }];
+}
+
+
+-(void)test
+{
+    [self.peripheralManager stopAdvertising];
 }
 
 @end
