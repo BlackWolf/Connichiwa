@@ -74,13 +74,40 @@
     //TODO should we keep a list of subscribed centrals? probably?
     
     DLog(@"Sending data to centrals...");
-    NSData *test = [@"Thisisavalue" dataUsingEncoding:NSUTF8StringEncoding];
-    BOOL didSend = [self.peripheralManager updateValue:test forCharacteristic:self.characteristic onSubscribedCentrals:nil];
+    NSDictionary *sendDictionary = @{
+                                     @"type": @"identifier",
+                                     @"identifier": self.identifier
+                                     };
+    NSData *initialData = [self _JSONFromDictionary:sendDictionary];
+    //NSData *test = [@"Thisisavalue" dataUsingEncoding:NSUTF8StringEncoding];
+    BOOL didSend = [self.peripheralManager updateValue:initialData forCharacteristic:self.characteristic onSubscribedCentrals:nil];
     
     if (didSend == NO)
     {
         DLog(@"Could not send data to centrals");
     }
+}
+
+/** TODO duplicate from CWWebserver - move to common utility class? **/
+- (NSData *)_JSONFromDictionary:(NSDictionary *)dictionary
+{
+    NSError *error;
+    NSData *data = [NSJSONSerialization dataWithJSONObject:dictionary options:JSON_WRITING_OPTIONS error:&error];
+    
+    if (error)
+    {
+        [NSException raise:@"Invalid Dictionary for serialization" format:@"Dictionary could not be serialized to JSON: %@", dictionary];
+    }
+    
+    //Create the actual JSON
+    //The JSON spec says that quotes and newlines must be escaped - not doing so will produce an "unexpected EOF" error
+    NSString *json = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    json = [json stringByReplacingOccurrencesOfString:@"\'" withString:@"\\\'"];
+    json = [json stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
+    json = [json stringByReplacingOccurrencesOfString:@"\n" withString:@"\\n"];
+    json = [json stringByReplacingOccurrencesOfString:@"\r" withString:@""];
+    
+    return data;
 }
 
 
