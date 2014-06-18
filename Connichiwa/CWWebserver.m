@@ -1,5 +1,5 @@
 //
-//  CWNodelikeRunner.m
+//  CWWebserver.m
 //  Connichiwa
 //
 //  Created by Mario Schreiner on 04/06/14.
@@ -9,7 +9,6 @@
 #import "CWWebserver.h"
 #import <Nodelike/NLContext.h>
 #import "CWBundle.h"
-#import "CWDeviceID.h"
 #import "CWConstants.h"
 #import "CWDebug.h"
 
@@ -98,50 +97,45 @@
 #pragma mark Web Library Communication Protocol
 
 
-- (void)sendLocalID:(CWDeviceID *)ID
+- (void)sendLocalIdentifier:(NSString *)identifier
 {
     NSDictionary *sendData = @{
-                               @"type": @"localid",
-                               @"major": ID.major,
-                               @"minor": ID.minor,
+                               @"type": @"localidentifier",
+                               @"identifier": identifier,
                                };
     NSString *json = [self _JSONFromDictionary:sendData];
     [self _sendToWeblib:json];
 }
 
 
-- (void)sendNewBeaconWithID:(CWDeviceID *)ID inProximity:(NSString *)proximity
+- (void)sendDetectedDeviceWithIdentifier:(NSString *)identifier
 {
     NSDictionary *sendData = @{
                                @"type": @"newdevice",
-                               @"major": ID.major,
-                               @"minor": ID.minor,
-                               @"proximity": proximity
+                               @"identifier": identifier,
                                };
     NSString *json = [self _JSONFromDictionary:sendData];
     [self _sendToWeblib:json];
 }
 
 
-- (void)sendBeaconWithID:(CWDeviceID *)ID newProximity:(NSString *)proximity
+- (void)sendDeviceWithIdentifier:(NSString *)identifier changedDistance:(double)distance
 {
     NSDictionary *sendData = @{
-                               @"type": @"deviceproximitychanged",
-                               @"major": ID.major,
-                               @"minor": ID.minor,
-                               @"proximity": proximity
+                               @"type": @"devicedistancechanged",
+                               @"identifier": identifier,
+                               @"distance": [NSNumber numberWithDouble:distance]
                                };
     NSString *json = [self _JSONFromDictionary:sendData];
     [self _sendToWeblib:json];
 }
 
 
-- (void)sendLostBeaconWithID:(CWDeviceID *)ID
+- (void)sendLostDeviceWithIdentifier:(NSString *)identifier
 {
     NSDictionary *sendData = @{
                                @"type": @"devicelost",
-                               @"major": ID.major,
-                               @"minor": ID.minor
+                               @"identifier": identifier,
                                };
     NSString *json = [self _JSONFromDictionary:sendData];
     [self _sendToWeblib:json];

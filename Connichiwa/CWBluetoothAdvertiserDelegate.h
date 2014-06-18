@@ -7,13 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CWDeviceID.h"
 
 
 
 @protocol CWBluetoothAdvertiserDelegate <NSObject>
 
-- (void)willStartAdvertisingWithID:(CWDeviceID *)ID;
-- (void)didStartAdvertisingWithID:(CWDeviceID *)ID;
+- (void)willStartAdvertisingWithIdentifier:(NSString *)identifier;
+- (void)didStartAdvertisingWithIdentifier:(NSString *)identifier;
 
 @end

@@ -8,10 +8,6 @@
 
 #import "CWWebApplication.h"
 #import "CWWebserver.h"
-#import "CWBeaconMonitor.h"
-#import "CWBeaconMonitorDelegate.h"
-#import "CWBeaconAdvertiser.h"
-#import "CWBeaconAdvertiseDelegate.h"
 #import "CWWebserverDelegate.h"
 #import "CWBluetoothMonitor.h"
 #import "CWBluetoothMonitorDelegate.h"
@@ -22,22 +18,12 @@
 
 
 
-@interface CWWebApplication () <CWWebserverDelegate, CWBeaconAdvertiserDelegate, CWBeaconMonitorDelegate, CWBluetoothAdvertiserDelegate, CWBluetoothMonitorDelegate>
+@interface CWWebApplication () <CWWebserverDelegate, CWBluetoothAdvertiserDelegate, CWBluetoothMonitorDelegate>
 
 /**
  *  The Connichiwa Webserver instance that runs our local webserver and communicates with the web library
  */
 @property (readwrite, strong) CWWebserver *webserver;
-
-/**
- *  The CWBeaconAdvertiser instance that makes this device discoverable over iBeacon
- */
-@property (readwrite, strong) CWBeaconAdvertiser *beaconAdvertiser;
-
-/**
- *  The CWBeaconMonitor instance that looks for other Connichiwa devices
- */
-@property (readwrite, strong) CWBeaconMonitor *beaconMonitor;
 
 @property (readwrite, strong) CWBluetoothMonitor *bluetoothCentral;
 
@@ -87,7 +73,7 @@
 
 - (void)_startBeaconAdvertising
 {
-    if (self.beaconAdvertiser != nil) return;
+//    if (self.beaconAdvertiser != nil) return;
     
 //    self.beaconAdvertiser = [[CWBeaconAdvertiser alloc] init];
 //    [self.beaconAdvertiser setDelegate:self];
@@ -101,7 +87,7 @@
 
 - (void)_startBeaconMonitoring
 {
-    if (self.beaconMonitor != nil) return;
+//    if (self.beaconMonitor != nil) return;
     
 //    self.beaconMonitor = [[CWBeaconMonitor alloc] init];
 //    [self.beaconMonitor setDelegate:self];
@@ -125,56 +111,34 @@
 }
 
 
-#pragma mark CWBeaconAdvertiserDelegate
+#pragma mark CWBluetoothAdvertiserDelegate
 
 
-/**
- *  See [CWBeaconAdvertiserDelegate didStartAdvertisingWithID:]
- *
- *  @param ID See [CWBeaconAdvertiserDelegate didStartAdvertisingWithID:]
- */
-- (void)didStartAdvertisingWithID:(CWDeviceID *)ID
+- (void)didStartAdvertisingWithIdentifier:(NSString *)identifier
 {
-    [self.webserver sendLocalID:ID];
+    [self.webserver sendLocalIdentifier:identifier];
     [self _startBeaconMonitoring];
 }
 
 
-#pragma mark CWBeaconMonitorDelegate
+#pragma mark CWBluetoothMonitorDelegate
 
 
-/**
- *  See [CWBeaconMonitorDelegate beaconDetectedWithID:inProximity:]
- *
- *  @param ID        See [CWBeaconMonitorDelegate beaconDetectedWithID:inProximity:]
- *  @param proximity See [CWBeaconMonitorDelegate beaconDetectedWithID:inProximity:]
- */
-- (void)beaconDetectedWithID:(CWDeviceID *)ID inProximity:(NSString *)proximity
+- (void)deviceDetectedWithIdentifier:(NSString *)identifier
 {
-    [self.webserver sendNewBeaconWithID:ID inProximity:proximity];
+    [self.webserver sendDetectedDeviceWithIdentifier:identifier];
 }
 
 
-/**
- *  See [CWBeaconMonitorDelegate beaconDetectedWithID:inProximity:]
- *
- *  @param ID        See [CWBeaconMonitorDelegate beaconDetectedWithID:inProximity:]
- *  @param proximity See [CWBeaconMonitorDelegate beaconDetectedWithID:inProximity:]
- */
-- (void)beaconWithID:(CWDeviceID *)ID changedProximity:(NSString *)proximity
+- (void)deviceWithIdentifier:(NSString *)identifier changedDistance:(double)distance
 {
-    [self.webserver sendBeaconWithID:ID newProximity:proximity];
+    [self.webserver sendDeviceWithIdentifier:identifier changedDistance:distance];
 }
 
 
-/**
- *  See [CWBeaconMonitorDelegate beaconLostWithID:]
- *
- *  @param ID See [CWBeaconMonitorDelegate beaconLostWithID:]
- */
-- (void)beaconLostWithID:(CWDeviceID *)ID
+- (void)deviceLostWithIdentifier:(NSString *)identifier
 {
-    [self.webserver sendLostBeaconWithID:ID];
+    [self.webserver sendLostDeviceWithIdentifier:identifier];
 }
 
 @end

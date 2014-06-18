@@ -8,7 +8,6 @@
 
 #import "CWBluetoothAdvertiser.h"
 #import "CWConstants.h"
-#import "CWDeviceID.h"
 #import "CWDebug.h"
 #import <CoreLocation/CoreLocation.h>
 
@@ -16,7 +15,7 @@
 
 @interface CWBluetoothAdvertiser () <CBPeripheralManagerDelegate>
 
-@property (readwrite, strong) CWDeviceID *myID;
+@property (readwrite, strong) NSString *identifier;
 
 @property (readwrite, strong) CBPeripheralManager *peripheralManager;
 @property (readwrite, strong) CBMutableService *service;
@@ -32,9 +31,8 @@
 {
     DLog(@"Initializing CBPeripheralManager...");
     
-    NSNumber *myMajor = [NSNumber numberWithUnsignedShort:(uint16_t)arc4random()];
-    NSNumber *myMinor = [NSNumber numberWithUnsignedShort:(uint16_t)arc4random()];
-    self.myID = [[CWDeviceID alloc] initWithMajor:myMajor minor:myMinor];
+    //Generate random identifier under which we will advertise
+    self.identifier = [[NSUUID UUID] UUIDString];
     
     self.peripheralManager = [[CBPeripheralManager alloc] initWithDelegate:self queue:nil];
 }
@@ -48,11 +46,13 @@
     {
         DLog(@"Peripheral Manager Powered On - Advertising Service with Characteristic...");
         
-        //TODO add willAdvertise
+        if ([self.delegate respondsToSelector:@selector(willStartAdvertisingWithIdentifier:)])
+        {
+            [self.delegate willStartAdvertisingWithIdentifier:self.identifier];
+        }
         
         [self.peripheralManager startAdvertising:@{ CBAdvertisementDataServiceUUIDsKey : @[[CBUUID UUIDWithString:BLUETOOTH_SERVICE_UUID]] }];
         
-        //TODO can we already send major/minor here to shorten the process?
         self.characteristic = [[CBMutableCharacteristic alloc] initWithType:[CBUUID UUIDWithString:BLUETOOTH_CHARACTERISTIC_UUID] properties:CBCharacteristicPropertyNotify value:nil permissions:CBAttributePermissionsReadable];
         
         self.service = [[CBMutableService alloc] initWithType:[CBUUID UUIDWithString:BLUETOOTH_SERVICE_UUID] primary:YES];
@@ -60,8 +60,11 @@
         
         [self.peripheralManager addService:self.service];
         
-        //TODO add selector check
-        [self.delegate didStartAdvertisingWithID:self.myID];
+        if ([self.delegate respondsToSelector:@selector(didStartAdvertisingWithIdentifier:)])
+        {
+           [self.delegate didStartAdvertisingWithIdentifier:self.identifier];
+        }
+        
     }
 }
 

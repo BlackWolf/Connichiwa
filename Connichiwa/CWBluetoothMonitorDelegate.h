@@ -7,12 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CWDeviceID.h"
+
+
 
 @protocol CWBluetoothMonitorDelegate <NSObject>
 
-- (void)beaconDetectedWithID:(CWDeviceID *)ID inProximity:(NSString *)proximity;
-- (void)beaconWithID:(CWDeviceID *)ID changedProximity:(NSString *)proximity;
-- (void)beaconLostWithID:(CWDeviceID *)ID;
+- (void)deviceDetectedWithIdentifier:(NSString *)identifier;
+- (void)deviceWithIdentifier:(NSString *)identifier changedDistance:(double)distance;
+- (void)deviceLostWithIdentifier:(NSString *)identifier;
 
 @end

@@ -17,7 +17,10 @@
 
 @end
 
+
+
 @implementation CWBluetoothConnection
+@synthesize identifier = _identifier;
 
 - (instancetype)init
 {
@@ -34,5 +37,28 @@
     
     return self;
 }
+
+
+- (BOOL)hasIdentifier
+{
+    return (self.identifier != nil);
+}
+
+#pragma mark Getter & Setter
+
+
+- (NSString *)identifier
+{
+    return _identifier;
+}
+
+- (void)setIdentifier:(NSString *)identifier
+{
+    if (_identifier != nil) [NSException raise:@"Identifier of BT Connection cannot be changed" format:@"The Identifier of a CWBluetoothConnection can be set only once."];
+    
+    _identifier = identifier;
+}
+
+
 
 @end

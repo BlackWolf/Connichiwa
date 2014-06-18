@@ -36,34 +36,10 @@
  */
 - (void)startWithDocumentRoot:(NSString *)documentRoot;
 
-/**
- *  Sends a message to the web application with the ID this device is advertised under
- *
- *  @param ID The ID of this device
- */
-- (void)sendLocalID:(CWDeviceID *)ID;
 
-/**
- *  Sends a message to the web application and informs it of a new device detected nearby
- *
- *  @param ID        The ID of the detected device
- *  @param proximity A string describing the distance between this device and the detected device
- */
-- (void)sendNewBeaconWithID:(CWDeviceID *)ID inProximity:(NSString *)proximity;
-
-/**
- *  Sends a message to the web application and informs it of a change of the proximity of a device nearby
- *
- *  @param ID        The ID of the device that changed
- *  @param proximity A string describing the new distance between this device and the detected device
- */
-- (void)sendBeaconWithID:(CWDeviceID *)ID newProximity:(NSString *)proximity;
-
-/**
- *  Sends a message to the web application and informs it of a nearby device that was lost
- *
- *  @param ID        The ID of the lost device
- */
-- (void)sendLostBeaconWithID:(CWDeviceID *)ID;
+- (void)sendLocalIdentifier:(NSString *)identifier;
+- (void)sendDetectedDeviceWithIdentifier:(NSString *)identifier;
+- (void)sendDeviceWithIdentifier:(NSString *)identifier changedDistance:(double)distance;
+- (void)sendLostDeviceWithIdentifier:(NSString *)identifier;
 
 @end

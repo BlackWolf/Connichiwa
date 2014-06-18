@@ -7,7 +7,16 @@
 //
 
 #import <Foundation/Foundation.h>
+@class CBPeripheral, CWDeviceID;
+
+
 
 @interface CWBluetoothConnection : NSObject
+
+@property (readwrite, strong) NSString *identifier;
+@property (readonly) CBPeripheral *peripheral;
+
+- (instancetype)initWithPeripheral:(CBPeripheral *)peripheral;
+- (BOOL)hasIdentifier;
 
 @end
