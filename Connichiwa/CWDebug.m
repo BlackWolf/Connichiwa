@@ -46,6 +46,7 @@ void cwLog(NSString *format, ...) {
     NSString *dateString = [dateFormatter stringFromDate:now];
     
     NSString *finalString = [NSString stringWithFormat:@"NATIVE    %@ %@ \n", dateString, formattedString];
+//    NSString *finalString = [NSString stringWithFormat:@"%@ \n", formattedString];
     [[NSFileHandle fileHandleWithStandardOutput] writeData:[finalString dataUsingEncoding:NSUTF8StringEncoding]];
 }
 

@@ -124,7 +124,7 @@
     NSDictionary *sendData = @{
                                @"type": @"devicedistancechanged",
                                @"identifier": identifier,
-                               @"distance": [NSNumber numberWithDouble:distance]
+                               @"distance": [NSNumber numberWithDouble:(round(distance * 10) / 10)]
                                };
     NSString *json = [self _JSONFromDictionary:sendData];
     [self _sendToWeblib:json];

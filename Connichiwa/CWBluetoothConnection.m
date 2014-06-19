@@ -7,13 +7,23 @@
 //
 
 #import "CWBluetoothConnection.h"
-#import <CoreBluetooth/CoreBluetooth.h>
+#import "CWDebug.h"
+
+
+
+//double const RSSI_MOVING_AVERAGE_ALPHA = 0.125;
+double const RSSI_MOVING_AVERAGE_ALPHA = 0.03125;
+//double const RSSI_MOVING_AVERAGE_ALPHA = 0.0225;
+//double const RSSI_MOVING_AVERAGE_ALPHA = 0.015625;
 
 
 
 @interface CWBluetoothConnection ()
 
 @property (readwrite, strong) CBPeripheral *peripheral;
+@property (readwrite) double averageRSSI;
+@property (readwrite) double savedRSSI;
+@property (readwrite, strong) NSDate *savedRSSIDate;
 
 @end
 
@@ -25,6 +35,7 @@
 - (instancetype)init
 {
     [NSException raise:@"Bluetooth connection cannot be instantiated without a peripheral" format:@"Bluetooth connection cannot be instantiated without a peripheral. Use -initWithPeripheral: instead."];
+    
     return nil;
 }
 
@@ -34,8 +45,40 @@
     self = [super init];
     
     self.peripheral = peripheral;
+    self.averageRSSI = 0;
     
     return self;
+}
+
+
+- (void)addNewRSSIMeasure:(double)rssi
+{
+//    DLog(@"Adding RSSI %f with current average %f", rssi, self.averageRSSI);
+    
+    //An RSSI value of 127 (0x7f) means the RSSI could not be read.
+    //We sometimes get this value - it's nothing bad as long as it doesn't occur too often
+    //Therefore, ignore that value
+    if (rssi == 127) return;
+    
+    //We use an exponential weighted moving average to compensate for outlier of the RSSI but still react quickly to heavy distance changes
+    //Formula: (1-α)*oldAverage + α*newSample ; with α being the weighting factor of new samples (bigger α means new values are adapted more quickly, but the average is more vulnerable to outlier)
+    if (self.averageRSSI == 0) self.averageRSSI = rssi;
+    else self.averageRSSI = (1.0-RSSI_MOVING_AVERAGE_ALPHA) * self.averageRSSI + RSSI_MOVING_AVERAGE_ALPHA * rssi;
+    
+}
+
+
+- (void)saveCurrentRSSI
+{
+    self.savedRSSI = self.averageRSSI;
+    self.savedRSSIDate = [NSDate date];
+}
+
+- (NSTimeInterval)timeSinceRSSISave
+{
+    if (self.savedRSSIDate == nil) return DBL_MAX;
+    
+    return [[NSDate date] timeIntervalSinceDate:self.savedRSSIDate];
 }
 
 

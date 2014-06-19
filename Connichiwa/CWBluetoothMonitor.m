@@ -72,18 +72,22 @@
 }
 
 
-//Based on http://stackoverflow.com/questions/20416218/understanding-ibeacon-distancing/20434019#20434019
 - (double)_calculateDistanceForMeasuredPower:(int)power rssi:(double)rssi
 {
-    if (rssi == 0) {
+    if (rssi == 0.0)
+    {
         return -1.0;
     }
-    
+
+    //Based on http://stackoverflow.com/questions/20416218/understanding-ibeacon-distancing/20434019#20434019
     double ratio = rssi*1.0/power;
     
     double distance = -1;
     if (ratio < 1.0) distance = pow(ratio, 10);
     else             distance = (0.89976) * pow(ratio, 7.7095) + 0.111;
+    
+    //Taken from https://github.com/sandeepmistry/node-bleacon/blob/master/lib/bleacon.js
+//    double distance = pow(12.0, 1.5 * ((rssi / power) - 1));
     
     return distance;
 }
@@ -113,27 +117,40 @@
 
 - (void)centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI
 {
-    double distance = [self _calculateDistanceForMeasuredPower:-59 rssi:[RSSI doubleValue]];
-    
     CWBluetoothConnection *existingConnection = [self _connectionForPeripheral:peripheral];
     if (existingConnection == nil)
     {
         DLog(@"Discovered Peripheral '%@', connecting...", peripheral.name);
         
         CWBluetoothConnection *newConnection = [[CWBluetoothConnection alloc] initWithPeripheral:peripheral];
+        [newConnection addNewRSSIMeasure:[RSSI doubleValue]];
         [self.connections addObject:newConnection];
 
+//        [self.centralManager cancelPeripheralConnection:peripheral];
         [self.centralManager connectPeripheral:peripheral options:nil];
-        
+    
         //Usually, this would be the place to send a "device detected" to the delegate
         //We can't do that, though, because we have to wait for the device to send us its unique ID
         //This means "device detected" will be sent only after we have actually connected
     }
     else if ([existingConnection hasIdentifier])
     {
+        [existingConnection addNewRSSIMeasure:[RSSI doubleValue]];
+        
         if ([self.delegate respondsToSelector:@selector(deviceWithIdentifier:changedDistance:)])
         {
-           [self.delegate deviceWithIdentifier:existingConnection.identifier changedDistance:distance];
+            //We only send an updated distance at certain conditions
+            //  - at least 0.1 seconds passed since we last sent it (to prevent flooding, regardless what happens)
+            //  - more than five seconds passed since we last sent it
+            //  - the distance changed more than 0.1 meters since we last sent it
+            double distance = [self _calculateDistanceForMeasuredPower:-62 rssi:[existingConnection averageRSSI]];
+            double savedDistance = [self _calculateDistanceForMeasuredPower:-62 rssi:[existingConnection savedRSSI]];
+            if ([existingConnection timeSinceRSSISave] > 0.1 && ([existingConnection timeSinceRSSISave] >= 5.0 || fabs(distance-savedDistance) > 0.2))
+            {
+                DLog(@"Sending new distance %.2f with time elapsed %.2f and distance diff %.2f", distance, [existingConnection timeSinceRSSISave], fabs(distance-savedDistance));
+                [existingConnection saveCurrentRSSI];
+                [self.delegate deviceWithIdentifier:existingConnection.identifier changedDistance:distance];
+            }
         }
     }
     
@@ -146,7 +163,13 @@
     DLog(@"Connected to '%@', discovering services...", peripheral.name);
     
     peripheral.delegate = self;
-    [peripheral discoverServices:@[[CBUUID UUIDWithString:BLUETOOTH_SERVICE_UUID]]];
+    if (peripheral.services)
+    {
+        [self peripheral:peripheral didDiscoverServices:nil];
+    } else
+    {
+        [peripheral discoverServices:@[[CBUUID UUIDWithString:BLUETOOTH_SERVICE_UUID]]];
+    }
 }
 
 
@@ -230,11 +253,9 @@
     //Updating a characteristic's value is BTs way of sending data. Since we communicate using JSON, unpack the JSON...
     NSDictionary *retrievedData = [NSJSONSerialization JSONObjectWithData:characteristic.value options:0 error:nil];
     
-    //We have a few messages that we can parse. We should probably define those somewhere, but for now...
+    //We have a few messages that we can parse. We should probably define those somewhere, but for now just do it...
     if ([retrievedData[@"type"] isEqualToString:@"identifier"])
     {
-        DLog(@"Received Identifier: %@", retrievedData[@"identifier"]);
-        
         CWBluetoothConnection *connection = [self _connectionForPeripheral:peripheral];
         [connection setIdentifier:retrievedData[@"identifier"]];
         
@@ -249,8 +270,7 @@
 
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateNotificationStateForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error
 {
-    NSString *uuidString = [[NSString alloc] initWithData:characteristic.UUID.data encoding:NSUTF8StringEncoding];
-    if ([uuidString isEqualToString:BLUETOOTH_CHARACTERISTIC_UUID] == NO) return;
+    if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:BLUETOOTH_CHARACTERISTIC_UUID]]) return;
     
     if (error)
     {

@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreBluetooth/CoreBluetooth.h>
 @class CBPeripheral, CWDeviceID;
 
 
@@ -15,8 +16,13 @@
 
 @property (readwrite, strong) NSString *identifier;
 @property (readonly) CBPeripheral *peripheral;
+@property (readonly) double averageRSSI;
+@property (readonly) double savedRSSI;
 
 - (instancetype)initWithPeripheral:(CBPeripheral *)peripheral;
+- (void)addNewRSSIMeasure:(double)rssi;
 - (BOOL)hasIdentifier;
+- (void)saveCurrentRSSI;
+- (NSTimeInterval)timeSinceRSSISave;
 
 @end
