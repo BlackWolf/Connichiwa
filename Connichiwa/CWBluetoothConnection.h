@@ -14,15 +14,14 @@
 
 typedef NS_ENUM(NSInteger, CWBluetoothConnectionState)
 {
-    CWBluetoothConnectionStateDiscovered,
-    CWBluetoothConnectionStateReady,
     CWBluetoothConnectionStateInitialConnecting,
     CWBluetoothConnectionStateInitialWaitingForData,
     CWBluetoothConnectionStateInitialDone,
-    CWBluetoothConnectionStateConnectionRequested,
-    CWBluetoothConnectionStateConnectionIPsSent,
-    CWBluetoothConnectionStateConnectionDone,
-    CWBluetoothConnectionStateErrored
+    CWBluetoothConnectionStateIPConnecting,
+    CWBluetoothConnectionStateIPSent,
+    CWBluetoothConnectionStateIPDone,
+    CWBluetoothConnectionStateErrored,
+    CWBluetoothConnectionStateUnknown
 };
 
 
@@ -31,14 +30,17 @@ typedef NS_ENUM(NSInteger, CWBluetoothConnectionState)
 
 @property (readwrite) CWBluetoothConnectionState state;
 @property (readwrite, strong) NSString *identifier;
+@property (readwrite) int measuredPower;
 @property (readonly) CBPeripheral *peripheral;
 @property (readonly) double averageRSSI;
-@property (readonly) double savedRSSI;
+@property (readonly) double lastSentRSSI;
 
 - (instancetype)initWithPeripheral:(CBPeripheral *)peripheral;
 - (void)addNewRSSIMeasure:(double)rssi;
+- (void)didSendDistance;
+- (NSTimeInterval)timeSinceLastSentRSSI;
+- (double)averageDistance;
+- (double)lastSentDistance;
 - (BOOL)isReady;
-- (void)saveCurrentRSSI;
-- (NSTimeInterval)timeSinceRSSISave;
 
 @end

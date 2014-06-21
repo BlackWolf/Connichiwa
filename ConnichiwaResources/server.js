@@ -1,5 +1,5 @@
 /* global SERVER_PORT, DOCUMENT_ROOT, RESOURCES_PATH, CWDEBUG */
-/* global native_localWebsocketWasOpened, native_receivedMessage */
+/* global native_didLoadWeblib, native_didReceiveMessageFromWeblib */
 "use strict";
 
 /**
@@ -65,7 +65,7 @@ websocket.on("connection", function(wsConnection) {
     wsLocalConnection = wsConnection;
     log("WEBSOCKET", "Initialized local connection");
     sendToWeblib(JSON.stringify({ type: "debug", cwdebug: CWDEBUG }));
-    native_localWebsocketWasOpened();
+    native_didLoadWeblib();
   }
   else
   {
@@ -74,8 +74,8 @@ websocket.on("connection", function(wsConnection) {
   }
 
   wsConnection.on("message", function(message) {
-    log("WEBSOCKET", "Received mesage: " + message);
-    native_receivedMessage(message);
+    log("WEBSOCKET", "Received message: " + message);
+    native_didReceiveMessageFromWeblib(message);
   });
 });
 
@@ -85,7 +85,7 @@ function sendToWeblib(message)
     log("Message lost because no local websocket connection exists: " + message);
     return;
   }
-//  log("WEBSERVER", "Sending mesage to weblib: " + message);
+//  log("WEBSERVER", "Sending message to weblib: " + message);
   wsLocalConnection.send(message);
 }
 

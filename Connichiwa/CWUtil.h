@@ -11,5 +11,7 @@
 @interface CWUtil : NSObject
 
 + (NSString *)escapedJSONStringFromDictionary:(NSDictionary *)dictionary;
++ (NSDictionary *)dictionaryFromJSONData:(NSData *)JSON;
++ (NSArray *)deviceInterfaceAddresses;
 
 @end

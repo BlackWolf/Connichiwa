@@ -7,14 +7,8 @@
 //
 
 #import "CWBluetoothConnection.h"
+#import "CWConstants.h"
 #import "CWDebug.h"
-
-
-
-//double const RSSI_MOVING_AVERAGE_ALPHA = 0.125;
-double const RSSI_MOVING_AVERAGE_ALPHA = 0.03125;
-//double const RSSI_MOVING_AVERAGE_ALPHA = 0.0225;
-//double const RSSI_MOVING_AVERAGE_ALPHA = 0.015625;
 
 
 
@@ -23,8 +17,8 @@ double const RSSI_MOVING_AVERAGE_ALPHA = 0.03125;
 
 @property (readwrite, strong) CBPeripheral *peripheral;
 @property (readwrite) double averageRSSI;
-@property (readwrite) double savedRSSI;
-@property (readwrite, strong) NSDate *savedRSSIDate;
+@property (readwrite) double lastSentRSSI;
+@property (readwrite, strong) NSDate *lastSentRSSIDate;
 
 @end
 
@@ -48,9 +42,11 @@ double const RSSI_MOVING_AVERAGE_ALPHA = 0.03125;
 {
     self = [super init];
     
-    self.state = CWBluetoothConnectionStateDiscovered;
+    self.state = CWBluetoothConnectionStateUnknown;
     self.peripheral = peripheral;
     self.averageRSSI = 0;
+    
+    self.measuredPower = DEFAULT_MEASURED_BLUETOOTH_POWER;
     
     return self;
 }
@@ -58,7 +54,7 @@ double const RSSI_MOVING_AVERAGE_ALPHA = 0.03125;
 
 - (void)addNewRSSIMeasure:(double)rssi
 {
-//    DLog(@"Adding RSSI %f with current average %f", rssi, self.averageRSSI);
+//    double oldRSSI = self.averageRSSI;
     
     //An RSSI value of 127 (0x7f) means the RSSI could not be read.
     //We sometimes get this value - it's nothing bad as long as it doesn't occur too often, just ignore it
@@ -69,27 +65,70 @@ double const RSSI_MOVING_AVERAGE_ALPHA = 0.03125;
     if (self.averageRSSI == 0) self.averageRSSI = rssi;
     else self.averageRSSI = (1.0-RSSI_MOVING_AVERAGE_ALPHA) * self.averageRSSI + RSSI_MOVING_AVERAGE_ALPHA * rssi;
     
-}
-
-
-- (void)saveCurrentRSSI
-{
-    self.savedRSSI = self.averageRSSI;
-    self.savedRSSIDate = [NSDate date];
-}
-
-
-- (NSTimeInterval)timeSinceRSSISave
-{
-    if (self.savedRSSIDate == nil) return DBL_MAX;
+//    DLog(@"Added RSSI %.0f to average %.0f, equals new average %.0f (%.3f m)", rssi, oldRSSI, self.averageRSSI, self.averageDistance);
     
-    return [[NSDate date] timeIntervalSinceDate:self.savedRSSIDate];
+}
+
+
+- (void)didSendDistance
+{
+    //Save the RSSI and date that was sent
+    self.lastSentRSSI = self.averageRSSI;
+    self.lastSentRSSIDate = [NSDate date];
+}
+
+
+- (NSTimeInterval)timeSinceLastSentRSSI
+{
+    if (self.lastSentRSSIDate == nil) return DBL_MAX;
+    
+    return [[NSDate date] timeIntervalSinceDate:self.lastSentRSSIDate];
+}
+
+
+- (double)averageDistance
+{
+    return [CWBluetoothConnection _distanceForMeasuredPower:self.measuredPower RSSI:self.averageRSSI];
+}
+
+
+- (double)lastSentDistance
+{
+    return [CWBluetoothConnection _distanceForMeasuredPower:self.measuredPower RSSI:self.lastSentRSSI];
 }
 
 
 - (BOOL)isReady
 {
-    return (self.state != CWBluetoothConnectionStateDiscovered && self.state != CWBluetoothConnectionStateErrored);
+    //We consider the device ready when it finished receiving its initial data and didn't error
+    return (self.state != CWBluetoothConnectionStateUnknown
+            && self.state != CWBluetoothConnectionStateInitialConnecting
+            && self.state != CWBluetoothConnectionStateInitialWaitingForData
+            && self.state != CWBluetoothConnectionStateErrored);
+}
+
+
+
+#pragma mark Helper
+
+
++ (double)_distanceForMeasuredPower:(int)power RSSI:(double)RSSI
+{
+    if (RSSI == 0.0)
+    {
+        return -1.0;
+    }
+    
+    //Based on http://stackoverflow.com/questions/20416218/understanding-ibeacon-distancing/20434019#20434019
+    double distance = -1;
+    double ratio = RSSI*1.0/power;
+    if (ratio < 1.0) distance = pow(ratio, 10);
+    else             distance = (0.89976) * pow(ratio, 7.7095) + 0.111;
+    
+    //Taken from https://github.com/sandeepmistry/node-bleacon/blob/master/lib/bleacon.js
+    //    double distance = pow(12.0, 1.5 * ((rssi / power) - 1));
+    
+    return distance;
 }
 
 

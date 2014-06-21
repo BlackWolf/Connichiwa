@@ -18,6 +18,7 @@
 @interface CWWebserverManager ()
 
 @property (readwrite, strong) NSString *documentRoot;
+@property (readwrite, strong) NSString *localIdentifier;
 
 /**
  *  A Nodelike-specific subclass of JSContext that is used to execute code and for communication between Objective-C and the Nodelike server
@@ -73,7 +74,7 @@
     };
     self.nodelikeContext[@"console"] = @{@"log": logger, @"error": logger};
     
-    [self _registerJavascriptCallbacks];
+    [self _registerWebserverCallbacks];
     
     //Pass some infos to the webserver
     self.nodelikeContext[@"SERVER_PORT"] = [NSString stringWithFormat:@"%d", WEBSERVER_PORT];
@@ -92,58 +93,106 @@
     [NLContext runEventLoopAsyncInContext:self.nodelikeContext];
     
     if (![serverScriptReturn isUndefined]) DLog(@"executed server.js, result is %@", [serverScriptReturn toString]);
+    
+    //I'm not sure if this should in some way be attached to the runEventLoopAsyncInContext:, but I suppose triggering this here will be fine
+    if ([self.delegate respondsToSelector:@selector(managerDidStartWebserver:)])
+    {
+        [self.delegate managerDidStartWebserver:self];
+    }
+}
+
+
+- (void)loadWeblibOnWebView:(UIWebView *)webView withLocalIdentifier:(NSString *)identifier
+{
+    self.localIdentifier = identifier;
+    
+    //Open 127.0.0.1, which will load the Connichiwa Web Library on this device and initiate the local websocket connection
+    //The webserver will report back to us by calling _didLoadWeblib once the websocket connection was established
+    NSURL *localhostURL = [NSURL URLWithString:[NSString stringWithFormat:@"http://127.0.0.1:%d", WEBSERVER_PORT]];
+    NSURLRequest *localhostURLRequest = [NSURLRequest requestWithURL:localhostURL];
+    [webView loadRequest:localhostURLRequest];
 }
 
 
 #pragma mark Web Library Communication Protocol
 
 
-- (void)sendLocalIdentifier:(NSString *)identifier
+//- (void)sendDetectedDeviceWithIdentifier:(NSString *)identifier
+//{
+//    NSDictionary *sendData = @{
+//                               @"type": @"newdevice",
+//                               @"identifier": identifier,
+//                               };
+//    NSString *json = [CWUtil escapedJSONStringFromDictionary:sendData];
+//    [self _sendToWeblib:json];
+//}
+//
+//
+//- (void)sendDeviceWithIdentifier:(NSString *)identifier changedDistance:(double)distance
+//{
+//    NSDictionary *sendData = @{
+//                               @"type": @"devicedistancechanged",
+//                               @"identifier": identifier,
+//                               @"distance": [NSNumber numberWithDouble:(round(distance * 10) / 10)]
+//                               };
+//    NSString *json = [CWUtil escapedJSONStringFromDictionary:sendData];
+//    [self _sendToWeblib:json];
+//}
+//
+//
+//- (void)sendLostDeviceWithIdentifier:(NSString *)identifier
+//{
+//    NSDictionary *sendData = @{
+//                               @"type": @"devicelost",
+//                               @"identifier": identifier,
+//                               };
+//    NSString *json = [CWUtil escapedJSONStringFromDictionary:sendData];
+//    [self _sendToWeblib:json];
+//}
+
+
+
+
+
+#pragma mark Weblib Communication - Sending
+
+
+- (void)sendToWeblib_deviceDetected:(NSString *)identifier
 {
-    NSDictionary *sendData = @{
-                               @"type": @"localidentifier",
-                               @"identifier": identifier,
-                               };
-    NSString *json = [CWUtil escapedJSONStringFromDictionary:sendData];
-    [self _sendToWeblib:json];
+    NSDictionary *data = @{
+                           @"type": @"devicedetected",
+                           @"identifier": identifier
+                           };
+    [self _sendDictionaryToWeblib:data];
 }
 
 
-- (void)sendDetectedDeviceWithIdentifier:(NSString *)identifier
+- (void)sendToWeblib_device:(NSString *)identifier changedDistance:(double)distance
 {
-    NSDictionary *sendData = @{
-                               @"type": @"newdevice",
-                               @"identifier": identifier,
-                               };
-    NSString *json = [CWUtil escapedJSONStringFromDictionary:sendData];
-    [self _sendToWeblib:json];
+    NSDictionary *data = @{
+                           @"type": @"devicedistancechanged",
+                           @"identifier": identifier,
+                           @"distance": [NSNumber numberWithDouble:(round(distance * 10) / 10)]
+                           };
+    [self _sendDictionaryToWeblib:data];
 }
 
 
-- (void)sendDeviceWithIdentifier:(NSString *)identifier changedDistance:(double)distance
+- (void)_sendToWeblib_localIdentifier
 {
-    NSDictionary *sendData = @{
-                               @"type": @"devicedistancechanged",
-                               @"identifier": identifier,
-                               @"distance": [NSNumber numberWithDouble:(round(distance * 10) / 10)]
-                               };
-    NSString *json = [CWUtil escapedJSONStringFromDictionary:sendData];
-    [self _sendToWeblib:json];
+    NSDictionary *data = @{
+                           @"type": @"localidentifier",
+                           @"identifier": self.localIdentifier
+                           };
+    [self _sendDictionaryToWeblib:data];
 }
 
 
-- (void)sendLostDeviceWithIdentifier:(NSString *)identifier
+- (void)_sendDictionaryToWeblib:(NSDictionary *)dictionary
 {
-    NSDictionary *sendData = @{
-                               @"type": @"devicelost",
-                               @"identifier": identifier,
-                               };
-    NSString *json = [CWUtil escapedJSONStringFromDictionary:sendData];
+    NSString *json = [CWUtil escapedJSONStringFromDictionary:dictionary];
     [self _sendToWeblib:json];
 }
-
-
-#pragma mark Helper
 
 
 /**
@@ -153,52 +202,55 @@
  */
 - (void)_sendToWeblib:(NSString *)message
 {
-//    DLog(@"Sending %@", message);
+    //    DLog(@"Sending %@", message);
     [self.nodelikeContext evaluateScript:[NSString stringWithFormat:@"sendToWeblib('%@')", message]];
+}
+
+
+#pragma mark Weblib Communication - Receiving
+
+
+- (void)_didReceiveMessageFromWeblib:(NSString *)message
+{
+    NSDictionary *messageData = [NSJSONSerialization JSONObjectWithData:[message dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
+    
+//    DLog(@"Got message: %@", messageData);
+    if ([messageData[@"type"] isEqualToString:@"connectionRequest"])
+    {
+        if ([self.delegate respondsToSelector:@selector(managerDidReceiveConnectionRequest:)])
+        {
+            NSString *targetIdentifier = messageData[@"identifier"];
+            [self.delegate managerDidReceiveConnectionRequest:targetIdentifier];
+        }
+    }
 }
 
 
 #pragma mark Webserver Callbacks
 
 
-- (void)_registerJavascriptCallbacks
+- (void)_registerWebserverCallbacks
 {
     __weak typeof(self) weakSelf = self;
     
-    self.nodelikeContext[@"native_receivedMessage"] = ^(NSString *message) {
-        [weakSelf receivedMessageFromWeblib:message];
+    self.nodelikeContext[@"native_didReceiveMessageFromWeblib"] = ^(NSString *message) {
+        [weakSelf _didReceiveMessageFromWeblib:message];
     };
     
-    self.nodelikeContext[@"native_localWebsocketWasOpened"] = ^{
-        [weakSelf localWebsocketWasOpened];
+    self.nodelikeContext[@"native_didLoadWeblib"] = ^{
+        [weakSelf _didLoadWeblib];
     };
 }
 
 
-- (void)receivedMessageFromWeblib:(NSString *)message
+- (void)_didLoadWeblib
 {
-    NSDictionary *messageData = [NSJSONSerialization JSONObjectWithData:[message dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
+    //Send the identifier of this device to the weblib, after that the weblib is ready
+    [self _sendToWeblib_localIdentifier];
     
-    DLog(@"Got message: %@", messageData);
-    if ([messageData[@"type"] isEqualToString:@"connectionRequest"])
+    if ([self.delegate respondsToSelector:@selector(managerDidLoadWeblib:)])
     {
-        if ([self.delegate respondsToSelector:@selector(receivedConnectionRequest:)])
-        {
-            NSString *connectionTarget = messageData[@"identifier"];
-            [self.delegate receivedConnectionRequest:connectionTarget];
-        }
-    }
-}
-
-
-/**
- *  Called by the webserver when the websocket connection to the local web view was established successfully
- */
-- (void)localWebsocketWasOpened
-{
-    if ([self.delegate respondsToSelector:@selector(localWebsocketWasOpened)])
-    {
-        [self.delegate didEstablishWeblibWebsocketConnection];
+        [self.delegate managerDidLoadWeblib:self];
     }
 }
 

@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
+@class CWWebserverManager;
 
 
 /**
@@ -17,11 +17,13 @@
 
 @optional
 
-- (void)receivedConnectionRequest:(NSString *)deviceIdentifier;
+- (void)managerDidStartWebserver:(CWWebserverManager *)webserverManager;
 
 /**
  *  Called after the webserver reported that the websocket connection to the local web library was successfully established. After this, it is possible to send messages to the web library through CWWebserverManager
  */
-- (void)didEstablishWeblibWebsocketConnection;
+- (void)managerDidLoadWeblib:(CWWebserverManager *)webserverManager;
+
+- (void)managerDidReceiveConnectionRequest:(NSString *)identifier;
 
 @end

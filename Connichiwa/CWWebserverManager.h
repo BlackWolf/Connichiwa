@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 #import "CWWebserverDelegate.h"
 @class NLContext, CWDeviceID;
 
@@ -19,6 +20,9 @@
  */
 @interface CWWebserverManager : NSObject
 
+- (instancetype)initWithDocumentRoot:(NSString *)documentRoot;
+- (void)startWebserver;
+
 /**
  *  The delegate to receive events send by CWWebserver
  */
@@ -29,17 +33,8 @@
  */
 @property (readonly) NSString *documentRoot;
 
-/**
- *  Launch the webserver with the given document root.
- *
- *  @param documentRoot A path that will be mapped to the root path of the web server. Your web application should be there.
- */
-- (void)startWithDocumentRoot:(NSString *)documentRoot;
-
-
-- (void)sendLocalIdentifier:(NSString *)identifier;
-- (void)sendDetectedDeviceWithIdentifier:(NSString *)identifier;
-- (void)sendDeviceWithIdentifier:(NSString *)identifier changedDistance:(double)distance;
-- (void)sendLostDeviceWithIdentifier:(NSString *)identifier;
+- (void)loadWeblibOnWebView:(UIWebView *)webView withLocalIdentifier:(NSString *)identifier;
+- (void)sendToWeblib_deviceDetected:(NSString *)identifier;
+- (void)sendToWeblib_device:(NSString *)identifier changedDistance:(double)distance;
 
 @end

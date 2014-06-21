@@ -14,4 +14,7 @@
 - (void)didStartScanning;
 - (void)didStartAdvertisingWithIdentifier:(NSString *)identifier;
 
+- (void)deviceDetected:(NSString *)identifier;
+- (void)device:(NSString *)identifier changedDistance:(double)distance;
+
 @end

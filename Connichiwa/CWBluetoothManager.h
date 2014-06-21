@@ -19,5 +19,8 @@
 
 - (void)startScanning;
 - (void)startAdvertising;
+- (void)stopScanning;
+- (void)stopAdvertising;
+- (void)sendNetworkAddressesToDevice:(NSString *)deviceIdentifier;
 
 @end

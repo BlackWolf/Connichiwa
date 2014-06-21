@@ -10,17 +10,18 @@
 #import "CWWebserverManager.h"
 #import "CWWebserverDelegate.h"
 #import "CWBluetoothManager.h"
+#import "CWBluetoothManagerDelegate.h"
 #import "CWConstants.h"
 #import "CWDebug.h"
 
 
 
-@interface CWWebApplication () <CWWebserverManagerDelegate>
+@interface CWWebApplication () <CWWebserverManagerDelegate, CWBluetoothManagerDelegate>
 
 /**
  *  The Connichiwa Webserver instance that runs our local webserver and communicates with the web library
  */
-@property (readwrite, strong) CWWebserverManager *webserver;
+@property (readwrite, strong) CWWebserverManager *webserverManager;
 
 @property (readwrite, strong) CWBluetoothManager *bluetoothManager;
 
@@ -53,103 +54,54 @@
     self.localWebView = webView;
     
     self.bluetoothManager = [[CWBluetoothManager alloc] init];
+    [self.bluetoothManager setDelegate:self];
     
-    self.webserver = [[CWWebserverManager alloc] init];
-    [self.webserver setDelegate:self];
-    [self.webserver startWithDocumentRoot:documentRoot];
-    
-    //The webserver started - now show the master's view by opening 127.0.0.1, which will also load the Connichiwa Web Library on this device and initiate the local websocket connection
-    //When the local websocket connection was established, the webserver will call the didEstablishWeblibWebsocketConnection callback
-    NSURL *localhostURL = [NSURL URLWithString:[NSString stringWithFormat:@"http://127.0.0.1:%d", WEBSERVER_PORT]];
-    NSURLRequest *localhostURLRequest = [NSURLRequest requestWithURL:localhostURL];
-    [self.localWebView loadRequest:localhostURLRequest];
+    //Initialize and start the webserver. When finished, it will call the managerDidStartWebserver: callback
+    self.webserverManager = [[CWWebserverManager alloc] initWithDocumentRoot:documentRoot];
+    [self.webserverManager setDelegate:self];
+    [self.webserverManager startWebserver];
     
     return self;
-}
-
-
-- (void)_startBeaconAdvertising
-{
-//    if (self.beaconAdvertiser != nil) return;
-    
-//    self.beaconAdvertiser = [[CWBeaconAdvertiser alloc] init];
-//    [self.beaconAdvertiser setDelegate:self];
-//    [self.beaconAdvertiser startAdvertising];
-    
-//    self.bluetoothPeripheral = [[CWBluetoothAdvertiser alloc] init];
-//    [self.bluetoothPeripheral setDelegate:self];
-//    [self.bluetoothPeripheral startAdvertising];
-    
-    [self.bluetoothManager startAdvertising];
-//    [self.bluetoothManager startScanning];
-    dispatch_async(dispatch_get_main_queue(), ^{
-    [self performSelector:@selector(_startBeaconMonitoring) withObject:nil afterDelay:0.5];
-    });
-}
-
-
-- (void)_startBeaconMonitoring
-{
-//    if (self.beaconMonitor != nil) return;
-    
-//    self.beaconMonitor = [[CWBeaconMonitor alloc] init];
-//    [self.beaconMonitor setDelegate:self];
-//    [self.beaconMonitor startMonitoring];
-    
-//    self.bluetoothCentral = [[CWBluetoothMonitor alloc] init];
-//    [self.bluetoothCentral setDelegate:self];
-//    [self.bluetoothCentral startSearching];
-    
-    [self.bluetoothManager startScanning];
 }
 
 
 #pragma mark CWWebserverDelegate
 
 
-- (void)receivedConnectionRequest:(NSString *)deviceIdentifier
+- (void)managerDidStartWebserver:(CWWebserverManager *)webserverManager
 {
-//    [self.bluetoothCentral handshakeWebsocketConnection:deviceIdentifier];
+    [self.webserverManager loadWeblibOnWebView:self.localWebView withLocalIdentifier:self.bluetoothManager.identifier];
 }
 
 
-/**
- *  See [CWWebserverDelegate localWebsocketWasOpened]
- */
-- (void)didEstablishWeblibWebsocketConnection
+- (void)managerDidLoadWeblib:(CWWebserverManager *)webserverManager
 {
-    [self _startBeaconAdvertising];
+    //Now that the weblib is loaded and can accept messages we can start monitor for other devices and advertising to other devices
+    //BT events will be send to us by the CWBluetoothManager via callbacks and we can then forward important events to the weblib
+    //For some reason, BT starts freaking out if we call startAdvertising and startScanning together, therefore we delay the scanning a little
+    [self.bluetoothManager startAdvertising];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.bluetoothManager performSelector:@selector(startScanning) withObject:nil afterDelay:0.5];
+    });
+}
+
+- (void)managerDidReceiveConnectionRequest:(NSString *)deviceIdentifier
+{
+    [self.bluetoothManager sendNetworkAddressesToDevice:deviceIdentifier];
 }
 
 
-#pragma mark CWBluetoothAdvertiserDelegate
+#pragma mark CWBluetoothManagerDelegate
 
-
-- (void)didStartAdvertisingWithIdentifier:(NSString *)identifier
+- (void)deviceDetected:(NSString *)identifier
 {
-    [self.webserver sendLocalIdentifier:identifier];
-    [self _startBeaconMonitoring];
+    [self.webserverManager sendToWeblib_deviceDetected:identifier];
 }
 
 
-#pragma mark CWBluetoothMonitorDelegate
-
-
-- (void)deviceDetectedWithIdentifier:(NSString *)identifier
+- (void)device:(NSString *)identifier changedDistance:(double)distance
 {
-    [self.webserver sendDetectedDeviceWithIdentifier:identifier];
-}
-
-
-- (void)deviceWithIdentifier:(NSString *)identifier changedDistance:(double)distance
-{
-    [self.webserver sendDeviceWithIdentifier:identifier changedDistance:distance];
-}
-
-
-- (void)deviceLostWithIdentifier:(NSString *)identifier
-{
-    [self.webserver sendLostDeviceWithIdentifier:identifier];
+    [self.webserverManager sendToWeblib_device:identifier changedDistance:distance];
 }
 
 @end

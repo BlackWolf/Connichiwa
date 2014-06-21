@@ -362,7 +362,7 @@ var CWEventManager = (function()
  * * major -- the major number of this device
  * * minor -- the minor number of this device
  *
- * **Device Detected** -- type="newdevice"   
+ * **Device Detected** -- type="devicedetected"
  * Contains information about a newly detected device. Format:   
  * * major -- The major part of the device ID
  * * minor -- The minor part of the device ID
@@ -398,7 +398,7 @@ var CWNativeCommunicationParser = (function()
     case "localidentifier":
       CWDeviceManager.setLocalID(object.identifier);
       break;
-    case "newdevice":
+    case "devicedetected":
       var device = new CWDevice(object.identifier);
       CWDeviceManager.addDevice(device);
       break;
