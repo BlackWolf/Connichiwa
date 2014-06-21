@@ -12,8 +12,24 @@
 
 
 
+typedef NS_ENUM(NSInteger, CWBluetoothConnectionState)
+{
+    CWBluetoothConnectionStateDiscovered,
+    CWBluetoothConnectionStateReady,
+    CWBluetoothConnectionStateInitialConnecting,
+    CWBluetoothConnectionStateInitialWaitingForData,
+    CWBluetoothConnectionStateInitialDone,
+    CWBluetoothConnectionStateConnectionRequested,
+    CWBluetoothConnectionStateConnectionIPsSent,
+    CWBluetoothConnectionStateConnectionDone,
+    CWBluetoothConnectionStateErrored
+};
+
+
+
 @interface CWBluetoothConnection : NSObject
 
+@property (readwrite) CWBluetoothConnectionState state;
 @property (readwrite, strong) NSString *identifier;
 @property (readonly) CBPeripheral *peripheral;
 @property (readonly) double averageRSSI;
@@ -21,7 +37,7 @@
 
 - (instancetype)initWithPeripheral:(CBPeripheral *)peripheral;
 - (void)addNewRSSIMeasure:(double)rssi;
-- (BOOL)hasIdentifier;
+- (BOOL)isReady;
 - (void)saveCurrentRSSI;
 - (NSTimeInterval)timeSinceRSSISave;
 

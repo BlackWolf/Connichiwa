@@ -41,3 +41,5 @@ Furthermore, the following Node.js modules have been used either as provided or 
 Also, I want to thank the people behind [VVDocumenter-Xcode](https://github.com/onevcat/VVDocumenter-Xcode) and [appledoc](https://github.com/tomaz/appledoc) that helped make that nice documentation possible that you find in the `ConnichiwaDocs/native` folder.
 
 Furthermore, thanks to [jsdoc](https://github.com/jsdoc3/jsdoc) for creating the documentation seen in `ConnichiwaDocs/weblib` and to the people behind [jshint](http://www.jshint.com) and [jscs](https://www.npmjs.org/package/jscs) for making it easily possible to check my JS code for flaws. Also, thanks to the people who created atom.io packages for [Linter](https://github.com/AtomLinter/Linter), [Linter Jscs](https://github.com/AtomLinter/linter-jscs) and [Linter Jshint](https://github.com/AtomLinter/linter-jshint) :-)
+
+For minification of the web library, I used [minifyjs](https://github.com/clarkf/minifyjs).

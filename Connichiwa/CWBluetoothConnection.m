@@ -18,6 +18,7 @@ double const RSSI_MOVING_AVERAGE_ALPHA = 0.03125;
 
 
 
+
 @interface CWBluetoothConnection ()
 
 @property (readwrite, strong) CBPeripheral *peripheral;
@@ -30,7 +31,10 @@ double const RSSI_MOVING_AVERAGE_ALPHA = 0.03125;
 
 
 @implementation CWBluetoothConnection
+
+
 @synthesize identifier = _identifier;
+
 
 - (instancetype)init
 {
@@ -44,6 +48,7 @@ double const RSSI_MOVING_AVERAGE_ALPHA = 0.03125;
 {
     self = [super init];
     
+    self.state = CWBluetoothConnectionStateDiscovered;
     self.peripheral = peripheral;
     self.averageRSSI = 0;
     
@@ -56,8 +61,7 @@ double const RSSI_MOVING_AVERAGE_ALPHA = 0.03125;
 //    DLog(@"Adding RSSI %f with current average %f", rssi, self.averageRSSI);
     
     //An RSSI value of 127 (0x7f) means the RSSI could not be read.
-    //We sometimes get this value - it's nothing bad as long as it doesn't occur too often
-    //Therefore, ignore that value
+    //We sometimes get this value - it's nothing bad as long as it doesn't occur too often, just ignore it
     if (rssi == 127) return;
     
     //We use an exponential weighted moving average to compensate for outlier of the RSSI but still react quickly to heavy distance changes
@@ -74,6 +78,7 @@ double const RSSI_MOVING_AVERAGE_ALPHA = 0.03125;
     self.savedRSSIDate = [NSDate date];
 }
 
+
 - (NSTimeInterval)timeSinceRSSISave
 {
     if (self.savedRSSIDate == nil) return DBL_MAX;
@@ -82,10 +87,11 @@ double const RSSI_MOVING_AVERAGE_ALPHA = 0.03125;
 }
 
 
-- (BOOL)hasIdentifier
+- (BOOL)isReady
 {
-    return (self.identifier != nil);
+    return (self.state != CWBluetoothConnectionStateDiscovered && self.state != CWBluetoothConnectionStateErrored);
 }
+
 
 #pragma mark Getter & Setter
 
@@ -95,13 +101,13 @@ double const RSSI_MOVING_AVERAGE_ALPHA = 0.03125;
     return _identifier;
 }
 
+
 - (void)setIdentifier:(NSString *)identifier
 {
-    if (_identifier != nil) [NSException raise:@"Identifier of BT Connection cannot be changed" format:@"The Identifier of a CWBluetoothConnection can be set only once."];
+    //TODO do this?
+    //if (_identifier != nil) [NSException raise:@"Identifier of BT Connection cannot be changed" format:@"The Identifier of a CWBluetoothConnection can be set only once."];
     
     _identifier = identifier;
 }
-
-
 
 @end

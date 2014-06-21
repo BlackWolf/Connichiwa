@@ -15,5 +15,6 @@
 @property (readwrite, strong) id<CWBluetoothMonitorDelegate> delegate;
 
 - (void)startSearching;
+- (void)handshakeWebsocketConnection:(NSString *)identifier;
 
 @end

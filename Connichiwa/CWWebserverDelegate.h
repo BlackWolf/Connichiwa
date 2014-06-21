@@ -13,13 +13,15 @@
 /**
  *  A delegate protocol that receives different events from the CWWebserver instance
  */
-@protocol CWWebserverDelegate <NSObject>
+@protocol CWWebserverManagerDelegate <NSObject>
 
 @optional
 
+- (void)receivedConnectionRequest:(NSString *)deviceIdentifier;
+
 /**
- *  Clled after the webserver reported that the websocket connection to the local web view was successfully established. After that, messages can be send to the web library through that websocket connection.
+ *  Called after the webserver reported that the websocket connection to the local web library was successfully established. After this, it is possible to send messages to the web library through CWWebserverManager
  */
-- (void)localWebsocketWasOpened;
+- (void)didEstablishWeblibWebsocketConnection;
 
 @end

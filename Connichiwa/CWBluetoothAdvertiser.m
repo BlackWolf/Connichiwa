@@ -53,7 +53,7 @@
         
         [self.peripheralManager startAdvertising:@{ CBAdvertisementDataServiceUUIDsKey : @[[CBUUID UUIDWithString:BLUETOOTH_SERVICE_UUID]] }];
         
-        self.characteristic = [[CBMutableCharacteristic alloc] initWithType:[CBUUID UUIDWithString:BLUETOOTH_CHARACTERISTIC_UUID] properties:CBCharacteristicPropertyNotify value:nil permissions:CBAttributePermissionsReadable];
+        self.characteristic = [[CBMutableCharacteristic alloc] initWithType:[CBUUID UUIDWithString:BLUETOOTH_CHARACTERISTIC_UUID] properties:(CBCharacteristicPropertyNotify | CBCharacteristicPropertyWriteWithoutResponse) value:nil permissions:CBAttributePermissionsWriteable];
         
         self.service = [[CBMutableService alloc] initWithType:[CBUUID UUIDWithString:BLUETOOTH_SERVICE_UUID] primary:YES];
         self.service.characteristics = @[ self.characteristic ];
@@ -75,11 +75,10 @@
     
     DLog(@"Sending data to centrals...");
     NSDictionary *sendDictionary = @{
-                                     @"type": @"identifier",
+                                     @"type": @"initial",
                                      @"identifier": self.identifier
                                      };
     NSData *initialData = [self _JSONFromDictionary:sendDictionary];
-    //NSData *test = [@"Thisisavalue" dataUsingEncoding:NSUTF8StringEncoding];
     BOOL didSend = [self.peripheralManager updateValue:initialData forCharacteristic:self.characteristic onSubscribedCentrals:nil];
     
     if (didSend == NO)
@@ -120,6 +119,25 @@
 - (void)peripheralManager:(CBPeripheralManager *)peripheralManager central:(CBCentral *)central didUnsubscribeFromCharacteristic:(CBCharacteristic *)characteristic
 {
     //stuuuuuff? do we even care?
+}
+
+- (void)peripheralManager:(CBPeripheralManager *)peripheral didReceiveReadRequest:(CBATTRequest *)request
+{
+    DLog(@"Read request");
+    
+    [self.peripheralManager respondToRequest:request withResult:CBATTErrorSuccess];
+}
+
+- (void)peripheralManager:(CBPeripheralManager *)peripheral didReceiveWriteRequests:(NSArray *)requests
+{
+    DLog(@"Write request");
+    
+    for (CBATTRequest *writeRequest in requests)
+    {
+        DLog(@"Data is %@", writeRequest.value);
+    }
+    
+    [self.peripheralManager respondToRequest:[requests objectAtIndex:0] withResult:CBATTErrorSuccess];
 }
 
 @end

@@ -45,20 +45,19 @@ var CWNativeCommunicationParser = (function()
     var object = JSON.parse(message);
     switch (object.type)
     {
-      case "localid":
-        var ID = new CWDeviceID(object.major, object.minor);
-        CWDeviceManager.setLocalID(ID);
-        break;
-      case "newbeacon":
-        var device = new CWDevice(new CWDeviceID(object.major, object.minor), { proximity: object.proximity });
-        CWDeviceManager.addDevice(device);
-        break;
-      case "deviceproximitychanged":
-        CWDeviceManager.updateDeviceProximity(new CWDeviceID(object.major, object.minor), object.proximity);
-        break;
-      case "devicelost":
-        CWDeviceManager.removeDevice(new CWDeviceID(object.major, object.minor));
-        break;
+    case "localidentifier":
+      CWDeviceManager.setLocalID(object.identifier);
+      break;
+    case "newdevice":
+      var device = new CWDevice(object.identifier);
+      CWDeviceManager.addDevice(device);
+      break;
+    case "devicedistancechanged":
+      CWDeviceManager.updateDeviceDistance(object.identifier, object.distance);
+      break;
+    case "devicelost":
+      CWDeviceManager.removeDevice(object.identifier);
+      break;
     }
   };
 

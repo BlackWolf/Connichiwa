@@ -6,15 +6,16 @@
 //  Copyright (c) 2014 Mario Schreiner. All rights reserved.
 //
 
-#import "CWWebserver.h"
+#import "CWWebserverManager.h"
 #import <Nodelike/NLContext.h>
+#import "CWUtil.h"
 #import "CWBundle.h"
 #import "CWConstants.h"
 #import "CWDebug.h"
 
 
 
-@interface CWWebserver ()
+@interface CWWebserverManager ()
 
 @property (readwrite, strong) NSString *documentRoot;
 
@@ -31,30 +32,30 @@
 - (void)_sendToWeblib:(NSString *)message;
 
 /**
- *  Creates a JSON string from a NSDictionary that can be safely send over JavaScriptCore's evaluteScript:.
- *  The dictionary must be convertable to JSON as defined by NSJSONSerialization
- *
- *  @param dictionary The dictionary to translate into JSON
- *
- *  @return The JSON string representing the Dictionary.
- */
-- (NSString *)_JSONFromDictionary:(NSDictionary *)dictionary;
-
-/**
  *  Registers the functions in Javascript that call native methods (and therefore allow the webserver to send messages to the native layer)
  */
-- (void)_registerWebserverCallbacks;
+- (void)_registerJavascriptCallbacks;
 
 @end
 
 
 
-@implementation CWWebserver
+@implementation CWWebserverManager
 
 
-- (void)startWithDocumentRoot:(NSString *)documentRoot
+
+- (instancetype)initWithDocumentRoot:(NSString *)documentRoot
 {
+    self = [super init];
+    
     self.documentRoot = documentRoot;
+    
+    return self;
+}
+
+
+- (void)startWebserver
+{
     self.nodelikeContext = [[NLContext alloc] initWithVirtualMachine:[[JSVirtualMachine alloc] init]];
     
     //Register JS error handler
@@ -72,7 +73,7 @@
     };
     self.nodelikeContext[@"console"] = @{@"log": logger, @"error": logger};
     
-    [self _registerWebserverCallbacks];
+    [self _registerJavascriptCallbacks];
     
     //Pass some infos to the webserver
     self.nodelikeContext[@"SERVER_PORT"] = [NSString stringWithFormat:@"%d", WEBSERVER_PORT];
@@ -103,7 +104,7 @@
                                @"type": @"localidentifier",
                                @"identifier": identifier,
                                };
-    NSString *json = [self _JSONFromDictionary:sendData];
+    NSString *json = [CWUtil escapedJSONStringFromDictionary:sendData];
     [self _sendToWeblib:json];
 }
 
@@ -114,7 +115,7 @@
                                @"type": @"newdevice",
                                @"identifier": identifier,
                                };
-    NSString *json = [self _JSONFromDictionary:sendData];
+    NSString *json = [CWUtil escapedJSONStringFromDictionary:sendData];
     [self _sendToWeblib:json];
 }
 
@@ -126,7 +127,7 @@
                                @"identifier": identifier,
                                @"distance": [NSNumber numberWithDouble:(round(distance * 10) / 10)]
                                };
-    NSString *json = [self _JSONFromDictionary:sendData];
+    NSString *json = [CWUtil escapedJSONStringFromDictionary:sendData];
     [self _sendToWeblib:json];
 }
 
@@ -137,7 +138,7 @@
                                @"type": @"devicelost",
                                @"identifier": identifier,
                                };
-    NSString *json = [self _JSONFromDictionary:sendData];
+    NSString *json = [CWUtil escapedJSONStringFromDictionary:sendData];
     [self _sendToWeblib:json];
 }
 
@@ -157,45 +158,36 @@
 }
 
 
-/**
- *  Creates a JSON string from a NSDictionary that can be safely send over JavaScriptCore's evaluteScript:.
- *  The dictionary must be convertable to JSON as defined by NSJSONSerialization
- *
- *  @param dictionary The dictionary to translate into JSON
- *
- *  @return The JSON string representing the Dictionary.
- */
-- (NSString *)_JSONFromDictionary:(NSDictionary *)dictionary
-{
-    NSError *error;
-    NSData *data = [NSJSONSerialization dataWithJSONObject:dictionary options:JSON_WRITING_OPTIONS error:&error];
-    
-    if (error)
-    {
-        [NSException raise:@"Invalid Dictionary for serialization" format:@"Dictionary could not be serialized to JSON: %@", dictionary];
-    }
-    
-    //Create the actual JSON
-    //The JSON spec says that quotes and newlines must be escaped - not doing so will produce an "unexpected EOF" error
-    NSString *json = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    json = [json stringByReplacingOccurrencesOfString:@"\'" withString:@"\\\'"];
-    json = [json stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
-    json = [json stringByReplacingOccurrencesOfString:@"\n" withString:@"\\n"];
-    json = [json stringByReplacingOccurrencesOfString:@"\r" withString:@""];
-    
-    return json;
-}
-
-
 #pragma mark Webserver Callbacks
 
 
-- (void)_registerWebserverCallbacks
+- (void)_registerJavascriptCallbacks
 {
     __weak typeof(self) weakSelf = self;
+    
+    self.nodelikeContext[@"native_receivedMessage"] = ^(NSString *message) {
+        [weakSelf receivedMessageFromWeblib:message];
+    };
+    
     self.nodelikeContext[@"native_localWebsocketWasOpened"] = ^{
         [weakSelf localWebsocketWasOpened];
     };
+}
+
+
+- (void)receivedMessageFromWeblib:(NSString *)message
+{
+    NSDictionary *messageData = [NSJSONSerialization JSONObjectWithData:[message dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
+    
+    DLog(@"Got message: %@", messageData);
+    if ([messageData[@"type"] isEqualToString:@"connectionRequest"])
+    {
+        if ([self.delegate respondsToSelector:@selector(receivedConnectionRequest:)])
+        {
+            NSString *connectionTarget = messageData[@"identifier"];
+            [self.delegate receivedConnectionRequest:connectionTarget];
+        }
+    }
 }
 
 
@@ -206,7 +198,7 @@
 {
     if ([self.delegate respondsToSelector:@selector(localWebsocketWasOpened)])
     {
-        [self.delegate localWebsocketWasOpened];
+        [self.delegate didEstablishWeblibWebsocketConnection];
     }
 }
 

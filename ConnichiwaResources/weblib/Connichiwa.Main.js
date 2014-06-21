@@ -1,4 +1,4 @@
-/* global LazyLoad, CWDeviceManager, CWNativeCommunicationParser, CWDebug, CWUtil, CWEventManager */
+/* global LazyLoad, CWDeviceManager, CWNativeCommunicationParser, CWDebug, CWUtil, CWEventManager, CWWebserverCommunicationParser, CWDevice */
 "use strict";
 
 
@@ -46,8 +46,8 @@ var Connichiwa = (function()
     var message = e.data;
     CWDebug.log("message: " + message);
     
-    CWNativeCommunicationParser.parse(message);
     CWWebserverCommunicationParser.parse(message);
+    CWNativeCommunicationParser.parse(message);
   };
 
 
@@ -91,9 +91,9 @@ var Connichiwa = (function()
   {
     var validEvents = [ 
       "ready", 
-      "localIDSet", 
+      "localIdentifierSet", 
       "deviceDetected", 
-      "deviceProximityChanged", 
+      "deviceDistanceChanged", 
       "deviceLost" 
     ];
     
@@ -101,9 +101,20 @@ var Connichiwa = (function()
 
     CWEventManager.register(event, callback);
   };
-
+  
+  
+  var connect = function(device)
+  {
+    if (CWDevice.prototype.isPrototypeOf(device) === false) throw "Need a CWDevice to connect to";
+    
+    if (device.isConnected()) return;
+    
+    var data = { type: "connectionRequest", identifier: device.getIdentifier() };
+    _websocket.send(JSON.stringify(data));
+  };
 
   return {
-    on : on
+    on      : on,
+    connect : connect
   };
 })();

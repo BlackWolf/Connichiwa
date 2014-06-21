@@ -17,12 +17,12 @@
  *  It is responsible for launching and managing the webserver and acts as a bridge between Objective-C and the server, sending and receiving messages from it over the Connichiwa Communication Protocol (Native Layer).
  *  Only one instance of the webserver should be running on a device.
  */
-@interface CWWebserver : NSObject
+@interface CWWebserverManager : NSObject
 
 /**
  *  The delegate to receive events send by CWWebserver
  */
-@property (readwrite, strong) id<CWWebserverDelegate> delegate;
+@property (readwrite, strong) id<CWWebserverManagerDelegate> delegate;
 
 /**
  *  Path to the folder acting as the root of the web server. '/' on the web server will be mapped to this path. 

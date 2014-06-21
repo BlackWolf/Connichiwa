@@ -1,5 +1,5 @@
 /* global SERVER_PORT, DOCUMENT_ROOT, RESOURCES_PATH, CWDEBUG */
-/* global native_localWebsocketWasOpened */
+/* global native_localWebsocketWasOpened, native_receivedMessage */
 "use strict";
 
 /**
@@ -75,6 +75,7 @@ websocket.on("connection", function(wsConnection) {
 
   wsConnection.on("message", function(message) {
     log("WEBSOCKET", "Received mesage: " + message);
+    native_receivedMessage(message);
   });
 });
 

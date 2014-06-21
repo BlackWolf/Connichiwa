@@ -4,122 +4,78 @@
 
 
 /**
- * An instance of this class described the unique ID of a single device (the local device or a remote device)
- *
- * @param {number} major The major part of the ID
- * @param {number} minor The minor part of the ID
- * @returns {CWDeviceID} a new CWDeviceID instance
- *
- * @namespace CWDeviceID
- */
-function CWDeviceID(major, minor) {
-  if (CWUtil.isInt(major) === false || CWUtil.isInt(minor) === false) throw "CWDeviceID must contain a valid major and a minor value";
-
-  /**
-   * The major part of this ID
-   */
-  var _major = major;
-
-  /**
-   * The minor part of this ID
-   */
-  var _minor = minor;
-
-  this.getMajor = function() { return _major; };
-  this.getMinor = function() { return _minor; };
-
-  return this;
-}
-
-
-/**
- * Checks if this CWDeviceID is equal to another
- *
- * @param {object} object another object
- * @returns {bool} true if the object is a CWDeviceID with the same major and minor part
- *
- * @memberof CWDeviceID
- */
-CWDeviceID.prototype.equalTo = function(object)
-{
-  if (CWDeviceID.prototype.isPrototypeOf(object) === false) return false;
-
-  return (this.getMajor() === object.getMajor() && this.getMinor() === object.getMinor());
-};
-
-
-/**
- * Transforms this ID into a string for output
- *
- * @returns {string} a string describing this ID
- *
- * @memberof CWDeviceID
- */
-CWDeviceID.prototype.toString = function() {
-  return "(" + this.getMajor() + "." + this.getMinor() + ")";
-};
-
-
-
-/**
  * An instance of this class describes a remote device that was detected nearby. It furthermore keeps information like the distance of the device and other connection-related information.
  *
  * @namespace CWDevice
  */
-function CWDevice(id, options)
+function CWDevice(identifier, options)
 {
-  if (CWDeviceID.prototype.isPrototypeOf(id) === false)  throw "Cannot create device without a valid CWDeviceID";
-
   if (CWUtil.isObject(options) === false) options = {};
   var passedOptions = options;
   options = {};
 
   var defaultOptions = {
-    proximity : "unknown",
+    connected : false,
+    distance  : -1,
   };
   $.extend(options, defaultOptions, passedOptions);
 
   /**
-   * The CWDeviceID representing this device's ID
+   * A string representing a unique identifier of the device
    */
-  var _id = id;
+  var _identifier = identifier;
 
+  var _connected = options.connected;
+  
   /**
    * The current distance between the local device and the device represented by this CWDevice instance
    */
-  var _proximity = options.proximity;
+  var _distance = options.distance;
+  
+  this.didConnect = function()
+  {
+    _connected = true;
+  };
+  
+  this.didDisconnect = function()
+  {
+    _connected = false;
+  }
 
   /**
    * Updates the distance between the local device and the device represented by the instance of this class
    *
-   * @param {string} newProximity The new distance as a string
+   * @param {double} value The new distance value in meters
    *
-   * @method updateProximity
+   * @method updateDistance
    * @memberof CWDevice
    */
-  this.updateProximity = function(newProximity)
+  this.updateDistance = function(value)
   {
-    //TODO check proximity string
-    _proximity = newProximity;
+    _distance = value;
   };
 
   /**
-   * Returns the ID of this device
+   * Returns the identifier of this device
    *
-   * @returns {CWDeviceID} the ID of this device
-   * @method getID
+   * @returns {string} The identifier of this device
+   *
+   * @method getIdentifier
    * @memberof CWDevice
    */
-  this.getID        = function() { return _id; };
+  this.getIdentifier = function() { return _identifier; };
+  
+  this.isConnected = function() { return _connected; };
 
   /**
-   * Returns the current distance between the local device and the device represented by this CWDevice instance, as a string.
+   * Returns the current distance between the local device and the device represented by this CWDevice instance, in meters.
    *
-   * @returns {string} a string describing the distance between the local device and this CWDevice
-   * @method updateProximity
+   * @returns {double} the distance between the local device and this CWDevice in meters
+   *
+   * @method getDistance
    * @memberof CWDevice
    */
-  this.getProximity = function() { return _proximity; };
+  this.getDistance = function() { return _distance; };
 
   return this;
 }
@@ -133,9 +89,7 @@ function CWDevice(id, options)
  */
 CWDevice.prototype.equalTo = function(object)
 {
-  if (CWDevice.prototype.isPrototypeOf(object) === false) return false;
-
-  return this.getID().equalTo(object.getID());
+  return this.getIdentifier() === object.getIdentifier();
 };
 
 
@@ -145,5 +99,5 @@ CWDevice.prototype.equalTo = function(object)
  * @returns {string} a string representation of this device
  */
 CWDevice.prototype.toString = function() {
-  return this.getID().toString();
+  return this.getIdentifier();
 };
