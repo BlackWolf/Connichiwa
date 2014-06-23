@@ -64,7 +64,8 @@ app.listen(SERVER_PORT);
 
 var websocket = new WebsocketServer({ port: WEBSOCKET_PORT });
 var wsLocalConnection;
-var wsRemoteConnections = [];
+var wsUnidentifiedRemoteConnection = [];
+var wsRemoteConnections = {};
 
 websocket.on("connection", function(wsConnection) {
   //For now, we just assume first device means its the master device
@@ -72,19 +73,54 @@ websocket.on("connection", function(wsConnection) {
   if (wsLocalConnection === undefined) {
     wsLocalConnection = wsConnection;
     log("WEBSOCKET", "Initialized local connection");
+    
+    wsLocalConnection.on("message", function(message) {
+      //A message from the weblib can target either the native layer of a remote device
+      //Figure out which and relay the message accordingly
+      log("WEBSOCKET", "Forwarding local message: " + message);
+      
+      var object = JSON.parse(message);
+      if (!object.target || object.target === "native") //TODO !object.target for backwards compatibility
+      {
+        sendToNative(message);
+      }
+      
+      if (object.target === "remote")
+      {
+        sendToRemote(object.targetIdentifier, message);
+      }
+    });
+    
     sendToWeblib(JSON.stringify({ type: "debug", cwdebug: CWDEBUG }));
     native_didLoadWeblib();
   }
   else
   {
-    wsRemoteConnections.push(wsConnection);
+    wsUnidentifiedRemoteConnection.push(wsConnection)
     log("WEBSOCKET", "Initialized remote connection");
+    
+    wsConnection.on("message", function(message) {
+      //Usually, the webserver just blindly relays messages, but we need to make one exception:
+      //The "remoteidentifier" message needs to unidentifiedparsed so we know the ID of each remote connection
+      //If we find that identifier, the connection is moved from the unidentified remote connections to the normal remote connections
+      var unidentifiedIndex = wsUnidentifiedRemoteConnection.indexOf(this);
+      if (unidentifiedIndex !== -1)
+      {
+        var object = JSON.parse(message);
+          
+        if (object.type === "remoteidentifier")
+        {
+          wsRemoteConnections[object.identifier] = this;
+          wsUnidentifiedRemoteConnection.splice(unidentifiedIndex, 1);
+          log("WEBSOCKET", "Got identifier for remote connection: " + object.identifier);
+        }
+      }
+      
+      //A message from a remote device is relayed to the weblib
+      log("WEBSOCKET", "Forwarding remote message: " + message);
+      wsLocalConnection.send(message);
+    });
   }
-
-  wsConnection.on("message", function(message) {
-    log("WEBSOCKET", "Received message: " + message);
-    native_didReceiveMessageFromWeblib(message);
-  });
 });
 
 function sendToWeblib(message)
@@ -93,8 +129,21 @@ function sendToWeblib(message)
     log("Message lost because no local websocket connection exists: " + message);
     return;
   }
-//  log("WEBSERVER", "Sending message to weblib: " + message);
+ log("WEBSERVER", "Sending message to weblib: " + message);
   wsLocalConnection.send(message);
+}
+
+
+function sendToNative(message)
+{
+  native_didReceiveMessageFromWeblib(message);
+}
+
+function sendToRemote(identifier, message)
+{
+  if (identifier in wsRemoteConnections === false) return;
+  
+  wsRemoteConnections[identifier].send(message);
 }
 
 //////////

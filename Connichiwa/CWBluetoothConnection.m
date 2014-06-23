@@ -49,7 +49,6 @@
     self.measuredPower = DEFAULT_MEASURED_BLUETOOTH_POWER;
     
     self.pendingIPWrites = 0;
-    self.successfulIPWrites = 0;
     
     return self;
 }

@@ -224,7 +224,7 @@
 {
     NSDictionary *messageData = [NSJSONSerialization JSONObjectWithData:[message dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
     
-//    DLog(@"Got message: %@", messageData);
+    DLog(@"Got message: %@", messageData);
     if ([messageData[@"type"] isEqualToString:@"connectionRequest"])
     {
         if ([self.delegate respondsToSelector:@selector(managerDidReceiveConnectionRequest:)])

@@ -48,30 +48,11 @@ var CWDeviceManager = (function()
   var addDevice = function(newDevice)
   {
     if (CWDevice.prototype.isPrototypeOf(newDevice) === false) throw "Cannot add a non-device";
-    if (_getDeviceWithIdentifier(newDevice.getIdentifier()) !== null) throw "Device with identifier " + newDevice.getIdentifier() + " was added twice";
+    if (getDeviceWithIdentifier(newDevice.getIdentifier()) !== null) return;
 
     _remoteDevices.push(newDevice);
     CWDebug.log("Detected new device: " + newDevice);
     CWEventManager.trigger("deviceDetected", newDevice);
-  };
-
-
-  /**
-   * Updates the distance between the local and a remote device
-   *
-   * @param {string} identifier The identifier of the device that changed
-   * @param {double} newDistance The new distance
-   *
-   * @memberof CWDeviceManager
-   */
-  var updateDeviceDistance = function(identifier, newDistance)
-  {
-    var device = _getDeviceWithIdentifier(identifier);
-    if (device === null) throw "Tried to update the distance of an undetected device";
-
-    device.updateDistance(newDistance);
-    CWDebug.log("Distance of " + this + " changed to " + newDistance);
-    CWEventManager.trigger("deviceDistanceChanged", device);
   };
 
 
@@ -85,8 +66,8 @@ var CWDeviceManager = (function()
   var removeDevice = function(identifier)
   {
 
-    var device = _getDeviceWithIdentifier(identifier);
-    if (device === null) throw "Tried to remove a device that doesn't exist";
+    var device = getDeviceWithIdentifier(identifier);
+    if (device === null) return;
 
     var index = _remoteDevices.indexOf(device);
     _remoteDevices.splice(index, 1);
@@ -102,7 +83,7 @@ var CWDeviceManager = (function()
    *
    * @memberof CWDeviceManager
    */
-  var _getDeviceWithIdentifier = function(identifier)
+  var getDeviceWithIdentifier = function(identifier)
   {
     for (var i = 0; i < _remoteDevices.length; i++)
     {
@@ -117,9 +98,9 @@ var CWDeviceManager = (function()
   };
 
   return {
-    setLocalID           : setLocalID,
-    addDevice            : addDevice,
-    updateDeviceDistance : updateDeviceDistance,
-    removeDevice         : removeDevice
+    setLocalID              : setLocalID,
+    addDevice               : addDevice,
+    removeDevice            : removeDevice,
+    getDeviceWithIdentifier : getDeviceWithIdentifier
   };
 })();

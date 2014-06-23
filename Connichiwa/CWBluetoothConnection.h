@@ -35,7 +35,6 @@ typedef NS_ENUM(NSInteger, CWBluetoothConnectionState)
 @property (readonly) double averageRSSI;
 @property (readonly) double lastSentRSSI;
 @property (readwrite) int pendingIPWrites;
-@property (readwrite) int successfulIPWrites;
 
 - (instancetype)initWithPeripheral:(CBPeripheral *)peripheral;
 - (void)addNewRSSIMeasure:(double)rssi;

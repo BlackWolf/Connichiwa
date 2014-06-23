@@ -58,7 +58,7 @@ var CWDebug = (function()
     log : log
   };
 })();
-/* global CWUtil, CWEventManager */
+/* global CWUtil, CWEventManager, CWDebug */
 "use strict";
 
 
@@ -113,6 +113,8 @@ function CWDevice(identifier, options)
   this.updateDistance = function(value)
   {
     _distance = value;
+    CWDebug.log("Distance of " + this + " changed to " + _distance);
+    CWEventManager.trigger("deviceDistanceChanged", this);
   };
 
   /**
@@ -216,30 +218,11 @@ var CWDeviceManager = (function()
   var addDevice = function(newDevice)
   {
     if (CWDevice.prototype.isPrototypeOf(newDevice) === false) throw "Cannot add a non-device";
-    if (_getDeviceWithIdentifier(newDevice.getIdentifier()) !== null) throw "Device with identifier " + newDevice.getIdentifier() + " was added twice";
+    if (getDeviceWithIdentifier(newDevice.getIdentifier()) !== null) return;
 
     _remoteDevices.push(newDevice);
     CWDebug.log("Detected new device: " + newDevice);
     CWEventManager.trigger("deviceDetected", newDevice);
-  };
-
-
-  /**
-   * Updates the distance between the local and a remote device
-   *
-   * @param {string} identifier The identifier of the device that changed
-   * @param {double} newDistance The new distance
-   *
-   * @memberof CWDeviceManager
-   */
-  var updateDeviceDistance = function(identifier, newDistance)
-  {
-    var device = _getDeviceWithIdentifier(identifier);
-    if (device === null) throw "Tried to update the distance of an undetected device";
-
-    device.updateDistance(newDistance);
-    CWDebug.log("Distance of " + this + " changed to " + newDistance);
-    CWEventManager.trigger("deviceDistanceChanged", device);
   };
 
 
@@ -253,8 +236,8 @@ var CWDeviceManager = (function()
   var removeDevice = function(identifier)
   {
 
-    var device = _getDeviceWithIdentifier(identifier);
-    if (device === null) throw "Tried to remove a device that doesn't exist";
+    var device = getDeviceWithIdentifier(identifier);
+    if (device === null) return;
 
     var index = _remoteDevices.indexOf(device);
     _remoteDevices.splice(index, 1);
@@ -270,7 +253,7 @@ var CWDeviceManager = (function()
    *
    * @memberof CWDeviceManager
    */
-  var _getDeviceWithIdentifier = function(identifier)
+  var getDeviceWithIdentifier = function(identifier)
   {
     for (var i = 0; i < _remoteDevices.length; i++)
     {
@@ -285,10 +268,10 @@ var CWDeviceManager = (function()
   };
 
   return {
-    setLocalID           : setLocalID,
-    addDevice            : addDevice,
-    updateDeviceDistance : updateDeviceDistance,
-    removeDevice         : removeDevice
+    setLocalID              : setLocalID,
+    addDevice               : addDevice,
+    removeDevice            : removeDevice,
+    getDeviceWithIdentifier : getDeviceWithIdentifier
   };
 })();
 /* global CWDebug */
@@ -353,7 +336,7 @@ var CWEventManager = (function()
     trigger  : trigger
   };
 })();
-/* global CWDeviceManager, CWDeviceID, CWDevice */
+/* global CWDeviceManager, CWDeviceID, CWDevice, CWDeviceState */
 "use strict";
 
 
@@ -362,27 +345,22 @@ var CWEventManager = (function()
  * The Connichiwa Communication Protocol Parser (Native Layer).  
  * Here the protocol used to communicate between this library and the native layer is parsed. This communication is done via JSON.
  *
- * **Local ID Information** -- type="localid"  
+ * **Local ID Information** -- type="localidentifier"  
  * Contains information about the local device. Format:
- * * major -- the major number of this device
- * * minor -- the minor number of this device
+ * * identifier -- a string identifying the unique ID of the device the weblib runs on
  *
  * **Device Detected** -- type="devicedetected"
  * Contains information about a newly detected device. Format:   
- * * major -- The major part of the device ID
- * * minor -- The minor part of the device ID
- * * proximity -- a string describing the distance of this device to the detected device (either "far", "near" or "immediate")
+ * * identifier -- the identifier of the newly detected device
  *
- * **Device Proximity Changed** -- type="deviceproximitychanged"  
+ * **Device Proximity Changed** -- type="devicedistancechanged"  
  * Contains information about the new proximity of a previously detected device. Format:  
- * * major -- The major part of the device ID
- * * minor -- The minor part of the device ID
- * * proximity -- a string describing the distance of this device to the device (either "far", "near" or "immediate")
+ * * identifier -- the identifier of the device whose distance changed
+ * * distance -- the new distance between this device and the other device, in meters
  *
  * **Device Lost** -- type="devicelost"  
  * Contains information about a device that went out of range or can not be detected anymore for other reasons. Format:  
- * * major -- The major part of the device ID
- * * minor -- The minor part of the device ID
+ * * identifier -- the identifier of the lost device
  *
  * @namespace CWNativeCommunicationParser
  */
@@ -408,13 +386,65 @@ var CWNativeCommunicationParser = (function()
       CWDeviceManager.addDevice(device);
       break;
     case "devicedistancechanged":
-      CWDeviceManager.updateDeviceDistance(object.identifier, object.distance);
+      var device = CWDeviceManager.getDeviceWithIdentifier(object.identifier);
+      if (device === null) return;
+      
+      device.updateDistance(object.distance);
       break;
     case "devicelost":
       CWDeviceManager.removeDevice(object.identifier);
       break;
     case "connectionRequestFailed":
-      
+      var device = CWDeviceManager.getDeviceWithIdentifier(object.identifier);
+      device.state = CWDeviceState.CONNECTING_FAILED;
+      CWEventManager.trigger("connectionRequestFailed", device);
+      break;
+    }
+  };
+
+  return {
+    parse : parse
+  };
+})();
+/* global CWDebug, CWDeviceManager, CWDeviceState, CWEventManager */
+"use strict";
+
+
+/**
+ * The Connichiwa Communication Protocol Parser (Remote Device).  
+ * Here the protocol used to communicate between this library and a connected remote device is parsed. The communication is done via JSON.
+ *
+ * **Remote ID Information** -- type="remoteidentifier"  
+ * Contains the identifier of a connected remote device. Format:
+ * * identifier -- a string identifying the unique ID of the device the weblib runs on
+ *
+ * @namespace CWRemoteCommunicationParser
+ */
+var CWRemoteCommunicationParser = (function()
+{
+  /**
+   * Parses a message from the websocket. If the message is none of the messages described by this class, this method will do nothing. Otherwise the message will trigger an appropiate action.
+   *
+   * @param {string} message The message from the websocket
+   *
+   * @memberof CWRemoteCommunicationParser
+   */
+  var parse = function(message)
+  {
+    var object = JSON.parse(message);
+    switch (object.type)
+    {
+      case "remoteidentifier":
+        var device = CWDeviceManager.getDeviceWithIdentifier(object.identifier);
+        if (device === null) return;
+        
+        device.state = CWDeviceState.CONNECTED;
+        
+        var data = { type: "remoteConnected", identifier: object.identifier };
+        Connichiwa._send(JSON.stringify(data));
+        
+        CWEventManager.trigger("deviceConnected", device);
+        break;
     }
   };
 
@@ -570,6 +600,7 @@ var Connichiwa = (function()
     
     CWWebserverCommunicationParser.parse(message);
     CWNativeCommunicationParser.parse(message);
+    CWRemoteCommunicationParser.parse(message);
   };
 
 
@@ -580,6 +611,7 @@ var Connichiwa = (function()
    */
   _websocket.onerror = function()
   {
+    alert("error");
     CWDebug.log("Websocket error");
   };
 
@@ -592,6 +624,12 @@ var Connichiwa = (function()
   _websocket.onclose = function()
   {
     CWDebug.log("Websocket closed");
+  };
+  
+  
+  var _send = function(message)
+  {
+    _websocket.send(message);
   };
 
 
@@ -616,7 +654,9 @@ var Connichiwa = (function()
       "localIdentifierSet", 
       "deviceDetected", 
       "deviceDistanceChanged", 
-      "deviceLost" 
+      "deviceLost",
+      "deviceConnected",
+      "connectionRequestFailed"
     ];
     
     if (CWUtil.inArray(event, validEvents) === false) throw "Registering for invalid event: " + event;
@@ -638,6 +678,7 @@ var Connichiwa = (function()
 
   return {
     on      : on,
-    connect : connect
+    connect : connect,
+    _send   : _send
   };
 })();

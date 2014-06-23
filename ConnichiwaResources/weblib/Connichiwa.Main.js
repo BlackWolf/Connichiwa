@@ -48,6 +48,7 @@ var Connichiwa = (function()
     
     CWWebserverCommunicationParser.parse(message);
     CWNativeCommunicationParser.parse(message);
+    CWRemoteCommunicationParser.parse(message);
   };
 
 
@@ -58,6 +59,7 @@ var Connichiwa = (function()
    */
   _websocket.onerror = function()
   {
+    alert("error");
     CWDebug.log("Websocket error");
   };
 
@@ -70,6 +72,12 @@ var Connichiwa = (function()
   _websocket.onclose = function()
   {
     CWDebug.log("Websocket closed");
+  };
+  
+  
+  var _send = function(message)
+  {
+    _websocket.send(message);
   };
 
 
@@ -94,7 +102,9 @@ var Connichiwa = (function()
       "localIdentifierSet", 
       "deviceDetected", 
       "deviceDistanceChanged", 
-      "deviceLost" 
+      "deviceLost",
+      "deviceConnected",
+      "connectionRequestFailed"
     ];
     
     if (CWUtil.inArray(event, validEvents) === false) throw "Registering for invalid event: " + event;
@@ -116,6 +126,7 @@ var Connichiwa = (function()
 
   return {
     on      : on,
-    connect : connect
+    connect : connect,
+    _send   : _send
   };
 })();

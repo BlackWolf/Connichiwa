@@ -41,14 +41,12 @@ var QueryString = (function()
   return _queryString;
 })();
 
-
 var websocket = new WebSocket("ws://" + ParsedURL.hostname + ":" + (parseInt(ParsedURL.port) + 1));
-alert("Connecting to ws://" + ParsedURL.hostname + ":" + (parseInt(ParsedURL.port) + 1));
 
 websocket.onopen = function()
 {
-  // var data = { type: "remoteidentifier", identifier: QueryString.identifier };
-  // websocket.send(JSON.stringify(data));
+  var data = { type: "remoteidentifier", identifier: QueryString.identifier };
+  websocket.send(JSON.stringify(data));
 };
 
 

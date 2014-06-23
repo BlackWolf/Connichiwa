@@ -54,8 +54,9 @@
     self.identifier = [[NSUUID UUID] UUIDString];
     
     dispatch_queue_t centralQueue = dispatch_queue_create("connichiwacentralqueue", DISPATCH_QUEUE_SERIAL);
+    dispatch_queue_t peripheralQueue = dispatch_queue_create("connichiwaperipheralqueue", DISPATCH_QUEUE_SERIAL);
     self.centralManager = [[CBCentralManager alloc] initWithDelegate:self queue:centralQueue];
-    self.peripheralManager = [[CBPeripheralManager alloc] initWithDelegate:self queue:centralQueue];
+    self.peripheralManager = [[CBPeripheralManager alloc] initWithDelegate:self queue:peripheralQueue];
     
     //When a central subscribes to the initial characteristic, we will sent it our initial device data, including our unique identifier
     self.advertisedInitialCharacteristic = [[CBMutableCharacteristic alloc] initWithType:[CBUUID UUIDWithString:BLUETOOTH_INITIAL_CHARACTERISTIC_UUID]
@@ -139,7 +140,6 @@
     
     [connection setState:CWBluetoothConnectionStateIPConnecting];
     connection.pendingIPWrites = 0;
-    connection.successfulIPWrites = 0;
     [self _connectPeripheral:connection.peripheral];
 }
 
@@ -251,25 +251,25 @@
 }
 
 
-- (void)_sendToCentral
+- (void)_sendData:(NSData *)data toCentral:(CBCentral *)central
 {
     
 }
 
 
-- (void)_sendToPeripheral
+- (void)_sendData:(NSData *)data toPeripheral:(CBPeripheral *)peripheral
 {
     
 }
 
 
-- (void)_receivedFromCentral
+- (void)_receivedData:(NSData *)data fromCentral:(CBCentral *)central
 {
     
 }
 
 
-- (void)_receivedFromPeripheral
+- (void)_receivedData:(NSData *)data fromPeripheral:(CBPeripheral *)peripheral
 {
     
 }
@@ -522,43 +522,36 @@
         && connection.state == CWBluetoothConnectionStateIPSent
         && [characteristic.UUID isEqual:[CBUUID UUIDWithString:BLUETOOTH_IP_CHARACTERISTIC_UUID]])
     {
+        connection.pendingIPWrites--;
+        
         //We exploit the BT write error mechanism to report if the other device was able to connect to the IP we sent
-        //When the IP was valid, the other device reports back a CBAttErrorSuccess, otherwise a CBATTErrorAttributeNotFound
-        if (error.code == CBATTErrorSuccess)
+        //When the IP was valid, the other device reports back a CBATTErrorSuccess, otherwise a CBATTErrorAttributeNotFound
+        if (error.code == CBATTErrorSuccess && connection.state == CWBluetoothConnectionStateIPSent)
         {
-            connection.successfulIPWrites++;
+            [connection setState:CWBluetoothConnectionStateIPDone];
+            if ([self.delegate respondsToSelector:@selector(didSendNetworkAddresses:success:)])
+            {
+                [self.delegate didSendNetworkAddresses:connection.identifier success:YES];
+            }
         }
         
-        connection.pendingIPWrites--;
         if (connection.pendingIPWrites == 0)
         {
             //
             //
             // TODO
-            // create delegate method didSentNetworkAddresses:(BOOL)success and call it here
-            // on success=true, a timeout is created by CWApplication that waits for the websocket connection
-            // on success=false, we immediatly report back the failure to connect
             //
             // edge cases to consider: websocket connection arrives after timeout (cancel websocket connection?)
             //                         websocket connection arrives BEFORE we even start the timeout - shouldn't be too much of a problem, as we should remember all remote devices somewhere anyway I guess (CWWebApplication?) so we don't connect to them twice or something
             //
             //
-            if (connection.successfulIPWrites > 0)
+            
+            //If the state is not "IPDone" yet, it means none of the IP writes came back with an CBATTErrorSuccess response - none of the IPs worked
+            if (connection.state == CWBluetoothConnectionStateIPSent)
             {
-                [connection setState:CWBluetoothConnectionStateIPDone];
-                
-                if ([self.delegate respondsToSelector:@selector(didSendNetworkAddresses:success:)])
-                {
-                    [self.delegate didSendNetworkAddresses:connection.identifier success:YES];
-                }
-            }
-            else
-            {
-                //The other device was not able to connect to one of the IPs we provided - report back a failure to connect
                 //TODO should we really ignore here?
                 DLog(@"Peripheral '%@' reported back no success with sent IPs, ignoring...");
                 [connection setState:CWBluetoothConnectionStateErrored];
-                
                 if ([self.delegate respondsToSelector:@selector(didSendNetworkAddresses:success:)])
                 {
                     [self.delegate didSendNetworkAddresses:connection.identifier success:NO];
