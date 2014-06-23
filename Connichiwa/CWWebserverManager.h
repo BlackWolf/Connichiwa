@@ -36,5 +36,6 @@
 - (void)loadWeblibOnWebView:(UIWebView *)webView withLocalIdentifier:(NSString *)identifier;
 - (void)sendToWeblib_deviceDetected:(NSString *)identifier;
 - (void)sendToWeblib_device:(NSString *)identifier changedDistance:(double)distance;
+- (void)sendToWeblib_connectionRequestFailed:(NSString *)identifier;
 
 @end

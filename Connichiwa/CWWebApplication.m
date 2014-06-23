@@ -93,6 +93,7 @@
 
 #pragma mark CWBluetoothManagerDelegate
 
+
 - (void)deviceDetected:(NSString *)identifier
 {
     [self.webserverManager sendToWeblib_deviceDetected:identifier];
@@ -102,6 +103,78 @@
 - (void)device:(NSString *)identifier changedDistance:(double)distance
 {
     [self.webserverManager sendToWeblib_device:identifier changedDistance:distance];
+}
+
+
+- (void)didReceiveDeviceURL:(NSURL *)URL;
+{
+    NSURL *extendedURL = [URL URLByAppendingPathComponent:@"remote" isDirectory:YES];
+    NSString *queryString = [NSString stringWithFormat:@"identifier=%@", self.bluetoothManager.identifier];
+    NSString *finalURLString = [[NSString alloc] initWithFormat:@"%@index.html%@%@", [extendedURL absoluteString], [extendedURL query] ? @"&" : @"?", queryString];
+    NSURL *finalURL = [NSURL URLWithString:finalURLString];
+    
+    NSURLRequest *URLRequest = [NSURLRequest requestWithURL:finalURL];
+    [self.remoteWebView setHidden:NO];
+    [self.remoteWebView loadRequest:URLRequest];
+}
+
+
+- (void)didSendNetworkAddresses:(NSString *)deviceIdentifier success:(BOOL)success
+{
+    if (success)
+    {
+        [self performSelector:@selector(remoteDeviceConnectionTimeout:) withObject:deviceIdentifier afterDelay:10.0];
+    }
+    else
+    {
+        [self.webserverManager sendToWeblib_connectionRequestFailed:deviceIdentifier];
+    }
+}
+
+
+- (void)remoteDeviceConnectionTimeout:(NSString *)deviceIdentifier
+{
+    //TODO check if the device is connected, if not:
+    
+    //Although we successfully sent our network address to the remote device, it did not connect to the weblib
+    //We consider the connection attempt a failure
+    [self.webserverManager sendToWeblib_connectionRequestFailed:deviceIdentifier];
+}
+
+
+- (void)didReceiveNetworkAddresses:(NSArray *)ips
+{
+    //TODO dispatch this
+    
+    //Wohoo, we recieved some IPs. So another device wants to use us, huh?
+    //Figure out an IP that works and open that IP in a webview
+//    for (NSString *ip in ips)
+//    {
+//        NSHTTPURLResponse *response = nil;
+//        NSError *error = nil;
+//        
+//        NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:%d/check", ip, WEBSERVER_PORT]];
+//        NSMutableURLRequest *request = [NSMutableURLRequest
+//                                        requestWithURL:url
+//                                        cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
+//                                        timeoutInterval:5.0];
+//        [request setHTTPMethod:@"HEAD"];
+//        
+//        DLog(@"Checking URL %@", url);
+//        [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+//        if ([response statusCode] == 200)
+//        {
+//            //We found the correct IP!
+//            DLog(@"Found working URL: %@", url);
+//            if (self.remoteWebView != nil)
+//            {
+//                NSURL *realURL = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:%d", ip, WEBSERVER_PORT]];
+//                NSURLRequest *realURLRequest = [NSURLRequest requestWithURL:realURL];
+//                [self.remoteWebView setHidden:NO];
+//                [self.remoteWebView loadRequest:realURLRequest];
+//            }
+//        }
+//    }
 }
 
 @end

@@ -3,6 +3,17 @@
 
 
 
+var CWDeviceState = 
+{
+  DISCOVERED        : "discovered",
+  CONNECTING        : "connecting",
+  CONNECTED         : "connected",
+  CONNECTION_FAILED : "connection_failed",
+  LOST              : "lost"
+};
+
+
+
 /**
  * An instance of this class describes a remote device that was detected nearby. It furthermore keeps information like the distance of the device and other connection-related information.
  *
@@ -15,32 +26,21 @@ function CWDevice(identifier, options)
   options = {};
 
   var defaultOptions = {
-    connected : false,
-    distance  : -1,
+    distance : -1,
   };
   $.extend(options, defaultOptions, passedOptions);
+  
+  this.state = CWDeviceState.DISCOVERED;
 
   /**
    * A string representing a unique identifier of the device
    */
   var _identifier = identifier;
-
-  var _connected = options.connected;
   
   /**
    * The current distance between the local device and the device represented by this CWDevice instance
    */
   var _distance = options.distance;
-  
-  this.didConnect = function()
-  {
-    _connected = true;
-  };
-  
-  this.didDisconnect = function()
-  {
-    _connected = false;
-  }
 
   /**
    * Updates the distance between the local device and the device represented by the instance of this class
@@ -64,8 +64,6 @@ function CWDevice(identifier, options)
    * @memberof CWDevice
    */
   this.getIdentifier = function() { return _identifier; };
-  
-  this.isConnected = function() { return _connected; };
 
   /**
    * Returns the current distance between the local device and the device represented by this CWDevice instance, in meters.
@@ -76,6 +74,13 @@ function CWDevice(identifier, options)
    * @memberof CWDevice
    */
   this.getDistance = function() { return _distance; };
+  
+  this.canBeConnected = function() 
+  { 
+    return this.state !== CWDeviceState.CONNECTED && 
+    this.state !== CWDeviceState.CONNECTING && 
+    this.state !== CWDeviceState.LOST;
+  };
 
   return this;
 }

@@ -12,6 +12,7 @@
 
 + (NSString *)escapedJSONStringFromDictionary:(NSDictionary *)dictionary;
 + (NSDictionary *)dictionaryFromJSONData:(NSData *)JSON;
++ (NSData *)dataFromDictionary:(NSDictionary *)dictionary;
 + (NSArray *)deviceInterfaceAddresses;
 
 @end

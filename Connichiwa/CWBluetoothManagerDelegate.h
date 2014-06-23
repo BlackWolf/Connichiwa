@@ -16,5 +16,6 @@
 
 - (void)deviceDetected:(NSString *)identifier;
 - (void)device:(NSString *)identifier changedDistance:(double)distance;
-
+- (void)didReceiveDeviceURL:(NSURL *)URL;
+- (void)didSendNetworkAddresses:(NSString *)deviceIdentifier success:(BOOL)success;
 @end

@@ -30,6 +30,11 @@ if (CWDEBUG === true) {
   app.use(new Morgan( { immediate: true, format: "WEBSERVER :date :remote-addr -- REQUEST :url (:response-time ms)" } ));
 }
 
+//Deliver a minimal page for '/check', which can be used to check if the webserver responds
+app.use("/check", function(req, res, next) {
+  res.status(200).send("Hic sunt dracones");
+});
+
 //Make sure the server only delivers "safe" filetypes
 app.use(function(req, res, next) {
   var validExtensionRegexp = /\.(html|htm|js|jpg|jpeg|png|gif|ico|pdf)\??.*$/;
@@ -44,6 +49,9 @@ app.use(function(req, res, next) {
 
 //Make sure we serve the Connichiwa Web Library to the web app under /connichiwa/
 app.use("/connichiwa", Express.static(RESOURCES_PATH + "/weblib"));
+
+//Serve the webpage that is accesses by remote devices
+app.use("/remote", Express.static(RESOURCES_PATH + "/remote"));
 
 //DOCUMENT_ROOT is served as /
 app.use("/", Express.static(DOCUMENT_ROOT));

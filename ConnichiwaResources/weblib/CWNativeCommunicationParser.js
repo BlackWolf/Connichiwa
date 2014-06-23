@@ -58,6 +58,8 @@ var CWNativeCommunicationParser = (function()
     case "devicelost":
       CWDeviceManager.removeDevice(object.identifier);
       break;
+    case "connectionRequestFailed":
+      
     }
   };
 

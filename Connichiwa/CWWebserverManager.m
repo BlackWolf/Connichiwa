@@ -178,6 +178,16 @@
 }
 
 
+- (void)sendToWeblib_connectionRequestFailed:(NSString *)identifier
+{
+    NSDictionary *data = @{
+                           @"type": @"connectionRequestFailed",
+                           @"identifier": identifier
+                           };
+    [self _sendDictionaryToWeblib:data];
+}
+
+
 - (void)_sendToWeblib_localIdentifier
 {
     NSDictionary *data = @{

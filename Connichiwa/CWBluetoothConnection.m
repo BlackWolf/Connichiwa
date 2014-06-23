@@ -48,6 +48,9 @@
     
     self.measuredPower = DEFAULT_MEASURED_BLUETOOTH_POWER;
     
+    self.pendingIPWrites = 0;
+    self.successfulIPWrites = 0;
+    
     return self;
 }
 
@@ -143,8 +146,9 @@
 
 - (void)setIdentifier:(NSString *)identifier
 {
-    //TODO do this?
-    //if (_identifier != nil) [NSException raise:@"Identifier of BT Connection cannot be changed" format:@"The Identifier of a CWBluetoothConnection can be set only once."];
+    if ([identifier isEqualToString:_identifier]) return;
+    
+    if (_identifier != nil) [NSException raise:@"Identifier of BT Connection cannot be changed" format:@"The Identifier of a CWBluetoothConnection can be set only once."];
     
     _identifier = identifier;
 }

@@ -49,6 +49,12 @@
 }
 
 
++ (NSData *)dataFromDictionary:(NSDictionary *)dictionary
+{
+    return [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+}
+
+
 /* Thanks to
  http://stackoverflow.com/questions/3434192/alternatives-to-nshost-in-iphone-app and
  http://zachwaugh.me/posts/programmatically-retrieving-ip-address-of-iphone/

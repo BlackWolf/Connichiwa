@@ -27,7 +27,6 @@
 
 @property (readwrite) BOOL wantsToStartScanning;
 @property (readwrite) BOOL wantsToStartAdvertising;
-@property (readwrite) int pendingCharacteristicWrites;
 
 @end
 
@@ -79,7 +78,6 @@
     self.connections = [NSMutableArray array];
     self.wantsToStartScanning = NO;
     self.wantsToStartAdvertising = NO;
-    self.pendingCharacteristicWrites = 0;
     
     return self;
 }
@@ -137,7 +135,11 @@
         return;
     }
     
+    if (connection.state == CWBluetoothConnectionStateIPConnecting || connection.state == CWBluetoothConnectionStateIPSent) return;
+    
     [connection setState:CWBluetoothConnectionStateIPConnecting];
+    connection.pendingIPWrites = 0;
+    connection.successfulIPWrites = 0;
     [self _connectPeripheral:connection.peripheral];
 }
 
@@ -233,13 +235,19 @@
 
 - (void)_sendIPsToPeripheral:(CBPeripheral *)peripheral onCharacteristic:(CBCharacteristic *)characteristic
 {
+    CWBluetoothConnection *connection = [self _connectionForPeripheral:peripheral];
     NSArray *ips = [CWUtil deviceInterfaceAddresses];
     for (NSString *ip in ips) {
         DLog(@"Writing value %@", @{ @"ip": ip } );
-        NSData *data = [NSJSONSerialization dataWithJSONObject:@{ @"ip": ip } options:NSJSONWritingPrettyPrinted error:nil];
+        NSData *data = [CWUtil dataFromDictionary:@{ @"ip": ip }];
         [peripheral writeValue:data forCharacteristic:characteristic type:CBCharacteristicWriteWithResponse];
-        self.pendingCharacteristicWrites++;
+        connection.pendingIPWrites++;
     }
+    
+//    NSData *data = [CWUtil dataFromDictionary:@{ @"ips": ips }];
+//    DLog(@"Writing data of length %d", [data length]);
+//    [peripheral writeValue:data forCharacteristic:characteristic type:CBCharacteristicWriteWithResponse];
+//    connection.pendingIPWrites++;
 }
 
 
@@ -463,7 +471,8 @@
     if (connection != nil
         && connection.state == CWBluetoothConnectionStateInitialWaitingForData
         && [characteristic.UUID isEqual:[CBUUID UUIDWithString:BLUETOOTH_INITIAL_CHARACTERISTIC_UUID]]
-        && characteristic.value != nil)
+        && characteristic.value != nil
+        && error == nil)
     {
         NSDictionary *retrievedData = [CWUtil dictionaryFromJSONData:characteristic.value];
         
@@ -490,6 +499,9 @@
         {
             [self.delegate deviceDetected:connection.identifier];
         }
+    } else
+    {
+        [self _disconnectPeripheral:peripheral];
     }
 }
 
@@ -499,25 +511,60 @@
     DLog(@"P didWriteValueForCharacteristic, error %@", error);
     
     CWBluetoothConnection *connection = [self _connectionForPeripheral:peripheral];
+    
+    if (connection.pendingIPWrites == 0)
+    {
+        DLog(@"Received a write response for '%@' without pending writes - what happened?", peripheral.name);
+        return;
+    }
+    
     if (connection != nil
         && connection.state == CWBluetoothConnectionStateIPSent
         && [characteristic.UUID isEqual:[CBUUID UUIDWithString:BLUETOOTH_IP_CHARACTERISTIC_UUID]])
     {
-        if (error != nil)
+        //We exploit the BT write error mechanism to report if the other device was able to connect to the IP we sent
+        //When the IP was valid, the other device reports back a CBAttErrorSuccess, otherwise a CBATTErrorAttributeNotFound
+        if (error.code == CBATTErrorSuccess)
         {
-            //TODO we need a retry mechanism here, for now we just ignore the peripheral
-            DLog(@"Error when sending IPs to %@, ignoring...", connection.identifier);
-            [connection setState:CWBluetoothConnectionStateErrored];
-            self.pendingCharacteristicWrites = 0;
-            [self _disconnectPeripheral:peripheral];
-            
-            return;
+            connection.successfulIPWrites++;
         }
         
-        self.pendingCharacteristicWrites--;
-        if (self.pendingCharacteristicWrites == 0)
+        connection.pendingIPWrites--;
+        if (connection.pendingIPWrites == 0)
         {
-            [connection setState:CWBluetoothConnectionStateIPDone];
+            //
+            //
+            // TODO
+            // create delegate method didSentNetworkAddresses:(BOOL)success and call it here
+            // on success=true, a timeout is created by CWApplication that waits for the websocket connection
+            // on success=false, we immediatly report back the failure to connect
+            //
+            // edge cases to consider: websocket connection arrives after timeout (cancel websocket connection?)
+            //                         websocket connection arrives BEFORE we even start the timeout - shouldn't be too much of a problem, as we should remember all remote devices somewhere anyway I guess (CWWebApplication?) so we don't connect to them twice or something
+            //
+            //
+            if (connection.successfulIPWrites > 0)
+            {
+                [connection setState:CWBluetoothConnectionStateIPDone];
+                
+                if ([self.delegate respondsToSelector:@selector(didSendNetworkAddresses:success:)])
+                {
+                    [self.delegate didSendNetworkAddresses:connection.identifier success:YES];
+                }
+            }
+            else
+            {
+                //The other device was not able to connect to one of the IPs we provided - report back a failure to connect
+                //TODO should we really ignore here?
+                DLog(@"Peripheral '%@' reported back no success with sent IPs, ignoring...");
+                [connection setState:CWBluetoothConnectionStateErrored];
+                
+                if ([self.delegate respondsToSelector:@selector(didSendNetworkAddresses:success:)])
+                {
+                    [self.delegate didSendNetworkAddresses:connection.identifier success:NO];
+                }
+            }
+            
             [self _disconnectPeripheral:peripheral];
         }
     }
@@ -529,7 +576,9 @@
     DLog(@"P didUpdateName '%@'", peripheral.name);
 }
 
+
 #pragma mark CBPeripheralManagerDelegate
+
 
 - (void)peripheralManagerDidUpdateState:(CBPeripheralManager *)peripheralManager
 {
@@ -570,7 +619,7 @@
 {
     DLog(@"PM didReceiveWriteRequests");
     
-    BOOL requestsValid = YES;
+    BOOL requestsValid = NO;
     NSMutableArray *retrievedIPs = [NSMutableArray array];
     for (CBATTRequest *writeRequest in requests)
     {
@@ -580,30 +629,63 @@
         
         if (retrievedData[@"ip"] == nil)
         {
-            requestsValid = NO;
-            break;
+            DLog(@"Error in the retrieved IP");
+            continue;
         }
         
-        [retrievedIPs addObject:retrievedData[@"ip"]];
+        NSHTTPURLResponse *response = nil;
+        NSError *error = nil;
+        
+        //TODO port should be sent by the central
+        NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:%d/check", retrievedData[@"ip"], WEBSERVER_PORT]];
+        NSMutableURLRequest *request = [NSMutableURLRequest
+                                        requestWithURL:url
+                                        cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
+                                        timeoutInterval:1.0];
+        [request setHTTPMethod:@"HEAD"];
+        
+        DLog(@"Checking URL %@", url);
+        [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+        if ([response statusCode] == 200)
+        {
+            //We found the correct IP!
+            DLog(@"Found working URL: %@", url);
+            if ([self.delegate respondsToSelector:@selector(didReceiveDeviceURL:)])
+            {
+                [self.delegate didReceiveDeviceURL:[url URLByDeletingLastPathComponent]];
+            }
+            requestsValid = YES;
+        }
     }
     
-    if (requestsValid == NO)
-    {
-        //TODO should we really ignore here?
-        DLog(@"Error in the revieved IPs");
-        [self.peripheralManager respondToRequest:[requests objectAtIndex:0] withResult:CBATTErrorUnlikelyError];
-    }
-    else
-    {
-        //Wow, we are so close now. We received a bunch of IPs, one of them is the one we should connect to
-        //Figure out which and bring this device into remote mode
-        for (NSString *ip in retrievedIPs)
-        {
-            
-        }
-        
-        [self.peripheralManager respondToRequest:[requests objectAtIndex:0] withResult:CBATTErrorSuccess];
-    }
+    if (requestsValid) [self.peripheralManager respondToRequest:[requests objectAtIndex:0] withResult:CBATTErrorSuccess];
+    else [self.peripheralManager respondToRequest:[requests objectAtIndex:0] withResult:CBATTErrorAttributeNotFound];
+    
+//        NSDictionary *retrievedData = [CWUtil dictionaryFromJSONData:writeRequest.value];
+//        
+//        if (retrievedData[@"ip"] == nil)
+//        {
+//            requestsValid = NO;
+//            break;
+//        }
+//        
+//        [retrievedIPs addObject:retrievedData[@"ip"]];
+//    }
+//    
+//    if (requestsValid == NO)
+//    {
+//        //TODO should we really ignore here?
+//        DLog(@"Error in the revieved IPs");
+//        [self.peripheralManager respondToRequest:[requests objectAtIndex:0] withResult:CBATTErrorUnlikelyError];
+//    }
+//    else
+//    {
+//        if ([self.delegate respondsToSelector:@selector(didRecieveNetworkAddresses:)])
+//        {
+//            [self.delegate didRecieveNetworkAddresses:retrievedIPs];
+//        }
+//        [self.peripheralManager respondToRequest:[requests objectAtIndex:0] withResult:CBATTErrorSuccess];
+//    }
 }
 
 

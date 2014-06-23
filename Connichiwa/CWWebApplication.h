@@ -16,6 +16,8 @@
  */
 @interface CWWebApplication : NSObject
 
+@property (readwrite, strong) UIWebView *remoteWebView;
+
 /**
  *  Initializes a new web application. It fires up the web server and starts the web application at the given path. It also takes care of displaying the web application on a local UIWebView.
  *
