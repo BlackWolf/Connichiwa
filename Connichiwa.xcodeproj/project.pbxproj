@@ -42,6 +42,7 @@
 		334AB758193FEC6000A15999 /* CWBundle.m in Sources */ = {isa = PBXBuildFile; fileRef = 334AB756193FEC6000A15999 /* CWBundle.m */; };
 		334AB76D19405F0C00A15999 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 334AB76C19405F0C00A15999 /* CoreBluetooth.framework */; };
 		334AB77319405F1100A15999 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 334AB77219405F1000A15999 /* CoreLocation.framework */; };
+		3351372E19578FBD004FE5E0 /* remote in Resources */ = {isa = PBXBuildFile; fileRef = 3351372D19578FBD004FE5E0 /* remote */; };
 		3367186C194776C1000A7164 /* CWWebserverDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 3367186B194776C1000A7164 /* CWWebserverDelegate.h */; };
 		33A0514A193E61CC00FED071 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33A05149193E61CC00FED071 /* Foundation.framework */; };
 		33A05158193E61CC00FED071 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33A05157193E61CC00FED071 /* XCTest.framework */; };
@@ -142,6 +143,7 @@
 		334AB756193FEC6000A15999 /* CWBundle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWBundle.m; sourceTree = "<group>"; };
 		334AB76C19405F0C00A15999 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
 		334AB77219405F1000A15999 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		3351372D19578FBD004FE5E0 /* remote */ = {isa = PBXFileReference; lastKnownFileType = folder; path = remote; sourceTree = "<group>"; };
 		3367186B194776C1000A7164 /* CWWebserverDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWWebserverDelegate.h; sourceTree = "<group>"; };
 		3381A01E193F492600BDDF34 /* Nodelike.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Nodelike.xcodeproj; path = Nodelike/Nodelike.xcodeproj; sourceTree = "<group>"; };
 		339A4BC2195024110072A4FC /* CWBluetoothMonitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWBluetoothMonitor.h; sourceTree = "<group>"; };
@@ -216,6 +218,7 @@
 		330CBB89193F14B60064AD99 /* ConnichiwaResources */ = {
 			isa = PBXGroup;
 			children = (
+				3351372D19578FBD004FE5E0 /* remote */,
 				331F2DE21944F4ED007609B9 /* weblib */,
 				33C3127D1940AEF600F2541C /* node_modules */,
 				3306A7981940A2DF001B999A /* server.js */,
@@ -493,6 +496,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3351372E19578FBD004FE5E0 /* remote in Resources */,
 				3306A79E1940A386001B999A /* server.js in Resources */,
 				33C3127E1940AEF600F2541C /* node_modules in Resources */,
 				330CBB8E193F14B60064AD99 /* InfoPlist.strings in Resources */,
@@ -607,7 +611,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "touch -cm \"${PROJECT_DIR}/${PRODUCT_NAME}\"\ntouch -cm \"${PROJECT_DIR}/${PRODUCT_NAME}/weblib\"\ntouch -cm \"${PROJECT_DIR}/${PRODUCT_NAME}/node_modules\"";
+			shellScript = "touch -cm \"${PROJECT_DIR}/${PRODUCT_NAME}\"\ntouch -cm \"${PROJECT_DIR}/${PRODUCT_NAME}/weblib\"\ntouch -cm \"${PROJECT_DIR}/${PRODUCT_NAME}/remote\"\ntouch -cm \"${PROJECT_DIR}/${PRODUCT_NAME}/node_modules\"";
 		};
 /* End PBXShellScriptBuildPhase section */
 
