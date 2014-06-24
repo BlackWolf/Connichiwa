@@ -7,9 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
 #import "CWWebserverDelegate.h"
-@class NLContext, CWDeviceID;
+@class NLContext;
 
 
 
@@ -33,7 +32,7 @@
  */
 @property (readonly) NSString *documentRoot;
 
-- (void)loadWeblibOnWebView:(UIWebView *)webView withLocalIdentifier:(NSString *)identifier;
+- (void)sendToWeblib_localIdentifier:(NSString *)identifier;
 - (void)sendToWeblib_deviceDetected:(NSString *)identifier;
 - (void)sendToWeblib_device:(NSString *)identifier changedDistance:(double)distance;
 - (void)sendToWeblib_connectionRequestFailed:(NSString *)identifier;

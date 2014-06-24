@@ -1,5 +1,5 @@
 /* global SERVER_PORT, DOCUMENT_ROOT, RESOURCES_PATH, CWDEBUG */
-/* global native_didLoadWeblib, native_didReceiveMessageFromWeblib */
+/* global native_didLoadWeblib, native_receivedFromWeblib */
 "use strict";
 
 /**
@@ -26,9 +26,7 @@ var WebsocketServer = require("ws").Server;
 var app = new Express();
 
 //Activate logging
-if (CWDEBUG === true) {
-  app.use(new Morgan( { immediate: true, format: "WEBSERVER :date :remote-addr -- REQUEST :url (:response-time ms)" } ));
-}
+if (CWDEBUG === true) app.use(new Morgan( { immediate: true, format: "WEBSERVER :date :remote-addr -- REQUEST :url (:response-time ms)" } ));
 
 //Deliver a minimal page for '/check', which can be used to check if the webserver responds
 app.use("/check", function(req, res, next) {
@@ -50,10 +48,10 @@ app.use(function(req, res, next) {
 //Make sure we serve the Connichiwa Web Library to the web app under /connichiwa/
 app.use("/connichiwa", Express.static(RESOURCES_PATH + "/weblib"));
 
-//Serve the webpage that is accesses by remote devices
+//Serve the webpage that is accessed by remote devices
 app.use("/remote", Express.static(RESOURCES_PATH + "/remote"));
 
-//DOCUMENT_ROOT is served as /
+//DOCUMENT_ROOT (web app) is served as /
 app.use("/", Express.static(DOCUMENT_ROOT));
 
 app.listen(SERVER_PORT);
@@ -136,7 +134,7 @@ function sendToWeblib(message)
 
 function sendToNative(message)
 {
-  native_didReceiveMessageFromWeblib(message);
+  native_receivedFromWeblib(message);
 }
 
 function sendToRemote(identifier, message)

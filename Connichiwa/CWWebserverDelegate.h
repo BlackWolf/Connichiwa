@@ -1,5 +1,5 @@
 //
-//  CWWebserverDelegate.h
+//  CWWebserverManagerDelegate.h
 //  Connichiwa
 //
 //  Created by Mario Schreiner on 10/06/14.
@@ -11,19 +11,15 @@
 
 
 /**
- *  A delegate protocol that receives different events from the CWWebserver instance
+ *  A delegate protocol that receives different events from the CWWebserverManager instance
  */
 @protocol CWWebserverManagerDelegate <NSObject>
 
 @optional
 
-- (void)managerDidStartWebserver:(CWWebserverManager *)webserverManager;
-
-/**
- *  Called after the webserver reported that the websocket connection to the local web library was successfully established. After this, it is possible to send messages to the web library through CWWebserverManager
- */
-- (void)managerDidLoadWeblib:(CWWebserverManager *)webserverManager;
-
-- (void)managerDidReceiveConnectionRequest:(NSString *)identifier;
+- (void)didStartWebserver;
+- (void)didConnectToWeblib;
+- (void)didReceiveConnectionRequest:(NSString *)identifier;
+- (void)didConnectToRemoteDevice:(NSString *)identifier;
 
 @end

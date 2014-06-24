@@ -8,13 +8,14 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import "CWWebApplicationState.h"
 
 
 
 /**
  *  The representative of the web application in Objective-C. This is the main class responsible for setting the web application and everything it needs up. This includes setting up this device as an iBeacon and listening for iBeacons. It additionally is responsible for the communication between the different parts - for example it relays information about found iBeacons to the web application. This class can also be used to send information to the web server or web application. It can also be used to retrieve events coming from the web server or web application.
  */
-@interface CWWebApplication : NSObject
+@interface CWWebApplication : NSObject <CWWebApplicationState>
 
 @property (readwrite, strong) UIWebView *remoteWebView;
 

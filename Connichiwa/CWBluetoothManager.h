@@ -15,7 +15,6 @@
 @interface CWBluetoothManager : NSObject
 
 @property (readwrite) id<CWBluetoothManagerDelegate> delegate;
-@property (readonly) NSString *identifier;
 
 - (void)startScanning;
 - (void)startAdvertising;

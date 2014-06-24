@@ -129,6 +129,7 @@
 		330CBB8D193F14B60064AD99 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		330CBB8F193F14B60064AD99 /* ConnichiwaResources-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ConnichiwaResources-Prefix.pch"; sourceTree = "<group>"; };
 		331F2DE21944F4ED007609B9 /* weblib */ = {isa = PBXFileReference; lastKnownFileType = folder; path = weblib; sourceTree = "<group>"; };
+		332B686D1958E55E004B0600 /* CWWebApplicationState.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CWWebApplicationState.h; sourceTree = "<group>"; };
 		333A80651953996D00420D5A /* CWBluetoothManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWBluetoothManager.h; sourceTree = "<group>"; };
 		333A80661953996D00420D5A /* CWBluetoothManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWBluetoothManager.m; sourceTree = "<group>"; };
 		333A806D1953997F00420D5A /* CWBluetoothManagerDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CWBluetoothManagerDelegate.h; sourceTree = "<group>"; };
@@ -307,6 +308,7 @@
 				33A0514E193E61CC00FED071 /* Connichiwa.h */,
 				334AB745193FDADC00A15999 /* CWWebApplication.h */,
 				334AB746193FDADC00A15999 /* CWWebApplication.m */,
+				332B686D1958E55E004B0600 /* CWWebApplicationState.h */,
 				330BA3D1193F8CB300D9E54C /* CWWebserverManager.h */,
 				330BA3D2193F8CB300D9E54C /* CWWebserverManager.m */,
 				3367186B194776C1000A7164 /* CWWebserverDelegate.h */,

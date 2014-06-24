@@ -8,6 +8,7 @@
 
 #import "CWBluetoothManager.h"
 #import "CWBluetoothConnection.h"
+#import "CWWebApplicationState.h"
 #import "CWUtil.h"
 #import "CWConstants.h"
 #import "CWDebug.h"
@@ -16,10 +17,11 @@
 
 @interface CWBluetoothManager () <CBCentralManagerDelegate, CBPeripheralManagerDelegate, CBPeripheralDelegate>
 
+@property (readwrite, weak) id<CWWebApplicationState> appState;
+
 @property (readwrite, strong) CBCentralManager *centralManager;
 @property (readwrite, strong) NSMutableArray *connections;
 
-@property (readwrite, strong) NSString *identifier;
 @property (readwrite, strong) CBPeripheralManager *peripheralManager;
 @property (readwrite, strong) CBMutableService *advertisedService;
 @property (readwrite, strong) CBMutableCharacteristic *advertisedInitialCharacteristic;
@@ -47,11 +49,11 @@
 @implementation CWBluetoothManager
 
 
-- (instancetype)init
+- (instancetype)initWithApplicationState:(id<CWWebApplicationState>)appState
 {
     self = [super init];
     
-    self.identifier = [[NSUUID UUID] UUIDString];
+    self.appState = appState;
     
     dispatch_queue_t centralQueue = dispatch_queue_create("connichiwacentralqueue", DISPATCH_QUEUE_SERIAL);
     dispatch_queue_t peripheralQueue = dispatch_queue_create("connichiwaperipheralqueue", DISPATCH_QUEUE_SERIAL);
@@ -159,12 +161,12 @@
 
 - (void)_doStartAdvertising
 {
-    DLog(@"Starting to advertise to other BT devices with identifier %@...", self.identifier);
+    DLog(@"Starting to advertise to other BT devices with identifier %@...", self.appState.identifier);
     [self.peripheralManager startAdvertising:@{ CBAdvertisementDataServiceUUIDsKey : @[[CBUUID UUIDWithString:BLUETOOTH_SERVICE_UUID]] }];
     
     if ([self.delegate respondsToSelector:@selector(didStartAdvertisingWithIdentifier:)])
     {
-        [self.delegate didStartAdvertisingWithIdentifier:self.identifier];
+        [self.delegate didStartAdvertisingWithIdentifier:self.appState.identifier];
     }
 }
 
@@ -221,7 +223,7 @@
 
 - (void)_sendInitialToCentral:(CBCentral *)central
 {
-    NSDictionary *sendDictionary = @{ @"identifier": self.identifier };
+    NSDictionary *sendDictionary = @{ @"identifier": self.appState.identifier };
     DLog(@"Writing value for own characteristic: %@ ", sendDictionary);
     NSData *initialData = [NSJSONSerialization dataWithJSONObject:sendDictionary options:NSJSONWritingPrettyPrinted error:nil];
     BOOL didSend = [self.peripheralManager updateValue:initialData forCharacteristic:self.advertisedInitialCharacteristic onSubscribedCentrals:@[central]];
@@ -238,8 +240,9 @@
     CWBluetoothConnection *connection = [self _connectionForPeripheral:peripheral];
     NSArray *ips = [CWUtil deviceInterfaceAddresses];
     for (NSString *ip in ips) {
-        DLog(@"Writing value %@", @{ @"ip": ip } );
-        NSData *data = [CWUtil dataFromDictionary:@{ @"ip": ip }];
+        NSString *ipWithPort = [NSString stringWithFormat:@"%@:%d", ip, WEBSERVER_PORT];
+        DLog(@"Writing value %@", @{ @"ip": ipWithPort } );
+        NSData *data = [CWUtil dataFromDictionary:@{ @"ip": ipWithPort }];
         [peripheral writeValue:data forCharacteristic:characteristic type:CBCharacteristicWriteWithResponse];
         connection.pendingIPWrites++;
     }
@@ -377,6 +380,17 @@
 - (void)centralManager:(CBCentralManager *)central didDisconnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error
 {
     DLog(@"CM: didDisconnectPeripheral '%@', error %@", peripheral.name, error);
+    
+    CWBluetoothConnection *connection = [self _connectionForPeripheral:peripheral];
+    if (connection == nil) return;
+    
+    if (connection.state != CWBluetoothConnectionStateUnknown &&
+        connection.state != CWBluetoothConnectionStateInitialDone &&
+        connection.state != CWBluetoothConnectionStateIPDone &&
+        connection.state != CWBluetoothConnectionStateErrored)
+    {
+        connection.state = CWBluetoothConnectionStateErrored;
+    }
 }
 
 
@@ -536,16 +550,7 @@
         }
         
         if (connection.pendingIPWrites == 0)
-        {
-            //
-            //
-            // TODO
-            //
-            // edge cases to consider: websocket connection arrives after timeout (cancel websocket connection?)
-            //                         websocket connection arrives BEFORE we even start the timeout - shouldn't be too much of a problem, as we should remember all remote devices somewhere anyway I guess (CWWebApplication?) so we don't connect to them twice or something
-            //
-            //
-            
+        {            
             //If the state is not "IPDone" yet, it means none of the IP writes came back with an CBATTErrorSuccess response - none of the IPs worked
             if (connection.state == CWBluetoothConnectionStateIPSent)
             {
@@ -626,11 +631,13 @@
             continue;
         }
         
+        //If we can't become a remote anyway, we reject any IPs we receive
+        if ([self.appState canBecomeRemote] == NO) continue;
+        
         NSHTTPURLResponse *response = nil;
         NSError *error = nil;
         
-        //TODO port should be sent by the central
-        NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:%d/check", retrievedData[@"ip"], WEBSERVER_PORT]];
+        NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@/check", retrievedData[@"ip"]]];
         NSMutableURLRequest *request = [NSMutableURLRequest
                                         requestWithURL:url
                                         cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
@@ -645,7 +652,7 @@
             DLog(@"Found working URL: %@", url);
             if ([self.delegate respondsToSelector:@selector(didReceiveDeviceURL:)])
             {
-                [self.delegate didReceiveDeviceURL:[url URLByDeletingLastPathComponent]];
+                [self.delegate didReceiveDeviceURL:[url URLByDeletingLastPathComponent]]; //remove /check
             }
             requestsValid = YES;
         }
@@ -653,32 +660,6 @@
     
     if (requestsValid) [self.peripheralManager respondToRequest:[requests objectAtIndex:0] withResult:CBATTErrorSuccess];
     else [self.peripheralManager respondToRequest:[requests objectAtIndex:0] withResult:CBATTErrorAttributeNotFound];
-    
-//        NSDictionary *retrievedData = [CWUtil dictionaryFromJSONData:writeRequest.value];
-//        
-//        if (retrievedData[@"ip"] == nil)
-//        {
-//            requestsValid = NO;
-//            break;
-//        }
-//        
-//        [retrievedIPs addObject:retrievedData[@"ip"]];
-//    }
-//    
-//    if (requestsValid == NO)
-//    {
-//        //TODO should we really ignore here?
-//        DLog(@"Error in the revieved IPs");
-//        [self.peripheralManager respondToRequest:[requests objectAtIndex:0] withResult:CBATTErrorUnlikelyError];
-//    }
-//    else
-//    {
-//        if ([self.delegate respondsToSelector:@selector(didRecieveNetworkAddresses:)])
-//        {
-//            [self.delegate didRecieveNetworkAddresses:retrievedIPs];
-//        }
-//        [self.peripheralManager respondToRequest:[requests objectAtIndex:0] withResult:CBATTErrorSuccess];
-//    }
 }
 
 
