@@ -1,4 +1,4 @@
-/* global CWDeviceManager, CWDeviceID, CWDevice, CWDeviceState */
+/* global CWDeviceManager, CWDeviceID, CWDevice, CWDeviceState, CWEventManager */
 "use strict";
 
 

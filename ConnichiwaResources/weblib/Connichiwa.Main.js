@@ -1,4 +1,4 @@
-/* global LazyLoad, CWDeviceManager, CWNativeCommunicationParser, CWDebug, CWUtil, CWEventManager, CWWebserverCommunicationParser, CWDevice, CWDeviceState */
+/* global LazyLoad, CWDeviceManager, CWNativeCommunicationParser, CWDebug, CWUtil, CWEventManager, CWWebserverCommunicationParser, CWDevice, CWDeviceState, CWRemoteCommunicationParser */
 "use strict";
 
 
@@ -121,12 +121,20 @@ var Connichiwa = (function()
     
     device.state = CWDeviceState.CONNECTING;
     var data = { type: "connectionRequest", identifier: device.getIdentifier() };
-    _websocket.send(JSON.stringify(data));
+    _send(JSON.stringify(data));
+  };
+  
+  var send = function(device, message)
+  {
+    message.target = "remote";
+    message.targetIdentifier = device.getIdentifier();
+    _send(JSON.stringify(message));
   };
 
   return {
+    _send   : _send,
     on      : on,
     connect : connect,
-    _send   : _send
+    send    : send
   };
 })();

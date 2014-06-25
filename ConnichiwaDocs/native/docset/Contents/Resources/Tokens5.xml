@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Classes/CWDeviceID.html">
+	<File path="Classes/CWUtil.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/cl/CWDeviceID</TokenIdentifier>
-			<Abstract type="html">Represents a unique ID for a connichiwa device. Each ID is made up of a major and a minor part and need to be unique among the different devices.</Abstract>
-			<DeclaredIn>CWDeviceID.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/cl/CWUtil</TokenIdentifier>
+			<Abstract type="html">A utility helper class that contains some useful methods that are needed amongst different Connichiwa components</Abstract>
+			<DeclaredIn>CWUtil.h</DeclaredIn>
             
 			
 			<NodeRef refid="5"/>
@@ -13,106 +13,65 @@
 		
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWDeviceID/setMajor:</TokenIdentifier>
-			<Abstract type="html">The major part of the ID</Abstract>
-			<DeclaredIn>CWDeviceID.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/clm/CWUtil/escapedJSONStringFromDictionary:</TokenIdentifier>
+			<Abstract type="html">Transforms a dictionary into a JSON string and escaped the string, so it can be used safely. The transformation is done via NSJSONSerialization, so the dictionary must contain only objects that can be serialized by NSJSONSerialization.</Abstract>
+			<DeclaredIn>CWUtil.h</DeclaredIn>
 			
-			<Declaration>@property (readonly) NSNumber *major</Declaration>
-			
-			
-			<Anchor>//api/name/major</Anchor>
-            <NodeRef refid="5"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWDeviceID/major</TokenIdentifier>
-			<Abstract type="html">The major part of the ID</Abstract>
-			<DeclaredIn>CWDeviceID.h</DeclaredIn>
-			
-			<Declaration>@property (readonly) NSNumber *major</Declaration>
-			
-			
-			<Anchor>//api/name/major</Anchor>
-            <NodeRef refid="5"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/CWDeviceID/major</TokenIdentifier>
-			<Abstract type="html">The major part of the ID</Abstract>
-			<DeclaredIn>CWDeviceID.h</DeclaredIn>
-			
-			<Declaration>@property (readonly) NSNumber *major</Declaration>
-			
-			
-			<Anchor>//api/name/major</Anchor>
-            <NodeRef refid="5"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWDeviceID/setMinor:</TokenIdentifier>
-			<Abstract type="html">The minor part of the ID</Abstract>
-			<DeclaredIn>CWDeviceID.h</DeclaredIn>
-			
-			<Declaration>@property (readonly) NSNumber *minor</Declaration>
-			
-			
-			<Anchor>//api/name/minor</Anchor>
-            <NodeRef refid="5"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWDeviceID/minor</TokenIdentifier>
-			<Abstract type="html">The minor part of the ID</Abstract>
-			<DeclaredIn>CWDeviceID.h</DeclaredIn>
-			
-			<Declaration>@property (readonly) NSNumber *minor</Declaration>
-			
-			
-			<Anchor>//api/name/minor</Anchor>
-            <NodeRef refid="5"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/CWDeviceID/minor</TokenIdentifier>
-			<Abstract type="html">The minor part of the ID</Abstract>
-			<DeclaredIn>CWDeviceID.h</DeclaredIn>
-			
-			<Declaration>@property (readonly) NSNumber *minor</Declaration>
-			
-			
-			<Anchor>//api/name/minor</Anchor>
-            <NodeRef refid="5"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWDeviceID/initWithMajor:minor:</TokenIdentifier>
-			<Abstract type="html">Creates a new ID with the given major and minor.</Abstract>
-			<DeclaredIn>CWDeviceID.h</DeclaredIn>
-			
-			<Declaration>- (instancetype)initWithMajor:(NSNumber *)major minor:(NSNumber *)minor</Declaration>
+			<Declaration>+ (NSString *)escapedJSONStringFromDictionary:(NSDictionary *)dictionary</Declaration>
 			<Parameters>
 				<Parameter>
-					<Name>major</Name>
-					<Abstract type="html">The major part of the ID</Abstract>
-				</Parameter><Parameter>
-					<Name>minor</Name>
-					<Abstract type="html">The minor part of the ID</Abstract>
+					<Name>dictionary</Name>
+					<Abstract type="html">The dictionary to transform</Abstract>
 				</Parameter>
 			</Parameters>
-			<ReturnValue><Abstract type="html">A new ID instance</Abstract></ReturnValue>
-			<Anchor>//api/name/initWithMajor:minor:</Anchor>
+			<ReturnValue><Abstract type="html">An escaped JSON string that represents the dictionary</Abstract></ReturnValue>
+			<Anchor>//api/name/escapedJSONStringFromDictionary:</Anchor>
             <NodeRef refid="5"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWDeviceID/init</TokenIdentifier>
-			<Abstract type="html">An ID without a major and minor part is invalid, therefore using this method will throw an exception immediatly.</Abstract>
-			<DeclaredIn>CWDeviceID.m</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/clm/CWUtil/dictionaryFromJSONData:</TokenIdentifier>
+			<Abstract type="html">Transform a given JSON data object, as it is for example created by JSONDataFromDictionary: into a dictionary. NSJSONSerialization is used, to the JSON string must be decodable by NSJSONSerialization.</Abstract>
+			<DeclaredIn>CWUtil.h</DeclaredIn>
 			
-			<Declaration>- (instancetype)init</Declaration>
+			<Declaration>+ (NSDictionary *)dictionaryFromJSONData:(NSData *)JSON</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>JSON</Name>
+					<Abstract type="html">The NSData object representing a JSON string</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">An NSDictionary that represents the JSON</Abstract></ReturnValue>
+			<Anchor>//api/name/dictionaryFromJSONData:</Anchor>
+            <NodeRef refid="5"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/CWUtil/JSONDataFromDictionary:</TokenIdentifier>
+			<Abstract type="html">Transforms a dictionary into a JSON data object. The resulting NSData object can then be decoded by using dictionaryFromJSONData: to retrieve the original dictionary. NSJSONSerialization is used, so the dictionary must contain only objects that can be serialized by NSJSONSerialization.</Abstract>
+			<DeclaredIn>CWUtil.h</DeclaredIn>
 			
-			<ReturnValue><Abstract type="html">nil</Abstract></ReturnValue>
-			<Anchor>//api/name/init</Anchor>
+			<Declaration>+ (NSData *)JSONDataFromDictionary:(NSDictionary *)dictionary</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>dictionary</Name>
+					<Abstract type="html">The dictionary to transform</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">An NSData object that represents the JSON string for the dictioanry</Abstract></ReturnValue>
+			<Anchor>//api/name/JSONDataFromDictionary:</Anchor>
+            <NodeRef refid="5"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/CWUtil/deviceInterfaceAddresses</TokenIdentifier>
+			<Abstract type="html">Retrieves a filtered array of this device&apos;s network interface addresses. Only relevant addresses will be returned, which for example includes the WiFi address or a BT PAN address if present.</Abstract>
+			<DeclaredIn>CWUtil.h</DeclaredIn>
+			
+			<Declaration>+ (NSArray *)deviceInterfaceAddresses</Declaration>
+			
+			<ReturnValue><Abstract type="html">An NSArray, each entry is a string that represents a relevant address of a network interface of this device.</Abstract></ReturnValue>
+			<Anchor>//api/name/deviceInterfaceAddresses</Anchor>
             <NodeRef refid="5"/>
 		</Token>
 		

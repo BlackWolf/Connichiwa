@@ -1,4 +1,4 @@
-/* global CWDebug, CWDeviceManager, CWDeviceState, CWEventManager */
+/* global CWDebug, CWDeviceManager, CWDeviceState, CWEventManager, Connichiwa */
 "use strict";
 
 

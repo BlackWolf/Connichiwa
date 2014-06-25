@@ -143,6 +143,11 @@ function CWDevice(identifier, options)
     this.state !== CWDeviceState.CONNECTING && 
     this.state !== CWDeviceState.LOST;
   };
+  
+  this.isConnected = function()
+  {
+    return (this.state === CWDeviceState.CONNECTED);
+  };
 
   return this;
 }
@@ -336,7 +341,7 @@ var CWEventManager = (function()
     trigger  : trigger
   };
 })();
-/* global CWDeviceManager, CWDeviceID, CWDevice, CWDeviceState */
+/* global CWDeviceManager, CWDeviceID, CWDevice, CWDeviceState, CWEventManager */
 "use strict";
 
 
@@ -406,7 +411,7 @@ var CWNativeCommunicationParser = (function()
     parse : parse
   };
 })();
-/* global CWDebug, CWDeviceManager, CWDeviceState, CWEventManager */
+/* global CWDebug, CWDeviceManager, CWDeviceState, CWEventManager, Connichiwa */
 "use strict";
 
 
@@ -550,7 +555,7 @@ var CWWebserverCommunicationParser = (function()
     parse : parse
   };
 })();
-/* global LazyLoad, CWDeviceManager, CWNativeCommunicationParser, CWDebug, CWUtil, CWEventManager, CWWebserverCommunicationParser, CWDevice, CWDeviceState */
+/* global LazyLoad, CWDeviceManager, CWNativeCommunicationParser, CWDebug, CWUtil, CWEventManager, CWWebserverCommunicationParser, CWDevice, CWDeviceState, CWRemoteCommunicationParser */
 "use strict";
 
 
@@ -673,12 +678,20 @@ var Connichiwa = (function()
     
     device.state = CWDeviceState.CONNECTING;
     var data = { type: "connectionRequest", identifier: device.getIdentifier() };
-    _websocket.send(JSON.stringify(data));
+    _send(JSON.stringify(data));
+  };
+  
+  var send = function(device, message)
+  {
+    message.target = "remote";
+    message.targetIdentifier = device.getIdentifier();
+    _send(JSON.stringify(message));
   };
 
   return {
+    _send   : _send,
     on      : on,
     connect : connect,
-    _send   : _send
+    send    : send
   };
 })();

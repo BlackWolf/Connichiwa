@@ -64,7 +64,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="connichiwa.js.html">connichiwa.js</a>, <a href="connichiwa.js.html#line124">line 124</a>
+        <a href="connichiwa.js.html">connichiwa.js</a>, <a href="connichiwa.js.html#line77">line 77</a>
     </li></ul></dd>
     
 
@@ -98,63 +98,7 @@
         <dl>
             
 <dt>
-    <h4 class="name" id="_id"><span class="type-signature">(inner) </span>_id<span class="type-signature"></span></h4>
-
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        <p>The CWDeviceID representing this device's ID</p>
-    </div>
-    
-
-    
-
-    
-<dl class="details">
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="connichiwa.js.html">connichiwa.js</a>, <a href="connichiwa.js.html#line145">line 145</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-    
-
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="_proximity"><span class="type-signature">(inner) </span>_proximity<span class="type-signature"></span></h4>
+    <h4 class="name" id="_distance"><span class="type-signature">(inner) </span>_distance<span class="type-signature"></span></h4>
 
     
 </dt>
@@ -190,7 +134,63 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="connichiwa.js.html">connichiwa.js</a>, <a href="connichiwa.js.html#line150">line 150</a>
+        <a href="connichiwa.js.html">connichiwa.js</a>, <a href="connichiwa.js.html#line103">line 103</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="_identifier"><span class="type-signature">(inner) </span>_identifier<span class="type-signature"></span></h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>A string representing a unique identifier of the device</p>
+    </div>
+    
+
+    
+
+    
+<dl class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="connichiwa.js.html">connichiwa.js</a>, <a href="connichiwa.js.html#line98">line 98</a>
     </li></ul></dd>
     
 
@@ -216,7 +216,7 @@
         <dl>
             
 <dt>
-    <h4 class="name" id="getID"><span class="type-signature">(static) </span>getID<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="CWDeviceID.html">CWDeviceID</a>}</span></h4>
+    <h4 class="name" id="getDistance"><span class="type-signature">(static) </span>getDistance<span class="signature">()</span><span class="type-signature"> &rarr; {double}</span></h4>
 
     
 </dt>
@@ -224,7 +224,7 @@
 
     
     <div class="description">
-        <p>Returns the ID of this device</p>
+        <p>Returns the current distance between the local device and the device represented by this CWDevice instance, in meters.</p>
     </div>
     
 
@@ -257,7 +257,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="connichiwa.js.html">connichiwa.js</a>, <a href="connichiwa.js.html#line166">line 166</a>
+        <a href="connichiwa.js.html">connichiwa.js</a>, <a href="connichiwa.js.html#line130">line 130</a>
     </li></ul></dd>
     
 
@@ -284,7 +284,7 @@
     
             
 <div class="param-desc">
-    <p>the ID of this device</p>
+    <p>the distance between the local device and this CWDevice in meters</p>
 </div>
 
 
@@ -295,7 +295,7 @@
     </dt>
     <dd>
         
-<span class="param-type"><a href="CWDeviceID.html">CWDeviceID</a></span>
+<span class="param-type">double</span>
 
 
     </dd>
@@ -309,7 +309,100 @@
         
             
 <dt>
-    <h4 class="name" id="updateProximity"><span class="type-signature">(static) </span>updateProximity<span class="signature">(newProximity)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="getIdentifier"><span class="type-signature">(static) </span>getIdentifier<span class="signature">()</span><span class="type-signature"> &rarr; {string}</span></h4>
+
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Returns the identifier of this device</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+<dl class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="connichiwa.js.html">connichiwa.js</a>, <a href="connichiwa.js.html#line120">line 120</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>The identifier of this device</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
+
+
+    </dd>
+</dl>
+
+        
+
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="updateDistance"><span class="type-signature">(static) </span>updateDistance<span class="signature">(value)</span><span class="type-signature"></span></h4>
 
     
 </dt>
@@ -351,13 +444,13 @@
 
         <tr>
             
-                <td class="name"><code>newProximity</code></td>
+                <td class="name"><code>value</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">double</span>
 
 
             
@@ -367,7 +460,7 @@
 
             
 
-            <td class="description last"><p>The new distance as a string</p></td>
+            <td class="description last"><p>The new distance value in meters</p></td>
         </tr>
 
     
@@ -398,7 +491,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="connichiwa.js.html">connichiwa.js</a>, <a href="connichiwa.js.html#line152">line 152</a>
+        <a href="connichiwa.js.html">connichiwa.js</a>, <a href="connichiwa.js.html#line105">line 105</a>
     </li></ul></dd>
     
 
@@ -421,99 +514,6 @@
     
 
     
-
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="updateProximity"><span class="type-signature">(static) </span>updateProximity<span class="signature">()</span><span class="type-signature"> &rarr; {string}</span></h4>
-
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        <p>Returns the current distance between the local device and the device represented by this CWDevice instance, as a string.</p>
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-<dl class="details">
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="connichiwa.js.html">connichiwa.js</a>, <a href="connichiwa.js.html#line175">line 175</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    <p>a string describing the distance between the local device and this CWDevice</p>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">string</span>
-
-
-    </dd>
-</dl>
-
-        
 
     
 </dd>
@@ -610,7 +610,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="connichiwa.js.html">connichiwa.js</a>, <a href="connichiwa.js.html#line194">line 194</a>
+        <a href="connichiwa.js.html">connichiwa.js</a>, <a href="connichiwa.js.html#line162">line 162</a>
     </li></ul></dd>
     
 
@@ -703,7 +703,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="connichiwa.js.html">connichiwa.js</a>, <a href="connichiwa.js.html#line207">line 207</a>
+        <a href="connichiwa.js.html">connichiwa.js</a>, <a href="connichiwa.js.html#line173">line 173</a>
     </li></ul></dd>
     
 
@@ -768,13 +768,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Namespaces</h3><ul><li><a href="Connichiwa.html">Connichiwa</a></li><li><a href="Connichiwa.Events.html">Events</a></li><li><a href="Connichiwa.Websocket.html">Websocket</a></li><li><a href="CWDebug.html">CWDebug</a></li><li><a href="CWDevice.html">CWDevice</a></li><li><a href="CWDeviceID.html">CWDeviceID</a></li><li><a href="CWDeviceManager.html">CWDeviceManager</a></li><li><a href="CWEventManager.html">CWEventManager</a></li><li><a href="CWNativeCommunicationParser.html">CWNativeCommunicationParser</a></li><li><a href="CWUtil.html">CWUtil</a></li><li><a href="CWWebserverCommunicationParser.html">CWWebserverCommunicationParser</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Namespaces</h3><ul><li><a href="Connichiwa.html">Connichiwa</a></li><li><a href="Connichiwa.Events.html">Events</a></li><li><a href="Connichiwa.Websocket.html">Websocket</a></li><li><a href="CWDebug.html">CWDebug</a></li><li><a href="CWDevice.html">CWDevice</a></li><li><a href="CWDeviceManager.html">CWDeviceManager</a></li><li><a href="CWEventManager.html">CWEventManager</a></li><li><a href="CWNativeCommunicationParser.html">CWNativeCommunicationParser</a></li><li><a href="CWRemoteCommunicationParser.html">CWRemoteCommunicationParser</a></li><li><a href="CWUtil.html">CWUtil</a></li><li><a href="CWWebserverCommunicationParser.html">CWWebserverCommunicationParser</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha7</a> on Mon Jun 16 2014 18:44:34 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha7</a> on Wed Jun 25 2014 18:37:14 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

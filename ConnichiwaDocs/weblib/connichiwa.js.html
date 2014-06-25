@@ -85,65 +85,18 @@ var CWDebug = (function()
     log : log
   };
 })();
-/* global CWUtil, CWEventManager */
+/* global CWUtil, CWEventManager, CWDebug */
 "use strict";
 
 
 
-/**
- * An instance of this class described the unique ID of a single device (the local device or a remote device)
- *
- * @param {number} major The major part of the ID
- * @param {number} minor The minor part of the ID
- * @returns {CWDeviceID} a new CWDeviceID instance
- *
- * @namespace CWDeviceID
- */
-function CWDeviceID(major, minor) {
-  if (CWUtil.isInt(major) === false || CWUtil.isInt(minor) === false) throw "CWDeviceID must contain a valid major and a minor value";
-
-  /**
-   * The major part of this ID
-   */
-  var _major = major;
-
-  /**
-   * The minor part of this ID
-   */
-  var _minor = minor;
-
-  this.getMajor = function() { return _major; };
-  this.getMinor = function() { return _minor; };
-
-  return this;
-}
-
-
-/**
- * Checks if this CWDeviceID is equal to another
- *
- * @param {object} object another object
- * @returns {bool} true if the object is a CWDeviceID with the same major and minor part
- *
- * @memberof CWDeviceID
- */
-CWDeviceID.prototype.equalTo = function(object)
+var CWDeviceState = 
 {
-  if (CWDeviceID.prototype.isPrototypeOf(object) === false) return false;
-
-  return (this.getMajor() === object.getMajor() &amp;&amp; this.getMinor() === object.getMinor());
-};
-
-
-/**
- * Transforms this ID into a string for output
- *
- * @returns {string} a string describing this ID
- *
- * @memberof CWDeviceID
- */
-CWDeviceID.prototype.toString = function() {
-  return "(" + this.getMajor() + "." + this.getMinor() + ")";
+  DISCOVERED        : "discovered",
+  CONNECTING        : "connecting",
+  CONNECTED         : "connected",
+  CONNECTION_FAILED : "connection_failed",
+  LOST              : "lost"
 };
 
 
@@ -153,60 +106,75 @@ CWDeviceID.prototype.toString = function() {
  *
  * @namespace CWDevice
  */
-function CWDevice(id, options)
+function CWDevice(identifier, options)
 {
-  if (CWDeviceID.prototype.isPrototypeOf(id) === false)  throw "Cannot create device without a valid CWDeviceID";
-
   if (CWUtil.isObject(options) === false) options = {};
   var passedOptions = options;
   options = {};
 
   var defaultOptions = {
-    proximity : "unknown",
+    distance : -1,
   };
   $.extend(options, defaultOptions, passedOptions);
+  
+  this.state = CWDeviceState.DISCOVERED;
 
   /**
-   * The CWDeviceID representing this device's ID
+   * A string representing a unique identifier of the device
    */
-  var _id = id;
-
+  var _identifier = identifier;
+  
   /**
    * The current distance between the local device and the device represented by this CWDevice instance
    */
-  var _proximity = options.proximity;
+  var _distance = options.distance;
 
   /**
    * Updates the distance between the local device and the device represented by the instance of this class
    *
-   * @param {string} newProximity The new distance as a string
+   * @param {double} value The new distance value in meters
    *
-   * @method updateProximity
+   * @method updateDistance
    * @memberof CWDevice
    */
-  this.updateProximity = function(newProximity)
+  this.updateDistance = function(value)
   {
-    //TODO check proximity string
-    _proximity = newProximity;
+    _distance = value;
+    CWDebug.log("Distance of " + this + " changed to " + _distance);
+    CWEventManager.trigger("deviceDistanceChanged", this);
   };
 
   /**
-   * Returns the ID of this device
+   * Returns the identifier of this device
    *
-   * @returns {CWDeviceID} the ID of this device
-   * @method getID
+   * @returns {string} The identifier of this device
+   *
+   * @method getIdentifier
    * @memberof CWDevice
    */
-  this.getID        = function() { return _id; };
+  this.getIdentifier = function() { return _identifier; };
 
   /**
-   * Returns the current distance between the local device and the device represented by this CWDevice instance, as a string.
+   * Returns the current distance between the local device and the device represented by this CWDevice instance, in meters.
    *
-   * @returns {string} a string describing the distance between the local device and this CWDevice
-   * @method updateProximity
+   * @returns {double} the distance between the local device and this CWDevice in meters
+   *
+   * @method getDistance
    * @memberof CWDevice
    */
-  this.getProximity = function() { return _proximity; };
+  this.getDistance = function() { return _distance; };
+  
+  this.canBeConnected = function() 
+  { 
+    return this.state !== CWDeviceState.CONNECTED &amp;&amp; 
+    this.state !== CWDeviceState.CONNECTING &amp;&amp; 
+    this.state !== CWDeviceState.LOST;
+  };
+  
+  this.isConnected = function()
+  {
+    return (this.state === CWDeviceState.CONNECTED);
+  };
 
   return this;
 }
@@ -220,9 +188,7 @@ function CWDevice(id, options)
  */
 CWDevice.prototype.equalTo = function(object)
 {
-  if (CWDevice.prototype.isPrototypeOf(object) === false) return false;
-
-  return this.getID().equalTo(object.getID());
+  return this.getIdentifier() === object.getIdentifier();
 };
 
 
@@ -232,9 +198,9 @@ CWDevice.prototype.equalTo = function(object)
  * @returns {string} a string representation of this device
  */
 CWDevice.prototype.toString = function() {
-  return this.getID().toString();
+  return this.getIdentifier();
 };
-/* global CWDevice, CWDeviceID, CWEventManager, CWDebug */
+/* global CWDevice, CWEventManager, CWDebug */
 "use strict";
 
 
@@ -247,9 +213,9 @@ CWDevice.prototype.toString = function() {
 var CWDeviceManager = (function()
 {
   /**
-   * The CWDeviceID of the local device (the device the webserver is running on)
+   * The identifier of the local device (the device the webserver is running on)
    */
-  var _localID;
+  var _localIdentifier;
 
   /**
    * An array of detected remote devices as CWDevice objects. All detected devices are in here, they are not necessarily connected to or used in any way by this device.
@@ -258,19 +224,19 @@ var CWDeviceManager = (function()
 
 
   /**
-   * Sets the ID of the local device under which it is advertised to other devices
+   * Sets the identifier of the local device under which it is advertised to other devices
    *
-   * @param {CWDeviceID} ID The local ID
+   * @param {string} identifier The identifier
    *
    * @memberof CWDeviceManager
    */
-  var setLocalID = function(ID)
+  var setLocalID = function(identifier)
   {
-    if (_localID !== undefined) throw "Local ID can only be set once";
+    if (_localIdentifier !== undefined) throw "Local identifier can only be set once";
 
-    _localID = ID;
-    CWDebug.log("Local ID set to " + _localID.toString());
-    CWEventManager.trigger("localIDSet", _localID);
+    _localIdentifier = identifier;
+    CWDebug.log("Local identifier set to " + _localIdentifier);
+    CWEventManager.trigger("localIdentifierSet", _localIdentifier);
   };
 
 
@@ -284,7 +250,7 @@ var CWDeviceManager = (function()
   var addDevice = function(newDevice)
   {
     if (CWDevice.prototype.isPrototypeOf(newDevice) === false) throw "Cannot add a non-device";
-    if (_getDeviceWithID(newDevice.getID()) !== null) throw "Device with ID " + newDevice.getID() + " was added twice";
+    if (getDeviceWithIdentifier(newDevice.getIdentifier()) !== null) return;
 
     _remoteDevices.push(newDevice);
     CWDebug.log("Detected new device: " + newDevice);
@@ -293,39 +259,17 @@ var CWDeviceManager = (function()
 
 
   /**
-   * Updates the distance between the local and a remote device
-   *
-   * @param {CWDeviceID} ID The ID of the device that changed
-   * @param {string} newProximity A string describing the new proximity
-   *
-   * @memberof CWDeviceManager
-   */
-  var updateDeviceProximity = function(ID, newProximity)
-  {
-    if (CWDeviceID.prototype.isPrototypeOf(ID) === false) throw "A DeviceID is needed to update a device";
-
-    var device = _getDeviceWithID(ID);
-    if (device === null) throw "Tried to change proximity of an undetected device";
-
-    device.updateProximity(newProximity);
-    CWDebug.log("Distance of " + this + " changed to " + newProximity);
-    CWEventManager.trigger("deviceProximityChanged", device);
-  };
-
-
-  /**
    * Removes a remote device from the manager
    *
-   * @param {CWDeviceID} ID The ID of the device to remove
+   * @param {string} identifier The identifier of the device to remove
    *
    * @memberof CWDeviceManager
    */
-  var removeDevice = function(ID)
+  var removeDevice = function(identifier)
   {
-    if (CWDeviceID.prototype.isPrototypeOf(ID) === false) throw "A DeviceID is needed to remove a device";
 
-    var device = _getDeviceWithID(ID);
-    if (device === null) throw "Tried to remove a device that doesn't exist";
+    var device = getDeviceWithIdentifier(identifier);
+    if (device === null) return;
 
     var index = _remoteDevices.indexOf(device);
     _remoteDevices.splice(index, 1);
@@ -334,21 +278,19 @@ var CWDeviceManager = (function()
 
 
   /**
-   * Gets the CWDevice stored under the given ID or null if the device is not stored in this manager
+   * Gets the CWDevice with the given identifier or null if the device is not stored in this manager
    *
-   * @param {CWDeviceID} ID The ID of the device to search for
+   * @param {string} identifier The identifier of the device to search for
    * @returns A CWDevice that belongs to the given ID or null if that device cannot be found
    *
    * @memberof CWDeviceManager
    */
-  var _getDeviceWithID = function(ID)
+  var getDeviceWithIdentifier = function(identifier)
   {
-    if (CWDeviceID.prototype.isPrototypeOf(ID) === false) throw "A DeviceID is needed to search for an existing device";
-
     for (var i = 0; i &lt; _remoteDevices.length; i++)
     {
       var remoteDevice = _remoteDevices[i];
-      if (remoteDevice.getID().equalTo(ID))
+      if (remoteDevice.getIdentifier() === identifier)
       {
         return remoteDevice;
       }
@@ -358,10 +300,10 @@ var CWDeviceManager = (function()
   };
 
   return {
-    setLocalID            : setLocalID,
-    addDevice             : addDevice,
-    updateDeviceProximity : updateDeviceProximity,
-    removeDevice          : removeDevice
+    setLocalID              : setLocalID,
+    addDevice               : addDevice,
+    removeDevice            : removeDevice,
+    getDeviceWithIdentifier : getDeviceWithIdentifier
   };
 })();
 /* global CWDebug */
@@ -426,7 +368,7 @@ var CWEventManager = (function()
     trigger  : trigger
   };
 })();
-/* global CWDeviceManager, CWDeviceID, CWDevice */
+/* global CWDeviceManager, CWDeviceID, CWDevice, CWDeviceState, CWEventManager */
 "use strict";
 
 
@@ -435,27 +377,22 @@ var CWEventManager = (function()
  * The Connichiwa Communication Protocol Parser (Native Layer).  
  * Here the protocol used to communicate between this library and the native layer is parsed. This communication is done via JSON.
  *
- * **Local ID Information** -- type="localid"  
+ * **Local ID Information** -- type="localidentifier"  
  * Contains information about the local device. Format:
- * * major -- the major number of this device
- * * minor -- the minor number of this device
+ * * identifier -- a string identifying the unique ID of the device the weblib runs on
  *
- * **Device Detected** -- type="newdevice"   
+ * **Device Detected** -- type="devicedetected"
  * Contains information about a newly detected device. Format:   
- * * major -- The major part of the device ID
- * * minor -- The minor part of the device ID
- * * proximity -- a string describing the distance of this device to the detected device (either "far", "near" or "immediate")
+ * * identifier -- the identifier of the newly detected device
  *
- * **Device Proximity Changed** -- type="deviceproximitychanged"  
+ * **Device Proximity Changed** -- type="devicedistancechanged"  
  * Contains information about the new proximity of a previously detected device. Format:  
- * * major -- The major part of the device ID
- * * minor -- The minor part of the device ID
- * * proximity -- a string describing the distance of this device to the device (either "far", "near" or "immediate")
+ * * identifier -- the identifier of the device whose distance changed
+ * * distance -- the new distance between this device and the other device, in meters
  *
  * **Device Lost** -- type="devicelost"  
  * Contains information about a device that went out of range or can not be detected anymore for other reasons. Format:  
- * * major -- The major part of the device ID
- * * minor -- The minor part of the device ID
+ * * identifier -- the identifier of the lost device
  *
  * @namespace CWNativeCommunicationParser
  */
@@ -473,19 +410,72 @@ var CWNativeCommunicationParser = (function()
     var object = JSON.parse(message);
     switch (object.type)
     {
-      case "localid":
-        var ID = new CWDeviceID(object.major, object.minor);
-        CWDeviceManager.setLocalID(ID);
-        break;
-      case "newbeacon":
-        var device = new CWDevice(new CWDeviceID(object.major, object.minor), { proximity: object.proximity });
-        CWDeviceManager.addDevice(device);
-        break;
-      case "deviceproximitychanged":
-        CWDeviceManager.updateDeviceProximity(new CWDeviceID(object.major, object.minor), object.proximity);
-        break;
-      case "devicelost":
-        CWDeviceManager.removeDevice(new CWDeviceID(object.major, object.minor));
+    case "localidentifier":
+      CWDeviceManager.setLocalID(object.identifier);
+      break;
+    case "devicedetected":
+      var device = new CWDevice(object.identifier);
+      CWDeviceManager.addDevice(device);
+      break;
+    case "devicedistancechanged":
+      var device = CWDeviceManager.getDeviceWithIdentifier(object.identifier);
+      if (device === null) return;
+      
+      device.updateDistance(object.distance);
+      break;
+    case "devicelost":
+      CWDeviceManager.removeDevice(object.identifier);
+      break;
+    case "connectionRequestFailed":
+      var device = CWDeviceManager.getDeviceWithIdentifier(object.identifier);
+      device.state = CWDeviceState.CONNECTING_FAILED;
+      CWEventManager.trigger("connectionRequestFailed", device);
+      break;
+    }
+  };
+
+  return {
+    parse : parse
+  };
+})();
+/* global CWDebug, CWDeviceManager, CWDeviceState, CWEventManager, Connichiwa */
+"use strict";
+
+
+/**
+ * The Connichiwa Communication Protocol Parser (Remote Device).  
+ * Here the protocol used to communicate between this library and a connected remote device is parsed. The communication is done via JSON.
+ *
+ * **Remote ID Information** -- type="remoteidentifier"  
+ * Contains the identifier of a connected remote device. Format:
+ * * identifier -- a string identifying the unique ID of the device the weblib runs on
+ *
+ * @namespace CWRemoteCommunicationParser
+ */
+var CWRemoteCommunicationParser = (function()
+{
+  /**
+   * Parses a message from the websocket. If the message is none of the messages described by this class, this method will do nothing. Otherwise the message will trigger an appropiate action.
+   *
+   * @param {string} message The message from the websocket
+   *
+   * @memberof CWRemoteCommunicationParser
+   */
+  var parse = function(message)
+  {
+    var object = JSON.parse(message);
+    switch (object.type)
+    {
+      case "remoteidentifier":
+        var device = CWDeviceManager.getDeviceWithIdentifier(object.identifier);
+        if (device === null) return;
+        
+        device.state = CWDeviceState.CONNECTED;
+        
+        var data = { type: "remoteConnected", identifier: object.identifier };
+        Connichiwa._send(JSON.stringify(data));
+        
+        CWEventManager.trigger("deviceConnected", device);
         break;
     }
   };
@@ -592,7 +582,7 @@ var CWWebserverCommunicationParser = (function()
     parse : parse
   };
 })();
-/* global LazyLoad, CWDeviceManager, CWNativeCommunicationParser, CWDebug, CWUtil, CWEventManager */
+/* global LazyLoad, CWDeviceManager, CWNativeCommunicationParser, CWDebug, CWUtil, CWEventManager, CWWebserverCommunicationParser, CWDevice, CWDeviceState, CWRemoteCommunicationParser */
 "use strict";
 
 
@@ -640,8 +630,9 @@ var Connichiwa = (function()
     var message = e.data;
     CWDebug.log("message: " + message);
     
-    CWNativeCommunicationParser.parse(message);
     CWWebserverCommunicationParser.parse(message);
+    CWNativeCommunicationParser.parse(message);
+    CWRemoteCommunicationParser.parse(message);
   };
 
 
@@ -652,6 +643,7 @@ var Connichiwa = (function()
    */
   _websocket.onerror = function()
   {
+    alert("error");
     CWDebug.log("Websocket error");
   };
 
@@ -664,6 +656,12 @@ var Connichiwa = (function()
   _websocket.onclose = function()
   {
     CWDebug.log("Websocket closed");
+  };
+  
+  
+  var _send = function(message)
+  {
+    _websocket.send(message);
   };
 
 
@@ -685,20 +683,43 @@ var Connichiwa = (function()
   {
     var validEvents = [ 
       "ready", 
-      "localIDSet", 
+      "localIdentifierSet", 
       "deviceDetected", 
-      "deviceProximityChanged", 
-      "deviceLost" 
+      "deviceDistanceChanged", 
+      "deviceLost",
+      "deviceConnected",
+      "connectionRequestFailed"
     ];
     
     if (CWUtil.inArray(event, validEvents) === false) throw "Registering for invalid event: " + event;
 
     CWEventManager.register(event, callback);
   };
-
+  
+  
+  var connect = function(device)
+  {
+    if (CWDevice.prototype.isPrototypeOf(device) === false) throw "Need a CWDevice to connect to";
+    
+    if (device.canBeConnected() === false) return;
+    
+    device.state = CWDeviceState.CONNECTING;
+    var data = { type: "connectionRequest", identifier: device.getIdentifier() };
+    _send(JSON.stringify(data));
+  };
+  
+  var send = function(device, message)
+  {
+    message.target = "remote";
+    message.targetIdentifier = device.getIdentifier();
+    _send(JSON.stringify(message));
+  };
 
   return {
-    on : on
+    _send   : _send,
+    on      : on,
+    connect : connect,
+    send    : send
   };
 })();
 </code></pre>
@@ -711,13 +732,13 @@ var Connichiwa = (function()
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Namespaces</h3><ul><li><a href="Connichiwa.html">Connichiwa</a></li><li><a href="Connichiwa.Events.html">Events</a></li><li><a href="Connichiwa.Websocket.html">Websocket</a></li><li><a href="CWDebug.html">CWDebug</a></li><li><a href="CWDevice.html">CWDevice</a></li><li><a href="CWDeviceID.html">CWDeviceID</a></li><li><a href="CWDeviceManager.html">CWDeviceManager</a></li><li><a href="CWEventManager.html">CWEventManager</a></li><li><a href="CWNativeCommunicationParser.html">CWNativeCommunicationParser</a></li><li><a href="CWUtil.html">CWUtil</a></li><li><a href="CWWebserverCommunicationParser.html">CWWebserverCommunicationParser</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Namespaces</h3><ul><li><a href="Connichiwa.html">Connichiwa</a></li><li><a href="Connichiwa.Events.html">Events</a></li><li><a href="Connichiwa.Websocket.html">Websocket</a></li><li><a href="CWDebug.html">CWDebug</a></li><li><a href="CWDevice.html">CWDevice</a></li><li><a href="CWDeviceManager.html">CWDeviceManager</a></li><li><a href="CWEventManager.html">CWEventManager</a></li><li><a href="CWNativeCommunicationParser.html">CWNativeCommunicationParser</a></li><li><a href="CWRemoteCommunicationParser.html">CWRemoteCommunicationParser</a></li><li><a href="CWUtil.html">CWUtil</a></li><li><a href="CWWebserverCommunicationParser.html">CWWebserverCommunicationParser</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha7</a> on Mon Jun 16 2014 18:44:34 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha7</a> on Wed Jun 25 2014 18:37:14 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

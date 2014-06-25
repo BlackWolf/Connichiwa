@@ -54,6 +54,18 @@ websocket.onmessage = function(e)
 {
   var message = e.data;
   log("message: " + message);
+  
+  var object = JSON.parse(message);
+  
+  if (object.type === "show")
+  {
+    $("body").append(object.content);
+  }
+  
+  if (object.type === "update")
+  {
+    $(object.element).html(object.content);
+  }
 };
 
 

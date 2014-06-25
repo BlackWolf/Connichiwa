@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="html/html; charset=utf-8" />
-		<title>CWBeaconAdvertiserDelegate Protocol Reference</title>
+		<title>CWWebserverManagerDelegate Protocol Reference</title>
 		<meta id="xcode-display" name="xcode-display" content="render"/>
 		<link rel="stylesheet" type="text/css" href="../css/styles.css" media="all" />
 		<link rel="stylesheet" type="text/css" media="print" href="../css/stylesPrint.css" />
@@ -16,7 +16,7 @@
 			</div>
 			
 			<div id="title" role="banner">
-				<h1 class="hideInXcode">CWBeaconAdvertiserDelegate Protocol Reference</h1>
+				<h1 class="hideInXcode">CWWebserverManagerDelegate Protocol Reference</h1>
 			</div>
 			<ul id="headerButtons" role="toolbar">
 				<li id="toc_button">
@@ -43,9 +43,13 @@
 	
 	<option value="instance_methods">Instance Methods</option>
 	
-	<option value="//api/name/didStartAdvertisingWithID:">&nbsp;&nbsp;&nbsp;&nbsp;- didStartAdvertisingWithID:</option>
+	<option value="//api/name/didConnectToRemoteDevice:">&nbsp;&nbsp;&nbsp;&nbsp;- didConnectToRemoteDevice:</option>
 	
-	<option value="//api/name/willStartAdvertisingWithID:">&nbsp;&nbsp;&nbsp;&nbsp;- willStartAdvertisingWithID:</option>
+	<option value="//api/name/didConnectToWeblib">&nbsp;&nbsp;&nbsp;&nbsp;- didConnectToWeblib</option>
+	
+	<option value="//api/name/didReceiveConnectionRequest:">&nbsp;&nbsp;&nbsp;&nbsp;- didReceiveConnectionRequest:</option>
+	
+	<option value="//api/name/didStartWebserver">&nbsp;&nbsp;&nbsp;&nbsp;- didStartWebserver</option>
 	
 	
 	
@@ -75,9 +79,13 @@
 
 <li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#instance_methods">Instance Methods</a></span><ul>
 	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/didStartAdvertisingWithID:">didStartAdvertisingWithID:</a></span></li>
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/didConnectToRemoteDevice:">didConnectToRemoteDevice:</a></span></li>
 	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/willStartAdvertisingWithID:">willStartAdvertisingWithID:</a></span></li>
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/didConnectToWeblib">didConnectToWeblib</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/didReceiveConnectionRequest:">didReceiveConnectionRequest:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/didStartWebserver">didStartWebserver</a></span></li>
 	
 </ul></li>
 
@@ -86,7 +94,7 @@
 		</nav>
 		<article>
 			<div id="contents" class="isShowingTOC" role="main">
-				<a title="CWBeaconAdvertiserDelegate Protocol Reference" name="top"></a>
+				<a title="CWWebserverManagerDelegate Protocol Reference" name="top"></a>
 				<div class="main-navigation navigation-top">
 					<ul>
 	<li><a href="../index.html">Index</a></li>
@@ -95,7 +103,7 @@
 				</div>
 				<div id="header">
 					<div class="section-header">
-						<h1 class="title title-header">CWBeaconAdvertiserDelegate Protocol Reference</h1>
+						<h1 class="title title-header">CWWebserverManagerDelegate Protocol Reference</h1>
 					</div>		
 				</div>
 				<div id="container">	
@@ -106,7 +114,7 @@
 	<td class="specification-value">NSObject</td>
 </tr><tr>
 	<td class="specification-title">Declared in</td>
-	<td class="specification-value">CWBeaconAdvertiseDelegate.h</td>
+	<td class="specification-value">CWWebserverManagerDelegate.h</td>
 </tr>
 						</tbody></table></div>
 					
@@ -116,7 +124,7 @@
 					<div class="section section-overview">
 						<a title="Overview" name="overview"></a>
 						<h2 class="subtitle subtitle-overview">Overview</h2>
-						<p>A delegate protocol that receives events about this devices role as a connichiwa beacon by the <a href="../Classes/CWBeaconAdvertiser.html">CWBeaconAdvertiser</a> instance</p>
+						<p>A delegate protocol that receives different events from the <a href="../Classes/CWWebserverManager.html">CWWebserverManager</a> instance</p>
 					</div>
 					
 					
@@ -134,13 +142,25 @@
 						<ul class="task-list">
 							<li>
 	<span class="tooltip">
-		<code><a href="#//api/name/willStartAdvertisingWithID:">&ndash;&nbsp;willStartAdvertisingWithID:</a></code>
+		<code><a href="#//api/name/didStartWebserver">&ndash;&nbsp;didStartWebserver</a></code>
 	</span>
 	
 	
 </li><li>
 	<span class="tooltip">
-		<code><a href="#//api/name/didStartAdvertisingWithID:">&ndash;&nbsp;didStartAdvertisingWithID:</a></code>
+		<code><a href="#//api/name/didConnectToWeblib">&ndash;&nbsp;didConnectToWeblib</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/didReceiveConnectionRequest:">&ndash;&nbsp;didReceiveConnectionRequest:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/didConnectToRemoteDevice:">&ndash;&nbsp;didConnectToRemoteDevice:</a></code>
 	</span>
 	
 	
@@ -162,18 +182,18 @@
 						<h2 class="subtitle subtitle-methods">Instance Methods</h2>
 						
 						<div class="section-method">
-	<a name="//api/name/didStartAdvertisingWithID:" title="didStartAdvertisingWithID:"></a>
-	<h3 class="subsubtitle method-title">didStartAdvertisingWithID:</h3>
+	<a name="//api/name/didConnectToRemoteDevice:" title="didConnectToRemoteDevice:"></a>
+	<h3 class="subsubtitle method-title">didConnectToRemoteDevice:</h3>
 	
 	
 	
 	<div class="method-subsection brief-description">
-		<p>Called after this device started advertising itself to other devices</p>
+		<p>Called when a remote device successfully established a websocket connection to the web library</p>
 	</div>		
 	
     
 
-	<div class="method-subsection method-declaration"><code>- (void)didStartAdvertisingWithID:(CWDeviceID *)<em>ID</em></code></div>
+	<div class="method-subsection method-declaration"><code>- (void)didConnectToRemoteDevice:(NSString *)<em>identifier</em></code></div>
 
     
 	
@@ -181,8 +201,8 @@
 		<h4 class="method-subtitle parameter-title">Parameters</h4>
 		
 		<dl class="argument-def parameter-def">
-			<dt><em>ID</em></dt>
-			<dd><p>The ID under which the device is know advertising itself</p></dd>
+			<dt><em>identifier</em></dt>
+			<dd><p>The identifier of the connected device</p></dd>
 		</dl>
 		
 	</div>
@@ -201,25 +221,61 @@
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">CWBeaconAdvertiseDelegate.h</code><br />
+		<code class="declared-in-ref">CWWebserverManagerDelegate.h</code><br />
 	</div>				
 	
 	
 </div>
 						
 						<div class="section-method">
-	<a name="//api/name/willStartAdvertisingWithID:" title="willStartAdvertisingWithID:"></a>
-	<h3 class="subsubtitle method-title">willStartAdvertisingWithID:</h3>
+	<a name="//api/name/didConnectToWeblib" title="didConnectToWeblib"></a>
+	<h3 class="subsubtitle method-title">didConnectToWeblib</h3>
 	
 	
 	
 	<div class="method-subsection brief-description">
-		<p>Called before this device starts advertising itself to other devices</p>
+		<p>Called when the web library was loaded and established a connection to the webserver</p>
 	</div>		
 	
     
 
-	<div class="method-subsection method-declaration"><code>- (void)willStartAdvertisingWithID:(CWDeviceID *)<em>ID</em></code></div>
+	<div class="method-subsection method-declaration"><code>- (void)didConnectToWeblib</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">CWWebserverManagerDelegate.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/didReceiveConnectionRequest:" title="didReceiveConnectionRequest:"></a>
+	<h3 class="subsubtitle method-title">didReceiveConnectionRequest:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Called when the web library sent a request to use another device as a remote device</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (void)didReceiveConnectionRequest:(NSString *)<em>identifier</em></code></div>
 
     
 	
@@ -227,8 +283,8 @@
 		<h4 class="method-subtitle parameter-title">Parameters</h4>
 		
 		<dl class="argument-def parameter-def">
-			<dt><em>ID</em></dt>
-			<dd><p>The ID under which this device will advertise itself</p></dd>
+			<dt><em>identifier</em></dt>
+			<dd><p>The identifier of the device that should be connected</p></dd>
 		</dl>
 		
 	</div>
@@ -247,7 +303,43 @@
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">CWBeaconAdvertiseDelegate.h</code><br />
+		<code class="declared-in-ref">CWWebserverManagerDelegate.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/didStartWebserver" title="didStartWebserver"></a>
+	<h3 class="subsubtitle method-title">didStartWebserver</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Called when the webserver was started and is ready to accept requests from web clients</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (void)didStartWebserver</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">CWWebserverManagerDelegate.h</code><br />
 	</div>				
 	
 	
@@ -268,7 +360,7 @@
 				<div id="footer">
 					<hr />
 					<div class="footer-copyright">
-						<p><span class="copyright">&copy; 2014 Mario Schreiner. All rights reserved. (Last updated: 2014-06-16)</span><br />
+						<p><span class="copyright">&copy; 2014 Mario Schreiner. All rights reserved. (Last updated: 2014-06-25)</span><br />
 						
 						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2 (build 963)</a>.</span></p>
 						

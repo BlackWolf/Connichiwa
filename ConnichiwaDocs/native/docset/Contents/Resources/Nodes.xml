@@ -36,29 +36,38 @@
 				</Node>
 				
                 
+				<Node>
+					<Name>Constants</Name>
+					<Path>index.html</Path>
+					<Subnodes>
+						<NodeRef refid="11"/>
+						
+					</Subnodes>
+				</Node>
+				
 			</Subnodes>
         </Node>
     </TOC>
 	<Library>
 		
 		<Node id="1" type="file" documentType="reference">
-            <Name>CWBeaconAdvertiser</Name>
-            <Path>Classes/CWBeaconAdvertiser.html</Path>
+            <Name>CWBluetoothConnection</Name>
+            <Path>Classes/CWBluetoothConnection.html</Path>
             
                 <Subnodes>
                 <Node type="section">
-                    <Path>Classes/CWBeaconAdvertiser.html</Path>
+                    <Path>Classes/CWBluetoothConnection.html</Path>
                     <Name>Overview</Name>
                     <Anchor>overview</Anchor>
                 </Node>
                 <Node type="section">
-                    <Path>Classes/CWBeaconAdvertiser.html</Path>
+                    <Path>Classes/CWBluetoothConnection.html</Path>
                     <Name>Tasks</Name>
                     <Anchor>tasks</Anchor>
                 </Node>
                 
                 <Node type="section">
-                    <Path>Classes/CWBeaconAdvertiser.html</Path>
+                    <Path>Classes/CWBluetoothConnection.html</Path>
                     <Name>Properties</Name>
                     <Anchor>properties</Anchor>
                 </Node>
@@ -66,7 +75,7 @@
                 
                 
                 <Node type="section">
-                    <Path>Classes/CWBeaconAdvertiser.html</Path>
+                    <Path>Classes/CWBluetoothConnection.html</Path>
                     <Name>Instance Methods</Name>
                     <Anchor>instance_methods</Anchor>
                 </Node>
@@ -75,23 +84,23 @@
             
         </Node>
 		<Node id="2" type="file" documentType="reference">
-            <Name>CWBeaconMonitor</Name>
-            <Path>Classes/CWBeaconMonitor.html</Path>
+            <Name>CWBluetoothManager</Name>
+            <Path>Classes/CWBluetoothManager.html</Path>
             
                 <Subnodes>
                 <Node type="section">
-                    <Path>Classes/CWBeaconMonitor.html</Path>
+                    <Path>Classes/CWBluetoothManager.html</Path>
                     <Name>Overview</Name>
                     <Anchor>overview</Anchor>
                 </Node>
                 <Node type="section">
-                    <Path>Classes/CWBeaconMonitor.html</Path>
+                    <Path>Classes/CWBluetoothManager.html</Path>
                     <Name>Tasks</Name>
                     <Anchor>tasks</Anchor>
                 </Node>
                 
                 <Node type="section">
-                    <Path>Classes/CWBeaconMonitor.html</Path>
+                    <Path>Classes/CWBluetoothManager.html</Path>
                     <Name>Properties</Name>
                     <Anchor>properties</Anchor>
                 </Node>
@@ -99,7 +108,7 @@
                 
                 
                 <Node type="section">
-                    <Path>Classes/CWBeaconMonitor.html</Path>
+                    <Path>Classes/CWBluetoothManager.html</Path>
                     <Name>Instance Methods</Name>
                     <Anchor>instance_methods</Anchor>
                 </Node>
@@ -162,34 +171,28 @@
             
         </Node>
 		<Node id="5" type="file" documentType="reference">
-            <Name>CWDeviceID</Name>
-            <Path>Classes/CWDeviceID.html</Path>
+            <Name>CWUtil</Name>
+            <Path>Classes/CWUtil.html</Path>
             
                 <Subnodes>
                 <Node type="section">
-                    <Path>Classes/CWDeviceID.html</Path>
+                    <Path>Classes/CWUtil.html</Path>
                     <Name>Overview</Name>
                     <Anchor>overview</Anchor>
                 </Node>
                 <Node type="section">
-                    <Path>Classes/CWDeviceID.html</Path>
+                    <Path>Classes/CWUtil.html</Path>
                     <Name>Tasks</Name>
                     <Anchor>tasks</Anchor>
                 </Node>
                 
-                <Node type="section">
-                    <Path>Classes/CWDeviceID.html</Path>
-                    <Name>Properties</Name>
-                    <Anchor>properties</Anchor>
-                </Node>
-                
-                
                 
                 <Node type="section">
-                    <Path>Classes/CWDeviceID.html</Path>
-                    <Name>Instance Methods</Name>
-                    <Anchor>instance_methods</Anchor>
+                    <Path>Classes/CWUtil.html</Path>
+                    <Name>Class Methods</Name>
+                    <Anchor>class_methods</Anchor>
                 </Node>
+                
                 
             </Subnodes>
             
@@ -228,23 +231,23 @@
             
         </Node>
 		<Node id="7" type="file" documentType="reference">
-            <Name>CWWebserver</Name>
-            <Path>Classes/CWWebserver.html</Path>
+            <Name>CWWebserverManager</Name>
+            <Path>Classes/CWWebserverManager.html</Path>
             
                 <Subnodes>
                 <Node type="section">
-                    <Path>Classes/CWWebserver.html</Path>
+                    <Path>Classes/CWWebserverManager.html</Path>
                     <Name>Overview</Name>
                     <Anchor>overview</Anchor>
                 </Node>
                 <Node type="section">
-                    <Path>Classes/CWWebserver.html</Path>
+                    <Path>Classes/CWWebserverManager.html</Path>
                     <Name>Tasks</Name>
                     <Anchor>tasks</Anchor>
                 </Node>
                 
                 <Node type="section">
-                    <Path>Classes/CWWebserver.html</Path>
+                    <Path>Classes/CWWebserverManager.html</Path>
                     <Name>Properties</Name>
                     <Anchor>properties</Anchor>
                 </Node>
@@ -252,7 +255,7 @@
                 
                 
                 <Node type="section">
-                    <Path>Classes/CWWebserver.html</Path>
+                    <Path>Classes/CWWebserverManager.html</Path>
                     <Name>Instance Methods</Name>
                     <Anchor>instance_methods</Anchor>
                 </Node>
@@ -263,17 +266,17 @@
 		
 		
         <Node id="8" type="file" documentType="reference">
-            <Name>CWBeaconAdvertiserDelegate</Name>
-            <Path>Protocols/CWBeaconAdvertiserDelegate.html</Path>
+            <Name>CWBluetoothManagerDelegate</Name>
+            <Path>Protocols/CWBluetoothManagerDelegate.html</Path>
             
                 <Subnodes>
                 <Node type="section">
-                    <Path>Protocols/CWBeaconAdvertiserDelegate.html</Path>
+                    <Path>Protocols/CWBluetoothManagerDelegate.html</Path>
                     <Name>Overview</Name>
                     <Anchor>overview</Anchor>
                 </Node>
                 <Node type="section">
-                    <Path>Protocols/CWBeaconAdvertiserDelegate.html</Path>
+                    <Path>Protocols/CWBluetoothManagerDelegate.html</Path>
                     <Name>Tasks</Name>
                     <Anchor>tasks</Anchor>
                 </Node>
@@ -281,7 +284,7 @@
                 
                 
                 <Node type="section">
-                    <Path>Protocols/CWBeaconAdvertiserDelegate.html</Path>
+                    <Path>Protocols/CWBluetoothManagerDelegate.html</Path>
                     <Name>Instance Methods</Name>
                     <Anchor>instance_methods</Anchor>
                 </Node>
@@ -290,25 +293,31 @@
             
         </Node>
 		<Node id="9" type="file" documentType="reference">
-            <Name>CWBeaconMonitorDelegate</Name>
-            <Path>Protocols/CWBeaconMonitorDelegate.html</Path>
+            <Name>CWWebApplicationState</Name>
+            <Path>Protocols/CWWebApplicationState.html</Path>
             
                 <Subnodes>
                 <Node type="section">
-                    <Path>Protocols/CWBeaconMonitorDelegate.html</Path>
+                    <Path>Protocols/CWWebApplicationState.html</Path>
                     <Name>Overview</Name>
                     <Anchor>overview</Anchor>
                 </Node>
                 <Node type="section">
-                    <Path>Protocols/CWBeaconMonitorDelegate.html</Path>
+                    <Path>Protocols/CWWebApplicationState.html</Path>
                     <Name>Tasks</Name>
                     <Anchor>tasks</Anchor>
+                </Node>
+                
+                <Node type="section">
+                    <Path>Protocols/CWWebApplicationState.html</Path>
+                    <Name>Properties</Name>
+                    <Anchor>properties</Anchor>
                 </Node>
                 
                 
                 
                 <Node type="section">
-                    <Path>Protocols/CWBeaconMonitorDelegate.html</Path>
+                    <Path>Protocols/CWWebApplicationState.html</Path>
                     <Name>Instance Methods</Name>
                     <Anchor>instance_methods</Anchor>
                 </Node>
@@ -317,17 +326,17 @@
             
         </Node>
 		<Node id="10" type="file" documentType="reference">
-            <Name>CWWebserverDelegate</Name>
-            <Path>Protocols/CWWebserverDelegate.html</Path>
+            <Name>CWWebserverManagerDelegate</Name>
+            <Path>Protocols/CWWebserverManagerDelegate.html</Path>
             
                 <Subnodes>
                 <Node type="section">
-                    <Path>Protocols/CWWebserverDelegate.html</Path>
+                    <Path>Protocols/CWWebserverManagerDelegate.html</Path>
                     <Name>Overview</Name>
                     <Anchor>overview</Anchor>
                 </Node>
                 <Node type="section">
-                    <Path>Protocols/CWWebserverDelegate.html</Path>
+                    <Path>Protocols/CWWebserverManagerDelegate.html</Path>
                     <Name>Tasks</Name>
                     <Anchor>tasks</Anchor>
                 </Node>
@@ -335,7 +344,7 @@
                 
                 
                 <Node type="section">
-                    <Path>Protocols/CWWebserverDelegate.html</Path>
+                    <Path>Protocols/CWWebserverManagerDelegate.html</Path>
                     <Name>Instance Methods</Name>
                     <Anchor>instance_methods</Anchor>
                 </Node>
@@ -344,6 +353,11 @@
             
         </Node>
 		
-        
+        <Node id="11" type="file" documentType="reference">
+            <Name>CWBluetoothConnectionState</Name>
+            <Path>Constants/CWBluetoothConnectionState.html</Path>
+            
+        </Node>
+		
 	</Library>
 </DocSetNodes>

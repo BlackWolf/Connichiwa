@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="html/html; charset=utf-8" />
-		<title>CWBeaconAdvertiser Class Reference</title>
+		<title>CWWebApplicationState Protocol Reference</title>
 		<meta id="xcode-display" name="xcode-display" content="render"/>
 		<link rel="stylesheet" type="text/css" href="../css/styles.css" media="all" />
 		<link rel="stylesheet" type="text/css" media="print" href="../css/stylesPrint.css" />
@@ -16,7 +16,7 @@
 			</div>
 			
 			<div id="title" role="banner">
-				<h1 class="hideInXcode">CWBeaconAdvertiser Class Reference</h1>
+				<h1 class="hideInXcode">CWWebApplicationState Protocol Reference</h1>
 			</div>
 			<ul id="headerButtons" role="toolbar">
 				<li id="toc_button">
@@ -39,13 +39,9 @@
 	
 	<option value="properties">Properties</option>
 	
-	<option value="//api/name/beaconRegion">&nbsp;&nbsp;&nbsp;&nbsp;beaconRegion</option>
+	<option value="//api/name/identifier">&nbsp;&nbsp;&nbsp;&nbsp;identifier</option>
 	
-	<option value="//api/name/delegate">&nbsp;&nbsp;&nbsp;&nbsp;delegate</option>
-	
-	<option value="//api/name/myID">&nbsp;&nbsp;&nbsp;&nbsp;myID</option>
-	
-	<option value="//api/name/peripheralManager">&nbsp;&nbsp;&nbsp;&nbsp;peripheralManager</option>
+	<option value="//api/name/webserverPort">&nbsp;&nbsp;&nbsp;&nbsp;webserverPort</option>
 	
 	
 	
@@ -54,11 +50,9 @@
 	
 	<option value="instance_methods">Instance Methods</option>
 	
-	<option value="//api/name/init">&nbsp;&nbsp;&nbsp;&nbsp;- init</option>
+	<option value="//api/name/canBecomeRemote">&nbsp;&nbsp;&nbsp;&nbsp;- canBecomeRemote</option>
 	
-	<option value="//api/name/peripheralManagerDidUpdateState:">&nbsp;&nbsp;&nbsp;&nbsp;- peripheralManagerDidUpdateState:</option>
-	
-	<option value="//api/name/startAdvertising">&nbsp;&nbsp;&nbsp;&nbsp;- startAdvertising</option>
+	<option value="//api/name/isRemote">&nbsp;&nbsp;&nbsp;&nbsp;- isRemote</option>
 	
 	
 	
@@ -76,8 +70,6 @@
 
 <li role="treeitem" id="task_treeitem"><span class="nodisclosure"></span><span class="sectionName"><a href="#tasks">Tasks</a></span><ul>
 	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Extension Methods">Extension Methods</a></span></li>
-	
 </ul></li>
 
 
@@ -86,13 +78,9 @@
 
 <li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#properties">Properties</a></span><ul>
 	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/beaconRegion">beaconRegion</a></span></li>
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/identifier">identifier</a></span></li>
 	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/delegate">delegate</a></span></li>
-	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/myID">myID</a></span></li>
-	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/peripheralManager">peripheralManager</a></span></li>
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/webserverPort">webserverPort</a></span></li>
 	
 </ul></li>
 
@@ -102,11 +90,9 @@
 
 <li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#instance_methods">Instance Methods</a></span><ul>
 	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/init">init</a></span></li>
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/canBecomeRemote">canBecomeRemote</a></span></li>
 	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/peripheralManagerDidUpdateState:">peripheralManagerDidUpdateState:</a></span></li>
-	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/startAdvertising">startAdvertising</a></span></li>
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/isRemote">isRemote</a></span></li>
 	
 </ul></li>
 
@@ -115,7 +101,7 @@
 		</nav>
 		<article>
 			<div id="contents" class="isShowingTOC" role="main">
-				<a title="CWBeaconAdvertiser Class Reference" name="top"></a>
+				<a title="CWWebApplicationState Protocol Reference" name="top"></a>
 				<div class="main-navigation navigation-top">
 					<ul>
 	<li><a href="../index.html">Index</a></li>
@@ -124,21 +110,18 @@
 				</div>
 				<div id="header">
 					<div class="section-header">
-						<h1 class="title title-header">CWBeaconAdvertiser Class Reference</h1>
+						<h1 class="title title-header">CWWebApplicationState Protocol Reference</h1>
 					</div>		
 				</div>
 				<div id="container">	
 					
 					<div class="section section-specification"><table cellspacing="0"><tbody>
 						<tr>
-	<td class="specification-title">Inherits from</td>
+	<td class="specification-title">Conforms to</td>
 	<td class="specification-value">NSObject</td>
 </tr><tr>
-	<td class="specification-title">Conforms to</td>
-	<td class="specification-value">CBPeripheralManagerDelegate</td>
-</tr><tr>
 	<td class="specification-title">Declared in</td>
-	<td class="specification-value">CWBeaconAdvertiser.h<br />CWBeaconAdvertiser.m</td>
+	<td class="specification-value">CWWebApplicationState.h</td>
 </tr>
 						</tbody></table></div>
 					
@@ -148,9 +131,7 @@
 					<div class="section section-overview">
 						<a title="Overview" name="overview"></a>
 						<h2 class="subtitle subtitle-overview">Overview</h2>
-						<p>An instance of CWBeaconAdvertiser sets this device up to act as an iBeacon over BTLE and make itself discoverable by other devices running a <a href="../Classes/CWBeaconMonitor.html">CWBeaconMonitor</a>.
-When advertising, CWBeaconAdvertiser assigns a random <a href="../Classes/CWDeviceID.html">CWDeviceID</a> to this beacon which is transmitted with the iBeacon package and can be picked up by other devices.
-Every device should only act as a single iBeacon - it is not recommended to create multiple instances of this class, which will yield undefined results.</p>
+						<p>Implemented by <a href="../Classes/CWWebApplication.html">CWWebApplication</a>, this protocol exposes the global state of the application. This can be passed to other classes that need to know about the global application state, keeping everything else in <a href="../Classes/CWWebApplication.html">CWWebApplication</a> hidden.</p>
 					</div>
 					
 					
@@ -163,67 +144,33 @@ Every device should only act as a single iBeacon - it is not recommended to crea
 						
 						
 						
-						<h3 class="subsubtitle task-title">Other Methods</h3>
+						
 
 						<ul class="task-list">
 							<li>
 	<span class="tooltip">
-		<code><a href="#//api/name/delegate">&nbsp;&nbsp;delegate</a></code>
+		<code><a href="#//api/name/identifier">&nbsp;&nbsp;identifier</a></code>
 	</span>
 	<span class="task-item-suffix">property</span>
-	
+	<span class="task-item-suffix">required method</span>
 </li><li>
 	<span class="tooltip">
-		<code><a href="#//api/name/myID">&nbsp;&nbsp;myID</a></code>
+		<code><a href="#//api/name/webserverPort">&nbsp;&nbsp;webserverPort</a></code>
 	</span>
 	<span class="task-item-suffix">property</span>
-	
+	<span class="task-item-suffix">required method</span>
 </li><li>
 	<span class="tooltip">
-		<code><a href="#//api/name/startAdvertising">&ndash;&nbsp;startAdvertising</a></code>
+		<code><a href="#//api/name/isRemote">&ndash;&nbsp;isRemote</a></code>
 	</span>
 	
-	
-</li>
-						</ul>
-						
-						
-						
-						<h3 class="subsubtitle task-title">Other Methods</h3>
-
-						<ul class="task-list">
-							<li>
-	<span class="tooltip">
-		<code><a href="#//api/name/init">&ndash;&nbsp;init</a></code>
-	</span>
-	
-	
+	<span class="task-item-suffix">required method</span>
 </li><li>
 	<span class="tooltip">
-		<code><a href="#//api/name/peripheralManagerDidUpdateState:">&ndash;&nbsp;peripheralManagerDidUpdateState:</a></code>
+		<code><a href="#//api/name/canBecomeRemote">&ndash;&nbsp;canBecomeRemote</a></code>
 	</span>
 	
-	
-</li>
-						</ul>
-						
-						
-						<a title="Extension Methods" name="task_Extension Methods"></a>
-						<h3 class="subsubtitle task-title">Extension Methods</h3>
-
-						<ul class="task-list">
-							<li>
-	<span class="tooltip">
-		<code><a href="#//api/name/peripheralManager">&nbsp;&nbsp;peripheralManager</a></code>
-	</span>
-	<span class="task-item-suffix">property</span>
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/beaconRegion">&nbsp;&nbsp;beaconRegion</a></code>
-	</span>
-	<span class="task-item-suffix">property</span>
-	
+	<span class="task-item-suffix">required method</span>
 </li>
 						</ul>
 						
@@ -238,18 +185,18 @@ Every device should only act as a single iBeacon - it is not recommended to crea
 						<h2 class="subtitle subtitle-methods">Properties</h2>
 						
 						<div class="section-method">
-	<a name="//api/name/beaconRegion" title="beaconRegion"></a>
-	<h3 class="subsubtitle method-title">beaconRegion</h3>
+	<a name="//api/name/identifier" title="identifier"></a>
+	<h3 class="subsubtitle method-title">identifier</h3>
 	
 	
 	
 	<div class="method-subsection brief-description">
-		<p>Represents the local region that our beacon creates</p>
+		<p>The unique identifier of this device that is used amongst all the different parts of Connichiwa</p>
 	</div>		
 	
     
 
-	<div class="method-subsection method-declaration"><code>@property (readwrite, strong) CLBeaconRegion *beaconRegion</code></div>
+	<div class="method-subsection method-declaration"><code>@property (readonly, strong) NSString *identifier</code></div>
 
     
 	
@@ -267,25 +214,25 @@ Every device should only act as a single iBeacon - it is not recommended to crea
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">CWBeaconAdvertiser.m</code><br />
+		<code class="declared-in-ref">CWWebApplicationState.h</code><br />
 	</div>				
 	
 	
 </div>
 						
 						<div class="section-method">
-	<a name="//api/name/delegate" title="delegate"></a>
-	<h3 class="subsubtitle method-title">delegate</h3>
+	<a name="//api/name/webserverPort" title="webserverPort"></a>
+	<h3 class="subsubtitle method-title">webserverPort</h3>
 	
 	
 	
 	<div class="method-subsection brief-description">
-		<p>Delegate that receives events from CWBeaconAdvertiser</p>
+		<p>The port that this web server listens on</p>
 	</div>		
 	
     
 
-	<div class="method-subsection method-declaration"><code>@property (readwrite, strong) id&lt;CWBeaconAdvertiserDelegate&gt; delegate</code></div>
+	<div class="method-subsection method-declaration"><code>@property (readonly) int webserverPort</code></div>
 
     
 	
@@ -303,79 +250,7 @@ Every device should only act as a single iBeacon - it is not recommended to crea
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">CWBeaconAdvertiser.h</code><br />
-	</div>				
-	
-	
-</div>
-						
-						<div class="section-method">
-	<a name="//api/name/myID" title="myID"></a>
-	<h3 class="subsubtitle method-title">myID</h3>
-	
-	
-	
-	<div class="method-subsection brief-description">
-		<p>The unique ID that this beacon advertises</p>
-	</div>		
-	
-    
-
-	<div class="method-subsection method-declaration"><code>@property (readonly) CWDeviceID *myID</code></div>
-
-    
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<div class="method-subsection declared-in-section">
-		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">CWBeaconAdvertiser.h</code><br />
-	</div>				
-	
-	
-</div>
-						
-						<div class="section-method">
-	<a name="//api/name/peripheralManager" title="peripheralManager"></a>
-	<h3 class="subsubtitle method-title">peripheralManager</h3>
-	
-	
-	
-	<div class="method-subsection brief-description">
-		<p>Core Bluetooth Peripheral Manager, responsible for advertising the iBeacon</p>
-	</div>		
-	
-    
-
-	<div class="method-subsection method-declaration"><code>@property (readwrite, strong) CBPeripheralManager *peripheralManager</code></div>
-
-    
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<div class="method-subsection declared-in-section">
-		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">CWBeaconAdvertiser.m</code><br />
+		<code class="declared-in-ref">CWWebApplicationState.h</code><br />
 	</div>				
 	
 	
@@ -392,18 +267,18 @@ Every device should only act as a single iBeacon - it is not recommended to crea
 						<h2 class="subtitle subtitle-methods">Instance Methods</h2>
 						
 						<div class="section-method">
-	<a name="//api/name/init" title="init"></a>
-	<h3 class="subsubtitle method-title">init</h3>
+	<a name="//api/name/canBecomeRemote" title="canBecomeRemote"></a>
+	<h3 class="subsubtitle method-title">canBecomeRemote</h3>
 	
 	
 	
 	<div class="method-subsection brief-description">
-		<p>Creates a new instance of this class. It is not advised to have multiple advertiser active on a single device, you should only create this class once.</p>
+		<p>Determines if this device can still become a remote device. This is, for example, not possible if this device is already a remote device or if remote devices are connected to it.</p>
 	</div>		
 	
     
 
-	<div class="method-subsection method-declaration"><code>- (instancetype)init</code></div>
+	<div class="method-subsection method-declaration"><code>- (BOOL)canBecomeRemote</code></div>
 
     
 	
@@ -411,7 +286,7 @@ Every device should only act as a single iBeacon - it is not recommended to crea
 	
 	<div class="method-subsection return">
 		<h4 class="method-subtitle parameter-title">Return Value</h4>
-		<p>A new instance of this class.</p>
+		<p>true if the device can still become a remote device, otherwise false</p>
 	</div>
 	
 	
@@ -426,36 +301,33 @@ Every device should only act as a single iBeacon - it is not recommended to crea
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">CWBeaconAdvertiser.m</code><br />
+		<code class="declared-in-ref">CWWebApplicationState.h</code><br />
 	</div>				
 	
 	
 </div>
 						
 						<div class="section-method">
-	<a name="//api/name/peripheralManagerDidUpdateState:" title="peripheralManagerDidUpdateState:"></a>
-	<h3 class="subsubtitle method-title">peripheralManagerDidUpdateState:</h3>
+	<a name="//api/name/isRemote" title="isRemote"></a>
+	<h3 class="subsubtitle method-title">isRemote</h3>
 	
 	
 	
 	<div class="method-subsection brief-description">
-		<p>Called by CBPeripheralManager when its power state changes</p>
+		<p>Determines if this device is currently running as a remote device for another Connichiwa device.</p>
 	</div>		
 	
     
 
-	<div class="method-subsection method-declaration"><code>- (void)peripheralManagerDidUpdateState:(CBPeripheralManager *)<em>manager</em></code></div>
+	<div class="method-subsection method-declaration"><code>- (BOOL)isRemote</code></div>
 
     
 	
-	<div class="method-subsection arguments-section parameters">
-		<h4 class="method-subtitle parameter-title">Parameters</h4>
-		
-		<dl class="argument-def parameter-def">
-			<dt><em>manager</em></dt>
-			<dd><p>The CBPeripheralManager instance that changed</p></dd>
-		</dl>
-		
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>true if the device is currently used as a remote device, otherwise false</p>
 	</div>
 	
 	
@@ -468,47 +340,9 @@ Every device should only act as a single iBeacon - it is not recommended to crea
 	
 	
 	
-	
-	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">CWBeaconAdvertiser.m</code><br />
-	</div>				
-	
-	
-</div>
-						
-						<div class="section-method">
-	<a name="//api/name/startAdvertising" title="startAdvertising"></a>
-	<h3 class="subsubtitle method-title">startAdvertising</h3>
-	
-	
-	
-	<div class="method-subsection brief-description">
-		<p>Make this device start advertising as an iBeacon. It becomes detectable by other Connichiwa devices.</p>
-	</div>		
-	
-    
-
-	<div class="method-subsection method-declaration"><code>- (void)startAdvertising</code></div>
-
-    
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<div class="method-subsection declared-in-section">
-		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">CWBeaconAdvertiser.h</code><br />
+		<code class="declared-in-ref">CWWebApplicationState.h</code><br />
 	</div>				
 	
 	
@@ -529,7 +363,7 @@ Every device should only act as a single iBeacon - it is not recommended to crea
 				<div id="footer">
 					<hr />
 					<div class="footer-copyright">
-						<p><span class="copyright">&copy; 2014 Mario Schreiner. All rights reserved. (Last updated: 2014-06-16)</span><br />
+						<p><span class="copyright">&copy; 2014 Mario Schreiner. All rights reserved. (Last updated: 2014-06-25)</span><br />
 						
 						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2 (build 963)</a>.</span></p>
 						

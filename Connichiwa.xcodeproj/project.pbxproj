@@ -22,8 +22,6 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		3306A78D1940746A001B999A /* CWConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 3306A78B1940746A001B999A /* CWConstants.h */; };
-		3306A78E1940746A001B999A /* CWConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 3306A78C1940746A001B999A /* CWConstants.m */; };
 		3306A79E1940A386001B999A /* server.js in Resources */ = {isa = PBXBuildFile; fileRef = 3306A7981940A2DF001B999A /* server.js */; };
 		330BA3D3193F8CB300D9E54C /* CWWebserverManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 330BA3D1193F8CB300D9E54C /* CWWebserverManager.h */; };
 		330BA3D4193F8CB300D9E54C /* CWWebserverManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 330BA3D2193F8CB300D9E54C /* CWWebserverManager.m */; };
@@ -31,6 +29,7 @@
 		330CBB88193F14B60064AD99 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 330CBB87193F14B60064AD99 /* CoreFoundation.framework */; };
 		330CBB8E193F14B60064AD99 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 330CBB8C193F14B60064AD99 /* InfoPlist.strings */; };
 		331F2DE31944F4ED007609B9 /* weblib in Resources */ = {isa = PBXBuildFile; fileRef = 331F2DE21944F4ED007609B9 /* weblib */; };
+		332B686F1959A2B5004B0600 /* scripts in Resources */ = {isa = PBXBuildFile; fileRef = 332B686E1959A2B5004B0600 /* scripts */; };
 		333A80671953996D00420D5A /* CWBluetoothManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 333A80651953996D00420D5A /* CWBluetoothManager.h */; };
 		333A80681953996D00420D5A /* CWBluetoothManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 333A80661953996D00420D5A /* CWBluetoothManager.m */; };
 		334AB741193FABAA00A15999 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 334AB740193FABAA00A15999 /* JavaScriptCore.framework */; };
@@ -43,7 +42,7 @@
 		334AB76D19405F0C00A15999 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 334AB76C19405F0C00A15999 /* CoreBluetooth.framework */; };
 		334AB77319405F1100A15999 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 334AB77219405F1000A15999 /* CoreLocation.framework */; };
 		3351372E19578FBD004FE5E0 /* remote in Resources */ = {isa = PBXBuildFile; fileRef = 3351372D19578FBD004FE5E0 /* remote */; };
-		3367186C194776C1000A7164 /* CWWebserverDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 3367186B194776C1000A7164 /* CWWebserverDelegate.h */; };
+		3367186C194776C1000A7164 /* CWWebserverManagerDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 3367186B194776C1000A7164 /* CWWebserverManagerDelegate.h */; };
 		33A0514A193E61CC00FED071 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33A05149193E61CC00FED071 /* Foundation.framework */; };
 		33A05158193E61CC00FED071 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33A05157193E61CC00FED071 /* XCTest.framework */; };
 		33A05159193E61CC00FED071 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33A05149193E61CC00FED071 /* Foundation.framework */; };
@@ -118,8 +117,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		3306A78B1940746A001B999A /* CWConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWConstants.h; sourceTree = "<group>"; };
-		3306A78C1940746A001B999A /* CWConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWConstants.m; sourceTree = "<group>"; };
 		3306A7981940A2DF001B999A /* server.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = server.js; sourceTree = "<group>"; };
 		330BA3D1193F8CB300D9E54C /* CWWebserverManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWWebserverManager.h; sourceTree = "<group>"; };
 		330BA3D2193F8CB300D9E54C /* CWWebserverManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWWebserverManager.m; sourceTree = "<group>"; };
@@ -130,11 +127,10 @@
 		330CBB8F193F14B60064AD99 /* ConnichiwaResources-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ConnichiwaResources-Prefix.pch"; sourceTree = "<group>"; };
 		331F2DE21944F4ED007609B9 /* weblib */ = {isa = PBXFileReference; lastKnownFileType = folder; path = weblib; sourceTree = "<group>"; };
 		332B686D1958E55E004B0600 /* CWWebApplicationState.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CWWebApplicationState.h; sourceTree = "<group>"; };
+		332B686E1959A2B5004B0600 /* scripts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = scripts; sourceTree = "<group>"; };
 		333A80651953996D00420D5A /* CWBluetoothManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWBluetoothManager.h; sourceTree = "<group>"; };
 		333A80661953996D00420D5A /* CWBluetoothManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWBluetoothManager.m; sourceTree = "<group>"; };
 		333A806D1953997F00420D5A /* CWBluetoothManagerDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CWBluetoothManagerDelegate.h; sourceTree = "<group>"; };
-		333FD5A11950AC8D003D624E /* CWBluetoothAdvertiserDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWBluetoothAdvertiserDelegate.h; sourceTree = "<group>"; };
-		333FD5A31950AE04003D624E /* CWBluetoothMonitorDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWBluetoothMonitorDelegate.h; sourceTree = "<group>"; };
 		334AB740193FABAA00A15999 /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		334AB745193FDADC00A15999 /* CWWebApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWWebApplication.h; sourceTree = "<group>"; };
 		334AB746193FDADC00A15999 /* CWWebApplication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWWebApplication.m; sourceTree = "<group>"; };
@@ -145,12 +141,8 @@
 		334AB76C19405F0C00A15999 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
 		334AB77219405F1000A15999 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		3351372D19578FBD004FE5E0 /* remote */ = {isa = PBXFileReference; lastKnownFileType = folder; path = remote; sourceTree = "<group>"; };
-		3367186B194776C1000A7164 /* CWWebserverDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWWebserverDelegate.h; sourceTree = "<group>"; };
+		3367186B194776C1000A7164 /* CWWebserverManagerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWWebserverManagerDelegate.h; sourceTree = "<group>"; };
 		3381A01E193F492600BDDF34 /* Nodelike.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Nodelike.xcodeproj; path = Nodelike/Nodelike.xcodeproj; sourceTree = "<group>"; };
-		339A4BC2195024110072A4FC /* CWBluetoothMonitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWBluetoothMonitor.h; sourceTree = "<group>"; };
-		339A4BC3195024110072A4FC /* CWBluetoothMonitor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWBluetoothMonitor.m; sourceTree = "<group>"; };
-		339A4BC6195037460072A4FC /* CWBluetoothAdvertiser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWBluetoothAdvertiser.h; sourceTree = "<group>"; };
-		339A4BC7195037460072A4FC /* CWBluetoothAdvertiser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWBluetoothAdvertiser.m; sourceTree = "<group>"; };
 		33A05146193E61CC00FED071 /* libConnichiwa.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libConnichiwa.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		33A05149193E61CC00FED071 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		33A0514D193E61CC00FED071 /* Connichiwa-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Connichiwa-Prefix.pch"; sourceTree = "<group>"; };
@@ -206,8 +198,6 @@
 			children = (
 				33EE7EF81955BC1500EFDE17 /* CWUtil.h */,
 				33EE7EF91955BC1500EFDE17 /* CWUtil.m */,
-				3306A78B1940746A001B999A /* CWConstants.h */,
-				3306A78C1940746A001B999A /* CWConstants.m */,
 				334AB755193FEC6000A15999 /* CWBundle.h */,
 				334AB756193FEC6000A15999 /* CWBundle.m */,
 				334AB751193FDDF800A15999 /* CWDebug.h */,
@@ -219,8 +209,9 @@
 		330CBB89193F14B60064AD99 /* ConnichiwaResources */ = {
 			isa = PBXGroup;
 			children = (
-				3351372D19578FBD004FE5E0 /* remote */,
 				331F2DE21944F4ED007609B9 /* weblib */,
+				3351372D19578FBD004FE5E0 /* remote */,
+				332B686E1959A2B5004B0600 /* scripts */,
 				33C3127D1940AEF600F2541C /* node_modules */,
 				3306A7981940A2DF001B999A /* server.js */,
 				330CBB8A193F14B60064AD99 /* Supporting Files */,
@@ -257,12 +248,6 @@
 				333A806D1953997F00420D5A /* CWBluetoothManagerDelegate.h */,
 				33A87DF51951037A001BDC09 /* CWBluetoothConnection.h */,
 				33A87DF61951037A001BDC09 /* CWBluetoothConnection.m */,
-				339A4BC2195024110072A4FC /* CWBluetoothMonitor.h */,
-				339A4BC3195024110072A4FC /* CWBluetoothMonitor.m */,
-				333FD5A31950AE04003D624E /* CWBluetoothMonitorDelegate.h */,
-				339A4BC6195037460072A4FC /* CWBluetoothAdvertiser.h */,
-				339A4BC7195037460072A4FC /* CWBluetoothAdvertiser.m */,
-				333FD5A11950AC8D003D624E /* CWBluetoothAdvertiserDelegate.h */,
 			);
 			name = Bluetooth;
 			sourceTree = "<group>";
@@ -311,7 +296,7 @@
 				332B686D1958E55E004B0600 /* CWWebApplicationState.h */,
 				330BA3D1193F8CB300D9E54C /* CWWebserverManager.h */,
 				330BA3D2193F8CB300D9E54C /* CWWebserverManager.m */,
-				3367186B194776C1000A7164 /* CWWebserverDelegate.h */,
+				3367186B194776C1000A7164 /* CWWebserverManagerDelegate.h */,
 				339A4BBD194F8D6C0072A4FC /* Bluetooth */,
 				3306A7951940970D001B999A /* Helper */,
 				33A0514C193E61CC00FED071 /* Supporting Files */,
@@ -354,13 +339,12 @@
 			files = (
 				33EE7EFA1955BC1500EFDE17 /* CWUtil.h in Headers */,
 				330CBB74193E75890064AD99 /* Connichiwa.h in Headers */,
-				3306A78D1940746A001B999A /* CWConstants.h in Headers */,
 				333A80671953996D00420D5A /* CWBluetoothManager.h in Headers */,
 				334AB747193FDADC00A15999 /* CWWebApplication.h in Headers */,
 				330BA3D3193F8CB300D9E54C /* CWWebserverManager.h in Headers */,
 				33A87DF71951037A001BDC09 /* CWBluetoothConnection.h in Headers */,
 				334AB757193FEC6000A15999 /* CWBundle.h in Headers */,
-				3367186C194776C1000A7164 /* CWWebserverDelegate.h in Headers */,
+				3367186C194776C1000A7164 /* CWWebserverManagerDelegate.h in Headers */,
 				334AB753193FDDF800A15999 /* CWDebug.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -501,6 +485,7 @@
 				3351372E19578FBD004FE5E0 /* remote in Resources */,
 				3306A79E1940A386001B999A /* server.js in Resources */,
 				33C3127E1940AEF600F2541C /* node_modules in Resources */,
+				332B686F1959A2B5004B0600 /* scripts in Resources */,
 				330CBB8E193F14B60064AD99 /* InfoPlist.strings in Resources */,
 				331F2DE31944F4ED007609B9 /* weblib in Resources */,
 			);
@@ -571,7 +556,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Appledoc must be installed (from https://github.com/tomaz/appledoc)\n\n# Runs appledoc command is on release build and it is installed\n# On Release builds, we actually create the documentation\n# ON Debug builds, we only run appledoc to create warnings about missing documentation\n# If the project grows, we will have to see if appledoc takes to long - then we might have to remove it from debug builds\n\n# Look at appledoc --help for all the parameters\n\nAPPLEDOC_PATH=\"/usr/local/bin/appledoc\"\nif [ -x $APPLEDOC_PATH ]; then\n\nif [ ${CONFIGURATION} == \"Release\" ]; then\n$APPLEDOC_PATH \\\n--project-name ${PRODUCT_NAME} \\\n--project-company \"Mario Schreiner\" \\\n--company-id \"com.marioschreiner\" \\\n--output ${PRODUCT_NAME}Docs/native \\\n--create-html \\\n--create-docset \\\n--install-docset \\\n--keep-undocumented-objects \\\n--keep-undocumented-members \\\n--keep-intermediate-files \\\n--no-repeat-first-par \\\n--warn-undocumented-object \\\n--warn-undocumented-member \\\n--warn-empty-description \\\n--warn-unknown-directive  \\\n--warn-missing-arg \\\n--warn-invalid-crossref \\\n--logformat xcode \\\n--exit-threshold 2 \\\n${PROJECT_DIR}/${PRODUCT_NAME}\nfi;\n\nif [ ${CONFIGURATION} == \"Debug\" ]; then\n$APPLEDOC_PATH \\\n--project-name ${PRODUCT_NAME} \\\n--project-company \"Mario Schreiner\" \\\n--company-id \"com.marioschreiner\" \\\n--output ${PRODUCT_NAME}Docs \\\n--no-create-html \\\n--no-create-docset \\\n--no-install-docset \\\n--keep-undocumented-objects \\\n--keep-undocumented-members \\\n--no-keep-intermediate-files \\\n--no-repeat-first-par \\\n--warn-undocumented-object \\\n--warn-undocumented-member \\\n--warn-empty-description \\\n--warn-unknown-directive  \\\n--warn-missing-arg \\\n--warn-invalid-crossref \\\n--logformat xcode \\\n--exit-threshold 2 \\\n${PROJECT_DIR}/${PRODUCT_NAME}\nfi;\n\nelse\necho \"install appledoc to create the native documentation\"\nfi;";
+			shellScript = "# Appledoc must be installed (from https://github.com/tomaz/appledoc)\n\n# Runs appledoc command is on release build and it is installed\n# On Release builds, we actually create the documentation\n# ON Debug builds, we only run appledoc to create warnings about missing documentation\n# If the project grows, we will have to see if appledoc takes to long - then we might have to remove it from debug builds\n\n# Look at appledoc --help for all the parameters\n\nAPPLEDOC_PATH=\"/usr/local/bin/appledoc\"\nif [ -x $APPLEDOC_PATH ]; then\n\nif [ ${CONFIGURATION} == \"Release\" ]; then\n$APPLEDOC_PATH \\\n--project-name ${PRODUCT_NAME} \\\n--project-company \"Mario Schreiner\" \\\n--company-id \"com.marioschreiner\" \\\n--output ${PRODUCT_NAME}Docs/native \\\n#--ignore \"*.m\" \\\n--create-html \\\n--create-docset \\\n--install-docset \\\n--keep-undocumented-objects \\\n--keep-undocumented-members \\\n--keep-intermediate-files \\\n--no-repeat-first-par \\\n--warn-undocumented-object \\\n--warn-undocumented-member \\\n--warn-empty-description \\\n--warn-unknown-directive  \\\n--warn-missing-arg \\\n--warn-invalid-crossref \\\n--logformat xcode \\\n--exit-threshold 2 \\\n${PROJECT_DIR}/${PRODUCT_NAME}\nfi;\n\nif [ ${CONFIGURATION} == \"Debug\" ]; then\n$APPLEDOC_PATH \\\n--project-name ${PRODUCT_NAME} \\\n--project-company \"Mario Schreiner\" \\\n--company-id \"com.marioschreiner\" \\\n--output ${PRODUCT_NAME}Docs \\\n--no-create-html \\\n--no-create-docset \\\n--no-install-docset \\\n--keep-undocumented-objects \\\n--keep-undocumented-members \\\n--no-keep-intermediate-files \\\n--no-repeat-first-par \\\n--warn-undocumented-object \\\n--warn-undocumented-member \\\n--warn-empty-description \\\n--warn-unknown-directive  \\\n--warn-missing-arg \\\n--warn-invalid-crossref \\\n--logformat xcode \\\n--exit-threshold 2 \\\n${PROJECT_DIR}/${PRODUCT_NAME}\nfi;\n\nelse\necho \"install appledoc to create the native documentation\"\nfi;";
 		};
 		3367186D19489121000A7164 /* Create JSDoc Script */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -613,7 +598,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "touch -cm \"${PROJECT_DIR}/${PRODUCT_NAME}\"\ntouch -cm \"${PROJECT_DIR}/${PRODUCT_NAME}/weblib\"\ntouch -cm \"${PROJECT_DIR}/${PRODUCT_NAME}/remote\"\ntouch -cm \"${PROJECT_DIR}/${PRODUCT_NAME}/node_modules\"";
+			shellScript = "touch -cm \"${PROJECT_DIR}/${PRODUCT_NAME}\"\ntouch -cm \"${PROJECT_DIR}/${PRODUCT_NAME}/weblib\"\ntouch -cm \"${PROJECT_DIR}/${PRODUCT_NAME}/remote\"\ntouch -cm \"${PROJECT_DIR}/${PRODUCT_NAME}/scripts\"\ntouch -cm \"${PROJECT_DIR}/${PRODUCT_NAME}/node_modules\"";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -628,7 +613,6 @@
 				33EE7EFB1955BC1500EFDE17 /* CWUtil.m in Sources */,
 				334AB754193FDDF800A15999 /* CWDebug.m in Sources */,
 				334AB748193FDADC00A15999 /* CWWebApplication.m in Sources */,
-				3306A78E1940746A001B999A /* CWConstants.m in Sources */,
 				333A80681953996D00420D5A /* CWBluetoothManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Classes/CWBeaconMonitor.html">
+	<File path="Classes/CWBluetoothManager.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/cl/CWBeaconMonitor</TokenIdentifier>
-			<Abstract type="html">Monitors the proximity for other Connichiwa beacons. If found, it reports beacons to its delegate.
-Only one instance of the monitor should be active at all time, therefore always use mainMonitor to get an instance of this class.</Abstract>
-			<DeclaredIn>CWBeaconMonitor.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/cl/CWBluetoothManager</TokenIdentifier>
+			<Abstract type="html">The CWBluetoothManager represents this device as a BT device. It can advertise this device to other devices and monitor for other devices. Furthermore, the delegate
+is notified of important events, for example detected devices, changes in device distance or established connections.</Abstract>
+			<DeclaredIn>CWBluetoothManager.h</DeclaredIn>
             
 			
 			<NodeRef refid="2"/>
@@ -14,23 +14,11 @@ Only one instance of the monitor should be active at all time, therefore always 
 		
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWBeaconMonitor/setDelegate:</TokenIdentifier>
-			<Abstract type="html">Delegate to receive events by this class</Abstract>
-			<DeclaredIn>CWBeaconMonitor.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/setDelegate:</TokenIdentifier>
+			<Abstract type="html">The delegate that receives events by this class</Abstract>
+			<DeclaredIn>CWBluetoothManager.h</DeclaredIn>
 			
-			<Declaration>@property (readwrite, strong) id&lt;CWBeaconMonitorDelegate&gt; delegate</Declaration>
-			
-			
-			<Anchor>//api/name/delegate</Anchor>
-            <NodeRef refid="2"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWBeaconMonitor/delegate</TokenIdentifier>
-			<Abstract type="html">Delegate to receive events by this class</Abstract>
-			<DeclaredIn>CWBeaconMonitor.h</DeclaredIn>
-			
-			<Declaration>@property (readwrite, strong) id&lt;CWBeaconMonitorDelegate&gt; delegate</Declaration>
+			<Declaration>@property (readwrite) id&lt;CWBluetoothManagerDelegate&gt; delegate</Declaration>
 			
 			
 			<Anchor>//api/name/delegate</Anchor>
@@ -38,11 +26,11 @@ Only one instance of the monitor should be active at all time, therefore always 
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/CWBeaconMonitor/delegate</TokenIdentifier>
-			<Abstract type="html">Delegate to receive events by this class</Abstract>
-			<DeclaredIn>CWBeaconMonitor.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/delegate</TokenIdentifier>
+			<Abstract type="html">The delegate that receives events by this class</Abstract>
+			<DeclaredIn>CWBluetoothManager.h</DeclaredIn>
 			
-			<Declaration>@property (readwrite, strong) id&lt;CWBeaconMonitorDelegate&gt; delegate</Declaration>
+			<Declaration>@property (readwrite) id&lt;CWBluetoothManagerDelegate&gt; delegate</Declaration>
 			
 			
 			<Anchor>//api/name/delegate</Anchor>
@@ -50,215 +38,96 @@ Only one instance of the monitor should be active at all time, therefore always 
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWBeaconMonitor/startMonitoring</TokenIdentifier>
-			<Abstract type="html">Starts monitoring for other devices and sends events about changes in the proximity to the delegate</Abstract>
-			<DeclaredIn>CWBeaconMonitor.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instp/CWBluetoothManager/delegate</TokenIdentifier>
+			<Abstract type="html">The delegate that receives events by this class</Abstract>
+			<DeclaredIn>CWBluetoothManager.h</DeclaredIn>
 			
-			<Declaration>- (void)startMonitoring</Declaration>
+			<Declaration>@property (readwrite) id&lt;CWBluetoothManagerDelegate&gt; delegate</Declaration>
 			
 			
-			<Anchor>//api/name/startMonitoring</Anchor>
+			<Anchor>//api/name/delegate</Anchor>
             <NodeRef refid="2"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWBeaconMonitor/init</TokenIdentifier>
-			<Abstract type="html">Creates a new instance of this class. It is not advised to have multiple advertiser active on a single device, you should only create this class once.</Abstract>
-			<DeclaredIn>CWBeaconMonitor.m</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/initWithApplicationState:</TokenIdentifier>
+			<Abstract type="html">Intializes a new CWBluetoothManager</Abstract>
+			<DeclaredIn>CWBluetoothManager.h</DeclaredIn>
 			
-			<Declaration>- (instancetype)init</Declaration>
-			
-			<ReturnValue><Abstract type="html">A new instance of this class.</Abstract></ReturnValue>
-			<Anchor>//api/name/init</Anchor>
-            <NodeRef refid="2"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWBeaconMonitor/_stringForProximity:</TokenIdentifier>
-			<Abstract type="html">Returns a string describing the proximity of a beacon</Abstract>
-			<DeclaredIn>CWBeaconMonitor.m</DeclaredIn>
-			
-			<Declaration>- (NSString *)_stringForProximity:(CLProximity)proximity</Declaration>
+			<Declaration>- (instancetype)initWithApplicationState:(id&lt;CWWebApplicationState&gt;)appState</Declaration>
 			<Parameters>
 				<Parameter>
-					<Name>proximity</Name>
-					<Abstract type="html">The CLProximity as returned by a CLBeacon</Abstract>
+					<Name>appState</Name>
+					<Abstract type="html">A CWWebApplicationState implementation that allows the BT Manager to access the global state</Abstract>
 				</Parameter>
 			</Parameters>
-			<ReturnValue><Abstract type="html">A string value describing the proximity</Abstract></ReturnValue>
-			<Anchor>//api/name/_stringForProximity:</Anchor>
+			<ReturnValue><Abstract type="html">A new instance of CWBluetoothManager</Abstract></ReturnValue>
+			<Anchor>//api/name/initWithApplicationState:</Anchor>
             <NodeRef refid="2"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWBeaconMonitor/locationManager:didEnterRegion:</TokenIdentifier>
-			<Abstract type="html">Called by CLLocationManager when we cross the border of a beacon and enter its range</Abstract>
-			<DeclaredIn>CWBeaconMonitor.m</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/startScanning</TokenIdentifier>
+			<Abstract type="html">Starts scanning for other, nearby devices</Abstract>
+			<DeclaredIn>CWBluetoothManager.h</DeclaredIn>
 			
-			<Declaration>- (void)locationManager:(CLLocationManager *)manager didEnterRegion:(CLRegion *)region</Declaration>
-			<Parameters>
-				<Parameter>
-					<Name>manager</Name>
-					<Abstract type="html">The CLLocationManager instance that detected the change</Abstract>
-				</Parameter><Parameter>
-					<Name>region</Name>
-					<Abstract type="html">The region that was entered</Abstract>
-				</Parameter>
-			</Parameters>
+			<Declaration>- (void)startScanning</Declaration>
 			
-			<Anchor>//api/name/locationManager:didEnterRegion:</Anchor>
+			
+			<Anchor>//api/name/startScanning</Anchor>
             <NodeRef refid="2"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWBeaconMonitor/locationManager:didExitRegion:</TokenIdentifier>
-			<Abstract type="html">Called by CLLocationManager when we cross the border of a beacon and exit its range</Abstract>
-			<DeclaredIn>CWBeaconMonitor.m</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/startAdvertising</TokenIdentifier>
+			<Abstract type="html">Starts advertising this device with the unique identifier stored in the application state. Will make this device detectable by other BT devices.</Abstract>
+			<DeclaredIn>CWBluetoothManager.h</DeclaredIn>
 			
-			<Declaration>- (void)locationManager:(CLLocationManager *)manager didExitRegion:(CLRegion *)region</Declaration>
-			<Parameters>
-				<Parameter>
-					<Name>manager</Name>
-					<Abstract type="html">The CLLocationManager instance that detected the change</Abstract>
-				</Parameter><Parameter>
-					<Name>region</Name>
-					<Abstract type="html">The region that was exited</Abstract>
-				</Parameter>
-			</Parameters>
+			<Declaration>- (void)startAdvertising</Declaration>
 			
-			<Anchor>//api/name/locationManager:didExitRegion:</Anchor>
+			
+			<Anchor>//api/name/startAdvertising</Anchor>
             <NodeRef refid="2"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWBeaconMonitor/locationManager:didRangeBeacons:inRegion:</TokenIdentifier>
-			<Abstract type="html">Called by CLLocationManager constantly to report found beacons in our beaconRegion. We get an array of beacons here and then check for new and changed beacons, which we then report to our delegate.
-Note that this method is also called with an empty beacon array</Abstract>
-			<DeclaredIn>CWBeaconMonitor.m</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/stopScanning</TokenIdentifier>
+			<Abstract type="html">Stops scanning for other devices</Abstract>
+			<DeclaredIn>CWBluetoothManager.h</DeclaredIn>
 			
-			<Declaration>- (void)locationManager:(CLLocationManager *)manager didRangeBeacons:(NSArray *)beacons inRegion:(CLBeaconRegion *)region</Declaration>
+			<Declaration>- (void)stopScanning</Declaration>
+			
+			
+			<Anchor>//api/name/stopScanning</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/stopAdvertising</TokenIdentifier>
+			<Abstract type="html">Stops advertising this device</Abstract>
+			<DeclaredIn>CWBluetoothManager.h</DeclaredIn>
+			
+			<Declaration>- (void)stopAdvertising</Declaration>
+			
+			
+			<Anchor>//api/name/stopAdvertising</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/sendNetworkAddressesToDevice:</TokenIdentifier>
+			<Abstract type="html">Tells the BTManager to send our network interface addresses to the device with the given identifier. The manager will then try to establish a BT connection to that device and transfer the network addresses. This is effectively a request to use the given device as a remote device.</Abstract>
+			<DeclaredIn>CWBluetoothManager.h</DeclaredIn>
+			
+			<Declaration>- (void)sendNetworkAddressesToDevice:(NSString *)deviceIdentifier</Declaration>
 			<Parameters>
 				<Parameter>
-					<Name>manager</Name>
-					<Abstract type="html">The CLLocationManager instance that detected the beacons</Abstract>
-				</Parameter><Parameter>
-					<Name>beacons</Name>
-					<Abstract type="html">The array of found beacons</Abstract>
-				</Parameter><Parameter>
-					<Name>region</Name>
-					<Abstract type="html">The region in which the beacons where detected - should be the same as our beaconRegion</Abstract>
+					<Name>deviceIdentifier</Name>
+					<Abstract type="html">The identifier of the other device</Abstract>
 				</Parameter>
 			</Parameters>
 			
-			<Anchor>//api/name/locationManager:didRangeBeacons:inRegion:</Anchor>
-            <NodeRef refid="2"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWBeaconMonitor/setLocationManager:</TokenIdentifier>
-			<Abstract type="html">CLLocationManager looks for iBeacons and reports found beacons to its delegate</Abstract>
-			<DeclaredIn>CWBeaconMonitor.m</DeclaredIn>
-			
-			<Declaration>@property (readwrite, strong) CLLocationManager *locationManager</Declaration>
-			
-			
-			<Anchor>//api/name/locationManager</Anchor>
-            <NodeRef refid="2"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWBeaconMonitor/locationManager</TokenIdentifier>
-			<Abstract type="html">CLLocationManager looks for iBeacons and reports found beacons to its delegate</Abstract>
-			<DeclaredIn>CWBeaconMonitor.m</DeclaredIn>
-			
-			<Declaration>@property (readwrite, strong) CLLocationManager *locationManager</Declaration>
-			
-			
-			<Anchor>//api/name/locationManager</Anchor>
-            <NodeRef refid="2"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/CWBeaconMonitor/locationManager</TokenIdentifier>
-			<Abstract type="html">CLLocationManager looks for iBeacons and reports found beacons to its delegate</Abstract>
-			<DeclaredIn>CWBeaconMonitor.m</DeclaredIn>
-			
-			<Declaration>@property (readwrite, strong) CLLocationManager *locationManager</Declaration>
-			
-			
-			<Anchor>//api/name/locationManager</Anchor>
-            <NodeRef refid="2"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWBeaconMonitor/setBeaconRegion:</TokenIdentifier>
-			<Abstract type="html">Represents a template of beacons we are searching for around us</Abstract>
-			<DeclaredIn>CWBeaconMonitor.m</DeclaredIn>
-			
-			<Declaration>@property (readwrite, strong) CLBeaconRegion *beaconRegion</Declaration>
-			
-			
-			<Anchor>//api/name/beaconRegion</Anchor>
-            <NodeRef refid="2"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWBeaconMonitor/beaconRegion</TokenIdentifier>
-			<Abstract type="html">Represents a template of beacons we are searching for around us</Abstract>
-			<DeclaredIn>CWBeaconMonitor.m</DeclaredIn>
-			
-			<Declaration>@property (readwrite, strong) CLBeaconRegion *beaconRegion</Declaration>
-			
-			
-			<Anchor>//api/name/beaconRegion</Anchor>
-            <NodeRef refid="2"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/CWBeaconMonitor/beaconRegion</TokenIdentifier>
-			<Abstract type="html">Represents a template of beacons we are searching for around us</Abstract>
-			<DeclaredIn>CWBeaconMonitor.m</DeclaredIn>
-			
-			<Declaration>@property (readwrite, strong) CLBeaconRegion *beaconRegion</Declaration>
-			
-			
-			<Anchor>//api/name/beaconRegion</Anchor>
-            <NodeRef refid="2"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWBeaconMonitor/setCurrentBeacons:</TokenIdentifier>
-			<Abstract type="html">An array of currently detected beacons</Abstract>
-			<DeclaredIn>CWBeaconMonitor.m</DeclaredIn>
-			
-			<Declaration>@property (readwrite, strong) NSArray *currentBeacons</Declaration>
-			
-			
-			<Anchor>//api/name/currentBeacons</Anchor>
-            <NodeRef refid="2"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWBeaconMonitor/currentBeacons</TokenIdentifier>
-			<Abstract type="html">An array of currently detected beacons</Abstract>
-			<DeclaredIn>CWBeaconMonitor.m</DeclaredIn>
-			
-			<Declaration>@property (readwrite, strong) NSArray *currentBeacons</Declaration>
-			
-			
-			<Anchor>//api/name/currentBeacons</Anchor>
-            <NodeRef refid="2"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/CWBeaconMonitor/currentBeacons</TokenIdentifier>
-			<Abstract type="html">An array of currently detected beacons</Abstract>
-			<DeclaredIn>CWBeaconMonitor.m</DeclaredIn>
-			
-			<Declaration>@property (readwrite, strong) NSArray *currentBeacons</Declaration>
-			
-			
-			<Anchor>//api/name/currentBeacons</Anchor>
+			<Anchor>//api/name/sendNetworkAddressesToDevice:</Anchor>
             <NodeRef refid="2"/>
 		</Token>
 		

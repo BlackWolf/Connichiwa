@@ -51,6 +51,9 @@ app.use("/connichiwa", Express.static(RESOURCES_PATH + "/weblib"));
 //Serve the webpage that is accessed by remote devices
 app.use("/remote", Express.static(RESOURCES_PATH + "/remote"));
 
+//Serve scripts delivered with Connichiwa
+app.use("/scripts", Express.static(RESOURCES_PATH + "/scripts"));
+
 //DOCUMENT_ROOT (web app) is served as /
 app.use("/", Express.static(DOCUMENT_ROOT));
 
@@ -94,7 +97,7 @@ websocket.on("connection", function(wsConnection) {
   }
   else
   {
-    wsUnidentifiedRemoteConnection.push(wsConnection)
+    wsUnidentifiedRemoteConnection.push(wsConnection);
     log("WEBSOCKET", "Initialized remote connection");
     
     wsConnection.on("message", function(message) {
@@ -127,7 +130,7 @@ function sendToWeblib(message)
     log("Message lost because no local websocket connection exists: " + message);
     return;
   }
- log("WEBSERVER", "Sending message to weblib: " + message);
+  log("WEBSERVER", "Sending message to weblib: " + message);
   wsLocalConnection.send(message);
 }
 

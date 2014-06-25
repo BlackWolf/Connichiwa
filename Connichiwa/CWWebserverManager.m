@@ -1,5 +1,5 @@
 //
-//  CWWebserver.m
+//  CWWebserverManager.m
 //  Connichiwa
 //
 //  Created by Mario Schreiner on 04/06/14.
@@ -10,7 +10,6 @@
 #import <Nodelike/NLContext.h>
 #import "CWUtil.h"
 #import "CWBundle.h"
-#import "CWConstants.h"
 #import "CWDebug.h"
 
 
@@ -25,23 +24,55 @@
 @property (strong, readwrite) NLContext *nodelikeContext;
 
 /**
- *  Uses the webserver to sends the given message to the web library
+ *  Sends the given dictionary to the web library as a JSON string. First transform the dictionary and then calls _sendToWeblib with the resulting JSON
  *
- *  @param message The message to send to the web library
+ *  @param dictionary The dictionary
+ */
+- (void)_sendDictionaryToWeblib:(NSDictionary *)dictionary;
+
+/**
+ *  Sends the given message to the web library
+ *
+ *  @param message The message
  */
 - (void)_sendToWeblib:(NSString *)message;
 
 /**
+ *  Called when we received a "connectionRequest" message from the web library. This means the web library wants us to connect to another device and use it as a remote device. The identifier of the remote device is stored in message.targetIdentifier
+ *
+ *  @param message The JSON string received from the web library as an NSDictionary
+ */
+- (void)_receivedFromWeblib_connectionRequest:(NSDictionary *)message;
+
+/**
+ *  Called when we received a "remoteConnected" message from the web library. This means that a remote device has established a websocket connection to the web library. The identifier of the connected device is stored in message.remoteIdentifier.
+ *
+ *  @param message The JSON string received from the web library as an NSDictionary
+ */
+- (void)_receivedFromWeblib_remoteConnected:(NSDictionary *)message;
+
+/**
  *  Registers the functions in Javascript that call native methods (and therefore allow the webserver to send messages to the native layer)
  */
-- (void)_registerJavascriptCallbacks;
+- (void)_registerWebserverCallbacks;
+
+/**
+ *  JS Callback that the webserver calls when the web library has connected and is loaded
+ */
+- (void)_didLoadWeblib;
+
+/**
+ *  JS Callback that the webserver calls whenever it receives a websocket message that should be forwarded to the native layer.
+ *
+ *  @param message The message received via websocket. Should always be a valid JSON string.
+ */
+- (void)_receivedFromWeblib:(NSString *)message;
 
 @end
 
 
 
 @implementation CWWebserverManager
-
 
 
 - (instancetype)initWithDocumentRoot:(NSString *)documentRoot
@@ -54,7 +85,7 @@
 }
 
 
-- (void)startWebserver
+- (void)startWebserverOnPort:(int)port
 {
     self.nodelikeContext = [[NLContext alloc] initWithVirtualMachine:[[JSVirtualMachine alloc] init]];
     
@@ -76,7 +107,7 @@
     [self _registerWebserverCallbacks];
     
     //Pass some infos to the webserver
-    self.nodelikeContext[@"SERVER_PORT"] = [NSString stringWithFormat:@"%d", WEBSERVER_PORT];
+    self.nodelikeContext[@"SERVER_PORT"] = [NSString stringWithFormat:@"%d", port];
     self.nodelikeContext[@"DOCUMENT_ROOT"] = self.documentRoot;
     self.nodelikeContext[@"RESOURCES_PATH"] = [[CWBundle bundle] bundlePath];
     self.nodelikeContext[@"CWDEBUG"] = [JSValue valueWithBool:NO inContext:self.nodelikeContext];;
@@ -206,7 +237,7 @@
 
 - (void)_didLoadWeblib
 {
-    if ([self.delegate respondsToSelector:@selector(managerDidLoadWeblib:)])
+    if ([self.delegate respondsToSelector:@selector(didConnectToWeblib)])
     {
         [self.delegate didConnectToWeblib];
     }

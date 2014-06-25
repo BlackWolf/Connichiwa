@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Constants/CWBluetoothConnectionState.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/c/tdef/CWBluetoothConnectionState</TokenIdentifier>
+			<Abstract type="html">Describes the current state of a BT Connection to a remote device</Abstract>
+			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
+            
+			
+			<NodeRef refid="11"/>
+		</Token>
+		
+		
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/CWBluetoothConnectionStateInitialConnecting</TokenIdentifier>
+            <Abstract type="html">The other device was detected and a BT connection is currently established to receive the initial data from the device
+     </Abstract>
+            <Declaration>CWBluetoothConnectionStateInitialConnecting</Declaration>
+            
+            <DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
+            
+            <NodeRef refid="11"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/CWBluetoothConnectionStateInitialWaitingForData</TokenIdentifier>
+            <Abstract type="html">A BT connection for the initial data transfer was established and we are awaiting for the other device to send us the data
+     </Abstract>
+            <Declaration>CWBluetoothConnectionStateInitialWaitingForData</Declaration>
+            
+            <DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
+            
+            <NodeRef refid="11"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/CWBluetoothConnectionStateInitialDone</TokenIdentifier>
+            <Abstract type="html">We received the initial data and the device can therefore be reported to other Connichiwa components. The BT connection has been disconnected.
+     </Abstract>
+            <Declaration>CWBluetoothConnectionStateInitialDone</Declaration>
+            
+            <DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
+            
+            <NodeRef refid="11"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/CWBluetoothConnectionStateIPConnecting</TokenIdentifier>
+            <Abstract type="html">We want to use the other device as a remote device and currently establish a BT connection in order to send it our network interface addresses
+     </Abstract>
+            <Declaration>CWBluetoothConnectionStateIPConnecting</Declaration>
+            
+            <DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
+            
+            <NodeRef refid="11"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/CWBluetoothConnectionStateIPSent</TokenIdentifier>
+            <Abstract type="html">We want to use the other device as a remote device, did sent our network interface addresses to the device and await a response for the addresses
+     </Abstract>
+            <Declaration>CWBluetoothConnectionStateIPSent</Declaration>
+            
+            <DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
+            
+            <NodeRef refid="11"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/CWBluetoothConnectionStateIPDone</TokenIdentifier>
+            <Abstract type="html">We want to use the other device as a remote device and received a response for the network interface addresses we sent. This state does not say anything about if the response was positive or negative
+     </Abstract>
+            <Declaration>CWBluetoothConnectionStateIPDone</Declaration>
+            
+            <DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
+            
+            <NodeRef refid="11"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/CWBluetoothConnectionStateErrored</TokenIdentifier>
+            <Abstract type="html">An unexpected error occured and the device can not be used any longer
+     </Abstract>
+            <Declaration>CWBluetoothConnectionStateErrored</Declaration>
+            
+            <DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
+            
+            <NodeRef refid="11"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/CWBluetoothConnectionStateUnknown</TokenIdentifier>
+            <Abstract type="html">The current state is unknown and the device can not be used
+     </Abstract>
+            <Declaration>CWBluetoothConnectionStateUnknown</Declaration>
+            
+            <DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
+            
+            <NodeRef refid="11"/>
+        </Token>
+        
+	</File>
+</Tokens>

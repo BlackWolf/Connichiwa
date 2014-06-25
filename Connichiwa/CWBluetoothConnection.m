@@ -7,9 +7,23 @@
 //
 
 #import "CWBluetoothConnection.h"
-#import "CWConstants.h"
 #import "CWDebug.h"
 
+
+
+/**
+ *  The default "measured power" assumes for BT transmitters. This is the RSSI of the transmitter at a distance of 1m
+ */
+int const DEFAULT_MEASURED_BLUETOOTH_POWER = -62;
+
+/**
+ *  The α value used when calculating the moving average for the BT Connection RSSI.
+ *  The higher this value, the faster changes to device distances will be adapted, but the more vulnerable the distance is to outlier
+ */
+//double const RSSI_MOVING_AVERAGE_ALPHA = 0.125;
+double const RSSI_MOVING_AVERAGE_ALPHA = 0.03125;
+//double const RSSI_MOVING_AVERAGE_ALPHA = 0.0225;
+//double const RSSI_MOVING_AVERAGE_ALPHA = 0.015625;
 
 
 
@@ -18,6 +32,10 @@
 @property (readwrite, strong) CBPeripheral *peripheral;
 @property (readwrite) double averageRSSI;
 @property (readwrite) double lastSentRSSI;
+
+/**
+ *  The date where didSendDistance was called last, used to calculate the result of timeSinceLastSentRSSI
+ */
 @property (readwrite, strong) NSDate *lastSentRSSIDate;
 
 @end
@@ -30,6 +48,11 @@
 @synthesize identifier = _identifier;
 
 
+/**
+ *  Should not be used, a CWBluetoothConnection without a CBPeripheral is invalid. Calling this method will raise an exception immediatly
+ *
+ *  @return nil
+ */
 - (instancetype)init
 {
     [NSException raise:@"Bluetooth connection cannot be instantiated without a peripheral" format:@"Bluetooth connection cannot be instantiated without a peripheral. Use -initWithPeripheral: instead."];
@@ -110,10 +133,18 @@
 }
 
 
-
 #pragma mark Helper
 
 
+/**
+ *  Calculates the distance for a given RSSI and a given measured power. It then returns the distance in meters as a double. Please note that there are several algorithms that do this (the exact algorithm used by Apple in their iBeacon implementation is unknown) and that the result can vary HEAVILY. In a good environment, this can be quite accurate but if there are a lot for devices nearby, the distance between the two devices is large or there are obstacles between the two devices, this calculation can lead to very wrong results.
+ *  The current algorithm is based on http://stackoverflow.com/questions/20416218/understanding-ibeacon-distancing/20434019#20434019
+ *
+ *  @param power The measured power for the device the RSSI belongs to
+ *  @param RSSI  The RSSI that should be converted into a distance
+ *
+ *  @return The distance calculated based on the RSSI and measured power, in meters
+ */
 + (double)_distanceForMeasuredPower:(int)power RSSI:(double)RSSI
 {
     if (RSSI == 0.0)

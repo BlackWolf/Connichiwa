@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Protocols/CWWebserverDelegate.html">
+	<File path="Protocols/CWWebserverManagerDelegate.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/intf/CWWebserverDelegate</TokenIdentifier>
-			<Abstract type="html">A delegate protocol that receives different events from the CWWebserver instance</Abstract>
-			<DeclaredIn>CWWebserverDelegate.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/intf/CWWebserverManagerDelegate</TokenIdentifier>
+			<Abstract type="html">A delegate protocol that receives different events from the CWWebserverManager instance</Abstract>
+			<DeclaredIn>CWWebserverManagerDelegate.h</DeclaredIn>
             
 			
 			<NodeRef refid="10"/>
@@ -13,14 +13,60 @@
 		
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/intfm/CWWebserverDelegate/localWebsocketWasOpened</TokenIdentifier>
-			<Abstract type="html">Clled after the webserver reported that the websocket connection to the local web view was successfully established. After that, messages can be send to the web library through that websocket connection.</Abstract>
-			<DeclaredIn>CWWebserverDelegate.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/intfm/CWWebserverManagerDelegate/didStartWebserver</TokenIdentifier>
+			<Abstract type="html">Called when the webserver was started and is ready to accept requests from web clients</Abstract>
+			<DeclaredIn>CWWebserverManagerDelegate.h</DeclaredIn>
 			
-			<Declaration>- (void)localWebsocketWasOpened</Declaration>
+			<Declaration>- (void)didStartWebserver</Declaration>
 			
 			
-			<Anchor>//api/name/localWebsocketWasOpened</Anchor>
+			<Anchor>//api/name/didStartWebserver</Anchor>
+            <NodeRef refid="10"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/CWWebserverManagerDelegate/didConnectToWeblib</TokenIdentifier>
+			<Abstract type="html">Called when the web library was loaded and established a connection to the webserver</Abstract>
+			<DeclaredIn>CWWebserverManagerDelegate.h</DeclaredIn>
+			
+			<Declaration>- (void)didConnectToWeblib</Declaration>
+			
+			
+			<Anchor>//api/name/didConnectToWeblib</Anchor>
+            <NodeRef refid="10"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/CWWebserverManagerDelegate/didReceiveConnectionRequest:</TokenIdentifier>
+			<Abstract type="html">Called when the web library sent a request to use another device as a remote device</Abstract>
+			<DeclaredIn>CWWebserverManagerDelegate.h</DeclaredIn>
+			
+			<Declaration>- (void)didReceiveConnectionRequest:(NSString *)identifier</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>identifier</Name>
+					<Abstract type="html">The identifier of the device that should be connected</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/didReceiveConnectionRequest:</Anchor>
+            <NodeRef refid="10"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/CWWebserverManagerDelegate/didConnectToRemoteDevice:</TokenIdentifier>
+			<Abstract type="html">Called when a remote device successfully established a websocket connection to the web library</Abstract>
+			<DeclaredIn>CWWebserverManagerDelegate.h</DeclaredIn>
+			
+			<Declaration>- (void)didConnectToRemoteDevice:(NSString *)identifier</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>identifier</Name>
+					<Abstract type="html">The identifier of the connected device</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/didConnectToRemoteDevice:</Anchor>
             <NodeRef refid="10"/>
 		</Token>
 		

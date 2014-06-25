@@ -83,6 +83,11 @@ function CWDevice(identifier, options)
     this.state !== CWDeviceState.CONNECTING && 
     this.state !== CWDeviceState.LOST;
   };
+  
+  this.isConnected = function()
+  {
+    return (this.state === CWDeviceState.CONNECTED);
+  };
 
   return this;
 }

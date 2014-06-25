@@ -7,7 +7,20 @@
 //
 
 #import "CWUtil.h"
-#import "CWConstants.h"
+#import "CWDebug.h"
+
+
+
+/**
+ *  The options used when creating JSON strings. In debug mode, we use a pretty representation, otherwise a shorter, less readable presentation
+ */
+#ifdef CWDEBUG
+    NSJSONWritingOptions const JSON_WRITING_OPTIONS = NSJSONWritingPrettyPrinted;
+#else
+    NSJSONWritingOptions const JSON_WRITING_OPTIONS = kNilOptions;
+#endif
+
+
 
 @implementation CWUtil
 
@@ -42,14 +55,13 @@
 }
 
 
-
 + (NSDictionary *)dictionaryFromJSONData:(NSData *)JSON
 {
     return [NSJSONSerialization JSONObjectWithData:JSON options:0 error:nil];
 }
 
 
-+ (NSData *)dataFromDictionary:(NSDictionary *)dictionary
++ (NSData *)JSONDataFromDictionary:(NSDictionary *)dictionary
 {
     return [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
 }
@@ -78,14 +90,29 @@
         temp_addr = interfaces;
         while (temp_addr != NULL)
         {
-            //            DLog(@"Interface %@ (family %d) with IP %@", [NSString stringWithUTF8String:temp_addr->ifa_name], temp_addr->ifa_addr->sa_family,[NSString stringWithUTF8String:inet_ntoa(((struct sockaddr_in *)temp_addr->ifa_addr)->sin_addr)]);
+            //temp_addr->ifa_name                                              : Interface name, for example "en0", "lo0", ...
+            //temp_addr->ifa_addr->sa_family                                   : Interface family, for example AF_INET
+            //inet_ntoa(((struct sockaddr_in *)temp_addr->ifa_addr)->sin_addr) : Interface Address (the IP) as a string
             
-            // Get NSString from C String
-            NSString *ip = [NSString stringWithUTF8String:inet_ntoa(((struct sockaddr_in *)temp_addr->ifa_addr)->sin_addr)];
-            if ([ip hasPrefix:@"0."] == NO && [ip hasPrefix:@"127."] == NO)
+            //Furthermore, the following should hold true for every iOS device (although there are no guarantees):
+            //en0 (family AF_INET)       is WiFi
+            //en1 (family AF_INET)       is GSM (tested iPhone only)
+            //en3 (family AF_INET)       is BT PAN (Receiving, tested iPad only)
+            //bridge100 (family AF_INET) is BT PAN (Advertising, tested iPhone only)
+            //For some reason, 6.3.6.0 seems to be some kind of magic IP used for inactive interface - ignore it. Sometimes, 0.0.0.0 or 255.x is used instead
+            DLog(@"Interface %@ (family %d) with IP %@", [NSString stringWithUTF8String:temp_addr->ifa_name], temp_addr->ifa_addr->sa_family, [NSString stringWithUTF8String:inet_ntoa(((struct sockaddr_in *)temp_addr->ifa_addr)->sin_addr)]);
+         
+            NSString *interfaceName = [NSString stringWithUTF8String:temp_addr->ifa_name];
+            if (temp_addr->ifa_addr->sa_family == AF_INET && ([interfaceName hasPrefix:@"en"] || [interfaceName hasPrefix:@"bridge"]))
             {
-                [ips addObject:ip];
+                //Get NSString from C String
+                NSString *ip = [NSString stringWithUTF8String:inet_ntoa(((struct sockaddr_in *)temp_addr->ifa_addr)->sin_addr)];
+                if ([ip hasPrefix:@"0."] == NO && [ip hasPrefix:@"127."] == NO && [ip hasPrefix:@"255."] == NO)
+                {
+                    [ips addObject:ip];
+                }
             }
+            
             
             temp_addr = temp_addr->ifa_next;
         }

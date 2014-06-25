@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Protocols/CWBeaconAdvertiserDelegate.html">
+	<File path="Protocols/CWBluetoothManagerDelegate.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/intf/CWBeaconAdvertiserDelegate</TokenIdentifier>
-			<Abstract type="html">A delegate protocol that receives events about this devices role as a connichiwa beacon by the CWBeaconAdvertiser instance</Abstract>
-			<DeclaredIn>CWBeaconAdvertiseDelegate.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/intf/CWBluetoothManagerDelegate</TokenIdentifier>
+			<Abstract type="html">A delegate protocol that receives different events from the CWBluetoothManager instance</Abstract>
+			<DeclaredIn>CWBluetoothManagerDelegate.h</DeclaredIn>
             
 			
 			<NodeRef refid="8"/>
@@ -13,36 +13,105 @@
 		
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/intfm/CWBeaconAdvertiserDelegate/willStartAdvertisingWithID:</TokenIdentifier>
-			<Abstract type="html">Called before this device starts advertising itself to other devices</Abstract>
-			<DeclaredIn>CWBeaconAdvertiseDelegate.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/intfm/CWBluetoothManagerDelegate/didStartScanning</TokenIdentifier>
+			<Abstract type="html">Called when the manager successfully started scanning for other BT devices</Abstract>
+			<DeclaredIn>CWBluetoothManagerDelegate.h</DeclaredIn>
 			
-			<Declaration>- (void)willStartAdvertisingWithID:(CWDeviceID *)ID</Declaration>
-			<Parameters>
-				<Parameter>
-					<Name>ID</Name>
-					<Abstract type="html">The ID under which this device will advertise itself</Abstract>
-				</Parameter>
-			</Parameters>
+			<Declaration>- (void)didStartScanning</Declaration>
 			
-			<Anchor>//api/name/willStartAdvertisingWithID:</Anchor>
+			
+			<Anchor>//api/name/didStartScanning</Anchor>
             <NodeRef refid="8"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/intfm/CWBeaconAdvertiserDelegate/didStartAdvertisingWithID:</TokenIdentifier>
-			<Abstract type="html">Called after this device started advertising itself to other devices</Abstract>
-			<DeclaredIn>CWBeaconAdvertiseDelegate.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/intfm/CWBluetoothManagerDelegate/didStartAdvertisingWithIdentifier:</TokenIdentifier>
+			<Abstract type="html">Called when the manager successfully started advertising this device to other BT device with the given identifier</Abstract>
+			<DeclaredIn>CWBluetoothManagerDelegate.h</DeclaredIn>
 			
-			<Declaration>- (void)didStartAdvertisingWithID:(CWDeviceID *)ID</Declaration>
+			<Declaration>- (void)didStartAdvertisingWithIdentifier:(NSString *)identifier</Declaration>
 			<Parameters>
 				<Parameter>
-					<Name>ID</Name>
-					<Abstract type="html">The ID under which the device is know advertising itself</Abstract>
+					<Name>identifier</Name>
+					<Abstract type="html">The identifier under wich we are advertised to other devices</Abstract>
 				</Parameter>
 			</Parameters>
 			
-			<Anchor>//api/name/didStartAdvertisingWithID:</Anchor>
+			<Anchor>//api/name/didStartAdvertisingWithIdentifier:</Anchor>
+            <NodeRef refid="8"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/CWBluetoothManagerDelegate/deviceDetected:</TokenIdentifier>
+			<Abstract type="html">Called when a new device was detected</Abstract>
+			<DeclaredIn>CWBluetoothManagerDelegate.h</DeclaredIn>
+			
+			<Declaration>- (void)deviceDetected:(NSString *)identifier</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>identifier</Name>
+					<Abstract type="html">The identifier of the newly detected device</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/deviceDetected:</Anchor>
+            <NodeRef refid="8"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/CWBluetoothManagerDelegate/device:changedDistance:</TokenIdentifier>
+			<Abstract type="html">Called when the distance of a previously detected device changed</Abstract>
+			<DeclaredIn>CWBluetoothManagerDelegate.h</DeclaredIn>
+			
+			<Declaration>- (void)device:(NSString *)identifier changedDistance:(double)distance</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>identifier</Name>
+					<Abstract type="html">The identifier of the changed device</Abstract>
+				</Parameter><Parameter>
+					<Name>distance</Name>
+					<Abstract type="html">The new distance of the device in meters</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/device:changedDistance:</Anchor>
+            <NodeRef refid="8"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/CWBluetoothManagerDelegate/didReceiveDeviceURL:</TokenIdentifier>
+			<Abstract type="html">Caled when we received an URL that points to another Connichiwa web application</Abstract>
+			<DeclaredIn>CWBluetoothManagerDelegate.h</DeclaredIn>
+			
+			<Declaration>- (void)didReceiveDeviceURL:(NSURL *)URL</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>URL</Name>
+					<Abstract type="html">The URL of the remote Connichiwa web application</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/didReceiveDeviceURL:</Anchor>
+            <NodeRef refid="8"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/CWBluetoothManagerDelegate/didSendNetworkAddresses:success:</TokenIdentifier>
+			<Abstract type="html">Called when we finished sending our network interface addresses to another device in order to use it as a remote device.</Abstract>
+			<DeclaredIn>CWBluetoothManagerDelegate.h</DeclaredIn>
+			
+			<Declaration>- (void)didSendNetworkAddresses:(NSString *)deviceIdentifier success:(BOOL)success</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>deviceIdentifier</Name>
+					<Abstract type="html">The identifier of the device that received the addresses</Abstract>
+				</Parameter><Parameter>
+					<Name>success</Name>
+					<Abstract type="html">YES if the device reported a success for at least one of the addresses, NO if none of the addresses were accepted by the remote device</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/didSendNetworkAddresses:success:</Anchor>
             <NodeRef refid="8"/>
 		</Token>
 		

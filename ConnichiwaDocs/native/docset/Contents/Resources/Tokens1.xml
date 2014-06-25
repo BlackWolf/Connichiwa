@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Classes/CWBeaconAdvertiser.html">
+	<File path="Classes/CWBluetoothConnection.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/cl/CWBeaconAdvertiser</TokenIdentifier>
-			<Abstract type="html">An instance of CWBeaconAdvertiser sets this device up to act as an iBeacon over BTLE and make itself discoverable by other devices running a CWBeaconMonitor.
-When advertising, CWBeaconAdvertiser assigns a random CWDeviceID to this beacon which is transmitted with the iBeacon package and can be picked up by other devices.
-Every device should only act as a single iBeacon - it is not recommended to create multiple instances of this class, which will yield undefined results.</Abstract>
-			<DeclaredIn>CWBeaconAdvertiser.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/cl/CWBluetoothConnection</TokenIdentifier>
+			<Abstract type="html">Each instance of this class is a data container for the bluetooth-related data of a connection to another device. &quot;Connection&quot; does not necessarily mean a fully established connection in this case. An instance of CWBluetoothConnection can also represent a device that has been detected nearby but no connection is established, or a device that has been seen previously but that was lost. Besides that, this class stores the state of the connection to another device, its received initial data, can receive new RSSI measurements for the device or keep track of send and received data.</Abstract>
+			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
             
 			
 			<NodeRef refid="1"/>
@@ -15,187 +13,348 @@ Every device should only act as a single iBeacon - it is not recommended to crea
 		
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWBeaconAdvertiser/setDelegate:</TokenIdentifier>
-			<Abstract type="html">Delegate that receives events from CWBeaconAdvertiser</Abstract>
-			<DeclaredIn>CWBeaconAdvertiser.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothConnection/setState:</TokenIdentifier>
+			<Abstract type="html">The current state of the connection</Abstract>
+			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
 			
-			<Declaration>@property (readwrite, strong) id&lt;CWBeaconAdvertiserDelegate&gt; delegate</Declaration>
+			<Declaration>@property (readwrite) CWBluetoothConnectionState state</Declaration>
 			
 			
-			<Anchor>//api/name/delegate</Anchor>
+			<Anchor>//api/name/state</Anchor>
             <NodeRef refid="1"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWBeaconAdvertiser/delegate</TokenIdentifier>
-			<Abstract type="html">Delegate that receives events from CWBeaconAdvertiser</Abstract>
-			<DeclaredIn>CWBeaconAdvertiser.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothConnection/state</TokenIdentifier>
+			<Abstract type="html">The current state of the connection</Abstract>
+			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
 			
-			<Declaration>@property (readwrite, strong) id&lt;CWBeaconAdvertiserDelegate&gt; delegate</Declaration>
+			<Declaration>@property (readwrite) CWBluetoothConnectionState state</Declaration>
 			
 			
-			<Anchor>//api/name/delegate</Anchor>
+			<Anchor>//api/name/state</Anchor>
             <NodeRef refid="1"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/CWBeaconAdvertiser/delegate</TokenIdentifier>
-			<Abstract type="html">Delegate that receives events from CWBeaconAdvertiser</Abstract>
-			<DeclaredIn>CWBeaconAdvertiser.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instp/CWBluetoothConnection/state</TokenIdentifier>
+			<Abstract type="html">The current state of the connection</Abstract>
+			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
 			
-			<Declaration>@property (readwrite, strong) id&lt;CWBeaconAdvertiserDelegate&gt; delegate</Declaration>
+			<Declaration>@property (readwrite) CWBluetoothConnectionState state</Declaration>
 			
 			
-			<Anchor>//api/name/delegate</Anchor>
+			<Anchor>//api/name/state</Anchor>
             <NodeRef refid="1"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWBeaconAdvertiser/setMyID:</TokenIdentifier>
-			<Abstract type="html">The unique ID that this beacon advertises</Abstract>
-			<DeclaredIn>CWBeaconAdvertiser.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothConnection/setIdentifier:</TokenIdentifier>
+			<Abstract type="html">The unique Connichiwa identifier of the other device</Abstract>
+			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
 			
-			<Declaration>@property (readonly) CWDeviceID *myID</Declaration>
+			<Declaration>@property (readwrite, strong) NSString *identifier</Declaration>
 			
 			
-			<Anchor>//api/name/myID</Anchor>
+			<Anchor>//api/name/identifier</Anchor>
             <NodeRef refid="1"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWBeaconAdvertiser/myID</TokenIdentifier>
-			<Abstract type="html">The unique ID that this beacon advertises</Abstract>
-			<DeclaredIn>CWBeaconAdvertiser.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothConnection/identifier</TokenIdentifier>
+			<Abstract type="html">The unique Connichiwa identifier of the other device</Abstract>
+			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
 			
-			<Declaration>@property (readonly) CWDeviceID *myID</Declaration>
+			<Declaration>@property (readwrite, strong) NSString *identifier</Declaration>
 			
 			
-			<Anchor>//api/name/myID</Anchor>
+			<Anchor>//api/name/identifier</Anchor>
             <NodeRef refid="1"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/CWBeaconAdvertiser/myID</TokenIdentifier>
-			<Abstract type="html">The unique ID that this beacon advertises</Abstract>
-			<DeclaredIn>CWBeaconAdvertiser.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instp/CWBluetoothConnection/identifier</TokenIdentifier>
+			<Abstract type="html">The unique Connichiwa identifier of the other device</Abstract>
+			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
 			
-			<Declaration>@property (readonly) CWDeviceID *myID</Declaration>
+			<Declaration>@property (readwrite, strong) NSString *identifier</Declaration>
 			
 			
-			<Anchor>//api/name/myID</Anchor>
+			<Anchor>//api/name/identifier</Anchor>
             <NodeRef refid="1"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWBeaconAdvertiser/startAdvertising</TokenIdentifier>
-			<Abstract type="html">Make this device start advertising as an iBeacon. It becomes detectable by other Connichiwa devices.</Abstract>
-			<DeclaredIn>CWBeaconAdvertiser.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothConnection/setMeasuredPower:</TokenIdentifier>
+			<Abstract type="html">The measured power of the other device&apos;s BT transmitter, used to calculate the distance to the other device</Abstract>
+			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
 			
-			<Declaration>- (void)startAdvertising</Declaration>
+			<Declaration>@property (readwrite) int measuredPower</Declaration>
 			
 			
-			<Anchor>//api/name/startAdvertising</Anchor>
+			<Anchor>//api/name/measuredPower</Anchor>
             <NodeRef refid="1"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWBeaconAdvertiser/init</TokenIdentifier>
-			<Abstract type="html">Creates a new instance of this class. It is not advised to have multiple advertiser active on a single device, you should only create this class once.</Abstract>
-			<DeclaredIn>CWBeaconAdvertiser.m</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothConnection/measuredPower</TokenIdentifier>
+			<Abstract type="html">The measured power of the other device&apos;s BT transmitter, used to calculate the distance to the other device</Abstract>
+			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
 			
-			<Declaration>- (instancetype)init</Declaration>
+			<Declaration>@property (readwrite) int measuredPower</Declaration>
 			
-			<ReturnValue><Abstract type="html">A new instance of this class.</Abstract></ReturnValue>
-			<Anchor>//api/name/init</Anchor>
+			
+			<Anchor>//api/name/measuredPower</Anchor>
             <NodeRef refid="1"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWBeaconAdvertiser/peripheralManagerDidUpdateState:</TokenIdentifier>
-			<Abstract type="html">Called by CBPeripheralManager when its power state changes</Abstract>
-			<DeclaredIn>CWBeaconAdvertiser.m</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instp/CWBluetoothConnection/measuredPower</TokenIdentifier>
+			<Abstract type="html">The measured power of the other device&apos;s BT transmitter, used to calculate the distance to the other device</Abstract>
+			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
 			
-			<Declaration>- (void)peripheralManagerDidUpdateState:(CBPeripheralManager *)manager</Declaration>
+			<Declaration>@property (readwrite) int measuredPower</Declaration>
+			
+			
+			<Anchor>//api/name/measuredPower</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothConnection/setPeripheral:</TokenIdentifier>
+			<Abstract type="html">The CBPeripheral instance associated with the device represented by this connection</Abstract>
+			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) CBPeripheral *peripheral</Declaration>
+			
+			
+			<Anchor>//api/name/peripheral</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothConnection/peripheral</TokenIdentifier>
+			<Abstract type="html">The CBPeripheral instance associated with the device represented by this connection</Abstract>
+			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) CBPeripheral *peripheral</Declaration>
+			
+			
+			<Anchor>//api/name/peripheral</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CWBluetoothConnection/peripheral</TokenIdentifier>
+			<Abstract type="html">The CBPeripheral instance associated with the device represented by this connection</Abstract>
+			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) CBPeripheral *peripheral</Declaration>
+			
+			
+			<Anchor>//api/name/peripheral</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothConnection/setAverageRSSI:</TokenIdentifier>
+			<Abstract type="html">The current average RSSI, results in a number of algorithms applied to RSSI measurements in order to compensate for outliers and jitter</Abstract>
+			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) double averageRSSI</Declaration>
+			
+			
+			<Anchor>//api/name/averageRSSI</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothConnection/averageRSSI</TokenIdentifier>
+			<Abstract type="html">The current average RSSI, results in a number of algorithms applied to RSSI measurements in order to compensate for outliers and jitter</Abstract>
+			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) double averageRSSI</Declaration>
+			
+			
+			<Anchor>//api/name/averageRSSI</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CWBluetoothConnection/averageRSSI</TokenIdentifier>
+			<Abstract type="html">The current average RSSI, results in a number of algorithms applied to RSSI measurements in order to compensate for outliers and jitter</Abstract>
+			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) double averageRSSI</Declaration>
+			
+			
+			<Anchor>//api/name/averageRSSI</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothConnection/setLastSentRSSI:</TokenIdentifier>
+			<Abstract type="html">The average RSSI at the point were didSendDistance was last called</Abstract>
+			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) double lastSentRSSI</Declaration>
+			
+			
+			<Anchor>//api/name/lastSentRSSI</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothConnection/lastSentRSSI</TokenIdentifier>
+			<Abstract type="html">The average RSSI at the point were didSendDistance was last called</Abstract>
+			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) double lastSentRSSI</Declaration>
+			
+			
+			<Anchor>//api/name/lastSentRSSI</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CWBluetoothConnection/lastSentRSSI</TokenIdentifier>
+			<Abstract type="html">The average RSSI at the point were didSendDistance was last called</Abstract>
+			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) double lastSentRSSI</Declaration>
+			
+			
+			<Anchor>//api/name/lastSentRSSI</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothConnection/setPendingIPWrites:</TokenIdentifier>
+			<Abstract type="html">When the local device writes its network interface addresses to the device represented by this class, this number representes the number of writes issued and therefore the number of responses expected. For each response, this should be decreased by one.</Abstract>
+			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
+			
+			<Declaration>@property (readwrite) int pendingIPWrites</Declaration>
+			
+			
+			<Anchor>//api/name/pendingIPWrites</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothConnection/pendingIPWrites</TokenIdentifier>
+			<Abstract type="html">When the local device writes its network interface addresses to the device represented by this class, this number representes the number of writes issued and therefore the number of responses expected. For each response, this should be decreased by one.</Abstract>
+			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
+			
+			<Declaration>@property (readwrite) int pendingIPWrites</Declaration>
+			
+			
+			<Anchor>//api/name/pendingIPWrites</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CWBluetoothConnection/pendingIPWrites</TokenIdentifier>
+			<Abstract type="html">When the local device writes its network interface addresses to the device represented by this class, this number representes the number of writes issued and therefore the number of responses expected. For each response, this should be decreased by one.</Abstract>
+			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
+			
+			<Declaration>@property (readwrite) int pendingIPWrites</Declaration>
+			
+			
+			<Anchor>//api/name/pendingIPWrites</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothConnection/initWithPeripheral:</TokenIdentifier>
+			<Abstract type="html">Initializes a new CWBluetoothConnection for the given CBPeripheral. For each CBPeripheral, and therefore for each discovered device, only one CWBluetoothConnection should be created</Abstract>
+			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
+			
+			<Declaration>- (instancetype)initWithPeripheral:(CBPeripheral *)peripheral</Declaration>
 			<Parameters>
 				<Parameter>
-					<Name>manager</Name>
-					<Abstract type="html">The CBPeripheralManager instance that changed</Abstract>
+					<Name>peripheral</Name>
+					<Abstract type="html">The CBPeriphal that represents this device in the BT environment</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">A new CWBluetoothConnection instance</Abstract></ReturnValue>
+			<Anchor>//api/name/initWithPeripheral:</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothConnection/addNewRSSIMeasure:</TokenIdentifier>
+			<Abstract type="html">Adds a new RSSI measurement to this device&apos;s RSSI. Using different algorithms, outlier RSSI&apos;s or jittering is reduce, the results of this algorithms can be found by retrieving averageRSSI from this class. Note that the original RSSI measurements can not be restored.</Abstract>
+			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
+			
+			<Declaration>- (void)addNewRSSIMeasure:(double)rssi</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>rssi</Name>
+					<Abstract type="html">The measured RSSI for the device</Abstract>
 				</Parameter>
 			</Parameters>
 			
-			<Anchor>//api/name/peripheralManagerDidUpdateState:</Anchor>
+			<Anchor>//api/name/addNewRSSIMeasure:</Anchor>
             <NodeRef refid="1"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWBeaconAdvertiser/setPeripheralManager:</TokenIdentifier>
-			<Abstract type="html">Core Bluetooth Peripheral Manager, responsible for advertising the iBeacon</Abstract>
-			<DeclaredIn>CWBeaconAdvertiser.m</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothConnection/didSendDistance</TokenIdentifier>
+			<Abstract type="html">This should be called after the distance of this device was send to other Connichiwa components. It will save the current time and the current averageRSSI and make them available via lastSentRSSI and timeSinceLastSentRSSI. This can be used to determine the time passed or the RSSI change since the last RSSI send.</Abstract>
+			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
 			
-			<Declaration>@property (readwrite, strong) CBPeripheralManager *peripheralManager</Declaration>
+			<Declaration>- (void)didSendDistance</Declaration>
 			
 			
-			<Anchor>//api/name/peripheralManager</Anchor>
+			<Anchor>//api/name/didSendDistance</Anchor>
             <NodeRef refid="1"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWBeaconAdvertiser/peripheralManager</TokenIdentifier>
-			<Abstract type="html">Core Bluetooth Peripheral Manager, responsible for advertising the iBeacon</Abstract>
-			<DeclaredIn>CWBeaconAdvertiser.m</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothConnection/timeSinceLastSentRSSI</TokenIdentifier>
+			<Abstract type="html">The amount of time that elapsed since the last time didSendDistance was called</Abstract>
+			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
 			
-			<Declaration>@property (readwrite, strong) CBPeripheralManager *peripheralManager</Declaration>
+			<Declaration>- (NSTimeInterval)timeSinceLastSentRSSI</Declaration>
 			
-			
-			<Anchor>//api/name/peripheralManager</Anchor>
+			<ReturnValue><Abstract type="html">A time interval in seconds</Abstract></ReturnValue>
+			<Anchor>//api/name/timeSinceLastSentRSSI</Anchor>
             <NodeRef refid="1"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/CWBeaconAdvertiser/peripheralManager</TokenIdentifier>
-			<Abstract type="html">Core Bluetooth Peripheral Manager, responsible for advertising the iBeacon</Abstract>
-			<DeclaredIn>CWBeaconAdvertiser.m</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothConnection/averageDistance</TokenIdentifier>
+			<Abstract type="html">The averageRSSI transformed into a distance</Abstract>
+			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
 			
-			<Declaration>@property (readwrite, strong) CBPeripheralManager *peripheralManager</Declaration>
+			<Declaration>- (double)averageDistance</Declaration>
 			
-			
-			<Anchor>//api/name/peripheralManager</Anchor>
+			<ReturnValue><Abstract type="html">The distance of the device according to averageRSSI, in meters</Abstract></ReturnValue>
+			<Anchor>//api/name/averageDistance</Anchor>
             <NodeRef refid="1"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWBeaconAdvertiser/setBeaconRegion:</TokenIdentifier>
-			<Abstract type="html">Represents the local region that our beacon creates</Abstract>
-			<DeclaredIn>CWBeaconAdvertiser.m</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothConnection/lastSentDistance</TokenIdentifier>
+			<Abstract type="html">The lastSentRSSI transformed into a distance</Abstract>
+			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
 			
-			<Declaration>@property (readwrite, strong) CLBeaconRegion *beaconRegion</Declaration>
+			<Declaration>- (double)lastSentDistance</Declaration>
 			
-			
-			<Anchor>//api/name/beaconRegion</Anchor>
+			<ReturnValue><Abstract type="html">The distance of the device when the RSSI was last sent, in meters</Abstract></ReturnValue>
+			<Anchor>//api/name/lastSentDistance</Anchor>
             <NodeRef refid="1"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWBeaconAdvertiser/beaconRegion</TokenIdentifier>
-			<Abstract type="html">Represents the local region that our beacon creates</Abstract>
-			<DeclaredIn>CWBeaconAdvertiser.m</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothConnection/isReady</TokenIdentifier>
+			<Abstract type="html">Determines if the device is ready to be used by other Connichiwa components</Abstract>
+			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
 			
-			<Declaration>@property (readwrite, strong) CLBeaconRegion *beaconRegion</Declaration>
+			<Declaration>- (BOOL)isReady</Declaration>
 			
-			
-			<Anchor>//api/name/beaconRegion</Anchor>
-            <NodeRef refid="1"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/CWBeaconAdvertiser/beaconRegion</TokenIdentifier>
-			<Abstract type="html">Represents the local region that our beacon creates</Abstract>
-			<DeclaredIn>CWBeaconAdvertiser.m</DeclaredIn>
-			
-			<Declaration>@property (readwrite, strong) CLBeaconRegion *beaconRegion</Declaration>
-			
-			
-			<Anchor>//api/name/beaconRegion</Anchor>
+			<ReturnValue><Abstract type="html">YES if the device can be used by other Connichiwa components, otherwise NO</Abstract></ReturnValue>
+			<Anchor>//api/name/isReady</Anchor>
             <NodeRef refid="1"/>
 		</Token>
 		

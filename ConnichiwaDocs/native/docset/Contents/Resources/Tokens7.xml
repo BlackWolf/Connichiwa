@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Classes/CWWebserver.html">
+	<File path="Classes/CWWebserverManager.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/cl/CWWebserver</TokenIdentifier>
-			<Abstract type="html">The CWWebserver class represents the local webserver run by Connichiwa in order to run local web applications.
+			<TokenIdentifier>//apple_ref/occ/cl/CWWebserverManager</TokenIdentifier>
+			<Abstract type="html">The CWWebserverManager class represents the local webserver run by Connichiwa in order to run local web applications.
 It is responsible for launching and managing the webserver and acts as a bridge between Objective-C and the server, sending and receiving messages from it over the Connichiwa Communication Protocol (Native Layer).
 Only one instance of the webserver should be running on a device.</Abstract>
-			<DeclaredIn>CWWebserver.h</DeclaredIn>
+			<DeclaredIn>CWWebserverManager.h</DeclaredIn>
             
 			
 			<NodeRef refid="7"/>
@@ -15,23 +15,11 @@ Only one instance of the webserver should be running on a device.</Abstract>
 		
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWWebserver/setDelegate:</TokenIdentifier>
-			<Abstract type="html">The delegate to receive events send by CWWebserver</Abstract>
-			<DeclaredIn>CWWebserver.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWWebserverManager/setDelegate:</TokenIdentifier>
+			<Abstract type="html">The delegate to receive events by this class</Abstract>
+			<DeclaredIn>CWWebserverManager.h</DeclaredIn>
 			
-			<Declaration>@property (readwrite, strong) id&lt;CWWebserverDelegate&gt; delegate</Declaration>
-			
-			
-			<Anchor>//api/name/delegate</Anchor>
-            <NodeRef refid="7"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWWebserver/delegate</TokenIdentifier>
-			<Abstract type="html">The delegate to receive events send by CWWebserver</Abstract>
-			<DeclaredIn>CWWebserver.h</DeclaredIn>
-			
-			<Declaration>@property (readwrite, strong) id&lt;CWWebserverDelegate&gt; delegate</Declaration>
+			<Declaration>@property (readwrite, strong) id&lt;CWWebserverManagerDelegate&gt; delegate</Declaration>
 			
 			
 			<Anchor>//api/name/delegate</Anchor>
@@ -39,11 +27,11 @@ Only one instance of the webserver should be running on a device.</Abstract>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/CWWebserver/delegate</TokenIdentifier>
-			<Abstract type="html">The delegate to receive events send by CWWebserver</Abstract>
-			<DeclaredIn>CWWebserver.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWWebserverManager/delegate</TokenIdentifier>
+			<Abstract type="html">The delegate to receive events by this class</Abstract>
+			<DeclaredIn>CWWebserverManager.h</DeclaredIn>
 			
-			<Declaration>@property (readwrite, strong) id&lt;CWWebserverDelegate&gt; delegate</Declaration>
+			<Declaration>@property (readwrite, strong) id&lt;CWWebserverManagerDelegate&gt; delegate</Declaration>
 			
 			
 			<Anchor>//api/name/delegate</Anchor>
@@ -51,9 +39,21 @@ Only one instance of the webserver should be running on a device.</Abstract>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWWebserver/setDocumentRoot:</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/instp/CWWebserverManager/delegate</TokenIdentifier>
+			<Abstract type="html">The delegate to receive events by this class</Abstract>
+			<DeclaredIn>CWWebserverManager.h</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) id&lt;CWWebserverManagerDelegate&gt; delegate</Declaration>
+			
+			
+			<Anchor>//api/name/delegate</Anchor>
+            <NodeRef refid="7"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWWebserverManager/setDocumentRoot:</TokenIdentifier>
 			<Abstract type="html">Path to the folder acting as the root of the web server. &apos;/&apos; on the web server will be mapped to this path.</Abstract>
-			<DeclaredIn>CWWebserver.h</DeclaredIn>
+			<DeclaredIn>CWWebserverManager.h</DeclaredIn>
 			
 			<Declaration>@property (readonly) NSString *documentRoot</Declaration>
 			
@@ -63,9 +63,9 @@ Only one instance of the webserver should be running on a device.</Abstract>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWWebserver/documentRoot</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/instm/CWWebserverManager/documentRoot</TokenIdentifier>
 			<Abstract type="html">Path to the folder acting as the root of the web server. &apos;/&apos; on the web server will be mapped to this path.</Abstract>
-			<DeclaredIn>CWWebserver.h</DeclaredIn>
+			<DeclaredIn>CWWebserverManager.h</DeclaredIn>
 			
 			<Declaration>@property (readonly) NSString *documentRoot</Declaration>
 			
@@ -75,9 +75,9 @@ Only one instance of the webserver should be running on a device.</Abstract>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/CWWebserver/documentRoot</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/instp/CWWebserverManager/documentRoot</TokenIdentifier>
 			<Abstract type="html">Path to the folder acting as the root of the web server. &apos;/&apos; on the web server will be mapped to this path.</Abstract>
-			<DeclaredIn>CWWebserver.h</DeclaredIn>
+			<DeclaredIn>CWWebserverManager.h</DeclaredIn>
 			
 			<Declaration>@property (readonly) NSString *documentRoot</Declaration>
 			
@@ -87,188 +87,107 @@ Only one instance of the webserver should be running on a device.</Abstract>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWWebserver/startWithDocumentRoot:</TokenIdentifier>
-			<Abstract type="html">Launch the webserver with the given document root.</Abstract>
-			<DeclaredIn>CWWebserver.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWWebserverManager/initWithDocumentRoot:</TokenIdentifier>
+			<Abstract type="html">Initialize a new CWWebserverManager instance with the given document root (should point to the path where the web application resides). Calling this does not actually start the webserver, use startWebserver to do so.</Abstract>
+			<DeclaredIn>CWWebserverManager.h</DeclaredIn>
 			
-			<Declaration>- (void)startWithDocumentRoot:(NSString *)documentRoot</Declaration>
+			<Declaration>- (instancetype)initWithDocumentRoot:(NSString *)documentRoot</Declaration>
 			<Parameters>
 				<Parameter>
 					<Name>documentRoot</Name>
-					<Abstract type="html">A path that will be mapped to the root path of the web server. Your web application should be there.</Abstract>
+					<Abstract type="html">The document root of the webserver, usually pointing to the path of the web application. &apos;/&apos; on the web server will be mapped to this path.</Abstract>
 				</Parameter>
 			</Parameters>
-			
-			<Anchor>//api/name/startWithDocumentRoot:</Anchor>
+			<ReturnValue><Abstract type="html">A new CWWebserverManager instance</Abstract></ReturnValue>
+			<Anchor>//api/name/initWithDocumentRoot:</Anchor>
             <NodeRef refid="7"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWWebserver/sendLocalID:</TokenIdentifier>
-			<Abstract type="html">Sends a message to the web application with the ID this device is advertised under</Abstract>
-			<DeclaredIn>CWWebserver.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWWebserverManager/startWebserverOnPort:</TokenIdentifier>
+			<Abstract type="html">Starts the webserver on the given port, making it possible for web clients to connect to it</Abstract>
+			<DeclaredIn>CWWebserverManager.h</DeclaredIn>
 			
-			<Declaration>- (void)sendLocalID:(CWDeviceID *)ID</Declaration>
+			<Declaration>- (void)startWebserverOnPort:(int)port</Declaration>
 			<Parameters>
 				<Parameter>
-					<Name>ID</Name>
-					<Abstract type="html">The ID of this device</Abstract>
+					<Name>port</Name>
+					<Abstract type="html">The port the webserver should listen on. Note that the websocket server will listen on this + 1</Abstract>
 				</Parameter>
 			</Parameters>
 			
-			<Anchor>//api/name/sendLocalID:</Anchor>
+			<Anchor>//api/name/startWebserverOnPort:</Anchor>
             <NodeRef refid="7"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWWebserver/sendNewBeaconWithID:inProximity:</TokenIdentifier>
-			<Abstract type="html">Sends a message to the web application and informs it of a new device detected nearby</Abstract>
-			<DeclaredIn>CWWebserver.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWWebserverManager/sendToWeblib_localIdentifier:</TokenIdentifier>
+			<Abstract type="html">Sends the given identifier to the web library and tells the web library this is the identifier of this device. Should usually only be called once in the application&apos;s life cycle and only with the correct identifier, otherwise results are undefined.</Abstract>
+			<DeclaredIn>CWWebserverManager.h</DeclaredIn>
 			
-			<Declaration>- (void)sendNewBeaconWithID:(CWDeviceID *)ID inProximity:(NSString *)proximity</Declaration>
+			<Declaration>- (void)sendToWeblib_localIdentifier:(NSString *)identifier</Declaration>
 			<Parameters>
 				<Parameter>
-					<Name>ID</Name>
-					<Abstract type="html">The ID of the detected device</Abstract>
+					<Name>identifier</Name>
+					<Abstract type="html">The identifier that represents this device amongst Connichiwa</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/sendToWeblib_localIdentifier:</Anchor>
+            <NodeRef refid="7"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWWebserverManager/sendToWeblib_deviceDetected:</TokenIdentifier>
+			<Abstract type="html">Sends a message to the web library telling it about a newly detected, nearby device with the given identifier</Abstract>
+			<DeclaredIn>CWWebserverManager.h</DeclaredIn>
+			
+			<Declaration>- (void)sendToWeblib_deviceDetected:(NSString *)identifier</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>identifier</Name>
+					<Abstract type="html">The identifier of the device that was detected</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/sendToWeblib_deviceDetected:</Anchor>
+            <NodeRef refid="7"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWWebserverManager/sendToWeblib_device:changedDistance:</TokenIdentifier>
+			<Abstract type="html">Sends a message to the web library telling it that the distance of a previously detected device has changes</Abstract>
+			<DeclaredIn>CWWebserverManager.h</DeclaredIn>
+			
+			<Declaration>- (void)sendToWeblib_device:(NSString *)identifier changedDistance:(double)distance</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>identifier</Name>
+					<Abstract type="html">The identifier of the device whose distance changes</Abstract>
 				</Parameter><Parameter>
-					<Name>proximity</Name>
-					<Abstract type="html">A string describing the distance between this device and the detected device</Abstract>
+					<Name>distance</Name>
+					<Abstract type="html">The new distance of the device in meters</Abstract>
 				</Parameter>
 			</Parameters>
 			
-			<Anchor>//api/name/sendNewBeaconWithID:inProximity:</Anchor>
+			<Anchor>//api/name/sendToWeblib_device:changedDistance:</Anchor>
             <NodeRef refid="7"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWWebserver/sendBeaconWithID:newProximity:</TokenIdentifier>
-			<Abstract type="html">Sends a message to the web application and informs it of a change of the proximity of a device nearby</Abstract>
-			<DeclaredIn>CWWebserver.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWWebserverManager/sendToWeblib_connectionRequestFailed:</TokenIdentifier>
+			<Abstract type="html">Sends a message to the web library telling it that a request to use another device as a remote device has failed</Abstract>
+			<DeclaredIn>CWWebserverManager.h</DeclaredIn>
 			
-			<Declaration>- (void)sendBeaconWithID:(CWDeviceID *)ID newProximity:(NSString *)proximity</Declaration>
+			<Declaration>- (void)sendToWeblib_connectionRequestFailed:(NSString *)identifier</Declaration>
 			<Parameters>
 				<Parameter>
-					<Name>ID</Name>
-					<Abstract type="html">The ID of the device that changed</Abstract>
-				</Parameter><Parameter>
-					<Name>proximity</Name>
-					<Abstract type="html">A string describing the new distance between this device and the detected device</Abstract>
+					<Name>identifier</Name>
+					<Abstract type="html">The identifier of the device that should have been used as a remote device</Abstract>
 				</Parameter>
 			</Parameters>
 			
-			<Anchor>//api/name/sendBeaconWithID:newProximity:</Anchor>
-            <NodeRef refid="7"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWWebserver/sendLostBeaconWithID:</TokenIdentifier>
-			<Abstract type="html">Sends a message to the web application and informs it of a nearby device that was lost</Abstract>
-			<DeclaredIn>CWWebserver.h</DeclaredIn>
-			
-			<Declaration>- (void)sendLostBeaconWithID:(CWDeviceID *)ID</Declaration>
-			<Parameters>
-				<Parameter>
-					<Name>ID</Name>
-					<Abstract type="html">The ID of the lost device</Abstract>
-				</Parameter>
-			</Parameters>
-			
-			<Anchor>//api/name/sendLostBeaconWithID:</Anchor>
-            <NodeRef refid="7"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWWebserver/_sendToWeblib:</TokenIdentifier>
-			<Abstract type="html">Sends the given message to the web library through the Nodelike server.</Abstract>
-			<DeclaredIn>CWWebserver.m</DeclaredIn>
-			
-			<Declaration>- (void)_sendToWeblib:(NSString *)message</Declaration>
-			<Parameters>
-				<Parameter>
-					<Name>message</Name>
-					<Abstract type="html">The message to send to the web library.</Abstract>
-				</Parameter>
-			</Parameters>
-			
-			<Anchor>//api/name/_sendToWeblib:</Anchor>
-            <NodeRef refid="7"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWWebserver/_JSONFromDictionary:</TokenIdentifier>
-			<Abstract type="html">Creates a JSON string from a NSDictionary that can be safely send over JavaScriptCore&apos;s evaluteScript:.
-The dictionary must be convertable to JSON as defined by NSJSONSerialization</Abstract>
-			<DeclaredIn>CWWebserver.m</DeclaredIn>
-			
-			<Declaration>- (NSString *)_JSONFromDictionary:(NSDictionary *)dictionary</Declaration>
-			<Parameters>
-				<Parameter>
-					<Name>dictionary</Name>
-					<Abstract type="html">The dictionary to translate into JSON</Abstract>
-				</Parameter>
-			</Parameters>
-			<ReturnValue><Abstract type="html">The JSON string representing the Dictionary.</Abstract></ReturnValue>
-			<Anchor>//api/name/_JSONFromDictionary:</Anchor>
-            <NodeRef refid="7"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWWebserver/_registerWebserverCallbacks</TokenIdentifier>
-			<Abstract type="html">Registers the functions in Javascript that call native methods (and therefore allow the webserver to send messages to the native layer)</Abstract>
-			<DeclaredIn>CWWebserver.m</DeclaredIn>
-			
-			<Declaration>- (void)_registerWebserverCallbacks</Declaration>
-			
-			
-			<Anchor>//api/name/_registerWebserverCallbacks</Anchor>
-            <NodeRef refid="7"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWWebserver/localWebsocketWasOpened</TokenIdentifier>
-			<Abstract type="html">Called by the webserver when the websocket connection to the local web view was established successfully</Abstract>
-			<DeclaredIn>CWWebserver.m</DeclaredIn>
-			
-			<Declaration>- (void)localWebsocketWasOpened</Declaration>
-			
-			
-			<Anchor>//api/name/localWebsocketWasOpened</Anchor>
-            <NodeRef refid="7"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWWebserver/setNodelikeContext:</TokenIdentifier>
-			<Abstract type="html">A Nodelike-specific subclass of JSContext that is used to execute code and for communication between Objective-C and the Nodelike server</Abstract>
-			<DeclaredIn>CWWebserver.m</DeclaredIn>
-			
-			<Declaration>@property (strong, readwrite) NLContext *nodelikeContext</Declaration>
-			
-			
-			<Anchor>//api/name/nodelikeContext</Anchor>
-            <NodeRef refid="7"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWWebserver/nodelikeContext</TokenIdentifier>
-			<Abstract type="html">A Nodelike-specific subclass of JSContext that is used to execute code and for communication between Objective-C and the Nodelike server</Abstract>
-			<DeclaredIn>CWWebserver.m</DeclaredIn>
-			
-			<Declaration>@property (strong, readwrite) NLContext *nodelikeContext</Declaration>
-			
-			
-			<Anchor>//api/name/nodelikeContext</Anchor>
-            <NodeRef refid="7"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/CWWebserver/nodelikeContext</TokenIdentifier>
-			<Abstract type="html">A Nodelike-specific subclass of JSContext that is used to execute code and for communication between Objective-C and the Nodelike server</Abstract>
-			<DeclaredIn>CWWebserver.m</DeclaredIn>
-			
-			<Declaration>@property (strong, readwrite) NLContext *nodelikeContext</Declaration>
-			
-			
-			<Anchor>//api/name/nodelikeContext</Anchor>
+			<Anchor>//api/name/sendToWeblib_connectionRequestFailed:</Anchor>
             <NodeRef refid="7"/>
 		</Token>
 		

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Protocols/CWBeaconMonitorDelegate.html">
+	<File path="Protocols/CWWebApplicationState.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/intf/CWBeaconMonitorDelegate</TokenIdentifier>
-			<Abstract type="html">A delegate protocol that receives events about nearby detected connichiwa beacons (devices) by the CWBeaconMonitor instance</Abstract>
-			<DeclaredIn>CWBeaconMonitorDelegate.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/intf/CWWebApplicationState</TokenIdentifier>
+			<Abstract type="html">Implemented by CWWebApplication, this protocol exposes the global state of the application. This can be passed to other classes that need to know about the global application state, keeping everything else in CWWebApplication hidden.</Abstract>
+			<DeclaredIn>CWWebApplicationState.h</DeclaredIn>
             
 			
 			<NodeRef refid="9"/>
@@ -13,59 +13,98 @@
 		
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/intfm/CWBeaconMonitorDelegate/beaconDetectedWithID:inProximity:</TokenIdentifier>
-			<Abstract type="html">Called when a new, previously unknown beacon was detected nearby</Abstract>
-			<DeclaredIn>CWBeaconMonitorDelegate.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/intfm/CWWebApplicationState/setIdentifier:</TokenIdentifier>
+			<Abstract type="html">The unique identifier of this device that is used amongst all the different parts of Connichiwa</Abstract>
+			<DeclaredIn>CWWebApplicationState.h</DeclaredIn>
 			
-			<Declaration>- (void)beaconDetectedWithID:(CWDeviceID *)ID inProximity:(NSString *)proximity</Declaration>
-			<Parameters>
-				<Parameter>
-					<Name>ID</Name>
-					<Abstract type="html">The ID of the newly detected device</Abstract>
-				</Parameter><Parameter>
-					<Name>proximity</Name>
-					<Abstract type="html">A string describing the distance between this device and the detected device</Abstract>
-				</Parameter>
-			</Parameters>
+			<Declaration>@property (readonly, strong) NSString *identifier</Declaration>
 			
-			<Anchor>//api/name/beaconDetectedWithID:inProximity:</Anchor>
+			
+			<Anchor>//api/name/identifier</Anchor>
             <NodeRef refid="9"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/intfm/CWBeaconMonitorDelegate/beaconWithID:changedProximity:</TokenIdentifier>
-			<Abstract type="html">Called when a known beacon changes its proximity</Abstract>
-			<DeclaredIn>CWBeaconMonitorDelegate.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/intfm/CWWebApplicationState/identifier</TokenIdentifier>
+			<Abstract type="html">The unique identifier of this device that is used amongst all the different parts of Connichiwa</Abstract>
+			<DeclaredIn>CWWebApplicationState.h</DeclaredIn>
 			
-			<Declaration>- (void)beaconWithID:(CWDeviceID *)ID changedProximity:(NSString *)proximity</Declaration>
-			<Parameters>
-				<Parameter>
-					<Name>ID</Name>
-					<Abstract type="html">The ID of the beacon that changed</Abstract>
-				</Parameter><Parameter>
-					<Name>proximity</Name>
-					<Abstract type="html">A string describing the new distance between this device and the detected device</Abstract>
-				</Parameter>
-			</Parameters>
+			<Declaration>@property (readonly, strong) NSString *identifier</Declaration>
 			
-			<Anchor>//api/name/beaconWithID:changedProximity:</Anchor>
+			
+			<Anchor>//api/name/identifier</Anchor>
             <NodeRef refid="9"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/intfm/CWBeaconMonitorDelegate/beaconLostWithID:</TokenIdentifier>
-			<Abstract type="html">Called when a known beacon was shutdown or went out of range</Abstract>
-			<DeclaredIn>CWBeaconMonitorDelegate.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/intfp/CWWebApplicationState/identifier</TokenIdentifier>
+			<Abstract type="html">The unique identifier of this device that is used amongst all the different parts of Connichiwa</Abstract>
+			<DeclaredIn>CWWebApplicationState.h</DeclaredIn>
 			
-			<Declaration>- (void)beaconLostWithID:(CWDeviceID *)ID</Declaration>
-			<Parameters>
-				<Parameter>
-					<Name>ID</Name>
-					<Abstract type="html">The ID of the lost beacon</Abstract>
-				</Parameter>
-			</Parameters>
+			<Declaration>@property (readonly, strong) NSString *identifier</Declaration>
 			
-			<Anchor>//api/name/beaconLostWithID:</Anchor>
+			
+			<Anchor>//api/name/identifier</Anchor>
+            <NodeRef refid="9"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/CWWebApplicationState/setWebserverPort:</TokenIdentifier>
+			<Abstract type="html">The port that this web server listens on</Abstract>
+			<DeclaredIn>CWWebApplicationState.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) int webserverPort</Declaration>
+			
+			
+			<Anchor>//api/name/webserverPort</Anchor>
+            <NodeRef refid="9"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/CWWebApplicationState/webserverPort</TokenIdentifier>
+			<Abstract type="html">The port that this web server listens on</Abstract>
+			<DeclaredIn>CWWebApplicationState.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) int webserverPort</Declaration>
+			
+			
+			<Anchor>//api/name/webserverPort</Anchor>
+            <NodeRef refid="9"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfp/CWWebApplicationState/webserverPort</TokenIdentifier>
+			<Abstract type="html">The port that this web server listens on</Abstract>
+			<DeclaredIn>CWWebApplicationState.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) int webserverPort</Declaration>
+			
+			
+			<Anchor>//api/name/webserverPort</Anchor>
+            <NodeRef refid="9"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/CWWebApplicationState/isRemote</TokenIdentifier>
+			<Abstract type="html">Determines if this device is currently running as a remote device for another Connichiwa device.</Abstract>
+			<DeclaredIn>CWWebApplicationState.h</DeclaredIn>
+			
+			<Declaration>- (BOOL)isRemote</Declaration>
+			
+			<ReturnValue><Abstract type="html">true if the device is currently used as a remote device, otherwise false</Abstract></ReturnValue>
+			<Anchor>//api/name/isRemote</Anchor>
+            <NodeRef refid="9"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/CWWebApplicationState/canBecomeRemote</TokenIdentifier>
+			<Abstract type="html">Determines if this device can still become a remote device. This is, for example, not possible if this device is already a remote device or if remote devices are connected to it.</Abstract>
+			<DeclaredIn>CWWebApplicationState.h</DeclaredIn>
+			
+			<Declaration>- (BOOL)canBecomeRemote</Declaration>
+			
+			<ReturnValue><Abstract type="html">true if the device can still become a remote device, otherwise false</Abstract></ReturnValue>
+			<Anchor>//api/name/canBecomeRemote</Anchor>
             <NodeRef refid="9"/>
 		</Token>
 		
