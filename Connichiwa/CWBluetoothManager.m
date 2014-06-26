@@ -47,6 +47,11 @@
 @property (readwrite, strong) CBMutableCharacteristic *advertisedIPCharacteristic;
 
 /**
+ *  Determines if the Connichiwa service was already added to the CBPeripheralManager and is advertised to other devices
+ */
+@property (readwrite) BOOL didAddService;
+
+/**
  *  Determines if startScanning was called by we didn't start scanning yet
  */
 @property (readwrite) BOOL wantsToStartScanning;
@@ -218,8 +223,6 @@ double const URL_CHECK_TIMEOUT = 2.0;
     self.advertisedService = [[CBMutableService alloc] initWithType:[CBUUID UUIDWithString:BLUETOOTH_SERVICE_UUID] primary:YES];
     self.advertisedService.characteristics = @[ self.advertisedInitialCharacteristic, self.advertisedIPCharacteristic ];
     
-    [self.peripheralManager addService:self.advertisedService];
-    
     self.connections = [NSMutableArray array];
     self.wantsToStartScanning = NO;
     self.wantsToStartAdvertising = NO;
@@ -246,6 +249,7 @@ double const URL_CHECK_TIMEOUT = 2.0;
 
 - (void)startAdvertising
 {
+    DLog(@"START ADVERTISING");
     if (self.peripheralManager.state == CBPeripheralManagerStatePoweredOn)
     {
         [self _doStartAdvertising];
@@ -589,19 +593,6 @@ double const URL_CHECK_TIMEOUT = 2.0;
 }
 
 
-/**
- *  Called when the CBCentralManager is restoring its state after the application was sent to the background. 
- *  TODO: Not quite sure why exactly we need this
- *
- *  @param central The CBCentralManager that is restored
- *  @param dict    A dictionary describing the state that should be restored
- */
-- (void)centralManager:(CBCentralManager *)central willRestoreState:(NSDictionary *)dict
-{
-    DLog(@"CM willRestoreState");
-}
-
-
 #pragma mark CBPeripheralDelegate
 
 
@@ -818,9 +809,14 @@ double const URL_CHECK_TIMEOUT = 2.0;
  */
 - (void)peripheralManagerDidUpdateState:(CBPeripheralManager *)peripheralManager
 {
-    if (peripheralManager.state == CBCentralManagerStatePoweredOn && self.wantsToStartAdvertising == YES)
+    if (peripheralManager.state == CBCentralManagerStatePoweredOn)
     {
-        [self startAdvertising];
+        //Add the Connichiwa service to the peripheral. When the service was added, XXX will be called
+        if (self.didAddService == NO)
+        {
+            self.didAddService = YES;
+            [self.peripheralManager addService:self.advertisedService];
+        }
     }
     
     [CWDebug executeInDebug:^{
@@ -836,6 +832,29 @@ double const URL_CHECK_TIMEOUT = 2.0;
         }
         DLog(@"Peripheral Manager state changed to %@", stateString);
     }];
+}
+
+
+/**
+ *  Called after the peripheral manager's addService: was called and the service was added to the peripheral and is now published. If startAdvertising was called before this callback arrives, we will repeat the call.
+ *
+ *  @param peripheral The PeripheralManager the service was added to
+ *  @param service    The service that was added
+ *  @param error      An error if something went wrong or nil if the service was added successfully
+ */
+- (void)peripheralManager:(CBPeripheralManager *)peripheral didAddService:(CBService *)service error:(NSError *)error
+{
+    if (error != nil)
+    {
+        self.didAddService = NO;
+        DLog(@"ERROR advertising the Connichiwa service: %@", error);
+        return;
+    }
+    
+    if (self.wantsToStartAdvertising == YES)
+    {
+        [self startAdvertising];
+    }
 }
 
 
@@ -967,19 +986,6 @@ double const URL_CHECK_TIMEOUT = 2.0;
             [self.delegate didStartAdvertisingWithIdentifier:self.appState.identifier];
         }
     }
-}
-
-
-/**
- *  Called when the CBPeripheralManager is restoring its state after the application was sent to the background.
- *  TODO: Not quite sure why exactly we need this
- *
- *  @param peripheral The CBPeripheralManager that is restored
- *  @param dict       A dictionary describing the state that should be restored
- */
-- (void)peripheralManager:(CBPeripheralManager *)peripheral willRestoreState:(NSDictionary *)dict
-{
-    DLog(@"PM willRestoreState");
 }
 
 @end
