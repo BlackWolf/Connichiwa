@@ -109,7 +109,7 @@ websocket.on("connection", function(wsConnection) {
       {
         var object = JSON.parse(message);
           
-        if (object.type === "remoteidentifier")
+        if (object.type === "didconnect")
         {
           wsRemoteConnections[object.identifier] = this;
           wsUnidentifiedRemoteConnection.splice(unidentifiedIndex, 1);
@@ -118,8 +118,39 @@ websocket.on("connection", function(wsConnection) {
       }
       
       //A message from a remote device is relayed to the weblib
-      log("WEBSOCKET", "Forwarding remote message: " + message);
+//      log("WEBSOCKET", "Forwarding remote message: " + message);
       wsLocalConnection.send(message);
+    });
+    
+    wsConnection.on("close", function(code, message)
+    {
+      log("WEBSOCKET", "GOT A CLOSE: " + code + " ; " + message);
+      
+      for (var key in wsRemoteConnections)
+      {
+        if (wsRemoteConnections.hasOwnProperty(key))
+        {
+          if (wsRemoteConnections[key] === wsConnection)
+          {
+            delete wsRemoteConnections[key];
+            break;
+          } 
+        }
+      }
+      
+      for (var i = 0 ; i < wsUnidentifiedRemoteConnection.length ; i++)
+      {
+        if (wsUnidentifiedRemoteConnection[i] === wsConnection)
+        {
+          wsUnidentifiedRemoteConnection.splice(wsUnidentifiedRemoteConnection.indexOf(wsConnection), 1);
+          break;
+        }
+      }  
+    });
+    
+    wsConnection.on("error", function(error)
+    {
+      log("WEBSOCKET", "GOT AN ERROR");
     });
   }
 });
@@ -144,7 +175,19 @@ function sendToRemote(identifier, message)
 {
   if (identifier in wsRemoteConnections === false) return;
   
-  wsRemoteConnections[identifier].send(message);
+  if (identifier === "broadcast")
+  {
+    for (var key in wsRemoteConnections)
+    {
+      if (wsRemoteConnections.hasOwnProperty(key))
+      {
+        wsRemoteConnections[key].send(message);    
+      }
+    }    
+    return;
+  }
+  
+  if (identifier in wsRemoteConnections) wsRemoteConnections[identifier].send(message);
 }
 
 //////////

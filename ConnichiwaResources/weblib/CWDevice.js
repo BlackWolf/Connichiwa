@@ -9,6 +9,7 @@ var CWDeviceState =
   CONNECTING        : "connecting",
   CONNECTED         : "connected",
   CONNECTION_FAILED : "connection_failed",
+  DISCONNECTED      : "disconnected",
   LOST              : "lost"
 };
 

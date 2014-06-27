@@ -51,6 +51,8 @@
  */
 @property (readwrite) BOOL didAddService;
 
+@property (readwrite) NSTimer *lostConnectionsTimer;
+
 /**
  *  Determines if startScanning was called by we didn't start scanning yet
  */
@@ -238,6 +240,7 @@ double const URL_CHECK_TIMEOUT = 2.0;
 {
     if (self.centralManager.state == CBCentralManagerStatePoweredOn)
     {
+        [self performSelectorOnMainThread:@selector(startLostConnectionTimer) withObject:nil waitUntilDone:YES];
         [self _doStartScanning];
     }
     else
@@ -297,7 +300,39 @@ double const URL_CHECK_TIMEOUT = 2.0;
 }
 
 
-#pragma mark Handling Connections
+- (void)_stopScanningTemporarily
+{
+    //Stop the check for lost connections, otherwise we would lose connections because of a temporary scan stop
+    //The timer is reset in startScanning - it is the responsible of BTManager to make sure a temporary scan stop is actually temporary and will be resumed!
+    [self performSelectorOnMainThread:@selector(stopLostConnectionTimer) withObject:nil waitUntilDone:YES];
+    [self stopScanning];
+}
+
+
+#pragma mark Timers
+
+
+- (void)startLostConnectionTimer
+{
+    DLog(@"STARTING LOST CONNECTION TIMER");
+    
+    [self stopLostConnectionTimer];
+    self.lostConnectionsTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(_removeLostConnections:) userInfo:nil repeats:YES];
+}
+
+
+- (void)stopLostConnectionTimer
+{
+    if (self.lostConnectionsTimer != nil)
+    {
+        DLog(@"STOPPING LOST CONNECTION TIMER");
+        [self.lostConnectionsTimer invalidate];
+        self.lostConnectionsTimer = nil;
+    }
+}
+
+
+#pragma mark Managing Connections
 
 
 - (void)_connectPeripheral:(CBPeripheral *)peripheral
@@ -305,7 +340,7 @@ double const URL_CHECK_TIMEOUT = 2.0;
     DLog(@"Connecting to BT device '%@'", peripheral.name);
     
     //It is rumored that scanning while connecting can lead to problems, therefore stop temporarily
-    [self stopScanning];
+    [self _stopScanningTemporarily];
     [self.centralManager connectPeripheral:peripheral options:nil];
 }
 
@@ -313,6 +348,20 @@ double const URL_CHECK_TIMEOUT = 2.0;
 - (void)_disconnectPeripheral:(CBPeripheral *)peripheral
 {
     DLog(@"Disconnecting BT device '%@'", peripheral.name);
+    
+    if (peripheral.state == CBPeripheralStateDisconnected || peripheral.state == CBPeripheralStateConnecting) return;
+    
+    // See if we are subscribed to a characteristic on the peripheral
+    for (CBService *service in peripheral.services) {
+        for (CBCharacteristic *characteristic in service.characteristics) {
+//            if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:BLUETOOTH_INITIAL_CHARACTERISTIC_UUID]]) {
+                if (characteristic.isNotifying) {
+                    [peripheral setNotifyValue:NO forCharacteristic:characteristic];
+                }
+//            }
+        }
+    }
+    
     [self.centralManager cancelPeripheralConnection:peripheral];
 }
 
@@ -340,6 +389,33 @@ double const URL_CHECK_TIMEOUT = 2.0;
             [self.delegate device:connection.identifier changedDistance:distance];
             [connection didSendDistance];
         }
+    }
+}
+
+
+- (void)_removeLostConnections:(NSTimer *)timer
+{
+    //Check the time we last saw each connection - if the connection has not been seen for a second, it is considered lost
+    NSDate *now = [NSDate date];
+    NSMutableArray *lostConnections = [NSMutableArray array];
+    for (CWBluetoothConnection *connection in self.connections)
+    {
+        if ([now timeIntervalSinceDate:connection.lastSeen] >= 1.0)
+        {
+            [lostConnections addObject:connection];
+        }
+    }
+    
+    for (CWBluetoothConnection *lostConnection in lostConnections)
+    {
+        [self.connections removeObject:lostConnection];
+        
+        if (lostConnection.identifier != nil && [self.delegate respondsToSelector:@selector(deviceLost:)])
+        {
+            [self.delegate deviceLost:lostConnection.identifier];
+        }
+        
+        
     }
 }
 
@@ -468,7 +544,6 @@ double const URL_CHECK_TIMEOUT = 2.0;
  */
 - (void)centralManagerDidUpdateState:(CBCentralManager *)central
 {
-    //If -startScanning was already called, call it again
     if (central.state == CBCentralManagerStatePoweredOn && self.wantsToStartScanning == YES)
     {
         [self startScanning];
@@ -511,12 +586,14 @@ double const URL_CHECK_TIMEOUT = 2.0;
         
         CWBluetoothConnection *newConnection = [[CWBluetoothConnection alloc] initWithPeripheral:peripheral];
         [newConnection setState:CWBluetoothConnectionStateInitialConnecting];
+        [newConnection updateLastSeen];
         [self.connections addObject:newConnection];
         
         [self _connectPeripheral:peripheral];
     }
     else
     {
+        [existingConnection updateLastSeen];
         [self _addRSSIMeasure:[RSSI doubleValue] toConnection:existingConnection];
     }
 }
@@ -951,6 +1028,7 @@ double const URL_CHECK_TIMEOUT = 2.0;
     
     if (characteristic == self.advertisedInitialCharacteristic)
     {
+        DLog(@"SUBSRIBED TO INITIAL, SENDING");
         [self _sendInitialToCentral:central];
     }
 }

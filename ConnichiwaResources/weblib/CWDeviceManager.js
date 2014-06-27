@@ -30,11 +30,12 @@ var CWDeviceManager = (function()
    */
   var setLocalID = function(identifier)
   {
-    if (_localIdentifier !== undefined) throw "Local identifier can only be set once";
+    if (_localIdentifier !== undefined) return false;
 
-    _localIdentifier = identifier;
     CWDebug.log("Local identifier set to " + _localIdentifier);
-    CWEventManager.trigger("localIdentifierSet", _localIdentifier);
+    _localIdentifier = identifier;
+    
+    return true;
   };
 
 
@@ -51,8 +52,7 @@ var CWDeviceManager = (function()
     if (getDeviceWithIdentifier(newDevice.getIdentifier()) !== null) return;
 
     _remoteDevices.push(newDevice);
-    CWDebug.log("Detected new device: " + newDevice);
-    CWEventManager.trigger("deviceDetected", newDevice);
+    CWDebug.log("Added new device: " + newDevice);
   };
 
 

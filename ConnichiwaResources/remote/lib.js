@@ -45,7 +45,7 @@ var websocket = new WebSocket("ws://" + ParsedURL.hostname + ":" + (parseInt(Par
 
 websocket.onopen = function()
 {
-  var data = { type: "remoteidentifier", identifier: QueryString.identifier };
+  var data = { type: "didconnect", identifier: QueryString.identifier };
   websocket.send(JSON.stringify(data));
 };
 
@@ -71,19 +71,28 @@ websocket.onmessage = function(e)
 
 websocket.onerror = function()
 {
-  alert("errored");
+    alert("websocket error");
 };
 
 
 websocket.onclose = function()
 {
-  alert("closed");
+    native_remoteWebsocketWasClosed();
 };
 
 
 //////////
 // MISC //
 //////////
+
+
+
+function closeWebsocket()
+{
+  var data = { type: "willdisconnect", identifier: QueryString.identifier };
+  websocket.send(JSON.stringify(data));
+  websocket.close();
+}
 
 
 function log(message)

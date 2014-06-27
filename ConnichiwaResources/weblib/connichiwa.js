@@ -69,6 +69,7 @@ var CWDeviceState =
   CONNECTING        : "connecting",
   CONNECTED         : "connected",
   CONNECTION_FAILED : "connection_failed",
+  DISCONNECTED      : "disconnected",
   LOST              : "lost"
 };
 
@@ -205,11 +206,12 @@ var CWDeviceManager = (function()
    */
   var setLocalID = function(identifier)
   {
-    if (_localIdentifier !== undefined) throw "Local identifier can only be set once";
+    if (_localIdentifier !== undefined) return false;
 
-    _localIdentifier = identifier;
     CWDebug.log("Local identifier set to " + _localIdentifier);
-    CWEventManager.trigger("localIdentifierSet", _localIdentifier);
+    _localIdentifier = identifier;
+    
+    return true;
   };
 
 
@@ -226,8 +228,7 @@ var CWDeviceManager = (function()
     if (getDeviceWithIdentifier(newDevice.getIdentifier()) !== null) return;
 
     _remoteDevices.push(newDevice);
-    CWDebug.log("Detected new device: " + newDevice);
-    CWEventManager.trigger("deviceDetected", newDevice);
+    CWDebug.log("Added new device: " + newDevice);
   };
 
 
@@ -384,11 +385,27 @@ var CWNativeCommunicationParser = (function()
     switch (object.type)
     {
     case "localidentifier":
-      CWDeviceManager.setLocalID(object.identifier);
+      var success = CWDeviceManager.setLocalID(object.identifier);
+
+      if (success) CWEventManager.trigger("localIdentifierSet", object.identifier);
       break;
     case "devicedetected":
-      var device = new CWDevice(object.identifier);
-      CWDeviceManager.addDevice(device);
+      var device = CWDeviceManager.getDeviceWithIdentifier(object.identifier);
+      
+      if (device === null)
+      {
+        device = new CWDevice(object.identifier);
+        CWDeviceManager.addDevice(device);
+      }
+      else
+      {
+        if (device.state !== CWDeviceState.CONNECTED && device.state !== CWDeviceState.CONNECTING)
+        {
+          device.state = CWDeviceState.DISCOVERED;
+        }
+      }
+
+      CWEventManager.trigger("deviceDetected", device);
       break;
     case "devicedistancechanged":
       var device = CWDeviceManager.getDeviceWithIdentifier(object.identifier);
@@ -397,7 +414,12 @@ var CWNativeCommunicationParser = (function()
       device.updateDistance(object.distance);
       break;
     case "devicelost":
-      CWDeviceManager.removeDevice(object.identifier);
+      var device = CWDeviceManager.getDeviceWithIdentifier(object.identifier);
+      if (device.state != CWDeviceState.CONNECTED && device.state != CWDeviceState.CONNECTING)
+      {
+        device.state = CWDeviceState.LOST;
+      }
+      CWEventManager.trigger("deviceLost", device);
       break;
     case "connectionRequestFailed":
       var device = CWDeviceManager.getDeviceWithIdentifier(object.identifier);
@@ -439,7 +461,7 @@ var CWRemoteCommunicationParser = (function()
     var object = JSON.parse(message);
     switch (object.type)
     {
-      case "remoteidentifier":
+      case "didconnect":
         var device = CWDeviceManager.getDeviceWithIdentifier(object.identifier);
         if (device === null) return;
         
@@ -449,6 +471,17 @@ var CWRemoteCommunicationParser = (function()
         Connichiwa._send(JSON.stringify(data));
         
         CWEventManager.trigger("deviceConnected", device);
+        break;
+      case "willdisconnect":
+        var device = CWDeviceManager.getDeviceWithIdentifier(object.identifier);
+        if (device === null) return;
+          
+        device.state = CWDeviceState.DISCONNECTED;
+          
+        var data = { type: "remoteDisconnected", identifier: object.identifier };
+        Connichiwa._send(JSON.stringify(data)); 
+        
+        CWEventManager.trigger("deviceDisconnected", device);
         break;
     }
   };
@@ -661,6 +694,7 @@ var Connichiwa = (function()
       "deviceDistanceChanged", 
       "deviceLost",
       "deviceConnected",
+      "deviceDisconnected",
       "connectionRequestFailed"
     ];
     

@@ -85,8 +85,10 @@
 }
 
 
-- (void)startWebserverOnPort:(int)port
+- (void)startWebserverWithDocumentRoot:(NSString *)documentRoot onPort:(int)port
 {
+    self.documentRoot = documentRoot;
+    
     self.nodelikeContext = [[NLContext alloc] initWithVirtualMachine:[[JSVirtualMachine alloc] init]];
     
     //Register JS error handler
@@ -132,6 +134,12 @@
 }
 
 
+- (void)startWebserverOnPort:(int)port
+{
+    [self startWebserverWithDocumentRoot:self.documentRoot onPort:port];
+}
+
+
 #pragma mark Weblib Communication - Sending
 
 
@@ -166,6 +174,16 @@
 }
 
 
+- (void)sendToWeblib_deviceLost:(NSString *)identifier
+{
+    NSDictionary *data = @{
+                           @"type": @"devicelost",
+                           @"identifier": identifier
+                           };
+    [self _sendDictionaryToWeblib:data];
+}
+
+
 - (void)sendToWeblib_connectionRequestFailed:(NSString *)identifier
 {
     NSDictionary *data = @{
@@ -183,14 +201,9 @@
 }
 
 
-/**
- *  Sends the given message to the web library through the Nodelike server.
- *
- *  @param message The message to send to the web library.
- */
 - (void)_sendToWeblib:(NSString *)message
 {
-    //    DLog(@"Sending %@", message);
+    DLog(@"Sending %@", message);
     [self.nodelikeContext evaluateScript:[NSString stringWithFormat:@"sendToWeblib('%@')", message]];
 }
 

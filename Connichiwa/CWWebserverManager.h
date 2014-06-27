@@ -39,6 +39,8 @@
  */
 - (instancetype)initWithDocumentRoot:(NSString *)documentRoot;
 
+- (void)startWebserverWithDocumentRoot:(NSString *)documentRoot onPort:(int)port;
+
 /**
  *  Starts the webserver, making it possible for web clients to connect to it
  */
@@ -70,6 +72,8 @@
  *  @param distance   The new distance of the device in meters
  */
 - (void)sendToWeblib_device:(NSString *)identifier changedDistance:(double)distance;
+
+- (void)sendToWeblib_deviceLost:(NSString *)identifier;
 
 /**
  *  Sends a message to the web library telling it that a request to use another device as a remote device has failed

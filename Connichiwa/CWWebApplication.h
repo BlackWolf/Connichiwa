@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import <JavaScriptCore/JavaScriptCore.h>
 
 
 
@@ -38,5 +39,11 @@
  *  @param webView      See launchWithDocumentRoot:onWebview:port:
  */
 - (void)launchWithDocumentRoot:(NSString *)documentRoot onWebview:(UIWebView *)webView;
+
+- (void)applicationWillResignActive;
+- (void)applicationDidEnterBackground;
+- (void)applicationWillEnterForeground;
+- (void)applicationDidBecomeActive;
+- (void)applicationWillTerminate;
 
 @end

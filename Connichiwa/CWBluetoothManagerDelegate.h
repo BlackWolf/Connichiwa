@@ -44,6 +44,8 @@
  */
 - (void)device:(NSString *)identifier changedDistance:(double)distance;
 
+- (void)deviceLost:(NSString *)identifier;
+
 /**
  *  Caled when we received an URL that points to another Connichiwa web application
  *

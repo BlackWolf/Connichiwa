@@ -85,6 +85,8 @@ typedef NS_ENUM(NSInteger, CWBluetoothConnectionState)
  */
 @property (readonly) CBPeripheral *peripheral;
 
+@property (readonly) NSDate *lastSeen;
+
 /**
  *  The current average RSSI, results in a number of algorithms applied to RSSI measurements in order to compensate for outliers and jitter
  */
@@ -115,6 +117,8 @@ typedef NS_ENUM(NSInteger, CWBluetoothConnectionState)
  *  @param rssi The measured RSSI for the device
  */
 - (void)addNewRSSIMeasure:(double)rssi;
+
+- (void)updateLastSeen;
 
 /**
  *  This should be called after the distance of this device was send to other Connichiwa components. It will save the current time and the current averageRSSI and make them available via lastSentRSSI and timeSinceLastSentRSSI. This can be used to determine the time passed or the RSSI change since the last RSSI send.

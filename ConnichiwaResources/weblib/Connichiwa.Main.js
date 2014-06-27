@@ -104,6 +104,7 @@ var Connichiwa = (function()
       "deviceDistanceChanged", 
       "deviceLost",
       "deviceConnected",
+      "deviceDisconnected",
       "connectionRequestFailed"
     ];
     

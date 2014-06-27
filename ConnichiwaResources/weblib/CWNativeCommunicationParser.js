@@ -41,11 +41,27 @@ var CWNativeCommunicationParser = (function()
     switch (object.type)
     {
     case "localidentifier":
-      CWDeviceManager.setLocalID(object.identifier);
+      var success = CWDeviceManager.setLocalID(object.identifier);
+
+      if (success) CWEventManager.trigger("localIdentifierSet", object.identifier);
       break;
     case "devicedetected":
-      var device = new CWDevice(object.identifier);
-      CWDeviceManager.addDevice(device);
+      var device = CWDeviceManager.getDeviceWithIdentifier(object.identifier);
+      
+      if (device === null)
+      {
+        device = new CWDevice(object.identifier);
+        CWDeviceManager.addDevice(device);
+      }
+      else
+      {
+        if (device.state !== CWDeviceState.CONNECTED && device.state !== CWDeviceState.CONNECTING)
+        {
+          device.state = CWDeviceState.DISCOVERED;
+        }
+      }
+
+      CWEventManager.trigger("deviceDetected", device);
       break;
     case "devicedistancechanged":
       var device = CWDeviceManager.getDeviceWithIdentifier(object.identifier);
@@ -54,7 +70,12 @@ var CWNativeCommunicationParser = (function()
       device.updateDistance(object.distance);
       break;
     case "devicelost":
-      CWDeviceManager.removeDevice(object.identifier);
+      var device = CWDeviceManager.getDeviceWithIdentifier(object.identifier);
+      if (device.state != CWDeviceState.CONNECTED && device.state != CWDeviceState.CONNECTING)
+      {
+        device.state = CWDeviceState.LOST;
+      }
+      CWEventManager.trigger("deviceLost", device);
       break;
     case "connectionRequestFailed":
       var device = CWDeviceManager.getDeviceWithIdentifier(object.identifier);

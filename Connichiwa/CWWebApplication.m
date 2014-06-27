@@ -12,12 +12,14 @@
 #import "CWBluetoothManager.h"
 #import "CWBluetoothManagerDelegate.h"
 #import "CWWebApplicationState.h"
+#import "CWRemoteLibraryManager.h"
 #import "CWDebug.h"
 
 
 
 int const DEFAULT_WEBSERVER_PORT = 8000;
 double const REMOTE_WEBSOCKET_CONNECT_TIMEOUT = 5.0;
+double const CLEANUP_TASK_TIMEOUT = 10.0;
 
 
 
@@ -32,6 +34,8 @@ double const REMOTE_WEBSOCKET_CONNECT_TIMEOUT = 5.0;
  *  The port the webserver will run on
  */
 @property (readwrite) int webserverPort;
+
+@property (readwrite, strong) CWRemoteLibraryManager *remoteLibManager;
 
 /**
  *  The main instance of CWWebserverManager. Runs the local webserver and forwards and receives messages from the web library
@@ -63,6 +67,8 @@ double const REMOTE_WEBSOCKET_CONNECT_TIMEOUT = 5.0;
  */
 @property (readwrite, strong) NSMutableArray *remoteDevices;
 
+@property (readwrite) UIBackgroundTaskIdentifier cleanupBackgroundTaskIdentifier;
+
 @end
 
 
@@ -85,6 +91,9 @@ double const REMOTE_WEBSOCKET_CONNECT_TIMEOUT = 5.0;
     self.pendingRemoteDevices = [NSMutableArray array];
     self.remoteDevices = [NSMutableArray array];
     
+    self.remoteLibManager = [[CWRemoteLibraryManager alloc] init];
+    self.webserverManager = [[CWWebserverManager alloc] init];
+    
     self.bluetoothManager = [[CWBluetoothManager alloc] initWithApplicationState:self];
     [self.bluetoothManager setDelegate:self];
     
@@ -97,15 +106,54 @@ double const REMOTE_WEBSOCKET_CONNECT_TIMEOUT = 5.0;
     self.localWebView = webView;
     self.webserverPort = port;
     
-    self.webserverManager = [[CWWebserverManager alloc] initWithDocumentRoot:documentRoot];
+
     [self.webserverManager setDelegate:self];
-    [self.webserverManager startWebserverOnPort:port];
+    [self.webserverManager startWebserverWithDocumentRoot:documentRoot onPort:port];
 }
 
 
 - (void)launchWithDocumentRoot:(NSString *)documentRoot onWebview:(UIWebView *)webView;
 {
     [self launchWithDocumentRoot:documentRoot onWebview:webView port:DEFAULT_WEBSERVER_PORT];
+}
+
+
+- (void)_remoteWebsocketWasClosed
+{
+    //The remoteWebView reports the websocket was closed, so we stop being a remote device
+    if (self.isRemote)
+    {
+        DLog(@"!! BACKING OUT OF REMOTE STATE");
+        
+        [self.remoteWebView loadHTMLString:@"" baseURL:nil];
+        [self.remoteWebView setHidden:YES];
+        
+        self.isRemote = NO;
+    }
+}
+
+
+#pragma mark Timers
+
+
+/**
+ *  Called when the timer that waits for a remote device to connect via websocket expires. If the device did not establish a websocket connection by the time this is called, it usually means something went wrong and we can consider the device connection as a failure.
+ *
+ *  @param deviceIdentifier The identifier of the device where the timer expires
+ */
+- (void)remoteDeviceConnectionTimeout:(NSString *)deviceIdentifier
+{
+    if ([self.remoteDevices containsObject:deviceIdentifier]) return;
+    
+    [self.pendingRemoteDevices removeObject:deviceIdentifier];
+    [self.webserverManager sendToWeblib_connectionRequestFailed:deviceIdentifier];
+}
+
+
+- (void)cleanupBackgroundTaskTimeout
+{
+    //By now everything should have been cleaned up nicely, we can end the background task so iOS doesn't kill us :-)
+    [[UIApplication sharedApplication] endBackgroundTask:self.cleanupBackgroundTaskIdentifier];
 }
 
 
@@ -152,6 +200,7 @@ double const REMOTE_WEBSOCKET_CONNECT_TIMEOUT = 5.0;
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.bluetoothManager performSelector:@selector(startScanning) withObject:nil afterDelay:0.5]; //BT starts freaking out without a small delay, no idea why
     });
+    
 }
 
 
@@ -213,6 +262,12 @@ double const REMOTE_WEBSOCKET_CONNECT_TIMEOUT = 5.0;
 }
 
 
+- (void)deviceLost:(NSString *)identifier
+{
+    [self.webserverManager sendToWeblib_deviceLost:identifier];
+}
+
+
 /**
  *  See [CWBluetoothManagerDelegate didReceiveDeviceURL:]
  *
@@ -237,6 +292,13 @@ double const REMOTE_WEBSOCKET_CONNECT_TIMEOUT = 5.0;
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.remoteWebView setHidden:NO];
         [self.remoteWebView loadRequest:URLRequest];
+        
+        JSContext *blubb = [self.remoteWebView valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
+        __weak typeof(self) weakSelf = self;
+        
+        blubb[@"native_remoteWebsocketWasClosed"] = ^{
+            [weakSelf _remoteWebsocketWasClosed];
+        };
     });
 }
 
@@ -263,20 +325,63 @@ double const REMOTE_WEBSOCKET_CONNECT_TIMEOUT = 5.0;
 }
 
 
-#pragma mark Timers
+#pragma mark ApplicationDelegate Forwards
 
 
-/**
- *  Called when the timer that waits for a remote device to connect via websocket expires. If the device did not establish a websocket connection by the time this is called, it usually means something went wrong and we can consider the device connection as a failure.
- *
- *  @param deviceIdentifier The identifier of the device where the timer expires
- */
-- (void)remoteDeviceConnectionTimeout:(NSString *)deviceIdentifier
+- (void)applicationWillResignActive
 {
-    if ([self.remoteDevices containsObject:deviceIdentifier]) return;
+    //Called whenever the app "loses focus", often when the app will resume shortly (except for a home button press)
+    //This includes home button presses, alert popups, opening the control or notification center, ...
+}
+
+
+- (void)applicationDidEnterBackground
+{
+    //Called whenever the application goes to the background, so mainly when the user presses the home button or locks the device
+    //willResignActive will always be called before this
     
-    [self.pendingRemoteDevices removeObject:deviceIdentifier];
-    [self.webserverManager sendToWeblib_connectionRequestFailed:deviceIdentifier];
+    //If we are a remote device we should shut down the websocket gracefully to let the master device know we are not available to display information
+    //The websocket connection is resumed in willEnterForeground
+    if (self.isRemote)
+    {
+        DLog(@"App entering background while being  a remote device... closing websocket connection");
+        
+        //Because closing the websocket is a threaded task, simply doing it in this method is not possible because iOS would suspend the thread before the close completes
+        //beginBackgroundTaskWithExpirationHandler: tells iOS that we still have to do work and iOS gives us up to 10 minutes to perform our task (although not guaranteed)
+        //Luckily, we don't need that long: after a short delay we will end the background task, but it is more than enough time for the websocket to close
+        //Be aware that the block passed to beginBackgroundTaskWithExpirationHandler: is called when the background task is ended forcefully by iOS and is not the code that is executed in the background. Calling beginBackgroundTaskWithExpirationHandler: simply tells iOS that we want to continue executing our code
+        
+        self.cleanupBackgroundTaskIdentifier = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+            [[UIApplication sharedApplication] endBackgroundTask:self.cleanupBackgroundTaskIdentifier];
+            self.cleanupBackgroundTaskIdentifier = UIBackgroundTaskInvalid;
+        }];
+        
+        [self.remoteWebView stringByEvaluatingJavaScriptFromString:@"closeWebsocket();"];
+        [self performSelector:@selector(cleanupBackgroundTaskTimeout) withObject:nil afterDelay:CLEANUP_TASK_TIMEOUT];
+    }
+}
+
+
+// http://stackoverflow.com/questions/21714365/uiwebview-javascript-losing-reference-to-ios-jscontext-namespace-object
+
+
+- (void)applicationWillEnterForeground
+{
+    //Called whenever an application goes to the foreground, so when it is re-launched after going to the background
+    
+    //TODO resume websocket connection?
+}
+
+
+- (void)applicationDidBecomeActive
+{
+    //Called when the application resumes activity, so after whatever caused willResignActivity is "resolved"
+}
+
+
+- (void)applicationWillTerminate
+{
+    //Called when the application terminates and is closed. Caused, for example, when the user flicks the application out of the task manager or if iOS needs to free resources.
 }
 
 @end

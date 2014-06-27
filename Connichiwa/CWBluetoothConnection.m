@@ -30,6 +30,7 @@ double const RSSI_MOVING_AVERAGE_ALPHA = 0.03125;
 @interface CWBluetoothConnection ()
 
 @property (readwrite, strong) CBPeripheral *peripheral;
+@property (readwrite, strong) NSDate *lastSeen;
 @property (readwrite) double averageRSSI;
 @property (readwrite) double lastSentRSSI;
 
@@ -95,6 +96,12 @@ double const RSSI_MOVING_AVERAGE_ALPHA = 0.03125;
 }
 
 
+- (void)updateLastSeen
+{
+    self.lastSeen = [NSDate date];
+}
+
+
 - (void)didSendDistance
 {
     //Save the RSSI and date that was sent
@@ -147,10 +154,7 @@ double const RSSI_MOVING_AVERAGE_ALPHA = 0.03125;
  */
 + (double)_distanceForMeasuredPower:(int)power RSSI:(double)RSSI
 {
-    if (RSSI == 0.0)
-    {
-        return -1.0;
-    }
+    if (RSSI == 0.0) return -1.0;
     
     //Based on http://stackoverflow.com/questions/20416218/understanding-ibeacon-distancing/20434019#20434019
     double distance = -1;
