@@ -40,13 +40,21 @@ var CWNativeCommunicationParser = (function()
     var object = JSON.parse(message);
     switch (object.type)
     {
+      case "connectwebsocket": _parseConnectWebsocket(object); break;
       case "cwdebug": _parseDebug(object); break;
       case "localidentifier": _parseLocalIdentifier(object); break;
       case "devicedetected": _parseDeviceDetected(object); break;
       case "devicedistancechanged": _parseDeviceDistanceChanged(object); break;
       case "devicelost": _parseDeviceLost(object); break;
       case "remoteconnectfailed": _parseRemoteConnectFailed(object); break;
+    case "remotedisconnected": _parseRemoteDisconnected(object); break;
     }
+  };
+  
+  
+  var _parseConnectWebsocket = function(message)
+  {
+    Connichiwa._connectWebsocket();
   };
   
   
@@ -105,6 +113,16 @@ var CWNativeCommunicationParser = (function()
     var device = CWDeviceManager.getDeviceWithIdentifier(message.identifier);
     device.connectionState = CWDeviceConnectionState.DISCONNECTED;
     CWEventManager.trigger("connectFailed", device);
+  };
+  
+  
+  var _parseRemoteDisconnected = function(message)
+  {
+    var device = CWDeviceManager.getDeviceWithIdentifier(message.identifier);
+    if (device === null) return;
+      
+    device.connectionState = CWDeviceConnectionState.DISCONNECTED;
+    CWEventManager.trigger("deviceDisconnected", device);
   };
 
   return {

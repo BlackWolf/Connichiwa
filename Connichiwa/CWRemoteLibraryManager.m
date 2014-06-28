@@ -47,10 +47,7 @@
     
     //URL is in the form http://IP:PORT - we need to make it http://IP:PORT/remote/index.html?identifier=ID
     //This will make it retrieve the remote library of the other device and send our identifier to the other device's weblib
-    NSURL *extendedURL = [URL URLByAppendingPathComponent:@"remote" isDirectory:YES];
-    NSString *queryString = [NSString stringWithFormat:@"identifier=%@", self.appState.identifier];
-    NSString *finalURLString = [[NSString alloc] initWithFormat:@"%@index.html%@%@", [extendedURL absoluteString], [extendedURL query] ? @"&" : @"?", queryString];
-    NSURL *finalURL = [NSURL URLWithString:finalURLString];
+    NSURL *finalURL = [[URL URLByAppendingPathComponent:@"remote" isDirectory:YES] URLByAppendingPathComponent:@"index.html" isDirectory:NO];
     
     NSURLRequest *URLRequest = [NSURLRequest requestWithURL:finalURL];
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -115,6 +112,15 @@
     self.state = CWRemoteLibraryManagerStateDisconnecting;
     [self.webView setHidden:YES];
     [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"about:blank"]]];
+}
+
+
+- (void)_sendToView_connectWebsocket
+{
+    NSDictionary *data = @{
+                           @"type": @"connectwebsocket"
+                           };
+    [self _sendToView_dictionary:data];
 }
 
 
@@ -192,6 +198,7 @@
         self.webViewContext[@"console"] = @{@"log": logger, @"error": logger};
         
         [self _registerJSCallbacks];
+        [self _sendToView_connectWebsocket];
     }
     else if (self.state == CWRemoteLibraryManagerStateDisconnecting)
     {

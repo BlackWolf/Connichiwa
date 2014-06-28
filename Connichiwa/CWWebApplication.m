@@ -201,7 +201,9 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
 {
     DLog(@" !! REMOTE DID CONNECT");
     
+    DLog(@" !! Removing");
     [self.pendingRemoteDevices removeObject:identifier];
+    DLog(@" !! Adding");
     [self.remoteDevices addObject:identifier];
 }
 
@@ -221,8 +223,11 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
 - (void)remoteDidDisconnect:(NSString *)identifier
 {
     DLog(@" !! REMOTE DID DISCONNECT");
+    
+    //A remote disconnect can happen before the remote device was initialized, the remote might still be pending
     [self.pendingRemoteDevices removeObject:identifier];
-    [self.remoteDevices addObject:identifier];
+    [self.remoteDevices removeObject:identifier];
+    
     [self.webLibManager sendRemoteDisconnected:identifier];
 }
 
@@ -254,6 +259,7 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
 
 - (void)deviceLost:(NSString *)identifier
 {
+    DLog(@" !! DEVICE WAS LOST");
     [self.webLibManager sendDeviceLost:identifier];
 }
 

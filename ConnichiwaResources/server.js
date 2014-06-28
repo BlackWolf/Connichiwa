@@ -82,9 +82,9 @@ websocket.on("connection", function(wsConnection) {
   else
   {
     wsUnidentifiedRemoteConnection.push(wsConnection);
-    wsConnection.on("message", (function(wsConnection) { return onRemoteMessage; })(wsConnection));
-    wsConnection.on("close", (function(wsConnection) { return onRemoteClose; })(wsConnection));
-    wsConnection.on("error", (function(wsConnection) { return onRemoteError; })(wsConnection));
+    wsConnection.on("message", onRemoteMessage(wsConnection));
+    wsConnection.on("close", onRemoteClose(wsConnection));
+    wsConnection.on("error", onRemoteError(wsConnection));
 
     log("WEBSOCKET", "Initialized remote connection");
   }
@@ -110,61 +110,70 @@ var onLocalError = function(error)
   
 }
 
-var onRemoteMessage = function(message)
+var onRemoteMessage = function(wsConnection)
 {
-  //Usually, the webserver just blindly relays messages, but we need to make one exception:
-  //The "remoteidentifier" message needs to unidentifiedparsed so we know the ID of each remote connection
-  //If we find that identifier, the connection is moved from the unidentified remote connections to the normal remote connections
-  var unidentifiedIndex = wsUnidentifiedRemoteConnection.indexOf(this);
-  if (unidentifiedIndex !== -1)
+  return function(message)
   {
-    var object = JSON.parse(message);
-      
-    if (object.type === "remoteidentifier")
+    //Usually, the webserver just blindly relays messages, but we need to make one exception:
+    //The "remoteidentifier" message needs to unidentifiedparsed so we know the ID of each remote connection
+    //If we find that identifier, the connection is moved from the unidentified remote connections to the normal remote connections
+    var unidentifiedIndex = wsUnidentifiedRemoteConnection.indexOf(wsConnection);
+    if (unidentifiedIndex !== -1)
     {
-      wsRemoteConnections[object.identifier] = this;
-      wsUnidentifiedRemoteConnection.splice(unidentifiedIndex, 1);
-      log("WEBSOCKET", "Got identifier for remote connection: " + object.identifier);
-    }
-  }
-  
-  //A message from a remote device is relayed to the weblib
-//      log("WEBSOCKET", "Forwarding remote message: " + message);
-  sendToLocal(message);
-}
-
-var onRemoteClose = function(code, message)
-{
-  log("WEBSOCKET", "GOT A CLOSE: " + code + " ; " + message);
-  
-  for (var key in wsRemoteConnections)
-  {
-    if (wsRemoteConnections.hasOwnProperty(key))
-    {
-      if (wsRemoteConnections[key] === wsConnection)
+      var object = JSON.parse(message);
+        
+      if (object.type === "remoteidentifier")
       {
-        delete wsRemoteConnections[key];
-        native_remoteWebsocketDidClose(key);
-        break;
-      } 
+        wsRemoteConnections[object.identifier] = wsConnection;
+        wsUnidentifiedRemoteConnection.splice(unidentifiedIndex, 1);
+        log("WEBSOCKET", "Got identifier for remote connection: " + object.identifier);
+      }
     }
+    
+    //A message from a remote device is relayed to the weblib
+  //      log("WEBSOCKET", "Forwarding remote message: " + message);
+    sendToLocal(message);
   }
-  
-  for (var i = 0 ; i < wsUnidentifiedRemoteConnection.length ; i++)
-  {
-    if (wsUnidentifiedRemoteConnection[i] === wsConnection)
-    {
-      wsUnidentifiedRemoteConnection.splice(wsUnidentifiedRemoteConnection.indexOf(wsConnection), 1);
-      //We don't sent native_remoteWebsocketDidClose() here because an unidentified connection is not considered established
-      break;
-    }
-  }  
-}
+};
 
-var onRemoteError = function(error)
+var onRemoteClose = function(wsConnection)
 {
-  log("WEBSOCKET", "GOT AN ERROR");
-}
+  return function(code, message)
+  {
+    log("WEBSOCKET", "GOT A CLOSE: " + code + " ; " + message);
+    
+    for (var key in wsRemoteConnections)
+    {
+      if (wsRemoteConnections.hasOwnProperty(key))
+      {
+        if (wsRemoteConnections[key] === wsConnection)
+        {
+          delete wsRemoteConnections[key];
+          native_remoteWebsocketDidClose(key);
+          break;
+        } 
+      }
+    }
+    
+    for (var i = 0 ; i < wsUnidentifiedRemoteConnection.length ; i++)
+    {
+      if (wsUnidentifiedRemoteConnection[i] === wsConnection)
+      {
+        wsUnidentifiedRemoteConnection.splice(wsUnidentifiedRemoteConnection.indexOf(wsConnection), 1);
+        //We don't sent native_remoteWebsocketDidClose() here because an unidentified connection is not considered established
+        break;
+      }
+    }  
+  }
+};
+
+var onRemoteError = function(wsConnection)
+{
+  return function(error)
+  {
+    log("WEBSOCKET", "GOT AN ERROR");
+  }
+};
 
 function sendToWeblib(message)
 {

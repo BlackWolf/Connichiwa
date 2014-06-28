@@ -16,15 +16,15 @@ var ParsedURL = (function()
 })();
 
 
-var websocket = new WebSocket("ws://" + ParsedURL.hostname + ":" + (parseInt(ParsedURL.port) + 1));
+var websocket;
 
-websocket.onopen = function()
+var onWebsocketOpen = function()
 {
   native_websocketDidOpen();
 };
 
 
-websocket.onmessage = function(e)
+var onWebsocketMessage = function(e)
 {
   var message = e.data;
   log("message: " + message);
@@ -43,13 +43,13 @@ websocket.onmessage = function(e)
 };
 
 
-websocket.onerror = function()
+var onWebsocketError = function()
 {
     alert("websocket error");
 };
 
 
-websocket.onclose = function()
+var onWebsocketClose = function()
 {
   native_websocketDidClose();
 };
@@ -60,6 +60,14 @@ function parseNativeMessage(message)
   var object = JSON.parse(message);
   switch (object.type)
   {
+    case "connectwebsocket":
+      websocket = new WebSocket("ws://" + ParsedURL.hostname + ":" + (parseInt(ParsedURL.port) + 1));
+      
+      websocket.onopen = onWebsocketOpen;
+      websocket.onmessage = onWebsocketMessage;
+      websocket.onclose = onWebsocketClose;
+      websocket.onerror = onWebsocketError;
+      break;
     case "cwdebug":
       if (object.cwdebug) CWDEBUG = true;
       break;

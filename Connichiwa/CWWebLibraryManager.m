@@ -156,6 +156,15 @@
 }
 
 
+- (void)_sendToView_connectWebsocket
+{
+    NSDictionary *data = @{
+                           @"type": @"connectwebsocket"
+                           };
+    [self _sendToView_dictionary:data];
+}
+
+
 - (void)_sendToView_cwdebug
 {
     NSDictionary *data = @{
@@ -270,16 +279,7 @@
         self.webViewContext[@"console"] = @{@"log": logger, @"error": logger};
         
         [self _registerJSCallbacks];
-        
-        //
-        //
-        //
-        //TODO we need to send a message to the weblib that it should connect the websocket
-        //otherwise it can happen that websocketDidOpen is received before the JS Callbacks are in place - and therefore gets lost
-        //the same should be done on the remote lib
-        //
-        //
-        //
+        [self _sendToView_connectWebsocket];
     }
     else if (self.state == CWWebLibraryManagerStateDisconnecting)
     {

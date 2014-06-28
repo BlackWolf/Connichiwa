@@ -341,13 +341,21 @@ var CWNativeCommunicationParser = (function()
     var object = JSON.parse(message);
     switch (object.type)
     {
+      case "connectwebsocket": _parseConnectWebsocket(object); break;
       case "cwdebug": _parseDebug(object); break;
       case "localidentifier": _parseLocalIdentifier(object); break;
       case "devicedetected": _parseDeviceDetected(object); break;
       case "devicedistancechanged": _parseDeviceDistanceChanged(object); break;
       case "devicelost": _parseDeviceLost(object); break;
       case "remoteconnectfailed": _parseRemoteConnectFailed(object); break;
+    case "remotedisconnected": _parseRemoteDisconnected(object); break;
     }
+  };
+  
+  
+  var _parseConnectWebsocket = function(message)
+  {
+    Connichiwa._connectWebsocket();
   };
   
   
@@ -406,6 +414,16 @@ var CWNativeCommunicationParser = (function()
     var device = CWDeviceManager.getDeviceWithIdentifier(message.identifier);
     device.connectionState = CWDeviceConnectionState.DISCONNECTED;
     CWEventManager.trigger("connectFailed", device);
+  };
+  
+  
+  var _parseRemoteDisconnected = function(message)
+  {
+    var device = CWDeviceManager.getDeviceWithIdentifier(message.identifier);
+    if (device === null) return;
+      
+    device.connectionState = CWDeviceConnectionState.DISCONNECTED;
+    CWEventManager.trigger("deviceDisconnected", device);
   };
 
   return {
@@ -543,7 +561,18 @@ var Connichiwa = (function()
    *
    * @memberof Connichiwa.Websocket
    */
-  var _websocket = new WebSocket("ws://127.0.0.1:8001");
+  var _websocket;
+  
+  
+  var _connectWebsocket = function()
+  {
+    _websocket = new WebSocket("ws://127.0.0.1:8001");
+    
+    _websocket.onopen = onWebsocketOpen;
+    _websocket.onmessage = onWebsocketMessage;
+    _websocket.onclose = onWebsocketClose;
+    _websocket.onerror = onWebsocketError;
+  };
 
 
   /**
@@ -551,7 +580,7 @@ var Connichiwa = (function()
    *
    * @memberof Connichiwa.Websocket
    */
-  _websocket.onopen = function()
+  var onWebsocketOpen = function()
   {
     native_websocketDidOpen();
     CWDebug.log("Websocket opened");
@@ -563,7 +592,7 @@ var Connichiwa = (function()
    *
    * @memberof Connichiwa.Websocket
    */
-  _websocket.onmessage = function(e)
+  var onWebsocketMessage = function(e)
   {
     var message = e.data;
     CWDebug.log("message: " + message);
@@ -577,7 +606,7 @@ var Connichiwa = (function()
    *
    * @memberof Connichiwa.Websocket
    */
-  _websocket.onerror = function()
+  var onWebsocketError = function()
   {
     alert("error");
     CWDebug.log("Websocket error");
@@ -589,7 +618,7 @@ var Connichiwa = (function()
    *
    * @memberof Connichiwa.Websocket
    */
-  _websocket.onclose = function()
+  var onWebsocketClose = function()
   {
     native_websocketDidClose();
     CWDebug.log("Websocket closed");
@@ -667,10 +696,11 @@ var Connichiwa = (function()
   };
 
   return {
-    _setIdentifier : _setIdentifier,
-    getIdentifier : getIdentifier,
-    on      : on,
-    connect : connect,
-    send    : send
+    _connectWebsocket : _connectWebsocket,
+    _setIdentifier    : _setIdentifier,
+    getIdentifier     : getIdentifier,
+    on                : on,
+    connect           : connect,
+    send              : send
   };
 })();

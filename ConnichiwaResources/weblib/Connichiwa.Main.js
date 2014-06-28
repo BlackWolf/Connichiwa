@@ -22,7 +22,18 @@ var Connichiwa = (function()
    *
    * @memberof Connichiwa.Websocket
    */
-  var _websocket = new WebSocket("ws://127.0.0.1:8001");
+  var _websocket;
+  
+  
+  var _connectWebsocket = function()
+  {
+    _websocket = new WebSocket("ws://127.0.0.1:8001");
+    
+    _websocket.onopen = onWebsocketOpen;
+    _websocket.onmessage = onWebsocketMessage;
+    _websocket.onclose = onWebsocketClose;
+    _websocket.onerror = onWebsocketError;
+  };
 
 
   /**
@@ -30,7 +41,7 @@ var Connichiwa = (function()
    *
    * @memberof Connichiwa.Websocket
    */
-  _websocket.onopen = function()
+  var onWebsocketOpen = function()
   {
     native_websocketDidOpen();
     CWDebug.log("Websocket opened");
@@ -42,7 +53,7 @@ var Connichiwa = (function()
    *
    * @memberof Connichiwa.Websocket
    */
-  _websocket.onmessage = function(e)
+  var onWebsocketMessage = function(e)
   {
     var message = e.data;
     CWDebug.log("message: " + message);
@@ -56,7 +67,7 @@ var Connichiwa = (function()
    *
    * @memberof Connichiwa.Websocket
    */
-  _websocket.onerror = function()
+  var onWebsocketError = function()
   {
     alert("error");
     CWDebug.log("Websocket error");
@@ -68,7 +79,7 @@ var Connichiwa = (function()
    *
    * @memberof Connichiwa.Websocket
    */
-  _websocket.onclose = function()
+  var onWebsocketClose = function()
   {
     native_websocketDidClose();
     CWDebug.log("Websocket closed");
@@ -146,10 +157,11 @@ var Connichiwa = (function()
   };
 
   return {
-    _setIdentifier : _setIdentifier,
-    getIdentifier : getIdentifier,
-    on      : on,
-    connect : connect,
-    send    : send
+    _connectWebsocket : _connectWebsocket,
+    _setIdentifier    : _setIdentifier,
+    getIdentifier     : getIdentifier,
+    on                : on,
+    connect           : connect,
+    send              : send
   };
 })();
