@@ -44,6 +44,8 @@
 		3351372E19578FBD004FE5E0 /* remote in Resources */ = {isa = PBXBuildFile; fileRef = 3351372D19578FBD004FE5E0 /* remote */; };
 		33618AC0195DAD37006FA51B /* CWRemoteLibraryManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 33618ABE195DAD37006FA51B /* CWRemoteLibraryManager.h */; };
 		33618AC1195DAD37006FA51B /* CWRemoteLibraryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 33618ABF195DAD37006FA51B /* CWRemoteLibraryManager.m */; };
+		33618AC8195DEDFE006FA51B /* CWWebLibraryManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 33618AC6195DEDFE006FA51B /* CWWebLibraryManager.h */; };
+		33618AC9195DEDFE006FA51B /* CWWebLibraryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 33618AC7195DEDFE006FA51B /* CWWebLibraryManager.m */; };
 		3367186C194776C1000A7164 /* CWWebserverManagerDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 3367186B194776C1000A7164 /* CWWebserverManagerDelegate.h */; };
 		33A0514A193E61CC00FED071 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33A05149193E61CC00FED071 /* Foundation.framework */; };
 		33A05158193E61CC00FED071 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33A05157193E61CC00FED071 /* XCTest.framework */; };
@@ -145,6 +147,9 @@
 		3351372D19578FBD004FE5E0 /* remote */ = {isa = PBXFileReference; lastKnownFileType = folder; path = remote; sourceTree = "<group>"; };
 		33618ABE195DAD37006FA51B /* CWRemoteLibraryManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWRemoteLibraryManager.h; sourceTree = "<group>"; };
 		33618ABF195DAD37006FA51B /* CWRemoteLibraryManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWRemoteLibraryManager.m; sourceTree = "<group>"; };
+		33618AC6195DEDFE006FA51B /* CWWebLibraryManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWWebLibraryManager.h; sourceTree = "<group>"; };
+		33618AC7195DEDFE006FA51B /* CWWebLibraryManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWWebLibraryManager.m; sourceTree = "<group>"; };
+		33618ACA195E233D006FA51B /* CWWebLibraryManagerDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CWWebLibraryManagerDelegate.h; sourceTree = "<group>"; };
 		3367186B194776C1000A7164 /* CWWebserverManagerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWWebserverManagerDelegate.h; sourceTree = "<group>"; };
 		3381A01E193F492600BDDF34 /* Nodelike.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Nodelike.xcodeproj; path = Nodelike/Nodelike.xcodeproj; sourceTree = "<group>"; };
 		33A05146193E61CC00FED071 /* libConnichiwa.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libConnichiwa.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -298,6 +303,9 @@
 				334AB745193FDADC00A15999 /* CWWebApplication.h */,
 				334AB746193FDADC00A15999 /* CWWebApplication.m */,
 				332B686D1958E55E004B0600 /* CWWebApplicationState.h */,
+				33618AC6195DEDFE006FA51B /* CWWebLibraryManager.h */,
+				33618AC7195DEDFE006FA51B /* CWWebLibraryManager.m */,
+				33618ACA195E233D006FA51B /* CWWebLibraryManagerDelegate.h */,
 				33618ABE195DAD37006FA51B /* CWRemoteLibraryManager.h */,
 				33618ABF195DAD37006FA51B /* CWRemoteLibraryManager.m */,
 				330BA3D1193F8CB300D9E54C /* CWWebserverManager.h */,
@@ -353,6 +361,7 @@
 				334AB757193FEC6000A15999 /* CWBundle.h in Headers */,
 				3367186C194776C1000A7164 /* CWWebserverManagerDelegate.h in Headers */,
 				334AB753193FDDF800A15999 /* CWDebug.h in Headers */,
+				33618AC8195DEDFE006FA51B /* CWWebLibraryManager.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -619,6 +628,7 @@
 				334AB758193FEC6000A15999 /* CWBundle.m in Sources */,
 				33EE7EFB1955BC1500EFDE17 /* CWUtil.m in Sources */,
 				334AB754193FDDF800A15999 /* CWDebug.m in Sources */,
+				33618AC9195DEDFE006FA51B /* CWWebLibraryManager.m in Sources */,
 				33618AC1195DAD37006FA51B /* CWRemoteLibraryManager.m in Sources */,
 				334AB748193FDADC00A15999 /* CWWebApplication.m in Sources */,
 				333A80681953996D00420D5A /* CWBluetoothManager.m in Sources */,

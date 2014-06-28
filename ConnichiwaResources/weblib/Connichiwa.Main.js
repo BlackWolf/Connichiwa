@@ -11,6 +11,7 @@
  */
 var Connichiwa = (function()
 {
+
   /**
   * @namespace Connichiwa.Websocket
   * @memberof Connichiwa
@@ -31,8 +32,8 @@ var Connichiwa = (function()
    */
   _websocket.onopen = function()
   {
+    native_websocketDidOpen();
     CWDebug.log("Websocket opened");
-    CWEventManager.trigger("ready");
   };
 
 
@@ -46,8 +47,8 @@ var Connichiwa = (function()
     var message = e.data;
     CWDebug.log("message: " + message);
     
-    CWWebserverCommunicationParser.parse(message);
-    CWNativeCommunicationParser.parse(message);
+    //CWWebserverCommunicationParser.parse(message);
+    //CWNativeCommunicationParser.parse(message);
     CWRemoteCommunicationParser.parse(message);
   };
 
@@ -71,6 +72,7 @@ var Connichiwa = (function()
    */
   _websocket.onclose = function()
   {
+    native_websocketDidClose();
     CWDebug.log("Websocket closed");
   };
   
@@ -99,13 +101,12 @@ var Connichiwa = (function()
   {
     var validEvents = [ 
       "ready", 
-      "localIdentifierSet", 
       "deviceDetected", 
       "deviceDistanceChanged", 
       "deviceLost",
       "deviceConnected",
       "deviceDisconnected",
-      "connectionRequestFailed"
+      "connectFailed"
     ];
     
     if (CWUtil.inArray(event, validEvents) === false) throw "Registering for invalid event: " + event;
@@ -121,8 +122,10 @@ var Connichiwa = (function()
     if (device.canBeConnected() === false) return;
     
     device.state = CWDeviceState.CONNECTING;
-    var data = { type: "connectionRequest", identifier: device.getIdentifier() };
-    _send(JSON.stringify(data));
+
+    // var data = { type: "connectionRequest", identifier: device.getIdentifier() };
+    //_send(JSON.stringify(data));
+    native_connectRemote(device.getIdentifier());
   };
   
   var send = function(device, message)

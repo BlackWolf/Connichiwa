@@ -47,6 +47,7 @@ websocket.onopen = function()
 {
   var data = { type: "didconnect", identifier: QueryString.identifier };
   websocket.send(JSON.stringify(data));
+    native_websocketDidOpen();
 };
 
 
@@ -77,22 +78,18 @@ websocket.onerror = function()
 
 websocket.onclose = function()
 {
-    native_remoteWebsocketWasClosed();
+    native_websocketDidClose();
 };
+
+function disconnect()
+{
+  websocket.close();
+}
 
 
 //////////
 // MISC //
 //////////
-
-
-
-function closeWebsocket()
-{
-  var data = { type: "willdisconnect", identifier: QueryString.identifier };
-  websocket.send(JSON.stringify(data));
-  websocket.close();
-}
 
 
 function log(message)

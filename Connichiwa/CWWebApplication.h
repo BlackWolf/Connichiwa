@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import <JavaScriptCore/JavaScriptCore.h>
 
 
 
@@ -17,11 +16,6 @@
  */
 @interface CWWebApplication : NSObject
 
-/**
- *  The webview where the remote lib will be loaded on. Should be set to a valid webview if this device should be used as a remote device. 
- *  TODO: dirty, we should find some other implementation for this.
- */
-@property (readwrite, strong) UIWebView *remoteWebView;
 
 /**
  *  Starts the web application on the given webview. This will fire up the webserver, which will serve the given document root and listen on the specified port.
@@ -39,6 +33,8 @@
  *  @param webView      See launchWithDocumentRoot:onWebview:port:
  */
 - (void)launchWithDocumentRoot:(NSString *)documentRoot onWebview:(UIWebView *)webView;
+
+- (void)setRemoteWebView:(UIWebView *)remoteWebView;
 
 - (void)applicationWillResignActive;
 - (void)applicationDidEnterBackground;

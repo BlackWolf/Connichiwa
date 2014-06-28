@@ -83,7 +83,7 @@ websocket.on("connection", function(wsConnection) {
       var object = JSON.parse(message);
       if (!object.target || object.target === "native") //TODO !object.target for backwards compatibility
       {
-        sendToNative(message);
+        log("WEBSOCKET", "!!! ERROR: TRIED TO SEND MESSAGE TO NATIVE VIA WEBSOCKET: "+message);
       }
       
       if (object.target === "remote")
@@ -91,9 +91,6 @@ websocket.on("connection", function(wsConnection) {
         sendToRemote(object.targetIdentifier, message);
       }
     });
-    
-    sendToWeblib(JSON.stringify({ type: "debug", cwdebug: CWDEBUG }));
-    native_didLoadWeblib();
   }
   else
   {
@@ -163,12 +160,6 @@ function sendToWeblib(message)
   }
   log("WEBSERVER", "Sending message to weblib: " + message);
   wsLocalConnection.send(message);
-}
-
-
-function sendToNative(message)
-{
-  native_receivedFromWeblib(message);
 }
 
 function sendToRemote(identifier, message)

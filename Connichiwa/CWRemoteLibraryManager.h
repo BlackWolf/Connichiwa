@@ -7,7 +7,29 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+#import <JavaScriptCore/JavaScriptCore.h>
+#import "CWWebApplicationState.h"
+
+
+
+typedef NS_ENUM(NSInteger, CWRemoteLibraryManagerState)
+{
+    CWRemoteLibraryManagerStateDisconnected,
+    CWRemoteLibraryManagerStateConnecting,
+    CWRemoteLibraryManagerStateConnected,
+    CWRemoteLibraryManagerStateDisconnecting
+};
+
+
 
 @interface CWRemoteLibraryManager : NSObject
+
+@property (readwrite, strong) UIWebView *webView;
+
+- (instancetype)initWithApplicationState:(id<CWWebApplicationState>)appState;
+- (BOOL)isActive;
+- (void)connectToServer:(NSURL *)URL;
+- (void)disconnect;
 
 @end

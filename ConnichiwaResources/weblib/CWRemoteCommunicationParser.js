@@ -32,9 +32,7 @@ var CWRemoteCommunicationParser = (function()
         
         device.state = CWDeviceState.CONNECTED;
         
-        var data = { type: "remoteConnected", identifier: object.identifier };
-        Connichiwa._send(JSON.stringify(data));
-        
+        native_remoteDidConnect(device.getIdentifier());
         CWEventManager.trigger("deviceConnected", device);
         break;
       case "willdisconnect":

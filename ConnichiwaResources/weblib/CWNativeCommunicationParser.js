@@ -40,10 +40,14 @@ var CWNativeCommunicationParser = (function()
     var object = JSON.parse(message);
     switch (object.type)
     {
+    case "cwdebug":
+      if (object.cwdebug) CWDebug.enableDebug();
+      break;
+
     case "localidentifier":
       var success = CWDeviceManager.setLocalID(object.identifier);
 
-      if (success) CWEventManager.trigger("localIdentifierSet", object.identifier);
+      if (success) CWEventManager.trigger("ready");
       break;
     case "devicedetected":
       var device = CWDeviceManager.getDeviceWithIdentifier(object.identifier);
@@ -68,6 +72,7 @@ var CWNativeCommunicationParser = (function()
       if (device === null) return;
       
       device.updateDistance(object.distance);
+CWEventManager.trigger("deviceDistanceChanged", device);
       break;
     case "devicelost":
       var device = CWDeviceManager.getDeviceWithIdentifier(object.identifier);
@@ -77,10 +82,10 @@ var CWNativeCommunicationParser = (function()
       }
       CWEventManager.trigger("deviceLost", device);
       break;
-    case "connectionRequestFailed":
+    case "remoteconnectfailed":
       var device = CWDeviceManager.getDeviceWithIdentifier(object.identifier);
       device.state = CWDeviceState.CONNECTING_FAILED;
-      CWEventManager.trigger("connectionRequestFailed", device);
+      CWEventManager.trigger("connectFailed", device);
       break;
     }
   };

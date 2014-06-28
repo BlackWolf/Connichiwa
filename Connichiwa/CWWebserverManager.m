@@ -140,130 +140,127 @@
 }
 
 
-#pragma mark Weblib Communication - Sending
-
-
-- (void)sendToWeblib_localIdentifier:(NSString *)identifier
-{
-    NSDictionary *data = @{
-                           @"type": @"localidentifier",
-                           @"identifier": identifier
-                           };
-    [self _sendDictionaryToWeblib:data];
-}
-
-
-- (void)sendToWeblib_deviceDetected:(NSString *)identifier
-{
-    NSDictionary *data = @{
-                           @"type": @"devicedetected",
-                           @"identifier": identifier
-                           };
-    [self _sendDictionaryToWeblib:data];
-}
-
-
-- (void)sendToWeblib_device:(NSString *)identifier changedDistance:(double)distance
-{
-    NSDictionary *data = @{
-                           @"type": @"devicedistancechanged",
-                           @"identifier": identifier,
-                           @"distance": [NSNumber numberWithDouble:(round(distance * 10) / 10)]
-                           };
-    [self _sendDictionaryToWeblib:data];
-}
-
-
-- (void)sendToWeblib_deviceLost:(NSString *)identifier
-{
-    NSDictionary *data = @{
-                           @"type": @"devicelost",
-                           @"identifier": identifier
-                           };
-    [self _sendDictionaryToWeblib:data];
-}
-
-
-- (void)sendToWeblib_connectionRequestFailed:(NSString *)identifier
-{
-    NSDictionary *data = @{
-                           @"type": @"connectionRequestFailed",
-                           @"identifier": identifier
-                           };
-    [self _sendDictionaryToWeblib:data];
-}
-
-
-- (void)_sendDictionaryToWeblib:(NSDictionary *)dictionary
-{
-    NSString *json = [CWUtil escapedJSONStringFromDictionary:dictionary];
-    [self _sendToWeblib:json];
-}
-
-
-- (void)_sendToWeblib:(NSString *)message
-{
-    DLog(@"Sending %@", message);
-    [self.nodelikeContext evaluateScript:[NSString stringWithFormat:@"sendToWeblib('%@')", message]];
-}
-
-
-#pragma mark Weblib Communication - Receiving
-
-
-- (void)_receivedFromWeblib_connectionRequest:(NSDictionary *)message
-{
-    if ([self.delegate respondsToSelector:@selector(didReceiveConnectionRequest:)])
-    {
-        NSString *targetIdentifier = message[@"identifier"];
-        [self.delegate didReceiveConnectionRequest:targetIdentifier];
-    }
-}
-
-
-- (void)_receivedFromWeblib_remoteConnected:(NSDictionary *)message
-{
-    if ([self.delegate respondsToSelector:@selector(didConnectToRemoteDevice:)])
-    {
-        NSString *remoteIdentifier = message[@"identifier"];
-        [self.delegate didConnectToRemoteDevice:remoteIdentifier];
-    }
-}
-
-
-#pragma mark Webserver Callbacks
+//#pragma mark Weblib Communication - Sending
+//
+//
+//- (void)sendToWeblib_localIdentifier:(NSString *)identifier
+//{
+//    NSDictionary *data = @{
+//                           @"type": @"localidentifier",
+//                           @"identifier": identifier
+//                           };
+//    [self _sendDictionaryToWeblib:data];
+//}
+//
+//
+//- (void)sendToWeblib_deviceDetected:(NSString *)identifier
+//{
+//    NSDictionary *data = @{
+//                           @"type": @"devicedetected",
+//                           @"identifier": identifier
+//                           };
+//    [self _sendDictionaryToWeblib:data];
+//}
+//
+//
+//- (void)sendToWeblib_device:(NSString *)identifier changedDistance:(double)distance
+//{
+//    NSDictionary *data = @{
+//                           @"type": @"devicedistancechanged",
+//                           @"identifier": identifier,
+//                           @"distance": [NSNumber numberWithDouble:(round(distance * 10) / 10)]
+//                           };
+//    [self _sendDictionaryToWeblib:data];
+//}
+//
+//
+//- (void)sendToWeblib_deviceLost:(NSString *)identifier
+//{
+//    NSDictionary *data = @{
+//                           @"type": @"devicelost",
+//                           @"identifier": identifier
+//                           };
+//    [self _sendDictionaryToWeblib:data];
+//}
+//
+//
+//- (void)sendToWeblib_connectionRequestFailed:(NSString *)identifier
+//{
+//    NSDictionary *data = @{
+//                           @"type": @"connectionRequestFailed",
+//                           @"identifier": identifier
+//                           };
+//    [self _sendDictionaryToWeblib:data];
+//}
+//
+//
+//- (void)_sendDictionaryToWeblib:(NSDictionary *)dictionary
+//{
+//    NSString *json = [CWUtil escapedJSONStringFromDictionary:dictionary];
+//    [self _sendToWeblib:json];
+//}
+//
+//
+//- (void)_sendToWeblib:(NSString *)message
+//{
+//    DLog(@"Sending %@", message);
+//    [self.nodelikeContext evaluateScript:[NSString stringWithFormat:@"sendToWeblib('%@')", message]];
+//}
+//
+//
+//#pragma mark Weblib Communication - Receiving
+//
+//
+//- (void)_receivedFromWeblib_connectionRequest:(NSDictionary *)message
+//{
+//    if ([self.delegate respondsToSelector:@selector(didReceiveConnectionRequest:)])
+//    {
+//        NSString *targetIdentifier = message[@"identifier"];
+//        [self.delegate didReceiveConnectionRequest:targetIdentifier];
+//    }
+//}
+//
+//
+//- (void)_receivedFromWeblib_remoteConnected:(NSDictionary *)message
+//{
+//    if ([self.delegate respondsToSelector:@selector(didConnectToRemoteDevice:)])
+//    {
+//        NSString *remoteIdentifier = message[@"identifier"];
+//        [self.delegate didConnectToRemoteDevice:remoteIdentifier];
+//    }
+//}
+//
+//
+#pragma mark Webserver Communication
 
 
 - (void)_registerWebserverCallbacks
 {
-    __weak typeof(self) weakSelf = self;
-    
-    self.nodelikeContext[@"native_didLoadWeblib"] = ^{
-        [weakSelf _didLoadWeblib];
-    };
-    
-    self.nodelikeContext[@"native_receivedFromWeblib"] = ^(NSString *message) {
-        [weakSelf _receivedFromWeblib:message];
-    };
+//    __weak typeof(self) weakSelf = self;
+//    
+//    self.nodelikeContext[@"native_remoteConnectionEstablished"] = ^(NSString *identifier) {
+//        [weakSelf _fromWebserver_remoteConnectionEstablished:identifier];
+//    };
 }
 
-
-- (void)_didLoadWeblib
-{
-    if ([self.delegate respondsToSelector:@selector(didConnectToWeblib)])
-    {
-        [self.delegate didConnectToWeblib];
-    }
-}
-
-
-- (void)_receivedFromWeblib:(NSString *)message
-{
-    NSDictionary *messageData = [NSJSONSerialization JSONObjectWithData:[message dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
-    //    DLog(@"Got message: %@", messageData);
-    
-    if ([messageData[@"type"] isEqualToString:@"connectionRequest"])    [self _receivedFromWeblib_connectionRequest:messageData];
-    else if ([messageData[@"type"] isEqualToString:@"remoteConnected"]) [self _receivedFromWeblib_remoteConnected:messageData];
-}
+//
+//
+//- (void)_didLoadWeblib
+//{
+//    if ([self.delegate respondsToSelector:@selector(didConnectToWeblib)])
+//    {
+//        [self.delegate didConnectToWeblib];
+//    }
+//}
+//
+//
+//- (void)_receivedFromWeblib:(NSString *)message
+//{
+//    NSDictionary *messageData = [NSJSONSerialization JSONObjectWithData:[message dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
+//    //    DLog(@"Got message: %@", messageData);
+//    
+//    if ([messageData[@"type"] isEqualToString:@"connectionRequest"])    [self _receivedFromWeblib_connectionRequest:messageData];
+//    else if ([messageData[@"type"] isEqualToString:@"remoteConnected"]) [self _receivedFromWeblib_remoteConnected:messageData];
+//}
 
 @end

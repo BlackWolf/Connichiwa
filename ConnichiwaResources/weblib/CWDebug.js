@@ -14,6 +14,11 @@ var CWDebug = (function()
    */
   var CWDEBUG = false;
 
+  var enableDebug = function()
+  {
+    CWDEBUG = true;
+  };
+
   /**
    * Logs a message to the console if debug mode is on
    *
@@ -55,6 +60,7 @@ var CWDebug = (function()
   };
 
   return {
+    enableDebug : enableDebug,
     log : log
   };
 })();

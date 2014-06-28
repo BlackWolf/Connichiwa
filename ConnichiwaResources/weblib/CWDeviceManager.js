@@ -32,8 +32,8 @@ var CWDeviceManager = (function()
   {
     if (_localIdentifier !== undefined) return false;
 
-    CWDebug.log("Local identifier set to " + _localIdentifier);
     _localIdentifier = identifier;
+    CWDebug.log("Local identifier set to " + _localIdentifier);
     
     return true;
   };

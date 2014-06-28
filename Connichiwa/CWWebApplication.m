@@ -13,6 +13,8 @@
 #import "CWBluetoothManagerDelegate.h"
 #import "CWWebApplicationState.h"
 #import "CWRemoteLibraryManager.h"
+#import "CWWebLibraryManager.h"
+#import "CWWebLibraryManagerDelegate.h"
 #import "CWDebug.h"
 
 
@@ -23,7 +25,7 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
 
 
 
-@interface CWWebApplication () <CWWebserverManagerDelegate, CWBluetoothManagerDelegate, CWWebApplicationState>
+@interface CWWebApplication () <CWWebserverManagerDelegate, CWBluetoothManagerDelegate, CWWebApplicationState, CWWebLibraryManagerDelegate>
 
 /**
  *  The unique identifier of this device that is used amongst all the different parts of Connichiwa
@@ -35,6 +37,7 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
  */
 @property (readwrite) int webserverPort;
 
+@property (readwrite, strong) CWWebLibraryManager *webLibManager;
 @property (readwrite, strong) CWRemoteLibraryManager *remoteLibManager;
 
 /**
@@ -51,11 +54,6 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
  *  The local UIWebView where the web application will be displayed on
  */
 @property (readwrite, strong) UIWebView *localWebView;
-
-/**
- *  Determines if this device is currently running as a remote device for another Connichiwa device.
- */
-@property (readwrite) BOOL isRemote;
 
 /**
  *  Contains a list of of devices that we currently try to connect to in order to use them as remote devices. Each entry is a device identifier.
@@ -86,13 +84,16 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
     self = [super init];
     
     self.identifier = [[NSUUID UUID] UUIDString];
-    
-    self.isRemote = NO;
     self.pendingRemoteDevices = [NSMutableArray array];
     self.remoteDevices = [NSMutableArray array];
     
-    self.remoteLibManager = [[CWRemoteLibraryManager alloc] init];
+    self.webLibManager = [[CWWebLibraryManager alloc] initWithApplicationState:self];
+    [self.webLibManager setDelegate:self];
+    
+    self.remoteLibManager = [[CWRemoteLibraryManager alloc] initWithApplicationState:self];
+    
     self.webserverManager = [[CWWebserverManager alloc] init];
+    [self.webserverManager setDelegate:self];
     
     self.bluetoothManager = [[CWBluetoothManager alloc] initWithApplicationState:self];
     [self.bluetoothManager setDelegate:self];
@@ -106,8 +107,6 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
     self.localWebView = webView;
     self.webserverPort = port;
     
-
-    [self.webserverManager setDelegate:self];
     [self.webserverManager startWebserverWithDocumentRoot:documentRoot onPort:port];
 }
 
@@ -118,18 +117,9 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
 }
 
 
-- (void)_remoteWebsocketWasClosed
+- (void)setRemoteWebView:(UIWebView *)remoteWebView
 {
-    //The remoteWebView reports the websocket was closed, so we stop being a remote device
-    if (self.isRemote)
-    {
-        DLog(@"!! BACKING OUT OF REMOTE STATE");
-        
-        [self.remoteWebView loadHTMLString:@"" baseURL:nil];
-        [self.remoteWebView setHidden:YES];
-        
-        self.isRemote = NO;
-    }
+    [self.remoteLibManager setWebView:remoteWebView];
 }
 
 
@@ -146,7 +136,7 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
     if ([self.remoteDevices containsObject:deviceIdentifier]) return;
     
     [self.pendingRemoteDevices removeObject:deviceIdentifier];
-    [self.webserverManager sendToWeblib_connectionRequestFailed:deviceIdentifier];
+    [self.webLibManager sendRemoteConnectFailed:deviceIdentifier];
 }
 
 
@@ -160,6 +150,12 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
 #pragma mark CWWebApplicationState Protocol
 
 
+- (BOOL)isRemote
+{
+    return self.remoteLibManager.isActive;
+}
+
+
 /**
  *  See [CWWebApplicationState canBecomeRemote]
  *
@@ -167,7 +163,42 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
  */
 - (BOOL)canBecomeRemote
 {
-    return (self.isRemote == NO && [self.pendingRemoteDevices count] == 0 && [self.remoteDevices count] == 0);
+    return ([self isRemote] == NO && [self.pendingRemoteDevices count] == 0 && [self.remoteDevices count] == 0);
+}
+
+
+#pragma mark CWWebLibraryManagerDelegate
+
+
+- (void)webLibraryIsReady
+{
+    //Weblib is ready to receive infos about detected devices, so let's start detecting and being detected
+    [self.bluetoothManager startAdvertising];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.bluetoothManager performSelector:@selector(startScanning) withObject:nil afterDelay:0.5]; //BT starts freaking out without a small delay, no idea why
+    });
+}
+
+
+- (void)didReceiveConnectionRequestForRemote:(NSString *)identifier
+{
+    if ([self.pendingRemoteDevices containsObject:identifier]) return;
+    
+    if ([self isRemote] == YES || [self.remoteDevices containsObject:identifier])
+    {
+        [self.webLibManager sendRemoteConnectFailed:identifier];
+        return;
+    }
+    
+    [self.pendingRemoteDevices addObject:identifier];
+    [self.bluetoothManager sendNetworkAddressesToDevice:identifier];
+}
+
+
+- (void)remoteDidConnect:(NSString *)identifier
+{
+    [self.pendingRemoteDevices removeObject:identifier];
+    [self.remoteDevices addObject:identifier];
 }
 
 
@@ -179,28 +210,8 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
  */
 - (void)didStartWebserver
 {
-    //Open 127.0.0.1, which will load the Connichiwa Web Library on this device and initiate the local websocket connection
-    //The webserver will report back to us by calling didConnectToWeblib
-    NSURL *localhostURL = [NSURL URLWithString:[NSString stringWithFormat:@"http://127.0.0.1:%d", self.webserverPort]];
-    NSURLRequest *localhostURLRequest = [NSURLRequest requestWithURL:localhostURL];
-    [self.localWebView loadRequest:localhostURLRequest];
-}
-
-
-/**
- *  See [CWWebserverManagerDelegate didConnectToWeblib]
- */
-- (void)didConnectToWeblib
-{
-    //Weblib is ready to receive infos about detected devices, so let's start detecting and being detected
-    //BT events will be send to us by the CWBluetoothManager via callbacks and we can then forward important events to the weblib
-    [self.webserverManager sendToWeblib_localIdentifier:self.identifier];
-    
-    [self.bluetoothManager startAdvertising];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.bluetoothManager performSelector:@selector(startScanning) withObject:nil afterDelay:0.5]; //BT starts freaking out without a small delay, no idea why
-    });
-    
+    [self.webLibManager setWebView:self.localWebView];
+    [self.webLibManager connect];
 }
 
 
@@ -213,7 +224,7 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
 {
     if ([self.pendingRemoteDevices containsObject:deviceIdentifier]) return;
     
-    if (self.isRemote == YES || [self.remoteDevices containsObject:deviceIdentifier])
+    if ([self isRemote] == YES || [self.remoteDevices containsObject:deviceIdentifier])
     {
         [self.webserverManager sendToWeblib_connectionRequestFailed:deviceIdentifier];
         return;
@@ -246,7 +257,7 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
  */
 - (void)deviceDetected:(NSString *)identifier
 {
-    [self.webserverManager sendToWeblib_deviceDetected:identifier];
+    [self.webLibManager sendDeviceDetected:identifier];
 }
 
 
@@ -258,13 +269,13 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
  */
 - (void)device:(NSString *)identifier changedDistance:(double)distance
 {
-    [self.webserverManager sendToWeblib_device:identifier changedDistance:distance];
+    [self.webLibManager sendDevice:identifier changedDistance:distance];
 }
 
 
 - (void)deviceLost:(NSString *)identifier
 {
-    [self.webserverManager sendToWeblib_deviceLost:identifier];
+    [self.webLibManager sendDeviceLost:identifier];
 }
 
 
@@ -278,28 +289,7 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
     if ([self canBecomeRemote] == NO) return;
         
     //This is it, the moment we have all been waiting for: Switching to remote state!
-    self.isRemote = YES;
-    DLog(@"!! SWITCHING INTO REMOTE STATE");
-    
-    //URL is in the form http://IP:PORT - we need to make it http://IP:PORT/remote/index.html?identifier=ID
-    //This will make it retrieve the remote library of the other device and send our identifier to the other device's weblib
-    NSURL *extendedURL = [URL URLByAppendingPathComponent:@"remote" isDirectory:YES];
-    NSString *queryString = [NSString stringWithFormat:@"identifier=%@", self.identifier];
-    NSString *finalURLString = [[NSString alloc] initWithFormat:@"%@index.html%@%@", [extendedURL absoluteString], [extendedURL query] ? @"&" : @"?", queryString];
-    NSURL *finalURL = [NSURL URLWithString:finalURLString];
-    
-    NSURLRequest *URLRequest = [NSURLRequest requestWithURL:finalURL];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.remoteWebView setHidden:NO];
-        [self.remoteWebView loadRequest:URLRequest];
-        
-        JSContext *blubb = [self.remoteWebView valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
-        __weak typeof(self) weakSelf = self;
-        
-        blubb[@"native_remoteWebsocketWasClosed"] = ^{
-            [weakSelf _remoteWebsocketWasClosed];
-        };
-    });
+    [self.remoteLibManager connectToServer:URL];
 }
 
 
@@ -312,7 +302,7 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
 - (void)didSendNetworkAddresses:(NSString *)deviceIdentifier success:(BOOL)success
 {
     //If we successfully transferred our IPs wait for the remote library to connect to us
-    //If the transfer failed or the remote lib won't connect, we will report a connection failure
+    //Once the remote device establishes a websocket connection CWWebserverManager will report the new connection
     if (success && [self.remoteDevices containsObject:deviceIdentifier] == NO)
     {
         [self performSelector:@selector(remoteDeviceConnectionTimeout:) withObject:deviceIdentifier afterDelay:REMOTE_WEBSOCKET_CONNECT_TIMEOUT];
@@ -320,7 +310,7 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
     else
     {
         [self.pendingRemoteDevices removeObject:deviceIdentifier];
-        [self.webserverManager sendToWeblib_connectionRequestFailed:deviceIdentifier];
+        [self.webLibManager sendRemoteConnectFailed:deviceIdentifier];
     }
 }
 
@@ -342,7 +332,7 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
     
     //If we are a remote device we should shut down the websocket gracefully to let the master device know we are not available to display information
     //The websocket connection is resumed in willEnterForeground
-    if (self.isRemote)
+    if ([self isRemote])
     {
         DLog(@"App entering background while being  a remote device... closing websocket connection");
         
@@ -356,7 +346,7 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
             self.cleanupBackgroundTaskIdentifier = UIBackgroundTaskInvalid;
         }];
         
-        [self.remoteWebView stringByEvaluatingJavaScriptFromString:@"closeWebsocket();"];
+        [self.remoteLibManager disconnect];
         [self performSelector:@selector(cleanupBackgroundTaskTimeout) withObject:nil afterDelay:CLEANUP_TASK_TIMEOUT];
     }
 }

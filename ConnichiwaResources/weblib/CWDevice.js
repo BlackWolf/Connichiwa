@@ -54,8 +54,6 @@ function CWDevice(identifier, options)
   this.updateDistance = function(value)
   {
     _distance = value;
-    CWDebug.log("Distance of " + this + " changed to " + _distance);
-    CWEventManager.trigger("deviceDistanceChanged", this);
   };
 
   /**

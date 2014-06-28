@@ -14,6 +14,11 @@ var CWDebug = (function()
    */
   var CWDEBUG = false;
 
+  var enableDebug = function()
+  {
+    CWDEBUG = true;
+  };
+
   /**
    * Logs a message to the console if debug mode is on
    *
@@ -55,6 +60,7 @@ var CWDebug = (function()
   };
 
   return {
+    enableDebug : enableDebug,
     log : log
   };
 })();
@@ -114,8 +120,6 @@ function CWDevice(identifier, options)
   this.updateDistance = function(value)
   {
     _distance = value;
-    CWDebug.log("Distance of " + this + " changed to " + _distance);
-    CWEventManager.trigger("deviceDistanceChanged", this);
   };
 
   /**
@@ -208,8 +212,8 @@ var CWDeviceManager = (function()
   {
     if (_localIdentifier !== undefined) return false;
 
-    CWDebug.log("Local identifier set to " + _localIdentifier);
     _localIdentifier = identifier;
+    CWDebug.log("Local identifier set to " + _localIdentifier);
     
     return true;
   };
@@ -384,10 +388,14 @@ var CWNativeCommunicationParser = (function()
     var object = JSON.parse(message);
     switch (object.type)
     {
+    case "cwdebug":
+      if (object.cwdebug) CWDebug.enableDebug();
+      break;
+
     case "localidentifier":
       var success = CWDeviceManager.setLocalID(object.identifier);
 
-      if (success) CWEventManager.trigger("localIdentifierSet", object.identifier);
+      if (success) CWEventManager.trigger("ready");
       break;
     case "devicedetected":
       var device = CWDeviceManager.getDeviceWithIdentifier(object.identifier);
@@ -412,6 +420,7 @@ var CWNativeCommunicationParser = (function()
       if (device === null) return;
       
       device.updateDistance(object.distance);
+CWEventManager.trigger("deviceDistanceChanged", device);
       break;
     case "devicelost":
       var device = CWDeviceManager.getDeviceWithIdentifier(object.identifier);
@@ -421,10 +430,10 @@ var CWNativeCommunicationParser = (function()
       }
       CWEventManager.trigger("deviceLost", device);
       break;
-    case "connectionRequestFailed":
+    case "remoteconnectfailed":
       var device = CWDeviceManager.getDeviceWithIdentifier(object.identifier);
       device.state = CWDeviceState.CONNECTING_FAILED;
-      CWEventManager.trigger("connectionRequestFailed", device);
+      CWEventManager.trigger("connectFailed", device);
       break;
     }
   };
@@ -467,9 +476,7 @@ var CWRemoteCommunicationParser = (function()
         
         device.state = CWDeviceState.CONNECTED;
         
-        var data = { type: "remoteConnected", identifier: object.identifier };
-        Connichiwa._send(JSON.stringify(data));
-        
+        native_remoteDidConnect(device.getIdentifier());
         CWEventManager.trigger("deviceConnected", device);
         break;
       case "willdisconnect":
@@ -601,6 +608,7 @@ var CWWebserverCommunicationParser = (function()
  */
 var Connichiwa = (function()
 {
+
   /**
   * @namespace Connichiwa.Websocket
   * @memberof Connichiwa
@@ -621,8 +629,8 @@ var Connichiwa = (function()
    */
   _websocket.onopen = function()
   {
+    native_websocketDidOpen();
     CWDebug.log("Websocket opened");
-    CWEventManager.trigger("ready");
   };
 
 
@@ -636,8 +644,8 @@ var Connichiwa = (function()
     var message = e.data;
     CWDebug.log("message: " + message);
     
-    CWWebserverCommunicationParser.parse(message);
-    CWNativeCommunicationParser.parse(message);
+    //CWWebserverCommunicationParser.parse(message);
+    //CWNativeCommunicationParser.parse(message);
     CWRemoteCommunicationParser.parse(message);
   };
 
@@ -661,6 +669,7 @@ var Connichiwa = (function()
    */
   _websocket.onclose = function()
   {
+    native_websocketDidClose();
     CWDebug.log("Websocket closed");
   };
   
@@ -689,13 +698,12 @@ var Connichiwa = (function()
   {
     var validEvents = [ 
       "ready", 
-      "localIdentifierSet", 
       "deviceDetected", 
       "deviceDistanceChanged", 
       "deviceLost",
       "deviceConnected",
       "deviceDisconnected",
-      "connectionRequestFailed"
+      "connectFailed"
     ];
     
     if (CWUtil.inArray(event, validEvents) === false) throw "Registering for invalid event: " + event;
@@ -711,8 +719,10 @@ var Connichiwa = (function()
     if (device.canBeConnected() === false) return;
     
     device.state = CWDeviceState.CONNECTING;
-    var data = { type: "connectionRequest", identifier: device.getIdentifier() };
-    _send(JSON.stringify(data));
+
+    // var data = { type: "connectionRequest", identifier: device.getIdentifier() };
+    //_send(JSON.stringify(data));
+    native_connectRemote(device.getIdentifier());
   };
   
   var send = function(device, message)
