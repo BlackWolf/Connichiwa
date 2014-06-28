@@ -76,6 +76,12 @@
 }
 
 
+- (void)sendRemoteDisconnected:(NSString *)identifier
+{
+    [self _sendToView_remoteDisconnected:identifier];
+}
+
+
 - (BOOL)isActive
 {
     return (self.state == CWWebLibraryManagerStateConnecting || self.state == CWWebLibraryManagerStateConnected);
@@ -210,6 +216,15 @@
     [self _sendToView_dictionary:data];
 }
 
+- (void)_sendToView_remoteDisconnected:(NSString *)identifier
+{
+    NSDictionary *data = @{
+                           @"type": @"remotedisconnected",
+                           @"identifier": identifier
+                           };
+    [self _sendToView_dictionary:data];
+}
+
 
 - (void)_sendToView_dictionary:(NSDictionary *)dictionary
 {
@@ -255,6 +270,16 @@
         self.webViewContext[@"console"] = @{@"log": logger, @"error": logger};
         
         [self _registerJSCallbacks];
+        
+        //
+        //
+        //
+        //TODO we need to send a message to the weblib that it should connect the websocket
+        //otherwise it can happen that websocketDidOpen is received before the JS Callbacks are in place - and therefore gets lost
+        //the same should be done on the remote lib
+        //
+        //
+        //
     }
     else if (self.state == CWWebLibraryManagerStateDisconnecting)
     {

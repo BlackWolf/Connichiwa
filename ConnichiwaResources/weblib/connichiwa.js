@@ -69,14 +69,17 @@ var CWDebug = (function()
 
 
 
-var CWDeviceState = 
+var CWDeviceDiscoveryState = 
 {
-  DISCOVERED        : "discovered",
-  CONNECTING        : "connecting",
-  CONNECTED         : "connected",
-  CONNECTION_FAILED : "connection_failed",
-  DISCONNECTED      : "disconnected",
-  LOST              : "lost"
+  DISCOVERED : "discovered",
+  LOST       : "lost"
+};
+
+var CWDeviceConnectionState =
+{
+  DISCONNECTED : "disconnected",
+  CONNECTING   : "connecting",
+  CONNECTED    : "connected"
 };
 
 
@@ -86,41 +89,16 @@ var CWDeviceState =
  *
  * @namespace CWDevice
  */
-function CWDevice(identifier, options)
+function CWDevice(identifier)
 {
-  if (CWUtil.isObject(options) === false) options = {};
-  var passedOptions = options;
-  options = {};
-
-  var defaultOptions = {
-    distance : -1,
-  };
-  $.extend(options, defaultOptions, passedOptions);
-  
-  this.state = CWDeviceState.DISCOVERED;
+  this.discoveryState = CWDeviceDiscoveryState.DISCOVERED;
+  this.connectionState = CWDeviceConnectionState.DISCONNECTED;
+  this.distance = -1;
 
   /**
    * A string representing a unique identifier of the device
    */
   var _identifier = identifier;
-  
-  /**
-   * The current distance between the local device and the device represented by this CWDevice instance
-   */
-  var _distance = options.distance;
-
-  /**
-   * Updates the distance between the local device and the device represented by the instance of this class
-   *
-   * @param {double} value The new distance value in meters
-   *
-   * @method updateDistance
-   * @memberof CWDevice
-   */
-  this.updateDistance = function(value)
-  {
-    _distance = value;
-  };
 
   /**
    * Returns the identifier of this device
@@ -131,27 +109,20 @@ function CWDevice(identifier, options)
    * @memberof CWDevice
    */
   this.getIdentifier = function() { return _identifier; };
-
-  /**
-   * Returns the current distance between the local device and the device represented by this CWDevice instance, in meters.
-   *
-   * @returns {double} the distance between the local device and this CWDevice in meters
-   *
-   * @method getDistance
-   * @memberof CWDevice
-   */
-  this.getDistance = function() { return _distance; };
+  
+  this.isNearby = function()
+  {
+    return (this.discoveryState === CWDeviceDiscoveryState.DISCOVERED);
+  };
   
   this.canBeConnected = function() 
   { 
-    return this.state !== CWDeviceState.CONNECTED && 
-    this.state !== CWDeviceState.CONNECTING && 
-    this.state !== CWDeviceState.LOST;
+    return (this.connectionState === CWDeviceConnectionState.DISCONNECTED);
   };
   
   this.isConnected = function()
   {
-    return (this.state === CWDeviceState.CONNECTED);
+    return (this.connectionState === CWDeviceConnectionState.CONNECTED);
   };
 
   return this;
@@ -166,6 +137,7 @@ function CWDevice(identifier, options)
  */
 CWDevice.prototype.equalTo = function(object)
 {
+  if (CWDevice.prototype.isPrototypeOf(object) === false) return false;
   return this.getIdentifier() === object.getIdentifier();
 };
 
@@ -190,68 +162,50 @@ CWDevice.prototype.toString = function() {
  */
 var CWDeviceManager = (function()
 {
-  /**
-   * The identifier of the local device (the device the webserver is running on)
-   */
-  var _localIdentifier;
 
   /**
    * An array of detected remote devices as CWDevice objects. All detected devices are in here, they are not necessarily connected to or used in any way by this device.
    */
   var _remoteDevices = [];
 
-
-  /**
-   * Sets the identifier of the local device under which it is advertised to other devices
-   *
-   * @param {string} identifier The identifier
-   *
-   * @memberof CWDeviceManager
-   */
-  var setLocalID = function(identifier)
-  {
-    if (_localIdentifier !== undefined) return false;
-
-    _localIdentifier = identifier;
-    CWDebug.log("Local identifier set to " + _localIdentifier);
-    
-    return true;
-  };
-
-
   /**
    * Adds a new remote device to the manager
    *
-   * @param {CWDevice} newDevice The newly detected device
+   * @param {CWDevice} newDevice The device that should be added to the manager. If the device already exists, nothing will happen.
+   * @returns {bool} true if the device was added, otherwise false
    *
    * @memberof CWDeviceManager
    */
   var addDevice = function(newDevice)
   {
     if (CWDevice.prototype.isPrototypeOf(newDevice) === false) throw "Cannot add a non-device";
-    if (getDeviceWithIdentifier(newDevice.getIdentifier()) !== null) return;
+    if (getDeviceWithIdentifier(newDevice.getIdentifier()) !== null) return false;
 
     _remoteDevices.push(newDevice);
-    CWDebug.log("Added new device: " + newDevice);
+    return true;
   };
 
 
   /**
    * Removes a remote device from the manager
    *
-   * @param {string} identifier The identifier of the device to remove
+   * @param {string|CWDevice} identifier The identifier of the device to remove or a CWDevice. If the device is not stored by this manager, nothing will happen
+  *  @returns {bool} true if the device was removed, otherwise false
    *
    * @memberof CWDeviceManager
    */
   var removeDevice = function(identifier)
   {
-
+    if (CWDevice.prototype.isPrototypeOf(identifier) === true) identifier = identifier.getIdentifier();
+      
     var device = getDeviceWithIdentifier(identifier);
-    if (device === null) return;
+    if (device === null) return false;
 
     var index = _remoteDevices.indexOf(device);
     _remoteDevices.splice(index, 1);
     CWEventManager.trigger("deviceLost", device);
+    
+    return true;
   };
 
 
@@ -278,7 +232,6 @@ var CWDeviceManager = (function()
   };
 
   return {
-    setLocalID              : setLocalID,
     addDevice               : addDevice,
     removeDevice            : removeDevice,
     getDeviceWithIdentifier : getDeviceWithIdentifier
@@ -388,54 +341,71 @@ var CWNativeCommunicationParser = (function()
     var object = JSON.parse(message);
     switch (object.type)
     {
-    case "cwdebug":
-      if (object.cwdebug) CWDebug.enableDebug();
-      break;
-
-    case "localidentifier":
-      var success = CWDeviceManager.setLocalID(object.identifier);
-
-      if (success) CWEventManager.trigger("ready");
-      break;
-    case "devicedetected":
-      var device = CWDeviceManager.getDeviceWithIdentifier(object.identifier);
-      
-      if (device === null)
-      {
-        device = new CWDevice(object.identifier);
-        CWDeviceManager.addDevice(device);
-      }
-      else
-      {
-        if (device.state !== CWDeviceState.CONNECTED && device.state !== CWDeviceState.CONNECTING)
-        {
-          device.state = CWDeviceState.DISCOVERED;
-        }
-      }
-
-      CWEventManager.trigger("deviceDetected", device);
-      break;
-    case "devicedistancechanged":
-      var device = CWDeviceManager.getDeviceWithIdentifier(object.identifier);
-      if (device === null) return;
-      
-      device.updateDistance(object.distance);
-CWEventManager.trigger("deviceDistanceChanged", device);
-      break;
-    case "devicelost":
-      var device = CWDeviceManager.getDeviceWithIdentifier(object.identifier);
-      if (device.state != CWDeviceState.CONNECTED && device.state != CWDeviceState.CONNECTING)
-      {
-        device.state = CWDeviceState.LOST;
-      }
-      CWEventManager.trigger("deviceLost", device);
-      break;
-    case "remoteconnectfailed":
-      var device = CWDeviceManager.getDeviceWithIdentifier(object.identifier);
-      device.state = CWDeviceState.CONNECTING_FAILED;
-      CWEventManager.trigger("connectFailed", device);
-      break;
+      case "cwdebug": _parseDebug(object); break;
+      case "localidentifier": _parseLocalIdentifier(object); break;
+      case "devicedetected": _parseDeviceDetected(object); break;
+      case "devicedistancechanged": _parseDeviceDistanceChanged(object); break;
+      case "devicelost": _parseDeviceLost(object); break;
+      case "remoteconnectfailed": _parseRemoteConnectFailed(object); break;
     }
+  };
+  
+  
+  var _parseDebug = function(message)
+  {
+    if (message.cwdebug) CWDebug.enableDebug();
+  };
+  
+  
+  var _parseLocalIdentifier = function(message)
+  {
+    var success = Connichiwa._setIdentifier(message.identifier);
+    if (success) CWEventManager.trigger("ready");
+  };
+  
+  
+  var _parseDeviceDetected = function(message)
+  {
+    var device = CWDeviceManager.getDeviceWithIdentifier(message.identifier);
+    
+    //We might re-detect a lost device, so it is possible that the device is already stored
+    if (device === null)
+    {
+      device = new CWDevice(message.identifier);
+      CWDeviceManager.addDevice(device);
+    }
+    else
+    {
+      device.discoveryState = CWDeviceDiscoveryState.DETECTED;
+    }
+
+    CWEventManager.trigger("deviceDetected", device);
+  };
+  
+  
+  var _parseDeviceDistanceChanged = function(message)
+  {
+    var device = CWDeviceManager.getDeviceWithIdentifier(message.identifier);
+    if (device === null) return;
+    
+    device.distance = message.distance;
+    CWEventManager.trigger("deviceDistanceChanged", device);
+  };
+  
+  
+  var _parseDeviceLost = function(message)
+  {
+    var device = CWDeviceManager.getDeviceWithIdentifier(message.identifier);
+    device.discoveryState = CWDeviceDiscoveryState.LOST;
+    CWEventManager.trigger("deviceLost", device);
+  };
+  
+  
+  var _parseRemoteConnectFailed = function(message)
+  {
+    var device = CWDeviceManager.getDeviceWithIdentifier(message.identifier);
+    device.connectionState = CWDeviceConnectionState.DISCONNECTED;
+    CWEventManager.trigger("connectFailed", device);
   };
 
   return {
@@ -470,27 +440,19 @@ var CWRemoteCommunicationParser = (function()
     var object = JSON.parse(message);
     switch (object.type)
     {
-      case "didconnect":
-        var device = CWDeviceManager.getDeviceWithIdentifier(object.identifier);
-        if (device === null) return;
-        
-        device.state = CWDeviceState.CONNECTED;
-        
-        native_remoteDidConnect(device.getIdentifier());
-        CWEventManager.trigger("deviceConnected", device);
-        break;
-      case "willdisconnect":
-        var device = CWDeviceManager.getDeviceWithIdentifier(object.identifier);
-        if (device === null) return;
-          
-        device.state = CWDeviceState.DISCONNECTED;
-          
-        var data = { type: "remoteDisconnected", identifier: object.identifier };
-        Connichiwa._send(JSON.stringify(data)); 
-        
-        CWEventManager.trigger("deviceDisconnected", device);
-        break;
+      case "remoteidentifier": _parseRemoteIdentifier(object); break;
     }
+  };
+  
+  
+  var _parseRemoteIdentifier = function(message)
+  {
+    var device = CWDeviceManager.getDeviceWithIdentifier(message.identifier);
+    if (device === null) return;
+    
+    device.connectionState = CWDeviceConnectionState.CONNECTED;
+    native_remoteDidConnect(device.getIdentifier());
+    CWEventManager.trigger("deviceConnected", device);
   };
 
   return {
@@ -557,44 +519,6 @@ var CWUtil = (function()
     inArray  : inArray
   };
 })();
-/* global CWDebug */
-"use strict";
-
-
-/**
- * The Connichiwa Communication Protocol Parser (Webserver).  
- * Here the protocol used to communicate between this library and the webserver is parsed. Although all websocket messages are (obvisouly) send by the webserver, this class parses messages that are triggered by the webserver itself and not relayed through the webserver. The communication is done via JSON.
- *
- * **Debug Flag Information** -- type="debug"  
- * Contains a flag telling us if we run in debug mode or not. Format:
- * * cwdebug -- true if we are debugging, otherwise false
- *
- * @namespace CWWebserverCommunicationParser
- */
-var CWWebserverCommunicationParser = (function()
-{
-  /**
-   * Parses a message from the websocket. If the message is none of the messages described by this class, this method will do nothing. Otherwise the message will trigger an appropiate action.
-   *
-   * @param {string} message The message from the websocket
-   *
-   * @memberof CWWebserverCommunicationParser
-   */
-  var parse = function(message)
-  {
-    var object = JSON.parse(message);
-    switch (object.type)
-    {
-      case "debug":
-        CWDebug.CWDEBUG = Boolean(object.cwdebug);
-        break;
-    }
-  };
-
-  return {
-    parse : parse
-  };
-})();
 /* global LazyLoad, CWDeviceManager, CWNativeCommunicationParser, CWDebug, CWUtil, CWEventManager, CWWebserverCommunicationParser, CWDevice, CWDeviceState, CWRemoteCommunicationParser */
 "use strict";
 
@@ -644,8 +568,6 @@ var Connichiwa = (function()
     var message = e.data;
     CWDebug.log("message: " + message);
     
-    //CWWebserverCommunicationParser.parse(message);
-    //CWNativeCommunicationParser.parse(message);
     CWRemoteCommunicationParser.parse(message);
   };
 
@@ -672,13 +594,29 @@ var Connichiwa = (function()
     native_websocketDidClose();
     CWDebug.log("Websocket closed");
   };
-  
-  
-  var _send = function(message)
-  {
-    _websocket.send(message);
-  };
 
+
+  /**
+  * @namespace Connichiwa.Misc
+  * @memberof Connichiwa
+  */
+  
+  
+  var _identifier;
+  
+  
+  var _setIdentifier = function(value)
+  {
+    if (_identifier !== undefined) return false;
+      
+    _identifier = value;
+    CWDebug.log("Local identifier set to " + _identifier);
+    
+    return true;
+  };
+  
+  
+  var getIdentifier = function() { return _identifier; }
 
   /**
   * @namespace Connichiwa.Events
@@ -718,22 +656,19 @@ var Connichiwa = (function()
     
     if (device.canBeConnected() === false) return;
     
-    device.state = CWDeviceState.CONNECTING;
-
-    // var data = { type: "connectionRequest", identifier: device.getIdentifier() };
-    //_send(JSON.stringify(data));
+    device.connectionState = CWDeviceConnectionState.CONNECTING;
     native_connectRemote(device.getIdentifier());
   };
   
   var send = function(device, message)
   {
-    message.target = "remote";
-    message.targetIdentifier = device.getIdentifier();
-    _send(JSON.stringify(message));
+    message.target = device.getIdentifier();
+    _websocket.send(JSON.stringify(message));
   };
 
   return {
-    _send   : _send,
+    _setIdentifier : _setIdentifier,
+    getIdentifier : getIdentifier,
     on      : on,
     connect : connect,
     send    : send

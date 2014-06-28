@@ -3,14 +3,17 @@
 
 
 
-var CWDeviceState = 
+var CWDeviceDiscoveryState = 
 {
-  DISCOVERED        : "discovered",
-  CONNECTING        : "connecting",
-  CONNECTED         : "connected",
-  CONNECTION_FAILED : "connection_failed",
-  DISCONNECTED      : "disconnected",
-  LOST              : "lost"
+  DISCOVERED : "discovered",
+  LOST       : "lost"
+};
+
+var CWDeviceConnectionState =
+{
+  DISCONNECTED : "disconnected",
+  CONNECTING   : "connecting",
+  CONNECTED    : "connected"
 };
 
 
@@ -20,41 +23,16 @@ var CWDeviceState =
  *
  * @namespace CWDevice
  */
-function CWDevice(identifier, options)
+function CWDevice(identifier)
 {
-  if (CWUtil.isObject(options) === false) options = {};
-  var passedOptions = options;
-  options = {};
-
-  var defaultOptions = {
-    distance : -1,
-  };
-  $.extend(options, defaultOptions, passedOptions);
-  
-  this.state = CWDeviceState.DISCOVERED;
+  this.discoveryState = CWDeviceDiscoveryState.DISCOVERED;
+  this.connectionState = CWDeviceConnectionState.DISCONNECTED;
+  this.distance = -1;
 
   /**
    * A string representing a unique identifier of the device
    */
   var _identifier = identifier;
-  
-  /**
-   * The current distance between the local device and the device represented by this CWDevice instance
-   */
-  var _distance = options.distance;
-
-  /**
-   * Updates the distance between the local device and the device represented by the instance of this class
-   *
-   * @param {double} value The new distance value in meters
-   *
-   * @method updateDistance
-   * @memberof CWDevice
-   */
-  this.updateDistance = function(value)
-  {
-    _distance = value;
-  };
 
   /**
    * Returns the identifier of this device
@@ -65,27 +43,20 @@ function CWDevice(identifier, options)
    * @memberof CWDevice
    */
   this.getIdentifier = function() { return _identifier; };
-
-  /**
-   * Returns the current distance between the local device and the device represented by this CWDevice instance, in meters.
-   *
-   * @returns {double} the distance between the local device and this CWDevice in meters
-   *
-   * @method getDistance
-   * @memberof CWDevice
-   */
-  this.getDistance = function() { return _distance; };
+  
+  this.isNearby = function()
+  {
+    return (this.discoveryState === CWDeviceDiscoveryState.DISCOVERED);
+  };
   
   this.canBeConnected = function() 
   { 
-    return this.state !== CWDeviceState.CONNECTED && 
-    this.state !== CWDeviceState.CONNECTING && 
-    this.state !== CWDeviceState.LOST;
+    return (this.connectionState === CWDeviceConnectionState.DISCONNECTED);
   };
   
   this.isConnected = function()
   {
-    return (this.state === CWDeviceState.CONNECTED);
+    return (this.connectionState === CWDeviceConnectionState.CONNECTED);
   };
 
   return this;
@@ -100,6 +71,7 @@ function CWDevice(identifier, options)
  */
 CWDevice.prototype.equalTo = function(object)
 {
+  if (CWDevice.prototype.isPrototypeOf(object) === false) return false;
   return this.getIdentifier() === object.getIdentifier();
 };
 

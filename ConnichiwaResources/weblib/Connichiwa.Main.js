@@ -47,8 +47,6 @@ var Connichiwa = (function()
     var message = e.data;
     CWDebug.log("message: " + message);
     
-    //CWWebserverCommunicationParser.parse(message);
-    //CWNativeCommunicationParser.parse(message);
     CWRemoteCommunicationParser.parse(message);
   };
 
@@ -75,13 +73,29 @@ var Connichiwa = (function()
     native_websocketDidClose();
     CWDebug.log("Websocket closed");
   };
-  
-  
-  var _send = function(message)
-  {
-    _websocket.send(message);
-  };
 
+
+  /**
+  * @namespace Connichiwa.Misc
+  * @memberof Connichiwa
+  */
+  
+  
+  var _identifier;
+  
+  
+  var _setIdentifier = function(value)
+  {
+    if (_identifier !== undefined) return false;
+      
+    _identifier = value;
+    CWDebug.log("Local identifier set to " + _identifier);
+    
+    return true;
+  };
+  
+  
+  var getIdentifier = function() { return _identifier; }
 
   /**
   * @namespace Connichiwa.Events
@@ -121,22 +135,19 @@ var Connichiwa = (function()
     
     if (device.canBeConnected() === false) return;
     
-    device.state = CWDeviceState.CONNECTING;
-
-    // var data = { type: "connectionRequest", identifier: device.getIdentifier() };
-    //_send(JSON.stringify(data));
+    device.connectionState = CWDeviceConnectionState.CONNECTING;
     native_connectRemote(device.getIdentifier());
   };
   
   var send = function(device, message)
   {
-    message.target = "remote";
-    message.targetIdentifier = device.getIdentifier();
-    _send(JSON.stringify(message));
+    message.target = device.getIdentifier();
+    _websocket.send(JSON.stringify(message));
   };
 
   return {
-    _send   : _send,
+    _setIdentifier : _setIdentifier,
+    getIdentifier : getIdentifier,
     on      : on,
     connect : connect,
     send    : send

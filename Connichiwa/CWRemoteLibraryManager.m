@@ -7,6 +7,7 @@
 //
 
 #import "CWRemoteLibraryManager.h"
+#import "CWUtil.h"
 #import "CWDebug.h"
 
 
@@ -65,6 +66,8 @@
     if (self.webView == nil) return;
     if ([self isActive] == NO) return;
     
+    DLog(@"!! BACKING OUT OF REMOTE STATE");
+    
     self.state = CWRemoteLibraryManagerStateDisconnecting;
     
     //Close the websocket. This will trigger the websocketWasClosed callback which finished up the disconnect
@@ -87,23 +90,27 @@
     __weak typeof(self) weakSelf = self;
     
     self.webViewContext[@"native_websocketDidOpen"] = ^{
-        [weakSelf _fromView_websocketDidOpen];
+        [weakSelf _receivedfromView_websocketDidOpen];
     };
     
     self.webViewContext[@"native_websocketDidClose"] = ^{
-        [weakSelf _fromView_websocketDidClose];
+        [weakSelf _receivedfromView_websocketDidClose];
     };
 }
 
 
-- (void)_fromView_websocketDidOpen
+- (void)_receivedfromView_websocketDidOpen
 {
     self.state = CWRemoteLibraryManagerStateConnected;
+    
+    [self _sendToView_cwdebug];
+    [self _sendToView_remoteIdentifier];
+    
     [self.webView setHidden:NO];
 }
 
 
-- (void)_fromView_websocketDidClose
+- (void)_receivedfromView_websocketDidClose
 {
     self.state = CWRemoteLibraryManagerStateDisconnecting;
     [self.webView setHidden:YES];
@@ -111,9 +118,51 @@
 }
 
 
+- (void)_sendToView_cwdebug
+{
+    NSDictionary *data = @{
+                           @"type": @"cwdebug",
+                           @"cwdebug": @CWDEBUG
+                           };
+    [self _sendToView_dictionary:data];
+}
+
+
+- (void)_sendToView_remoteIdentifier
+{
+    NSDictionary *data = @{
+                           @"type": @"remoteidentifier",
+                           @"identifier": self.appState.identifier
+                           };
+    [self _sendToView_dictionary:data];
+}
+
+
 - (void)_sendToView_disconnect
 {
-    [self.webView stringByEvaluatingJavaScriptFromString:@"disconnect();"];
+    NSDictionary *data = @{
+                           @"type": @"disconnect"
+                           };
+    [self _sendToView_dictionary:data];
+}
+
+
+- (void)_sendToView_dictionary:(NSDictionary *)dictionary
+{
+    NSString *json = [CWUtil escapedJSONStringFromDictionary:dictionary];
+    [self _sendToView:json];
+}
+
+
+- (void)_sendToView:(NSString *)message
+{
+    if (self.webViewContext == nil) return;
+    
+    //stringByEvaluatingJavaScriptFromString: must be called on the main thread, but it seems buggy with dispatch_async, so we use performSelectorOnMainThread:
+    //Also see http://stackoverflow.com/questions/11593900/uiwebview-stringbyevaluatingjavascriptfromstring-hangs-on-ios5-0-5-1-when-called
+    //    DLog(@"Sending %@", message);
+    NSString *js = [NSString stringWithFormat:@"parseNativeMessage('%@')", message];
+    [self.webView performSelectorOnMainThread:@selector(stringByEvaluatingJavaScriptFromString:) withObject:js waitUntilDone:NO];
 }
 
 
@@ -126,6 +175,22 @@
     {
         //Loaded a remote server URL, set up its context
         self.webViewContext = [self.webView valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
+        
+        //Register JS error handler
+        self.webViewContext.exceptionHandler = ^(JSContext *c, JSValue *e) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                DLog(@"%@ stack: %@", e, [e valueForProperty:@"stack"]);
+            });
+        };
+        
+        //Register JS logger handler
+        id logger = ^(JSValue *thing) {
+            [JSContext.currentArguments enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                DLog(@"%@", [obj toString]);
+            }];
+        };
+        self.webViewContext[@"console"] = @{@"log": logger, @"error": logger};
+        
         [self _registerJSCallbacks];
     }
     else if (self.state == CWRemoteLibraryManagerStateDisconnecting)

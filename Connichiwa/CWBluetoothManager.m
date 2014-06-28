@@ -314,8 +314,6 @@ double const URL_CHECK_TIMEOUT = 2.0;
 
 - (void)startLostConnectionTimer
 {
-    DLog(@"STARTING LOST CONNECTION TIMER");
-    
     [self stopLostConnectionTimer];
     self.lostConnectionsTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(_removeLostConnections:) userInfo:nil repeats:YES];
 }
@@ -325,7 +323,6 @@ double const URL_CHECK_TIMEOUT = 2.0;
 {
     if (self.lostConnectionsTimer != nil)
     {
-        DLog(@"STOPPING LOST CONNECTION TIMER");
         [self.lostConnectionsTimer invalidate];
         self.lostConnectionsTimer = nil;
     }

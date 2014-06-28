@@ -184,6 +184,8 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
 {
     if ([self.pendingRemoteDevices containsObject:identifier]) return;
     
+    DLog(@" !! TRYING TO GET DEVICE AS REMOTE");
+    
     if ([self isRemote] == YES || [self.remoteDevices containsObject:identifier])
     {
         [self.webLibManager sendRemoteConnectFailed:identifier];
@@ -197,6 +199,8 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
 
 - (void)remoteDidConnect:(NSString *)identifier
 {
+    DLog(@" !! REMOTE DID CONNECT");
+    
     [self.pendingRemoteDevices removeObject:identifier];
     [self.remoteDevices addObject:identifier];
 }
@@ -214,38 +218,13 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
     [self.webLibManager connect];
 }
 
-
-/**
- *  See [CWWebserverManagerDelegate didReceiveConnectionRequest:]
- *
- *  @param deviceIdentifier See [CWWebserverManagerDelegate didReceiveConnectionRequest:]
- */
-- (void)didReceiveConnectionRequest:(NSString *)deviceIdentifier
+- (void)remoteDidDisconnect:(NSString *)identifier
 {
-    if ([self.pendingRemoteDevices containsObject:deviceIdentifier]) return;
-    
-    if ([self isRemote] == YES || [self.remoteDevices containsObject:deviceIdentifier])
-    {
-        [self.webserverManager sendToWeblib_connectionRequestFailed:deviceIdentifier];
-        return;
-    }
-    
-    [self.pendingRemoteDevices addObject:deviceIdentifier];
-    [self.bluetoothManager sendNetworkAddressesToDevice:deviceIdentifier];
-}
-
-
-/**
- *  See [CWWebserverManagerDelegate didConnectToRemoteDevice:]
- *
- *  @param identifier See [CWWebserverManagerDelegate didConnectToRemoteDevice:]
- */
-- (void)didConnectToRemoteDevice:(NSString *)identifier
-{
+    DLog(@" !! REMOTE DID DISCONNECT");
     [self.pendingRemoteDevices removeObject:identifier];
     [self.remoteDevices addObject:identifier];
+    [self.webLibManager sendRemoteDisconnected:identifier];
 }
-
 
 #pragma mark CWBluetoothManagerDelegate
 
@@ -301,6 +280,8 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
  */
 - (void)didSendNetworkAddresses:(NSString *)deviceIdentifier success:(BOOL)success
 {
+    DLog(@" !! DID SEND NETWORK INTERFACE ADDRESSES");
+    
     //If we successfully transferred our IPs wait for the remote library to connect to us
     //Once the remote device establishes a websocket connection CWWebserverManager will report the new connection
     if (success && [self.remoteDevices containsObject:deviceIdentifier] == NO)

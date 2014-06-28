@@ -2,6 +2,10 @@
 
 
 
+var CWDEBUG = false;
+
+
+
 //Parse URL
 var ParsedURL = (function()
 {
@@ -12,42 +16,11 @@ var ParsedURL = (function()
 })();
 
 
-
-var QueryString = (function() 
-{
-  var _queryString = {};
-  var query = window.location.search.substring(1);
-  var vars = query.split("&");
-  for (var i = 0; i < vars.length; i++) {
-    var pair = vars[i].split("=");
-    // If first entry with this name
-    if (typeof _queryString[pair[0]] === "undefined") 
-    {
-      _queryString[pair[0]] = pair[1];
-    // If second entry with this name
-    } 
-    else if (typeof _queryString[pair[0]] === "string") 
-    {
-      var arr = [ _queryString[pair[0]], pair[1] ];
-      _queryString[pair[0]] = arr;
-      // If third or later entry with this name
-    } 
-    else 
-    {
-      _queryString[pair[0]].push(pair[1]);
-    }
-  }
-   
-  return _queryString;
-})();
-
 var websocket = new WebSocket("ws://" + ParsedURL.hostname + ":" + (parseInt(ParsedURL.port) + 1));
 
 websocket.onopen = function()
 {
-  var data = { type: "didconnect", identifier: QueryString.identifier };
-  websocket.send(JSON.stringify(data));
-    native_websocketDidOpen();
+  native_websocketDidOpen();
 };
 
 
@@ -78,12 +51,32 @@ websocket.onerror = function()
 
 websocket.onclose = function()
 {
-    native_websocketDidClose();
+  native_websocketDidClose();
 };
 
-function disconnect()
+
+function parseNativeMessage(message)
 {
-  websocket.close();
+  var object = JSON.parse(message);
+  switch (object.type)
+  {
+    case "cwdebug":
+      if (object.cwdebug) CWDEBUG = true;
+      break;
+    case "remoteidentifier":
+      var data = { type: "remoteidentifier", identifier: object.identifier };
+      sendMessage(data);
+      break;
+    case "disconnect":
+      websocket.close();
+      break;
+  }
+}
+
+
+function sendMessage(message)
+{
+  websocket.send(JSON.stringify(message));
 }
 
 
@@ -94,7 +87,7 @@ function disconnect()
 
 function log(message)
 {
-  console.log(getDateString() + " -- " + message);
+  if (CWDEBUG) console.log(getDateString() + " -- " + message);
 }
 
 function getDateString(date)

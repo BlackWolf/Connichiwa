@@ -73,84 +73,98 @@ websocket.on("connection", function(wsConnection) {
   //TODO We should probably check the source IP here or something
   if (wsLocalConnection === undefined) {
     wsLocalConnection = wsConnection;
+    wsLocalConnection.on("message", onLocalMessage);
+    wsLocalConnection.on("close", onLocalClose);
+    wsLocalConnection.on("error", onLocalError);
+
     log("WEBSOCKET", "Initialized local connection");
-    
-    wsLocalConnection.on("message", function(message) {
-      //A message from the weblib can target either the native layer of a remote device
-      //Figure out which and relay the message accordingly
-      log("WEBSOCKET", "Forwarding local message: " + message);
-      
-      var object = JSON.parse(message);
-      if (!object.target || object.target === "native") //TODO !object.target for backwards compatibility
-      {
-        log("WEBSOCKET", "!!! ERROR: TRIED TO SEND MESSAGE TO NATIVE VIA WEBSOCKET: "+message);
-      }
-      
-      if (object.target === "remote")
-      {
-        sendToRemote(object.targetIdentifier, message);
-      }
-    });
   }
   else
   {
     wsUnidentifiedRemoteConnection.push(wsConnection);
+    wsConnection.on("message", (function(wsConnection) { return onRemoteMessage; })(wsConnection));
+    wsConnection.on("close", (function(wsConnection) { return onRemoteClose; })(wsConnection));
+    wsConnection.on("error", (function(wsConnection) { return onRemoteError; })(wsConnection));
+
     log("WEBSOCKET", "Initialized remote connection");
-    
-    wsConnection.on("message", function(message) {
-      //Usually, the webserver just blindly relays messages, but we need to make one exception:
-      //The "remoteidentifier" message needs to unidentifiedparsed so we know the ID of each remote connection
-      //If we find that identifier, the connection is moved from the unidentified remote connections to the normal remote connections
-      var unidentifiedIndex = wsUnidentifiedRemoteConnection.indexOf(this);
-      if (unidentifiedIndex !== -1)
-      {
-        var object = JSON.parse(message);
-          
-        if (object.type === "didconnect")
-        {
-          wsRemoteConnections[object.identifier] = this;
-          wsUnidentifiedRemoteConnection.splice(unidentifiedIndex, 1);
-          log("WEBSOCKET", "Got identifier for remote connection: " + object.identifier);
-        }
-      }
-      
-      //A message from a remote device is relayed to the weblib
-//      log("WEBSOCKET", "Forwarding remote message: " + message);
-      wsLocalConnection.send(message);
-    });
-    
-    wsConnection.on("close", function(code, message)
-    {
-      log("WEBSOCKET", "GOT A CLOSE: " + code + " ; " + message);
-      
-      for (var key in wsRemoteConnections)
-      {
-        if (wsRemoteConnections.hasOwnProperty(key))
-        {
-          if (wsRemoteConnections[key] === wsConnection)
-          {
-            delete wsRemoteConnections[key];
-            break;
-          } 
-        }
-      }
-      
-      for (var i = 0 ; i < wsUnidentifiedRemoteConnection.length ; i++)
-      {
-        if (wsUnidentifiedRemoteConnection[i] === wsConnection)
-        {
-          wsUnidentifiedRemoteConnection.splice(wsUnidentifiedRemoteConnection.indexOf(wsConnection), 1);
-          break;
-        }
-      }  
-    });
-    
-    wsConnection.on("error", function(error)
-    {
-      log("WEBSOCKET", "GOT AN ERROR");
-    });
   }
 });
+
+var onLocalMessage = function(message)
+{
+  log("WEBSOCKET", "Forwarding local message: " + message);
+  
+  var object = JSON.parse(message);
+  if (object.target === "native") log("WEBSOCKET", "!!! ERROR: TRIED TO SEND MESSAGE TO NATIVE VIA WEBSOCKET: "+message);
+
+  sendToRemote(object.target, message);
+}
+
+var onLocalClose = function(code, message)
+{
+  
+}
+
+var onLocalError = function(error)
+{
+  
+}
+
+var onRemoteMessage = function(message)
+{
+  //Usually, the webserver just blindly relays messages, but we need to make one exception:
+  //The "remoteidentifier" message needs to unidentifiedparsed so we know the ID of each remote connection
+  //If we find that identifier, the connection is moved from the unidentified remote connections to the normal remote connections
+  var unidentifiedIndex = wsUnidentifiedRemoteConnection.indexOf(this);
+  if (unidentifiedIndex !== -1)
+  {
+    var object = JSON.parse(message);
+      
+    if (object.type === "remoteidentifier")
+    {
+      wsRemoteConnections[object.identifier] = this;
+      wsUnidentifiedRemoteConnection.splice(unidentifiedIndex, 1);
+      log("WEBSOCKET", "Got identifier for remote connection: " + object.identifier);
+    }
+  }
+  
+  //A message from a remote device is relayed to the weblib
+//      log("WEBSOCKET", "Forwarding remote message: " + message);
+  sendToLocal(message);
+}
+
+var onRemoteClose = function(code, message)
+{
+  log("WEBSOCKET", "GOT A CLOSE: " + code + " ; " + message);
+  
+  for (var key in wsRemoteConnections)
+  {
+    if (wsRemoteConnections.hasOwnProperty(key))
+    {
+      if (wsRemoteConnections[key] === wsConnection)
+      {
+        delete wsRemoteConnections[key];
+        native_remoteWebsocketDidClose(key);
+        break;
+      } 
+    }
+  }
+  
+  for (var i = 0 ; i < wsUnidentifiedRemoteConnection.length ; i++)
+  {
+    if (wsUnidentifiedRemoteConnection[i] === wsConnection)
+    {
+      wsUnidentifiedRemoteConnection.splice(wsUnidentifiedRemoteConnection.indexOf(wsConnection), 1);
+      //We don't sent native_remoteWebsocketDidClose() here because an unidentified connection is not considered established
+      break;
+    }
+  }  
+}
+
+var onRemoteError = function(error)
+{
+  log("WEBSOCKET", "GOT AN ERROR");
+}
 
 function sendToWeblib(message)
 {
@@ -159,6 +173,11 @@ function sendToWeblib(message)
     return;
   }
   log("WEBSERVER", "Sending message to weblib: " + message);
+  wsLocalConnection.send(message);
+}
+
+function sendToLocal(message)
+{
   wsLocalConnection.send(message);
 }
 

@@ -10,68 +10,50 @@
  */
 var CWDeviceManager = (function()
 {
-  /**
-   * The identifier of the local device (the device the webserver is running on)
-   */
-  var _localIdentifier;
 
   /**
    * An array of detected remote devices as CWDevice objects. All detected devices are in here, they are not necessarily connected to or used in any way by this device.
    */
   var _remoteDevices = [];
 
-
-  /**
-   * Sets the identifier of the local device under which it is advertised to other devices
-   *
-   * @param {string} identifier The identifier
-   *
-   * @memberof CWDeviceManager
-   */
-  var setLocalID = function(identifier)
-  {
-    if (_localIdentifier !== undefined) return false;
-
-    _localIdentifier = identifier;
-    CWDebug.log("Local identifier set to " + _localIdentifier);
-    
-    return true;
-  };
-
-
   /**
    * Adds a new remote device to the manager
    *
-   * @param {CWDevice} newDevice The newly detected device
+   * @param {CWDevice} newDevice The device that should be added to the manager. If the device already exists, nothing will happen.
+   * @returns {bool} true if the device was added, otherwise false
    *
    * @memberof CWDeviceManager
    */
   var addDevice = function(newDevice)
   {
     if (CWDevice.prototype.isPrototypeOf(newDevice) === false) throw "Cannot add a non-device";
-    if (getDeviceWithIdentifier(newDevice.getIdentifier()) !== null) return;
+    if (getDeviceWithIdentifier(newDevice.getIdentifier()) !== null) return false;
 
     _remoteDevices.push(newDevice);
-    CWDebug.log("Added new device: " + newDevice);
+    return true;
   };
 
 
   /**
    * Removes a remote device from the manager
    *
-   * @param {string} identifier The identifier of the device to remove
+   * @param {string|CWDevice} identifier The identifier of the device to remove or a CWDevice. If the device is not stored by this manager, nothing will happen
+  *  @returns {bool} true if the device was removed, otherwise false
    *
    * @memberof CWDeviceManager
    */
   var removeDevice = function(identifier)
   {
-
+    if (CWDevice.prototype.isPrototypeOf(identifier) === true) identifier = identifier.getIdentifier();
+      
     var device = getDeviceWithIdentifier(identifier);
-    if (device === null) return;
+    if (device === null) return false;
 
     var index = _remoteDevices.indexOf(device);
     _remoteDevices.splice(index, 1);
     CWEventManager.trigger("deviceLost", device);
+    
+    return true;
   };
 
 
@@ -98,7 +80,6 @@ var CWDeviceManager = (function()
   };
 
   return {
-    setLocalID              : setLocalID,
     addDevice               : addDevice,
     removeDevice            : removeDevice,
     getDeviceWithIdentifier : getDeviceWithIdentifier

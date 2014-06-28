@@ -51,35 +51,4 @@
  */
 - (void)startWebserverOnPort:(int)port;
 
-/**
- *  Sends the given identifier to the web library and tells the web library this is the identifier of this device. Should usually only be called once in the application's life cycle and only with the correct identifier, otherwise results are undefined.
- *
- *  @param identifier The identifier that represents this device amongst Connichiwa
- */
-- (void)sendToWeblib_localIdentifier:(NSString *)identifier;
-
-/**
- *  Sends a message to the web library telling it about a newly detected, nearby device with the given identifier
- *
- *  @param identifier The identifier of the device that was detected
- */
-- (void)sendToWeblib_deviceDetected:(NSString *)identifier;
-
-/**
- *  Sends a message to the web library telling it that the distance of a previously detected device has changes
- *
- *  @param identifier The identifier of the device whose distance changes
- *  @param distance   The new distance of the device in meters
- */
-- (void)sendToWeblib_device:(NSString *)identifier changedDistance:(double)distance;
-
-- (void)sendToWeblib_deviceLost:(NSString *)identifier;
-
-/**
- *  Sends a message to the web library telling it that a request to use another device as a remote device has failed
- *
- *  @param identifier The identifier of the device that should have been used as a remote device
- */
-- (void)sendToWeblib_connectionRequestFailed:(NSString *)identifier;
-
 @end

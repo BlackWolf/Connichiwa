@@ -35,6 +35,7 @@ typedef NS_ENUM(NSInteger, CWWebLibraryManagerState)
 - (void)sendDevice:(NSString *)identifier changedDistance:(double)distance;
 - (void)sendDeviceLost:(NSString *)identifier;
 - (void)sendRemoteConnectFailed:(NSString *)identifier;
+- (void)sendRemoteDisconnected:(NSString *)identifier;
 - (BOOL)isActive;
 
 @end

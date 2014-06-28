@@ -26,27 +26,19 @@ var CWRemoteCommunicationParser = (function()
     var object = JSON.parse(message);
     switch (object.type)
     {
-      case "didconnect":
-        var device = CWDeviceManager.getDeviceWithIdentifier(object.identifier);
-        if (device === null) return;
-        
-        device.state = CWDeviceState.CONNECTED;
-        
-        native_remoteDidConnect(device.getIdentifier());
-        CWEventManager.trigger("deviceConnected", device);
-        break;
-      case "willdisconnect":
-        var device = CWDeviceManager.getDeviceWithIdentifier(object.identifier);
-        if (device === null) return;
-          
-        device.state = CWDeviceState.DISCONNECTED;
-          
-        var data = { type: "remoteDisconnected", identifier: object.identifier };
-        Connichiwa._send(JSON.stringify(data)); 
-        
-        CWEventManager.trigger("deviceDisconnected", device);
-        break;
+      case "remoteidentifier": _parseRemoteIdentifier(object); break;
     }
+  };
+  
+  
+  var _parseRemoteIdentifier = function(message)
+  {
+    var device = CWDeviceManager.getDeviceWithIdentifier(message.identifier);
+    if (device === null) return;
+    
+    device.connectionState = CWDeviceConnectionState.CONNECTED;
+    native_remoteDidConnect(device.getIdentifier());
+    CWEventManager.trigger("deviceConnected", device);
   };
 
   return {

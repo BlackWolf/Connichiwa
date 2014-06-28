@@ -22,23 +22,5 @@
  */
 - (void)didStartWebserver;
 
-///**
-// *  Called when the web library was loaded and established a connection to the webserver
-// */
-//- (void)didConnectToWeblib;
-//
-///**
-// *  Called when the web library sent a request to use another device as a remote device
-// *
-// *  @param identifier The identifier of the device that should be connected
-// */
-//- (void)didReceiveConnectionRequest:(NSString *)identifier;
-//
-///**
-// *  Called when a remote device successfully established a websocket connection to the web library
-// *
-// *  @param identifier The identifier of the connected device
-// */
-//- (void)didConnectToRemoteDevice:(NSString *)identifier;
-
+- (void)remoteDidDisconnect:(NSString *)identifier;
 @end

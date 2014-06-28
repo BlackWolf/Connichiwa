@@ -40,54 +40,71 @@ var CWNativeCommunicationParser = (function()
     var object = JSON.parse(message);
     switch (object.type)
     {
-    case "cwdebug":
-      if (object.cwdebug) CWDebug.enableDebug();
-      break;
-
-    case "localidentifier":
-      var success = CWDeviceManager.setLocalID(object.identifier);
-
-      if (success) CWEventManager.trigger("ready");
-      break;
-    case "devicedetected":
-      var device = CWDeviceManager.getDeviceWithIdentifier(object.identifier);
-      
-      if (device === null)
-      {
-        device = new CWDevice(object.identifier);
-        CWDeviceManager.addDevice(device);
-      }
-      else
-      {
-        if (device.state !== CWDeviceState.CONNECTED && device.state !== CWDeviceState.CONNECTING)
-        {
-          device.state = CWDeviceState.DISCOVERED;
-        }
-      }
-
-      CWEventManager.trigger("deviceDetected", device);
-      break;
-    case "devicedistancechanged":
-      var device = CWDeviceManager.getDeviceWithIdentifier(object.identifier);
-      if (device === null) return;
-      
-      device.updateDistance(object.distance);
-CWEventManager.trigger("deviceDistanceChanged", device);
-      break;
-    case "devicelost":
-      var device = CWDeviceManager.getDeviceWithIdentifier(object.identifier);
-      if (device.state != CWDeviceState.CONNECTED && device.state != CWDeviceState.CONNECTING)
-      {
-        device.state = CWDeviceState.LOST;
-      }
-      CWEventManager.trigger("deviceLost", device);
-      break;
-    case "remoteconnectfailed":
-      var device = CWDeviceManager.getDeviceWithIdentifier(object.identifier);
-      device.state = CWDeviceState.CONNECTING_FAILED;
-      CWEventManager.trigger("connectFailed", device);
-      break;
+      case "cwdebug": _parseDebug(object); break;
+      case "localidentifier": _parseLocalIdentifier(object); break;
+      case "devicedetected": _parseDeviceDetected(object); break;
+      case "devicedistancechanged": _parseDeviceDistanceChanged(object); break;
+      case "devicelost": _parseDeviceLost(object); break;
+      case "remoteconnectfailed": _parseRemoteConnectFailed(object); break;
     }
+  };
+  
+  
+  var _parseDebug = function(message)
+  {
+    if (message.cwdebug) CWDebug.enableDebug();
+  };
+  
+  
+  var _parseLocalIdentifier = function(message)
+  {
+    var success = Connichiwa._setIdentifier(message.identifier);
+    if (success) CWEventManager.trigger("ready");
+  };
+  
+  
+  var _parseDeviceDetected = function(message)
+  {
+    var device = CWDeviceManager.getDeviceWithIdentifier(message.identifier);
+    
+    //We might re-detect a lost device, so it is possible that the device is already stored
+    if (device === null)
+    {
+      device = new CWDevice(message.identifier);
+      CWDeviceManager.addDevice(device);
+    }
+    else
+    {
+      device.discoveryState = CWDeviceDiscoveryState.DETECTED;
+    }
+
+    CWEventManager.trigger("deviceDetected", device);
+  };
+  
+  
+  var _parseDeviceDistanceChanged = function(message)
+  {
+    var device = CWDeviceManager.getDeviceWithIdentifier(message.identifier);
+    if (device === null) return;
+    
+    device.distance = message.distance;
+    CWEventManager.trigger("deviceDistanceChanged", device);
+  };
+  
+  
+  var _parseDeviceLost = function(message)
+  {
+    var device = CWDeviceManager.getDeviceWithIdentifier(message.identifier);
+    device.discoveryState = CWDeviceDiscoveryState.LOST;
+    CWEventManager.trigger("deviceLost", device);
+  };
+  
+  
+  var _parseRemoteConnectFailed = function(message)
+  {
+    var device = CWDeviceManager.getDeviceWithIdentifier(message.identifier);
+    device.connectionState = CWDeviceConnectionState.DISCONNECTED;
+    CWEventManager.trigger("connectFailed", device);
   };
 
   return {
