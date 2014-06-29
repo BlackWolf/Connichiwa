@@ -38,6 +38,7 @@
 
 - (void)connect
 {
+    if (self.appState.isWebserverRunning == NO) return;
     if (self.webView == nil) return;
     if ([self isActive]) return;
     
@@ -49,6 +50,12 @@
         [self.webView setDelegate:self];
         [self.webView loadRequest:localhostURLRequest];
     });
+}
+
+
+- (void)disconnect
+{
+    
 }
 
 
@@ -131,10 +138,11 @@
 
 - (void)_receivedfromView_websocketDidClose
 {
+    DLog(@"WEB LIB CLOSED");
     self.state = CWWebLibraryManagerStateDisconnecting;
     [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"about:blank"]]];
     
-    [NSException raise:@"Weblib websocket did close" format:@"Oops, that totally shouldn't happen, should it?"];
+//    [NSException raise:@"Weblib websocket did close" format:@"Oops, that totally shouldn't happen, should it?"];
 }
 
 
@@ -244,11 +252,12 @@
 
 - (void)_sendToView:(NSString *)message
 {
+    if (self.appState.isWebserverRunning == NO) return;
     if (self.webViewContext == nil) return;
     
     //stringByEvaluatingJavaScriptFromString: must be called on the main thread, but it seems buggy with dispatch_async, so we use performSelectorOnMainThread:
     //Also see http://stackoverflow.com/questions/11593900/uiwebview-stringbyevaluatingjavascriptfromstring-hangs-on-ios5-0-5-1-when-called
-//    DLog(@"Sending %@", message);
+    DLog(@"Sending %@", message);
     NSString *js = [NSString stringWithFormat:@"CWNativeCommunicationParser.parse('%@')", message];
     [self.webView performSelectorOnMainThread:@selector(stringByEvaluatingJavaScriptFromString:) withObject:js waitUntilDone:NO];
 }

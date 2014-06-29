@@ -287,6 +287,7 @@ var CWEventManager = (function()
     var args = Array.prototype.slice.call(arguments);
     args.shift();
 
+    CWDebug.log("Triggering event "+event);
     for (var i = 0; i < _events[event].length; i++)
     {
       var callback = _events[event][i];
@@ -470,7 +471,12 @@ var CWRemoteCommunicationParser = (function()
     
     device.connectionState = CWDeviceConnectionState.CONNECTED;
     native_remoteDidConnect(device.getIdentifier());
-    CWEventManager.trigger("deviceConnected", device);
+    
+    //For some reason, it seems that triggering this messages sometimes causes the iOS WebThread to crash
+    //I THINK this might be related to us sending a message to the remote device in the web app when this event is triggered
+    //This does seem strange, though, considering we just received a message over the websocket (so it obviously is initialized and working)
+    //As a temporary fix, I try to delay sending this event a little and see if it helps
+    setTimeout(function() { CWEventManager.trigger("deviceConnected", device); }, 1000);
   };
 
   return {
@@ -692,6 +698,7 @@ var Connichiwa = (function()
   var send = function(device, message)
   {
     message.target = device.getIdentifier();
+    CWDebug.log("CONNICHIWA.SEND "+JSON.stringify(message));
     _websocket.send(JSON.stringify(message));
   };
 

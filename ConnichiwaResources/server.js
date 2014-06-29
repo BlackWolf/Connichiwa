@@ -57,18 +57,13 @@ app.use("/scripts", Express.static(RESOURCES_PATH + "/scripts"));
 //DOCUMENT_ROOT (web app) is served as /
 app.use("/", Express.static(DOCUMENT_ROOT));
 
-app.listen(SERVER_PORT);
+var http = app.listen(SERVER_PORT);
 
 ///////////////
 // WEBSOCKET //
 ///////////////
 
-var websocket = new WebsocketServer({ port: WEBSOCKET_PORT });
-var wsLocalConnection;
-var wsUnidentifiedRemoteConnection = [];
-var wsRemoteConnections = {};
-
-websocket.on("connection", function(wsConnection) {
+var onWebsocketConnection = function(wsConnection) {
   //For now, we just assume first device means its the master device
   //TODO We should probably check the source IP here or something
   if (wsLocalConnection === undefined) {
@@ -88,7 +83,14 @@ websocket.on("connection", function(wsConnection) {
 
     log("WEBSOCKET", "Initialized remote connection");
   }
-});
+};
+
+var websocket = new WebsocketServer({ port: WEBSOCKET_PORT });
+var wsLocalConnection;
+var wsUnidentifiedRemoteConnection = [];
+var wsRemoteConnections = {};
+
+websocket.on("connection", onWebsocketConnection);
 
 var onLocalMessage = function(message)
 {
@@ -148,7 +150,9 @@ var onRemoteClose = function(wsConnection)
       {
         if (wsRemoteConnections[key] === wsConnection)
         {
+          log("WEBSERVER", "Deleting entry "+key);
           delete wsRemoteConnections[key];
+          log("WEBSERER", "Sending message to native "+key);
           native_remoteWebsocketDidClose(key);
           break;
         } 
@@ -192,8 +196,6 @@ function sendToLocal(message)
 
 function sendToRemote(identifier, message)
 {
-  if (identifier in wsRemoteConnections === false) return;
-  
   if (identifier === "broadcast")
   {
     for (var key in wsRemoteConnections)
@@ -205,13 +207,67 @@ function sendToRemote(identifier, message)
     }    
     return;
   }
-  
-  if (identifier in wsRemoteConnections) wsRemoteConnections[identifier].send(message);
+  else {
+    if (identifier in wsRemoteConnections === false) return;
+    wsRemoteConnections[identifier].send(message);
+  }
 }
 
 //////////
 // MISC //
 //////////
+
+
+function shutdown()
+{
+  var disconnectMessage = JSON.stringify({ type: "serverShuttingDown" });
+  // if (wsLocalConnection !== undefined) 
+  // {
+  //   log("WEBSOCKET", "Closing local ws");
+  //   wsLocalConnection.send(disconnectMessage);
+  //   // wsLocalConnection.close();
+  //   // wsLocalConnection = undefined;
+  // }
+  for (var key in wsRemoteConnections)
+  {
+    if (wsRemoteConnections.hasOwnProperty(key))
+    {
+      log("WEBSERVER", "Closing WS "+key);
+      wsRemoteConnections[key].send(disconnectMessage);
+      // wsRemoteConnections[key].close();
+    }
+  }  
+  // wsRemoteConnections = {};
+  for (var i = 0; i < wsUnidentifiedRemoteConnection.length ; i++)
+  {
+    log("WEBSERVER", "CLosing unidentified ws");
+    wsUnidentifiedRemoteConnection[i].send(disconnectMessage);
+    // wsUnidentifiedRemoteConnection[i].close();
+  }
+  // wsUnidentifiedRemoteConnection = [];
+  
+  // setTimeout(function() {
+    log("WEBSERVER", "SHUTTING DOWN WEBSOCKET SERVER");
+    websocket.close();
+  
+    log("WEBSERVER", "SHUTTING DOWN HTTP SERVER");
+    http.close();
+  // }, 5000);
+}
+
+function startup()
+{
+  log("WEBSERVER", "RESTARTING HTTP SERVER")
+  http = app.listen(SERVER_PORT);
+  
+  log("WEBSERVER", "RESTARTING WEBSOCKET SERVER");
+  websocket = new WebsocketServer({ port: WEBSOCKET_PORT });
+  wsLocalConnection = undefined;
+  wsUnidentifiedRemoteConnection = [];
+  wsRemoteConnections = {};
+
+  websocket.on("connection", onWebsocketConnection);
+}
 
 function log(type, message)
 {

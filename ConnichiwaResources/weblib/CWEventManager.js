@@ -48,6 +48,7 @@ var CWEventManager = (function()
     var args = Array.prototype.slice.call(arguments);
     args.shift();
 
+    CWDebug.log("Triggering event "+event);
     for (var i = 0; i < _events[event].length; i++)
     {
       var callback = _events[event][i];

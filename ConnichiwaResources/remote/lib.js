@@ -31,6 +31,14 @@ var onWebsocketMessage = function(e)
   
   var object = JSON.parse(message);
   
+  if (object.type === "serverShuttingDown")
+  {
+    //Usually, we should call websocket.close() here
+    //Unfortunately, the disconnect message is also sent when the master device app is moving to the background
+    //For some reason, closing the websocket then can cause a crash in the UIWebView, so we report a closed websocket even though it is still open
+    native_serverIsShuttingDown();
+    // websocket.close();    
+  }
   if (object.type === "show")
   {
     $("body").append(object.content);
@@ -57,6 +65,7 @@ var onWebsocketClose = function()
 
 function parseNativeMessage(message)
 {
+  log("GOT MESSAGE "+message);
   var object = JSON.parse(message);
   switch (object.type)
   {

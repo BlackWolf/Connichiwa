@@ -16,6 +16,8 @@
 
 @interface CWWebserverManager ()
 
+@property (readwrite) BOOL isRunning;
+
 @property (readwrite, strong) NSString *documentRoot;
 
 /**
@@ -34,6 +36,7 @@
 {
     self = [super init];
     
+    self.isRunning = NO;
     self.documentRoot = documentRoot;
     
     return self;
@@ -81,6 +84,8 @@
     
     if (![serverScriptReturn isUndefined]) DLog(@"executed server.js, result is %@", [serverScriptReturn toString]);
     
+    self.isRunning = YES;
+    
     //I'm not sure if this should in some way be attached to the runEventLoopAsyncInContext:, but I suppose triggering this here will be fine
     if ([self.delegate respondsToSelector:@selector(didStartWebserver)])
     {
@@ -92,6 +97,21 @@
 - (void)startWebserverOnPort:(int)port
 {
     [self startWebserverWithDocumentRoot:self.documentRoot onPort:port];
+}
+
+
+- (void)pauseWebserver
+{
+    DLog(@"PAUSING");
+    self.isRunning = NO;
+    [self.nodelikeContext evaluateScript:@"shutdown();"];
+}
+
+- (void)resumeWebserver
+{
+    DLog(@"RESUMING");
+    [self.nodelikeContext evaluateScript:@"startup();"];
+    self.isRunning = YES;
 }
 
 

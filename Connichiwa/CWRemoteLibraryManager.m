@@ -93,6 +93,10 @@
     self.webViewContext[@"native_websocketDidClose"] = ^{
         [weakSelf _receivedfromView_websocketDidClose];
     };
+    
+    self.webViewContext[@"native_serverIsShuttingDown"] = ^{
+        [weakSelf _receivedfromView_serverIsShuttingDown];
+    };
 }
 
 
@@ -109,9 +113,24 @@
 
 - (void)_receivedfromView_websocketDidClose
 {
+    DLog(@"Remote websocket did close");
     self.state = CWRemoteLibraryManagerStateDisconnecting;
-    [self.webView setHidden:YES];
-    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"about:blank"]]];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.webView setHidden:YES];
+        [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"about:blank"]]];
+    });
+}
+
+
+- (void)_receivedfromView_serverIsShuttingDown
+{
+    DLog(@"Remote master did disconnect");
+    self.state = CWRemoteLibraryManagerStateDisconnecting;
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.webView setHidden:YES];
+    });
 }
 
 
@@ -179,9 +198,11 @@
 {
     if (self.state == CWRemoteLibraryManagerStateConnecting)
     {
+        DLog(@"Setting up Remote Context");
+        
         //Loaded a remote server URL, set up its context
         self.webViewContext = [self.webView valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
-        
+
         //Register JS error handler
         self.webViewContext.exceptionHandler = ^(JSContext *c, JSValue *e) {
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -197,7 +218,10 @@
         };
         self.webViewContext[@"console"] = @{@"log": logger, @"error": logger};
         
+        
+        DLog(@"Registering JS Callbacks");
         [self _registerJSCallbacks];
+        DLog(@"Connecting websocket");
         [self _sendToView_connectWebsocket];
     }
     else if (self.state == CWRemoteLibraryManagerStateDisconnecting)

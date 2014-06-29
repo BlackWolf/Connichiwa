@@ -25,6 +25,8 @@
  */
 @property (readwrite, strong) id<CWWebserverManagerDelegate> delegate;
 
+@property (readonly) BOOL isRunning;
+
 /**
  *  Path to the folder acting as the root of the web server. '/' on the web server will be mapped to this path. 
  */
@@ -50,5 +52,8 @@
  *  @param port The port the webserver should listen on. Note that the websocket server will listen on this + 1
  */
 - (void)startWebserverOnPort:(int)port;
+
+- (void)pauseWebserver;
+- (void)resumeWebserver;
 
 @end

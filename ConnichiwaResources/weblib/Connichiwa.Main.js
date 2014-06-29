@@ -153,6 +153,7 @@ var Connichiwa = (function()
   var send = function(device, message)
   {
     message.target = device.getIdentifier();
+    CWDebug.log("CONNICHIWA.SEND "+JSON.stringify(message));
     _websocket.send(JSON.stringify(message));
   };
 

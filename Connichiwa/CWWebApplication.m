@@ -150,6 +150,12 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
 #pragma mark CWWebApplicationState Protocol
 
 
+- (BOOL)isWebserverRunning
+{
+    return (self.webserverManager.isRunning);
+}
+
+
 - (BOOL)isRemote
 {
     return self.remoteLibManager.isActive;
@@ -205,6 +211,7 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
     [self.pendingRemoteDevices removeObject:identifier];
     DLog(@" !! Adding");
     [self.remoteDevices addObject:identifier];
+    DLog(@" !! Did Add");
 }
 
 
@@ -317,21 +324,24 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
     //Called whenever the application goes to the background, so mainly when the user presses the home button or locks the device
     //willResignActive will always be called before this
     
+    //Because pausing the webserver is a threaded task, simply doing it in this method is not possible because iOS would suspend the thread before the close completes
+    //beginBackgroundTaskWithExpirationHandler: tells iOS that we still have to do work and iOS gives us up to 10 minutes to perform our task (although not guaranteed)
+    //Luckily, we don't need that long: after a short delay we will end the background task, but it is more than enough time for the websocket to close
+    //Be aware that the block passed to beginBackgroundTaskWithExpirationHandler: is called when the background task is ended forcefully by iOS and is not the code that is executed in the background. Calling beginBackgroundTaskWithExpirationHandler: simply tells iOS that we want to continue executing our code
+    
+    self.cleanupBackgroundTaskIdentifier = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+        [[UIApplication sharedApplication] endBackgroundTask:self.cleanupBackgroundTaskIdentifier];
+        self.cleanupBackgroundTaskIdentifier = UIBackgroundTaskInvalid;
+    }];
+    
+    DLog(@"App entering background, pausing webserver...");
+    [self.webserverManager pauseWebserver];
+    
     //If we are a remote device we should shut down the websocket gracefully to let the master device know we are not available to display information
     //The websocket connection is resumed in willEnterForeground
     if ([self isRemote])
     {
         DLog(@"App entering background while being  a remote device... closing websocket connection");
-        
-        //Because closing the websocket is a threaded task, simply doing it in this method is not possible because iOS would suspend the thread before the close completes
-        //beginBackgroundTaskWithExpirationHandler: tells iOS that we still have to do work and iOS gives us up to 10 minutes to perform our task (although not guaranteed)
-        //Luckily, we don't need that long: after a short delay we will end the background task, but it is more than enough time for the websocket to close
-        //Be aware that the block passed to beginBackgroundTaskWithExpirationHandler: is called when the background task is ended forcefully by iOS and is not the code that is executed in the background. Calling beginBackgroundTaskWithExpirationHandler: simply tells iOS that we want to continue executing our code
-        
-        self.cleanupBackgroundTaskIdentifier = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
-            [[UIApplication sharedApplication] endBackgroundTask:self.cleanupBackgroundTaskIdentifier];
-            self.cleanupBackgroundTaskIdentifier = UIBackgroundTaskInvalid;
-        }];
         
         [self.remoteLibManager disconnect];
         [self performSelector:@selector(cleanupBackgroundTaskTimeout) withObject:nil afterDelay:CLEANUP_TASK_TIMEOUT];
@@ -345,6 +355,9 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
 - (void)applicationWillEnterForeground
 {
     //Called whenever an application goes to the foreground, so when it is re-launched after going to the background
+    
+    DLog(@"App entering foreground, resuming webserver...");
+    [self.webserverManager resumeWebserver];
     
     //TODO resume websocket connection?
 }

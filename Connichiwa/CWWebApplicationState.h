@@ -25,6 +25,8 @@
  */
 @property (readonly) int webserverPort;
 
+- (BOOL)isWebserverRunning;
+
 /**
  *  Determines if this device is currently running as a remote device for another Connichiwa device.
  *
