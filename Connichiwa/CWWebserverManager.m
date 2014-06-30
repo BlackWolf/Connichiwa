@@ -69,7 +69,7 @@
     [self _registerJSCallbacks];
     
     //Pass some infos to the webserver
-    self.nodelikeContext[@"SERVER_PORT"] = [NSString stringWithFormat:@"%d", port];
+    self.nodelikeContext[@"HTTP_PORT"] = [NSString stringWithFormat:@"%d", port];
     self.nodelikeContext[@"DOCUMENT_ROOT"] = self.documentRoot;
     self.nodelikeContext[@"RESOURCES_PATH"] = [[CWBundle bundle] bundlePath];
     self.nodelikeContext[@"CWDEBUG"] = [JSValue valueWithBool:NO inContext:self.nodelikeContext];;
@@ -80,11 +80,10 @@
     //Start the actual webserver by executing our Node.JS server script
     NSString *serverScriptPath = [[CWBundle bundle] pathForResource:@"server" ofType:@"js"];
     NSString *serverScript = [NSString stringWithContentsOfFile:serverScriptPath encoding:NSUTF8StringEncoding error:nil];
-    JSValue *serverScriptReturn = [self.nodelikeContext evaluateScript:serverScript];
     
+    [self.nodelikeContext evaluateScript:serverScript];
+    [self.nodelikeContext evaluateScript:@"startListening();"];
     [NLContext runEventLoopAsyncInContext:self.nodelikeContext];
-    
-    if (![serverScriptReturn isUndefined]) DLog(@"executed server.js, result is %@", [serverScriptReturn toString]);
 }
 
 
@@ -96,17 +95,15 @@
 
 - (void)pauseWebserver
 {
-    DLog(@"PAUSING");
     self.state = CWWebserverManagerStatePaused;
-    [self.nodelikeContext evaluateScript:@"shutdown();"];
+    [self.nodelikeContext evaluateScript:@"stopListening();"];
 }
 
 
 - (void)resumeWebserver
 {
-    DLog(@"RESUMING");
     self.state = CWWebserverManagerStateStarting;
-    [self.nodelikeContext evaluateScript:@"startup();"];
+    [self.nodelikeContext evaluateScript:@"startListening();"];
 }
 
 
@@ -131,7 +128,6 @@
 
 - (void)_receivedFromServer_serverDidStart
 {
-    DLog(@"WOHOO");
     self.state = CWWebserverManagerStateStarted;
     
     if ([self.delegate respondsToSelector:@selector(didStartWebserver)])

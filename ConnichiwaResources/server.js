@@ -1,31 +1,36 @@
-/* global SERVER_PORT, DOCUMENT_ROOT, RESOURCES_PATH, CWDEBUG */
-/* global native_didLoadWeblib, native_receivedFromWeblib */
+/* global HTTP_PORT, DOCUMENT_ROOT, RESOURCES_PATH, CWDEBUG */
+/* global native_serverDidStart, native_remoteWebsocketDidClose */
 "use strict";
 
 /**
  *
  * Constants passed from CWWebserver:
- *     SERVER_PORT -- the port the HTTP server is supposed to run on
+ *     HTTP_PORT -- the port the HTTP server is supposed to run on
  *     DOCUMENT_ROOT -- the root of the web application, defined by the iOS application.
  *     RESOURCES_PATH -- Full path to the root of ConnichiwaResources.bundle.
  *     CWDEBUG -- true if the app runs in debug config, false for release
  *
 **/
 
-var WEBSOCKET_PORT = parseInt(SERVER_PORT) + 1;
+var WEBSOCKET_PORT = parseInt(HTTP_PORT) + 1;
+
+
 
 var Express = require("express");
 var Morgan = require("morgan");
 var Path = require("path");
 var WebsocketServer = require("ws").Server;
 
+
+
 ///////////////
 // WEBSERVER //
 ///////////////
 
 var app = new Express();
+
 var http;
-var httpLoaded = false;
+var httpLoaded;
 
 //Activate logging
 if (CWDEBUG === true) app.use(new Morgan( { immediate: true, format: "WEBSERVER :date :remote-addr -- REQUEST :url (:response-time ms)" } ));
@@ -59,72 +64,49 @@ app.use("/scripts", Express.static(RESOURCES_PATH + "/scripts"));
 //DOCUMENT_ROOT (web app) is served as /
 app.use("/", Express.static(DOCUMENT_ROOT));
 
-http = app.listen(SERVER_PORT, function() 
+var onHttpListening = function()
 {
   httpLoaded = true;
-  checkIfServersAreRunning();
-});
+  checkServerStatus();
+};
 
 ///////////////
 // WEBSOCKET //
 ///////////////
 
-var websocketLoaded = false;
-
-var onWebsocketConnection = function(wsConnection) {
-  //For now, we just assume first device means its the master device
-  //TODO We should probably check the source IP here or something
-  if (wsLocalConnection === undefined) {
-    wsLocalConnection = wsConnection;
-    wsLocalConnection.on("message", onLocalMessage);
-    wsLocalConnection.on("close", onLocalClose);
-    wsLocalConnection.on("error", onLocalError);
-
-    log("WEBSOCKET", "Initialized local connection");
-  }
-  else
-  {
-    wsUnidentifiedRemoteConnection.push(wsConnection);
-    wsConnection.on("message", onRemoteMessage(wsConnection));
-    wsConnection.on("close", onRemoteClose(wsConnection));
-    wsConnection.on("error", onRemoteError(wsConnection));
-
-    log("WEBSOCKET", "Initialized remote connection");
-  }
-};
-
-var websocket = new WebsocketServer({ port: WEBSOCKET_PORT }, function()
-{
-  websocketLoaded = true;
-  checkIfServersAreRunning();
-});
-
-
+var websocket;
+var websocketLoaded;
 var wsLocalConnection;
-var wsUnidentifiedRemoteConnection = [];
-var wsRemoteConnections = {};
+var wsUnidentifiedRemoteConnections;
+var wsRemoteConnections;
 
-websocket.on("connection", onWebsocketConnection);
+
+
+// LOCAL CONNECTION CALLBACKS
 
 var onLocalMessage = function(message)
 {
   log("WEBSOCKET", "Forwarding local message: " + message);
   
   var object = JSON.parse(message);
-  if (object.target === "native") log("WEBSOCKET", "!!! ERROR: TRIED TO SEND MESSAGE TO NATIVE VIA WEBSOCKET: "+message);
+  if (object.target === "native") log("WEBSOCKET", "!!! ERROR: TRIED TO SEND MESSAGE TO NATIVE VIA WEBSOCKET: " + message);
 
   sendToRemote(object.target, message);
-}
+};
 
 var onLocalClose = function(code, message)
 {
   
-}
+};
 
 var onLocalError = function(error)
 {
   
-}
+};
+
+
+
+// REMOTE CONNETION CALLBACKS
 
 var onRemoteMessage = function(wsConnection)
 {
@@ -133,7 +115,7 @@ var onRemoteMessage = function(wsConnection)
     //Usually, the webserver just blindly relays messages, but we need to make one exception:
     //The "remoteidentifier" message needs to unidentifiedparsed so we know the ID of each remote connection
     //If we find that identifier, the connection is moved from the unidentified remote connections to the normal remote connections
-    var unidentifiedIndex = wsUnidentifiedRemoteConnection.indexOf(wsConnection);
+    var unidentifiedIndex = wsUnidentifiedRemoteConnections.indexOf(wsConnection);
     if (unidentifiedIndex !== -1)
     {
       var object = JSON.parse(message);
@@ -141,7 +123,7 @@ var onRemoteMessage = function(wsConnection)
       if (object.type === "remoteidentifier")
       {
         wsRemoteConnections[object.identifier] = wsConnection;
-        wsUnidentifiedRemoteConnection.splice(unidentifiedIndex, 1);
+        wsUnidentifiedRemoteConnections.splice(unidentifiedIndex, 1);
         log("WEBSOCKET", "Got identifier for remote connection: " + object.identifier);
       }
     }
@@ -149,7 +131,7 @@ var onRemoteMessage = function(wsConnection)
     //A message from a remote device is relayed to the weblib
   //      log("WEBSOCKET", "Forwarding remote message: " + message);
     sendToLocal(message);
-  }
+  };
 };
 
 var onRemoteClose = function(wsConnection)
@@ -164,25 +146,23 @@ var onRemoteClose = function(wsConnection)
       {
         if (wsRemoteConnections[key] === wsConnection)
         {
-          log("WEBSERVER", "Deleting entry "+key);
           delete wsRemoteConnections[key];
-          log("WEBSERER", "Sending message to native "+key);
           native_remoteWebsocketDidClose(key);
           break;
         } 
       }
     }
     
-    for (var i = 0 ; i < wsUnidentifiedRemoteConnection.length ; i++)
+    for (var i = 0 ; i < wsUnidentifiedRemoteConnections.length ; i++)
     {
-      if (wsUnidentifiedRemoteConnection[i] === wsConnection)
+      if (wsUnidentifiedRemoteConnections[i] === wsConnection)
       {
-        wsUnidentifiedRemoteConnection.splice(wsUnidentifiedRemoteConnection.indexOf(wsConnection), 1);
+        wsUnidentifiedRemoteConnections.splice(wsUnidentifiedRemoteConnections.indexOf(wsConnection), 1);
         //We don't sent native_remoteWebsocketDidClose() here because an unidentified connection is not considered established
         break;
       }
     }  
-  }
+  };
 };
 
 var onRemoteError = function(wsConnection)
@@ -190,7 +170,7 @@ var onRemoteError = function(wsConnection)
   return function(error)
   {
     log("WEBSOCKET", "GOT AN ERROR");
-  }
+  };
 };
 
 function sendToWeblib(message)
@@ -227,70 +207,96 @@ function sendToRemote(identifier, message)
   }
 }
 
-//////////
-// MISC //
-//////////
 
 
-function checkIfServersAreRunning()
+// WEBSOCKET CALLBACKS
+
+var onWebsocketListening = function()
 {
-  if (httpLoaded && websocketLoaded)
-    {
-      native_serverDidStart();
-    }
+  websocketLoaded = true;
+  checkServerStatus();
+};
+
+var onWebsocketConnection = function(wsConnection) {
+  //For now, we just assume first device means its the master device
+  //TODO We should probably check the source IP here or something
+  if (wsLocalConnection === undefined) {
+    wsLocalConnection = wsConnection;
+    wsLocalConnection.on("message", onLocalMessage);
+    wsLocalConnection.on("close", onLocalClose);
+    wsLocalConnection.on("error", onLocalError);
+
+    log("WEBSOCKET", "Initialized local connection");
+  }
+  else
+  {
+    wsUnidentifiedRemoteConnections.push(wsConnection);
+    wsConnection.on("message", onRemoteMessage(wsConnection));
+    wsConnection.on("close", onRemoteClose(wsConnection));
+    wsConnection.on("error", onRemoteError(wsConnection));
+
+    log("WEBSOCKET", "Initialized remote connection");
+  }
+};
+
+
+
+////////////////////
+// SERVER CONTROL //
+////////////////////
+
+function startListening()
+{
+  httpLoaded = false;
+  websocketLoaded = false;
+  wsLocalConnection = undefined;
+  wsUnidentifiedRemoteConnections = [];
+  wsRemoteConnections = {};
+
+  http = app.listen(HTTP_PORT, onHttpListening);
+  websocket = new WebsocketServer({ port: WEBSOCKET_PORT }, onWebsocketListening);
+  websocket.on("connection", onWebsocketConnection);
 }
 
 
-function shutdown()
+function stopListening()
 {
+  httpLoaded = false;
+  websocketLoaded = false;
+
+  //It can take some time until the server closes the websocket connection
+  //Therefore, send a message to the remotes so they can leave early
   var shutdownMessage = JSON.stringify({ type: "servershuttingdown" });
-  // if (wsLocalConnection !== undefined) 
-  // {
-  //   log("WEBSOCKET", "Closing local ws");
-  //   wsLocalConnection.send(disconnectMessage);
-  //   // wsLocalConnection.close();
-  //   // wsLocalConnection = undefined;
-  // }
   for (var key in wsRemoteConnections)
   {
     if (wsRemoteConnections.hasOwnProperty(key))
     {
-      log("WEBSERVER", "Closing WS "+key);
       wsRemoteConnections[key].send(shutdownMessage);
-      // wsRemoteConnections[key].close();
     }
   }  
-  // wsRemoteConnections = {};
-  for (var i = 0; i < wsUnidentifiedRemoteConnection.length ; i++)
+  for (var i = 0; i < wsUnidentifiedRemoteConnections.length; i++)
   {
-    log("WEBSERVER", "Closing unidentified ws");
-    wsUnidentifiedRemoteConnection[i].send(shutdownMessage);
-    // wsUnidentifiedRemoteConnection[i].close();
+    wsUnidentifiedRemoteConnections[i].send(shutdownMessage);
   }
-  // wsUnidentifiedRemoteConnection = [];
-  
-  // setTimeout(function() {
-    log("WEBSERVER", "SHUTTING DOWN WEBSOCKET SERVER");
-    websocket.close();
-  
-    log("WEBSERVER", "SHUTTING DOWN HTTP SERVER");
-    http.close();
-  // }, 5000);
+
+  websocket.close();
+  http.close();
 }
 
-function startup()
+
+function checkServerStatus()
 {
-  log("WEBSERVER", "RESTARTING HTTP SERVER")
-  http = app.listen(SERVER_PORT);
-  
-  log("WEBSERVER", "RESTARTING WEBSOCKET SERVER");
-  websocket = new WebsocketServer({ port: WEBSOCKET_PORT });
-  wsLocalConnection = undefined;
-  wsUnidentifiedRemoteConnection = [];
-  wsRemoteConnections = {};
-
-  websocket.on("connection", onWebsocketConnection);
+  if (httpLoaded && websocketLoaded)
+  {
+    native_serverDidStart();
+  }
 }
+
+
+
+//////////
+// MISC //
+//////////
 
 function log(type, message)
 {
@@ -303,6 +309,7 @@ function log(type, message)
 
   console.log(type + " " + getDateString() + " -- " + message);
 }
+
 
 function getDateString(date)
 {
