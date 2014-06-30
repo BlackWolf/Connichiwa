@@ -260,7 +260,7 @@
 - (void)_sendToView_remoteConnectFailed:(NSString *)identifier
 {
     NSDictionary *data = @{
-                           @"type": @"connectfailed",
+                           @"type": @"remoteconnectfailed",
                            @"identifier": identifier
                            };
     [self _sendToView_dictionary:data];
