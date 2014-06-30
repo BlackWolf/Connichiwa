@@ -349,7 +349,8 @@ var CWNativeCommunicationParser = (function()
       case "devicedistancechanged": _parseDeviceDistanceChanged(object); break;
       case "devicelost": _parseDeviceLost(object); break;
       case "remoteconnectfailed": _parseRemoteConnectFailed(object); break;
-    case "remotedisconnected": _parseRemoteDisconnected(object); break;
+      case "remotedisconnected": _parseRemoteDisconnected(object); break;
+      case "disconnectwebsocket": _parseDisconnectWebsocket(object); break;
     }
   };
   
@@ -425,6 +426,12 @@ var CWNativeCommunicationParser = (function()
       
     device.connectionState = CWDeviceConnectionState.DISCONNECTED;
     CWEventManager.trigger("deviceDisconnected", device);
+  };
+  
+  
+  var _parseDisconnectWebsocket = function(message)
+  {
+    Connichiwa._disconnectWebsocket();  
   };
 
   return {
@@ -579,6 +586,12 @@ var Connichiwa = (function()
     _websocket.onclose = onWebsocketClose;
     _websocket.onerror = onWebsocketError;
   };
+  
+  
+  var _disconnectWebsocket = function()
+  {
+    _websocket.close();
+  }
 
 
   /**
@@ -703,11 +716,12 @@ var Connichiwa = (function()
   };
 
   return {
-    _connectWebsocket : _connectWebsocket,
-    _setIdentifier    : _setIdentifier,
-    getIdentifier     : getIdentifier,
-    on                : on,
-    connect           : connect,
-    send              : send
+    _connectWebsocket    : _connectWebsocket,
+    _disconnectWebsocket : _disconnectWebsocket,
+    _setIdentifier       : _setIdentifier,
+    getIdentifier        : getIdentifier,
+    on                   : on,
+    connect              : connect,
+    send                 : send
   };
 })();

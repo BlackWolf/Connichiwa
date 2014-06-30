@@ -47,7 +47,8 @@ var CWNativeCommunicationParser = (function()
       case "devicedistancechanged": _parseDeviceDistanceChanged(object); break;
       case "devicelost": _parseDeviceLost(object); break;
       case "remoteconnectfailed": _parseRemoteConnectFailed(object); break;
-    case "remotedisconnected": _parseRemoteDisconnected(object); break;
+      case "remotedisconnected": _parseRemoteDisconnected(object); break;
+      case "disconnectwebsocket": _parseDisconnectWebsocket(object); break;
     }
   };
   
@@ -123,6 +124,12 @@ var CWNativeCommunicationParser = (function()
       
     device.connectionState = CWDeviceConnectionState.DISCONNECTED;
     CWEventManager.trigger("deviceDisconnected", device);
+  };
+  
+  
+  var _parseDisconnectWebsocket = function(message)
+  {
+    Connichiwa._disconnectWebsocket();  
   };
 
   return {

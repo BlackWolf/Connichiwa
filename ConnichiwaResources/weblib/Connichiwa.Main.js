@@ -34,6 +34,12 @@ var Connichiwa = (function()
     _websocket.onclose = onWebsocketClose;
     _websocket.onerror = onWebsocketError;
   };
+  
+  
+  var _disconnectWebsocket = function()
+  {
+    _websocket.close();
+  }
 
 
   /**
@@ -158,11 +164,12 @@ var Connichiwa = (function()
   };
 
   return {
-    _connectWebsocket : _connectWebsocket,
-    _setIdentifier    : _setIdentifier,
-    getIdentifier     : getIdentifier,
-    on                : on,
-    connect           : connect,
-    send              : send
+    _connectWebsocket    : _connectWebsocket,
+    _disconnectWebsocket : _disconnectWebsocket,
+    _setIdentifier       : _setIdentifier,
+    getIdentifier        : getIdentifier,
+    on                   : on,
+    connect              : connect,
+    send                 : send
   };
 })();

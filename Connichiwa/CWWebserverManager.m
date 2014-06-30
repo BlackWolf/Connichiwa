@@ -16,7 +16,7 @@
 
 @interface CWWebserverManager ()
 
-@property (readwrite) BOOL isRunning;
+@property (readwrite) CWWebserverManagerState state;
 
 @property (readwrite, strong) NSString *documentRoot;
 
@@ -36,7 +36,7 @@
 {
     self = [super init];
     
-    self.isRunning = NO;
+    self.state = CWWebserverManagerStateStopped;
     self.documentRoot = documentRoot;
     
     return self;
@@ -45,6 +45,8 @@
 
 - (void)startWebserverWithDocumentRoot:(NSString *)documentRoot onPort:(int)port
 {
+    self.state = CWWebserverManagerStateStarting;
+    
     self.documentRoot = documentRoot;
     
     self.nodelikeContext = [[NLContext alloc] initWithVirtualMachine:[[JSVirtualMachine alloc] init]];
@@ -83,14 +85,6 @@
     [NLContext runEventLoopAsyncInContext:self.nodelikeContext];
     
     if (![serverScriptReturn isUndefined]) DLog(@"executed server.js, result is %@", [serverScriptReturn toString]);
-    
-    self.isRunning = YES;
-    
-    //I'm not sure if this should in some way be attached to the runEventLoopAsyncInContext:, but I suppose triggering this here will be fine
-    if ([self.delegate respondsToSelector:@selector(didStartWebserver)])
-    {
-        [self.delegate didStartWebserver];
-    }
 }
 
 
@@ -103,15 +97,16 @@
 - (void)pauseWebserver
 {
     DLog(@"PAUSING");
-    self.isRunning = NO;
+    self.state = CWWebserverManagerStatePaused;
     [self.nodelikeContext evaluateScript:@"shutdown();"];
 }
+
 
 - (void)resumeWebserver
 {
     DLog(@"RESUMING");
+    self.state = CWWebserverManagerStateStarting;
     [self.nodelikeContext evaluateScript:@"startup();"];
-    self.isRunning = YES;
 }
 
 
@@ -124,13 +119,29 @@
     
     __weak typeof(self) weakSelf = self;
     
+    self.nodelikeContext[@"native_serverDidStart"] = ^(NSString *identifier) {
+        [weakSelf _receivedFromServer_serverDidStart];
+    };
+    
     self.nodelikeContext[@"native_remoteWebsocketDidClose"] = ^(NSString *identifier) {
-        [weakSelf _receivedfromServer_remoteWebsocketDidClose:identifier];
+        [weakSelf _receivedFromServer_remoteWebsocketDidClose:identifier];
     };
 }
 
 
-- (void)_receivedfromServer_remoteWebsocketDidClose:(NSString *)identifier
+- (void)_receivedFromServer_serverDidStart
+{
+    DLog(@"WOHOO");
+    self.state = CWWebserverManagerStateStarted;
+    
+    if ([self.delegate respondsToSelector:@selector(didStartWebserver)])
+    {
+        [self.delegate didStartWebserver];
+    }
+}
+
+
+- (void)_receivedFromServer_remoteWebsocketDidClose:(NSString *)identifier
 {
     if ([self.delegate respondsToSelector:@selector(remoteDidDisconnect:)])
     {

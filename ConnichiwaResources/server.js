@@ -24,6 +24,8 @@ var WebsocketServer = require("ws").Server;
 ///////////////
 
 var app = new Express();
+var http;
+var httpLoaded = false;
 
 //Activate logging
 if (CWDEBUG === true) app.use(new Morgan( { immediate: true, format: "WEBSERVER :date :remote-addr -- REQUEST :url (:response-time ms)" } ));
@@ -41,7 +43,7 @@ app.use(function(req, res, next) {
     res.status(404).send("File not found");
     return;
   }
-
+  
   next();
 });
 
@@ -57,11 +59,17 @@ app.use("/scripts", Express.static(RESOURCES_PATH + "/scripts"));
 //DOCUMENT_ROOT (web app) is served as /
 app.use("/", Express.static(DOCUMENT_ROOT));
 
-var http = app.listen(SERVER_PORT);
+http = app.listen(SERVER_PORT, function() 
+{
+  httpLoaded = true;
+  checkIfServersAreRunning();
+});
 
 ///////////////
 // WEBSOCKET //
 ///////////////
+
+var websocketLoaded = false;
 
 var onWebsocketConnection = function(wsConnection) {
   //For now, we just assume first device means its the master device
@@ -85,7 +93,13 @@ var onWebsocketConnection = function(wsConnection) {
   }
 };
 
-var websocket = new WebsocketServer({ port: WEBSOCKET_PORT });
+var websocket = new WebsocketServer({ port: WEBSOCKET_PORT }, function()
+{
+  websocketLoaded = true;
+  checkIfServersAreRunning();
+});
+
+
 var wsLocalConnection;
 var wsUnidentifiedRemoteConnection = [];
 var wsRemoteConnections = {};
@@ -218,9 +232,18 @@ function sendToRemote(identifier, message)
 //////////
 
 
+function checkIfServersAreRunning()
+{
+  if (httpLoaded && websocketLoaded)
+    {
+      native_serverDidStart();
+    }
+}
+
+
 function shutdown()
 {
-  var disconnectMessage = JSON.stringify({ type: "serverShuttingDown" });
+  var shutdownMessage = JSON.stringify({ type: "servershuttingdown" });
   // if (wsLocalConnection !== undefined) 
   // {
   //   log("WEBSOCKET", "Closing local ws");
@@ -233,15 +256,15 @@ function shutdown()
     if (wsRemoteConnections.hasOwnProperty(key))
     {
       log("WEBSERVER", "Closing WS "+key);
-      wsRemoteConnections[key].send(disconnectMessage);
+      wsRemoteConnections[key].send(shutdownMessage);
       // wsRemoteConnections[key].close();
     }
   }  
   // wsRemoteConnections = {};
   for (var i = 0; i < wsUnidentifiedRemoteConnection.length ; i++)
   {
-    log("WEBSERVER", "CLosing unidentified ws");
-    wsUnidentifiedRemoteConnection[i].send(disconnectMessage);
+    log("WEBSERVER", "Closing unidentified ws");
+    wsUnidentifiedRemoteConnection[i].send(shutdownMessage);
     // wsUnidentifiedRemoteConnection[i].close();
   }
   // wsUnidentifiedRemoteConnection = [];

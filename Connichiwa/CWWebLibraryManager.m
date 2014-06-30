@@ -42,6 +42,12 @@
     if (self.webView == nil) return;
     if ([self isActive]) return;
     
+    if (self.state == CWWebLibraryManagerStateDisconnecting)
+    {
+        [self performSelector:@selector(connect) withObject:nil afterDelay:1.0];
+        return;
+    }
+    
     self.state = CWWebLibraryManagerStateConnecting;
     
     NSURL *localhostURL = [NSURL URLWithString:[NSString stringWithFormat:@"http://127.0.0.1:%d", self.appState.webserverPort]];
@@ -55,7 +61,18 @@
 
 - (void)disconnect
 {
+    if (self.webView == nil) return;
+    if ([self isActive] == NO) return;
     
+    if (self.state == CWWebLibraryManagerStateConnecting)
+    {
+        [self performSelector:@selector(disconnect) withObject:nil afterDelay:1.0];
+        return;
+    }
+    
+    self.state = CWWebLibraryManagerStateDisconnecting;
+    
+    [self _sendToView_disconnectWebsocket];
 }
 
 
@@ -138,11 +155,18 @@
 
 - (void)_receivedfromView_websocketDidClose
 {
-    DLog(@"WEB LIB CLOSED");
     self.state = CWWebLibraryManagerStateDisconnecting;
-    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"about:blank"]]];
     
-//    [NSException raise:@"Weblib websocket did close" format:@"Oops, that totally shouldn't happen, should it?"];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"about:blank"]]];
+    });
+    
+    //If the webserver is not running, the websocket is allowed to disconnect
+    //Otherwise this seems like a rather huge error, so we stop app execution
+    if (self.appState.isWebserverRunning == YES)
+    {
+        [NSException raise:@"Weblib websocket did close" format:@"Oops, that totally shouldn't happen, should it?"];
+    }
 }
 
 
@@ -168,6 +192,15 @@
 {
     NSDictionary *data = @{
                            @"type": @"connectwebsocket"
+                           };
+    [self _sendToView_dictionary:data];
+}
+
+
+- (void)_sendToView_disconnectWebsocket
+{
+    NSDictionary *data = @{
+                           @"type": @"disconnectwebsocket"
                            };
     [self _sendToView_dictionary:data];
 }

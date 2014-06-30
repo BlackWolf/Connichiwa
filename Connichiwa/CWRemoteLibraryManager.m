@@ -41,6 +41,12 @@
     if (self.webView == nil) return;
     if ([self isActive]) return;
     
+    if (self.state == CWRemoteLibraryManagerStateDisconnecting)
+    {
+        [self performSelector:@selector(connectToServer:) withObject:URL afterDelay:1.0];
+        return;
+    }
+    
     DLog(@"!! SWITCHING INTO REMOTE STATE");
     
     self.state = CWRemoteLibraryManagerStateConnecting;
@@ -63,12 +69,17 @@
     if (self.webView == nil) return;
     if ([self isActive] == NO) return;
     
+    if (self.state == CWRemoteLibraryManagerStateConnecting)
+    {
+        [self performSelector:@selector(disconnect) withObject:nil afterDelay:1.0];
+        return;
+    }
+    
     DLog(@"!! BACKING OUT OF REMOTE STATE");
     
     self.state = CWRemoteLibraryManagerStateDisconnecting;
     
-    //Close the websocket. This will trigger the websocketWasClosed callback which finished up the disconnect
-    [self _sendToView_disconnect];
+    [self _sendToView_disconnectWebsocket];
 }
 
 
@@ -107,13 +118,16 @@
     [self _sendToView_cwdebug];
     [self _sendToView_remoteIdentifier];
     
-    [self.webView setHidden:NO];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.webView setHidden:NO];
+    });
 }
 
 
 - (void)_receivedfromView_websocketDidClose
 {
     DLog(@"Remote websocket did close");
+    
     self.state = CWRemoteLibraryManagerStateDisconnecting;
     
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -126,6 +140,9 @@
 - (void)_receivedfromView_serverIsShuttingDown
 {
     DLog(@"Remote master did disconnect");
+    
+    //We put this device out of remote state, but we don't close the websocket
+    //because of an UIWebView bug that might cause the master device to crash if we do
     self.state = CWRemoteLibraryManagerStateDisconnecting;
     
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -138,6 +155,15 @@
 {
     NSDictionary *data = @{
                            @"type": @"connectwebsocket"
+                           };
+    [self _sendToView_dictionary:data];
+}
+
+
+- (void)_sendToView_disconnectWebsocket
+{
+    NSDictionary *data = @{
+                           @"type": @"disconnectwebsocket"
                            };
     [self _sendToView_dictionary:data];
 }
@@ -158,15 +184,6 @@
     NSDictionary *data = @{
                            @"type": @"remoteidentifier",
                            @"identifier": self.appState.identifier
-                           };
-    [self _sendToView_dictionary:data];
-}
-
-
-- (void)_sendToView_disconnect
-{
-    NSDictionary *data = @{
-                           @"type": @"disconnect"
                            };
     [self _sendToView_dictionary:data];
 }
@@ -198,8 +215,6 @@
 {
     if (self.state == CWRemoteLibraryManagerStateConnecting)
     {
-        DLog(@"Setting up Remote Context");
-        
         //Loaded a remote server URL, set up its context
         self.webViewContext = [self.webView valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
 
@@ -218,10 +233,7 @@
         };
         self.webViewContext[@"console"] = @{@"log": logger, @"error": logger};
         
-        
-        DLog(@"Registering JS Callbacks");
         [self _registerJSCallbacks];
-        DLog(@"Connecting websocket");
         [self _sendToView_connectWebsocket];
     }
     else if (self.state == CWRemoteLibraryManagerStateDisconnecting)

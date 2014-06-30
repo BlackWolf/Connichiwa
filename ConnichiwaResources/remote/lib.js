@@ -31,7 +31,7 @@ var onWebsocketMessage = function(e)
   
   var object = JSON.parse(message);
   
-  if (object.type === "serverShuttingDown")
+  if (object.type === "servershuttingdown")
   {
     //Usually, we should call websocket.close() here
     //Unfortunately, the disconnect message is also sent when the master device app is moving to the background
@@ -84,7 +84,7 @@ function parseNativeMessage(message)
       var data = { type: "remoteidentifier", identifier: object.identifier };
       sendMessage(data);
       break;
-    case "disconnect":
+    case "disconnectwebsocket":
       websocket.close();
       break;
   }

@@ -152,7 +152,7 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
 
 - (BOOL)isWebserverRunning
 {
-    return (self.webserverManager.isRunning);
+    return (self.webserverManager.state == CWWebserverManagerStateStarted);
 }
 
 
@@ -227,6 +227,7 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
     [self.webLibManager connect];
 }
 
+
 - (void)remoteDidDisconnect:(NSString *)identifier
 {
     DLog(@" !! REMOTE DID DISCONNECT");
@@ -237,6 +238,7 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
     
     [self.webLibManager sendRemoteDisconnected:identifier];
 }
+
 
 #pragma mark CWBluetoothManagerDelegate
 
