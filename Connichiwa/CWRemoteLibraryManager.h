@@ -18,7 +18,8 @@ typedef NS_ENUM(NSInteger, CWRemoteLibraryManagerState)
     CWRemoteLibraryManagerStateDisconnected,
     CWRemoteLibraryManagerStateConnecting,
     CWRemoteLibraryManagerStateConnected,
-    CWRemoteLibraryManagerStateDisconnecting
+    CWRemoteLibraryManagerStateDisconnecting,
+    CWRemoteLibraryManagerStateSoftDisconnected
 };
 
 

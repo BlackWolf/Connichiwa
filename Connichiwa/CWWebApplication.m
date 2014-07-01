@@ -142,6 +142,8 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
 
 - (void)cleanupBackgroundTaskTimeout
 {
+    DLog(@"STOPPING CLEANUP TASK");
+    
     //By now everything should have been cleaned up nicely, we can end the background task so iOS doesn't kill us :-)
     [[UIApplication sharedApplication] endBackgroundTask:self.cleanupBackgroundTaskIdentifier];
 }
@@ -188,6 +190,7 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
 
 - (void)didReceiveConnectionRequestForRemote:(NSString *)identifier
 {
+    if ([self isWebserverRunning] == NO) return; //no remote connections while webserver is down
     if ([self.pendingRemoteDevices containsObject:identifier]) return;
     
     DLog(@" !! TRYING TO GET DEVICE AS REMOTE");
@@ -207,11 +210,8 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
 {
     DLog(@" !! REMOTE DID CONNECT");
     
-    DLog(@" !! Removing");
     [self.pendingRemoteDevices removeObject:identifier];
-    DLog(@" !! Adding");
     [self.remoteDevices addObject:identifier];
-    DLog(@" !! Did Add");
 }
 
 
@@ -332,12 +332,17 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
     //Be aware that the block passed to beginBackgroundTaskWithExpirationHandler: is called when the background task is ended forcefully by iOS and is not the code that is executed in the background. Calling beginBackgroundTaskWithExpirationHandler: simply tells iOS that we want to continue executing our code
     
     self.cleanupBackgroundTaskIdentifier = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+        DLog(@"CLEANUP EXPIRED");
         [[UIApplication sharedApplication] endBackgroundTask:self.cleanupBackgroundTaskIdentifier];
         self.cleanupBackgroundTaskIdentifier = UIBackgroundTaskInvalid;
     }];
+    [self performSelector:@selector(cleanupBackgroundTaskTimeout) withObject:nil afterDelay:CLEANUP_TASK_TIMEOUT];
     
     DLog(@"App entering background, pausing webserver...");
-    [self.webserverManager pauseWebserver];
+//    [self.webserverManager pauseWebserver];
+    [self.bluetoothManager stopAdvertising];
+    [self.bluetoothManager stopScanning];
+    [self.webserverManager suspendWebserver];
     
     //If we are a remote device we should shut down the websocket gracefully to let the master device know we are not available to display information
     //The websocket connection is resumed in willEnterForeground
@@ -346,7 +351,6 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
         DLog(@"App entering background while being  a remote device... closing websocket connection");
         
         [self.remoteLibManager disconnect];
-        [self performSelector:@selector(cleanupBackgroundTaskTimeout) withObject:nil afterDelay:CLEANUP_TASK_TIMEOUT];
     }
 }
 
@@ -360,6 +364,11 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
     
     DLog(@"App entering foreground, resuming webserver...");
     [self.webserverManager resumeWebserver];
+    [self.bluetoothManager startAdvertising];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.bluetoothManager performSelector:@selector(startScanning) withObject:nil afterDelay:0.5]; //BT starts freaking out without a small delay, no idea why
+    });
+    
     
     //TODO resume websocket connection?
 }

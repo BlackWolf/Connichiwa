@@ -66,6 +66,7 @@ app.use("/", Express.static(DOCUMENT_ROOT));
 
 var onHttpListening = function()
 {
+  log("HTTP LISTENING on "+http.address().port);
   httpLoaded = true;
   checkServerStatus();
 };
@@ -173,46 +174,13 @@ var onRemoteError = function(wsConnection)
   };
 };
 
-function sendToWeblib(message)
-{
-  if (wsLocalConnection === undefined) {
-    log("Message lost because no local websocket connection exists: " + message);
-    return;
-  }
-  log("WEBSERVER", "Sending message to weblib: " + message);
-  wsLocalConnection.send(message);
-}
-
-function sendToLocal(message)
-{
-  wsLocalConnection.send(message);
-}
-
-function sendToRemote(identifier, message)
-{
-  if (identifier === "broadcast")
-  {
-    for (var key in wsRemoteConnections)
-    {
-      if (wsRemoteConnections.hasOwnProperty(key))
-      {
-        wsRemoteConnections[key].send(message);    
-      }
-    }    
-    return;
-  }
-  else {
-    if (identifier in wsRemoteConnections === false) return;
-    wsRemoteConnections[identifier].send(message);
-  }
-}
-
 
 
 // WEBSOCKET CALLBACKS
 
 var onWebsocketListening = function()
 {
+  log("WEBSOCKET LISTENING");
   websocketLoaded = true;
   checkServerStatus();
 };
@@ -241,12 +209,55 @@ var onWebsocketConnection = function(wsConnection) {
 
 
 
+// SENDING % RECEIVING MESSAGES
+
+function sendToLocal(message)
+{
+  if (wsLocalConnection === undefined) {
+    log("Message lost because no local websocket connection exists: " + message);
+    return;
+  }
+
+  wsLocalConnection.send(message);
+}
+
+
+function sendToRemote(identifier, message)
+{
+  if (identifier === "broadcast")
+  {
+    for (var key in wsRemoteConnections)
+    {
+      if (wsRemoteConnections.hasOwnProperty(key))
+      {
+        wsRemoteConnections[key].send(message);    
+      }
+    }    
+    return;
+  }
+  else {
+    if (identifier in wsRemoteConnections === false) return;
+    wsRemoteConnections[identifier].send(message);
+  }
+}
+
+
+function sendToWeblib(message)
+{
+  sendToLocal(message);
+}
+
+
+
 ////////////////////
 // SERVER CONTROL //
 ////////////////////
 
+var httpConnections = [];
+
 function startListening()
 {
+  log("WEBSERVER", "START LISTENING");
   httpLoaded = false;
   websocketLoaded = false;
   wsLocalConnection = undefined;
@@ -254,6 +265,8 @@ function startListening()
   wsRemoteConnections = {};
 
   http = app.listen(HTTP_PORT, onHttpListening);
+  http.on("close", function() { log("WEBSERVER", "HTTP CLOSED"); });
+  http.on("connection", function(socket) { httpConnections.push(socket); });
   websocket = new WebsocketServer({ port: WEBSOCKET_PORT }, onWebsocketListening);
   websocket.on("connection", onWebsocketConnection);
 }
@@ -264,23 +277,41 @@ function stopListening()
   httpLoaded = false;
   websocketLoaded = false;
 
-  //It can take some time until the server closes the websocket connection
-  //Therefore, send a message to the remotes so they can leave early
-  var shutdownMessage = JSON.stringify({ type: "servershuttingdown" });
+  websocket.close();
+  http.close();
+
+  closeAllConnections();
+}
+
+
+function softDisconnectAllRemotes()
+{
+  var shutdownMessage = JSON.stringify({ type: "softdisconnect" });
   for (var key in wsRemoteConnections)
   {
     if (wsRemoteConnections.hasOwnProperty(key))
     {
       wsRemoteConnections[key].send(shutdownMessage);
+      delete wsRemoteConnections[key];
+      native_remoteWebsocketDidClose(key);
     }
   }  
   for (var i = 0; i < wsUnidentifiedRemoteConnections.length; i++)
   {
     wsUnidentifiedRemoteConnections[i].send(shutdownMessage);
+    wsUnidentifiedRemoteConnections[i] = undefined; 
   }
 
-  websocket.close();
-  http.close();
+  // for (var i = 0; i < httpConnections.length; i++)
+  // {
+  //   log("WEBSERVER", "Destroying HTTP connection");
+  //   log("WEBSERVER", httpConnections[i].disconnected);
+  //   httpConnections[i].on('end', function() { log("WEBSERVER", "HTTP ended"); });
+  //   httpConnections[i].on('close', function() { log("WEBSERVER", "HTTP closed"); });
+  //   httpConnections[i].on('error', function() { log("WEBSERVER", "HTTP errored"); });
+  //   httpConnections[i].end();
+  //   // log("WEBSERVER", httpConnections[i].disconnected);
+  // }
 }
 
 

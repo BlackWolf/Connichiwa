@@ -17,7 +17,7 @@ typedef NS_ENUM(NSInteger, CWWebserverManagerState)
     CWWebserverManagerStateStopped,
     CWWebserverManagerStateStarting,
     CWWebserverManagerStateStarted,
-    CWWebserverManagerStatePaused
+    CWWebserverManagerStateSuspended
 };
 
 
@@ -63,7 +63,7 @@ typedef NS_ENUM(NSInteger, CWWebserverManagerState)
  */
 - (void)startWebserverOnPort:(int)port;
 
-- (void)pauseWebserver;
+- (void)suspendWebserver;
 - (void)resumeWebserver;
 
 @end

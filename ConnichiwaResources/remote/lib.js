@@ -17,9 +17,11 @@ var ParsedURL = (function()
 
 
 var websocket;
+var connected = false;
 
 var onWebsocketOpen = function()
 {
+  connected = true;
   native_websocketDidOpen();
 };
 
@@ -31,13 +33,10 @@ var onWebsocketMessage = function(e)
   
   var object = JSON.parse(message);
   
-  if (object.type === "servershuttingdown")
+  if (object.type === "softdisconnect")
   {
-    //Usually, we should call websocket.close() here
-    //Unfortunately, the disconnect message is also sent when the master device app is moving to the background
-    //For some reason, closing the websocket then can cause a crash in the UIWebView, so we report a closed websocket even though it is still open
-    native_serverIsShuttingDown();
-    // websocket.close();    
+    connected = false;
+    native_softDisconnect();
   }
   if (object.type === "show")
   {
@@ -53,12 +52,14 @@ var onWebsocketMessage = function(e)
 
 var onWebsocketError = function()
 {
-    alert("websocket error");
+  alert("websocket error");
 };
 
 
 var onWebsocketClose = function()
 {
+  connected = false;
+  cleanupWebsocket();
   native_websocketDidClose();
 };
 
@@ -70,8 +71,13 @@ function parseNativeMessage(message)
   switch (object.type)
   {
     case "connectwebsocket":
+      connected = false;
+
+      var oldWebsocket = websocket;
+      cleanupWebsocket();    
+      if (oldWebsocket !== undefined) oldWebsocket.close();
+
       websocket = new WebSocket("ws://" + ParsedURL.hostname + ":" + (parseInt(ParsedURL.port) + 1));
-      
       websocket.onopen = onWebsocketOpen;
       websocket.onmessage = onWebsocketMessage;
       websocket.onclose = onWebsocketClose;
@@ -91,8 +97,24 @@ function parseNativeMessage(message)
 }
 
 
+function cleanupWebsocket()
+{
+  if (websocket !== undefined) 
+  {
+    websocket.onopen = undefined;
+    websocket.onmessage = undefined;
+    websocket.onclose = undefined;
+    websocket.onerror = undefined;
+    websocket.close();
+    websocket = undefined;
+  }
+}
+
+
 function sendMessage(message)
 {
+  if (connected === false) return;
+
   websocket.send(JSON.stringify(message));
 }
 

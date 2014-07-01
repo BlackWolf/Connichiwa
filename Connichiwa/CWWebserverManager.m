@@ -93,17 +93,21 @@
 }
 
 
-- (void)pauseWebserver
+- (void)suspendWebserver
 {
-    self.state = CWWebserverManagerStatePaused;
-    [self.nodelikeContext evaluateScript:@"stopListening();"];
+    if (self.state != CWWebserverManagerStateStarted) return;
+    
+    self.state = CWWebserverManagerStateSuspended;
+    [self.nodelikeContext evaluateScript:@"softDisconnectAllRemotes();"];
 }
 
 
 - (void)resumeWebserver
 {
-    self.state = CWWebserverManagerStateStarting;
-    [self.nodelikeContext evaluateScript:@"startListening();"];
+    // When we suspended, we soft disconnected all remotes
+    // On resume, we don't need to do anything - we just make it possible for remotes to connect again
+    // Furthermore, the local web library connection will automatically reconnect without us doing anything
+    self.state = CWWebserverManagerStateStarted;
 }
 
 

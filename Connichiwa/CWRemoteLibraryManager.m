@@ -51,8 +51,7 @@
     
     self.state = CWRemoteLibraryManagerStateConnecting;
     
-    //URL is in the form http://IP:PORT - we need to make it http://IP:PORT/remote/index.html?identifier=ID
-    //This will make it retrieve the remote library of the other device and send our identifier to the other device's weblib
+    //URL is in the form http://IP:PORT - we need to make it http://IP:PORT/remote/index.html
     NSURL *finalURL = [[URL URLByAppendingPathComponent:@"remote" isDirectory:YES] URLByAppendingPathComponent:@"index.html" isDirectory:NO];
     
     NSURLRequest *URLRequest = [NSURLRequest requestWithURL:finalURL];
@@ -105,8 +104,8 @@
         [weakSelf _receivedfromView_websocketDidClose];
     };
     
-    self.webViewContext[@"native_serverIsShuttingDown"] = ^{
-        [weakSelf _receivedfromView_serverIsShuttingDown];
+    self.webViewContext[@"native_softDisconnect"] = ^{
+        [weakSelf _receivedfromView_softDisconnect];
     };
 }
 
@@ -137,13 +136,15 @@
 }
 
 
-- (void)_receivedfromView_serverIsShuttingDown
+- (void)_receivedfromView_softDisconnect
 {
-    DLog(@"Remote master did disconnect");
+    DLog(@"Soft-disconnecting remote");
     
-    //We put this device out of remote state, but we don't close the websocket
-    //because of an UIWebView bug that might cause the master device to crash if we do
-    self.state = CWRemoteLibraryManagerStateDisconnecting;
+    //"Soft Disconnecting" means that we put this device out of remote state but don't actually close the websocket connection
+    //Technically, this means the server can still send us messages but we just don't care about it
+    //We do this because there are situations where a bug in UIWebView can cause a crash if the websocket is closed, but we still want to disconnect the client
+    //The actual websocket close comes when the server either shuts down the connection or we replace the webview with a new remote connection
+    self.state = CWRemoteLibraryManagerStateSoftDisconnected;
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.webView setHidden:YES];

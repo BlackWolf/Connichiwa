@@ -285,7 +285,6 @@
 
 - (void)_sendToView:(NSString *)message
 {
-    if (self.appState.isWebserverRunning == NO) return;
     if (self.webViewContext == nil) return;
     
     //stringByEvaluatingJavaScriptFromString: must be called on the main thread, but it seems buggy with dispatch_async, so we use performSelectorOnMainThread:
