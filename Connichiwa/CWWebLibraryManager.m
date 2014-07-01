@@ -59,23 +59,6 @@
 }
 
 
-- (void)disconnect
-{
-    if (self.webView == nil) return;
-    if ([self isActive] == NO) return;
-    
-    if (self.state == CWWebLibraryManagerStateConnecting)
-    {
-        [self performSelector:@selector(disconnect) withObject:nil afterDelay:1.0];
-        return;
-    }
-    
-    self.state = CWWebLibraryManagerStateDisconnecting;
-    
-    [self _sendToView_disconnectWebsocket];
-}
-
-
 - (void)sendDeviceDetected:(NSString *)identifier
 {
     [self _sendToView_deviceDetected:identifier];
@@ -155,18 +138,7 @@
 
 - (void)_receivedfromView_websocketDidClose
 {
-    self.state = CWWebLibraryManagerStateDisconnecting;
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"about:blank"]]];
-    });
-    
-    //If the webserver is not running, the websocket is allowed to disconnect
-    //Otherwise this seems like a rather huge error, so we stop app execution
-    if (self.appState.isWebserverRunning == YES)
-    {
-        [NSException raise:@"Weblib websocket did close" format:@"Oops, that totally shouldn't happen, should it?"];
-    }
+    [NSException raise:@"NOOOO" format:@"This should totally not happen. Damn you, sockets!"];
 }
 
 

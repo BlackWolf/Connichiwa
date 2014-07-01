@@ -370,7 +370,11 @@ var CWNativeCommunicationParser = (function()
   var _parseLocalIdentifier = function(message)
   {
     var success = Connichiwa._setIdentifier(message.identifier);
-    if (success) CWEventManager.trigger("ready");
+    if (success)
+    {
+      Connichiwa._send(JSON.stringify(message)); //needed so server recognizes us as local weblib
+      CWEventManager.trigger("ready");
+    }
   };
   
   
@@ -575,16 +579,24 @@ var Connichiwa = (function()
    * @memberof Connichiwa.Websocket
    */
   var _websocket;
+
+  var _websocketConnectionAttempts = 0;
   
   
   var _connectWebsocket = function()
   {
+    if (_websocket !== undefined && (_websocket.state === CONNECTING || _websocket.state === OPEN)) return;
+
+    _cleanupWebsocket();
+
+    console.log("Trying to establish websocket connection");
     _websocket = new WebSocket("ws://127.0.0.1:8001");
-    
     _websocket.onopen = onWebsocketOpen;
     _websocket.onmessage = onWebsocketMessage;
     _websocket.onclose = onWebsocketClose;
     _websocket.onerror = onWebsocketError;
+
+    _websocketConnectionAttempts++;
   };
   
   
@@ -602,6 +614,7 @@ var Connichiwa = (function()
   var onWebsocketOpen = function()
   {
     native_websocketDidOpen();
+    _websocketConnectionAttempts = 0;
     CWDebug.log("Websocket opened");
   };
 
@@ -627,8 +640,8 @@ var Connichiwa = (function()
    */
   var onWebsocketError = function()
   {
-    alert("error");
     CWDebug.log("Websocket error");
+    onWebsocketClose();
   };
 
 
@@ -639,8 +652,37 @@ var Connichiwa = (function()
    */
   var onWebsocketClose = function()
   {
-    native_websocketDidClose();
     CWDebug.log("Websocket closed");
+    _cleanupWebsocket();
+
+    if (_websocketConnectionAttempts >= 5)
+    {
+      //Give up, guess we are fucked
+      native_websocketDidClose();
+      return;
+    }
+
+    setTimeout(function() { _connectWebsocket(); }, _websocketConnectionAttempts*1000);
+  };
+
+
+  var _cleanupWebsocket = function()
+  {
+    if (_websocket !== undefined) 
+    {
+      _websocket.onopen = undefined;
+      _websocket.onmessage = undefined;
+      _websocket.onclose = undefined;
+      _websocket.onerror = undefined;
+      _websocket = undefined;
+    }
+  };
+
+
+
+var _send = function(message)
+  {
+    _websocket.send(message);
   };
 
 
@@ -718,6 +760,7 @@ var Connichiwa = (function()
   return {
     _connectWebsocket    : _connectWebsocket,
     _disconnectWebsocket : _disconnectWebsocket,
+    _send                : _send,
     _setIdentifier       : _setIdentifier,
     getIdentifier        : getIdentifier,
     on                   : on,

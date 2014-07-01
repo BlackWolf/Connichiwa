@@ -68,7 +68,11 @@ var CWNativeCommunicationParser = (function()
   var _parseLocalIdentifier = function(message)
   {
     var success = Connichiwa._setIdentifier(message.identifier);
-    if (success) CWEventManager.trigger("ready");
+    if (success)
+    {
+      Connichiwa._send(JSON.stringify(message)); //needed so server recognizes us as local weblib
+      CWEventManager.trigger("ready");
+    }
   };
   
   

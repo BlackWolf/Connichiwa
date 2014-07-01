@@ -52,7 +52,7 @@ var onWebsocketMessage = function(e)
 
 var onWebsocketError = function()
 {
-  alert("websocket error");
+  onWebsocketClose();
 };
 
 
@@ -66,7 +66,6 @@ var onWebsocketClose = function()
 
 function parseNativeMessage(message)
 {
-  log("GOT MESSAGE "+message);
   var object = JSON.parse(message);
   switch (object.type)
   {
@@ -105,7 +104,6 @@ function cleanupWebsocket()
     websocket.onmessage = undefined;
     websocket.onclose = undefined;
     websocket.onerror = undefined;
-    websocket.close();
     websocket = undefined;
   }
 }
