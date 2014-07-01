@@ -32,6 +32,8 @@
  */
 @property (readwrite) id<CWBluetoothManagerDelegate> delegate;
 
+@property (readonly) BOOL isScanning;
+
 /**
  *  Intializes a new CWBluetoothManager
  *
@@ -60,6 +62,8 @@
  *  Stops advertising this device
  */
 - (void)stopAdvertising;
+
+- (BOOL)isAdvertising;
 
 /**
  *  Tells the BTManager to send our network interface addresses to the device with the given identifier. The manager will then try to establish a BT connection to that device and transfer the network addresses. This is effectively a request to use the given device as a remote device.

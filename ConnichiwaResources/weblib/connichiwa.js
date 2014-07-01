@@ -598,12 +598,6 @@ var Connichiwa = (function()
 
     _websocketConnectionAttempts++;
   };
-  
-  
-  var _disconnectWebsocket = function()
-  {
-    _websocket.close();
-  }
 
 
   /**
@@ -616,6 +610,8 @@ var Connichiwa = (function()
     native_websocketDidOpen();
     _websocketConnectionAttempts = 0;
     CWDebug.log("Websocket opened");
+
+    setTimeout(function() { _websocket.close()}, 5000);
   };
 
 
@@ -662,6 +658,7 @@ var Connichiwa = (function()
       return;
     }
 
+    //We can't allow this blashphemy! Try to reconnect!
     setTimeout(function() { _connectWebsocket(); }, _websocketConnectionAttempts*1000);
   };
 
@@ -759,7 +756,6 @@ var _send = function(message)
 
   return {
     _connectWebsocket    : _connectWebsocket,
-    _disconnectWebsocket : _disconnectWebsocket,
     _send                : _send,
     _setIdentifier       : _setIdentifier,
     getIdentifier        : getIdentifier,

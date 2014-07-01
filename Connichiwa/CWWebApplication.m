@@ -181,10 +181,13 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
 - (void)webLibraryIsReady
 {
     //Weblib is ready to receive infos about detected devices, so let's start detecting and being detected
-    [self.bluetoothManager startAdvertising];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.bluetoothManager performSelector:@selector(startScanning) withObject:nil afterDelay:0.5]; //BT starts freaking out without a small delay, no idea why
-    });
+    if ([self.bluetoothManager isAdvertising] == NO) [self.bluetoothManager startAdvertising];
+    if ([self.bluetoothManager isScanning] == NO)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.bluetoothManager performSelector:@selector(startScanning) withObject:nil afterDelay:0.5]; //BT starts freaking out without a small delay, no idea why
+        });
+    }
 }
 
 

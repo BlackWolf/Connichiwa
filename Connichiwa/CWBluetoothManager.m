@@ -21,6 +21,8 @@
  */
 @property (readwrite, weak) id<CWWebApplicationState> appState;
 
+@property (readwrite) BOOL isScanning;
+
 /**
  *  The CBCentralManager instance used by the manager to make this device a BTLE Central
  */
@@ -226,6 +228,7 @@ double const URL_CHECK_TIMEOUT = 2.0;
     self.advertisedService.characteristics = @[ self.advertisedInitialCharacteristic, self.advertisedIPCharacteristic ];
     
     self.connections = [NSMutableArray array];
+    self.isScanning = NO;
     self.wantsToStartScanning = NO;
     self.wantsToStartAdvertising = NO;
     
@@ -268,6 +271,7 @@ double const URL_CHECK_TIMEOUT = 2.0;
 {
     DLog(@"Stop scanning for other BT devices");
     self.wantsToStartScanning = NO;
+    self.isScanning = NO;
     [self.centralManager stopScan];
 }
 
@@ -280,11 +284,18 @@ double const URL_CHECK_TIMEOUT = 2.0;
 }
 
 
+- (BOOL)isAdvertising
+{
+    return self.peripheralManager != nil && self.peripheralManager.isAdvertising;
+}
+
+
 - (void)_doStartScanning
 {
     DLog(@"Starting to scan for other BT devices...");
     [self.centralManager scanForPeripheralsWithServices:@[[CBUUID UUIDWithString:BLUETOOTH_SERVICE_UUID]]
                                                 options:@{ CBCentralManagerScanOptionAllowDuplicatesKey : @YES }];
+    self.isScanning = YES;
     
     if ([self.delegate respondsToSelector:@selector(didStartScanning)])
     {
