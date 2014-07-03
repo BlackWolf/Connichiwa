@@ -59,7 +59,7 @@ void cwLogNew(int priority, NSString *source, NSString *file, int line, NSString
     NSArray *activeDebugSources = @[ @"NATIVE", @"BLUETOOTH", @"WEBSERVER", @"WEBLIB", @"REMOTELIB" ]; //TODO is defined every time, lame, but static NSArray is not possible
  
     source = [source uppercaseString];
-    if (priority <= MAX_PRIORITY && (activeDebugSources == nil || [activeDebugSources containsObject:source]))
+    if (priority <= MAX_PRIORITY && ([source isEqualToString:@"ERROR"] || activeDebugSources == nil || [activeDebugSources containsObject:source]))
     {
         static dispatch_once_t token;
         static NSDateFormatter *dateFormatter;

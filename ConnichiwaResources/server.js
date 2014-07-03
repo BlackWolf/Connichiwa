@@ -170,7 +170,7 @@ var onUnidentifiedRemoteMessage = function(wsConnection)
 
       if (object.type === "localidentifier")
       {
-        log(4, "Websocket was determined to be local");
+        log(3, "Websocket was determined to be local");
         wsLocalConnection = wsConnection;
         wsUnidentifiedConnections.splice(index, 1);
         // wsConnection.onmessage = onLocalMessage;
@@ -189,7 +189,7 @@ var onUnidentifiedRemoteMessage = function(wsConnection)
 
       if (object.type === "remoteidentifier")
       {
-        log(4, "Websocket was determined to be remote");
+        log(3, "Websocket was determined to be remote");
         wsRemoteConnections[object.identifier] = wsConnection;
         wsUnidentifiedConnections.splice(index, 1);
         // wsConnection.onmessage = onRemoteMessage(wsConnection);

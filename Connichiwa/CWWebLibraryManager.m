@@ -149,7 +149,7 @@
 
 - (void)_receivedFromView_connectRemote:(NSString *)identifier
 {
-    CWLog(4, @"Web library requested a connection to %@", identifier);
+    CWLog(3, @"Web library requested a connection to %@", identifier);
     if ([self.delegate respondsToSelector:@selector(didReceiveConnectionRequestForRemote:)])
     {
         [self.delegate didReceiveConnectionRequestForRemote:identifier];
@@ -159,7 +159,7 @@
 
 - (void)_receivedFromView_remoteDidConnect:(NSString *)identifier
 {
-    CWLog(4, @"Web Library reported remote device %@ connected", identifier);
+    CWLog(3, @"Web Library reported remote device %@ connected", identifier);
     if ([self.delegate respondsToSelector:@selector(remoteDidConnect:)])
     {
         [self.delegate remoteDidConnect:identifier];
