@@ -25,6 +25,11 @@
  */
 @property (readonly) int webserverPort;
 
+/**
+ *  Determines if the webserver is currently running and accepting remote connections
+ *
+ *  @return true if the webserver is connectable, otherwise false
+ */
 - (BOOL)isWebserverRunning;
 
 /**

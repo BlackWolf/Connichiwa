@@ -78,5 +78,4 @@ void cwLogNew(int priority, NSString *source, NSString *file, int line, NSString
     }
 }
 
-
 @end

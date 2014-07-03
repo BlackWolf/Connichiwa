@@ -25,6 +25,23 @@
  */
 @property (strong, readwrite) NLContext *nodelikeContext;
 
+/**
+ *  Registers callback functions that the webserver script can call to execute native methods
+ */
+- (void)_registerJSCallbacks;
+
+/**
+ *  Called by the webserver script if the server finished starting up and is ready to accept HTTP and Websocket connections
+ */
+- (void)_receivedFromServer_serverDidStart;
+
+/**
+ *  Called by the webserver script if the websocket connection of a remote device was closed (the remote disconnected)
+ *
+ *  @param identifier The device identifier of the device to which the connection was closed
+ */
+- (void)_receivedFromServer_remoteWebsocketDidClose:(NSString *)identifier;
+
 @end
 
 
@@ -93,12 +110,6 @@
 }
 
 
-- (void)startWebserverOnPort:(int)port
-{
-    [self startWebserverWithDocumentRoot:self.documentRoot onPort:port];
-}
-
-
 - (void)suspendWebserver
 {
     if (self.state != CWWebserverManagerStateStarted) return;
@@ -130,11 +141,11 @@
     
     __weak typeof(self) weakSelf = self;
     
-    self.nodelikeContext[@"native_serverDidStart"] = ^(NSString *identifier) {
+    self.nodelikeContext[@"nativeCallServerDidStart"] = ^(NSString *identifier) {
         [weakSelf _receivedFromServer_serverDidStart];
     };
     
-    self.nodelikeContext[@"native_remoteWebsocketDidClose"] = ^(NSString *identifier) {
+    self.nodelikeContext[@"nativeCallRemoteWebsocketDidClose"] = ^(NSString *identifier) {
         [weakSelf _receivedFromServer_remoteWebsocketDidClose:identifier];
     };
 }
@@ -162,6 +173,5 @@
         [self.delegate remoteDidDisconnect:identifier];
     }
 }
-
 
 @end

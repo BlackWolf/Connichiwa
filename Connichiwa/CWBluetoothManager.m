@@ -53,6 +53,9 @@
  */
 @property (readwrite) BOOL didAddService;
 
+/**
+ *  A timer after which the manager will check if any BT devices have disappeared
+ */
 @property (readwrite) NSTimer *lostConnectionsTimer;
 
 /**
@@ -82,6 +85,21 @@
 - (void)_doStartAdvertising;
 
 /**
+ *  Calls stopScanning but marks this stop as a temporary stop so BT devices will be not be reported as lost. It is the responsibility of the manager to resume scanning at some point, however, this method does not control the length of the scan stop.
+ */
+- (void)_stopScanningTemporarily;
+
+/**
+ *  Starts the lostConnectionsTimer, enabling a periodic check for lost BT devices
+ */
+- (void)startLostConnectionTimer;
+
+/**
+ *  Stops the lostConnectionsTimer, disabling checking for lost BT device
+ */
+- (void)stopLostConnectionTimer;
+
+/**
  *  Will ask the CBCentralManager to connect to the given CBPeripheral. This method will temporarily stop scanning for other BT devices, because scanning and connecting simultanously can lead to problems. Scanning will be resumed either in centralManager:didConnectPeripheral: or centralManager:didFailToConnectPeripheral:error:
  *
  *  @param peripheral The CBPeripheral to connect to
@@ -102,6 +120,13 @@
  *  @param connection The connection which contains the CBPeripheral that the RSSI was measured for
  */
 - (void)_addRSSIMeasure:(double)RSSI toConnection:(CWBluetoothConnection *)connection;
+
+/**
+ *  Called when the lostConnectionsTimer fires. This method checks if any BT devices have timed out and if so marks them as lost and sends an appropiate message to our delegate.
+ *
+ *  @param timer The timer that caused the method to fire
+ */
+- (void)_removeLostConnections:(NSTimer *)timer;
 
 /**
  *  Sends our initial device data to the given CBCentral via the initial characteristic. This method should be triggered after a central subscribed to our initial characteristic.
@@ -295,6 +320,8 @@ double const URL_CHECK_TIMEOUT = 2.0;
 
 - (void)_doStartScanning
 {
+    if ([self isScanning]) return;
+    
     BTLog(1, @"Starting to scan for other BT devices");
     
     [self.centralManager scanForPeripheralsWithServices:@[[CBUUID UUIDWithString:BLUETOOTH_SERVICE_UUID]]
@@ -310,6 +337,8 @@ double const URL_CHECK_TIMEOUT = 2.0;
 
 - (void)_doStartAdvertising
 {
+    if ([self isAdvertising]) return;
+    
     BTLog(1, @"Starting to advertise to other BT devices with identifier %@", self.appState.identifier);
     
     [self.peripheralManager startAdvertising:@{ CBAdvertisementDataServiceUUIDsKey : @[[CBUUID UUIDWithString:BLUETOOTH_SERVICE_UUID]] }];
@@ -371,8 +400,10 @@ double const URL_CHECK_TIMEOUT = 2.0;
     if (peripheral.state == CBPeripheralStateDisconnected || peripheral.state == CBPeripheralStateConnecting) return;
     
     // See if we are subscribed to a characteristic on the peripheral
-    for (CBService *service in peripheral.services) {
-        for (CBCharacteristic *characteristic in service.characteristics) {
+    for (CBService *service in peripheral.services)
+    {
+        for (CBCharacteristic *characteristic in service.characteristics)
+        {
             if (characteristic.isNotifying) [peripheral setNotifyValue:NO forCharacteristic:characteristic];
         }
     }

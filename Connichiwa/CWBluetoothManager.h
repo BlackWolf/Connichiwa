@@ -32,6 +32,9 @@
  */
 @property (readwrite) id<CWBluetoothManagerDelegate> delegate;
 
+/**
+ *  Determines if the device is currently scanning for other BT devices
+ */
 @property (readonly) BOOL isScanning;
 
 /**
@@ -63,6 +66,11 @@
  */
 - (void)stopAdvertising;
 
+/**
+ *  Determines if the device is currently advertising itself to other BT devices
+ *
+ *  @return true if the device is currently advertising over BT, otherwise false
+ */
 - (BOOL)isAdvertising;
 
 /**

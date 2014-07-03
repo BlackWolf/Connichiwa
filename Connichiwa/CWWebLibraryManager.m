@@ -14,13 +14,123 @@
 
 @interface CWWebLibraryManager () <UIWebViewDelegate>
 
+/**
+ *  The state object of this connichiwa application
+ */
 @property (readwrite, weak) id<CWWebApplicationState> appState;
 
+/**
+ *  The current state of the web library manager
+ */
 @property (readwrite) CWWebLibraryManagerState state;
 
+/**
+ *  The context of the currently opened page on the UIWebView or nil if no page is open there
+ */
 @property (readwrite, strong) JSContext *webViewContext;
 
+/**
+ *  Registers callback functions that the remote library can call to execute native methods
+ */
+- (void)_registerJSCallbacks;
+
+/**
+ *  Called by the web library once the websocket to the local webserver was established
+ */
+- (void)_receivedfromView_websocketDidOpen;
+
+/**
+ *  Called by the web library when the websocket to the local webserver was closed (which should never happen)
+ */
+- (void)_receivedfromView_websocketDidClose;
+
+/**
+ *  Called by the web library if it wants to use another device was a remote device and requests to connect to it
+ *
+ *  @param identifier The identifier of the device that shall be connected
+ */
+- (void)_receivedFromView_connectRemote:(NSString *)identifier;
+
+/**
+ *  Called by the web library if it reports that a remote device successfully connected and messages can now be exchanged
+ *
+ *  @param identifier The identifier of the connected remote device
+ */
+- (void)_receivedFromView_remoteDidConnect:(NSString *)identifier;
+
+/**
+ *  Asks the web library to connect its websocket to the local webserver
+ */
+- (void)_sendToView_connectWebsocket;
+
+/**
+ *  Asks the web library to disconnect its websocket from the local webserver
+ */
+- (void)_sendToView_disconnectWebsocket;
+
+/**
+ *  Tells the web library if we are running in debug mode or not
+ */
+- (void)_sendToView_cwdebug;
+
+/**
+ *  Tells the web library the unique connichiwa identifier we are known under
+ */
+- (void)_sendToView_localIdentifier;
+
+/**
+ *  Tells the web library that a new device was detected, also see sendDeviceDetected:
+ *
+ *  @param identifier The identifier of the detected device
+ */
+- (void)_sendToView_deviceDetected:(NSString *)identifier;
+
+/**
+ *  Tells the web library that a device changed its distance, also see sendDevice:changedDistance:
+ *
+ *  @param identifier The identifier of the device
+ *  @param distance   The new distance in meters
+ */
+- (void)_sendToView_device:(NSString *)identifier changedDistance:(double)distance;
+
+/**
+ *  Tells the web library that a device was lost, also see sendDeviceLost:
+ *
+ *  @param identifier The identifier of the lost device
+ */
+- (void)_sendToView_deviceLost:(NSString *)identifier;
+
+/**
+ *  Tells the web library that a connection to a remote device failed, also see sendRemoteConnectFailed:
+ *
+ *  @param identifier The identifier of the device that was not connected
+ */
+- (void)_sendToView_remoteConnectFailed:(NSString *)identifier;
+
+/**
+ *  Tells the web library that a remote device disconnected, also see sendRemoteDisconnected:
+ *
+ *  @param identifier The identifier of the disconnected device
+ */
+- (void)_sendToView_remoteDisconnected:(NSString *)identifier;
+
+/**
+ *  Sends the given dictionary to the web library as a JSON string
+ *
+ *  @param dictionary The dictionary to send. Every entry of the dictionary must be convertable by [CWUtil escapedJSONStringFromDictionary:]
+ */
+- (void)_sendToView_dictionary:(NSDictionary *)dictionary;
+
+/**
+ *  Sends the given string to the web library
+ *
+ *  @param message The message string to send
+ */
+- (void)_sendToView:(NSString *)message;
+
 @end
+
+
 
 @implementation CWWebLibraryManager
 
@@ -106,19 +216,19 @@
     
     __weak typeof(self) weakSelf = self;
     
-    self.webViewContext[@"native_websocketDidOpen"] = ^{
+    self.webViewContext[@"nativeCallWebsocketDidOpen"] = ^{
         [weakSelf _receivedfromView_websocketDidOpen];
     };
     
-    self.webViewContext[@"native_websocketDidClose"] = ^{
+    self.webViewContext[@"nativeCallWebsocketDidClose"] = ^{
         [weakSelf _receivedfromView_websocketDidClose];
     };
     
-    self.webViewContext[@"native_connectRemote"] = ^(NSString *identifier) {
+    self.webViewContext[@"nativeCallConnectRemote"] = ^(NSString *identifier) {
         [weakSelf _receivedFromView_connectRemote:identifier];
     };
     
-    self.webViewContext[@"native_remoteDidConnect"] = ^(NSString *identifier) {
+    self.webViewContext[@"nativeCallRemoteDidConnect"] = ^(NSString *identifier) {
         [weakSelf _receivedFromView_remoteDidConnect:identifier];
     };
 }
@@ -244,6 +354,7 @@
                            };
     [self _sendToView_dictionary:data];
 }
+
 
 - (void)_sendToView_remoteDisconnected:(NSString *)identifier
 {

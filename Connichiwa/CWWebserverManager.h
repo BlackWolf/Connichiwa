@@ -12,11 +12,26 @@
 
 
 
+/**
+ *  Represents the state of the webserver controlled by this manager
+ */
 typedef NS_ENUM(NSInteger, CWWebserverManagerState)
 {
+    /**
+     *  The webserver is stopped
+     */
     CWWebserverManagerStateStopped,
+    /**
+     *  The webserver is starting
+     */
     CWWebserverManagerStateStarting,
+    /**
+     *  The webserver has started and accepts connections
+     */
     CWWebserverManagerStateStarted,
+    /**
+     *  The webserver is currently suspended - it is still running but does not accept connections
+     */
     CWWebserverManagerStateSuspended
 };
 
@@ -24,7 +39,7 @@ typedef NS_ENUM(NSInteger, CWWebserverManagerState)
 
 /**
  *  The CWWebserverManager class represents the local webserver run by Connichiwa in order to run local web applications.
- *  It is responsible for launching and managing the webserver and acts as a bridge between Objective-C and the server, sending and receiving messages from it over the Connichiwa Communication Protocol (Native Layer).
+ *  It is responsible for launching and managing the webserver that offers an HTTP and Websocket server. The manager also receives information about established or closed websocket connections.
  *  Only one instance of the webserver should be running on a device.
  */
 @interface CWWebserverManager : NSObject
@@ -35,6 +50,9 @@ typedef NS_ENUM(NSInteger, CWWebserverManagerState)
  */
 @property (readwrite, strong) id<CWWebserverManagerDelegate> delegate;
 
+/**
+ *  The current state of this manager
+ */
 @property (readonly) CWWebserverManagerState state;
 
 /**
@@ -51,19 +69,22 @@ typedef NS_ENUM(NSInteger, CWWebserverManagerState)
  */
 - (instancetype)initWithDocumentRoot:(NSString *)documentRoot;
 
+/**
+ *  Calling this method actually launches the webserver and initializes the HTTP and Websocket servers. The root of the webserver will be mapped to the given document root, the HTTP server will run on the given port and the websocket server will run on the given port + 1
+ *
+ *  @param documentRoot The document root that contains the files that the webserver is supposed to serve
+ *  @param port         The port the HTTP server will run
+ */
 - (void)startWebserverWithDocumentRoot:(NSString *)documentRoot onPort:(int)port;
 
 /**
- *  Starts the webserver, making it possible for web clients to connect to it
+ *  Puts the webserver in a suspended state where it closes all remote connections and does not accept new ones
  */
-/**
- *  Starts the webserver on the given port, making it possible for web clients to connect to it
- *
- *  @param port The port the webserver should listen on. Note that the websocket server will listen on this + 1
- */
-- (void)startWebserverOnPort:(int)port;
-
 - (void)suspendWebserver;
+
+/**
+ *  Resumes the webserver if it is in suspended state, making it possible to establish remote connections again
+ */
 - (void)resumeWebserver;
 
 @end

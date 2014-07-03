@@ -37,11 +37,18 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
  */
 @property (readwrite) int webserverPort;
 
+/**
+ *  The main instance of CWWebLibraryManager. Runs the actual web application, the web library and forwards and receives messages from the web library
+ */
 @property (readwrite, strong) CWWebLibraryManager *webLibManager;
+
+/**
+ *  The main instance of CWRemoteLibraryManager. Runs the remote library if the device is used as a remote by another Connichiwa device. Also forwards and receives messages from the remote library
+ */
 @property (readwrite, strong) CWRemoteLibraryManager *remoteLibManager;
 
 /**
- *  The main instance of CWWebserverManager. Runs the local webserver and forwards and receives messages from the web library
+ *  The main instance of CWWebserverManager. Runs the local webserver and forwards and receives messages from it
  */
 @property (readwrite, strong) CWWebserverManager *webserverManager;
 
@@ -65,7 +72,22 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
  */
 @property (readwrite, strong) NSMutableArray *remoteDevices;
 
+/**
+ *  Identifier for the cleanup task that is started when this device is sent to the background
+ */
 @property (readwrite) UIBackgroundTaskIdentifier cleanupBackgroundTaskIdentifier;
+
+/**
+ *  Called when the timer that waits for a remote device to connect via websocket expires. If the device did not establish a websocket connection by the time this is called, it usually means something went wrong and we can consider the device connection as a failure.
+ *
+ *  @param deviceIdentifier The identifier of the device where the timer expires
+ */
+- (void)remoteDeviceConnectionTimeout:(NSString *)deviceIdentifier;
+
+/**
+ *  Called when the device was when the device-sent-to-background cleanup task timed out
+ */
+- (void)cleanupBackgroundTaskTimeout;
 
 @end
 
@@ -128,11 +150,6 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
 #pragma mark Timers
 
 
-/**
- *  Called when the timer that waits for a remote device to connect via websocket expires. If the device did not establish a websocket connection by the time this is called, it usually means something went wrong and we can consider the device connection as a failure.
- *
- *  @param deviceIdentifier The identifier of the device where the timer expires
- */
 - (void)remoteDeviceConnectionTimeout:(NSString *)deviceIdentifier
 {
     if ([self.remoteDevices containsObject:deviceIdentifier]) return;
@@ -156,12 +173,22 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
 #pragma mark CWWebApplicationState Protocol
 
 
+/**
+ *  See [CWWebApplicationState isWebserverRunning]
+ *
+ *  @return See [CWWebApplicationState isWebserverRunning]
+ */
 - (BOOL)isWebserverRunning
 {
     return (self.webserverManager.state == CWWebserverManagerStateStarted);
 }
 
 
+/**
+ *  See [CWWebApplicationState isRemote]
+ *
+ *  @return See [CWWebApplicationState isRemote]
+ */
 - (BOOL)isRemote
 {
     return self.remoteLibManager.isActive;
@@ -182,6 +209,9 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
 #pragma mark CWWebLibraryManagerDelegate
 
 
+/**
+ *  See [CWWebLibraryManagerDelegate webLibraryIsReady]
+ */
 - (void)webLibraryIsReady
 {
     //Weblib is ready to receive infos about detected devices, so let's start detecting and being detected
@@ -195,6 +225,11 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
 }
 
 
+/**
+ *  See [CWWebLibraryManagerDelegate didReceiveConnectionRequestForRemote:]
+ *
+ *  @param identifier See [CWWebLibraryManagerDelegate didReceiveConnectionRequestForRemote:]
+ */
 - (void)didReceiveConnectionRequestForRemote:(NSString *)identifier
 {
     if ([self isWebserverRunning] == NO) return; //no remote connections while webserver is down
@@ -211,6 +246,11 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
 }
 
 
+/**
+ *  See [CWWebLibraryManagerDelegate remoteDidConnect:]
+ *
+ *  @param identifier See [CWWebLibraryManagerDelegate remoteDidConnect:]
+ */
 - (void)remoteDidConnect:(NSString *)identifier
 {
     [self.pendingRemoteDevices removeObject:identifier];
@@ -231,6 +271,11 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
 }
 
 
+/**
+ *  See [CWWebserverManagerDelegate remoteDidDisconnect:]
+ *
+ *  @param identifier See [CWWebserverManagerDelegate remoteDidDisconnect:]
+ */
 - (void)remoteDidDisconnect:(NSString *)identifier
 {
     //A remote disconnect can happen before the remote device was initialized, the remote might still be pending
@@ -267,6 +312,11 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
 }
 
 
+/**
+ *  See [CWBluetoothManagerDelegate deviceLost:]
+ *
+ *  @param identifier See [CWBluetoothManagerDelegate deviceLost:]
+ */
 - (void)deviceLost:(NSString *)identifier
 {
     [self.webLibManager sendDeviceLost:identifier];
@@ -350,9 +400,6 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
         [self.remoteLibManager disconnect];
     }
 }
-
-
-// http://stackoverflow.com/questions/21714365/uiwebview-javascript-losing-reference-to-ios-jscontext-namespace-object
 
 
 - (void)applicationWillEnterForeground

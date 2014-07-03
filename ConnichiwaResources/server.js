@@ -1,5 +1,5 @@
 /* global HTTP_PORT, DOCUMENT_ROOT, RESOURCES_PATH, CWDEBUG */
-/* global native_serverDidStart, native_remoteWebsocketDidClose */
+/* global nativeCallServerDidStart, nativeCallRemoteWebsocketDidClose */
 "use strict";
 
 /**
@@ -88,7 +88,7 @@ function cleanupWebsocketConnection(wsConnection)
     wsConnection.onclose = undefined;
     wsConnection.onerror = undefined;
   }
-};
+}
 
 
 
@@ -96,7 +96,7 @@ function cleanupWebsocketConnection(wsConnection)
 
 var onLocalMessage = function(message)
 {
-  log(4, "Message from web library: "+message);
+  log(4, "Message from web library: " + message);
   var object = JSON.parse(message);
   sendToRemote(object.target, message);
 };
@@ -122,7 +122,7 @@ var onRemoteMessage = function(wsConnection)
   return function(message)
   {
     //A message from a remote device is relayed to the weblib
-    log(4, "Received message from remote device: "+message);
+    log(4, "Received message from remote device: " + message);
     sendToLocal(message);
   };
 };
@@ -140,7 +140,7 @@ var onRemoteClose = function(wsConnection)
           log(3, "Remote websocket closed");
           delete wsRemoteConnections[key];
           cleanupWebsocketConnection(wsConnection);
-          native_remoteWebsocketDidClose(key);
+          nativeCallRemoteWebsocketDidClose(key);
           break;
         } 
       }
@@ -161,7 +161,7 @@ var onUnidentifiedRemoteMessage = function(wsConnection)
 {
   return function(message)
   {
-    log(4, "Received message from unidentified websocket: "+message);
+    log(4, "Received message from unidentified websocket: " + message);
     var index = wsUnidentifiedConnections.indexOf(wsConnection);
 
     if (index > -1)
@@ -273,7 +273,7 @@ function sendToLocal(message)
     return;
   }
 
-  log(4, "Sending message to web library: "+message);
+  log(4, "Sending message to web library: " + message);
   wsLocalConnection.send(message);
 }
 
@@ -286,16 +286,16 @@ function sendToRemote(identifier, message)
     {
       if (wsRemoteConnections.hasOwnProperty(key))
       {
-        log(4, "Sending message to remote device "+key+": "+message);
+        log(4, "Sending message to remote device " + key + ": " + message);
         wsRemoteConnections[key].send(message);    
       }
     }    
     return;
   }
   else {
-    log(4, "Trying to send message to remote device "+identifier);
+    log(4, "Trying to send message to remote device " + identifier);
     if (identifier in wsRemoteConnections === false) return;
-    log(4, "Sending message to remote device "+identifier+": "+message);
+    log(4, "Sending message to remote device " + identifier + ": " + message);
     wsRemoteConnections[identifier].send(message);
   }
 }
@@ -340,7 +340,7 @@ function softDisconnectAllRemotes()
     {
       wsRemoteConnections[key].send(shutdownMessage);
       delete wsRemoteConnections[key];
-      native_remoteWebsocketDidClose(key);
+      nativeCallRemoteWebsocketDidClose(key);
     }
   }  
   for (var i = 0; i < wsUnidentifiedConnections.length; i++)
@@ -355,12 +355,12 @@ function checkServerStatus()
 {
   if (httpListening && websocketListening)
   {
-    native_serverDidStart();
+    nativeCallServerDidStart();
   }
 }
 
 
 function log(prio, message)
 {
-  console.log(prio+"|"+message);
+  console.log(prio + "|" + message);
 }

@@ -14,13 +14,78 @@
 
 @interface CWRemoteLibraryManager () <UIWebViewDelegate>
 
+/**
+ *  The application state of this connichiwa application
+ */
 @property (readwrite, weak) id<CWWebApplicationState> appState;
 
+/**
+ *  The current state of this manager
+ */
 @property (readwrite) CWRemoteLibraryManagerState state;
 
+/**
+ *  The JSContext of the web view. nil if the device is not currently connected as a remote device.
+ */
 @property (readwrite, strong) JSContext *webViewContext;
 
+/**
+ *  Registers callback functions that the remote library can call to execute native methods
+ */
+- (void)_registerJSCallbacks;
+
+/**
+ *  Called by the remote library once the websocket to the master device was established
+ */
+- (void)_receivedfromView_websocketDidOpen;
+
+/**
+ *  Called by the remote library when the websocket to the master device was closed (the master disconnected)
+ */
+- (void)_receivedfromView_websocketDidClose;
+
+/**
+ *  Called by the remote library if we should soft-disconnect from the master
+ */
+- (void)_receivedfromView_softDisconnect;
+
+/**
+ *  Asks the remote library to connect its websocket to the master
+ */
+- (void)_sendToView_connectWebsocket;
+
+/**
+ *  Asks the remote library to disconnect its websocket from the master
+ */
+- (void)_sendToView_disconnectWebsocket;
+
+/**
+ *  Tells the remote library if we are running in debug mode or not
+ */
+- (void)_sendToView_cwdebug;
+
+/**
+ *  Tells the remote library the unique connichiwa identifier we are known under
+ */
+- (void)_sendToView_remoteIdentifier;
+
+/**
+ *  Sends the given dictionary to the remote library as a JSON string
+ *
+ *  @param dictionary The dictionary to send. Every entry of the dictionary must be convertable by [CWUtil escapedJSONStringFromDictionary:]
+ */
+- (void)_sendToView_dictionary:(NSDictionary *)dictionary;
+
+/**
+ *  Sends the given string to the remote library
+ *
+ *  @param message The message string to send
+ */
+- (void)_sendToView:(NSString *)message;
+
 @end
+
+
 
 @implementation CWRemoteLibraryManager
 
@@ -90,21 +155,22 @@
 
 #pragma mark WebView Communication
 
+
 - (void)_registerJSCallbacks
 {
     if (self.webViewContext == nil) return;
     
     __weak typeof(self) weakSelf = self;
     
-    self.webViewContext[@"native_websocketDidOpen"] = ^{
+    self.webViewContext[@"nativeCallWebsocketDidOpen"] = ^{
         [weakSelf _receivedfromView_websocketDidOpen];
     };
     
-    self.webViewContext[@"native_websocketDidClose"] = ^{
+    self.webViewContext[@"nativeCallWebsocketDidClose"] = ^{
         [weakSelf _receivedfromView_websocketDidClose];
     };
     
-    self.webViewContext[@"native_softDisconnect"] = ^{
+    self.webViewContext[@"nativeCallSoftDisconnect"] = ^{
         [weakSelf _receivedfromView_softDisconnect];
     };
 }
@@ -214,6 +280,11 @@
 #pragma mark UIWebViewDelegate
 
 
+/**
+ *  Called by the UIWebView once it finished loading a page. This means the page is fully ready, the UIWebView JSContext is ready and we can start using the page.
+ *
+ *  @param webView The UIWebView that triggered this call
+ */
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
     if (self.state == CWRemoteLibraryManagerStateConnecting)

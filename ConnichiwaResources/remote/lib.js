@@ -1,3 +1,4 @@
+/* global nativeCallWebsocketDidOpen, nativeCallSoftDisconnect, nativeCallWebsocketDidClose */
 "use strict";
 
 
@@ -23,7 +24,7 @@ var onWebsocketOpen = function()
 {
   log(3, "Websocket opened");
   connected = true;
-  native_websocketDidOpen();
+  nativeCallWebsocketDidOpen();
 };
 
 
@@ -37,7 +38,7 @@ var onWebsocketMessage = function(e)
   if (object.type === "softdisconnect")
   {
     connected = false;
-    native_softDisconnect();
+    nativeCallSoftDisconnect();
   }
   if (object.type === "show")
   {
@@ -51,24 +52,24 @@ var onWebsocketMessage = function(e)
 };
 
 
+var onWebsocketClose = function()
+{
+  log(3, "Websocket closed");
+  connected = false;
+  cleanupWebsocket();
+  nativeCallWebsocketDidClose();
+};
+
+
 var onWebsocketError = function()
 {
   onWebsocketClose();
 };
 
 
-var onWebsocketClose = function()
-{
-  log(3, "Websocket closed");
-  connected = false;
-  cleanupWebsocket();
-  native_websocketDidClose();
-};
-
-
 function parseNativeMessage(message)
 {
-  log(4, "Parsing native message: "+message);
+  log(4, "Parsing native message: " + message);
   var object = JSON.parse(message);
   switch (object.type)
   {
@@ -116,7 +117,7 @@ function sendMessage(message)
 {
   if (connected === false) return;
 
-  log(4, "Sending message: "+message);
+  log(4, "Sending message: " + message);
 
   websocket.send(JSON.stringify(message));
 }
@@ -129,5 +130,5 @@ function sendMessage(message)
 
 function log(priority, message)
 {
-  if (debug) console.log(priority+"|"+message);
+  if (debug) console.log(priority + "|" + message);
 }

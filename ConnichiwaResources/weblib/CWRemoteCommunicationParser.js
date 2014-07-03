@@ -1,4 +1,5 @@
-/* global CWDebug, CWDeviceManager, CWDeviceState, CWEventManager, Connichiwa */
+/* global CWDebug, CWDeviceManager, CWDeviceConnectionState, CWEventManager, Connichiwa */
+/* global nativeCallRemoteDidConnect */
 "use strict";
 
 
@@ -23,7 +24,7 @@ var CWRemoteCommunicationParser = (function()
    */
   var parse = function(message)
   {
-    CWDebug.log(4, "Parsing remote message: "+message);
+    CWDebug.log(4, "Parsing remote message: " + message);
     var object = JSON.parse(message);
     switch (object.type)
     {
@@ -38,7 +39,7 @@ var CWRemoteCommunicationParser = (function()
     if (device === null) return;
     
     device.connectionState = CWDeviceConnectionState.CONNECTED;
-    native_remoteDidConnect(device.getIdentifier());
+    nativeCallRemoteDidConnect(device.getIdentifier());
     
     //For some reason, it seems that triggering this messages sometimes causes the iOS WebThread to crash
     //I THINK this might be related to us sending a message to the remote device in the web app when this event is triggered

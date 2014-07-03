@@ -22,6 +22,7 @@ var CWDebug = (function()
   /**
    * Logs a message to the console if debug mode is on
    *
+   * @param {int} priority The priority of the message. Messages with lower priority are printed at lower debug states.
    * @param {string} message the message to log
    *
    * @memberof CWDebug
@@ -33,6 +34,6 @@ var CWDebug = (function()
 
   return {
     enableDebug : enableDebug,
-    log : log
+    log         : log
   };
 })();

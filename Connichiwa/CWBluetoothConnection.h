@@ -85,6 +85,9 @@ typedef NS_ENUM(NSInteger, CWBluetoothConnectionState)
  */
 @property (readonly) CBPeripheral *peripheral;
 
+/**
+ *  Saves the date this device was last seen via Bluetooth
+ */
 @property (readonly) NSDate *lastSeen;
 
 /**
@@ -118,6 +121,9 @@ typedef NS_ENUM(NSInteger, CWBluetoothConnectionState)
  */
 - (void)addNewRSSIMeasure:(double)rssi;
 
+/**
+ *  Should be called every time the device is detected via Bluetooth, remembers when the device was last seen
+ */
 - (void)updateLastSeen;
 
 /**

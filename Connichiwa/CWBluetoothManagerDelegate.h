@@ -44,6 +44,11 @@
  */
 - (void)device:(NSString *)identifier changedDistance:(double)distance;
 
+/**
+ *  Called when a previously detected device was lost
+ *
+ *  @param identifier The identifier of the lost device
+ */
 - (void)deviceLost:(NSString *)identifier;
 
 /**

@@ -1,4 +1,6 @@
-/* global LazyLoad, CWDeviceManager, CWNativeCommunicationParser, CWDebug, CWUtil, CWEventManager, CWWebserverCommunicationParser, CWDevice, CWDeviceState, CWRemoteCommunicationParser */
+/* global CWEventManager, CWRemoteCommunicationParser, CWDevice, CWDeviceConnectionState, CWUtil, CWDebug */
+/* global nativeCallWebsocketDidOpen, nativeCallWebsocketDidClose, nativeCallConnectRemote  */
+/* global CONNECTING, OPEN */
 "use strict";
 
 
@@ -53,7 +55,7 @@ var Connichiwa = (function()
   var onWebsocketOpen = function()
   {
     CWDebug.log(3, "Websocket opened");
-    native_websocketDidOpen();
+    nativeCallWebsocketDidOpen();
     _websocketConnectionAttempts = 0;
   };
 
@@ -96,12 +98,12 @@ var Connichiwa = (function()
     if (_websocketConnectionAttempts >= 5)
     {
       //Give up, guess we are fucked
-      native_websocketDidClose();
+      nativeCallWebsocketDidClose();
       return;
     }
 
     //We can't allow this blashphemy! Try to reconnect!
-    setTimeout(function() { _connectWebsocket(); }, _websocketConnectionAttempts*1000);
+    setTimeout(function() { _connectWebsocket(); }, _websocketConnectionAttempts * 1000);
   };
 
 
@@ -119,9 +121,9 @@ var Connichiwa = (function()
 
 
 
-var _send = function(message)
+  var _send = function(message)
   {
-    CWDebug.log(4, "Sending message "+message);
+    CWDebug.log(4, "Sending message " + message);
     _websocket.send(message);
   };
 
@@ -146,7 +148,7 @@ var _send = function(message)
   };
   
   
-  var getIdentifier = function() { return _identifier; }
+  var getIdentifier = function() { return _identifier; };
 
   /**
   * @namespace Connichiwa.Events
@@ -187,7 +189,7 @@ var _send = function(message)
     if (device.canBeConnected() === false) return;
     
     device.connectionState = CWDeviceConnectionState.CONNECTING;
-    native_connectRemote(device.getIdentifier());
+    nativeCallConnectRemote(device.getIdentifier());
   };
   
   var send = function(device, message)
@@ -197,12 +199,12 @@ var _send = function(message)
   };
 
   return {
-    _connectWebsocket    : _connectWebsocket,
-    _send                : _send,
-    _setIdentifier       : _setIdentifier,
-    getIdentifier        : getIdentifier,
-    on                   : on,
-    connect              : connect,
-    send                 : send
+    _connectWebsocket : _connectWebsocket,
+    _send             : _send,
+    _setIdentifier    : _setIdentifier,
+    getIdentifier     : getIdentifier,
+    on                : on,
+    connect           : connect,
+    send              : send
   };
 })();
