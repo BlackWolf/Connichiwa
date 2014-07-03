@@ -48,6 +48,8 @@
         return;
     }
     
+    CWLog(1, @"Connecting web library");
+    
     self.state = CWWebLibraryManagerStateConnecting;
     
     NSURL *localhostURL = [NSURL URLWithString:[NSString stringWithFormat:@"http://127.0.0.1:%d", self.appState.webserverPort]];
@@ -124,6 +126,8 @@
 
 - (void)_receivedfromView_websocketDidOpen
 {
+    CWLog(3, @"Remote weblibrary websocket did open, sending initial data");
+    
     self.state = CWWebLibraryManagerStateConnected;
     
     [self _sendToView_cwdebug];
@@ -138,12 +142,14 @@
 
 - (void)_receivedfromView_websocketDidClose
 {
+    CWLog(3, @"Remote websocket library did close, this shouldn't happen. Never.");
     [NSException raise:@"NOOOO" format:@"This should totally not happen. Damn you, sockets!"];
 }
 
 
 - (void)_receivedFromView_connectRemote:(NSString *)identifier
 {
+    CWLog(4, @"Web library requested a connection to %@", identifier);
     if ([self.delegate respondsToSelector:@selector(didReceiveConnectionRequestForRemote:)])
     {
         [self.delegate didReceiveConnectionRequestForRemote:identifier];
@@ -153,6 +159,7 @@
 
 - (void)_receivedFromView_remoteDidConnect:(NSString *)identifier
 {
+    CWLog(4, @"Web Library reported remote device %@ connected", identifier);
     if ([self.delegate respondsToSelector:@selector(remoteDidConnect:)])
     {
         [self.delegate remoteDidConnect:identifier];
@@ -261,7 +268,7 @@
     
     //stringByEvaluatingJavaScriptFromString: must be called on the main thread, but it seems buggy with dispatch_async, so we use performSelectorOnMainThread:
     //Also see http://stackoverflow.com/questions/11593900/uiwebview-stringbyevaluatingjavascriptfromstring-hangs-on-ios5-0-5-1-when-called
-    DLog(@"Sending %@", message);
+    CWLog(4, @"Sending message to web library: %@", message);
     NSString *js = [NSString stringWithFormat:@"CWNativeCommunicationParser.parse('%@')", message];
     [self.webView performSelectorOnMainThread:@selector(stringByEvaluatingJavaScriptFromString:) withObject:js waitUntilDone:NO];
 }
@@ -274,28 +281,40 @@
 {
     if (self.state == CWWebLibraryManagerStateConnecting)
     {
+        CWLog(3, @"Web library webview did load, setting things up and connecting websocket");
+        
         self.webViewContext = [self.webView valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
         
         //Register JS error handler
         self.webViewContext.exceptionHandler = ^(JSContext *c, JSValue *e) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                DLog(@"%@ stack: %@", e, [e valueForProperty:@"stack"]);
+                _CWLog(1, @"WEBLIB", @"?????", -1, @"JAVASCRIPT ERROR: %@. Stack: %@", e, [e valueForProperty:@"stack"]);
             });
         };
         
-        //Register JS logger handler
-        id logger = ^(JSValue *thing) {
-            [JSContext.currentArguments enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                DLog(@"%@", [obj toString]);
-            }];
+        id logger = ^(NSString *logMessage)
+        {
+            NSArray *components = [logMessage componentsSeparatedByString:@"|"]; //array should contain: prio, message
+            if ([components count] != 2)
+            {
+                _CWLog(1, @"WEBLIB", @"?????", -1, logMessage);
+            }
+            else
+            {
+                _CWLog([[components objectAtIndex:0] intValue], @"WEBLIB", @"?????", -1, [components objectAtIndex:1]);
+            }
         };
-        self.webViewContext[@"console"] = @{@"log": logger, @"error": logger};
+        self.webViewContext[@"console"][@"log"] = logger;
+        self.webViewContext[@"console"][@"error"] = logger;
+        //TODO we should add the other console types (warn, ...) and maybe format them specially
         
         [self _registerJSCallbacks];
         [self _sendToView_connectWebsocket];
     }
     else if (self.state == CWWebLibraryManagerStateDisconnecting)
     {
+        CWLog(3, @"Web library webview did blank, we are fully disconnected... why would we want that?");
+        
         //Loaded the empty page in the process of disconnecting, clear the context
         self.webViewContext = nil;
         self.state = CWWebLibraryManagerStateDisconnected;

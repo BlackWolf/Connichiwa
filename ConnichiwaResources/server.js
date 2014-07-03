@@ -8,7 +8,6 @@
  *     HTTP_PORT -- the port the HTTP server is supposed to run on
  *     DOCUMENT_ROOT -- the root of the web application, defined by the iOS application.
  *     RESOURCES_PATH -- Full path to the root of ConnichiwaResources.bundle.
- *     CWDEBUG -- true if the app runs in debug config, false for release
  *
 **/
 
@@ -33,7 +32,7 @@ var http;
 var httpListening;
 
 //Activate logging
-if (CWDEBUG === true) app.use(new Morgan( { immediate: true, format: "WEBSERVER :date :remote-addr -- REQUEST :url (:response-time ms)" } ));
+app.use(new Morgan( { immediate: true, format: "2|Request from :remote-addr: :url (:response-time ms)" } ));
 
 //Deliver a minimal page for '/check', which can be used to check if the webserver responds
 app.use("/check", function(req, res, next) {
@@ -44,7 +43,7 @@ app.use("/check", function(req, res, next) {
 app.use(function(req, res, next) {
   var validExtensionRegexp = /\.(html|htm|js|jpg|jpeg|png|gif|ico|pdf)\??.*$/;
   if (validExtensionRegexp.test(Path.extname(req.url)) === false && req.url !== "/") {
-    console.log(req.url + " rejected because of file extension");
+    log(1, req.url + " rejected because of file extension");
     res.status(404).send("File not found");
     return;
   }
@@ -97,11 +96,13 @@ function cleanupWebsocketConnection(wsConnection)
 
 var onLocalMessage = function(message)
 {
-  sendToRemote(object.target, message);
+  log(4, "Message from web library: "+message);
+  sendToRemote(message.target, message);
 };
 
 var onLocalClose = function(code, message)
 {
+  log(3, "Web library websocket closed");
   cleanupWebsocketConnection(wsLocalConnection);
   wsLocalConnection = undefined;
 };
@@ -120,7 +121,7 @@ var onRemoteMessage = function(wsConnection)
   return function(message)
   {
     //A message from a remote device is relayed to the weblib
-    //log("WEBSOCKET", "Forwarding remote message: " + message);
+    log(4, "Received message from remote device: "+message);
     sendToLocal(message);
   };
 };
@@ -135,6 +136,7 @@ var onRemoteClose = function(wsConnection)
       {
         if (wsRemoteConnections[key] === wsConnection)
         {
+          log(3, "Remote websocket closed");
           delete wsRemoteConnections[key];
           cleanupWebsocketConnection(wsConnection);
           native_remoteWebsocketDidClose(key);
@@ -158,6 +160,7 @@ var onUnidentifiedRemoteMessage = function(wsConnection)
 {
   return function(message)
   {
+    log(4, "Received message from unidentified websocket: "+message);
     var index = wsUnidentifiedConnections.indexOf(wsConnection);
 
     if (index > -1)
@@ -166,6 +169,7 @@ var onUnidentifiedRemoteMessage = function(wsConnection)
 
       if (object.type === "localidentifier")
       {
+        log(4, "Websocket was determined to be local");
         wsLocalConnection = wsConnection;
         wsUnidentifiedConnections.splice(index, 1);
         wsConnection.on("message", onLocalMessage);
@@ -175,6 +179,7 @@ var onUnidentifiedRemoteMessage = function(wsConnection)
 
       if (object.type === "remoteidentifier")
       {
+        log(4, "Websocket was determined to be remote");
         wsRemoteConnections[object.identifier] = wsConnection;
         wsUnidentifiedConnections.splice(index, 1);
         wsConnection.on("message", onRemoteMessage(wsConnection));
@@ -197,6 +202,7 @@ var onUnidentifiedRemoteClose = function(wsConnection)
       {
         //We don't sent native_remoteWebsocketDidClose() here because 
         //an unidentified connection is not considered established
+        log(3, "Unidentified websocket closed");
         wsUnidentifiedConnections.splice(wsUnidentifiedConnections.indexOf(wsConnection), 1);
         cleanupWebsocketConnection(wsConnection);
         break;
@@ -220,12 +226,14 @@ var onUnidentifiedRemoteError = function(wsConnection)
 
 var onWebsocketListening = function()
 {
+  log(3, "Websocket server is now listening");
   websocketListening = true;
   checkServerStatus();
 };
 
 
 var onWebsocketConnection = function(wsConnection) {
+  log(3, "Unidentified websocket connection established");
   wsUnidentifiedConnections.push(wsConnection);
   wsConnection.on("message", onUnidentifiedRemoteMessage(wsConnection));
   wsConnection.on("close", onUnidentifiedRemoteClose(wsConnection));
@@ -239,10 +247,11 @@ var onWebsocketConnection = function(wsConnection) {
 function sendToLocal(message)
 {
   if (wsLocalConnection === undefined) {
-    log("Message lost because no local websocket connection exists: " + message);
+    log(4, "MESSAGE LOST. No local websocket connection exists: " + message);
     return;
   }
 
+  log(4, "Sending message to web library: "+message);
   wsLocalConnection.send(message);
 }
 
@@ -255,6 +264,7 @@ function sendToRemote(identifier, message)
     {
       if (wsRemoteConnections.hasOwnProperty(key))
       {
+        log(4, "Sending message to remote device "+key+": "+message);
         wsRemoteConnections[key].send(message);    
       }
     }    
@@ -262,6 +272,7 @@ function sendToRemote(identifier, message)
   }
   else {
     if (identifier in wsRemoteConnections === false) return;
+    log(4, "Sending message to remote device "+identifier+": "+message);
     wsRemoteConnections[identifier].send(message);
   }
 }
@@ -282,6 +293,8 @@ function startListening()
 {
   if (http !== undefined && websocket !== undefined) return;
 
+  log(3, "Starting HTTP and Websocket server");
+
   httpListening = false;
   websocketListening = false;
   wsLocalConnection = undefined;
@@ -296,6 +309,7 @@ function startListening()
 
 function softDisconnectAllRemotes()
 {
+  log(3, "Soft-Disconnecting all remotes");
   var shutdownMessage = JSON.stringify({ type: "softdisconnect" });
   for (var key in wsRemoteConnections)
   {
@@ -323,40 +337,7 @@ function checkServerStatus()
 }
 
 
-
-//////////
-// MISC //
-//////////
-
-function log(type, message)
+function log(prio, message)
 {
-  if (CWDEBUG !== true) return;
-
-  while (type.length < 9)
-  {
-    type += " ";
-  }
-
-  console.log(type + " " + getDateString() + " -- " + message);
-}
-
-
-function getDateString(date)
-{
-  if (date === undefined) date = new Date();
-
-  var hours = String(date.getHours());
-  hours = (hours.length === 1) ? "0" + hours : hours;
-
-  var minutes = String(date.getMinutes());
-  minutes = (minutes.length === 1) ? "0" + minutes : minutes;
-
-  var seconds = String(date.getSeconds());
-  seconds = (seconds.length === 1) ? "0" + seconds : seconds;
-
-  var milliseconds = String(date.getMilliseconds());
-  milliseconds = (milliseconds.length === 1) ? "00" + milliseconds : milliseconds;
-  milliseconds = (milliseconds.length === 2) ? "0" + milliseconds : milliseconds;
-
-  return hours + ":" + minutes + ":" + seconds + "." + milliseconds;
+  console.log(prio+"|"+message);
 }

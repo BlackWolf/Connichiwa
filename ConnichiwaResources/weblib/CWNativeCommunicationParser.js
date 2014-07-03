@@ -37,6 +37,7 @@ var CWNativeCommunicationParser = (function()
    */
   var parse = function(message)
   {
+    CWDebug.log(4, "Parsing native message: "+message);
     var object = JSON.parse(message);
     switch (object.type)
     {
@@ -91,6 +92,7 @@ var CWNativeCommunicationParser = (function()
       device.discoveryState = CWDeviceDiscoveryState.DETECTED;
     }
 
+    CWDebug.log(2, "Detected device: "+device.getIdentifier());
     CWEventManager.trigger("deviceDetected", device);
   };
   
@@ -101,6 +103,7 @@ var CWNativeCommunicationParser = (function()
     if (device === null) return;
     
     device.distance = message.distance;
+    CWDebug.log(5, "Updated distance of device "+device.getIdentifier()+" to "+device.distance);
     CWEventManager.trigger("deviceDistanceChanged", device);
   };
   
@@ -109,6 +112,8 @@ var CWNativeCommunicationParser = (function()
   {
     var device = CWDeviceManager.getDeviceWithIdentifier(message.identifier);
     device.discoveryState = CWDeviceDiscoveryState.LOST;
+
+    CWDebug.log(2, "Lost device: "+device.getIdentifier());
     CWEventManager.trigger("deviceLost", device);
   };
   
@@ -117,6 +122,8 @@ var CWNativeCommunicationParser = (function()
   {
     var device = CWDeviceManager.getDeviceWithIdentifier(message.identifier);
     device.connectionState = CWDeviceConnectionState.DISCONNECTED;
+
+    CWDebug.log(2, "Connection to remote device failed: "+device.getIdentifier());
     CWEventManager.trigger("connectFailed", device);
   };
   
@@ -127,6 +134,8 @@ var CWNativeCommunicationParser = (function()
     if (device === null) return;
       
     device.connectionState = CWDeviceConnectionState.DISCONNECTED;
+
+    CWDebug.log(2, "Device disconnected: "+device.getIdentifier());
     CWEventManager.trigger("deviceDisconnected", device);
   };
   

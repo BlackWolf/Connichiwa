@@ -45,6 +45,8 @@
 
 - (void)startWebserverWithDocumentRoot:(NSString *)documentRoot onPort:(int)port
 {
+    CWLog(1, @"Webserver is starting with document root %@ on port %d", documentRoot, port);
+    
     self.state = CWWebserverManagerStateStarting;
     
     self.documentRoot = documentRoot;
@@ -54,17 +56,25 @@
     //Register JS error handler
     self.nodelikeContext.exceptionHandler = ^(JSContext *c, JSValue *e) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            DLog(@"%@ stack: %@", e, [e valueForProperty:@"stack"]);
+            _CWLog(1, @"WEBSERVER", @"?????", -1, @"JAVASCRIPT ERROR: %@. Stack: %@", e, [e valueForProperty:@"stack"]);
         });
     };
     
-    //Register JS logger handler
-    id logger = ^(JSValue *thing) {
-        [JSContext.currentArguments enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            DLog(@"%@", [obj toString]);
-        }];
+    id logger = ^(NSString *logMessage)
+    {
+        NSArray *components = [logMessage componentsSeparatedByString:@"|"]; //array should contain: prio, message
+        if ([components count] != 2)
+        {
+            _CWLog(1, @"WEBSERVER", @"?????", -1, logMessage);
+        }
+        else
+        {
+            _CWLog([[components objectAtIndex:0] intValue], @"WEBSERVER", @"?????", -1, [components objectAtIndex:1]);
+        }
     };
-    self.nodelikeContext[@"console"] = @{@"log": logger, @"error": logger};
+    self.nodelikeContext[@"console"][@"log"] = logger;
+    self.nodelikeContext[@"console"][@"error"] = logger;
+    //TODO we should add the other console types (warn, ...) and maybe format them specially
     
     [self _registerJSCallbacks];
     
@@ -72,10 +82,6 @@
     self.nodelikeContext[@"HTTP_PORT"] = [NSString stringWithFormat:@"%d", port];
     self.nodelikeContext[@"DOCUMENT_ROOT"] = self.documentRoot;
     self.nodelikeContext[@"RESOURCES_PATH"] = [[CWBundle bundle] bundlePath];
-    self.nodelikeContext[@"CWDEBUG"] = [JSValue valueWithBool:NO inContext:self.nodelikeContext];;
-    [CWDebug executeInDebug:^{
-        self.nodelikeContext[@"CWDEBUG"] = [JSValue valueWithBool:YES inContext:self.nodelikeContext];
-    }];
     
     //Start the actual webserver by executing our Node.JS server script
     NSString *serverScriptPath = [[CWBundle bundle] pathForResource:@"server" ofType:@"js"];
@@ -97,6 +103,8 @@
 {
     if (self.state != CWWebserverManagerStateStarted) return;
     
+    CWLog(1, @"Webserver is suspended, all remotes are soft-disconnected");
+    
     self.state = CWWebserverManagerStateSuspended;
     [self.nodelikeContext evaluateScript:@"softDisconnectAllRemotes();"];
 }
@@ -104,6 +112,8 @@
 
 - (void)resumeWebserver
 {
+    CWLog(1, @"Webserver is resumed");
+    
     // When we suspended, we soft disconnected all remotes
     // On resume, we don't need to do anything - we just make it possible for remotes to connect again
     // Furthermore, the local web library connection will automatically reconnect without us doing anything
@@ -132,6 +142,8 @@
 
 - (void)_receivedFromServer_serverDidStart
 {
+    CWLog(1, @"Webserver did start");
+    
     self.state = CWWebserverManagerStateStarted;
     
     if ([self.delegate respondsToSelector:@selector(didStartWebserver)])
@@ -143,6 +155,8 @@
 
 - (void)_receivedFromServer_remoteWebsocketDidClose:(NSString *)identifier
 {
+    CWLog(3, @"Webserver reports a remote websocket did close");
+    
     if ([self.delegate respondsToSelector:@selector(remoteDidDisconnect:)])
     {
         [self.delegate remoteDidDisconnect:identifier];

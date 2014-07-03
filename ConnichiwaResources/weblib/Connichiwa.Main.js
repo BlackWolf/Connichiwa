@@ -33,7 +33,8 @@ var Connichiwa = (function()
 
     _cleanupWebsocket();
 
-    console.log("Trying to establish websocket connection");
+    CWDebug.log(3, "Connecting websocket");
+
     _websocket = new WebSocket("ws://127.0.0.1:8001");
     _websocket.onopen = onWebsocketOpen;
     _websocket.onmessage = onWebsocketMessage;
@@ -51,9 +52,9 @@ var Connichiwa = (function()
    */
   var onWebsocketOpen = function()
   {
+    CWDebug.log(3, "Websocket opened");
     native_websocketDidOpen();
     _websocketConnectionAttempts = 0;
-    CWDebug.log("Websocket opened");
   };
 
 
@@ -65,7 +66,7 @@ var Connichiwa = (function()
   var onWebsocketMessage = function(e)
   {
     var message = e.data;
-    CWDebug.log("message: " + message);
+    CWDebug.log(4, "Received message: " + message);
     
     CWRemoteCommunicationParser.parse(message);
   };
@@ -78,7 +79,6 @@ var Connichiwa = (function()
    */
   var onWebsocketError = function()
   {
-    CWDebug.log("Websocket error");
     onWebsocketClose();
   };
 
@@ -90,7 +90,7 @@ var Connichiwa = (function()
    */
   var onWebsocketClose = function()
   {
-    CWDebug.log("Websocket closed");
+    CWDebug.log(3, "Websocket closed");
     _cleanupWebsocket();
 
     if (_websocketConnectionAttempts >= 5)
@@ -121,6 +121,7 @@ var Connichiwa = (function()
 
 var _send = function(message)
   {
+    CWDebug.log(4, "Sending message "+message);
     _websocket.send(message);
   };
 
@@ -139,7 +140,7 @@ var _send = function(message)
     if (_identifier !== undefined) return false;
       
     _identifier = value;
-    CWDebug.log("Local identifier set to " + _identifier);
+    CWDebug.log(2, "Local identifier set to " + _identifier);
     
     return true;
   };
@@ -192,8 +193,7 @@ var _send = function(message)
   var send = function(device, message)
   {
     message.target = device.getIdentifier();
-    CWDebug.log("CONNICHIWA.SEND "+JSON.stringify(message));
-    _websocket.send(JSON.stringify(message));
+    Connichiwa._send(JSON.stringify(message));
   };
 
   return {

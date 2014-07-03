@@ -2,7 +2,7 @@
 
 
 
-var CWDEBUG = false;
+var debug = false;
 
 
 
@@ -21,6 +21,7 @@ var connected = false;
 
 var onWebsocketOpen = function()
 {
+  log(3, "Websocket opened");
   connected = true;
   native_websocketDidOpen();
 };
@@ -29,7 +30,7 @@ var onWebsocketOpen = function()
 var onWebsocketMessage = function(e)
 {
   var message = e.data;
-  log("message: " + message);
+  log(4, "Received message: " + message);
   
   var object = JSON.parse(message);
   
@@ -58,6 +59,7 @@ var onWebsocketError = function()
 
 var onWebsocketClose = function()
 {
+  log(3, "Websocket closed");
   connected = false;
   cleanupWebsocket();
   native_websocketDidClose();
@@ -66,6 +68,7 @@ var onWebsocketClose = function()
 
 function parseNativeMessage(message)
 {
+  log(4, "Parsing native message: "+message);
   var object = JSON.parse(message);
   switch (object.type)
   {
@@ -83,7 +86,7 @@ function parseNativeMessage(message)
       websocket.onerror = onWebsocketError;
       break;
     case "cwdebug":
-      if (object.cwdebug) CWDEBUG = true;
+      if (object.cwdebug) debug = true;
       break;
     case "remoteidentifier":
       var data = { type: "remoteidentifier", identifier: object.identifier };
@@ -113,6 +116,8 @@ function sendMessage(message)
 {
   if (connected === false) return;
 
+  log(4, "Sending message: "+message);
+
   websocket.send(JSON.stringify(message));
 }
 
@@ -122,27 +127,7 @@ function sendMessage(message)
 //////////
 
 
-function log(message)
+function log(priority, message)
 {
-  if (CWDEBUG) console.log(getDateString() + " -- " + message);
-}
-
-function getDateString(date)
-{
-  if (date === undefined) date = new Date();
-
-  var hours = String(date.getHours());
-  hours = (hours.length === 1) ? "0" + hours : hours;
-
-  var minutes = String(date.getMinutes());
-  minutes = (minutes.length === 1) ? "0" + minutes : minutes;
-
-  var seconds = String(date.getSeconds());
-  seconds = (seconds.length === 1) ? "0" + seconds : seconds;
-
-  var milliseconds = String(date.getMilliseconds());
-  milliseconds = (milliseconds.length === 1) ? "00" + milliseconds : milliseconds;
-  milliseconds = (milliseconds.length === 2) ? "0" + milliseconds : milliseconds;
-
-  return hours + ":" + minutes + ":" + seconds + "." + milliseconds;
+  if (debug) console.log(priority+"|"+message);
 }

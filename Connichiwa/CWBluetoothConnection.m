@@ -86,12 +86,12 @@ double const RSSI_MOVING_AVERAGE_ALPHA = 0.03125;
     //We sometimes get this value - it's nothing bad as long as it doesn't occur too often, just ignore it
     if (rssi == 127) return;
     
+    BTLog(5, @"Adding RSSI %.0f to device %@", rssi, self.identifier);
+    
     //We use an exponential weighted moving average to compensate for outlier of the RSSI but still react quickly to heavy distance changes
     //Formula: (1-α)*oldAverage + α*newSample ; with α being the weighting factor of new samples (bigger α means new values are adapted more quickly, but the average is more vulnerable to outlier)
     if (self.averageRSSI == 0) self.averageRSSI = rssi;
     else self.averageRSSI = (1.0-RSSI_MOVING_AVERAGE_ALPHA) * self.averageRSSI + RSSI_MOVING_AVERAGE_ALPHA * rssi;
-    
-//    DLog(@"Added RSSI %.0f to average %.0f, equals new average %.0f (%.3f m)", rssi, oldRSSI, self.averageRSSI, self.averageDistance);
     
 }
 

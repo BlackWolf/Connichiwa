@@ -47,7 +47,7 @@
         return;
     }
     
-    DLog(@"!! SWITCHING INTO REMOTE STATE");
+    CWLog(1, @"Connecting as a remote to %@, device is now a remote!", URL);
     
     self.state = CWRemoteLibraryManagerStateConnecting;
     
@@ -74,7 +74,7 @@
         return;
     }
     
-    DLog(@"!! BACKING OUT OF REMOTE STATE");
+    CWLog(1, @"Device is disconnecting from master device, stop being a remote!");
     
     self.state = CWRemoteLibraryManagerStateDisconnecting;
     
@@ -112,6 +112,8 @@
 
 - (void)_receivedfromView_websocketDidOpen
 {
+    CWLog(3, @"Remote websocket did open, sending initial data");
+    
     self.state = CWRemoteLibraryManagerStateConnected;
     
     [self _sendToView_cwdebug];
@@ -125,7 +127,7 @@
 
 - (void)_receivedfromView_websocketDidClose
 {
-    DLog(@"Remote websocket did close");
+    CWLog(3, @"Remote websocket did close, stop being a remote");
     
     self.state = CWRemoteLibraryManagerStateDisconnecting;
     
@@ -138,7 +140,7 @@
 
 - (void)_receivedfromView_softDisconnect
 {
-    DLog(@"Soft-disconnecting remote");
+    CWLog(1, @"Soft-Disconnecting from master");
     
     //"Soft Disconnecting" means that we put this device out of remote state but don't actually close the websocket connection
     //Technically, this means the server can still send us messages but we just don't care about it
@@ -203,7 +205,7 @@
     
     //stringByEvaluatingJavaScriptFromString: must be called on the main thread, but it seems buggy with dispatch_async, so we use performSelectorOnMainThread:
     //Also see http://stackoverflow.com/questions/11593900/uiwebview-stringbyevaluatingjavascriptfromstring-hangs-on-ios5-0-5-1-when-called
-    //    DLog(@"Sending %@", message);
+    CWLog(4, @"Sending message to remote library: %@", message);
     NSString *js = [NSString stringWithFormat:@"parseNativeMessage('%@')", message];
     [self.webView performSelectorOnMainThread:@selector(stringByEvaluatingJavaScriptFromString:) withObject:js waitUntilDone:NO];
 }
@@ -216,29 +218,40 @@
 {
     if (self.state == CWRemoteLibraryManagerStateConnecting)
     {
+        CWLog(3, @"Remote webview did load, setting things up and connecting websocket");
+        
         //Loaded a remote server URL, set up its context
         self.webViewContext = [self.webView valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
 
         //Register JS error handler
         self.webViewContext.exceptionHandler = ^(JSContext *c, JSValue *e) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                DLog(@"%@ stack: %@", e, [e valueForProperty:@"stack"]);
+                _CWLog(1, @"REMOTELIB", @"?????", -1, @"JAVASCRIPT ERROR: %@. Stack: %@", e, [e valueForProperty:@"stack"]);
             });
         };
         
-        //Register JS logger handler
-        id logger = ^(JSValue *thing) {
-            [JSContext.currentArguments enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                DLog(@"%@", [obj toString]);
-            }];
+        id logger = ^(NSString *logMessage)
+        {
+            NSArray *components = [logMessage componentsSeparatedByString:@"|"]; //array should contain: prio, message
+            if ([components count] != 2)
+            {
+                _CWLog(1, @"REMOTELIB", @"?????", -1, logMessage);
+            }
+            else
+            {
+                _CWLog([[components objectAtIndex:0] intValue], @"REMOTELIB", @"?????", -1, [components objectAtIndex:1]);
+            }
         };
-        self.webViewContext[@"console"] = @{@"log": logger, @"error": logger};
+        self.webViewContext[@"console"][@"log"] = logger;
+        self.webViewContext[@"console"][@"error"] = logger;
         
         [self _registerJSCallbacks];
         [self _sendToView_connectWebsocket];
     }
     else if (self.state == CWRemoteLibraryManagerStateDisconnecting)
     {
+        CWLog(3, @"Remote webview did blank, we are fully disconnected");
+        
         //Loaded the empty page in the process of disconnecting, clear the context
         self.webViewContext = nil;
         self.state = CWRemoteLibraryManagerStateDisconnected;

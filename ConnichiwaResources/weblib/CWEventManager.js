@@ -30,7 +30,7 @@ var CWEventManager = (function()
 
     if (!_events[event]) _events[event] = [];
     _events[event].push(callback);
-    CWDebug.log("Attached callback to " + event);
+    CWDebug.log(3, "Attached callback to " + event);
   };
 
   /**
@@ -48,7 +48,7 @@ var CWEventManager = (function()
     var args = Array.prototype.slice.call(arguments);
     args.shift();
 
-    CWDebug.log("Triggering event "+event);
+    CWDebug.log(3, "Triggering event "+event);
     for (var i = 0; i < _events[event].length; i++)
     {
       var callback = _events[event][i];

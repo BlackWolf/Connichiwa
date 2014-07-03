@@ -81,6 +81,8 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
  */
 - (instancetype)init
 {
+    CWLog(1, @"Initializing CWWebApplication");
+    
     self = [super init];
     
     self.identifier = [[NSUUID UUID] UUIDString];
@@ -135,6 +137,8 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
 {
     if ([self.remoteDevices containsObject:deviceIdentifier]) return;
     
+    CWLog(2, @"Remote device %@ did not connect in time", deviceIdentifier);
+    
     [self.pendingRemoteDevices removeObject:deviceIdentifier];
     [self.webLibManager sendRemoteConnectFailed:deviceIdentifier];
 }
@@ -142,7 +146,7 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
 
 - (void)cleanupBackgroundTaskTimeout
 {
-    DLog(@"STOPPING CLEANUP TASK");
+    CWLog(3, @"Background Cleanup timed out");
     
     //By now everything should have been cleaned up nicely, we can end the background task so iOS doesn't kill us :-)
     [[UIApplication sharedApplication] endBackgroundTask:self.cleanupBackgroundTaskIdentifier];
@@ -196,8 +200,6 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
     if ([self isWebserverRunning] == NO) return; //no remote connections while webserver is down
     if ([self.pendingRemoteDevices containsObject:identifier]) return;
     
-    DLog(@" !! TRYING TO GET DEVICE AS REMOTE");
-    
     if ([self isRemote] == YES || [self.remoteDevices containsObject:identifier])
     {
         [self.webLibManager sendRemoteConnectFailed:identifier];
@@ -211,8 +213,6 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
 
 - (void)remoteDidConnect:(NSString *)identifier
 {
-    DLog(@" !! REMOTE DID CONNECT");
-    
     [self.pendingRemoteDevices removeObject:identifier];
     [self.remoteDevices addObject:identifier];
 }
@@ -233,8 +233,6 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
 
 - (void)remoteDidDisconnect:(NSString *)identifier
 {
-    DLog(@" !! REMOTE DID DISCONNECT");
-    
     //A remote disconnect can happen before the remote device was initialized, the remote might still be pending
     [self.pendingRemoteDevices removeObject:identifier];
     [self.remoteDevices removeObject:identifier];
@@ -271,7 +269,6 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
 
 - (void)deviceLost:(NSString *)identifier
 {
-    DLog(@" !! DEVICE WAS LOST");
     [self.webLibManager sendDeviceLost:identifier];
 }
 
@@ -298,12 +295,11 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
  */
 - (void)didSendNetworkAddresses:(NSString *)deviceIdentifier success:(BOOL)success
 {
-    DLog(@" !! DID SEND NETWORK INTERFACE ADDRESSES");
-    
     //If we successfully transferred our IPs wait for the remote library to connect to us
     //Once the remote device establishes a websocket connection CWWebserverManager will report the new connection
     if (success && [self.remoteDevices containsObject:deviceIdentifier] == NO)
     {
+        CWLog(2, @"IPs were sent to %@, waiting for a websocket connection...", deviceIdentifier);
         [self performSelector:@selector(remoteDeviceConnectionTimeout:) withObject:deviceIdentifier afterDelay:REMOTE_WEBSOCKET_CONNECT_TIMEOUT];
     }
     else
@@ -335,14 +331,13 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
     //Be aware that the block passed to beginBackgroundTaskWithExpirationHandler: is called when the background task is ended forcefully by iOS and is not the code that is executed in the background. Calling beginBackgroundTaskWithExpirationHandler: simply tells iOS that we want to continue executing our code
     
     self.cleanupBackgroundTaskIdentifier = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
-        DLog(@"CLEANUP EXPIRED");
+        CWLog(3, @"Background Task Expired");
         [[UIApplication sharedApplication] endBackgroundTask:self.cleanupBackgroundTaskIdentifier];
         self.cleanupBackgroundTaskIdentifier = UIBackgroundTaskInvalid;
     }];
     [self performSelector:@selector(cleanupBackgroundTaskTimeout) withObject:nil afterDelay:CLEANUP_TASK_TIMEOUT];
     
-    DLog(@"App entering background, pausing webserver...");
-//    [self.webserverManager pauseWebserver];
+    CWLog(1, @"App entering background, pausing BT and webserver...");
     [self.bluetoothManager stopAdvertising];
     [self.bluetoothManager stopScanning];
     [self.webserverManager suspendWebserver];
@@ -351,8 +346,7 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
     //The websocket connection is resumed in willEnterForeground
     if ([self isRemote])
     {
-        DLog(@"App entering background while being  a remote device... closing websocket connection");
-        
+        CWLog(1, @"App entering background while being a remote, closing remote connection");
         [self.remoteLibManager disconnect];
     }
 }
@@ -365,7 +359,7 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
 {
     //Called whenever an application goes to the foreground, so when it is re-launched after going to the background
     
-    DLog(@"App entering foreground, resuming webserver...");
+    CWLog(1, @"App entering foreground, resuming webserver...");
     [self.webserverManager resumeWebserver];
     [self.bluetoothManager startAdvertising];
     dispatch_async(dispatch_get_main_queue(), ^{

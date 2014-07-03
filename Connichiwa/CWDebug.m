@@ -8,6 +8,8 @@
 
 #import "CWDebug.h"
 
+int const MAX_PRIORITY = 5;
+
 
 
 @implementation CWDebug
@@ -46,8 +48,47 @@ void cwLog(NSString *format, ...) {
     NSString *dateString = [dateFormatter stringFromDate:now];
     
     NSString *finalString = [NSString stringWithFormat:@"NATIVE    %@ %@ \n", dateString, formattedString];
-//    NSString *finalString = [NSString stringWithFormat:@"%@ \n", formattedString];
     [[NSFileHandle fileHandleWithStandardOutput] writeData:[finalString dataUsingEncoding:NSUTF8StringEncoding]];
 }
+
+
+static long longestSourceLength = 10;
+
+void cwLogNew(int priority, NSString *source, NSString *file, int line, NSString *format, ...)
+{
+    NSArray *activeDebugSources = @[ @"NATIVE", @"BLUETOOTH", @"WEBSERVER", @"WEBLIB", @"REMOTELIB" ]; //TODO is defined every time, lame, but static NSArray is not possible
+ 
+    source = [source uppercaseString];
+    if (priority <= MAX_PRIORITY && (activeDebugSources == nil || [activeDebugSources containsObject:source]))
+    {
+        static dispatch_once_t token;
+        static NSDateFormatter *dateFormatter;
+        dispatch_once(&token, ^{
+            dateFormatter = [[NSDateFormatter alloc] init];
+            [dateFormatter setDateFormat:@"HH:mm:ss.SSS"];
+        });
+        
+        va_list args;
+        va_start(args, format);
+        NSString *formattedString = [[NSString alloc] initWithFormat:format arguments:args];
+        va_end(args);
+        
+        NSDate *now = [NSDate date];
+        NSString *dateString = [dateFormatter stringFromDate:now];
+        
+        if ([source length] > longestSourceLength) longestSourceLength = [source length];
+        long neededSpaces = longestSourceLength - [source length];
+        if (neededSpaces > 0)
+        {
+            NSString *spaces = [[NSString string] stringByPaddingToLength:neededSpaces withString:@" " startingAtIndex:0];
+            source = [source stringByAppendingString:spaces];
+        }
+        
+//        NSString *finalString = [NSString stringWithFormat:@"%@ %@ %@:%d -- %@\n", source, dateString, file, line, formattedString];
+        NSString *finalString = [NSString stringWithFormat:@"%@ %@ -- %@\n", source, dateString, formattedString];
+        [[NSFileHandle fileHandleWithStandardOutput] writeData:[finalString dataUsingEncoding:NSUTF8StringEncoding]];
+    }
+}
+
 
 @end

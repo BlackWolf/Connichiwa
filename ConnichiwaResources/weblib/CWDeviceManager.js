@@ -29,6 +29,7 @@ var CWDeviceManager = (function()
     if (CWDevice.prototype.isPrototypeOf(newDevice) === false) throw "Cannot add a non-device";
     if (getDeviceWithIdentifier(newDevice.getIdentifier()) !== null) return false;
 
+    CWDebug.log(3, "Added device: "+newDevice.getIdentifier());
     _remoteDevices.push(newDevice);
     return true;
   };
@@ -49,9 +50,9 @@ var CWDeviceManager = (function()
     var device = getDeviceWithIdentifier(identifier);
     if (device === null) return false;
 
+    CWDebug.log("Removed device: "+identifier);
     var index = _remoteDevices.indexOf(device);
     _remoteDevices.splice(index, 1);
-    CWEventManager.trigger("deviceLost", device);
     
     return true;
   };

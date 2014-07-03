@@ -241,6 +241,7 @@ double const URL_CHECK_TIMEOUT = 2.0;
 
 - (void)startScanning
 {
+    BTLog(3, @"Trying to start scanning for other BT devices");
     if (self.centralManager.state == CBCentralManagerStatePoweredOn)
     {
         [self performSelectorOnMainThread:@selector(startLostConnectionTimer) withObject:nil waitUntilDone:YES];
@@ -255,7 +256,7 @@ double const URL_CHECK_TIMEOUT = 2.0;
 
 - (void)startAdvertising
 {
-    DLog(@"START ADVERTISING");
+    BTLog(3, @"Trying to advertise to other BT devices");
     if (self.peripheralManager.state == CBPeripheralManagerStatePoweredOn)
     {
         [self _doStartAdvertising];
@@ -269,7 +270,8 @@ double const URL_CHECK_TIMEOUT = 2.0;
 
 - (void)stopScanning
 {
-    DLog(@"Stop scanning for other BT devices");
+    BTLog(1, @"Stop scanning for other BT devices");
+    
     self.wantsToStartScanning = NO;
     self.isScanning = NO;
     [self.centralManager stopScan];
@@ -278,7 +280,8 @@ double const URL_CHECK_TIMEOUT = 2.0;
 
 - (void)stopAdvertising
 {
-    DLog(@"Stop advertising to other BT devices");
+    BTLog(1, @"Stop advertising to other BT devices");
+    
     self.wantsToStartAdvertising = NO;
     [self.peripheralManager stopAdvertising];
 }
@@ -292,7 +295,8 @@ double const URL_CHECK_TIMEOUT = 2.0;
 
 - (void)_doStartScanning
 {
-    DLog(@"Starting to scan for other BT devices...");
+    BTLog(1, @"Starting to scan for other BT devices");
+    
     [self.centralManager scanForPeripheralsWithServices:@[[CBUUID UUIDWithString:BLUETOOTH_SERVICE_UUID]]
                                                 options:@{ CBCentralManagerScanOptionAllowDuplicatesKey : @YES }];
     self.isScanning = YES;
@@ -306,13 +310,16 @@ double const URL_CHECK_TIMEOUT = 2.0;
 
 - (void)_doStartAdvertising
 {
-    DLog(@"Starting to advertise to other BT devices with identifier %@...", self.appState.identifier);
+    BTLog(1, @"Starting to advertise to other BT devices with identifier %@", self.appState.identifier);
+    
     [self.peripheralManager startAdvertising:@{ CBAdvertisementDataServiceUUIDsKey : @[[CBUUID UUIDWithString:BLUETOOTH_SERVICE_UUID]] }];
 }
 
 
 - (void)_stopScanningTemporarily
 {
+    BTLog(3, @"Temporarily stop scanning for other BT devices");
+    
     //Stop the check for lost connections, otherwise we would lose connections because of a temporary scan stop
     //The timer is reset in startScanning - it is the responsible of BTManager to make sure a temporary scan stop is actually temporary and will be resumed!
     [self performSelectorOnMainThread:@selector(stopLostConnectionTimer) withObject:nil waitUntilDone:YES];
@@ -325,6 +332,8 @@ double const URL_CHECK_TIMEOUT = 2.0;
 
 - (void)startLostConnectionTimer
 {
+    BTLog(3, @"Starting 'Lost BT Connections' Timer");
+    
     [self stopLostConnectionTimer];
     self.lostConnectionsTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(_removeLostConnections:) userInfo:nil repeats:YES];
 }
@@ -334,6 +343,8 @@ double const URL_CHECK_TIMEOUT = 2.0;
 {
     if (self.lostConnectionsTimer != nil)
     {
+        BTLog(3, @"Stopping 'Lost BT Connections' Timer");
+
         [self.lostConnectionsTimer invalidate];
         self.lostConnectionsTimer = nil;
     }
@@ -345,7 +356,7 @@ double const URL_CHECK_TIMEOUT = 2.0;
 
 - (void)_connectPeripheral:(CBPeripheral *)peripheral
 {
-    DLog(@"Connecting to BT device '%@'", peripheral.name);
+    BTLog(2, @"Connecting BT device %@", peripheral.name);
     
     //It is rumored that scanning while connecting can lead to problems, therefore stop temporarily
     [self _stopScanningTemporarily];
@@ -355,18 +366,14 @@ double const URL_CHECK_TIMEOUT = 2.0;
 
 - (void)_disconnectPeripheral:(CBPeripheral *)peripheral
 {
-    DLog(@"Disconnecting BT device '%@'", peripheral.name);
+    BTLog(2, @"Disconnecting BT device %@", peripheral.name);
     
     if (peripheral.state == CBPeripheralStateDisconnected || peripheral.state == CBPeripheralStateConnecting) return;
     
     // See if we are subscribed to a characteristic on the peripheral
     for (CBService *service in peripheral.services) {
         for (CBCharacteristic *characteristic in service.characteristics) {
-//            if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:BLUETOOTH_INITIAL_CHARACTERISTIC_UUID]]) {
-                if (characteristic.isNotifying) {
-                    [peripheral setNotifyValue:NO forCharacteristic:characteristic];
-                }
-//            }
+            if (characteristic.isNotifying) [peripheral setNotifyValue:NO forCharacteristic:characteristic];
         }
     }
     
@@ -393,7 +400,6 @@ double const URL_CHECK_TIMEOUT = 2.0;
         double lastSentDistance = [connection lastSentDistance];
         if ([connection timeSinceLastSentRSSI] > 0.1 && ([connection timeSinceLastSentRSSI] >= 5.0 || fabs(distance-lastSentDistance) > 0.1))
         {
-//            DLog(@"Sending new distance %.2f with time elapsed %.2f and distance diff %.2f", distance, [connection timeSinceLastSentRSSI], fabs(distance-lastSentDistance));
             [self.delegate device:connection.identifier changedDistance:distance];
             [connection didSendDistance];
         }
@@ -403,6 +409,8 @@ double const URL_CHECK_TIMEOUT = 2.0;
 
 - (void)_removeLostConnections:(NSTimer *)timer
 {
+    CWLog(5, @"'Lost BT Connections' Timer triggered");
+    
     //Check the time we last saw each connection - if the connection has not been seen for a second, it is considered lost
     NSDate *now = [NSDate date];
     NSMutableArray *lostConnections = [NSMutableArray array];
@@ -437,11 +445,13 @@ double const URL_CHECK_TIMEOUT = 2.0;
     
     if (connection == nil)
     {
-        DLog(@"Invalid device identifier to send network addresses to, %@", deviceIdentifier);
+        ErrLog(@"Cannot send IPs to %@ - unknown device identifier", deviceIdentifier);
         return;
     }
     
     if (connection.state == CWBluetoothConnectionStateIPConnecting || connection.state == CWBluetoothConnectionStateIPSent) return;
+    
+    BTLog(3, @"Preparing to send IPs to %@", deviceIdentifier);
     
     [connection setState:CWBluetoothConnectionStateIPConnecting];
     connection.pendingIPWrites = 0;
@@ -451,14 +461,15 @@ double const URL_CHECK_TIMEOUT = 2.0;
 
 - (void)_sendInitialToCentral:(CBCentral *)central
 {
+    BTLog(3, @"Preparing to send initial data to %@", central);
+    
     NSDictionary *sendDictionary = @{ @"identifier": self.appState.identifier };
-    DLog(@"Writing value for own characteristic: %@ ", sendDictionary);
     NSData *initialData = [NSJSONSerialization dataWithJSONObject:sendDictionary options:NSJSONWritingPrettyPrinted error:nil];
     BOOL didSend = [self.peripheralManager updateValue:initialData forCharacteristic:self.advertisedInitialCharacteristic onSubscribedCentrals:@[central]];
     
     if (didSend == NO)
     {
-        DLog(@"Could not send data to central");
+        ErrLog(@"Unable to send initial data to %@", central);
     }
 }
 
@@ -470,16 +481,11 @@ double const URL_CHECK_TIMEOUT = 2.0;
     for (NSString *ip in ips)
     {
         NSString *ipWithPort = [NSString stringWithFormat:@"%@:%d", ip, self.appState.webserverPort];
-        DLog(@"Writing value %@", @{ @"ip": ipWithPort } );
+        BTLog(4, @"Sending IP %@ to %@", ipWithPort, connection.identifier);
         NSData *data = [CWUtil JSONDataFromDictionary:@{ @"ip": ipWithPort }];
         [peripheral writeValue:data forCharacteristic:characteristic type:CBCharacteristicWriteWithResponse];
         connection.pendingIPWrites++;
     }
-    
-//    NSData *data = [CWUtil dataFromDictionary:@{ @"ips": ips }];
-//    DLog(@"Writing data of length %d", [data length]);
-//    [peripheral writeValue:data forCharacteristic:characteristic type:CBCharacteristicWriteWithResponse];
-//    connection.pendingIPWrites++;
 }
 
 
@@ -568,7 +574,7 @@ double const URL_CHECK_TIMEOUT = 2.0;
             case CBCentralManagerStatePoweredOff: stateString = @"PoweredOff"; break;
             default: stateString = @"Unknown"; break;
         }
-        DLog(@"Central Manager state changed to %@", stateString);
+        BTLog(1, @"Central Manager state changed to %@", stateString);
     }];
 }
 
@@ -583,14 +589,14 @@ double const URL_CHECK_TIMEOUT = 2.0;
  */
 - (void)centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI
 {
-//    DLog(@"CM didDiscoverPeripheral '%@'", peripheral.name);
+    BTLog(5, @"Triggered didDiscoverPeriphal for %@", peripheral.name);
     
     //If a new peripheral is detected, we need to connect to its initial characteristic and retrieve its identifier before reporting it to the delegate
     //For previously detected devices, we use the measures RSSI to update their distance measure
     CWBluetoothConnection *existingConnection = [self _connectionForPeripheral:peripheral];
     if (existingConnection == nil)
     {
-        DLog(@"Peripheral '%@' is new", peripheral.name);
+        BTLog(3, @"New peripheral '%@'", peripheral.name);
         
         CWBluetoothConnection *newConnection = [[CWBluetoothConnection alloc] initWithPeripheral:peripheral];
         [newConnection setState:CWBluetoothConnectionStateInitialConnecting];
@@ -615,7 +621,7 @@ double const URL_CHECK_TIMEOUT = 2.0;
  */
 - (void)centralManager:(CBCentralManager *)central didConnectPeripheral:(CBPeripheral *)peripheral
 {
-    DLog(@"CM didConnectPeripheral '%@'", peripheral.name);
+    BTLog(3, @"Connected periphal '%@'", peripheral.name);
     
     //In _connectPeripheral we stop scanning while connecting, so we need to resume scanning now
     [self startScanning];
@@ -634,7 +640,7 @@ double const URL_CHECK_TIMEOUT = 2.0;
  */
 - (void)centralManager:(CBCentralManager *)central didFailToConnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error
 {
-    DLog(@"CM didFailToConnectPeripheral '%@', error %@", peripheral.name, error);
+    BTLog(3, @"Failed to connect peripheral %@. Error: %@", peripheral.name, error);
     
     CWBluetoothConnection *connection = [self _connectionForPeripheral:peripheral];
     if (connection == nil) return;
@@ -662,7 +668,7 @@ double const URL_CHECK_TIMEOUT = 2.0;
  */
 - (void)centralManager:(CBCentralManager *)central didDisconnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error
 {
-    DLog(@"CM: didDisconnectPeripheral '%@', error %@", peripheral.name, error);
+    BTLog(3, @"Disconnected peripheral %@. Error: %@", peripheral.name, error);
     
     CWBluetoothConnection *connection = [self _connectionForPeripheral:peripheral];
     if (connection == nil) return;
@@ -689,7 +695,7 @@ double const URL_CHECK_TIMEOUT = 2.0;
  */
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverServices:(NSError *)error
 {
-    DLog(@"P didDiscoverServices '%@', error %@", peripheral.name, error);
+    BTLog(3, @"Discovered services for %@. Error: %@", peripheral.name, error);
     
     //Depending on the connection state, discover either the initial or the IP characteristic
     CWBluetoothConnection *connection = [self _connectionForPeripheral:peripheral];
@@ -713,7 +719,7 @@ double const URL_CHECK_TIMEOUT = 2.0;
     
     if (foundValidService == NO)
     {
-        DLog(@"No valid services found for '%@', device is ignored...", peripheral.name);
+        BTLog(3, @"No valid services found for %@, device is ignored...", peripheral.name);
         [connection setState:CWBluetoothConnectionStateErrored];
         [self _disconnectPeripheral:peripheral];
     }
@@ -731,7 +737,7 @@ double const URL_CHECK_TIMEOUT = 2.0;
  */
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverCharacteristicsForService:(CBService *)service error:(NSError *)error
 {
-    DLog(@"P didDiscoverCharacteristics '%@', error %@", peripheral.name, error);
+    BTLog(3, @"Discovered Characteristics for %@. Error: %@", peripheral.name, error);
     
     CWBluetoothConnection *connection = [self _connectionForPeripheral:peripheral];
     BOOL foundValidCharacteristic = NO;
@@ -759,7 +765,7 @@ double const URL_CHECK_TIMEOUT = 2.0;
     
     if (foundValidCharacteristic == NO)
     {
-        DLog(@"No valid characteristics found for '%@', device is ignored...", peripheral.name);
+        BTLog(3, @"No valid characteristics found for %@, device is ignored...", peripheral.name);
         [connection setState:CWBluetoothConnectionStateErrored];
         [self _disconnectPeripheral:peripheral];
     }
@@ -775,7 +781,7 @@ double const URL_CHECK_TIMEOUT = 2.0;
  */
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error
 {
-    DLog(@"P didUpdateValueForCharacteristic: %@, error %@", [[NSString alloc] initWithData:characteristic.value encoding:NSUTF8StringEncoding], error);
+    BTLog(4, @"Received data from %@. Data: %@. Error: %@", peripheral.name, [[NSString alloc] initWithData:characteristic.value encoding:NSUTF8StringEncoding], error);
     
     CWBluetoothConnection *connection = [self _connectionForPeripheral:peripheral];
     if (connection != nil
@@ -788,7 +794,7 @@ double const URL_CHECK_TIMEOUT = 2.0;
         
         if (retrievedData[@"identifier"] == nil)
         {
-            DLog(@"WARNING: Received initial device data of '%@' without an identifier, device is ignored...", peripheral.name);
+            ErrLog(@"Received initial device data from %@ without an identifier, device is ignored...", peripheral.name);
             [connection setState:CWBluetoothConnectionStateErrored];
             [self _disconnectPeripheral:peripheral];
             return;
@@ -826,13 +832,13 @@ double const URL_CHECK_TIMEOUT = 2.0;
  */
 - (void)peripheral:(CBPeripheral *)peripheral didWriteValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error
 {
-    DLog(@"P didWriteValueForCharacteristic, error %@", error);
+    BTLog(4, @"Device %@ answered to send data. Response: %@", peripheral.name, error);
     
     CWBluetoothConnection *connection = [self _connectionForPeripheral:peripheral];
     
     if (connection.pendingIPWrites == 0)
     {
-        DLog(@"Received a write response for '%@' without pending writes - what happened?", peripheral.name);
+        ErrLog(@"Received a write response from %@ without pending writes - what happened?", peripheral.name);
         return;
     }
     
@@ -858,8 +864,8 @@ double const URL_CHECK_TIMEOUT = 2.0;
             //If the state is not "IPDone" yet, it means none of the IP writes came back with an CBATTErrorSuccess response - none of the IPs worked
             if (connection.state == CWBluetoothConnectionStateIPSent)
             {
-                //TODO should we really ignore here?
-                DLog(@"Peripheral '%@' reported back no success with sent IPs, ignoring...", peripheral.name);
+                //TODO should we really ignore here? probably a retry mechanism would be in order
+                BTLog(3, @"Device %@ could not connect to any of the IPs we send, device is ignored...", peripheral.name);
                 [connection setState:CWBluetoothConnectionStateErrored];
                 if ([self.delegate respondsToSelector:@selector(didSendNetworkAddresses:success:)])
                 {
@@ -880,7 +886,7 @@ double const URL_CHECK_TIMEOUT = 2.0;
  */
 - (void)peripheralDidUpdateName:(CBPeripheral *)peripheral
 {
-    DLog(@"P didUpdateName '%@'", peripheral.name);
+    BTLog(3, @"Device updated name to %@", peripheral.name);
 }
 
 
@@ -915,7 +921,7 @@ double const URL_CHECK_TIMEOUT = 2.0;
             case CBPeripheralManagerStatePoweredOff: stateString = @"PoweredOff"; break;
             default: stateString = @"Unknown"; break;
         }
-        DLog(@"Peripheral Manager state changed to %@", stateString);
+        BTLog(1, @"Peripheral Manager state changed to %@", stateString);
     }];
 }
 
@@ -932,7 +938,7 @@ double const URL_CHECK_TIMEOUT = 2.0;
     if (error != nil)
     {
         self.didAddService = NO;
-        DLog(@"ERROR advertising the Connichiwa service: %@", error);
+        ErrLog(@"Could not advertise Connichiwa service. Error: %@", error);
         return;
     }
     
@@ -951,7 +957,6 @@ double const URL_CHECK_TIMEOUT = 2.0;
  */
 - (void)peripheralManagerIsReadyToUpdateSubscribers:(CBPeripheralManager *)peripheral
 {
-    DLog(@"PM isReadyToUpdateSubscribers");
 }
 
 
@@ -963,7 +968,6 @@ double const URL_CHECK_TIMEOUT = 2.0;
  */
 - (void)peripheralManager:(CBPeripheralManager *)peripheral didReceiveReadRequest:(CBATTRequest *)request
 {
-    DLog(@"PM didReceiveReadRequest");
 }
 
 
@@ -975,18 +979,16 @@ double const URL_CHECK_TIMEOUT = 2.0;
  */
 - (void)peripheralManager:(CBPeripheralManager *)peripheral didReceiveWriteRequests:(NSArray *)requests
 {
-    DLog(@"PM didReceiveWriteRequests");
-    
     BOOL requestsValid = NO;
     for (CBATTRequest *writeRequest in requests)
     {
-        DLog(@"PM didReceiveWriteRequests request data is %@", [[NSString alloc] initWithData:writeRequest.value encoding:NSUTF8StringEncoding]);
+        BTLog(4, @"Did receive IP from another device: %@", [[NSString alloc] initWithData:writeRequest.value encoding:NSUTF8StringEncoding]);
         
         NSDictionary *retrievedData = [CWUtil dictionaryFromJSONData:writeRequest.value];
         
         if (retrievedData[@"ip"] == nil)
         {
-            DLog(@"Error in the retrieved IP");
+            ErrLog(@"Error in the retrieved IP");
             continue;
         }
         
@@ -1003,12 +1005,12 @@ double const URL_CHECK_TIMEOUT = 2.0;
                                         timeoutInterval:URL_CHECK_TIMEOUT];
         [request setHTTPMethod:@"HEAD"];
         
-        DLog(@"Checking URL %@", url);
+        BTLog(4, @"Checking IP %@ for validity", url);
         [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
         if ([response statusCode] == 200)
         {
             //We found the correct IP!
-            DLog(@"Found working URL: %@", url);
+            DLog(@"%@ is a valid URL", url);
             if ([self.delegate respondsToSelector:@selector(didReceiveDeviceURL:)])
             {
                 [self.delegate didReceiveDeviceURL:[url URLByDeletingLastPathComponent]]; //remove /check
@@ -1032,11 +1034,9 @@ double const URL_CHECK_TIMEOUT = 2.0;
  */
 - (void)peripheralManager:(CBPeripheralManager *)peripheral central:(CBCentral *)central didSubscribeToCharacteristic:(CBCharacteristic *)characteristic
 {
-    DLog(@"PM centralDidSubscribeToCharacteristic");
-    
     if (characteristic == self.advertisedInitialCharacteristic)
     {
-        DLog(@"SUBSRIBED TO INITIAL, SENDING");
+        BTLog(3, @"Another device subscribed to our initial characteristic");
         [self _sendInitialToCentral:central];
     }
 }
@@ -1051,7 +1051,10 @@ double const URL_CHECK_TIMEOUT = 2.0;
  */
 - (void)peripheralManager:(CBPeripheralManager *)peripheral central:(CBCentral *)central didUnsubscribeFromCharacteristic:(CBCharacteristic *)characteristic
 {
-    DLog(@"PM centralDidUnsubscribeFromCharacteristic");
+    if (characteristic == self.advertisedInitialCharacteristic)
+    {
+        BTLog(3, @"Another device unsubscribed from our initial characteristic");
+    }
 }
 
 
@@ -1063,7 +1066,7 @@ double const URL_CHECK_TIMEOUT = 2.0;
  */
 - (void)peripheralManagerDidStartAdvertising:(CBPeripheralManager *)peripheral error:(NSError *)error
 {
-    DLog(@"PM didStartAdvertising, error %@", error);
+    BTLog(2, @"Did start advertising to other BT devices");
     
     if (error == nil)
     {
