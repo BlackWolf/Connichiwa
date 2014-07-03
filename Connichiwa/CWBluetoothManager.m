@@ -1005,12 +1005,12 @@ double const URL_CHECK_TIMEOUT = 2.0;
                                         timeoutInterval:URL_CHECK_TIMEOUT];
         [request setHTTPMethod:@"HEAD"];
         
-        BTLog(4, @"Checking IP %@ for validity", url);
+        BTLog(3, @"Checking IP %@ for validity", url);
         [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
         if ([response statusCode] == 200)
         {
             //We found the correct IP!
-            DLog(@"%@ is a valid URL", url);
+            BTLog(3, @"%@ is a valid URL", url);
             if ([self.delegate respondsToSelector:@selector(didReceiveDeviceURL:)])
             {
                 [self.delegate didReceiveDeviceURL:[url URLByDeletingLastPathComponent]]; //remove /check

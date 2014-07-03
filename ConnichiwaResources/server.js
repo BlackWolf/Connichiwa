@@ -97,7 +97,8 @@ function cleanupWebsocketConnection(wsConnection)
 var onLocalMessage = function(message)
 {
   log(4, "Message from web library: "+message);
-  sendToRemote(message.target, message);
+  var object = JSON.parse(message);
+  sendToRemote(object.target, message);
 };
 
 var onLocalClose = function(code, message)
@@ -172,6 +173,15 @@ var onUnidentifiedRemoteMessage = function(wsConnection)
         log(4, "Websocket was determined to be local");
         wsLocalConnection = wsConnection;
         wsUnidentifiedConnections.splice(index, 1);
+        // wsConnection.onmessage = onLocalMessage;
+        // wsConnection.onclose = onLocalClose;
+        // wsConnection.onerror = onLocalError;
+        // wsConnection.removeListener("message", onUnidentifiedRemoteMessage);
+        // wsConnection.removeListener("close", onUnidentifiedRemoteClose);
+        // wsConnection.removeListener("error", onUnidentifiedRemoteError);
+        wsConnection.removeAllListeners("message");
+        wsConnection.removeAllListeners("close");
+        wsConnection.removeAllListeners("error");
         wsConnection.on("message", onLocalMessage);
         wsConnection.on("close", onLocalClose);
         wsConnection.on("error", onLocalError);
@@ -182,6 +192,15 @@ var onUnidentifiedRemoteMessage = function(wsConnection)
         log(4, "Websocket was determined to be remote");
         wsRemoteConnections[object.identifier] = wsConnection;
         wsUnidentifiedConnections.splice(index, 1);
+        // wsConnection.onmessage = onRemoteMessage(wsConnection);
+        // wsConnection.onclose = onRemoteClose(wsConnection);
+        // wsConnection.onerror = onRemoteError(wsConnection);
+        // wsConnection.removeListener("message", onUnidentifiedRemoteMessage);
+        // wsConnection.removeListener("close", onUnidentifiedRemoteClose);
+        // wsConnection.removeListener("error", onUnidentifiedRemoteError);
+        wsConnection.removeAllListeners("message");
+        wsConnection.removeAllListeners("close");
+        wsConnection.removeAllListeners("error");
         wsConnection.on("message", onRemoteMessage(wsConnection));
         wsConnection.on("close", onRemoteClose(wsConnection));
         wsConnection.on("error", onRemoteError(wsConnection));
@@ -235,6 +254,9 @@ var onWebsocketListening = function()
 var onWebsocketConnection = function(wsConnection) {
   log(3, "Unidentified websocket connection established");
   wsUnidentifiedConnections.push(wsConnection);
+  // wsConnection.onmessage = onUnidentifiedRemoteMessage(wsConnection);
+  // wsConnection.onclose = onUnidentifiedRemoteClose(wsConnection);
+  // wsConnection.onerror = onUnidentifiedRemoteError(wsConnection);
   wsConnection.on("message", onUnidentifiedRemoteMessage(wsConnection));
   wsConnection.on("close", onUnidentifiedRemoteClose(wsConnection));
   wsConnection.on("error", onUnidentifiedRemoteError(wsConnection));
@@ -271,6 +293,7 @@ function sendToRemote(identifier, message)
     return;
   }
   else {
+    log(4, "Trying to send message to remote device "+identifier);
     if (identifier in wsRemoteConnections === false) return;
     log(4, "Sending message to remote device "+identifier+": "+message);
     wsRemoteConnections[identifier].send(message);
