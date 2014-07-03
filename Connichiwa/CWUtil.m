@@ -100,7 +100,7 @@
             //en3 (family AF_INET)       is BT PAN (Receiving, tested iPad only)
             //bridge100 (family AF_INET) is BT PAN (Advertising, tested iPhone only)
             //For some reason, 6.3.6.0 seems to be some kind of magic IP used for inactive interface - ignore it. Sometimes, 0.0.0.0 or 255.x is used instead
-            DLog(@"Interface %@ (family %d) with IP %@", [NSString stringWithUTF8String:temp_addr->ifa_name], temp_addr->ifa_addr->sa_family, [NSString stringWithUTF8String:inet_ntoa(((struct sockaddr_in *)temp_addr->ifa_addr)->sin_addr)]);
+            CWLog(5, @"Found interface %@ (family %d) with IP %@", [NSString stringWithUTF8String:temp_addr->ifa_name], temp_addr->ifa_addr->sa_family, [NSString stringWithUTF8String:inet_ntoa(((struct sockaddr_in *)temp_addr->ifa_addr)->sin_addr)]);
          
             NSString *interfaceName = [NSString stringWithUTF8String:temp_addr->ifa_name];
             if (temp_addr->ifa_addr->sa_family == AF_INET && ([interfaceName hasPrefix:@"en"] || [interfaceName hasPrefix:@"bridge"]))
