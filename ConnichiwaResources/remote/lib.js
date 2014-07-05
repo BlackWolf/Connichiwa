@@ -27,7 +27,6 @@ var onWebsocketOpen = function()
   nativeCallWebsocketDidOpen();
 };
 
-
 var onWebsocketMessage = function(e)
 {
   var message = e.data;
@@ -42,12 +41,20 @@ var onWebsocketMessage = function(e)
   }
   if (object.type === "show")
   {
-    $("body").append(object.content);
+    window.requestAnimationFrame(function(timestamp) {
+      $("body").append(object.content);
+    });
   }
   
   if (object.type === "update")
   {
-    $(object.element).html(object.content);
+    window.requestAnimationFrame(function(timestamp) {
+      $(object.element).html(object.content);
+    });
+    // setTimeout(test(object.element, object.content), 0);
+    // $(object.element).html(object.content);
+    // object.element = object.element.replace("#", "");
+    // document.getElementById(object.element).innerHTML = object.content;
   }
 };
 
