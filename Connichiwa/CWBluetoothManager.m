@@ -936,6 +936,7 @@ double const URL_CHECK_TIMEOUT = 2.0;
             if (connection.state == CWBluetoothConnectionStateIPSent)
             {
                 BTLog(3, @"Device %@ could not connect to any of the IPs we send", peripheral.name);
+                connection.state = CWBluetoothConnectionStateInitialDone; //go back to state before trying to send IPs
                 if ([self.delegate respondsToSelector:@selector(didSendNetworkAddresses:success:)])
                 {
                     [self.delegate didSendNetworkAddresses:connection.identifier success:NO];
