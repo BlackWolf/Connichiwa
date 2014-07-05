@@ -390,6 +390,7 @@ double const URL_CHECK_TIMEOUT = 2.0;
 - (void)_connectPeripheral:(CBPeripheral *)peripheral
 {
     CWBluetoothConnection *connection = [self _connectionForPeripheral:peripheral];
+    if (connection == nil) return; //e.g. when the device was lost
     
     if (connection.state == CWBluetoothConnectionStateErrored ||
         peripheral.state == CBPeripheralStateConnecting ||
@@ -423,6 +424,22 @@ double const URL_CHECK_TIMEOUT = 2.0;
     }
     
     [self.centralManager cancelPeripheralConnection:peripheral];
+}
+
+
+- (BOOL)_maybeRetryConnect:(CWBluetoothConnection *)connection
+{
+    if (connection.connectionTries <= MAX_CONNECTION_RETRIES)
+    {
+        double delay = pow(connection.connectionTries, 2) * 5.0; //exponential waiting time
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self performSelector:@selector(_connectPeripheral:) withObject:connection.peripheral afterDelay:delay];
+        });
+        
+        return YES;
+    }
+    
+    return NO;
 }
 
 
@@ -522,6 +539,8 @@ double const URL_CHECK_TIMEOUT = 2.0;
 - (void)_sendIPsToPeripheral:(CBPeripheral *)peripheral onCharacteristic:(CBCharacteristic *)characteristic
 {
     CWBluetoothConnection *connection = [self _connectionForPeripheral:peripheral];
+    if (connection == nil) return;
+    
     NSArray *ips = [CWUtil deviceInterfaceAddresses];
     for (NSString *ip in ips)
     {
@@ -694,16 +713,15 @@ double const URL_CHECK_TIMEOUT = 2.0;
     if (connection == nil) return;
     
     //If a connection attempt fails we retry up to MAX_CONNECTION_RETRIES times with increased waiting times
-    if ((connection.state == CWBluetoothConnectionStateInitialConnecting || connection.state == CWBluetoothConnectionStateIPConnecting) &&
-        connection.connectionTries <= MAX_CONNECTION_RETRIES)
+    BOOL didRetry = NO;
+    if (connection.state != CWBluetoothConnectionStateUnknown &&
+        connection.state != CWBluetoothConnectionStateInitialDone &&
+        connection.state != CWBluetoothConnectionStateIPDone)
     {
-        double delay = pow(connection.connectionTries, 2) * 5.0; //exponential waiting time
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self performSelector:@selector(_connectPeripheral:) withObject:connection.peripheral afterDelay:delay];
-        });
-    } else {
-        connection.state = CWBluetoothConnectionStateErrored;
+        didRetry = [self _maybeRetryConnect:connection];
     }
+    
+    if (didRetry == NO) connection.state = CWBluetoothConnectionStateErrored;
     
     //In _connectPeripheral we stop scanning while connecting, so we need to resume scanning now
     [self startScanning];
@@ -724,14 +742,17 @@ double const URL_CHECK_TIMEOUT = 2.0;
     CWBluetoothConnection *connection = [self _connectionForPeripheral:peripheral];
     if (connection == nil) return;
     
-    //If we didn't transfer initial data yet, we cannot use this device, therefore set its state to error
+    //If the disconnect occurs before receiving/sending the data we want, we need to reconnect
+    //This should basically never occur unless the device moves out of range, in which case it will be taken care of in _removeLostConnections anyway, but we need to take care of the unlikely cases as well, don't we? ;-)
+    BOOL didRetry = NO;
     if (connection.state != CWBluetoothConnectionStateUnknown &&
         connection.state != CWBluetoothConnectionStateInitialDone &&
-        connection.state != CWBluetoothConnectionStateIPDone &&
-        connection.state != CWBluetoothConnectionStateErrored)
+        connection.state != CWBluetoothConnectionStateIPDone)
     {
-        connection.state = CWBluetoothConnectionStateErrored;
+        didRetry = [self _maybeRetryConnect:connection];
     }
+    
+    if (didRetry == NO) connection.state = CWBluetoothConnectionStateErrored;
 }
 
 
@@ -911,12 +932,10 @@ double const URL_CHECK_TIMEOUT = 2.0;
         
         if (connection.pendingIPWrites == 0)
         {            
-            //If the state is not "IPDone" yet, it means none of the IP writes came back with an CBATTErrorSuccess response - none of the IPs worked
+            //If the state is not "IPDone" yet it means none of the IP writes came back with an CBATTErrorSuccess response - none of the IPs worked
             if (connection.state == CWBluetoothConnectionStateIPSent)
             {
-                //TODO should we really ignore here? probably a retry mechanism would be in order
-                BTLog(3, @"Device %@ could not connect to any of the IPs we send, device is ignored...", peripheral.name);
-                [connection setState:CWBluetoothConnectionStateErrored];
+                BTLog(3, @"Device %@ could not connect to any of the IPs we send", peripheral.name);
                 if ([self.delegate respondsToSelector:@selector(didSendNetworkAddresses:success:)])
                 {
                     [self.delegate didSendNetworkAddresses:connection.identifier success:NO];
