@@ -294,9 +294,9 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
  *
  *  @param identifier See [CWBluetoothManagerDelegate deviceDetected:]
  */
-- (void)deviceDetected:(NSString *)identifier
+- (void)deviceDetected:(NSString *)identifier information:(NSDictionary *)deviceInfo
 {
-    [self.webLibManager sendDeviceDetected:identifier];
+    [self.webLibManager sendDeviceDetected:identifier information:deviceInfo];
 }
 
 

@@ -1,4 +1,4 @@
-/* global CWUtil, CWEventManager, CWDebug */
+/* global Connichiwa, CWUtil, CWEventManager, CWDebug */
 "use strict";
 
 
@@ -23,16 +23,20 @@ var CWDeviceConnectionState =
  *
  * @namespace CWDevice
  */
-function CWDevice(identifier)
+function CWDevice(properties)
 {
+  if (!properties.identifier) throw "Cannot instantiate CWDevice without an identifier";
+
   this.discoveryState = CWDeviceDiscoveryState.DISCOVERED;
   this.connectionState = CWDeviceConnectionState.DISCONNECTED;
   this.distance = -1;
+  this.name = "unknown";
+  if (properties.name) this.name = properties.name;
 
   /**
    * A string representing a unique identifier of the device
    */
-  var _identifier = identifier;
+  var _identifier = properties.identifier;
 
   /**
    * Returns the identifier of this device
@@ -51,7 +55,8 @@ function CWDevice(identifier)
   
   this.canBeConnected = function() 
   { 
-    return (this.connectionState === CWDeviceConnectionState.DISCONNECTED);
+    return (this.connectionState === CWDeviceConnectionState.DISCONNECTED && 
+      this.discoveryState === CWDeviceDiscoveryState.DISCOVERED);
   };
   
   this.isConnected = function()
@@ -61,6 +66,12 @@ function CWDevice(identifier)
 
   return this;
 }
+
+
+CWDevice.prototype.send = function(message)
+{
+  Connichiwa.send(this, message);
+};
 
 
 /**

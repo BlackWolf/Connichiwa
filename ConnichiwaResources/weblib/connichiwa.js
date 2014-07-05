@@ -22,6 +22,7 @@ var CWDebug = (function()
   /**
    * Logs a message to the console if debug mode is on
    *
+   * @param {int} priority The priority of the message. Messages with lower priority are printed at lower debug states.
    * @param {string} message the message to log
    *
    * @memberof CWDebug
@@ -33,10 +34,10 @@ var CWDebug = (function()
 
   return {
     enableDebug : enableDebug,
-    log : log
+    log         : log
   };
 })();
-/* global CWUtil, CWEventManager, CWDebug */
+/* global Connichiwa, CWUtil, CWEventManager, CWDebug */
 "use strict";
 
 
@@ -61,16 +62,20 @@ var CWDeviceConnectionState =
  *
  * @namespace CWDevice
  */
-function CWDevice(identifier)
+function CWDevice(properties)
 {
+  if (!properties.identifier) throw "Cannot instantiate CWDevice without an identifier";
+
   this.discoveryState = CWDeviceDiscoveryState.DISCOVERED;
   this.connectionState = CWDeviceConnectionState.DISCONNECTED;
   this.distance = -1;
+  this.name = "unknown";
+  if (properties.name) this.name = properties.name;
 
   /**
    * A string representing a unique identifier of the device
    */
-  var _identifier = identifier;
+  var _identifier = properties.identifier;
 
   /**
    * Returns the identifier of this device
@@ -89,7 +94,8 @@ function CWDevice(identifier)
   
   this.canBeConnected = function() 
   { 
-    return (this.connectionState === CWDeviceConnectionState.DISCONNECTED);
+    return (this.connectionState === CWDeviceConnectionState.DISCONNECTED && 
+      this.discoveryState === CWDeviceDiscoveryState.DISCOVERED);
   };
   
   this.isConnected = function()
@@ -99,6 +105,12 @@ function CWDevice(identifier)
 
   return this;
 }
+
+
+CWDevice.prototype.send = function(message)
+{
+  Connichiwa.send(this, message);
+};
 
 
 /**
@@ -153,7 +165,7 @@ var CWDeviceManager = (function()
     if (CWDevice.prototype.isPrototypeOf(newDevice) === false) throw "Cannot add a non-device";
     if (getDeviceWithIdentifier(newDevice.getIdentifier()) !== null) return false;
 
-    CWDebug.log(3, "Added device: "+newDevice.getIdentifier());
+    CWDebug.log(3, "Added device: " + newDevice.getIdentifier());
     _remoteDevices.push(newDevice);
     return true;
   };
@@ -174,7 +186,7 @@ var CWDeviceManager = (function()
     var device = getDeviceWithIdentifier(identifier);
     if (device === null) return false;
 
-    CWDebug.log("Removed device: "+identifier);
+    CWDebug.log("Removed device: " + identifier);
     var index = _remoteDevices.indexOf(device);
     _remoteDevices.splice(index, 1);
     
@@ -260,7 +272,7 @@ var CWEventManager = (function()
     var args = Array.prototype.slice.call(arguments);
     args.shift();
 
-    CWDebug.log(5, "Triggering event "+event);
+    CWDebug.log(5, "Triggering event " + event);
     for (var i = 0; i < _events[event].length; i++)
     {
       var callback = _events[event][i];
@@ -273,7 +285,7 @@ var CWEventManager = (function()
     trigger  : trigger
   };
 })();
-/* global CWDeviceManager, CWDeviceID, CWDevice, CWDeviceState, CWEventManager */
+/* global Connichiwa, CWDeviceManager, CWDevice, CWDeviceDiscoveryState, CWDeviceConnectionState, CWEventManager, CWDebug */
 "use strict";
 
 
@@ -312,7 +324,7 @@ var CWNativeCommunicationParser = (function()
    */
   var parse = function(message)
   {
-    CWDebug.log(4, "Parsing native message: "+message);
+    CWDebug.log(4, "Parsing native message: " + message);
     var object = JSON.parse(message);
     switch (object.type)
     {
@@ -359,15 +371,13 @@ var CWNativeCommunicationParser = (function()
     //We might re-detect a lost device, so it is possible that the device is already stored
     if (device === null)
     {
-      device = new CWDevice(message.identifier);
+      device = new CWDevice(message);
       CWDeviceManager.addDevice(device);
     }
-    else
-    {
-      device.discoveryState = CWDeviceDiscoveryState.DETECTED;
-    }
 
-    CWDebug.log(2, "Detected device: "+device.getIdentifier());
+    device.discoveryState = CWDeviceDiscoveryState.DISCOVERED;
+
+    CWDebug.log(2, "Detected device: " + device.getIdentifier());
     CWEventManager.trigger("deviceDetected", device);
   };
   
@@ -378,7 +388,7 @@ var CWNativeCommunicationParser = (function()
     if (device === null) return;
     
     device.distance = message.distance;
-    CWDebug.log(5, "Updated distance of device "+device.getIdentifier()+" to "+device.distance);
+    CWDebug.log(5, "Updated distance of device " + device.getIdentifier() + " to " + device.distance);
     CWEventManager.trigger("deviceDistanceChanged", device);
   };
   
@@ -388,7 +398,7 @@ var CWNativeCommunicationParser = (function()
     var device = CWDeviceManager.getDeviceWithIdentifier(message.identifier);
     device.discoveryState = CWDeviceDiscoveryState.LOST;
 
-    CWDebug.log(2, "Lost device: "+device.getIdentifier());
+    CWDebug.log(2, "Lost device: " + device.getIdentifier());
     CWEventManager.trigger("deviceLost", device);
   };
   
@@ -398,7 +408,7 @@ var CWNativeCommunicationParser = (function()
     var device = CWDeviceManager.getDeviceWithIdentifier(message.identifier);
     device.connectionState = CWDeviceConnectionState.DISCONNECTED;
 
-    CWDebug.log(2, "Connection to remote device failed: "+device.getIdentifier());
+    CWDebug.log(2, "Connection to remote device failed: " + device.getIdentifier());
     CWEventManager.trigger("connectFailed", device);
   };
   
@@ -410,7 +420,7 @@ var CWNativeCommunicationParser = (function()
       
     device.connectionState = CWDeviceConnectionState.DISCONNECTED;
 
-    CWDebug.log(2, "Device disconnected: "+device.getIdentifier());
+    CWDebug.log(2, "Device disconnected: " + device.getIdentifier());
     CWEventManager.trigger("deviceDisconnected", device);
   };
   
@@ -424,7 +434,8 @@ var CWNativeCommunicationParser = (function()
     parse : parse
   };
 })();
-/* global CWDebug, CWDeviceManager, CWDeviceState, CWEventManager, Connichiwa */
+/* global CWDebug, CWDeviceManager, CWDeviceConnectionState, CWEventManager, Connichiwa */
+/* global nativeCallRemoteDidConnect */
 "use strict";
 
 
@@ -449,7 +460,7 @@ var CWRemoteCommunicationParser = (function()
    */
   var parse = function(message)
   {
-    CWDebug.log(4, "Parsing remote message: "+message);
+    CWDebug.log(4, "Parsing remote message: " + message);
     var object = JSON.parse(message);
     switch (object.type)
     {
@@ -464,7 +475,7 @@ var CWRemoteCommunicationParser = (function()
     if (device === null) return;
     
     device.connectionState = CWDeviceConnectionState.CONNECTED;
-    native_remoteDidConnect(device.getIdentifier());
+    nativeCallRemoteDidConnect(device.getIdentifier());
     
     //For some reason, it seems that triggering this messages sometimes causes the iOS WebThread to crash
     //I THINK this might be related to us sending a message to the remote device in the web app when this event is triggered
@@ -537,7 +548,9 @@ var CWUtil = (function()
     inArray  : inArray
   };
 })();
-/* global LazyLoad, CWDeviceManager, CWNativeCommunicationParser, CWDebug, CWUtil, CWEventManager, CWWebserverCommunicationParser, CWDevice, CWDeviceState, CWRemoteCommunicationParser */
+/* global CWEventManager, CWRemoteCommunicationParser, CWDevice, CWDeviceConnectionState, CWUtil, CWDebug */
+/* global nativeCallWebsocketDidOpen, nativeCallWebsocketDidClose, nativeCallConnectRemote  */
+/* global CONNECTING, OPEN */
 "use strict";
 
 
@@ -592,7 +605,7 @@ var Connichiwa = (function()
   var onWebsocketOpen = function()
   {
     CWDebug.log(3, "Websocket opened");
-    native_websocketDidOpen();
+    nativeCallWebsocketDidOpen();
     _websocketConnectionAttempts = 0;
   };
 
@@ -635,12 +648,12 @@ var Connichiwa = (function()
     if (_websocketConnectionAttempts >= 5)
     {
       //Give up, guess we are fucked
-      native_websocketDidClose();
+      nativeCallWebsocketDidClose();
       return;
     }
 
     //We can't allow this blashphemy! Try to reconnect!
-    setTimeout(function() { _connectWebsocket(); }, _websocketConnectionAttempts*1000);
+    setTimeout(function() { _connectWebsocket(); }, _websocketConnectionAttempts * 1000);
   };
 
 
@@ -658,9 +671,9 @@ var Connichiwa = (function()
 
 
 
-var _send = function(message)
+  var _send = function(message)
   {
-    CWDebug.log(4, "Sending message "+message);
+    CWDebug.log(4, "Sending message " + message);
     _websocket.send(message);
   };
 
@@ -685,7 +698,7 @@ var _send = function(message)
   };
   
   
-  var getIdentifier = function() { return _identifier; }
+  var getIdentifier = function() { return _identifier; };
 
   /**
   * @namespace Connichiwa.Events
@@ -726,7 +739,7 @@ var _send = function(message)
     if (device.canBeConnected() === false) return;
     
     device.connectionState = CWDeviceConnectionState.CONNECTING;
-    native_connectRemote(device.getIdentifier());
+    nativeCallConnectRemote(device.getIdentifier());
   };
   
   var send = function(device, message)
@@ -736,12 +749,12 @@ var _send = function(message)
   };
 
   return {
-    _connectWebsocket    : _connectWebsocket,
-    _send                : _send,
-    _setIdentifier       : _setIdentifier,
-    getIdentifier        : getIdentifier,
-    on                   : on,
-    connect              : connect,
-    send                 : send
+    _connectWebsocket : _connectWebsocket,
+    _send             : _send,
+    _setIdentifier    : _setIdentifier,
+    getIdentifier     : getIdentifier,
+    on                : on,
+    connect           : connect,
+    send              : send
   };
 })();

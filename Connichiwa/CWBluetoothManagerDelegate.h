@@ -34,7 +34,7 @@
  *
  *  @param identifier The identifier of the newly detected device
  */
-- (void)deviceDetected:(NSString *)identifier;
+- (void)deviceDetected:(NSString *)identifier information:(NSDictionary *)deviceInfo;
 
 /**
  *  Called when the distance of a previously detected device changed

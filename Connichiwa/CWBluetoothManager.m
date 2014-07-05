@@ -14,6 +14,10 @@
 
 
 
+int const MAX_CONNECTION_RETRIES = 3;
+
+
+
 @interface CWBluetoothManager () <CBCentralManagerDelegate, CBPeripheralManagerDelegate, CBPeripheralDelegate>
 
 /**
@@ -385,9 +389,19 @@ double const URL_CHECK_TIMEOUT = 2.0;
 
 - (void)_connectPeripheral:(CBPeripheral *)peripheral
 {
+    CWBluetoothConnection *connection = [self _connectionForPeripheral:peripheral];
+    
+    if (connection.state == CWBluetoothConnectionStateErrored ||
+        peripheral.state == CBPeripheralStateConnecting ||
+        peripheral.state == CBPeripheralStateConnected)
+    {
+        return;
+    }
+    
     BTLog(2, @"Connecting BT device %@", peripheral.name);
     
     //It is rumored that scanning while connecting can lead to problems, therefore stop temporarily
+    connection.connectionTries++;
     [self _stopScanningTemporarily];
     [self.centralManager connectPeripheral:peripheral options:nil];
 }
@@ -494,7 +508,7 @@ double const URL_CHECK_TIMEOUT = 2.0;
 {
     BTLog(3, @"Preparing to send initial data to %@", central);
     
-    NSDictionary *sendDictionary = @{ @"identifier": self.appState.identifier };
+    NSDictionary *sendDictionary = @{ @"identifier": self.appState.identifier, @"name": self.appState.deviceName };
     NSData *initialData = [NSJSONSerialization dataWithJSONObject:sendDictionary options:NSJSONWritingPrettyPrinted error:nil];
     BOOL didSend = [self.peripheralManager updateValue:initialData forCharacteristic:self.advertisedInitialCharacteristic onSubscribedCentrals:@[central]];
     
@@ -654,6 +668,9 @@ double const URL_CHECK_TIMEOUT = 2.0;
 {
     BTLog(3, @"Connected periphal '%@'", peripheral.name);
     
+    CWBluetoothConnection *connection = [self _connectionForPeripheral:peripheral];
+    connection.connectionTries = 0;
+    
     //In _connectPeripheral we stop scanning while connecting, so we need to resume scanning now
     [self startScanning];
     
@@ -676,12 +693,15 @@ double const URL_CHECK_TIMEOUT = 2.0;
     CWBluetoothConnection *connection = [self _connectionForPeripheral:peripheral];
     if (connection == nil) return;
     
-    //If we didn't transfer initial data yet, we cannot use this device, therefore set its state to error
-    if (connection.state != CWBluetoothConnectionStateUnknown &&
-        connection.state != CWBluetoothConnectionStateInitialDone &&
-        connection.state != CWBluetoothConnectionStateIPDone &&
-        connection.state != CWBluetoothConnectionStateErrored)
+    //If a connection attempt fails we retry up to MAX_CONNECTION_RETRIES times with increased waiting times
+    if ((connection.state == CWBluetoothConnectionStateInitialConnecting || connection.state == CWBluetoothConnectionStateIPConnecting) &&
+        connection.connectionTries <= MAX_CONNECTION_RETRIES)
     {
+        double delay = pow(connection.connectionTries, 2) * 5.0; //exponential waiting time
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self performSelector:@selector(_connectPeripheral:) withObject:connection.peripheral afterDelay:delay];
+        });
+    } else {
         connection.state = CWBluetoothConnectionStateErrored;
     }
     
@@ -828,23 +848,22 @@ double const URL_CHECK_TIMEOUT = 2.0;
             ErrLog(@"Received initial device data from %@ without an identifier, device is ignored...", peripheral.name);
             [connection setState:CWBluetoothConnectionStateErrored];
             [self _disconnectPeripheral:peripheral];
+            
             return;
         }
-        else
-        {
-            [connection setIdentifier:retrievedData[@"identifier"]];
-        }
-        
-        //Grab all valid initial data fields that are available and add them to the connection information
+
+        [connection setIdentifier:retrievedData[@"identifier"]];
+        if (retrievedData[@"name"] != nil) [connection setName:retrievedData[@"name"]];
         if (retrievedData[@"measuredPower"] != nil) [connection setMeasuredPower:[(NSNumber *)retrievedData[@"measuredPower"] intValue]];
+        
         
         [connection setState:CWBluetoothConnectionStateInitialDone];
         [self _disconnectPeripheral:peripheral];
         
         //After the initial data transfer we can finally sent the "device detected" to the delegate
-        if ([self.delegate respondsToSelector:@selector(deviceDetected:)])
+        if ([self.delegate respondsToSelector:@selector(deviceDetected:information:)])
         {
-            [self.delegate deviceDetected:connection.identifier];
+            [self.delegate deviceDetected:connection.identifier information:retrievedData];
         }
     }
     else

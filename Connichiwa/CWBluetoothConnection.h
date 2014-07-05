@@ -23,7 +23,7 @@ typedef NS_ENUM(NSInteger, CWBluetoothConnectionState)
     CWBluetoothConnectionStateInitialConnecting,
     
     /**
-     *  A BT connection for the initial data transfer was established and we are awaiting for the other device to send us the data
+     *  A BT connection for the initial data transfer was established and we are waiting for the other device to send us the data
      */
     CWBluetoothConnectionStateInitialWaitingForData,
     
@@ -75,6 +75,8 @@ typedef NS_ENUM(NSInteger, CWBluetoothConnectionState)
  */
 @property (readwrite, strong) NSString *identifier;
 
+@property (readwrite, strong) NSString *name;
+
 /**
  *  The measured power of the other device's BT transmitter, used to calculate the distance to the other device
  */
@@ -99,6 +101,8 @@ typedef NS_ENUM(NSInteger, CWBluetoothConnectionState)
  *  The average RSSI at the point were didSendDistance was last called
  */
 @property (readonly) double lastSentRSSI;
+
+@property (readwrite) int connectionTries;
 
 /**
  *  When the local device writes its network interface addresses to the device represented by this class, this number representes the number of writes issued and therefore the number of responses expected. For each response, this should be decreased by one.

@@ -18,7 +18,9 @@
 /**
  *  The unique identifier of this device that is used amongst all the different parts of Connichiwa
  */
-@property (readonly, strong) NSString *identifier;
+@property (readonly) NSString *identifier;
+
+@property (readonly) NSString *deviceName;
 
 /**
  *  The port that this web server listens on

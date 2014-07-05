@@ -74,7 +74,7 @@ typedef NS_ENUM(NSInteger, CWWebLibraryManagerState)
  *
  *  @param identifier The unique connichiwa identifier of the detected device
  */
-- (void)sendDeviceDetected:(NSString *)identifier;
+- (void)sendDeviceDetected:(NSString *)identifier information:(NSDictionary *)deviceInfo;
 
 /**
  *  Sends information to the web library that a previously detected device has changed its distance to this device

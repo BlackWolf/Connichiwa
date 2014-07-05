@@ -84,13 +84,11 @@ var CWNativeCommunicationParser = (function()
     //We might re-detect a lost device, so it is possible that the device is already stored
     if (device === null)
     {
-      device = new CWDevice(message.identifier);
+      device = new CWDevice(message);
       CWDeviceManager.addDevice(device);
     }
-    else
-    {
-      device.discoveryState = CWDeviceDiscoveryState.DETECTED;
-    }
+
+    device.discoveryState = CWDeviceDiscoveryState.DISCOVERED;
 
     CWDebug.log(2, "Detected device: " + device.getIdentifier());
     CWEventManager.trigger("deviceDetected", device);

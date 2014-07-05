@@ -16,6 +16,7 @@
  */
 @interface CWWebApplication : NSObject
 
+@property (readwrite, strong) NSString *deviceName;
 
 /**
  *  Starts the web application on the given webview. This will fire up the webserver, which will serve the given document root and listen on the specified port.

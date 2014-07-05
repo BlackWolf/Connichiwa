@@ -72,6 +72,7 @@ double const RSSI_MOVING_AVERAGE_ALPHA = 0.03125;
     
     self.measuredPower = DEFAULT_MEASURED_BLUETOOTH_POWER;
     
+    self.connectionTries = 0;
     self.pendingIPWrites = 0;
     
     return self;

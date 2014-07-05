@@ -171,9 +171,9 @@
 }
 
 
-- (void)sendDeviceDetected:(NSString *)identifier
+- (void)sendDeviceDetected:(NSString *)identifier information:(NSDictionary *)deviceInfo
 {
-    [self _sendToView_deviceDetected:identifier];
+    [self _sendToView_deviceDetected:identifier information:deviceInfo];
 }
 
 
@@ -315,12 +315,14 @@
 }
 
 
-- (void)_sendToView_deviceDetected:(NSString *)identifier
+- (void)_sendToView_deviceDetected:(NSString *)identifier information:(NSDictionary *)deviceInfo
 {
-    NSDictionary *data = @{
+    NSMutableDictionary *data = [deviceInfo mutableCopy];
+    NSDictionary *moreData = @{
                            @"type": @"devicedetected",
                            @"identifier": identifier
                            };
+    [data addEntriesFromDictionary:moreData];
     [self _sendToView_dictionary:data];
 }
 
@@ -416,7 +418,9 @@
             }
         };
         self.webViewContext[@"console"][@"log"] = logger;
+        self.webViewContext[@"console"][@"info"] = logger;
         self.webViewContext[@"console"][@"error"] = logger;
+        self.webViewContext[@"console"][@"warn"] = logger;
         //TODO we should add the other console types (warn, ...) and maybe format them specially
         
         [self _registerJSCallbacks];
