@@ -511,7 +511,7 @@ double const URL_CHECK_TIMEOUT = 2.0;
         return;
     }
     
-    if (connection.state == CWBluetoothConnectionStateIPConnecting || connection.state == CWBluetoothConnectionStateIPSent) return;
+    if (connection.state != CWBluetoothConnectionStateInitialDone) return;
     
     BTLog(3, @"Preparing to send IPs to %@", deviceIdentifier);
     
@@ -542,13 +542,29 @@ double const URL_CHECK_TIMEOUT = 2.0;
     if (connection == nil) return;
     
     NSArray *ips = [CWUtil deviceInterfaceAddresses];
-    for (NSString *ip in ips)
+    if ([ips count] > 0)
     {
-        NSString *ipWithPort = [NSString stringWithFormat:@"%@:%d", ip, self.appState.webserverPort];
-        BTLog(4, @"Sending IP %@ to %@", ipWithPort, connection.identifier);
-        NSData *data = [CWUtil JSONDataFromDictionary:@{ @"ip": ipWithPort }];
-        [peripheral writeValue:data forCharacteristic:characteristic type:CBCharacteristicWriteWithResponse];
-        connection.pendingIPWrites++;
+        for (NSString *ip in ips)
+        {
+            NSString *ipWithPort = [NSString stringWithFormat:@"%@:%d", ip, self.appState.webserverPort];
+            BTLog(4, @"Sending IP %@ to %@", ipWithPort, connection.identifier);
+            NSData *data = [CWUtil JSONDataFromDictionary:@{ @"ip": ipWithPort }];
+            [peripheral writeValue:data forCharacteristic:characteristic type:CBCharacteristicWriteWithResponse];
+            connection.pendingIPWrites++;
+        }
+        
+        [connection setState:CWBluetoothConnectionStateIPSent];
+    }
+    else
+    {
+        BTLog(3, @"We have no active network interfaces - %@ cannot be connected", connection.identifier);
+        [connection setState:CWBluetoothConnectionStateInitialDone]; //go back to state before trying to send IPs
+        [self _disconnectPeripheral:peripheral];
+        
+        if ([self.delegate respondsToSelector:@selector(didSendNetworkAddresses:success:)])
+        {
+            [self.delegate didSendNetworkAddresses:connection.identifier success:NO];
+        }
     }
 }
 
@@ -712,16 +728,13 @@ double const URL_CHECK_TIMEOUT = 2.0;
     CWBluetoothConnection *connection = [self _connectionForPeripheral:peripheral];
     if (connection == nil) return;
     
-    //If a connection attempt fails we retry up to MAX_CONNECTION_RETRIES times with increased waiting times
-    BOOL didRetry = NO;
-    if (connection.state != CWBluetoothConnectionStateUnknown &&
-        connection.state != CWBluetoothConnectionStateInitialDone &&
-        connection.state != CWBluetoothConnectionStateIPDone)
+    //Retry the failed connection attempt
+    BOOL didRetry = [self _maybeRetryConnect:connection];
+    if (didRetry == NO)
     {
-        didRetry = [self _maybeRetryConnect:connection];
+        BTLog(3, @"Device %@ failed to connect too many times, ignoring device...", peripheral.name);
+        connection.state = CWBluetoothConnectionStateErrored;
     }
-    
-    if (didRetry == NO) connection.state = CWBluetoothConnectionStateErrored;
     
     //In _connectPeripheral we stop scanning while connecting, so we need to resume scanning now
     [self startScanning];
@@ -742,17 +755,16 @@ double const URL_CHECK_TIMEOUT = 2.0;
     CWBluetoothConnection *connection = [self _connectionForPeripheral:peripheral];
     if (connection == nil) return;
     
-    //If the disconnect occurs before receiving/sending the data we want, we need to reconnect
-    //This should basically never occur unless the device moves out of range, in which case it will be taken care of in _removeLostConnections anyway, but we need to take care of the unlikely cases as well, don't we? ;-)
-    BOOL didRetry = NO;
-    if (connection.state != CWBluetoothConnectionStateUnknown &&
-        connection.state != CWBluetoothConnectionStateInitialDone &&
-        connection.state != CWBluetoothConnectionStateIPDone)
-    {
-        didRetry = [self _maybeRetryConnect:connection];
-    }
+    //If the disconnect occurs when it shouldn't we retry
+    //This should basically never occur unless the device moves out of range during a connect, in which case it will be taken care of in _removeLostConnections anyway, but we need to take care of the unlikely cases as well, don't we? ;-)
+    if (connection.state == CWBluetoothConnectionStateInitialDone || connection.state == CWBluetoothConnectionStateIPDone) return;
     
-    if (didRetry == NO) connection.state = CWBluetoothConnectionStateErrored;
+    BOOL didRetry = [self _maybeRetryConnect:connection];
+    if (didRetry == NO)
+    {
+        BTLog(3, @"Device %@ disconnected unexpectetly too many times, ignoring device...", peripheral.name);
+        connection.state = CWBluetoothConnectionStateErrored;
+    }
 }
 
 
@@ -830,7 +842,6 @@ double const URL_CHECK_TIMEOUT = 2.0;
         if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:BLUETOOTH_IP_CHARACTERISTIC_UUID]])
         {
             [self _sendIPsToPeripheral:peripheral onCharacteristic:characteristic];
-            [connection setState:CWBluetoothConnectionStateIPSent];
             foundValidCharacteristic = YES;
         }
     }
@@ -937,13 +948,13 @@ double const URL_CHECK_TIMEOUT = 2.0;
             {
                 BTLog(3, @"Device %@ could not connect to any of the IPs we send", peripheral.name);
                 connection.state = CWBluetoothConnectionStateInitialDone; //go back to state before trying to send IPs
+                [self _disconnectPeripheral:peripheral];
+                
                 if ([self.delegate respondsToSelector:@selector(didSendNetworkAddresses:success:)])
                 {
                     [self.delegate didSendNetworkAddresses:connection.identifier success:NO];
                 }
             }
-            
-            [self _disconnectPeripheral:peripheral];
         }
     }
 }
