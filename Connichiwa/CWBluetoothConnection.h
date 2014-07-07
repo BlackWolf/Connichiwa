@@ -140,11 +140,6 @@ typedef NS_ENUM(NSInteger, CWBluetoothConnectionIPWriteState)
  */
 - (instancetype)initWithPeripheral:(CBPeripheral *)peripheral;
 
-- (void)addInitialDataChunk:(NSData *)chunk;
-- (NSString *)initialDataString;
-- (NSData *)initialData;
-- (BOOL)isInitialDataComplete;
-
 /**
  *  Adds a new RSSI measurement to this device's RSSI. Using different algorithms, outlier RSSI's or jittering is reduce, the results of this algorithms can be found by retrieving averageRSSI from this class. Note that the original RSSI measurements can not be restored.
  *

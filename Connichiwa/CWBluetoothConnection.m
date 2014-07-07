@@ -30,7 +30,6 @@ double const RSSI_MOVING_AVERAGE_ALPHA = 0.03125;
 @interface CWBluetoothConnection ()
 
 @property (readwrite, strong) CBPeripheral *peripheral;
-@property (readwrite, strong) NSMutableData *_initialData;
 @property (readwrite, strong) NSDate *lastSeen;
 @property (readwrite) double averageRSSI;
 @property (readwrite) double lastSentRSSI;
@@ -71,7 +70,6 @@ double const RSSI_MOVING_AVERAGE_ALPHA = 0.03125;
     self.initialDataState = CWBluetoothConnectionInitialDataStateMissing;
     self.ipWriteState = CWBluetoothConnectionIPWriteStateDisconnected;
     self.peripheral = peripheral;
-    self._initialData = [NSMutableData data];
     self.averageRSSI = 0;
     
     self.measuredPower = DEFAULT_MEASURED_BLUETOOTH_POWER;
@@ -80,36 +78,6 @@ double const RSSI_MOVING_AVERAGE_ALPHA = 0.03125;
     self.pendingIPWrites = 0;
     
     return self;
-}
-
-
-- (void)addInitialDataChunk:(NSData *)chunk
-{
-    [self._initialData appendData:chunk];
-}
-
-
-- (NSString *)initialDataString
-{
-    NSString *string = [[NSString alloc] initWithData:self._initialData encoding:NSUTF8StringEncoding];
-    
-    if ([string hasSuffix:@"''EOM''"]) return [string substringToIndex:[string length] - 7];
-    return string;
-}
-
-
-- (NSData *)initialData
-{
-    //Getting the initialDataString from our NSData, which will remove the ''EOM'', then transforming back... kinda stupid what you gonna do?
-    NSString *string = [self initialDataString];
-    
-    return [string dataUsingEncoding:NSUTF8StringEncoding];
-}
-
-
-- (BOOL)isInitialDataComplete
-{
-    return ([[self initialDataString] hasSuffix:@"''EOM''"]);
 }
 
 
