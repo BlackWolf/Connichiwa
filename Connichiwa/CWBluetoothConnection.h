@@ -59,6 +59,24 @@ typedef NS_ENUM(NSInteger, CWBluetoothConnectionState)
 };
 
 
+typedef NS_ENUM(NSInteger, CWBluetoothConnectionInitialDataState)
+{
+    CWBluetoothConnectionInitialDataStateMissing,
+    CWBluetoothConnectionInitialDataStateConnecting,
+    CWBluetoothConnectionInitialDataStateReceiving,
+    CWBluetoothConnectionInitialDataStateReceived,
+    CWBluetoothConnectionInitialDataStateError
+};
+
+typedef NS_ENUM(NSInteger, CWBluetoothConnectionIPWriteState)
+{
+    CWBluetoothConnectionIPWriteStateDisconnected,
+    CWBluetoothConnectionIPWriteStateConnecting,
+    CWBluetoothConnectionIPWriteStateConnected,
+    CWBluetoothConnectionIPWriteStateSent
+};
+
+
 
 /**
  *  Each instance of this class is a data container for the bluetooth-related data of a connection to another device. "Connection" does not necessarily mean a fully established connection in this case. An instance of CWBluetoothConnection can also represent a device that has been detected nearby but no connection is established, or a device that has been seen previously but that was lost. Besides that, this class stores the state of the connection to another device, its received initial data, can receive new RSSI measurements for the device or keep track of send and received data.
@@ -69,6 +87,10 @@ typedef NS_ENUM(NSInteger, CWBluetoothConnectionState)
  *  The current state of the connection
  */
 @property (readwrite) CWBluetoothConnectionState state;
+
+@property (readwrite) CWBluetoothConnectionInitialDataState initialDataState;
+
+@property (readwrite) CWBluetoothConnectionIPWriteState ipWriteState;
 
 /**
  *  The unique Connichiwa identifier of the other device
@@ -117,6 +139,11 @@ typedef NS_ENUM(NSInteger, CWBluetoothConnectionState)
  *  @return A new CWBluetoothConnection instance
  */
 - (instancetype)initWithPeripheral:(CBPeripheral *)peripheral;
+
+- (void)addInitialDataChunk:(NSData *)chunk;
+- (NSString *)initialDataString;
+- (NSData *)initialData;
+- (BOOL)isInitialDataComplete;
 
 /**
  *  Adds a new RSSI measurement to this device's RSSI. Using different algorithms, outlier RSSI's or jittering is reduce, the results of this algorithms can be found by retrieving averageRSSI from this class. Note that the original RSSI measurements can not be restored.

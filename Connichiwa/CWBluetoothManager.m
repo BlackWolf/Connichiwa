@@ -7,6 +7,8 @@
 //
 
 #import "CWBluetoothManager.h"
+#import "CWBluetoothTransferManager.h"
+#import "CWBluetoothTransferManagerDelegate.h"
 #import "CWBluetoothConnection.h"
 #import "CWWebApplicationState.h"
 #import "CWUtil.h"
@@ -18,12 +20,14 @@ int const MAX_CONNECTION_RETRIES = 4;
 
 
 
-@interface CWBluetoothManager () <CBCentralManagerDelegate, CBPeripheralManagerDelegate, CBPeripheralDelegate>
+@interface CWBluetoothManager () <CBCentralManagerDelegate, CBPeripheralManagerDelegate, CBPeripheralDelegate, CWBluetoothTransferManagerDelegate>
 
 /**
  *  A CWWebApplicationState implementation that allows the BT Manager to access the global state. This is important because the BT Manager needs to know about our unique identifier and if it should accept IPs via it's BT characteristic.
  */
 @property (readwrite, weak) id<CWWebApplicationState> appState;
+
+@property (readwrite, strong) CWBluetoothTransferManager *transferManager;
 
 @property (readwrite) BOOL isScanning;
 
@@ -137,7 +141,7 @@ int const MAX_CONNECTION_RETRIES = 4;
  *
  *  @param central The CBCentral that subscribed to the initial characteristic and should receive the data
  */
-- (void)_sendInitialToCentral:(CBCentral *)central;
+- (void)_sendInitialDataToCentral:(CBCentral *)central;
 
 /**
  *  Sends our network interface addresses to the given peripheral via the given writeable characteristic, which should be the other devices IP characteristic.
@@ -146,38 +150,6 @@ int const MAX_CONNECTION_RETRIES = 4;
  *  @param characteristic The writeable characteristic to write the IPs into
  */
 - (void)_sendIPsToPeripheral:(CBPeripheral *)peripheral onCharacteristic:(CBCharacteristic *)characteristic;
-
-/**
- *  TODO: This is not implemented. We should implement a new send/receive mechanisms that bundles data here and also makes sure that sending data is neatly packed in 20-byte chunks and put together.
- *
- *  @param data    TODO
- *  @param central TODO
- */
-- (void)_sendData:(NSData *)data toCentral:(CBCentral *)central;
-
-/**
- *  TODO: This is not implemented. We should implement a new send/receive mechanisms that bundles data here and also makes sure that sending data is neatly packed in 20-byte chunks and put together.
- *
- *  @param data       TODO
- *  @param peripheral TODO
- */
-- (void)_sendData:(NSData *)data toPeripheral:(CBPeripheral *)peripheral;
-
-/**
- *  TODO: This is not implemented. We should implement a new send/receive mechanisms that bundles data here and also makes sure that sending data is neatly packed in 20-byte chunks and put together.
- *
- *  @param data    TODO
- *  @param central TODO
- */
-- (void)_receivedData:(NSData *)data fromCentral:(CBCentral *)central;
-
-/**
- *  TODO: This is not implemented. We should implement a new send/receive mechanisms that bundles data here and also makes sure that sending data is neatly packed in 20-byte chunks and put together.
- *
- *  @param data                     TODO
- *  @param peripheral               TODO
- */
-- (void)_receivedData:(NSData *)data fromPeripheral:(CBPeripheral *)peripheral;
 
 /**
  *  Retrieves the CWBluetoothConnection that belongs to the device with the given identifier from the connections array
@@ -239,6 +211,8 @@ double const URL_CHECK_TIMEOUT = 2.0;
     dispatch_queue_t peripheralQueue = dispatch_queue_create("connichiwaperipheralqueue", DISPATCH_QUEUE_SERIAL);
     self.centralManager = [[CBCentralManager alloc] initWithDelegate:self queue:centralQueue];
     self.peripheralManager = [[CBPeripheralManager alloc] initWithDelegate:self queue:peripheralQueue];
+    self.transferManager = [[CWBluetoothTransferManager alloc] initWithPeripheralManager:self.peripheralManager];
+    [self.transferManager setDelegate:self];
     
     //When a central subscribes to the initial characteristic, we will sent it our initial device data, including our unique identifier
     self.advertisedInitialCharacteristic = [[CBMutableCharacteristic alloc] initWithType:[CBUUID UUIDWithString:BLUETOOTH_INITIAL_CHARACTERISTIC_UUID]
@@ -502,6 +476,55 @@ double const URL_CHECK_TIMEOUT = 2.0;
 #pragma mark Sending & Receiving Data
 
 
+- (void)_sendInitialDataToCentral:(CBCentral *)central
+{    
+    NSDictionary *sendDictionary = @{ @"identifier": self.appState.identifier, @"name": self.appState.deviceName };
+    NSData *initialData = [NSJSONSerialization dataWithJSONObject:sendDictionary options:NSJSONWritingPrettyPrinted error:nil];
+    [self.transferManager sendData:initialData toCentral:central withCharacteristic:self.advertisedInitialCharacteristic];
+}
+
+
+- (void)_receivedInitialData:(NSData *)data forPeripheral:(CBPeripheral *)peripheral
+{
+    CWBluetoothConnection *connection = [self _connectionForPeripheral:peripheral];
+    
+    if (connection.initialDataState != CWBluetoothConnectionInitialDataStateReceiving)
+    {
+        ErrLog(@"Received initial data from peripheral not in InitialDataStateReceiving!");
+        return;
+    }
+    
+    NSDictionary *initialData = [CWUtil dictionaryFromJSONData:data];
+    
+    BTLog(3, @"Received initial data for %@: %@", connection.identifier, initialData);
+    
+    if (initialData[@"identifier"] == nil)
+    {
+        ErrLog(@"Received initial data did not contain an identifier, device is ignored...", connection.peripheral.name);
+        [connection setState:CWBluetoothConnectionStateErrored];
+        [connection setInitialDataState:CWBluetoothConnectionInitialDataStateError];
+        [self _disconnectPeripheral:connection.peripheral];
+        
+        return;
+    }
+    
+    [connection setIdentifier:initialData[@"identifier"]];
+    if (initialData[@"name"] != nil) [connection setName:initialData[@"name"]];
+    if (initialData[@"measuredPower"] != nil) [connection setMeasuredPower:[(NSNumber *)initialData[@"measuredPower"] intValue]];
+    
+    
+    [connection setState:CWBluetoothConnectionStateInitialDone];
+    [connection setInitialDataState:CWBluetoothConnectionInitialDataStateReceived];
+    [self _disconnectPeripheral:connection.peripheral];
+    
+    //After the initial data transfer we can finally sent the "device detected" to the delegate
+    if ([self.delegate respondsToSelector:@selector(deviceDetected:information:)])
+    {
+        [self.delegate deviceDetected:connection.identifier information:initialData];
+    }
+}
+
+
 - (void)sendNetworkAddressesToDevice:(NSString *)deviceIdentifier
 {
     CWBluetoothConnection *connection = [self _connectionForIdentifier:deviceIdentifier];
@@ -519,21 +542,6 @@ double const URL_CHECK_TIMEOUT = 2.0;
     [connection setState:CWBluetoothConnectionStateIPConnecting];
     connection.pendingIPWrites = 0;
     [self _connectPeripheral:connection.peripheral];
-}
-
-
-- (void)_sendInitialToCentral:(CBCentral *)central
-{
-    BTLog(3, @"Preparing to send initial data to %@", central);
-    
-    NSDictionary *sendDictionary = @{ @"identifier": self.appState.identifier, @"name": self.appState.deviceName };
-    NSData *initialData = [NSJSONSerialization dataWithJSONObject:sendDictionary options:NSJSONWritingPrettyPrinted error:nil];
-    BOOL didSend = [self.peripheralManager updateValue:initialData forCharacteristic:self.advertisedInitialCharacteristic onSubscribedCentrals:@[central]];
-    
-    if (didSend == NO)
-    {
-        ErrLog(@"Unable to send initial data to %@", central);
-    }
 }
 
 
@@ -570,30 +578,6 @@ double const URL_CHECK_TIMEOUT = 2.0;
 }
 
 
-- (void)_sendData:(NSData *)data toCentral:(CBCentral *)central
-{
-    
-}
-
-
-- (void)_sendData:(NSData *)data toPeripheral:(CBPeripheral *)peripheral
-{
-    
-}
-
-
-- (void)_receivedData:(NSData *)data fromCentral:(CBCentral *)central
-{
-    
-}
-
-
-- (void)_receivedData:(NSData *)data fromPeripheral:(CBPeripheral *)peripheral
-{
-    
-}
-
-
 #pragma mark Retrieving CWBluetoothConnections
 
 
@@ -626,6 +610,14 @@ double const URL_CHECK_TIMEOUT = 2.0;
     }
     
     return foundConnection;
+}
+
+
+#pragma mark CWBluetoothTransferManagerDelegate
+
+- (void)didReceiveMessage:(NSData *)data fromPeripheral:(CBPeripheral *)peripheral withCharacteristic:(CBCharacteristic *)characteristic
+{
+    if ([characteristic.UUID isEqual:self.advertisedInitialCharacteristic.UUID]) [self _receivedInitialData:data forPeripheral:peripheral];
 }
 
 
@@ -681,6 +673,7 @@ double const URL_CHECK_TIMEOUT = 2.0;
         
         CWBluetoothConnection *newConnection = [[CWBluetoothConnection alloc] initWithPeripheral:peripheral];
         [newConnection setState:CWBluetoothConnectionStateInitialConnecting];
+        [newConnection setInitialDataState:CWBluetoothConnectionInitialDataStateConnecting];
         [newConnection updateLastSeen];
         [self.connections addObject:newConnection];
         
@@ -830,9 +823,10 @@ double const URL_CHECK_TIMEOUT = 2.0;
     {
         //The initial characteristic supports notify only
         //Subscribing to the notifications will call the peripheralManager:central:didSubscribeToCharacteristic: of the other device and trigger the initial data transfer
-        if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:BLUETOOTH_INITIAL_CHARACTERISTIC_UUID]])
+        if (connection.initialDataState == CWBluetoothConnectionInitialDataStateConnecting && [characteristic.UUID isEqual:[CBUUID UUIDWithString:BLUETOOTH_INITIAL_CHARACTERISTIC_UUID]])
         {
             [connection setState:CWBluetoothConnectionStateInitialWaitingForData];
+            [connection setInitialDataState:CWBluetoothConnectionInitialDataStateReceiving];
             [peripheral setNotifyValue:YES forCharacteristic:characteristic];
             foundValidCharacteristic = YES;
         }
@@ -865,42 +859,14 @@ double const URL_CHECK_TIMEOUT = 2.0;
  */
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error
 {
-    BTLog(3, @"Received data from %@. Data: %@. Error: %@", peripheral.name, [[NSString alloc] initWithData:characteristic.value encoding:NSUTF8StringEncoding], error);
-    
-    CWBluetoothConnection *connection = [self _connectionForPeripheral:peripheral];
-    if (connection != nil
-        && connection.state == CWBluetoothConnectionStateInitialWaitingForData
-        && [characteristic.UUID isEqual:[CBUUID UUIDWithString:BLUETOOTH_INITIAL_CHARACTERISTIC_UUID]]
-        && characteristic.value != nil
-        && error == nil)
+    if (characteristic.value != nil && error == nil)
     {
-        NSDictionary *retrievedData = [CWUtil dictionaryFromJSONData:characteristic.value];
-        
-        if (retrievedData[@"identifier"] == nil)
-        {
-            ErrLog(@"Received initial device data from %@ without an identifier, device is ignored...", peripheral.name);
-            [connection setState:CWBluetoothConnectionStateErrored];
-            [self _disconnectPeripheral:peripheral];
-            
-            return;
-        }
-
-        [connection setIdentifier:retrievedData[@"identifier"]];
-        if (retrievedData[@"name"] != nil) [connection setName:retrievedData[@"name"]];
-        if (retrievedData[@"measuredPower"] != nil) [connection setMeasuredPower:[(NSNumber *)retrievedData[@"measuredPower"] intValue]];
-        
-        
-        [connection setState:CWBluetoothConnectionStateInitialDone];
-        [self _disconnectPeripheral:peripheral];
-        
-        //After the initial data transfer we can finally sent the "device detected" to the delegate
-        if ([self.delegate respondsToSelector:@selector(deviceDetected:information:)])
-        {
-            [self.delegate deviceDetected:connection.identifier information:retrievedData];
-        }
+        [self.transferManager receivedData:characteristic.value fromPeripheral:peripheral withCharacteristic:characteristic];
     }
     else
     {
+        ErrLog(@"Received data from %@. Data: %@. Error: %@", peripheral.name, [[NSString alloc] initWithData:characteristic.value encoding:NSUTF8StringEncoding], error);
+        
         [self _disconnectPeripheral:peripheral];
     }
 }
@@ -955,6 +921,10 @@ double const URL_CHECK_TIMEOUT = 2.0;
                 {
                     [self.delegate didSendNetworkAddresses:connection.identifier success:NO];
                 }
+            }
+            else
+            {
+                BTLog(3, @"Device %@ successfully connected to one of the IPs we sent", peripheral.name);
             }
         }
     }
@@ -1039,6 +1009,7 @@ double const URL_CHECK_TIMEOUT = 2.0;
  */
 - (void)peripheralManagerIsReadyToUpdateSubscribers:(CBPeripheralManager *)peripheral
 {
+    [self.transferManager canContinueSendingToCentrals];
 }
 
 
@@ -1119,7 +1090,7 @@ double const URL_CHECK_TIMEOUT = 2.0;
     if (characteristic == self.advertisedInitialCharacteristic)
     {
         BTLog(3, @"Another device subscribed to our initial characteristic");
-        [self _sendInitialToCentral:central];
+        [self _sendInitialDataToCentral:central];
     }
 }
 

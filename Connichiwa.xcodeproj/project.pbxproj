@@ -29,6 +29,8 @@
 		330CBB88193F14B60064AD99 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 330CBB87193F14B60064AD99 /* CoreFoundation.framework */; };
 		330CBB8E193F14B60064AD99 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 330CBB8C193F14B60064AD99 /* InfoPlist.strings */; };
 		331F2DE31944F4ED007609B9 /* weblib in Resources */ = {isa = PBXBuildFile; fileRef = 331F2DE21944F4ED007609B9 /* weblib */; };
+		3321DCDB196AA6830090D39C /* CWBluetoothTransferManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 3321DCD9196AA6830090D39C /* CWBluetoothTransferManager.h */; };
+		3321DCDC196AA6830090D39C /* CWBluetoothTransferManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3321DCDA196AA6830090D39C /* CWBluetoothTransferManager.m */; };
 		332B686F1959A2B5004B0600 /* scripts in Resources */ = {isa = PBXBuildFile; fileRef = 332B686E1959A2B5004B0600 /* scripts */; };
 		333A80671953996D00420D5A /* CWBluetoothManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 333A80651953996D00420D5A /* CWBluetoothManager.h */; };
 		333A80681953996D00420D5A /* CWBluetoothManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 333A80661953996D00420D5A /* CWBluetoothManager.m */; };
@@ -130,6 +132,9 @@
 		330CBB8D193F14B60064AD99 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		330CBB8F193F14B60064AD99 /* ConnichiwaResources-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ConnichiwaResources-Prefix.pch"; sourceTree = "<group>"; };
 		331F2DE21944F4ED007609B9 /* weblib */ = {isa = PBXFileReference; lastKnownFileType = folder; path = weblib; sourceTree = "<group>"; };
+		3321DCD9196AA6830090D39C /* CWBluetoothTransferManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWBluetoothTransferManager.h; sourceTree = "<group>"; };
+		3321DCDA196AA6830090D39C /* CWBluetoothTransferManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWBluetoothTransferManager.m; sourceTree = "<group>"; };
+		3321DCE1196AA6920090D39C /* CWBluetoothTransferManagerDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CWBluetoothTransferManagerDelegate.h; sourceTree = "<group>"; };
 		332B686D1958E55E004B0600 /* CWWebApplicationState.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CWWebApplicationState.h; sourceTree = "<group>"; };
 		332B686E1959A2B5004B0600 /* scripts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = scripts; sourceTree = "<group>"; };
 		333A80651953996D00420D5A /* CWBluetoothManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWBluetoothManager.h; sourceTree = "<group>"; };
@@ -255,6 +260,9 @@
 				333A80651953996D00420D5A /* CWBluetoothManager.h */,
 				333A80661953996D00420D5A /* CWBluetoothManager.m */,
 				333A806D1953997F00420D5A /* CWBluetoothManagerDelegate.h */,
+				3321DCD9196AA6830090D39C /* CWBluetoothTransferManager.h */,
+				3321DCDA196AA6830090D39C /* CWBluetoothTransferManager.m */,
+				3321DCE1196AA6920090D39C /* CWBluetoothTransferManagerDelegate.h */,
 				33A87DF51951037A001BDC09 /* CWBluetoothConnection.h */,
 				33A87DF61951037A001BDC09 /* CWBluetoothConnection.m */,
 			);
@@ -353,6 +361,7 @@
 			files = (
 				33EE7EFA1955BC1500EFDE17 /* CWUtil.h in Headers */,
 				330CBB74193E75890064AD99 /* Connichiwa.h in Headers */,
+				3321DCDB196AA6830090D39C /* CWBluetoothTransferManager.h in Headers */,
 				33618AC0195DAD37006FA51B /* CWRemoteLibraryManager.h in Headers */,
 				333A80671953996D00420D5A /* CWBluetoothManager.h in Headers */,
 				334AB747193FDADC00A15999 /* CWWebApplication.h in Headers */,
@@ -632,6 +641,7 @@
 				33618AC1195DAD37006FA51B /* CWRemoteLibraryManager.m in Sources */,
 				334AB748193FDADC00A15999 /* CWWebApplication.m in Sources */,
 				333A80681953996D00420D5A /* CWBluetoothManager.m in Sources */,
+				3321DCDC196AA6830090D39C /* CWBluetoothTransferManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
