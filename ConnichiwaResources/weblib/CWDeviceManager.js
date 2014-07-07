@@ -80,9 +80,23 @@ var CWDeviceManager = (function()
     return null;
   };
 
+
+  var getConnectedDevices = function()
+  {
+    var connectedDevices = [];
+    for (var i = 0; i < _remoteDevices.length; i++)
+    {
+      var remoteDevice = _remoteDevices[i];
+      if (remoteDevice.isConnected()) connectedDevices.push(remoteDevice);
+    }
+
+    return connectedDevices;
+  };
+
   return {
     addDevice               : addDevice,
     removeDevice            : removeDevice,
-    getDeviceWithIdentifier : getDeviceWithIdentifier
+    getDeviceWithIdentifier : getDeviceWithIdentifier,
+    getConnectedDevices     : getConnectedDevices
   };
 })();

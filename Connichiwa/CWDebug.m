@@ -44,7 +44,7 @@ static long longestSourceLength = 10;
  */
 void cwLogNew(int priority, NSString *source, NSString *file, int line, NSString *format, ...)
 {
-    NSArray *activeDebugSources = @[ @"NATIVE", @"BLUETOOTH", @"WEBSERVER", @"WEBLIB", @"REMOTELIB" ]; //TODO is defined every time, lame, but static NSArray is not possible
+    NSArray *activeDebugSources = nil; //TODO is defined every time, lame, but static NSArray is not possible
  
     source = [source uppercaseString];
     if (priority <= MAX_LOG_PRIORITY && ([source isEqualToString:@"ERROR"] || activeDebugSources == nil || [activeDebugSources containsObject:source]))

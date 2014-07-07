@@ -52,7 +52,7 @@
 - (void)deviceLost:(NSString *)identifier;
 
 /**
- *  Caled when we received an URL that points to another Connichiwa web application
+ *  Called when we received an URL that points to another Connichiwa web application
  *
  *  @param URL The URL of the remote Connichiwa web application
  */

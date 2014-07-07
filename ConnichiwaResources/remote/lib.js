@@ -56,6 +56,45 @@ var onWebsocketMessage = function(e)
     // object.element = object.element.replace("#", "");
     // document.getElementById(object.element).innerHTML = object.content;
   }
+
+  if (object.type === "updateStyle")
+  {
+    window.requestAnimationFrame(function(timestamp) {
+      for (var style in object.styles) {
+        $(object.element).css(style, object.styles[style]);
+      }
+    });
+    // setTimeout(test(object.element, object.content), 0);
+    // $(object.element).html(object.content);
+    // object.element = object.element.replace("#", "");
+    // document.getElementById(object.element).innerHTML = object.content;
+  }
+
+  if (object.type === "beginPath")
+  {
+    window.requestAnimationFrame(function(timestamp) {
+      var context = $(object.element)[0].getContext("2d");
+      context.beginPath();
+      context.moveTo(object.coords.x, object.coords.y);
+    });
+  }
+
+  if (object.type === "updatePath")
+  {
+    window.requestAnimationFrame(function(timestamp) {
+      var context = $(object.element)[0].getContext("2d");
+      context.lineTo(object.coords.x, object.coords.y);
+      context.stroke();
+    });
+  }
+
+  if (object.type === "endPath")
+  {
+    window.requestAnimationFrame(function(timestamp) {
+      var context = $(object.element)[0].getContext("2d");
+      context.closePath();
+    });
+  }
 };
 
 

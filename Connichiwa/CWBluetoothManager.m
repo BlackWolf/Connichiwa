@@ -14,7 +14,7 @@
 
 
 
-int const MAX_CONNECTION_RETRIES = 3;
+int const MAX_CONNECTION_RETRIES = 4;
 
 
 
@@ -486,6 +486,7 @@ double const URL_CHECK_TIMEOUT = 2.0;
     
     for (CWBluetoothConnection *lostConnection in lostConnections)
     {
+        CWLog(5, @"Removed connection %@", lostConnection.identifier);
         [self.connections removeObject:lostConnection];
         
         if (lostConnection.identifier != nil && [self.delegate respondsToSelector:@selector(deviceLost:)])
@@ -864,7 +865,7 @@ double const URL_CHECK_TIMEOUT = 2.0;
  */
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error
 {
-    BTLog(4, @"Received data from %@. Data: %@. Error: %@", peripheral.name, [[NSString alloc] initWithData:characteristic.value encoding:NSUTF8StringEncoding], error);
+    BTLog(3, @"Received data from %@. Data: %@. Error: %@", peripheral.name, [[NSString alloc] initWithData:characteristic.value encoding:NSUTF8StringEncoding], error);
     
     CWBluetoothConnection *connection = [self _connectionForPeripheral:peripheral];
     if (connection != nil

@@ -216,10 +216,24 @@ var CWDeviceManager = (function()
     return null;
   };
 
+
+  var getConnectedDevices = function()
+  {
+    var connectedDevices = [];
+    for (var i = 0; i < _remoteDevices.length; i++)
+    {
+      var remoteDevice = _remoteDevices[i];
+      if (remoteDevice.isConnected()) connectedDevices.push(remoteDevice);
+    }
+
+    return connectedDevices;
+  };
+
   return {
     addDevice               : addDevice,
     removeDevice            : removeDevice,
-    getDeviceWithIdentifier : getDeviceWithIdentifier
+    getDeviceWithIdentifier : getDeviceWithIdentifier,
+    getConnectedDevices     : getConnectedDevices
   };
 })();
 /* global CWDebug */
@@ -548,7 +562,7 @@ var CWUtil = (function()
     inArray  : inArray
   };
 })();
-/* global CWEventManager, CWRemoteCommunicationParser, CWDevice, CWDeviceConnectionState, CWUtil, CWDebug */
+/* global CWEventManager, CWDeviceManager, CWRemoteCommunicationParser, CWDevice, CWDeviceConnectionState, CWUtil, CWDebug */
 /* global nativeCallWebsocketDidOpen, nativeCallWebsocketDidClose, nativeCallConnectRemote  */
 /* global CONNECTING, OPEN */
 "use strict";
@@ -748,6 +762,16 @@ var Connichiwa = (function()
     Connichiwa._send(JSON.stringify(message));
   };
 
+
+  var broadcast = function(message) 
+  {
+    var connectedDevices = CWDeviceManager.getConnectedDevices();
+    for (var i = 0; i < connectedDevices.length ; i++) 
+    {
+      Connichiwa.send(connectedDevices[i], message);
+    }
+  };
+
   return {
     _connectWebsocket : _connectWebsocket,
     _send             : _send,
@@ -755,6 +779,7 @@ var Connichiwa = (function()
     getIdentifier     : getIdentifier,
     on                : on,
     connect           : connect,
-    send              : send
+    send              : send,
+    broadcast         : broadcast
   };
 })();
