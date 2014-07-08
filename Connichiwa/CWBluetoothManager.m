@@ -601,6 +601,7 @@ double const URL_CHECK_TIMEOUT = 2.0;
                     [self.delegate didReceiveDeviceURL:[url URLByDeletingLastPathComponent]]; //remove /check
                 }
                 containsValidIP = YES;
+                break;
             }
         }
     }
