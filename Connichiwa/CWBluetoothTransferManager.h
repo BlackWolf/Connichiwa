@@ -21,6 +21,7 @@
 - (void)sendData:(NSData *)data toCentral:(CBCentral *)central withCharacteristic:(CBMutableCharacteristic *)characteristic;
 - (void)sendData:(NSData *)data toPeripheral:(CBPeripheral *)peripheral withCharacteristic:(CBCharacteristic *)characteristic;
 - (void)receivedData:(NSData *)chunk fromPeripheral:(CBPeripheral *)peripheral withCharacteristic:(CBCharacteristic *)characteristic;
+- (void)receivedDataFromCentral:(CBATTRequest *)writeRequest;
 - (void)canContinueSendingToCentrals;
 
 @end

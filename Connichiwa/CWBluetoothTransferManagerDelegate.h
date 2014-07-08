@@ -11,5 +11,6 @@
 @protocol CWBluetoothTransferManagerDelegate <NSObject>
 
 - (void)didReceiveMessage:(NSData *)data fromPeripheral:(CBPeripheral *)peripheral withCharacteristic:(CBCharacteristic *)characteristic;
+- (void)didReceiveMessage:(NSData *)data fromCentral:(CBCentral *)central withCharacteristic:(CBCharacteristic *)characteristic lastWriteRequest:(CBATTRequest *)request;
 
 @end

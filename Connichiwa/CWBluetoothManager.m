@@ -223,7 +223,7 @@ double const URL_CHECK_TIMEOUT = 2.0;
     //A central can subscribe to the IP characteristic when it wants to use our device as a remote device
     //The characteristic is writeable and allows the central to send us its
     self.advertisedIPCharacteristic = [[CBMutableCharacteristic alloc] initWithType:[CBUUID UUIDWithString:BLUETOOTH_IP_CHARACTERISTIC_UUID]
-                                                                              properties:CBCharacteristicPropertyWrite
+                                                                              properties:(CBCharacteristicPropertyWriteWithoutResponse | CBCharacteristicPropertyWrite)
                                                                                    value:nil
                                                                              permissions:CBAttributePermissionsWriteable];
     
@@ -366,9 +366,7 @@ double const URL_CHECK_TIMEOUT = 2.0;
     CWBluetoothConnection *connection = [self _connectionForPeripheral:peripheral];
     if (connection == nil) return; //e.g. when the device was lost
     
-    if (connection.state == CWBluetoothConnectionStateErrored ||
-        peripheral.state == CBPeripheralStateConnecting ||
-        peripheral.state == CBPeripheralStateConnected)
+    if (connection.didError == YES || peripheral.state == CBPeripheralStateConnecting || peripheral.state == CBPeripheralStateConnected)
     {
         return;
     }
@@ -419,7 +417,7 @@ double const URL_CHECK_TIMEOUT = 2.0;
 
 - (void)_addRSSIMeasure:(double)RSSI toConnection:(CWBluetoothConnection *)connection
 {
-    if (connection.state == CWBluetoothConnectionStateErrored) return;
+    if (connection.didError == YES) return;
     
     [connection addNewRSSIMeasure:RSSI];
     
@@ -473,7 +471,7 @@ double const URL_CHECK_TIMEOUT = 2.0;
 }
 
 
-#pragma mark Sending & Receiving Data
+#pragma mark Sending & Receiving Initial Data
 
 
 - (void)_sendInitialDataToCentral:(CBCentral *)central
@@ -501,8 +499,8 @@ double const URL_CHECK_TIMEOUT = 2.0;
     if (initialData[@"identifier"] == nil)
     {
         ErrLog(@"Received initial data did not contain an identifier, device is ignored...", connection.peripheral.name);
-        [connection setState:CWBluetoothConnectionStateErrored];
         [connection setInitialDataState:CWBluetoothConnectionInitialDataStateError];
+        connection.didError = YES;
         [self _disconnectPeripheral:connection.peripheral];
         
         return;
@@ -513,7 +511,6 @@ double const URL_CHECK_TIMEOUT = 2.0;
     if (initialData[@"measuredPower"] != nil) [connection setMeasuredPower:[(NSNumber *)initialData[@"measuredPower"] intValue]];
     
     
-    [connection setState:CWBluetoothConnectionStateInitialDone];
     [connection setInitialDataState:CWBluetoothConnectionInitialDataStateReceived];
     [self _disconnectPeripheral:connection.peripheral];
     
@@ -523,6 +520,9 @@ double const URL_CHECK_TIMEOUT = 2.0;
         [self.delegate deviceDetected:connection.identifier information:initialData];
     }
 }
+
+
+#pragma mark Sending & Receiving IP Data
 
 
 - (void)sendNetworkAddressesToDevice:(NSString *)deviceIdentifier
@@ -535,12 +535,11 @@ double const URL_CHECK_TIMEOUT = 2.0;
         return;
     }
     
-    if (connection.state != CWBluetoothConnectionStateInitialDone) return;
+    if (connection.IPWriteState != CWBluetoothConnectionIPWriteStateDisconnected) return;
     
     BTLog(3, @"Preparing to send IPs to %@", deviceIdentifier);
     
-    [connection setState:CWBluetoothConnectionStateIPConnecting];
-    connection.pendingIPWrites = 0;
+    [connection setIPWriteState:CWBluetoothConnectionIPWriteStateConnecting];
     [self _connectPeripheral:connection.peripheral];
 }
 
@@ -551,30 +550,64 @@ double const URL_CHECK_TIMEOUT = 2.0;
     if (connection == nil) return;
     
     NSArray *ips = [CWUtil deviceInterfaceAddresses];
-    if ([ips count] > 0)
+    NSMutableArray *ipsWithPort = [NSMutableArray arrayWithCapacity:[ips count]];
+    for (NSString *ip in ips)
     {
-        for (NSString *ip in ips)
-        {
-            NSString *ipWithPort = [NSString stringWithFormat:@"%@:%d", ip, self.appState.webserverPort];
-            BTLog(4, @"Sending IP %@ to %@", ipWithPort, connection.identifier);
-            NSData *data = [CWUtil JSONDataFromDictionary:@{ @"ip": ipWithPort }];
-            [peripheral writeValue:data forCharacteristic:characteristic type:CBCharacteristicWriteWithResponse];
-            connection.pendingIPWrites++;
-        }
-        
-        [connection setState:CWBluetoothConnectionStateIPSent];
+        [ipsWithPort addObject:[NSString stringWithFormat:@"%@:%d", ip, self.appState.webserverPort]];
     }
-    else
+    
+    NSData *data = [CWUtil JSONDataFromDictionary:@{ @"ips": ipsWithPort }];
+    connection.IPWriteState = CWBluetoothConnectionIPWriteStateSent;
+    [self.transferManager sendData:data toPeripheral:peripheral withCharacteristic:characteristic];
+}
+
+
+- (void)_receivedIPData:(NSData *)data forCentral:(CBCentral *)central lastWriteRequest:(CBATTRequest *)writeRequest
+{
+    NSDictionary *ipData = [CWUtil dictionaryFromJSONData:data];
+    
+    if (ipData[@"ips"] == nil)
     {
-        BTLog(3, @"We have no active network interfaces - %@ cannot be connected", connection.identifier);
-        [connection setState:CWBluetoothConnectionStateInitialDone]; //go back to state before trying to send IPs
-        [self _disconnectPeripheral:peripheral];
-        
-        if ([self.delegate respondsToSelector:@selector(didSendNetworkAddresses:success:)])
+        ErrLog(@"'ips' key was missing from received IP data");
+        return;
+    }
+    
+    //If we can't become a remote anyway, we reject any IPs we receive
+    //Otherwise we check every IP for validity and stop when we found a valid IP
+    BOOL containsValidIP = NO;
+    if ([self.appState canBecomeRemote])
+    {
+        for (NSString *ip in ipData[@"ips"])
         {
-            [self.delegate didSendNetworkAddresses:connection.identifier success:NO];
+            NSHTTPURLResponse *response = nil;
+            NSError *error = nil;
+            
+            NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@/check", ip]];
+            NSMutableURLRequest *httpRequest = [NSMutableURLRequest
+                                                requestWithURL:url
+                                                cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
+                                                timeoutInterval:URL_CHECK_TIMEOUT];
+            [httpRequest setHTTPMethod:@"HEAD"];
+            
+            BTLog(3, @"Checking IP %@ for validity", url);
+            [NSURLConnection sendSynchronousRequest:httpRequest returningResponse:&response error:&error];
+            BTLog(3, @"OH NOES, AN ERROR: %@", error);
+            if ([response statusCode] == 200)
+            {
+                //We found a working IP!
+                BTLog(3, @"%@ is a valid URL", url);
+                if ([self.delegate respondsToSelector:@selector(didReceiveDeviceURL:)])
+                {
+                    [self.delegate didReceiveDeviceURL:[url URLByDeletingLastPathComponent]]; //remove /check
+                }
+                containsValidIP = YES;
+            }
         }
     }
+
+    //We exploit the write request responses here to indicate if the IP(s) received worked or not
+    if (containsValidIP)    [self.peripheralManager respondToRequest:writeRequest withResult:CBATTErrorSuccess];
+    else                    [self.peripheralManager respondToRequest:writeRequest withResult:CBATTErrorAttributeNotFound];
 }
 
 
@@ -620,6 +653,10 @@ double const URL_CHECK_TIMEOUT = 2.0;
     if ([characteristic.UUID isEqual:self.advertisedInitialCharacteristic.UUID]) [self _receivedInitialData:data forPeripheral:peripheral];
 }
 
+- (void)didReceiveMessage:(NSData *)data fromCentral:(CBCentral *)central withCharacteristic:(CBCharacteristic *)characteristic lastWriteRequest:(CBATTRequest *)request
+{
+    if ([characteristic.UUID isEqual:self.advertisedIPCharacteristic.UUID]) [self _receivedIPData:data forCentral:central lastWriteRequest:request];
+}
 
 #pragma mark CBCentralManagerDelegate
 
@@ -672,8 +709,8 @@ double const URL_CHECK_TIMEOUT = 2.0;
         BTLog(3, @"New peripheral '%@'", peripheral.name);
         
         CWBluetoothConnection *newConnection = [[CWBluetoothConnection alloc] initWithPeripheral:peripheral];
-        [newConnection setState:CWBluetoothConnectionStateInitialConnecting];
         [newConnection setInitialDataState:CWBluetoothConnectionInitialDataStateConnecting];
+        [newConnection setIPWriteState:CWBluetoothConnectionIPWriteStateDisconnected];
         [newConnection updateLastSeen];
         [self.connections addObject:newConnection];
         
@@ -727,7 +764,7 @@ double const URL_CHECK_TIMEOUT = 2.0;
     if (didRetry == NO)
     {
         BTLog(3, @"Device %@ failed to connect too many times, ignoring device...", peripheral.name);
-        connection.state = CWBluetoothConnectionStateErrored;
+        connection.didError = YES;
     }
     
     //In _connectPeripheral we stop scanning while connecting, so we need to resume scanning now
@@ -746,19 +783,19 @@ double const URL_CHECK_TIMEOUT = 2.0;
 {
     BTLog(3, @"Disconnected peripheral %@. Error: %@", peripheral.name, error);
     
-    CWBluetoothConnection *connection = [self _connectionForPeripheral:peripheral];
-    if (connection == nil) return;
-    
-    //If the disconnect occurs when it shouldn't we retry
-    //This should basically never occur unless the device moves out of range during a connect, in which case it will be taken care of in _removeLostConnections anyway, but we need to take care of the unlikely cases as well, don't we? ;-)
-    if (connection.state == CWBluetoothConnectionStateInitialDone || connection.state == CWBluetoothConnectionStateIPDone) return;
-    
-    BOOL didRetry = [self _maybeRetryConnect:connection];
-    if (didRetry == NO)
-    {
-        BTLog(3, @"Device %@ disconnected unexpectetly too many times, ignoring device...", peripheral.name);
-        connection.state = CWBluetoothConnectionStateErrored;
-    }
+//    CWBluetoothConnection *connection = [self _connectionForPeripheral:peripheral];
+//    if (connection == nil) return;
+//    
+//    //If the disconnect occurs when it shouldn't we retry
+//    //This should basically never occur unless the device moves out of range during a connect, in which case it will be taken care of in _removeLostConnections anyway, but we need to take care of the unlikely cases as well, don't we? ;-)
+//    if (connection.state == CWBluetoothConnectionStateInitialDone || connection.state == CWBluetoothConnectionStateIPDone) return;
+//    
+//    BOOL didRetry = [self _maybeRetryConnect:connection];
+//    if (didRetry == NO)
+//    {
+//        BTLog(3, @"Device %@ disconnected unexpectetly too many times, ignoring device...", peripheral.name);
+//        connection.state = CWBluetoothConnectionStateErrored;
+//    }
 }
 
 
@@ -782,12 +819,13 @@ double const URL_CHECK_TIMEOUT = 2.0;
     {
         if ([service.UUID isEqual:[CBUUID UUIDWithString:BLUETOOTH_SERVICE_UUID]])
         {
-            if (connection.state == CWBluetoothConnectionStateInitialConnecting)
+            if (connection.initialDataState == CWBluetoothConnectionInitialDataStateConnecting)
             {
                 [peripheral discoverCharacteristics:@[[CBUUID UUIDWithString:BLUETOOTH_INITIAL_CHARACTERISTIC_UUID]] forService:service];
                 foundValidService = YES;
             }
-            else if (connection.state == CWBluetoothConnectionStateIPConnecting)
+            
+            if (connection.IPWriteState == CWBluetoothConnectionIPWriteStateConnecting)
             {
                 [peripheral discoverCharacteristics:@[[CBUUID UUIDWithString:BLUETOOTH_IP_CHARACTERISTIC_UUID]] forService:service];
                 foundValidService = YES;
@@ -798,7 +836,7 @@ double const URL_CHECK_TIMEOUT = 2.0;
     if (foundValidService == NO)
     {
         BTLog(3, @"No valid services found for %@, device is ignored...", peripheral.name);
-        [connection setState:CWBluetoothConnectionStateErrored];
+        connection.didError = YES;
         [self _disconnectPeripheral:peripheral];
     }
 }
@@ -825,7 +863,6 @@ double const URL_CHECK_TIMEOUT = 2.0;
         //Subscribing to the notifications will call the peripheralManager:central:didSubscribeToCharacteristic: of the other device and trigger the initial data transfer
         if (connection.initialDataState == CWBluetoothConnectionInitialDataStateConnecting && [characteristic.UUID isEqual:[CBUUID UUIDWithString:BLUETOOTH_INITIAL_CHARACTERISTIC_UUID]])
         {
-            [connection setState:CWBluetoothConnectionStateInitialWaitingForData];
             [connection setInitialDataState:CWBluetoothConnectionInitialDataStateReceiving];
             [peripheral setNotifyValue:YES forCharacteristic:characteristic];
             foundValidCharacteristic = YES;
@@ -844,7 +881,7 @@ double const URL_CHECK_TIMEOUT = 2.0;
     if (foundValidCharacteristic == NO)
     {
         BTLog(3, @"No valid characteristics found for %@, device is ignored...", peripheral.name);
-        [connection setState:CWBluetoothConnectionStateErrored];
+        connection.didError = YES;
         [self _disconnectPeripheral:peripheral];
     }
 }
@@ -884,61 +921,32 @@ double const URL_CHECK_TIMEOUT = 2.0;
     BTLog(4, @"Device %@ answered to send data. Response: %@", peripheral.name, error);
     
     CWBluetoothConnection *connection = [self _connectionForPeripheral:peripheral];
-    
-    if (connection.pendingIPWrites == 0)
+    if (connection == nil)
     {
-        ErrLog(@"Received a write response from %@ without pending writes - what happened?", peripheral.name);
+        ErrLog(@"Received write response for disconnected BT connection - arghlz?");
         return;
     }
     
-    if (connection != nil
-        && connection.state == CWBluetoothConnectionStateIPSent
-        && [characteristic.UUID isEqual:[CBUUID UUIDWithString:BLUETOOTH_IP_CHARACTERISTIC_UUID]])
+    if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:BLUETOOTH_IP_CHARACTERISTIC_UUID]])
     {
-        connection.pendingIPWrites--;
-        
-        //We exploit the BT write error mechanism to report if the other device was able to connect to the IP we sent
-        //When the IP was valid, the other device reports back a CBATTErrorSuccess, otherwise a CBATTErrorAttributeNotFound
-        if (error.code == CBATTErrorSuccess && connection.state == CWBluetoothConnectionStateIPSent)
+        if (connection.IPWriteState != CWBluetoothConnectionIPWriteStateSent)
         {
-            [connection setState:CWBluetoothConnectionStateIPDone];
-            if ([self.delegate respondsToSelector:@selector(didSendNetworkAddresses:success:)])
-            {
-                [self.delegate didSendNetworkAddresses:connection.identifier success:YES];
-            }
+            ErrLog(@"Received IP write response without having sent IPs - dafuq?");
+            return;
         }
         
-        if (connection.pendingIPWrites == 0)
-        {            
-            //If the state is not "IPDone" yet it means none of the IP writes came back with an CBATTErrorSuccess response - none of the IPs worked
-            if (connection.state == CWBluetoothConnectionStateIPSent)
-            {
-                BTLog(3, @"Device %@ could not connect to any of the IPs we send", peripheral.name);
-                connection.state = CWBluetoothConnectionStateInitialDone; //go back to state before trying to send IPs
-                [self _disconnectPeripheral:peripheral];
-                
-                if ([self.delegate respondsToSelector:@selector(didSendNetworkAddresses:success:)])
-                {
-                    [self.delegate didSendNetworkAddresses:connection.identifier success:NO];
-                }
-            }
-            else
-            {
-                BTLog(3, @"Device %@ successfully connected to one of the IPs we sent", peripheral.name);
-            }
+        connection.IPWriteState = CWBluetoothConnectionIPWriteStateDisconnected;
+        [self _disconnectPeripheral:peripheral];
+        
+        //We exploit the BT write error mechanism to report if the other device was able to connect to one of the IPs we sent
+        //When the IP was valid, the other device reports back a CBATTErrorSuccess, otherwise a CBATTErrorAttributeNotFound
+        BOOL success = (error.code == CBATTErrorSuccess);
+        BTLog(3, @"Device %@ %@ connect to one of the IPs we send", peripheral.name, (success ? @"did" : @"was unable to"));
+        if ([self.delegate respondsToSelector:@selector(didSendNetworkAddresses:success:)])
+        {
+            [self.delegate didSendNetworkAddresses:connection.identifier success:success];
         }
     }
-}
-
-
-/**
- *  Called when the device name of a CBPeripheral was updated. This is sometimes called because the device name is not discovered instantly. As long as no name was discovered for a CBPeripheral, its name will be (null). The new name is stored in peripheral.name
- *
- *  @param peripheral The peripheral whose name updated
- */
-- (void)peripheralDidUpdateName:(CBPeripheral *)peripheral
-{
-    BTLog(3, @"Device updated name to %@", peripheral.name);
 }
 
 
@@ -1035,46 +1043,9 @@ double const URL_CHECK_TIMEOUT = 2.0;
     BOOL requestsValid = NO;
     for (CBATTRequest *writeRequest in requests)
     {
-        BTLog(4, @"Did receive IP from another device: %@", [[NSString alloc] initWithData:writeRequest.value encoding:NSUTF8StringEncoding]);
-        
-        NSDictionary *retrievedData = [CWUtil dictionaryFromJSONData:writeRequest.value];
-        
-        if (retrievedData[@"ip"] == nil)
-        {
-            ErrLog(@"Error in the retrieved IP");
-            continue;
-        }
-        
-        //If we can't become a remote anyway, we reject any IPs we receive
-        if ([self.appState canBecomeRemote] == NO) continue;
-        
-        NSHTTPURLResponse *response = nil;
-        NSError *error = nil;
-        
-        NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@/check", retrievedData[@"ip"]]];
-        NSMutableURLRequest *request = [NSMutableURLRequest
-                                        requestWithURL:url
-                                        cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
-                                        timeoutInterval:URL_CHECK_TIMEOUT];
-        [request setHTTPMethod:@"HEAD"];
-        
-        BTLog(3, @"Checking IP %@ for validity", url);
-        [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
-        if ([response statusCode] == 200)
-        {
-            //We found the correct IP!
-            BTLog(3, @"%@ is a valid URL", url);
-            if ([self.delegate respondsToSelector:@selector(didReceiveDeviceURL:)])
-            {
-                [self.delegate didReceiveDeviceURL:[url URLByDeletingLastPathComponent]]; //remove /check
-            }
-            requestsValid = YES;
-        }
+//        [self.transferManager receivedChunk:writeRequest.value fromCentral:writeRequest.central withCharacteristic:writeRequest.characteristic];
+        [self.transferManager receivedDataFromCentral:writeRequest];
     }
-    
-    //We exploit the write request responses here to indicate if the IP(s) received worked or not
-    if (requestsValid) [self.peripheralManager respondToRequest:[requests objectAtIndex:0] withResult:CBATTErrorSuccess];
-    else [self.peripheralManager respondToRequest:[requests objectAtIndex:0] withResult:CBATTErrorAttributeNotFound];
 }
 
 

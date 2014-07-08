@@ -14,7 +14,7 @@
 @interface CWBluetoothTransferCentralKey : NSObject <NSCopying>
 
 @property (readwrite, strong) CBCentral *central;
-@property (readwrite, strong) CBMutableCharacteristic *characteristic;
+@property (readwrite, strong) CBCharacteristic *characteristic;
 
 @end
 
@@ -31,7 +31,7 @@
 }
 
 
-- (instancetype)initWithCentral:(CBCentral *)central characteristic:(CBMutableCharacteristic *)characteristic
+- (instancetype)initWithCentral:(CBCentral *)central characteristic:(CBCharacteristic *)characteristic
 {
     self = [super init];
     
@@ -152,6 +152,7 @@
 @property (readwrite, strong) NSMutableDictionary *centralSends;
 @property (readwrite, strong) NSMutableArray *centralEOMSends;
 @property (readwrite, strong) NSMutableDictionary *peripheralReceives;
+@property (readwrite, strong) NSMutableDictionary *centralReceives;
 
 @end
 
@@ -168,34 +169,13 @@
     self.centralSends = [NSMutableDictionary dictionary];
     self.centralEOMSends = [NSMutableArray array];
     self.peripheralReceives = [NSMutableDictionary dictionary];
+    self.centralReceives = [NSMutableDictionary dictionary];
     
     return self;
 }
 
 
-- (void)sendData:(NSData *)data toCentral:(CBCentral *)central withCharacteristic:(CBMutableCharacteristic *)characteristic
-{
-    BTLog(3, @"Preparing to send data to central %@: %@", [central.identifier UUIDString], [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
-    
-    CWBluetoothTransferCentralKey *key = [[CWBluetoothTransferCentralKey alloc] initWithCentral:central characteristic:characteristic];
-    [self.centralSends setObject:[data mutableCopy] forKey:key];
-    [self _sendNextChunkToCentral:key];
-}
-
-
-- (void)sendData:(NSData *)data toPeripheral:(CBPeripheral *)peripheral withCharacteristic:(CBCharacteristic *)characteristic
-{
-//    CWBluetoothTransferKey *key = [[CWBluetoothTransferKey alloc] initWithPeripheral:peripheral characteristic:characteristic];
-//    [self.peripheralSends setObject:[data mutableCopy] forKey:key];
-//    [self _sendNextChunkToPeripheral:key];
-    
-    //divide data into chunks and send them via writeValue
-}
-
-
-- (void)receivedChunk:(NSData *)chunk fromCentral:(CBCentral *)central withCharacteristic:(CBCharacteristic *)characteristic
-{
-}
+#pragma mark Peripheral -> Central
 
 
 - (void)receivedData:(NSData *)chunk fromPeripheral:(CBPeripheral *)peripheral withCharacteristic:(CBCharacteristic *)characteristic
@@ -206,6 +186,7 @@
     if ([[[NSString alloc] initWithData:chunk encoding:NSUTF8StringEncoding] isEqualToString:@"EOM"])
     {
         BTLog(4, @"Received EOM from peripheral %@, message complete.", peripheral.name);
+        [self.peripheralReceives removeObjectForKey:key];
         
         if ([self.delegate respondsToSelector:@selector(didReceiveMessage:fromPeripheral:withCharacteristic:)])
         {
@@ -226,6 +207,15 @@
     }
 }
 
+- (void)sendData:(NSData *)data toCentral:(CBCentral *)central withCharacteristic:(CBMutableCharacteristic *)characteristic
+{
+    BTLog(3, @"Preparing to send data to central %@: %@", [central.identifier UUIDString], [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+    
+    CWBluetoothTransferCentralKey *key = [[CWBluetoothTransferCentralKey alloc] initWithCentral:central characteristic:characteristic];
+    [self.centralSends setObject:[data mutableCopy] forKey:key];
+    [self _sendNextChunkToCentral:key];
+}
+
 
 - (void)_sendNextChunkToCentral:(CWBluetoothTransferCentralKey *)key
 {
@@ -239,9 +229,9 @@
     
     NSUInteger bytesToSend = 20;
     if ([remainingData length] < bytesToSend) bytesToSend = [remainingData length];
-        
+    
     NSData *chunk = [NSData dataWithBytes:[remainingData bytes] length:bytesToSend];
-    BOOL didSend = [self.peripheralManager updateValue:chunk forCharacteristic:key.characteristic onSubscribedCentrals:@[key.central]];
+    BOOL didSend = [self.peripheralManager updateValue:chunk forCharacteristic:(CBMutableCharacteristic *)key.characteristic onSubscribedCentrals:@[key.central]];
     
     //If there was still room in the queue (didSend==YES), we can go on sending
     //If the queue is full we wait for the peripheralManagerIsReadyToSend callback, which will call this method again
@@ -314,5 +304,80 @@
         return;
     }
 }
+
+
+#pragma mark Central -> Peripheral
+
+- (void)sendData:(NSData *)data toPeripheral:(CBPeripheral *)peripheral withCharacteristic:(CBCharacteristic *)characteristic
+{
+    //Luckily, sending to peripherals is much easier than sending to centrals. Just split the data in chunks of 20 bytes and fire away in a loop
+    NSMutableData *toSend = [data mutableCopy];
+    while ([toSend length] > 0)
+    {
+        NSUInteger bytesToSend = 20;
+        if ([toSend length] < bytesToSend) bytesToSend = [toSend length];
+        
+        NSData *chunk = [NSData dataWithBytes:[toSend bytes] length:bytesToSend];
+        [peripheral writeValue:chunk forCharacteristic:characteristic type:CBCharacteristicWriteWithoutResponse];
+        
+        //Remove sent chunk from data to send
+        NSRange range = NSMakeRange(0, bytesToSend);
+        [toSend replaceBytesInRange:range withBytes:NULL length:0];
+        
+        BTLog(4, @"Did send chunk of data to peripheral %@: %@", peripheral.name, [[NSString alloc] initWithData:chunk encoding:NSUTF8StringEncoding]);
+    }
+    
+    //Send the EOM
+    //We only care about if the complete message was received well, so we use WriteWithResponse here while we used WriteWithoutResponse for the other writes
+    [peripheral writeValue:[@"EOM" dataUsingEncoding:NSUTF8StringEncoding] forCharacteristic:characteristic type:CBCharacteristicWriteWithResponse];
+    
+    BTLog(4, @"Did send EOM to peripheral %@, message complete.", peripheral.name);
+}
+
+
+- (void)receivedDataFromCentral:(CBATTRequest *)writeRequest
+{
+    NSData *chunk = writeRequest.value;
+    CBCentral *central = writeRequest.central;
+    CBCharacteristic *characteristic = writeRequest.characteristic;
+    
+    CWBluetoothTransferCentralKey *key = [[CWBluetoothTransferCentralKey alloc] initWithCentral:central characteristic:characteristic];
+    NSMutableData *existingData = [self.centralReceives objectForKey:key];
+    
+    if ([[[NSString alloc] initWithData:chunk encoding:NSUTF8StringEncoding] isEqualToString:@"EOM"])
+    {
+        BTLog(4, @"Received EOM from central %@, message complete.", [central.identifier UUIDString]);
+        [self.centralReceives removeObjectForKey:key];
+        
+        if ([self.delegate respondsToSelector:@selector(didReceiveMessage:fromCentral:withCharacteristic:lastWriteRequest:)])
+        {
+            [self.delegate didReceiveMessage:existingData fromCentral:central withCharacteristic:characteristic lastWriteRequest:writeRequest];
+        }
+        return;
+    }
+    
+    BTLog(4, @"Received chunk of data from central %@: %@", [central.identifier UUIDString], [[NSString alloc] initWithData:chunk encoding:NSUTF8StringEncoding]);
+    
+    if (existingData == nil)
+    {
+        [self.centralReceives setObject:[chunk mutableCopy] forKey:key];
+    }
+    else
+    {
+        [existingData appendData:chunk];
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 @end

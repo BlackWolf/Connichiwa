@@ -12,53 +12,6 @@
 
 
 
-/**
- *  Describes the current state of a BT Connection to a remote device
- */
-typedef NS_ENUM(NSInteger, CWBluetoothConnectionState)
-{
-    /**
-     *  The other device was detected and a BT connection is currently established to receive the initial data from the device
-     */
-    CWBluetoothConnectionStateInitialConnecting,
-    
-    /**
-     *  A BT connection for the initial data transfer was established and we are waiting for the other device to send us the data
-     */
-    CWBluetoothConnectionStateInitialWaitingForData,
-    
-    /**
-     * We received the initial data and the device can therefore be reported to other Connichiwa components. The BT connection has been disconnected.
-     */
-    CWBluetoothConnectionStateInitialDone,
-    
-    /**
-     *  We want to use the other device as a remote device and currently establish a BT connection in order to send it our network interface addresses
-     */
-    CWBluetoothConnectionStateIPConnecting,
-    
-    /**
-     *  We want to use the other device as a remote device, did sent our network interface addresses to the device and await a response for the addresses
-     */
-    CWBluetoothConnectionStateIPSent,
-    
-    /**
-     *  We want to use the other device as a remote device and received a response for the network interface addresses we sent. This state does not say anything about if the response was positive or negative
-     */
-    CWBluetoothConnectionStateIPDone,
-    
-    /**
-     *  An unexpected error occured and the device can not be used any longer
-     */
-    CWBluetoothConnectionStateErrored,
-    
-    /**
-     *  The current state is unknown and the device can not be used
-     */
-    CWBluetoothConnectionStateUnknown
-};
-
-
 typedef NS_ENUM(NSInteger, CWBluetoothConnectionInitialDataState)
 {
     CWBluetoothConnectionInitialDataStateMissing,
@@ -83,14 +36,11 @@ typedef NS_ENUM(NSInteger, CWBluetoothConnectionIPWriteState)
  */
 @interface CWBluetoothConnection : NSObject
 
-/**
- *  The current state of the connection
- */
-@property (readwrite) CWBluetoothConnectionState state;
-
 @property (readwrite) CWBluetoothConnectionInitialDataState initialDataState;
 
-@property (readwrite) CWBluetoothConnectionIPWriteState ipWriteState;
+@property (readwrite) CWBluetoothConnectionIPWriteState IPWriteState;
+
+@property (readwrite) BOOL didError;
 
 /**
  *  The unique Connichiwa identifier of the other device
@@ -125,11 +75,6 @@ typedef NS_ENUM(NSInteger, CWBluetoothConnectionIPWriteState)
 @property (readonly) double lastSentRSSI;
 
 @property (readwrite) int connectionTries;
-
-/**
- *  When the local device writes its network interface addresses to the device represented by this class, this number representes the number of writes issued and therefore the number of responses expected. For each response, this should be decreased by one.
- */
-@property (readwrite) int pendingIPWrites;
 
 /**
  *  Initializes a new CWBluetoothConnection for the given CBPeripheral. For each CBPeripheral, and therefore for each discovered device, only one CWBluetoothConnection should be created
