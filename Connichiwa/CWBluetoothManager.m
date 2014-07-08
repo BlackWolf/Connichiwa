@@ -570,50 +570,82 @@ double const URL_CHECK_TIMEOUT = 2.0;
 - (void)_receivedIPData:(NSData *)data forCentral:(CBCentral *)central lastWriteRequest:(CBATTRequest *)writeRequest
 {
     NSDictionary *ipData = [CWUtil dictionaryFromJSONData:data];
-    
-    if (ipData[@"ips"] == nil)
-    {
-        ErrLog(@"'ips' key was missing from received IP data");
-        return;
-    }
-    
-    //If we can't become a remote anyway, we reject any IPs we receive
-    //Otherwise we check every IP for validity and stop when we found a valid IP
     BOOL containsValidIP = NO;
-    if ([self.appState canBecomeRemote])
+    
+    if (ipData[@"ips"] != nil)
     {
-        for (NSString *ip in ipData[@"ips"])
+        //If we can't become a remote anyway, we reject any IPs we receive
+        //Otherwise we check every IP for validity and stop when we found a valid IP
+        if ([self.appState canBecomeRemote])
         {
-            NSHTTPURLResponse *response = nil;
-            NSError *error = nil;
-            
-            NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@/check", ip]];
-            NSMutableURLRequest *httpRequest = [NSMutableURLRequest
-                                                requestWithURL:url
-                                                cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
-                                                timeoutInterval:URL_CHECK_TIMEOUT];
-            [httpRequest setHTTPMethod:@"HEAD"];
-            
-            BTLog(3, @"Checking IP %@ for validity", url);
-            [NSURLConnection sendSynchronousRequest:httpRequest returningResponse:&response error:&error];
-            BTLog(3, @"OH NOES, AN ERROR: %@", error);
-            if ([response statusCode] == 200)
+            for (NSString *ip in ipData[@"ips"])
             {
-                //We found a working IP!
-                BTLog(3, @"%@ is a valid URL", url);
-                if ([self.delegate respondsToSelector:@selector(didReceiveDeviceURL:)])
+                NSHTTPURLResponse *response = nil;
+                NSError *error = nil;
+                
+                NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@/check", ip]];
+                NSMutableURLRequest *httpRequest = [NSMutableURLRequest
+                                                    requestWithURL:url
+                                                    cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
+                                                    timeoutInterval:URL_CHECK_TIMEOUT];
+                [httpRequest setHTTPMethod:@"HEAD"];
+                
+                BTLog(3, @"Checking IP %@ for validity", url);
+                [NSURLConnection sendSynchronousRequest:httpRequest returningResponse:&response error:&error];
+                BTLog(3, @"OH NOES, AN ERROR: %@", error);
+                if ([response statusCode] == 200)
                 {
-                    [self.delegate didReceiveDeviceURL:[url URLByDeletingLastPathComponent]]; //remove /check
+                    //We found a working IP!
+                    BTLog(3, @"%@ is a valid URL", url);
+                    if ([self.delegate respondsToSelector:@selector(didReceiveDeviceURL:)])
+                    {
+                        [self.delegate didReceiveDeviceURL:[url URLByDeletingLastPathComponent]]; //remove /check
+                    }
+                    containsValidIP = YES;
+                    break;
                 }
-                containsValidIP = YES;
-                break;
             }
         }
+    }
+    else
+    {
+        ErrLog(@"'ips' key was missing from received IP data");
     }
 
     //We exploit the write request responses here to indicate if the IP(s) received worked or not
     if (containsValidIP)    [self.peripheralManager respondToRequest:writeRequest withResult:CBATTErrorSuccess];
     else                    [self.peripheralManager respondToRequest:writeRequest withResult:CBATTErrorAttributeNotFound];
+}
+
+
+- (void)_didReceiveIPWriteResponse:(NSError *)error fromPeripheral:(CBPeripheral *)peripheral
+{
+    BTLog(4, @"Device %@ answered to send IPs. Response: %@", peripheral.name, error);
+    
+    CWBluetoothConnection *connection = [self _connectionForPeripheral:peripheral];
+    if (connection == nil)
+    {
+        ErrLog(@"Received IP write response for disconnected BT connection - arghlz?");
+        return;
+    }
+    
+    if (connection.IPWriteState != CWBluetoothConnectionIPWriteStateSent)
+    {
+        ErrLog(@"Received IP write response without having sent IPs - dafuq?");
+        return;
+    }
+    
+    connection.IPWriteState = CWBluetoothConnectionIPWriteStateDisconnected; //back to initial state
+    [self _disconnectPeripheral:peripheral];
+    
+    //We exploit the BT write error mechanism to report if the other device was able to connect to one of the IPs we sent
+    //When one of the IPs worked, the other device reports back a CBATTErrorSuccess, otherwise a CBATTErrorAttributeNotFound
+    BOOL success = (error.code == CBATTErrorSuccess);
+    BTLog(3, @"Device %@ %@ connect to one of the IPs we send", peripheral.name, (success ? @"did" : @"was unable to"));
+    if ([self.delegate respondsToSelector:@selector(didSendNetworkAddresses:success:)])
+    {
+        [self.delegate didSendNetworkAddresses:connection.identifier success:success];
+    }
 }
 
 
@@ -789,36 +821,8 @@ double const URL_CHECK_TIMEOUT = 2.0;
 {
     BTLog(3, @"Disconnected peripheral %@. Error: %@", peripheral.name, error);
     
-    //
-    //
-    //TODO we could probably re-implement this by checking the state of the characteristics
-    //if one of the characteristics is in Connecting phase, this disconnect is probably not wanted and we could try a reconnect?
-    //
-    //
-    
-//    CWBluetoothConnection *connection = [self _connectionForPeripheral:peripheral];
-//    if (connection == nil) return;
-//    
-//    //If we are in a state where we connected but didn't finish sending or receiving data, something probably went wrong
-//    if (connection.initialDataState == CWBluetoothConnectionInitialDataStateConnecting || connection.initialDataState == CWBluetoothConnectionInitialDataStateConnected ||
-//        connection.IPWriteState == CWBluetoothConnectionIPWriteStateConnecting || connection.IPWriteState == CWBluetoothConnectionIPWriteStateConnected)
-//    {
-//        
-//    }
-    
-//    CWBluetoothConnection *connection = [self _connectionForPeripheral:peripheral];
-//    if (connection == nil) return;
-//    
-//    //If the disconnect occurs when it shouldn't we retry
-//    //This should basically never occur unless the device moves out of range during a connect, in which case it will be taken care of in _removeLostConnections anyway, but we need to take care of the unlikely cases as well, don't we? ;-)
-//    if (connection.state == CWBluetoothConnectionStateInitialDone || connection.state == CWBluetoothConnectionStateIPDone) return;
-//    
-//    BOOL didRetry = [self _maybeRetryConnect:connection];
-//    if (didRetry == NO)
-//    {
-//        BTLog(3, @"Device %@ disconnected unexpectetly too many times, ignoring device...", peripheral.name);
-//        connection.state = CWBluetoothConnectionStateErrored;
-//    }
+    //I don't think there is anything we can/should do here. Most of the time, a disconnect is completely ok.
+    //If a disconnect occurs during a data transfer, that mostly means the device moved out of range and will be detected as lost soon anyway
 }
 
 
@@ -942,46 +946,9 @@ double const URL_CHECK_TIMEOUT = 2.0;
  */
 - (void)peripheral:(CBPeripheral *)peripheral didWriteValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error
 {
-    //
-    //
-    //
-    //
-    // TODO
-    // we should create a method "didReceiveIPWriteResponse" and delegate to this method
-    // this will make sure we have all our logic in our own methods at the top of the class and we only change connection state in those methods
-    // this will also make sure that the BT methods are mostly delegate methods
-    //
-    //
-    //
-    //
-    BTLog(4, @"Device %@ answered to send data. Response: %@", peripheral.name, error);
-    
-    CWBluetoothConnection *connection = [self _connectionForPeripheral:peripheral];
-    if (connection == nil)
+    if ([characteristic.UUID isEqual:self.advertisedIPCharacteristic.UUID])
     {
-        ErrLog(@"Received write response for disconnected BT connection - arghlz?");
-        return;
-    }
-    
-    if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:BLUETOOTH_IP_CHARACTERISTIC_UUID]])
-    {
-        if (connection.IPWriteState != CWBluetoothConnectionIPWriteStateSent)
-        {
-            ErrLog(@"Received IP write response without having sent IPs - dafuq?");
-            return;
-        }
-        
-        connection.IPWriteState = CWBluetoothConnectionIPWriteStateDisconnected;
-        [self _disconnectPeripheral:peripheral];
-        
-        //We exploit the BT write error mechanism to report if the other device was able to connect to one of the IPs we sent
-        //When the IP was valid, the other device reports back a CBATTErrorSuccess, otherwise a CBATTErrorAttributeNotFound
-        BOOL success = (error.code == CBATTErrorSuccess);
-        BTLog(3, @"Device %@ %@ connect to one of the IPs we send", peripheral.name, (success ? @"did" : @"was unable to"));
-        if ([self.delegate respondsToSelector:@selector(didSendNetworkAddresses:success:)])
-        {
-            [self.delegate didSendNetworkAddresses:connection.identifier success:success];
-        }
+        [self _didReceiveIPWriteResponse:error fromPeripheral:peripheral];
     }
 }
 
