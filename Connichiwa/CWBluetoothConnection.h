@@ -16,9 +16,8 @@ typedef NS_ENUM(NSInteger, CWBluetoothConnectionInitialDataState)
 {
     CWBluetoothConnectionInitialDataStateMissing,
     CWBluetoothConnectionInitialDataStateConnecting,
-    CWBluetoothConnectionInitialDataStateReceiving,
-    CWBluetoothConnectionInitialDataStateReceived,
-    CWBluetoothConnectionInitialDataStateError
+    CWBluetoothConnectionInitialDataStateConnected,
+    CWBluetoothConnectionInitialDataStateReceived
 };
 
 typedef NS_ENUM(NSInteger, CWBluetoothConnectionIPWriteState)

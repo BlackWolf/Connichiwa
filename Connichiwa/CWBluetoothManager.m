@@ -247,8 +247,8 @@ double const URL_CHECK_TIMEOUT = 2.0;
     BTLog(3, @"Trying to start scanning for other BT devices");
     if (self.centralManager.state == CBCentralManagerStatePoweredOn)
     {
-        [self performSelectorOnMainThread:@selector(startLostConnectionTimer) withObject:nil waitUntilDone:YES];
         [self _doStartScanning];
+        [self performSelectorOnMainThread:@selector(startLostConnectionTimer) withObject:nil waitUntilDone:YES];
     }
     else
     {
@@ -327,10 +327,13 @@ double const URL_CHECK_TIMEOUT = 2.0;
 {
     BTLog(3, @"Temporarily stop scanning for other BT devices");
     
-    //Stop the check for lost connections, otherwise we would lose connections because of a temporary scan stop
-    //The timer is reset in startScanning - it is the responsible of BTManager to make sure a temporary scan stop is actually temporary and will be resumed!
+    //A temporary scan stop is usually used when we want to connect a peripheral. We don't want to lose any devices during that, so stop the timer
+    //Usually, scanning is resumed in either peripheralDidConnect or peripheralDidFailToConnect
+    //On very rare occasions (for example the other device encounters a BT problem) it might happen that we neither receive the connect nor the connectFailed callback
+    //This would mean we never resume scanning, something that can not be risked, therefore resume scanning after a longer timeout regardless of what happens
     [self performSelectorOnMainThread:@selector(stopLostConnectionTimer) withObject:nil waitUntilDone:YES];
     [self stopScanning];
+    [self performSelector:@selector(startScanning) withObject:nil afterDelay:30.0];
 }
 
 
@@ -339,6 +342,8 @@ double const URL_CHECK_TIMEOUT = 2.0;
 
 - (void)startLostConnectionTimer
 {
+    if (self.lostConnectionsTimer != nil) return;
+    
     BTLog(3, @"Starting 'Lost BT Connections' Timer");
     
     [self stopLostConnectionTimer];
@@ -486,9 +491,9 @@ double const URL_CHECK_TIMEOUT = 2.0;
 {
     CWBluetoothConnection *connection = [self _connectionForPeripheral:peripheral];
     
-    if (connection.initialDataState != CWBluetoothConnectionInitialDataStateReceiving)
+    if (connection.initialDataState != CWBluetoothConnectionInitialDataStateConnected)
     {
-        ErrLog(@"Received initial data from peripheral not in InitialDataStateReceiving!");
+        ErrLog(@"Received initial data from peripheral not in initial connected state!");
         return;
     }
     
@@ -499,7 +504,7 @@ double const URL_CHECK_TIMEOUT = 2.0;
     if (initialData[@"identifier"] == nil)
     {
         ErrLog(@"Received initial data did not contain an identifier, device is ignored...", connection.peripheral.name);
-        [connection setInitialDataState:CWBluetoothConnectionInitialDataStateError];
+        [connection setInitialDataState:CWBluetoothConnectionInitialDataStateMissing];
         connection.didError = YES;
         [self _disconnectPeripheral:connection.peripheral];
         
@@ -784,6 +789,23 @@ double const URL_CHECK_TIMEOUT = 2.0;
 {
     BTLog(3, @"Disconnected peripheral %@. Error: %@", peripheral.name, error);
     
+    //
+    //
+    //TODO we could probably re-implement this by checking the state of the characteristics
+    //if one of the characteristics is in Connecting phase, this disconnect is probably not wanted and we could try a reconnect?
+    //
+    //
+    
+//    CWBluetoothConnection *connection = [self _connectionForPeripheral:peripheral];
+//    if (connection == nil) return;
+//    
+//    //If we are in a state where we connected but didn't finish sending or receiving data, something probably went wrong
+//    if (connection.initialDataState == CWBluetoothConnectionInitialDataStateConnecting || connection.initialDataState == CWBluetoothConnectionInitialDataStateConnected ||
+//        connection.IPWriteState == CWBluetoothConnectionIPWriteStateConnecting || connection.IPWriteState == CWBluetoothConnectionIPWriteStateConnected)
+//    {
+//        
+//    }
+    
 //    CWBluetoothConnection *connection = [self _connectionForPeripheral:peripheral];
 //    if (connection == nil) return;
 //    
@@ -864,7 +886,7 @@ double const URL_CHECK_TIMEOUT = 2.0;
         //Subscribing to the notifications will call the peripheralManager:central:didSubscribeToCharacteristic: of the other device and trigger the initial data transfer
         if (connection.initialDataState == CWBluetoothConnectionInitialDataStateConnecting && [characteristic.UUID isEqual:[CBUUID UUIDWithString:BLUETOOTH_INITIAL_CHARACTERISTIC_UUID]])
         {
-            [connection setInitialDataState:CWBluetoothConnectionInitialDataStateReceiving];
+            [connection setInitialDataState:CWBluetoothConnectionInitialDataStateConnected];
             [peripheral setNotifyValue:YES forCharacteristic:characteristic];
             foundValidCharacteristic = YES;
         }
@@ -874,6 +896,7 @@ double const URL_CHECK_TIMEOUT = 2.0;
         //After sending, peripheral:didWriteValueForCharacteristic:error: will be called
         if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:BLUETOOTH_IP_CHARACTERISTIC_UUID]])
         {
+            [connection setIPWriteState:CWBluetoothConnectionIPWriteStateConnected];
             [self _sendIPsToPeripheral:peripheral onCharacteristic:characteristic];
             foundValidCharacteristic = YES;
         }
@@ -919,6 +942,18 @@ double const URL_CHECK_TIMEOUT = 2.0;
  */
 - (void)peripheral:(CBPeripheral *)peripheral didWriteValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error
 {
+    //
+    //
+    //
+    //
+    // TODO
+    // we should create a method "didReceiveIPWriteResponse" and delegate to this method
+    // this will make sure we have all our logic in our own methods at the top of the class and we only change connection state in those methods
+    // this will also make sure that the BT methods are mostly delegate methods
+    //
+    //
+    //
+    //
     BTLog(4, @"Device %@ answered to send data. Response: %@", peripheral.name, error);
     
     CWBluetoothConnection *connection = [self _connectionForPeripheral:peripheral];
@@ -1012,24 +1047,13 @@ double const URL_CHECK_TIMEOUT = 2.0;
 
 /**
  *  Called when sending data to a central via a notifyable characteristic failed because the transmission queue was full. The call to this method indicates that the characteristic can hold data again.
- *  TODO: Should be used as part of the send/receive rewrite
  *
  *  @param peripheral The CBPeripheralManager that triggered this message
  */
 - (void)peripheralManagerIsReadyToUpdateSubscribers:(CBPeripheralManager *)peripheral
 {
+    //We need to pass this call to the transfer manager so it knows it can continue to send data if necessary
     [self.transferManager canContinueSendingToCentrals];
-}
-
-
-/**
- *  Called whenever we received a read request for a characteristic. This applies to readable characteristics only, which are not used in Connichiwa as of yet, so this should never be called.
- *
- *  @param peripheral The CBPeripheralManager that received the request
- *  @param request    The read request
- */
-- (void)peripheralManager:(CBPeripheralManager *)peripheral didReceiveReadRequest:(CBATTRequest *)request
-{
 }
 
 
@@ -1041,10 +1065,8 @@ double const URL_CHECK_TIMEOUT = 2.0;
  */
 - (void)peripheralManager:(CBPeripheralManager *)peripheral didReceiveWriteRequests:(NSArray *)requests
 {
-    BOOL requestsValid = NO;
     for (CBATTRequest *writeRequest in requests)
     {
-//        [self.transferManager receivedChunk:writeRequest.value fromCentral:writeRequest.central withCharacteristic:writeRequest.characteristic];
         [self.transferManager receivedDataFromCentral:writeRequest];
     }
 }
