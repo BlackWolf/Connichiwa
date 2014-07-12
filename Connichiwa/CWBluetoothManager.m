@@ -347,7 +347,7 @@ double const URL_CHECK_TIMEOUT = 2.0;
     BTLog(3, @"Starting 'Lost BT Connections' Timer");
     
     [self stopLostConnectionTimer];
-    self.lostConnectionsTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(_removeLostConnections:) userInfo:nil repeats:YES];
+    self.lostConnectionsTimer = [NSTimer scheduledTimerWithTimeInterval:30.0 target:self selector:@selector(_removeLostConnections:) userInfo:nil repeats:YES];
 }
 
 
@@ -592,7 +592,6 @@ double const URL_CHECK_TIMEOUT = 2.0;
                 
                 BTLog(3, @"Checking IP %@ for validity", url);
                 [NSURLConnection sendSynchronousRequest:httpRequest returningResponse:&response error:&error];
-                BTLog(3, @"OH NOES, AN ERROR: %@", error);
                 if ([response statusCode] == 200)
                 {
                     //We found a working IP!
