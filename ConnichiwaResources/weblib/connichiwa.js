@@ -474,11 +474,9 @@ var CWRemoteCommunicationParser = (function()
    */
   var parse = function(message)
   {
-    CWDebug.log(4, "Parsing remote message: " + message);
-    var object = JSON.parse(message);
-    switch (object.type)
+    switch (message.type)
     {
-      case "remoteidentifier": _parseRemoteIdentifier(object); break;
+      case "remoteidentifier": _parseRemoteIdentifier(message); break;
     }
   };
   
@@ -631,10 +629,12 @@ var Connichiwa = (function()
    */
   var onWebsocketMessage = function(e)
   {
-    var message = e.data;
+    var message = JSON.parse(e.data);
     CWDebug.log(4, "Received message: " + message);
     
     CWRemoteCommunicationParser.parse(message);
+
+    if (message.type) CWEventManager.trigger("message" + message.type, message);
   };
 
 
@@ -744,6 +744,12 @@ var Connichiwa = (function()
 
     CWEventManager.register(event, callback);
   };
+
+
+  var onMessage = function(type, callback)
+  {
+    CWEventManager.register("message" + type, callback);
+  };
   
   
   var connect = function(device)
@@ -778,6 +784,7 @@ var Connichiwa = (function()
     _setIdentifier    : _setIdentifier,
     getIdentifier     : getIdentifier,
     on                : on,
+    onMessage         : onMessage,
     connect           : connect,
     send              : send,
     broadcast         : broadcast

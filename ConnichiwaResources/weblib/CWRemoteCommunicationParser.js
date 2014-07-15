@@ -24,11 +24,9 @@ var CWRemoteCommunicationParser = (function()
    */
   var parse = function(message)
   {
-    CWDebug.log(4, "Parsing remote message: " + message);
-    var object = JSON.parse(message);
-    switch (object.type)
+    switch (message.type)
     {
-      case "remoteidentifier": _parseRemoteIdentifier(object); break;
+      case "remoteidentifier": _parseRemoteIdentifier(message); break;
     }
   };
   

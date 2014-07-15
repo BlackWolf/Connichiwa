@@ -1,4 +1,4 @@
-/* global Remote */
+/* global Remote, CRDebug */
 "use strict";
 
 
@@ -7,68 +7,56 @@ var CRMasterCommunicationParser = (function()
 {
   var parse = function(message)
   {
-    CRDebug.log(4, "Received message: " + message);
-    var object = JSON.parse(message);
-
-    if (object.type === "softdisconnect")
+    if (message.type === "softdisconnect")
     {
       Remote._softDisconnectWebsocket();
     }
-    if (object.type === "show")
+    if (message.type === "show")
     {
       window.requestAnimationFrame(function(timestamp) {
-        $("body").append(object.content);
+        $("body").append(message.content);
       });
     }
 
-    if (object.type === "update")
+    if (message.type === "update")
     {
       window.requestAnimationFrame(function(timestamp) {
-        $(object.element).html(object.content);
+        $(message.element).html(message.content);
       });
     }
 
-    if (object.type === "updateStyle")
+    if (message.type === "beginPath")
     {
       window.requestAnimationFrame(function(timestamp) {
-        for (var style in object.styles) {
-          $(object.element).css(style, object.styles[style]);
-        }
-      });
-    }
-
-    if (object.type === "beginPath")
-    {
-      window.requestAnimationFrame(function(timestamp) {
-        var context = $(object.element)[0].getContext("2d");
+        var context = $(message.element)[0].getContext("2d");
         context.beginPath();
-        context.moveTo(object.coords.x, object.coords.y);
+        context.moveTo(message.coords.x, message.coords.y);
       });
     }
 
-    if (object.type === "updatePath")
+    if (message.type === "updatePath")
     {
       window.requestAnimationFrame(function(timestamp) {
-        var context = $(object.element)[0].getContext("2d");
-        context.lineTo(object.coords.x, object.coords.y);
+        var context = $(message.element)[0].getContext("2d");
+        context.lineTo(message.coords.x, message.coords.y);
         context.stroke();
       });
     }
 
-    if (object.type === "endPath")
+    if (message.type === "endPath")
     {
       window.requestAnimationFrame(function(timestamp) {
-        var context = $(object.element)[0].getContext("2d");
+        var context = $(message.element)[0].getContext("2d");
         context.closePath();
       });
     }
-    if (object.type === "loadScript")
+    if (message.type === "loadScript")
     {
-      $.getScript(object.url, function() {
+      $.getScript(message.url, function() {
         //TODO check for AJAX errors n stuff
         var message = {
           type    : "scriptLoaded",
-          request : object
+          request : message
         };
         Remote.send(message);
       });

@@ -1,4 +1,4 @@
-/* global CRDebug, CRURLParser, CRMasterCommunicationParser */
+/* global CRDebug, CRURLParser, CRMasterCommunicationParser, CREventManager */
 /* global nativeCallWebsocketDidOpen, nativeCallSoftDisconnect, nativeCallWebsocketDidClose */
 "use strict";
 
@@ -62,8 +62,12 @@ var Remote = (function()
 
   var onWebsocketMessage = function(e)
   {
-    var message = e.data;
+    var message = JSON.parse(e.data);
+    CRDebug.log(4, "Received message: " + e.data);
+
     CRMasterCommunicationParser.parse(message);
+
+    if (message.type) CREventManager.trigger("message" + message.type, message);
   };
 
 
@@ -94,9 +98,17 @@ var Remote = (function()
   };
 
 
+  var onMessage = function(type, callback)
+  {
+    CREventManager.register("message" + type, callback);
+  };
+
+
   return {
     _connectWebsocket        : _connectWebsocket,
     _softDisconnectWebsocket : _softDisconnectWebsocket,
-    send                     : send
+    _disconnectWebsocket     : _disconnectWebsocket,
+    send                     : send,
+    onMessage                : onMessage
   };
 })();

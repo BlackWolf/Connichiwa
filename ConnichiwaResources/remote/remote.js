@@ -32,7 +32,70 @@ var CRDebug = (function()
     log         : log
   };
 })();
-/* global Remote */
+/* global CRDebug */
+"use strict";
+
+
+
+/**
+ * Manages events throughout Connichiwa. Allows all parts of Connichiwa to register for and trigger events.
+ *
+ * @namespace CWEventManager
+ */
+var CREventManager = (function()
+{
+  /**
+   * A dictionary where each entry represents a single event. The key is the event name. Each entry of the dictionary is an array of callbacks that should be called when the event is triggered.
+   */
+  var _events = {};
+
+  /**
+   * Registers the given callback function for the given event. When the event is triggered, the callback will be executed.
+   *
+   * @param {string} event The name of the event
+   * @param {function} callback The callback function to call when the event is triggered
+   *
+   * @memberof CWEventManager
+   */
+  var register = function(event, callback)
+  {
+    if (typeof(event) !== "string") throw "Event name must be a string";
+    if (typeof(callback) !== "function") throw "Event callback must be a function";
+
+    if (!_events[event]) _events[event] = [];
+    _events[event].push(callback);
+    CRDebug.log(3, "Attached callback to " + event);
+  };
+
+  /**
+   * Triggers the given events, calling all callback functions that have registered for the event.
+   *
+   * @param {string} event The name of the event to trigger
+   *
+   * @memberof CWEventManager
+   */
+  var trigger = function(event)
+  {
+    if (!_events[event]) return;
+
+    //Get all arguments passed to trigger() and remove the event
+    var args = Array.prototype.slice.call(arguments);
+    args.shift();
+
+    CRDebug.log(5, "Triggering event " + event);
+    for (var i = 0; i < _events[event].length; i++)
+    {
+      var callback = _events[event][i];
+      callback.apply(null, args); //calls the callback with arguments args
+    }
+  };
+
+  return {
+    register : register,
+    trigger  : trigger
+  };
+})();
+/* global Remote, CRDebug */
 "use strict";
 
 
@@ -41,68 +104,56 @@ var CRMasterCommunicationParser = (function()
 {
   var parse = function(message)
   {
-    CRDebug.log(4, "Received message: " + message);
-    var object = JSON.parse(message);
-
-    if (object.type === "softdisconnect")
+    if (message.type === "softdisconnect")
     {
       Remote._softDisconnectWebsocket();
     }
-    if (object.type === "show")
+    if (message.type === "show")
     {
       window.requestAnimationFrame(function(timestamp) {
-        $("body").append(object.content);
+        $("body").append(message.content);
       });
     }
 
-    if (object.type === "update")
+    if (message.type === "update")
     {
       window.requestAnimationFrame(function(timestamp) {
-        $(object.element).html(object.content);
+        $(message.element).html(message.content);
       });
     }
 
-    if (object.type === "updateStyle")
+    if (message.type === "beginPath")
     {
       window.requestAnimationFrame(function(timestamp) {
-        for (var style in object.styles) {
-          $(object.element).css(style, object.styles[style]);
-        }
-      });
-    }
-
-    if (object.type === "beginPath")
-    {
-      window.requestAnimationFrame(function(timestamp) {
-        var context = $(object.element)[0].getContext("2d");
+        var context = $(message.element)[0].getContext("2d");
         context.beginPath();
-        context.moveTo(object.coords.x, object.coords.y);
+        context.moveTo(message.coords.x, message.coords.y);
       });
     }
 
-    if (object.type === "updatePath")
+    if (message.type === "updatePath")
     {
       window.requestAnimationFrame(function(timestamp) {
-        var context = $(object.element)[0].getContext("2d");
-        context.lineTo(object.coords.x, object.coords.y);
+        var context = $(message.element)[0].getContext("2d");
+        context.lineTo(message.coords.x, message.coords.y);
         context.stroke();
       });
     }
 
-    if (object.type === "endPath")
+    if (message.type === "endPath")
     {
       window.requestAnimationFrame(function(timestamp) {
-        var context = $(object.element)[0].getContext("2d");
+        var context = $(message.element)[0].getContext("2d");
         context.closePath();
       });
     }
-    if (object.type === "loadScript")
+    if (message.type === "loadScript")
     {
-      $.getScript(object.url, function() {
+      $.getScript(message.url, function() {
         //TODO check for AJAX errors n stuff
         var message = {
           type    : "scriptLoaded",
-          request : object
+          request : message
         };
         Remote.send(message);
       });
@@ -170,7 +221,7 @@ function CRURLParser(url)
 
   return parser;
 }
-/* global CRDebug, CRURLParser, CRMasterCommunicationParser */
+/* global CRDebug, CRURLParser, CRMasterCommunicationParser, CREventManager */
 /* global nativeCallWebsocketDidOpen, nativeCallSoftDisconnect, nativeCallWebsocketDidClose */
 "use strict";
 
@@ -234,8 +285,12 @@ var Remote = (function()
 
   var onWebsocketMessage = function(e)
   {
-    var message = e.data;
+    var message = JSON.parse(e.data);
+    CRDebug.log(4, "Received message: " + e.data);
+
     CRMasterCommunicationParser.parse(message);
+
+    if (message.type) CREventManager.trigger("message" + message.type, message);
   };
 
 
@@ -266,189 +321,17 @@ var Remote = (function()
   };
 
 
+  var onMessage = function(type, callback)
+  {
+    CREventManager.register("message" + type, callback);
+  };
+
+
   return {
     _connectWebsocket        : _connectWebsocket,
     _softDisconnectWebsocket : _softDisconnectWebsocket,
-    send                     : send
+    _disconnectWebsocket     : _disconnectWebsocket,
+    send                     : send,
+    onMessage                : onMessage
   };
 })();
-/* global nativeCallWebsocketDidOpen, nativeCallSoftDisconnect, nativeCallWebsocketDidClose */
-"use strict";
-
-
-
-var debug = false;
-
-
-
-//Parse URL
-var ParsedURL = (function()
-{
-  var parser = document.createElement("a");
-  parser.href = document.URL;
-  
-  return parser;
-})();
-
-
-var websocket;
-var connected = false;
-
-var onWebsocketOpen = function()
-{
-  log(3, "Websocket opened");
-  connected = true;
-  nativeCallWebsocketDidOpen();
-};
-
-var onWebsocketMessage = function(e)
-{
-  var message = e.data;
-  log(4, "Received message: " + message);
-  
-  var object = JSON.parse(message);
-  
-  if (object.type === "softdisconnect")
-  {
-    connected = false;
-    nativeCallSoftDisconnect();
-  }
-  if (object.type === "show")
-  {
-    window.requestAnimationFrame(function(timestamp) {
-      $("body").append(object.content);
-    });
-  }
-  
-  if (object.type === "update")
-  {
-    window.requestAnimationFrame(function(timestamp) {
-      $(object.element).html(object.content);
-    });
-    // setTimeout(test(object.element, object.content), 0);
-    // $(object.element).html(object.content);
-    // object.element = object.element.replace("#", "");
-    // document.getElementById(object.element).innerHTML = object.content;
-  }
-
-  if (object.type === "updateStyle")
-  {
-    window.requestAnimationFrame(function(timestamp) {
-      for (var style in object.styles) {
-        $(object.element).css(style, object.styles[style]);
-      }
-    });
-    // setTimeout(test(object.element, object.content), 0);
-    // $(object.element).html(object.content);
-    // object.element = object.element.replace("#", "");
-    // document.getElementById(object.element).innerHTML = object.content;
-  }
-
-  if (object.type === "beginPath")
-  {
-    window.requestAnimationFrame(function(timestamp) {
-      var context = $(object.element)[0].getContext("2d");
-      context.beginPath();
-      context.moveTo(object.coords.x, object.coords.y);
-    });
-  }
-
-  if (object.type === "updatePath")
-  {
-    window.requestAnimationFrame(function(timestamp) {
-      var context = $(object.element)[0].getContext("2d");
-      context.lineTo(object.coords.x, object.coords.y);
-      context.stroke();
-    });
-  }
-
-  if (object.type === "endPath")
-  {
-    window.requestAnimationFrame(function(timestamp) {
-      var context = $(object.element)[0].getContext("2d");
-      context.closePath();
-    });
-  }
-};
-
-
-var onWebsocketClose = function()
-{
-  log(3, "Websocket closed");
-  connected = false;
-  cleanupWebsocket();
-  nativeCallWebsocketDidClose();
-};
-
-
-var onWebsocketError = function()
-{
-  onWebsocketClose();
-};
-
-
-function parseNativeMessage(message)
-{
-  log(4, "Parsing native message: " + message);
-  var object = JSON.parse(message);
-  switch (object.type)
-  {
-    case "connectwebsocket":
-      connected = false;
-
-      var oldWebsocket = websocket;
-      cleanupWebsocket();    
-      if (oldWebsocket !== undefined) oldWebsocket.close();
-
-      websocket = new WebSocket("ws://" + ParsedURL.hostname + ":" + (parseInt(ParsedURL.port) + 1));
-      websocket.onopen = onWebsocketOpen;
-      websocket.onmessage = onWebsocketMessage;
-      websocket.onclose = onWebsocketClose;
-      websocket.onerror = onWebsocketError;
-      break;
-    case "cwdebug":
-      if (object.cwdebug) debug = true;
-      break;
-    case "remoteidentifier":
-      var data = { type: "remoteidentifier", identifier: object.identifier };
-      sendMessage(data);
-      break;
-    case "disconnectwebsocket":
-      websocket.close();
-      break;
-  }
-}
-
-
-function cleanupWebsocket()
-{
-  if (websocket !== undefined) 
-  {
-    websocket.onopen = undefined;
-    websocket.onmessage = undefined;
-    websocket.onclose = undefined;
-    websocket.onerror = undefined;
-    websocket = undefined;
-  }
-}
-
-
-function sendMessage(message)
-{
-  if (connected === false) return;
-
-  log(4, "Sending message: " + message);
-
-  websocket.send(JSON.stringify(message));
-}
-
-
-//////////
-// MISC //
-//////////
-
-
-function log(priority, message)
-{
-  if (debug) console.log(priority + "|" + message);
-}
