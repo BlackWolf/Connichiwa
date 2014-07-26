@@ -116,8 +116,8 @@
     
     self.state = CWRemoteLibraryManagerStateConnecting;
     
-    //URL is in the form http://IP:PORT - we need to make it http://IP:PORT/remote/index.html
-    NSURL *finalURL = [[URL URLByAppendingPathComponent:@"remote" isDirectory:YES] URLByAppendingPathComponent:@"index.html" isDirectory:NO];
+    //URL is in the form http://IP:PORT - we need to make it http://IP:PORT/connichiwa/remote.html
+    NSURL *finalURL = [[URL URLByAppendingPathComponent:@"connichiwa" isDirectory:YES] URLByAppendingPathComponent:@"remote.html" isDirectory:NO];
     
     NSURLRequest *URLRequest = [NSURLRequest requestWithURL:finalURL];
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -272,7 +272,7 @@
     //stringByEvaluatingJavaScriptFromString: must be called on the main thread, but it seems buggy with dispatch_async, so we use performSelectorOnMainThread:
     //Also see http://stackoverflow.com/questions/11593900/uiwebview-stringbyevaluatingjavascriptfromstring-hangs-on-ios5-0-5-1-when-called
     CWLog(4, @"Sending message to remote library: %@", message);
-    NSString *js = [NSString stringWithFormat:@"CRNativeCommunicationParser.parse('%@')", message];
+    NSString *js = [NSString stringWithFormat:@"CWNativeRemoteCommunication.parse('%@')", message];
     [self.webView performSelectorOnMainThread:@selector(stringByEvaluatingJavaScriptFromString:) withObject:js waitUntilDone:NO];
 }
 

@@ -9,6 +9,29 @@
  */
 var CWUtil = (function()
 {
+  var parseURL = function(url) 
+  {
+    var parser = document.createElement("a");
+    parser.href = url;
+
+    return parser;
+  };
+
+
+  var getEventLocation = function(e, type) 
+  {
+    if (type === undefined) type = "page";
+
+    var pos = { x: e[type+"X"], y: e[type+"Y"] };
+    if (pos.x === undefined || pos.y === undefined)
+    {
+      pos = { x: e.originalEvent.targetTouches[0][type+"X"], y: e.originalEvent.targetTouches[0][type+"Y"] };
+    }
+
+    return pos;
+  };
+
+  
   /**
    * Checks if the given parameter is an Int.
    *
@@ -53,6 +76,8 @@ var CWUtil = (function()
 
 
   return {
+    parseURL : parseURL,
+    getEventLocation : getEventLocation,
     isInt    : isInt,
     isObject : isObject,
     inArray  : inArray

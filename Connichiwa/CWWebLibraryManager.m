@@ -382,7 +382,7 @@
     //stringByEvaluatingJavaScriptFromString: must be called on the main thread, but it seems buggy with dispatch_async, so we use performSelectorOnMainThread:
     //Also see http://stackoverflow.com/questions/11593900/uiwebview-stringbyevaluatingjavascriptfromstring-hangs-on-ios5-0-5-1-when-called
     CWLog(4, @"Sending message to web library: %@", message);
-    NSString *js = [NSString stringWithFormat:@"CWNativeCommunicationParser.parse('%@')", message];
+    NSString *js = [NSString stringWithFormat:@"CWNativeMasterCommunication.parse('%@')", message];
     [self.webView performSelectorOnMainThread:@selector(stringByEvaluatingJavaScriptFromString:) withObject:js waitUntilDone:NO];
 }
 

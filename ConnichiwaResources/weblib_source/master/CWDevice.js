@@ -1,4 +1,5 @@
 /* global Connichiwa, CWUtil, CWEventManager, CWDebug */
+/* global nativeCallConnectRemote */
 "use strict";
 
 
@@ -68,9 +69,19 @@ function CWDevice(properties)
 }
 
 
-CWDevice.prototype.send = function(message)
+CWDevice.prototype.connect = function()
 {
-  Connichiwa.send(this, message);
+  if (this.canBeConnected() === false) return;
+
+  this.connectionState = CWDeviceConnectionState.CONNECTING;
+  nativeCallConnectRemote(this.getIdentifier());
+};
+
+
+CWDevice.prototype.send = function(messageObject)
+{
+  messageObject.target = this.getIdentifier();
+  Connichiwa._sendObject(messageObject);
 };
 
 

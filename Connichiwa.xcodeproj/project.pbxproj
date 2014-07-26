@@ -28,7 +28,6 @@
 		330CBB74193E75890064AD99 /* Connichiwa.h in Headers */ = {isa = PBXBuildFile; fileRef = 33A0514E193E61CC00FED071 /* Connichiwa.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		330CBB88193F14B60064AD99 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 330CBB87193F14B60064AD99 /* CoreFoundation.framework */; };
 		330CBB8E193F14B60064AD99 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 330CBB8C193F14B60064AD99 /* InfoPlist.strings */; };
-		331F2DE31944F4ED007609B9 /* weblib in Resources */ = {isa = PBXBuildFile; fileRef = 331F2DE21944F4ED007609B9 /* weblib */; };
 		332B686F1959A2B5004B0600 /* scripts in Resources */ = {isa = PBXBuildFile; fileRef = 332B686E1959A2B5004B0600 /* scripts */; };
 		333A80671953996D00420D5A /* CWBluetoothManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 333A80651953996D00420D5A /* CWBluetoothManager.h */; };
 		333A80681953996D00420D5A /* CWBluetoothManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 333A80661953996D00420D5A /* CWBluetoothManager.m */; };
@@ -41,12 +40,13 @@
 		334AB758193FEC6000A15999 /* CWBundle.m in Sources */ = {isa = PBXBuildFile; fileRef = 334AB756193FEC6000A15999 /* CWBundle.m */; };
 		334AB76D19405F0C00A15999 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 334AB76C19405F0C00A15999 /* CoreBluetooth.framework */; };
 		334AB77319405F1100A15999 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 334AB77219405F1000A15999 /* CoreLocation.framework */; };
-		3351372E19578FBD004FE5E0 /* remote in Resources */ = {isa = PBXBuildFile; fileRef = 3351372D19578FBD004FE5E0 /* remote */; };
 		33618AC0195DAD37006FA51B /* CWRemoteLibraryManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 33618ABE195DAD37006FA51B /* CWRemoteLibraryManager.h */; };
 		33618AC1195DAD37006FA51B /* CWRemoteLibraryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 33618ABF195DAD37006FA51B /* CWRemoteLibraryManager.m */; };
 		33618AC8195DEDFE006FA51B /* CWWebLibraryManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 33618AC6195DEDFE006FA51B /* CWWebLibraryManager.h */; };
 		33618AC9195DEDFE006FA51B /* CWWebLibraryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 33618AC7195DEDFE006FA51B /* CWWebLibraryManager.m */; };
 		3367186C194776C1000A7164 /* CWWebserverManagerDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 3367186B194776C1000A7164 /* CWWebserverManagerDelegate.h */; };
+		337FE7961977E07B00912293 /* weblib in Resources */ = {isa = PBXBuildFile; fileRef = 337FE7951977E07B00912293 /* weblib */; };
+		337FE7981977E2FA00912293 /* remote.html in Resources */ = {isa = PBXBuildFile; fileRef = 337FE7971977E2FA00912293 /* remote.html */; };
 		33A0514A193E61CC00FED071 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33A05149193E61CC00FED071 /* Foundation.framework */; };
 		33A05158193E61CC00FED071 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33A05157193E61CC00FED071 /* XCTest.framework */; };
 		33A05159193E61CC00FED071 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33A05149193E61CC00FED071 /* Foundation.framework */; };
@@ -129,7 +129,6 @@
 		330CBB8B193F14B60064AD99 /* ConnichiwaResources-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ConnichiwaResources-Info.plist"; sourceTree = "<group>"; };
 		330CBB8D193F14B60064AD99 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		330CBB8F193F14B60064AD99 /* ConnichiwaResources-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ConnichiwaResources-Prefix.pch"; sourceTree = "<group>"; };
-		331F2DE21944F4ED007609B9 /* weblib */ = {isa = PBXFileReference; lastKnownFileType = folder; path = weblib; sourceTree = "<group>"; };
 		332B686D1958E55E004B0600 /* CWWebApplicationState.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CWWebApplicationState.h; sourceTree = "<group>"; };
 		332B686E1959A2B5004B0600 /* scripts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = scripts; sourceTree = "<group>"; };
 		333A80651953996D00420D5A /* CWBluetoothManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWBluetoothManager.h; sourceTree = "<group>"; };
@@ -144,13 +143,14 @@
 		334AB756193FEC6000A15999 /* CWBundle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWBundle.m; sourceTree = "<group>"; };
 		334AB76C19405F0C00A15999 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
 		334AB77219405F1000A15999 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
-		3351372D19578FBD004FE5E0 /* remote */ = {isa = PBXFileReference; lastKnownFileType = folder; path = remote; sourceTree = "<group>"; };
 		33618ABE195DAD37006FA51B /* CWRemoteLibraryManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWRemoteLibraryManager.h; sourceTree = "<group>"; };
 		33618ABF195DAD37006FA51B /* CWRemoteLibraryManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWRemoteLibraryManager.m; sourceTree = "<group>"; };
 		33618AC6195DEDFE006FA51B /* CWWebLibraryManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWWebLibraryManager.h; sourceTree = "<group>"; };
 		33618AC7195DEDFE006FA51B /* CWWebLibraryManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWWebLibraryManager.m; sourceTree = "<group>"; };
 		33618ACA195E233D006FA51B /* CWWebLibraryManagerDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CWWebLibraryManagerDelegate.h; sourceTree = "<group>"; };
 		3367186B194776C1000A7164 /* CWWebserverManagerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWWebserverManagerDelegate.h; sourceTree = "<group>"; };
+		337FE7951977E07B00912293 /* weblib */ = {isa = PBXFileReference; lastKnownFileType = folder; path = weblib; sourceTree = "<group>"; };
+		337FE7971977E2FA00912293 /* remote.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = remote.html; sourceTree = "<group>"; };
 		3381A01E193F492600BDDF34 /* Nodelike.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Nodelike.xcodeproj; path = Nodelike/Nodelike.xcodeproj; sourceTree = "<group>"; };
 		33A05146193E61CC00FED071 /* libConnichiwa.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libConnichiwa.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		33A05149193E61CC00FED071 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -218,11 +218,11 @@
 		330CBB89193F14B60064AD99 /* ConnichiwaResources */ = {
 			isa = PBXGroup;
 			children = (
-				331F2DE21944F4ED007609B9 /* weblib */,
-				3351372D19578FBD004FE5E0 /* remote */,
+				337FE7951977E07B00912293 /* weblib */,
 				332B686E1959A2B5004B0600 /* scripts */,
 				33C3127D1940AEF600F2541C /* node_modules */,
 				3306A7981940A2DF001B999A /* server.js */,
+				337FE7971977E2FA00912293 /* remote.html */,
 				330CBB8A193F14B60064AD99 /* Supporting Files */,
 			);
 			path = ConnichiwaResources;
@@ -499,12 +499,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3351372E19578FBD004FE5E0 /* remote in Resources */,
+				337FE7981977E2FA00912293 /* remote.html in Resources */,
+				337FE7961977E07B00912293 /* weblib in Resources */,
 				3306A79E1940A386001B999A /* server.js in Resources */,
 				33C3127E1940AEF600F2541C /* node_modules in Resources */,
 				332B686F1959A2B5004B0600 /* scripts in Resources */,
 				330CBB8E193F14B60064AD99 /* InfoPlist.strings in Resources */,
-				331F2DE31944F4ED007609B9 /* weblib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -601,7 +601,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "PATH=$(bash -l -c 'echo $PATH')\n\nCONCAT_FILE=\"${PROJECT_DIR}/${PRODUCT_NAME}/remote/remote.js\"\nCONCAT_FILE_MIN=\"${PROJECT_DIR}/${PRODUCT_NAME}/remote/remote.min.js\"\n\nrm -f ${CONCAT_FILE}\nrm -f ${CONCAT_FILE_MIN}\n\n# CONCATENATE\n# Concatenates everything in the weblib folder\nfor file in \"${PROJECT_DIR}/${PRODUCT_NAME}/remote/*.js\"; do echo $file && cat $file >> ${CONCAT_FILE}; done\n\n# MINIFY\n# Minifyjs needs to be installed (npm install -g minifyjs)\nMINIFYJS_PATH=\"/usr/local/bin/minifyjs\"\nif [ -x $MINIFYJS_PATH ]; then\nif [ -f $CONCAT_FILE ]; then\n\n${MINIFYJS_PATH} -m -i ${CONCAT_FILE} -o ${CONCAT_FILE_MIN}\nfi\nelse\necho \"install minifyjs globally via npm to create a web library documentation\"\nfi;";
+			shellScript = "PATH=$(bash -l -c 'echo $PATH')\n\nCONCAT_FILE=\"${PROJECT_DIR}/${PRODUCT_NAME}/weblib/remote.js\"\nCONCAT_FILE_MIN=\"${PROJECT_DIR}/${PRODUCT_NAME}/weblib/remote.min.js\"\n\nrm -f ${CONCAT_FILE}\nrm -f ${CONCAT_FILE_MIN}\n\n# CONCATENATE\n# Concatenates everything in the weblib folder\ncat \"${PROJECT_DIR}/${PRODUCT_NAME}/scripts/OOP.js\" >> ${CONCAT_FILE};\nfor file in \"${PROJECT_DIR}/${PRODUCT_NAME}/weblib_source/common/*.js\"; do cat $file >> ${CONCAT_FILE}; done\nfor file in \"${PROJECT_DIR}/${PRODUCT_NAME}/weblib_source/remote/*.js\"; do cat $file >> ${CONCAT_FILE}; done\n\n# MINIFY\n# Minifyjs needs to be installed (npm install -g minifyjs)\nMINIFYJS_PATH=\"/usr/local/bin/minifyjs\"\nif [ -x $MINIFYJS_PATH ]; then\nif [ -f $CONCAT_FILE ]; then\n\n${MINIFYJS_PATH} -m -i ${CONCAT_FILE} -o ${CONCAT_FILE_MIN}\nfi\nelse\necho \"install minifyjs globally via npm to create minified JS library versions\"\nfi;";
 		};
 		33CC8C2D194B1CD800D99851 /* Concatenate & Minify Web Library Script */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -615,7 +615,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "PATH=$(bash -l -c 'echo $PATH')\n\nCONCAT_FILE=\"${PROJECT_DIR}/${PRODUCT_NAME}/weblib/connichiwa.js\"\nCONCAT_FILE_MIN=\"${PROJECT_DIR}/${PRODUCT_NAME}/weblib/connichiwa.min.js\"\n\nrm -f ${CONCAT_FILE}\nrm -f ${CONCAT_FILE_MIN}\n\n# CONCATENATE\n# Concatenates everything in the weblib folder\nfor file in \"${PROJECT_DIR}/${PRODUCT_NAME}/weblib/*.js\"; do echo $file && cat $file >> ${CONCAT_FILE}; done\n\n# MINIFY\n# Minifyjs needs to be installed (npm install -g minifyjs)\nMINIFYJS_PATH=\"/usr/local/bin/minifyjs\"\nif [ -x $MINIFYJS_PATH ]; then\nif [ -f $CONCAT_FILE ]; then\n\n${MINIFYJS_PATH} -m -i ${CONCAT_FILE} -o ${CONCAT_FILE_MIN}\nfi\nelse\necho \"install minifyjs globally via npm to create a web library documentation\"\nfi;";
+			shellScript = "PATH=$(bash -l -c 'echo $PATH')\n\nCONCAT_FILE=\"${PROJECT_DIR}/${PRODUCT_NAME}/weblib/connichiwa.js\"\nCONCAT_FILE_MIN=\"${PROJECT_DIR}/${PRODUCT_NAME}/weblib/connichiwa.min.js\"\n\nrm -f ${CONCAT_FILE}\nrm -f ${CONCAT_FILE_MIN}\n\n# CONCATENATE\n# Concatenates everything in the weblib folder\ncat \"${PROJECT_DIR}/${PRODUCT_NAME}/scripts/OOP.js\" >> ${CONCAT_FILE};\nfor file in \"${PROJECT_DIR}/${PRODUCT_NAME}/weblib_source/common/*.js\"; do cat $file >> ${CONCAT_FILE}; done\nfor file in \"${PROJECT_DIR}/${PRODUCT_NAME}/weblib_source/master/*.js\"; do cat $file >> ${CONCAT_FILE}; done\n\n# MINIFY\n# Minifyjs needs to be installed (npm install -g minifyjs)\nMINIFYJS_PATH=\"/usr/local/bin/minifyjs\"\nif [ -x $MINIFYJS_PATH ]; then\nif [ -f $CONCAT_FILE ]; then\n\n${MINIFYJS_PATH} -m -i ${CONCAT_FILE} -o ${CONCAT_FILE_MIN}\nfi\nelse\necho \"install minifyjs globally via npm to create minified JS library versions\"\nfi;";
 		};
 		33D197D9194B3D2100AE1E1D /* Touch Folder References Script */ = {
 			isa = PBXShellScriptBuildPhase;

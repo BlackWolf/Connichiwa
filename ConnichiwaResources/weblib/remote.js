@@ -493,535 +493,170 @@ var Connichiwa = OOP.createSingleton("Connichiwa", "Connichiwa", {
     }
   },
 });
-/* global Connichiwa, CWUtil, CWEventManager, CWDebug */
-/* global nativeCallConnectRemote */
+/* global CWDebug */
 "use strict";
 
 
 
-var CWDeviceDiscoveryState = 
+var CWMasterCommunication = OOP.createSingleton("Connichiwa", "CWMasterCommunication", 
 {
-  DISCOVERED : "discovered",
-  LOST       : "lost"
-};
-
-var CWDeviceConnectionState =
-{
-  DISCONNECTED : "disconnected",
-  CONNECTING   : "connecting",
-  CONNECTED    : "connected"
-};
-
-
-
-/**
- * An instance of this class describes a remote device that was detected nearby. It furthermore keeps information like the distance of the device and other connection-related information.
- *
- * @namespace CWDevice
- */
-function CWDevice(properties)
-{
-  if (!properties.identifier) throw "Cannot instantiate CWDevice without an identifier";
-
-  this.discoveryState = CWDeviceDiscoveryState.DISCOVERED;
-  this.connectionState = CWDeviceConnectionState.DISCONNECTED;
-  this.distance = -1;
-  this.name = "unknown";
-  if (properties.name) this.name = properties.name;
-
-  /**
-   * A string representing a unique identifier of the device
-   */
-  var _identifier = properties.identifier;
-
-  /**
-   * Returns the identifier of this device
-   *
-   * @returns {string} The identifier of this device
-   *
-   * @method getIdentifier
-   * @memberof CWDevice
-   */
-  this.getIdentifier = function() { return _identifier; };
-  
-  this.isNearby = function()
-  {
-    return (this.discoveryState === CWDeviceDiscoveryState.DISCOVERED);
-  };
-  
-  this.canBeConnected = function() 
-  { 
-    return (this.connectionState === CWDeviceConnectionState.DISCONNECTED && 
-      this.discoveryState === CWDeviceDiscoveryState.DISCOVERED);
-  };
-  
-  this.isConnected = function()
-  {
-    return (this.connectionState === CWDeviceConnectionState.CONNECTED);
-  };
-
-  return this;
-}
-
-
-CWDevice.prototype.connect = function()
-{
-  if (this.canBeConnected() === false) return;
-
-  this.connectionState = CWDeviceConnectionState.CONNECTING;
-  nativeCallConnectRemote(this.getIdentifier());
-};
-
-
-CWDevice.prototype.send = function(messageObject)
-{
-  messageObject.target = this.getIdentifier();
-  Connichiwa._sendObject(messageObject);
-};
-
-
-/**
- * Checks if the given object is equal to this device. Two devices are equal if they describe the same remote device (= their ID is the same). This does not do any pointer comparison.
- *
- * @param {object} object The object to compare this CWDevice to
- * @returns {bool} true if the given object is equal to this CWDevice, otherwise false
- */
-CWDevice.prototype.equalTo = function(object)
-{
-  if (CWDevice.prototype.isPrototypeOf(object) === false) return false;
-  return this.getIdentifier() === object.getIdentifier();
-};
-
-
-/**
- * Returns a string representation of this CWDevice
- *
- * @returns {string} a string representation of this device
- */
-CWDevice.prototype.toString = function() {
-  return this.getIdentifier();
-};
-/* global CWDevice, CWEventManager, CWDebug */
-"use strict";
-
-
-
-/**
- * Manages the local device and all remote devices detected and connected to
- *
- * @namespace CWDeviceManager
- */
-var CWDeviceManager = (function()
-{
-
-  /**
-   * An array of detected remote devices as CWDevice objects. All detected devices are in here, they are not necessarily connected to or used in any way by this device.
-   */
-  var _remoteDevices = [];
-
-  /**
-   * Adds a new remote device to the manager
-   *
-   * @param {CWDevice} newDevice The device that should be added to the manager. If the device already exists, nothing will happen.
-   * @returns {bool} true if the device was added, otherwise false
-   *
-   * @memberof CWDeviceManager
-   */
-  var addDevice = function(newDevice)
-  {
-    if (CWDevice.prototype.isPrototypeOf(newDevice) === false) throw "Cannot add a non-device";
-    if (getDeviceWithIdentifier(newDevice.getIdentifier()) !== null) return false;
-
-    CWDebug.log(3, "Added device: " + newDevice.getIdentifier());
-    _remoteDevices.push(newDevice);
-    return true;
-  };
-
-
-  /**
-   * Removes a remote device from the manager
-   *
-   * @param {string|CWDevice} identifier The identifier of the device to remove or a CWDevice. If the device is not stored by this manager, nothing will happen
-  *  @returns {bool} true if the device was removed, otherwise false
-   *
-   * @memberof CWDeviceManager
-   */
-  var removeDevice = function(identifier)
-  {
-    if (CWDevice.prototype.isPrototypeOf(identifier) === true) identifier = identifier.getIdentifier();
-      
-    var device = getDeviceWithIdentifier(identifier);
-    if (device === null) return false;
-
-    CWDebug.log("Removed device: " + identifier);
-    var index = _remoteDevices.indexOf(device);
-    _remoteDevices.splice(index, 1);
-    
-    return true;
-  };
-
-
-  /**
-   * Gets the CWDevice with the given identifier or null if the device is not stored in this manager
-   *
-   * @param {string} identifier The identifier of the device to search for
-   * @returns A CWDevice that belongs to the given ID or null if that device cannot be found
-   *
-   * @memberof CWDeviceManager
-   */
-  var getDeviceWithIdentifier = function(identifier)
-  {
-    for (var i = 0; i < _remoteDevices.length; i++)
-    {
-      var remoteDevice = _remoteDevices[i];
-      if (remoteDevice.getIdentifier() === identifier)
-      {
-        return remoteDevice;
-      }
-    }
-
-    return null;
-  };
-
-
-  var getConnectedDevices = function()
-  {
-    var connectedDevices = [];
-    for (var i = 0; i < _remoteDevices.length; i++)
-    {
-      var remoteDevice = _remoteDevices[i];
-      if (remoteDevice.isConnected()) connectedDevices.push(remoteDevice);
-    }
-
-    return connectedDevices;
-  };
-
-  return {
-    addDevice               : addDevice,
-    removeDevice            : removeDevice,
-    getDeviceWithIdentifier : getDeviceWithIdentifier,
-    getConnectedDevices     : getConnectedDevices
-  };
-})();
-/* global OOP, CWDeviceManager, CWDevice, CWDeviceDiscoveryState, CWDeviceConnectionState, CWEventManager, CWDebug */
-"use strict";
-
-
-
-/**
- * The Connichiwa Communication Protocol Parser (Native Layer).  
- * Here the protocol used to communicate between this library and the native layer is parsed. This communication is done via JSON.
- *
- * **Local ID Information** -- type="localidentifier"  
- * Contains information about the local device. Format:
- * * identifier -- a string identifying the unique ID of the device the weblib runs on
- *
- * **Device Detected** -- type="devicedetected"
- * Contains information about a newly detected device. Format:   
- * * identifier -- the identifier of the newly detected device
- *
- * **Device Proximity Changed** -- type="devicedistancechanged"  
- * Contains information about the new proximity of a previously detected device. Format:  
- * * identifier -- the identifier of the device whose distance changed
- * * distance -- the new distance between this device and the other device, in meters
- *
- * **Device Lost** -- type="devicelost"  
- * Contains information about a device that went out of range or can not be detected anymore for other reasons. Format:  
- * * identifier -- the identifier of the lost device
- *
- * @namespace CWNativeCommunicationParser
- */
-var CWNativeMasterCommunication = OOP.createSingleton("Connichiwa", "CWNativeMasterCommunication", {
-  /**
-   * Parses a message from the websocket. If the message is none of the messages described by this class, this method will do nothing. Otherwise the message will trigger an appropiate action.
-   *
-   * @param {string} message The message from the websocket
-   *
-   * @memberof CWNativeCommunicationParser
-   */
   "public parse": function(message)
   {
-    CWDebug.log(4, "Parsing native message (master): " + message);
-    var object = JSON.parse(message);
-    switch (object.type)
+    if (message.type === "softdisconnect")
     {
-      case "connectwebsocket":      this._parseConnectWebsocket(object); break;
-      case "cwdebug":               this._parseDebug(object); break;
-      case "localidentifier":       this._parseLocalIdentifier(object); break;
-      case "devicedetected":        this._parseDeviceDetected(object); break;
-      case "devicedistancechanged": this._parseDeviceDistanceChanged(object); break;
-      case "devicelost":            this._parseDeviceLost(object); break;
-      case "remoteconnectfailed":   this._parseRemoteConnectFailed(object); break;
-      case "remotedisconnected":    this._parseRemoteDisconnected(object); break;
-      case "disconnectwebsocket":   this._parseDisconnectWebsocket(object); break;
+      this.package.Connichiwa._softDisconnectWebsocket();
     }
-  },
-  
-  
-  _parseConnectWebsocket: function(message)
-  {
-    this.package.Connichiwa._connectWebsocket();
-  },
-  
-  
-  _parseDebug: function(message)
-  {
-    if (message.cwdebug) CWDebug.enableDebug();
-  },
-  
-  
-  _parseLocalIdentifier: function(message)
-  {
-    var success = this.package.Connichiwa._setIdentifier(message.identifier);
-    if (success)
+    if (message.type === "show")
     {
-      this.package.Connichiwa._sendObject(message); //needed so server recognizes us as local weblib
-      CWEventManager.trigger("ready");
-    }
-  },
-  
-  
-  _parseDeviceDetected: function(message)
-  {
-    var device = CWDeviceManager.getDeviceWithIdentifier(message.identifier);
-    
-    //We might re-detect a lost device, so it is possible that the device is already stored
-    if (device === null)
-    {
-      device = new CWDevice(message);
-      CWDeviceManager.addDevice(device);
+      window.requestAnimationFrame(function(timestamp) {
+        $("body").append(message.content);
+      });
     }
 
-    device.discoveryState = CWDeviceDiscoveryState.DISCOVERED;
+    if (message.type === "update")
+    {
+      window.requestAnimationFrame(function(timestamp) {
+        $(message.element).html(message.content);
+      });
+    }
 
-    CWDebug.log(2, "Detected device: " + device.getIdentifier());
-    CWEventManager.trigger("deviceDetected", device);
-  },
-  
-  
-  _parseDeviceDistanceChanged: function(message)
-  {
-    var device = CWDeviceManager.getDeviceWithIdentifier(message.identifier);
-    if (device === null) return;
-    
-    device.distance = message.distance;
-    CWDebug.log(5, "Updated distance of device " + device.getIdentifier() + " to " + device.distance);
-    CWEventManager.trigger("deviceDistanceChanged", device);
-  },
-  
-  
-  _parseDeviceLost: function(message)
-  {
-    var device = CWDeviceManager.getDeviceWithIdentifier(message.identifier);
-    device.discoveryState = CWDeviceDiscoveryState.LOST;
+    if (message.type === "beginPath")
+    {
+      window.requestAnimationFrame(function(timestamp) {
+        var context = $(message.element)[0].getContext("2d");
+        context.beginPath();
+        context.moveTo(message.coords.x, message.coords.y);
+      });
+    }
 
-    CWDebug.log(2, "Lost device: " + device.getIdentifier());
-    CWEventManager.trigger("deviceLost", device);
-  },
-  
-  
-  _parseRemoteConnectFailed: function(message)
-  {
-    var device = CWDeviceManager.getDeviceWithIdentifier(message.identifier);
-    device.connectionState = CWDeviceConnectionState.DISCONNECTED;
+    if (message.type === "updatePath")
+    {
+      window.requestAnimationFrame(function(timestamp) {
+        var context = $(message.element)[0].getContext("2d");
+        context.lineTo(message.coords.x, message.coords.y);
+        context.stroke();
+      });
+    }
 
-    CWDebug.log(2, "Connection to remote device failed: " + device.getIdentifier());
-    CWEventManager.trigger("connectFailed", device);
-  },
-  
-  
-  _parseRemoteDisconnected: function(message)
-  {
-    var device = CWDeviceManager.getDeviceWithIdentifier(message.identifier);
-    if (device === null) return;
-      
-    device.connectionState = CWDeviceConnectionState.DISCONNECTED;
-
-    CWDebug.log(2, "Device disconnected: " + device.getIdentifier());
-    CWEventManager.trigger("deviceDisconnected", device);
-  },
-  
-  
-  _parseDisconnectWebsocket: function(message)
-  {
-    this.package.Connichiwa._disconnectWebsocket();  
+    if (message.type === "endPath")
+    {
+      window.requestAnimationFrame(function(timestamp) {
+        var context = $(message.element)[0].getContext("2d");
+        context.closePath();
+      });
+    }
+    if (message.type === "loadScript")
+    {
+      $.getScript(message.url, function() {
+        //TODO check for AJAX errors n stuff
+        var message = {
+          type    : "scriptLoaded",
+          request : message
+        };
+        this.package.Connichiwa._sendObject(message);
+      });
+    }
   },
 });
 /* global OOP, CWDebug */
 "use strict";
 
 
-var CWPinchManager = OOP.createSingleton("Connichiwa", "CWPinchManager", {
-  "private _swipes": {},
 
-  "package detectedSwipe": function(identifier, edge) {
-    CWDebug.log(1, "A SWIPE ON EDGE "+edge);
-
-    //Check if the swipe corresponds with another swipe in the database to form a pinch
-    var now = new Date();
-    var matchingEdge = this._oppositeEdge(edge);
-
-    for (var key in this._swipes) {
-      var savedSwipe = this._swipes[key];
-
-      //We can't create a pinch on a single device
-      if (savedSwipe.device === identifier) continue;
-
-      //If the existing swipe is too old, it is invalid
-      CWDebug.log(1, "Checking "+(now.getTime()-savedSwipe.date.getTime()));
-      if (now.getTime()-savedSwipe.date.getTime() > 500) continue;
-
-      //If the edge of the other swipe is not on the correct device edge, it's not forming a pinch
-      if (savedSwipe.edge !== matchingEdge) continue;
-
-      //WE HAVE A PINCH
-      CWDebug.log(1, "Super crazy PINCH PINCH PINCH");
-      return;
-    }
-    
-    //If the swipe does not seem to be part of a pinch, remember it for later
-    this._swipes[identifier] = { device: identifier, edge: edge, date: now };
-  },
-
-
-  "private _oppositeEdge": function(edge) {
-    switch (edge) {
-      case "top": return "bottom"; 
-      case "bottom": return "top";
-      case "left": return "right";
-      case "right": return "left";
-    }
-
-    return "invalid";
-  }
-});
-/* global OOP, CWPinchManager, CWDebug, CWDeviceManager, CWDeviceConnectionState, CWEventManager */
-/* global nativeCallRemoteDidConnect */
-"use strict";
-
-
-/**
- * The Connichiwa Communication Protocol Parser (Remote Device).  
- * Here the protocol used to communicate between this library and a connected remote device is parsed. The communication is done via JSON.
- *
- * **Remote ID Information** -- type="remoteidentifier"  
- * Contains the identifier of a connected remote device. Format:
- * * identifier -- a string identifying the unique ID of the device the weblib runs on
- *
- * @namespace CWRemoteCommunicationParser
- */
-var CWRemoteCommunication = OOP.createSingleton("Connichiwa", "CWRemoteCommunication", 
+var CWNativeRemoteCommunication = OOP.createSingleton("Connichiwa", "CWNativeRemoteCommunication", 
 {
-  /**
-   * Parses a message from the websocket. If the message is none of the messages described by this class, this method will do nothing. Otherwise the message will trigger an appropiate action.
-   *
-   * @param {string} message The message from the websocket
-   *
-   * @memberof CWRemoteCommunicationParser
-   */
   "public parse": function(message)
   {
-    switch (message.type)
+    CWDebug.log(4, "Parsing native message (remote): " + message);
+    var object = JSON.parse(message);
+    switch (object.type)
     {
-      case "remoteidentifier": this._parseRemoteIdentifier(message); break;
-      case "pinchswipe": this._parsePinchSwipe(message); break;
+      case "connectwebsocket":    this._parseConnectWebsocket(object); break;
+      case "cwdebug":             this._parseDebug(object); break;
+      case "remoteidentifier":    this._parseRemoteIdentifier(object); break;
+      case "disconnectwebsocket": this._parseDisconnectWebsocket(object); break;
     }
   },
-  
-  
-  _parseRemoteIdentifier: function(message)
+
+
+  _parseConnectWebsocket: function(message)
   {
-    var device = CWDeviceManager.getDeviceWithIdentifier(message.identifier);
-    if (device === null) return;
-    
-    device.connectionState = CWDeviceConnectionState.CONNECTED;
-    nativeCallRemoteDidConnect(device.getIdentifier());
-    
-    //For some reason, it seems that triggering this messages sometimes causes the iOS WebThread to crash
-    //I THINK this might be related to us sending a message to the remote device in the web app when this event is triggered
-    //This does seem strange, though, considering we just received a message over the websocket (so it obviously is initialized and working)
-    //As a temporary fix, I try to delay sending this event a little and see if it helps
-    setTimeout(function() { CWEventManager.trigger("deviceConnected", device); }, 1000);
+    this.package.Connichiwa._connectWebsocket();
   },
 
-  _parsePinchSwipe: function(message) {
-    this.package.CWPinchManager.detectedSwipe(message.device, message.edge);
+
+  _parseDebug: function(message)
+  {
+    CWDebug.enableDebug();
+  },
+
+
+  _parseRemoteIdentifier: function(message) 
+  {
+    this.package.Connichiwa._setIdentifier(message.identifier);
+    
+    var data = { type: "remoteidentifier", identifier: message.identifier };
+    this.package.Connichiwa.send(data);
+  },
+
+
+  _parseDisconnectWebsocket: function(message)
+  {
+    this.package.Connichiwa._disconnectWebsocket();  
   },
 });
-/* global OOP, CWDebug, CWRemoteCommunication, CWEventManager, CWUtil, CWDeviceManager */
-/* global CONNECTING, OPEN */
-/* global nativeCallWebsocketDidOpen, nativeCallWebsocketDidClose */
+/* global OOP, CWUtil, CWDebug, CWMasterCommunication, CWEventManager */
+/* global nativeCallWebsocketDidOpen, nativeCallWebsocketDidClose, nativeCallSoftDisconnect */
 "use strict";
 
 
 OOP.extendSingleton("Connichiwa", "Connichiwa", {
-  "public isMaster"             : true,
-  "private _connectionAttempts" : 0,
-
-  // PUBLIC API
+  "public isMaster"           : false,
+  "private _parsedURL"        : new CWUtil.parseURL(document.URL),
+  "private _softDisconnected" : false,
 
 
   "public send": function(messageObject) {
-    //TODO
-    //For now, if send is used on the master we just send it to ourselves
-    //as if it was send by a remote device
-    CWRemoteCommunication.parse(messageObject);
-  },
-  
-  
-  "public on": function(event, callback)
-  {
-    var validEvents = [ 
-      "ready", 
-      "deviceDetected", 
-      "deviceDistanceChanged", 
-      "deviceLost",
-      "deviceConnected",
-      "deviceDisconnected",
-      "connectFailed"
-    ];
-    
-    if (CWUtil.inArray(event, validEvents) === false) throw "Registering for invalid event: " + event;
-
-    CWEventManager.register(event, callback);
+    this._send(JSON.stringify(messageObject));
   },
 
 
   "public broadcast": function(messageObject) 
   {
     messageObject.target = "broadcast";
-    messageObject.source = "native";
+    messageObject.source = this.getIdentifier();
     this._sendObject(messageObject);
   },
-
-  // WEBSOCKET
 
 
   "package _connectWebsocket": function()
   {
-    if (this._websocket !== undefined && (this._websocket.state === CONNECTING || this._websocket.state === OPEN)) {
-      return;
-    }
+    //If we replace the websocket (or re-connect) we don't want to call onWebsocketClose
+    //Therefore, first cleanup, then close
+    var oldWebsocket = this._websocket;
+    this._cleanupWebsocket();    
+    if (oldWebsocket !== undefined) oldWebsocket.close();
 
-    this._cleanupWebsocket();
-
-    CWDebug.log(3, "Connecting websocket");
-
-    this._websocket           = new WebSocket("ws://127.0.0.1:8001");
+    this._websocket           = new WebSocket("ws://" + this._parsedURL.hostname + ":" + (parseInt(this._parsedURL.port) + 1));
     this._websocket.onopen    = this._onWebsocketOpen;
     this._websocket.onmessage = this._onWebsocketMessage;
     this._websocket.onclose   = this._onWebsocketClose;
     this._websocket.onerror   = this._onWebsocketError;
+  },
 
-    this._connectionAttempts++;
+
+  _softDisconnectWebsocket: function()
+  {
+    this._softDisconnected = true;
+    nativeCallSoftDisconnect();
   },
 
 
   _onWebsocketOpen: function()
   {
     CWDebug.log(3, "Websocket opened");
+    this._softDisconnected = false;
     nativeCallWebsocketDidOpen();
-    this._connectionAttempts = 0;
   },
 
 
@@ -1029,8 +664,8 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
   {
     var message = JSON.parse(e.data);
     CWDebug.log(4, "Received message: " + e.data);
-    
-    CWRemoteCommunication.parse(message);
+
+    CWMasterCommunication.parse(message);
 
     if (message.type) CWEventManager.trigger("message" + message.type, message);
   },
@@ -1040,21 +675,14 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
   {
     CWDebug.log(3, "Websocket closed");
     this._cleanupWebsocket();
-
-    if (this._connectionAttempts >= 5)
-    {
-      //Give up, guess we are fucked
-      nativeCallWebsocketDidClose();
-      return;
-    }
-
-    //We can't allow this blashphemy! Try to reconnect!
-    setTimeout(function() { this._connectWebsocket(); }, this._connectionAttempts * 1000);
+    nativeCallWebsocketDidClose();
   },
 
 
   _onWebsocketError: function()
   {
     this._onWebsocketClose();
-  },
+  }
 });
+
+CWEventManager.trigger("ready"); //trigger ready asap on remotes

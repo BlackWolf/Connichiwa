@@ -51,14 +51,19 @@ app.use(function(req, res, next) {
   next();
 });
 
+app.use("/connichiwa/remote.html", function(req, res, next) 
+{
+  res.sendfile(RESOURCES_PATH + "/remote.html");
+});
+
 //Make sure we serve the Connichiwa Web Library to the web app under /connichiwa/
 app.use("/connichiwa", Express.static(RESOURCES_PATH + "/weblib"));
 
 //Serve the webpage that is accessed by remote devices
-app.use("/remote", Express.static(RESOURCES_PATH + "/remote"));
+// app.use("/remote", Express.static(RESOURCES_PATH + "/remote"));
 
 //Serve scripts delivered with Connichiwa
-app.use("/scripts", Express.static(RESOURCES_PATH + "/scripts"));
+app.use("/connichiwa-scripts", Express.static(RESOURCES_PATH + "/scripts"));
 
 //DOCUMENT_ROOT (web app) is served as /
 app.use("/", Express.static(DOCUMENT_ROOT));
@@ -98,8 +103,16 @@ var onLocalMessage = function(message)
 {
   log(4, "Message from web library: " + message);
   var object = JSON.parse(message);
-  sendToRemote(object.target, message);
-};
+
+  if (object.target === "broadcast")
+  {
+    sendAsBroadcast(object.source, message);
+  } 
+  else 
+  {
+    sendToRemote(object.target, message);
+  }
+}; 
 
 var onLocalClose = function(code, message)
 {
@@ -121,9 +134,16 @@ var onRemoteMessage = function(wsConnection)
 {
   return function(message)
   {
-    //A message from a remote device is relayed to the weblib
-    log(4, "Received message from remote device: " + message);
-    sendToLocal(message);
+    var object = JSON.parse(message);
+
+    if (object.target === "broadcast")
+    {
+      sendAsBroadcast(object.source, message);
+    } 
+    else 
+    {
+      sendToLocal(message);
+    }
   };
 };
 
@@ -280,24 +300,25 @@ function sendToLocal(message)
 
 function sendToRemote(identifier, message)
 {
-  if (identifier === "broadcast")
+  log(4, "Trying to send message to remote device " + identifier);
+  if (identifier in wsRemoteConnections === false) return;
+  log(4, "Sending message to remote device " + identifier + ": " + message);
+  wsRemoteConnections[identifier].send(message);
+}
+
+
+function sendAsBroadcast(source, message) 
+{
+  for (var key in wsRemoteConnections)
   {
-    for (var key in wsRemoteConnections)
+    if (wsRemoteConnections.hasOwnProperty(key) && key !== source)
     {
-      if (wsRemoteConnections.hasOwnProperty(key))
-      {
-        log(4, "Sending message to remote device " + key + ": " + message);
-        wsRemoteConnections[key].send(message);    
-      }
-    }    
-    return;
+      log(4, "Sending message to remote device " + key + ": " + message);
+      wsRemoteConnections[key].send(message);    
+    }
   }
-  else {
-    log(4, "Trying to send message to remote device " + identifier);
-    if (identifier in wsRemoteConnections === false) return;
-    log(4, "Sending message to remote device " + identifier + ": " + message);
-    wsRemoteConnections[identifier].send(message);
-  }
+
+  if (source !== "native") wsLocalConnection.send(message);
 }
 
 

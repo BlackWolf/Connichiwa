@@ -1,15 +1,15 @@
-/* global Remote, CRDebug */
+/* global CWDebug */
 "use strict";
 
 
 
-var CRMasterCommunicationParser = (function() 
+var CWMasterCommunication = OOP.createSingleton("Connichiwa", "CWMasterCommunication", 
 {
-  var parse = function(message)
+  "public parse": function(message)
   {
     if (message.type === "softdisconnect")
     {
-      Remote._softDisconnectWebsocket();
+      this.package.Connichiwa._softDisconnectWebsocket();
     }
     if (message.type === "show")
     {
@@ -58,12 +58,8 @@ var CRMasterCommunicationParser = (function()
           type    : "scriptLoaded",
           request : message
         };
-        Remote.send(message);
+        this.package.Connichiwa._sendObject(message);
       });
     }
-  };
-
-  return {
-    parse : parse
-  };
-})();
+  },
+});

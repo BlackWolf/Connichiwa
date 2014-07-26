@@ -1,4 +1,4 @@
-/* global CWDebug, CWDeviceManager, CWDeviceConnectionState, CWEventManager, Connichiwa */
+/* global OOP, CWPinchManager, CWDebug, CWDeviceManager, CWDeviceConnectionState, CWEventManager */
 /* global nativeCallRemoteDidConnect */
 "use strict";
 
@@ -13,7 +13,7 @@
  *
  * @namespace CWRemoteCommunicationParser
  */
-var CWRemoteCommunicationParser = (function()
+var CWRemoteCommunication = OOP.createSingleton("Connichiwa", "CWRemoteCommunication", 
 {
   /**
    * Parses a message from the websocket. If the message is none of the messages described by this class, this method will do nothing. Otherwise the message will trigger an appropiate action.
@@ -22,16 +22,17 @@ var CWRemoteCommunicationParser = (function()
    *
    * @memberof CWRemoteCommunicationParser
    */
-  var parse = function(message)
+  "public parse": function(message)
   {
     switch (message.type)
     {
-      case "remoteidentifier": _parseRemoteIdentifier(message); break;
+      case "remoteidentifier": this._parseRemoteIdentifier(message); break;
+      case "pinchswipe": this._parsePinchSwipe(message); break;
     }
-  };
+  },
   
   
-  var _parseRemoteIdentifier = function(message)
+  _parseRemoteIdentifier: function(message)
   {
     var device = CWDeviceManager.getDeviceWithIdentifier(message.identifier);
     if (device === null) return;
@@ -44,9 +45,9 @@ var CWRemoteCommunicationParser = (function()
     //This does seem strange, though, considering we just received a message over the websocket (so it obviously is initialized and working)
     //As a temporary fix, I try to delay sending this event a little and see if it helps
     setTimeout(function() { CWEventManager.trigger("deviceConnected", device); }, 1000);
-  };
+  },
 
-  return {
-    parse : parse
-  };
-})();
+  _parsePinchSwipe: function(message) {
+    this.package.CWPinchManager.detectedSwipe(message.device, message.edge);
+  },
+});
