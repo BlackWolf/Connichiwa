@@ -17,7 +17,7 @@ var CWPinchManager = OOP.createSingleton("Connichiwa", "CWPinchManager", {
       if (savedSwipe.device === identifier) continue;
 
       //If the edge of the other swipe is not on the correct device edge, it's not forming a pinch
-      if (savedSwipe.edge !== matchingEdge) continue;
+      // if (savedSwipe.edge !== matchingEdge) continue;
 
       //If the existing swipe is too old, it is invalid
       if ((now.getTime() - savedSwipe.date.getTime()) > 1000) continue;
@@ -33,10 +33,10 @@ var CWPinchManager = OOP.createSingleton("Connichiwa", "CWPinchManager", {
 
   "private _oppositeEdge": function(edge) {
     switch (edge) {
-      case "top": return "bottom"; 
+      case "top":    return "bottom"; 
       case "bottom": return "top";
-      case "left": return "right";
-      case "right": return "left";
+      case "left":   return "right";
+      case "right":  return "left";
     }
 
     return "invalid";
