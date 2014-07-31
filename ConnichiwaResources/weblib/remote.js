@@ -347,6 +347,8 @@ $(document).ready(function() {
       type   : "pinchswipe",
       device : Connichiwa.getIdentifier(),
       edge   : edge,
+      width  : screen.availWidth,
+      height : screen.availHeight,
       x      : endLocation.x,
       y      : endLocation.y
     };
@@ -478,17 +480,13 @@ var Connichiwa = OOP.createSingleton("Connichiwa", "Connichiwa", {
     this._websocket.close();
   },
 
-  // TODO we need to make this package instead of public
-  // For now, this is impossible because CWDevice uses it and CWDevice doesn't use OOP
-  "public _sendObject": function(messageObject)
+  "package _sendObject": function(messageObject)
   {
     this._send(JSON.stringify(messageObject));
   },
 
 
-  // TODO we need to make this package instead of public
-  // For now, this is impossible because CWDevice uses it and CWDevice doesn't use OOP
-  "public _send": function(message) {
+  "package _send": function(message) {
     CWDebug.log(4, "Sending message: " + message);
     this._websocket.send(message);
   },
@@ -506,7 +504,7 @@ var Connichiwa = OOP.createSingleton("Connichiwa", "Connichiwa", {
     }
   },
 });
-/* global CWDebug */
+/* global OOP, CWDebug */
 "use strict";
 
 
@@ -560,14 +558,20 @@ var CWMasterCommunication = OOP.createSingleton("Connichiwa", "CWMasterCommunica
     }
     if (message.type === "loadScript")
     {
-      $.getScript(message.url, function() {
-        //TODO check for AJAX errors n stuff
-        var message = {
-          type    : "scriptLoaded",
-          request : message
-        };
-        this.package.Connichiwa._sendObject(message);
-      });
+      CWDebug.log(1, "LOADING SCRIPT "+message.url);
+      $.getScript(message.url)
+        .done(function() {
+          CWDebug.log(1, "SCRIPT WAS LOADED");
+          //TODO check for AJAX errors n stuff
+          var message = {
+            type    : "scriptLoaded",
+            request : message
+          };
+          Connichiwa.send(message);
+        })
+        .fail(function(f, s, t) {
+          CWDebug.log(1, "SCRIPT LOAD FAILED HARD: "+t);
+        });
     }
   },
 });
@@ -624,20 +628,40 @@ var CWNativeRemoteCommunication = OOP.createSingleton("Connichiwa", "CWNativeRem
 
 
 OOP.extendSingleton("Connichiwa", "Connichiwa", {
-  "public isMaster"           : false,
   "private _parsedURL"        : new CWUtil.parseURL(document.URL),
   "private _softDisconnected" : false,
 
 
-  "public send": function(messageObject) {
-    this._send(JSON.stringify(messageObject));
+  "public isMaster": function() {
+    return false;
+  },
+
+
+  "public send": function(identifier, messageObject) {
+    if (identifier === "broadcast") {
+      this.broadcast(messageObject);
+      return;
+    }
+
+    if (messageObject === undefined) {
+      messageObject = identifier;
+      identifier = undefined;
+      messageObject.source = this.getIdentifier();
+      messageObject.target = "master";
+      this._sendObject(messageObject);
+      return;
+    }
+
+    messageObject.source = this.getIdentifier();
+    messageObject.target = identifier;
+    this._sendObject(messageObject);
   },
 
 
   "public broadcast": function(messageObject) 
   {
-    messageObject.target = "broadcast";
     messageObject.source = this.getIdentifier();
+    messageObject.target = "broadcast";
     this._sendObject(messageObject);
   },
 

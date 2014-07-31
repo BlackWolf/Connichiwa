@@ -526,7 +526,13 @@ double const URL_CHECK_TIMEOUT = 2.0;
 {
     BTLog(3, @"Preparing to send initial data to %@", central);
     
-    NSDictionary *sendDictionary = @{ @"identifier": self.appState.identifier, @"name": self.appState.deviceName };
+    CGRect screenRect = [[UIScreen mainScreen] bounds];
+    NSDictionary *sendDictionary = @{
+                                     @"identifier": self.appState.identifier,
+                                     @"name": self.appState.deviceName,
+                                     @"screenWidth": [NSNumber numberWithFloat:screenRect.size.width],
+                                     @"screenHeight": [NSNumber numberWithFloat:screenRect.size.height]
+                                     };
     NSData *initialData = [NSJSONSerialization dataWithJSONObject:sendDictionary options:NSJSONWritingPrettyPrinted error:nil];
     BOOL didSend = [self.peripheralManager updateValue:initialData forCharacteristic:self.advertisedInitialCharacteristic onSubscribedCentrals:@[central]];
     

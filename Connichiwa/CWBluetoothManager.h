@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreBluetooth/CoreBluetooth.h>
+#import <UIKit/UIKit.h>
 #import "CWBluetoothManagerDelegate.h"
 #import "CWWebApplicationState.h"
 

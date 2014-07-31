@@ -1,4 +1,4 @@
-/* global CWDebug */
+/* global OOP, CWDebug */
 "use strict";
 
 
@@ -52,14 +52,20 @@ var CWMasterCommunication = OOP.createSingleton("Connichiwa", "CWMasterCommunica
     }
     if (message.type === "loadScript")
     {
-      $.getScript(message.url, function() {
-        //TODO check for AJAX errors n stuff
-        var message = {
-          type    : "scriptLoaded",
-          request : message
-        };
-        this.package.Connichiwa._sendObject(message);
-      });
+      CWDebug.log(1, "LOADING SCRIPT "+message.url);
+      $.getScript(message.url)
+        .done(function() {
+          CWDebug.log(1, "SCRIPT WAS LOADED");
+          //TODO check for AJAX errors n stuff
+          var message = {
+            type    : "scriptLoaded",
+            request : message
+          };
+          Connichiwa.send(message);
+        })
+        .fail(function(f, s, t) {
+          CWDebug.log(1, "SCRIPT LOAD FAILED HARD: "+t);
+        });
     }
   },
 });

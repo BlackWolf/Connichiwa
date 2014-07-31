@@ -5,10 +5,14 @@
 
 
 OOP.extendSingleton("Connichiwa", "Connichiwa", {
-  "public isMaster"             : true,
   "private _connectionAttempts" : 0,
 
   // PUBLIC API
+  
+
+  "public isMaster": function() {
+    return true;
+  },
 
 
   "public send": function(identifier, messageObject) {

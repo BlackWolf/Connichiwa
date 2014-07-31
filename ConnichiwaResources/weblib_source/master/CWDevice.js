@@ -87,8 +87,9 @@ CWDevice.prototype.connect = function()
 
 CWDevice.prototype.send = function(messageObject)
 {
-  messageObject.target = this.getIdentifier();
-  Connichiwa._sendObject(messageObject);
+  Connichiwa.send(this.getIdentifier(), messageObject);
+  // messageObject.target = this.getIdentifier();
+  // Connichiwa._sendObject(messageObject);
 };
 
 

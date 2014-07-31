@@ -3,25 +3,17 @@
 
 
 var CWPinchManager = OOP.createSingleton("Connichiwa", "CWPinchManager", {
-  "private _swipes"       : {},
-  "private _devices"      : {},
+  "private _swipes"  : {},
+  "private _devices" : {},
 
 
   "public getDeviceTransformation": function(device) {
-    //TODO, for now we just check one level from the master device
-    //obviously, this must be fixed
-    var masterPinchedDevice = this._getPinchedDevice(CWDeviceManager.getLocalDevice());
+    if (device.getIdentifier() in this._devices === false) return { x: 0, y: 0 };
 
-    var transform = { x: screen.availWidth, y: screen.availHeight };
-    var edges = [ "top", "left", "bottom", "right" ];
-    for (var i = 0; i < edges.length; i++) {
-      var edge = edges[i];
-      if (device.getIdentifier() in masterPinchedDevice[edge]) {
-        var axis = this._axisForEdge(edge);
-        transform[axis] = masterPinchedDevice[edge][device.getIdentifier()];
-        return transform;
-      }
-    }
+    return { 
+      x : this._devices[device.getIdentifier()].transformX, 
+      y : this._devices[device.getIdentifier()].transformY
+    };
   },
 
 
@@ -54,6 +46,8 @@ var CWPinchManager = OOP.createSingleton("Connichiwa", "CWPinchManager", {
     //If the swipe does not seem to be part of a pinch, remember it for later
     CWDebug.log(3, "Adding swipe " + data.device);
     this._swipes[data.device] = { date: now, data: data };
+
+    //TODO remove the swipes?
   },
 
 
@@ -61,13 +55,14 @@ var CWPinchManager = OOP.createSingleton("Connichiwa", "CWPinchManager", {
     //Always add the master device as the first device
     if (Object.keys(this._devices).length === 0) {
       var localDevice = CWDeviceManager.getLocalDevice();
-      this._devices[localDevice.getIdentifier()] = this._createPinchData(localDevice);
+      var localData = { width: screen.availWidth, height: screen.availHeight };
+      this._devices[localDevice.getIdentifier()] = this._createNewPinchData(localDevice, localData);
     }
 
     CWDebug.log(3, "Detected pinch");
 
-    //Exactly one of the two devices needs to be pinched
-    //We need this so we can get the relative position of the new device
+    //Exactly one of the two devices needs to be pinched already
+    //We need this so we can calculate the position of the new device
     var firstPinchedDevice = this._getPinchedDevice(firstDevice);
     var secondPinchedDevice = this._getPinchedDevice(secondDevice);
 
@@ -87,11 +82,30 @@ var CWPinchManager = OOP.createSingleton("Connichiwa", "CWPinchManager", {
       newData = firstData;
     }
 
-    //Add the new device to the pinch data of the existing device
-    //Also, create pinch data for the new device
+    //Add the devices to each others neighbors at the relative positions
+    //Furthermore, create the pinch data for the new device, including the
+    //position relative to the master device
     pinchedDevice[pinchedData.edge][newDevice.getIdentifier()] = this._coordinateForEdge(pinchedData.edge, pinchedData);
-    var newPinchDevice = this._createPinchData(newDevice);
+
+    var newPinchDevice = this._createNewPinchData(newDevice, newData);
     newPinchDevice[newData.edge][pinchedDevice.device.getIdentifier()] = this._coordinateForEdge(newData.edge, newData);
+
+    //Calculate the transformation of the new device based on the transformation
+    //of the pinched device and the pinched edge on the pinched device
+    if (pinchedData.edge === "right") {
+      newPinchDevice.transformX = pinchedDevice.transformX + pinchedDevice.width;
+      newPinchDevice.transformY = pinchedDevice.transformY + pinchedData.y - newData.y;
+    } else if (pinchedData.edge === "bottom") {
+      newPinchDevice.transformX = pinchedDevice.transformX + pinchedData.x;
+      newPinchDevice.transformY = pinchedDevice.transformY + pinchedDevice.height;
+    } else if (pinchedData.edge === "left") {
+      newPinchDevice.transformX = pinchedDevice.transformX - newPinchDevice.width;
+      newPinchDevice.transformY = pinchedDevice.transformY + pinchedData.y;
+    } else if (pinchedData.edge === "top") {
+      newPinchDevice.transformX = pinchedDevice.transformX + pinchedData.x;
+      newPinchDevice.transformY = pinchedDevice.transformY - newPinchDevice.height;
+    }
+
     this._devices[newDevice.getIdentifier()] = newPinchDevice;
 
     CWDebug.log(1, "Got pinch, devices look like this: " + JSON.stringify(this._devices));
@@ -108,22 +122,22 @@ var CWPinchManager = OOP.createSingleton("Connichiwa", "CWPinchManager", {
   },
 
 
-  "private _createPinchData": function(device) {
+  "private _createNewPinchData": function(device, data) {
     return {
-      device      : device,
-      left        : {},
-      right       : {},
-      top         : {},
-      bottom      : {},
-      orientation : "unknown"
+      device     : device,
+      width      : data.width,
+      height     : data.height,
+      transformX : 0,
+      transformY : 0,
+      left       : {},
+      right      : {},
+      top        : {},
+      bottom     : {},
     };
   },
 
 
   "private _coordinateForEdge": function(edge, point) {
-    // if (edge === "left" || edge === "right") return point.y;
-    // if (edge === "top" || edge === "bottom") return point.x;
-     
     var axis = this._axisForEdge(edge);
     if (axis === null) return null;
 

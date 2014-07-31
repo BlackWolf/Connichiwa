@@ -4,9 +4,13 @@
 
 
 OOP.extendSingleton("Connichiwa", "Connichiwa", {
-  "public isMaster"           : false,
   "private _parsedURL"        : new CWUtil.parseURL(document.URL),
   "private _softDisconnected" : false,
+
+
+  "public isMaster": function() {
+    return false;
+  },
 
 
   "public send": function(identifier, messageObject) {

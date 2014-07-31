@@ -51,6 +51,8 @@ $(document).ready(function() {
       type   : "pinchswipe",
       device : Connichiwa.getIdentifier(),
       edge   : edge,
+      width  : screen.availWidth,
+      height : screen.availHeight,
       x      : endLocation.x,
       y      : endLocation.y
     };
