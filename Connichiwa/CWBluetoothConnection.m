@@ -66,14 +66,15 @@ double const RSSI_MOVING_AVERAGE_ALPHA = 0.03125;
 {
     self = [super init];
     
-    self.state = CWBluetoothConnectionStateUnknown;
+    self.initialDataState = CWBluetoothConnectionInitialDataStateMissing;
+    self.IPWriteState = CWBluetoothConnectionIPWriteStateDisconnected;
+    self.didError = NO;
     self.peripheral = peripheral;
     self.averageRSSI = 0;
     
     self.measuredPower = DEFAULT_MEASURED_BLUETOOTH_POWER;
     
     self.connectionTries = 0;
-    self.pendingIPWrites = 0;
     
     return self;
 }
@@ -134,10 +135,7 @@ double const RSSI_MOVING_AVERAGE_ALPHA = 0.03125;
 - (BOOL)isReady
 {
     //We consider the device ready when it finished receiving its initial data and didn't error
-    return (self.state != CWBluetoothConnectionStateUnknown
-            && self.state != CWBluetoothConnectionStateInitialConnecting
-            && self.state != CWBluetoothConnectionStateInitialWaitingForData
-            && self.state != CWBluetoothConnectionStateErrored);
+    return (self.didError == NO && self.initialDataState == CWBluetoothConnectionInitialDataStateReceived);
 }
 
 
