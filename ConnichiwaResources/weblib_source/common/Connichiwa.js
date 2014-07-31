@@ -35,17 +35,13 @@ var Connichiwa = OOP.createSingleton("Connichiwa", "Connichiwa", {
     this._websocket.close();
   },
 
-  // TODO we need to make this package instead of public
-  // For now, this is impossible because CWDevice uses it and CWDevice doesn't use OOP
-  "public _sendObject": function(messageObject)
+  "package _sendObject": function(messageObject)
   {
     this._send(JSON.stringify(messageObject));
   },
 
 
-  // TODO we need to make this package instead of public
-  // For now, this is impossible because CWDevice uses it and CWDevice doesn't use OOP
-  "public _send": function(message) {
+  "package _send": function(message) {
     CWDebug.log(4, "Sending message: " + message);
     this._websocket.send(message);
   },

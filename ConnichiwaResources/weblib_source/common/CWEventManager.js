@@ -42,13 +42,14 @@ var CWEventManager = (function()
    */
   var trigger = function(event)
   {
-    if (!_events[event]) return;
+    CWDebug.log(4, "Triggering event " + event);
+
+    if (!_events[event]) { CWDebug.log(1, "No callbacks registered"); return; }
 
     //Get all arguments passed to trigger() and remove the event
     var args = Array.prototype.slice.call(arguments);
     args.shift();
 
-    CWDebug.log(5, "Triggering event " + event);
     for (var i = 0; i < _events[event].length; i++)
     {
       var callback = _events[event][i];

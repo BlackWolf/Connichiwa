@@ -274,13 +274,14 @@ var CWEventManager = (function()
    */
   var trigger = function(event)
   {
-    if (!_events[event]) return;
+    CWDebug.log(4, "Triggering event " + event);
+
+    if (!_events[event]) { CWDebug.log(1, "No callbacks registered"); return; }
 
     //Get all arguments passed to trigger() and remove the event
     var args = Array.prototype.slice.call(arguments);
     args.shift();
 
-    CWDebug.log(5, "Triggering event " + event);
     for (var i = 0; i < _events[event].length; i++)
     {
       var callback = _events[event][i];
@@ -297,52 +298,64 @@ var CWEventManager = (function()
 "use strict";
 
 
-// (function() {
 $(document).ready(function() {
   var startLocation;
   var endLocation;
   $("body").on("mousedown touchstart", function(e) {
-    startLocation = CWUtil.getEventLocation(e, "screen");
-    // CWDebug.log(1, "Touch started @ "+JSON.stringify(startLocation));
+    startLocation = CWUtil.getEventLocation(e, "client");
+
+    // var client = CWUtil.getEventLocation(e, "client");
+    // var page = CWUtil.getEventLocation(e, "page");
+
+    // CWDebug.log(1, "Touch start. Screen: "+JSON.stringify(startLocation)+". Client: "+JSON.stringify(client)+". Page: "+JSON.stringify(page));
   });
 
   $("body").on("mousemove touchmove", function(e) {
-    endLocation = CWUtil.getEventLocation(e, "screen");
+    if (startLocation === undefined) return;
+
+    //TODO if the user stops moving the finger or starts moving in another direction,
+    //this swipe is invalid
+    
+    endLocation = CWUtil.getEventLocation(e, "client");
   });
 
   $("body").on("mouseup touchend", function(e) {
     if (startLocation === undefined || endLocation === undefined) return;
 
-    // CWDebug.log(1, "Touch eneded @ " + JSON.stringify(endLocation));
+    //TODO check if the swipe had a certain minimum length
 
-    //First, check if the touch ended at a device edge
+    //TODO check if the swipe was a straight line
+
+    //Check if the touch ended at a device edge
     //If so, it's a potential part of a multi-device pinch, so send it to the master
-    CWDebug.log(1, "Checking "+JSON.stringify(endLocation)+" against "+JSON.stringify(screen));
-    var endsAtTopEdge = (endLocation.y <= 50);
-    var endsAtLeftEdge = (endLocation.x <= 50);
-    var endsAtBottomEdge = (endLocation.y >= screen.availHeight-50);
-    var endsAtRightEdge = (endLocation.x >= screen.availWidth-50);
+    var endsAtTopEdge    = (endLocation.y <= 50);
+    var endsAtLeftEdge   = (endLocation.x <= 50);
+    var endsAtBottomEdge = (endLocation.y >= (screen.availHeight - 50));
+    var endsAtRightEdge  = (endLocation.x >= (screen.availWidth - 50));
 
     var edge = "invalid";
-    if (endsAtTopEdge) edge = "top";
-    else if (endsAtLeftEdge) edge = "left";
+    if (endsAtTopEdge)         edge = "top";
+    else if (endsAtLeftEdge)   edge = "left";
     else if (endsAtBottomEdge) edge = "bottom";
-    else if (endsAtRightEdge) edge = "right";
+    else if (endsAtRightEdge)  edge = "right";
 
     if (edge === "invalid") return;
+
+    CWDebug.log(1, "Endlocation is "+JSON.stringify(endLocation)+", edge is "+edge);
 
     var message = {
       type   : "pinchswipe",
       device : Connichiwa.getIdentifier(),
-      edge   : edge
+      edge   : edge,
+      x      : endLocation.x,
+      y      : endLocation.y
     };
     Connichiwa.send(message);
 
     startLocation = undefined;
-    endLocation = undefined;
+    endLocation   = undefined;
   });
 });
-// })();
 "use strict";
 
 
@@ -527,7 +540,10 @@ function CWDevice(properties)
   this.connectionState = CWDeviceConnectionState.DISCONNECTED;
   this.distance = -1;
   this.name = "unknown";
+  this._isLocal = false;
+
   if (properties.name) this.name = properties.name;
+  if (properties.isLocal) this._isLocal = properties.isLocal;
 
   /**
    * A string representing a unique identifier of the device
@@ -543,6 +559,10 @@ function CWDevice(properties)
    * @memberof CWDevice
    */
   this.getIdentifier = function() { return _identifier; };
+
+  this.isLocal = function() {
+    return this._isLocal;
+  };
   
   this.isNearby = function()
   {
@@ -613,7 +633,7 @@ CWDevice.prototype.toString = function() {
  */
 var CWDeviceManager = (function()
 {
-
+  var localDevice;
   /**
    * An array of detected remote devices as CWDevice objects. All detected devices are in here, they are not necessarily connected to or used in any way by this device.
    */
@@ -671,6 +691,10 @@ var CWDeviceManager = (function()
    */
   var getDeviceWithIdentifier = function(identifier)
   {
+    if (localDevice !== undefined && identifier === localDevice.getIdentifier()) {
+      return localDevice;
+    }
+    
     for (var i = 0; i < _remoteDevices.length; i++)
     {
       var remoteDevice = _remoteDevices[i];
@@ -696,11 +720,30 @@ var CWDeviceManager = (function()
     return connectedDevices;
   };
 
+
+  var createLocalDevice = function(identifier) {
+    var deviceProperties = {
+      identifier : identifier,
+      name       : "local",
+      isLocal    : true
+    };
+    localDevice = new CWDevice(deviceProperties);
+    localDevice.discoveryState = CWDeviceDiscoveryState.LOST;
+    localDevice.connectionState = CWDeviceConnectionState.CONNECTED;
+  };
+
+
+  var getLocalDevice = function() {
+    return localDevice;
+  };
+
   return {
     addDevice               : addDevice,
     removeDevice            : removeDevice,
     getDeviceWithIdentifier : getDeviceWithIdentifier,
-    getConnectedDevices     : getConnectedDevices
+    getConnectedDevices     : getConnectedDevices,
+    createLocalDevice       : createLocalDevice,
+    getLocalDevice          : getLocalDevice
   };
 })();
 /* global OOP, CWDeviceManager, CWDevice, CWDeviceDiscoveryState, CWDeviceConnectionState, CWEventManager, CWDebug */
@@ -847,49 +890,161 @@ var CWNativeMasterCommunication = OOP.createSingleton("Connichiwa", "CWNativeMas
     this.package.Connichiwa._disconnectWebsocket();  
   },
 });
-/* global OOP, CWDebug */
+/* global OOP, Connichiwa, CWUtil, CWDevice, CWDeviceManager, CWEventManager, CWDebug */
 "use strict";
 
 
 var CWPinchManager = OOP.createSingleton("Connichiwa", "CWPinchManager", {
-  "private _swipes": {},
+  "private _swipes"       : {},
+  "private _devices"      : {},
 
-  "package detectedSwipe": function(identifier, edge) {
-    CWDebug.log(1, "A SWIPE ON EDGE "+edge);
+
+  "public getDeviceTransformation": function(device) {
+    //TODO, for now we just check one level from the master device
+    //obviously, this must be fixed
+    var masterPinchedDevice = this._getPinchedDevice(CWDeviceManager.getLocalDevice());
+
+    var transform = { x: screen.availWidth, y: screen.availHeight };
+    var edges = [ "top", "left", "bottom", "right" ];
+    for (var i = 0; i < edges.length; i++) {
+      var edge = edges[i];
+      if (device.getIdentifier() in masterPinchedDevice[edge]) {
+        var axis = this._axisForEdge(edge);
+        transform[axis] = masterPinchedDevice[edge][device.getIdentifier()];
+        return transform;
+      }
+    }
+  },
+
+
+  "package detectedSwipe": function(data) {
+    CWDebug.log(3, "Detected swipe on " +data.edge+", device "+data.device);
+    var device = CWDeviceManager.getDeviceWithIdentifier(data.device);
+    if (device === null || device.isConnected() === false) return;
 
     //Check if the swipe corresponds with another swipe in the database to form a pinch
     var now = new Date();
-    var matchingEdge = this._oppositeEdge(edge);
 
     for (var key in this._swipes) {
       var savedSwipe = this._swipes[key];
 
       //We can't create a pinch on a single device
-      if (savedSwipe.device === identifier) continue;
+      if (savedSwipe.data.device === data.device) continue;
 
       //If the existing swipe is too old, it is invalid
-      CWDebug.log(1, "Checking "+(now.getTime()-savedSwipe.date.getTime()));
-      if (now.getTime()-savedSwipe.date.getTime() > 500) continue;
+      if ((now.getTime() - savedSwipe.date.getTime()) > 1000) continue;
 
-      //If the edge of the other swipe is not on the correct device edge, it's not forming a pinch
-      if (savedSwipe.edge !== matchingEdge) continue;
 
-      //WE HAVE A PINCH
-      CWDebug.log(1, "Super crazy PINCH PINCH PINCH");
+      //Check if the other device is still connected
+      var otherDevice = CWDeviceManager.getDeviceWithIdentifier(savedSwipe.data.device); 
+      if (otherDevice === null || otherDevice.isConnected() === false) continue;
+
+      this._detectedPinch(device, data, otherDevice, savedSwipe.data);
       return;
     }
-    
+
     //If the swipe does not seem to be part of a pinch, remember it for later
-    this._swipes[identifier] = { device: identifier, edge: edge, date: now };
+    CWDebug.log(3, "Adding swipe " + data.device);
+    this._swipes[data.device] = { date: now, data: data };
+  },
+
+
+  "private _detectedPinch": function(firstDevice, firstData, secondDevice, secondData) {
+    //Always add the master device as the first device
+    if (Object.keys(this._devices).length === 0) {
+      var localDevice = CWDeviceManager.getLocalDevice();
+      this._devices[localDevice.getIdentifier()] = this._createPinchData(localDevice);
+    }
+
+    CWDebug.log(3, "Detected pinch");
+
+    //Exactly one of the two devices needs to be pinched
+    //We need this so we can get the relative position of the new device
+    var firstPinchedDevice = this._getPinchedDevice(firstDevice);
+    var secondPinchedDevice = this._getPinchedDevice(secondDevice);
+
+    if (firstPinchedDevice === undefined && secondPinchedDevice === undefined) return;
+    if (firstPinchedDevice !== undefined && secondPinchedDevice !== undefined) return;
+
+    var pinchedDevice, newDevice, pinchedData, newData;
+    if (firstPinchedDevice !== undefined) {
+      pinchedDevice = firstPinchedDevice;
+      pinchedData = firstData;
+      newDevice = secondDevice;
+      newData = secondData;
+    } else {
+      pinchedDevice = secondPinchedDevice;
+      pinchedData = secondData;
+      newDevice = firstDevice;
+      newData = firstData;
+    }
+
+    //Add the new device to the pinch data of the existing device
+    //Also, create pinch data for the new device
+    pinchedDevice[pinchedData.edge][newDevice.getIdentifier()] = this._coordinateForEdge(pinchedData.edge, pinchedData);
+    var newPinchDevice = this._createPinchData(newDevice);
+    newPinchDevice[newData.edge][pinchedDevice.device.getIdentifier()] = this._coordinateForEdge(newData.edge, newData);
+    this._devices[newDevice.getIdentifier()] = newPinchDevice;
+
+    CWDebug.log(1, "Got pinch, devices look like this: " + JSON.stringify(this._devices));
+    CWEventManager.trigger("pinch", newDevice);
+  },
+
+
+  "private _getPinchedDevice": function(device) {
+    if (device.getIdentifier() in this._devices) {
+      return this._devices[device.getIdentifier()];
+    } else {
+      return undefined;
+    }
+  },
+
+
+  "private _createPinchData": function(device) {
+    return {
+      device      : device,
+      left        : {},
+      right       : {},
+      top         : {},
+      bottom      : {},
+      orientation : "unknown"
+    };
+  },
+
+
+  "private _coordinateForEdge": function(edge, point) {
+    // if (edge === "left" || edge === "right") return point.y;
+    // if (edge === "top" || edge === "bottom") return point.x;
+     
+    var axis = this._axisForEdge(edge);
+    if (axis === null) return null;
+
+    return point[axis];
+  },
+
+
+  "private _axisForEdge": function(edge) {
+    if (edge === "left" || edge === "right") return "y";
+    if (edge === "top" || edge === "bottom") return "x";
+
+    return null;
+  },
+
+
+  "private _invertAxis": function(axis) {
+    if (axis === "x") return "y";
+    if (axis === "y") return "x";
+
+    return null;
   },
 
 
   "private _oppositeEdge": function(edge) {
     switch (edge) {
-      case "top": return "bottom"; 
+      case "top":    return "bottom"; 
       case "bottom": return "top";
-      case "left": return "right";
-      case "right": return "left";
+      case "left":   return "right";
+      case "right":  return "left";
     }
 
     return "invalid";
@@ -945,7 +1100,7 @@ var CWRemoteCommunication = OOP.createSingleton("Connichiwa", "CWRemoteCommunica
   },
 
   _parsePinchSwipe: function(message) {
-    this.package.CWPinchManager.detectedSwipe(message.device, message.edge);
+    this.package.CWPinchManager.detectedSwipe(message);
   },
 });
 /* global OOP, CWDebug, CWRemoteCommunication, CWEventManager, CWUtil, CWDeviceManager */
@@ -978,7 +1133,8 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
       "deviceLost",
       "deviceConnected",
       "deviceDisconnected",
-      "connectFailed"
+      "connectFailed",
+      "pinch"
     ];
     
     if (CWUtil.inArray(event, validEvents) === false) throw "Registering for invalid event: " + event;
@@ -992,6 +1148,21 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
     messageObject.target = "broadcast";
     messageObject.source = "native";
     this._sendObject(messageObject);
+  },
+
+
+  // OVERWRITES
+   
+  "package _setIdentifier": function(value) 
+  {
+    if (this._identifier !== undefined) return false;
+
+    this._identifier = value;
+    CWDebug.log(2, "Identifier set to " + this._identifier);
+
+    CWDeviceManager.createLocalDevice(this._identifier);
+
+    return true;
   },
 
   // WEBSOCKET

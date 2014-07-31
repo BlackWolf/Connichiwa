@@ -48,6 +48,6 @@ var CWRemoteCommunication = OOP.createSingleton("Connichiwa", "CWRemoteCommunica
   },
 
   _parsePinchSwipe: function(message) {
-    this.package.CWPinchManager.detectedSwipe(message.device, message.edge);
+    this.package.CWPinchManager.detectedSwipe(message);
   },
 });

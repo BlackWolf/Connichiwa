@@ -10,7 +10,7 @@
  */
 var CWDeviceManager = (function()
 {
-
+  var localDevice;
   /**
    * An array of detected remote devices as CWDevice objects. All detected devices are in here, they are not necessarily connected to or used in any way by this device.
    */
@@ -68,6 +68,11 @@ var CWDeviceManager = (function()
    */
   var getDeviceWithIdentifier = function(identifier)
   {
+    if (localDevice !== undefined && 
+      (identifier === localDevice.getIdentifier() || identifier === "master")) {
+      return localDevice;
+    }
+    
     for (var i = 0; i < _remoteDevices.length; i++)
     {
       var remoteDevice = _remoteDevices[i];
@@ -93,10 +98,29 @@ var CWDeviceManager = (function()
     return connectedDevices;
   };
 
+
+  var createLocalDevice = function(identifier) {
+    var deviceProperties = {
+      identifier : identifier,
+      name       : "local",
+      isLocal    : true
+    };
+    localDevice = new CWDevice(deviceProperties);
+    localDevice.discoveryState = CWDeviceDiscoveryState.LOST;
+    localDevice.connectionState = CWDeviceConnectionState.CONNECTED;
+  };
+
+
+  var getLocalDevice = function() {
+    return localDevice;
+  };
+
   return {
     addDevice               : addDevice,
     removeDevice            : removeDevice,
     getDeviceWithIdentifier : getDeviceWithIdentifier,
-    getConnectedDevices     : getConnectedDevices
+    getConnectedDevices     : getConnectedDevices,
+    createLocalDevice       : createLocalDevice,
+    getLocalDevice          : getLocalDevice
   };
 })();

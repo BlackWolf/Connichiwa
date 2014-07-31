@@ -9,15 +9,31 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
   "private _softDisconnected" : false,
 
 
-  "public send": function(messageObject) {
-    this._send(JSON.stringify(messageObject));
+  "public send": function(identifier, messageObject) {
+    if (identifier === "broadcast") {
+      this.broadcast(messageObject);
+      return;
+    }
+
+    if (messageObject === undefined) {
+      messageObject = identifier;
+      identifier = undefined;
+      messageObject.source = this.getIdentifier();
+      messageObject.target = "master";
+      this._sendObject(messageObject);
+      return;
+    }
+
+    messageObject.source = this.getIdentifier();
+    messageObject.target = identifier;
+    this._sendObject(messageObject);
   },
 
 
   "public broadcast": function(messageObject) 
   {
-    messageObject.target = "broadcast";
     messageObject.source = this.getIdentifier();
+    messageObject.target = "broadcast";
     this._sendObject(messageObject);
   },
 

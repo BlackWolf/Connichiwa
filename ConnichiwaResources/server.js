@@ -80,6 +80,7 @@ var onHttpListening = function()
 
 var websocket;
 var websocketListening;
+var wsLocalConnectionIdentifier;
 var wsLocalConnection;
 var wsUnidentifiedConnections;
 var wsRemoteConnections;
@@ -110,7 +111,7 @@ var onLocalMessage = function(message)
   } 
   else 
   {
-    sendToRemote(object.target, message);
+    sendToDevice(object.target, message);
   }
 }; 
 
@@ -142,7 +143,7 @@ var onRemoteMessage = function(wsConnection)
     } 
     else 
     {
-      sendToLocal(message);
+      sendToDevice(object.target, message);
     }
   };
 };
@@ -191,14 +192,9 @@ var onUnidentifiedRemoteMessage = function(wsConnection)
       if (object.type === "localidentifier")
       {
         log(3, "Websocket was determined to be local");
+        wsLocalConnectionIdentifier = object.identifier;
         wsLocalConnection = wsConnection;
         wsUnidentifiedConnections.splice(index, 1);
-        // wsConnection.onmessage = onLocalMessage;
-        // wsConnection.onclose = onLocalClose;
-        // wsConnection.onerror = onLocalError;
-        // wsConnection.removeListener("message", onUnidentifiedRemoteMessage);
-        // wsConnection.removeListener("close", onUnidentifiedRemoteClose);
-        // wsConnection.removeListener("error", onUnidentifiedRemoteError);
         wsConnection.removeAllListeners("message");
         wsConnection.removeAllListeners("close");
         wsConnection.removeAllListeners("error");
@@ -212,12 +208,6 @@ var onUnidentifiedRemoteMessage = function(wsConnection)
         log(3, "Websocket was determined to be remote");
         wsRemoteConnections[object.identifier] = wsConnection;
         wsUnidentifiedConnections.splice(index, 1);
-        // wsConnection.onmessage = onRemoteMessage(wsConnection);
-        // wsConnection.onclose = onRemoteClose(wsConnection);
-        // wsConnection.onerror = onRemoteError(wsConnection);
-        // wsConnection.removeListener("message", onUnidentifiedRemoteMessage);
-        // wsConnection.removeListener("close", onUnidentifiedRemoteClose);
-        // wsConnection.removeListener("error", onUnidentifiedRemoteError);
         wsConnection.removeAllListeners("message");
         wsConnection.removeAllListeners("close");
         wsConnection.removeAllListeners("error");
@@ -298,8 +288,13 @@ function sendToLocal(message)
 }
 
 
-function sendToRemote(identifier, message)
+function sendToDevice(identifier, message)
 {
+  if (identifier === wsLocalConnectionIdentifier || identifier === "master") {
+    sendToLocal(message);
+    return;
+  }
+
   log(4, "Trying to send message to remote device " + identifier);
   if (identifier in wsRemoteConnections === false) return;
   log(4, "Sending message to remote device " + identifier + ": " + message);
@@ -318,7 +313,9 @@ function sendAsBroadcast(source, message)
     }
   }
 
-  if (source !== "native") wsLocalConnection.send(message);
+  if (source !== "master" && source !== wsLocalConnectionIdentifier) {
+    wsLocalConnection.send(message);
+  }
 }
 
 

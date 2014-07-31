@@ -274,13 +274,14 @@ var CWEventManager = (function()
    */
   var trigger = function(event)
   {
-    if (!_events[event]) return;
+    CWDebug.log(4, "Triggering event " + event);
+
+    if (!_events[event]) { CWDebug.log(1, "No callbacks registered"); return; }
 
     //Get all arguments passed to trigger() and remove the event
     var args = Array.prototype.slice.call(arguments);
     args.shift();
 
-    CWDebug.log(5, "Triggering event " + event);
     for (var i = 0; i < _events[event].length; i++)
     {
       var callback = _events[event][i];
@@ -297,52 +298,64 @@ var CWEventManager = (function()
 "use strict";
 
 
-// (function() {
 $(document).ready(function() {
   var startLocation;
   var endLocation;
   $("body").on("mousedown touchstart", function(e) {
-    startLocation = CWUtil.getEventLocation(e, "screen");
-    // CWDebug.log(1, "Touch started @ "+JSON.stringify(startLocation));
+    startLocation = CWUtil.getEventLocation(e, "client");
+
+    // var client = CWUtil.getEventLocation(e, "client");
+    // var page = CWUtil.getEventLocation(e, "page");
+
+    // CWDebug.log(1, "Touch start. Screen: "+JSON.stringify(startLocation)+". Client: "+JSON.stringify(client)+". Page: "+JSON.stringify(page));
   });
 
   $("body").on("mousemove touchmove", function(e) {
-    endLocation = CWUtil.getEventLocation(e, "screen");
+    if (startLocation === undefined) return;
+
+    //TODO if the user stops moving the finger or starts moving in another direction,
+    //this swipe is invalid
+    
+    endLocation = CWUtil.getEventLocation(e, "client");
   });
 
   $("body").on("mouseup touchend", function(e) {
     if (startLocation === undefined || endLocation === undefined) return;
 
-    // CWDebug.log(1, "Touch eneded @ " + JSON.stringify(endLocation));
+    //TODO check if the swipe had a certain minimum length
 
-    //First, check if the touch ended at a device edge
+    //TODO check if the swipe was a straight line
+
+    //Check if the touch ended at a device edge
     //If so, it's a potential part of a multi-device pinch, so send it to the master
-    CWDebug.log(1, "Checking "+JSON.stringify(endLocation)+" against "+JSON.stringify(screen));
-    var endsAtTopEdge = (endLocation.y <= 50);
-    var endsAtLeftEdge = (endLocation.x <= 50);
-    var endsAtBottomEdge = (endLocation.y >= screen.availHeight-50);
-    var endsAtRightEdge = (endLocation.x >= screen.availWidth-50);
+    var endsAtTopEdge    = (endLocation.y <= 50);
+    var endsAtLeftEdge   = (endLocation.x <= 50);
+    var endsAtBottomEdge = (endLocation.y >= (screen.availHeight - 50));
+    var endsAtRightEdge  = (endLocation.x >= (screen.availWidth - 50));
 
     var edge = "invalid";
-    if (endsAtTopEdge) edge = "top";
-    else if (endsAtLeftEdge) edge = "left";
+    if (endsAtTopEdge)         edge = "top";
+    else if (endsAtLeftEdge)   edge = "left";
     else if (endsAtBottomEdge) edge = "bottom";
-    else if (endsAtRightEdge) edge = "right";
+    else if (endsAtRightEdge)  edge = "right";
 
     if (edge === "invalid") return;
+
+    CWDebug.log(1, "Endlocation is "+JSON.stringify(endLocation)+", edge is "+edge);
 
     var message = {
       type   : "pinchswipe",
       device : Connichiwa.getIdentifier(),
-      edge   : edge
+      edge   : edge,
+      x      : endLocation.x,
+      y      : endLocation.y
     };
     Connichiwa.send(message);
 
     startLocation = undefined;
-    endLocation = undefined;
+    endLocation   = undefined;
   });
 });
-// })();
 "use strict";
 
 

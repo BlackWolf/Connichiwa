@@ -32,7 +32,10 @@ function CWDevice(properties)
   this.connectionState = CWDeviceConnectionState.DISCONNECTED;
   this.distance = -1;
   this.name = "unknown";
+  this._isLocal = false;
+
   if (properties.name) this.name = properties.name;
+  if (properties.isLocal) this._isLocal = properties.isLocal;
 
   /**
    * A string representing a unique identifier of the device
@@ -48,6 +51,10 @@ function CWDevice(properties)
    * @memberof CWDevice
    */
   this.getIdentifier = function() { return _identifier; };
+
+  this.isLocal = function() {
+    return this._isLocal;
+  };
   
   this.isNearby = function()
   {
