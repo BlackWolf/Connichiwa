@@ -284,8 +284,18 @@ var CWEventManager = (function()
 
     for (var i = 0; i < _events[event].length; i++)
     {
+      //TODO
+      //This is a dirty hack to see if a requestAnimationFrame
+      //around a message callback will prevent crashes
+      //We need a cleaner solution in case this works
       var callback = _events[event][i];
-      callback.apply(null, args); //calls the callback with arguments args
+      // if (event.indexOf("message") === 0) {
+        // window.requestAnimationFrame(function() {
+          // callback.apply(null, args);
+        // });
+      // } else {
+        callback.apply(null, args); //calls the callback with arguments args
+      // }
     }
   };
 
@@ -303,11 +313,6 @@ $(document).ready(function() {
   var endLocation;
   $("body").on("mousedown touchstart", function(e) {
     startLocation = CWUtil.getEventLocation(e, "client");
-
-    // var client = CWUtil.getEventLocation(e, "client");
-    // var page = CWUtil.getEventLocation(e, "page");
-
-    // CWDebug.log(1, "Touch start. Screen: "+JSON.stringify(startLocation)+". Client: "+JSON.stringify(client)+". Page: "+JSON.stringify(page));
   });
 
   $("body").on("mousemove touchmove", function(e) {
@@ -519,42 +524,32 @@ var CWMasterCommunication = OOP.createSingleton("Connichiwa", "CWMasterCommunica
     }
     if (message.type === "show")
     {
-      window.requestAnimationFrame(function(timestamp) {
-        $("body").append(message.content);
-      });
+      $("body").append(message.content);
     }
 
     if (message.type === "update")
     {
-      window.requestAnimationFrame(function(timestamp) {
-        $(message.element).html(message.content);
-      });
+      $(message.element).html(message.content);
     }
 
     if (message.type === "beginPath")
     {
-      window.requestAnimationFrame(function(timestamp) {
-        var context = $(message.element)[0].getContext("2d");
-        context.beginPath();
-        context.moveTo(message.coords.x, message.coords.y);
-      });
+      var context = $(message.element)[0].getContext("2d");
+      context.beginPath();
+      context.moveTo(message.coords.x, message.coords.y);
     }
 
     if (message.type === "updatePath")
     {
-      window.requestAnimationFrame(function(timestamp) {
-        var context = $(message.element)[0].getContext("2d");
-        context.lineTo(message.coords.x, message.coords.y);
-        context.stroke();
-      });
+      var context = $(message.element)[0].getContext("2d");
+      context.lineTo(message.coords.x, message.coords.y);
+      context.stroke();
     }
 
     if (message.type === "endPath")
     {
-      window.requestAnimationFrame(function(timestamp) {
-        var context = $(message.element)[0].getContext("2d");
-        context.closePath();
-      });
+      var context = $(message.element)[0].getContext("2d");
+      context.closePath();
     }
     if (message.type === "loadScript")
     {
@@ -702,9 +697,14 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
     var message = JSON.parse(e.data);
     CWDebug.log(4, "Received message: " + e.data);
 
-    CWMasterCommunication.parse(message);
+    //It seems that reacting immediatly to a websocket message
+    //sometimes causes crashes in Safari. I am unsure why.
+    //We use requestAnimationFrame in an attempt to prevent those crashes
+    window.requestAnimationFrame(function() {
+      CWMasterCommunication.parse(message);
 
-    if (message.type) CWEventManager.trigger("message" + message.type, message);
+      if (message.type) CWEventManager.trigger("message" + message.type, message);
+    });
   },
 
 

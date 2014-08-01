@@ -28,7 +28,6 @@
 		330CBB74193E75890064AD99 /* Connichiwa.h in Headers */ = {isa = PBXBuildFile; fileRef = 33A0514E193E61CC00FED071 /* Connichiwa.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		330CBB88193F14B60064AD99 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 330CBB87193F14B60064AD99 /* CoreFoundation.framework */; };
 		330CBB8E193F14B60064AD99 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 330CBB8C193F14B60064AD99 /* InfoPlist.strings */; };
-		331F2DE31944F4ED007609B9 /* weblib in Resources */ = {isa = PBXBuildFile; fileRef = 331F2DE21944F4ED007609B9 /* weblib */; };
 		3321DCDB196AA6830090D39C /* CWBluetoothTransferManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 3321DCD9196AA6830090D39C /* CWBluetoothTransferManager.h */; };
 		3321DCDC196AA6830090D39C /* CWBluetoothTransferManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3321DCDA196AA6830090D39C /* CWBluetoothTransferManager.m */; };
 		332B686F1959A2B5004B0600 /* scripts in Resources */ = {isa = PBXBuildFile; fileRef = 332B686E1959A2B5004B0600 /* scripts */; };
@@ -132,7 +131,6 @@
 		330CBB8B193F14B60064AD99 /* ConnichiwaResources-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ConnichiwaResources-Info.plist"; sourceTree = "<group>"; };
 		330CBB8D193F14B60064AD99 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		330CBB8F193F14B60064AD99 /* ConnichiwaResources-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ConnichiwaResources-Prefix.pch"; sourceTree = "<group>"; };
-		331F2DE21944F4ED007609B9 /* weblib */ = {isa = PBXFileReference; lastKnownFileType = folder; path = weblib; sourceTree = "<group>"; };
 		3321DCD9196AA6830090D39C /* CWBluetoothTransferManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWBluetoothTransferManager.h; sourceTree = "<group>"; };
 		3321DCDA196AA6830090D39C /* CWBluetoothTransferManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWBluetoothTransferManager.m; sourceTree = "<group>"; };
 		3321DCE1196AA6920090D39C /* CWBluetoothTransferManagerDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CWBluetoothTransferManagerDelegate.h; sourceTree = "<group>"; };
@@ -570,7 +568,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "PATH=$(bash -l -c 'echo $PATH')\n\nCONCAT_FILE=\"${PROJECT_DIR}/${PRODUCT_NAME}/remote/remote.js\"\nCONCAT_FILE_MIN=\"${PROJECT_DIR}/${PRODUCT_NAME}/remote/remote.min.js\"\n\nrm -f ${CONCAT_FILE}\nrm -f ${CONCAT_FILE_MIN}\n\n# CONCATENATE\n# Concatenates everything in the weblib folder\nfor file in \"${PROJECT_DIR}/${PRODUCT_NAME}/remote/*.js\"; do echo $file && cat $file >> ${CONCAT_FILE}; done\n\n# MINIFY\n# Minifyjs needs to be installed (npm install -g minifyjs)\nMINIFYJS_PATH=\"/usr/local/bin/minifyjs\"\nif [ -x $MINIFYJS_PATH ]; then\nif [ -f $CONCAT_FILE ]; then\n\n${MINIFYJS_PATH} -m -i ${CONCAT_FILE} -o ${CONCAT_FILE_MIN}\nfi\nelse\necho \"install minifyjs globally via npm to minify the remote library\"\nfi;";
+			shellScript = "PATH=$(bash -l -c 'echo $PATH')\n\nCONCAT_FILE=\"${PROJECT_DIR}/${PRODUCT_NAME}/weblib/remote.js\"\nCONCAT_FILE_MIN=\"${PROJECT_DIR}/${PRODUCT_NAME}/weblib/remote.min.js\"\n\nrm -f ${CONCAT_FILE}\nrm -f ${CONCAT_FILE_MIN}\n\n# CONCATENATE\n# Concatenates everything in the weblib folder\ncat \"${PROJECT_DIR}/${PRODUCT_NAME}/scripts/OOP.js\" >> ${CONCAT_FILE};\nfor file in \"${PROJECT_DIR}/${PRODUCT_NAME}/weblib_source/common/*.js\"; do cat $file >> ${CONCAT_FILE}; done\nfor file in \"${PROJECT_DIR}/${PRODUCT_NAME}/weblib_source/remote/*.js\"; do cat $file >> ${CONCAT_FILE}; done\n\n# MINIFY\n# Minifyjs needs to be installed (npm install -g minifyjs)\nMINIFYJS_PATH=\"/usr/local/bin/minifyjs\"\nif [ -x $MINIFYJS_PATH ]; then\nif [ -f $CONCAT_FILE ]; then\n\n${MINIFYJS_PATH} -m -i ${CONCAT_FILE} -o ${CONCAT_FILE_MIN}\nfi\nelse\necho \"install minifyjs globally via npm to minify the remote library\"\nfi;";
 		};
 		33163302193F722300EED43E /* Objective-Clean Run Script */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -613,20 +611,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# CREATE JSDOC\n# Jsdoc needs to be installed (npm install -g jsdoc@\"<=3.3.0\")\n\nPATH=$(bash -l -c 'echo $PATH')\nJSDOC_PATH=\"/usr/local/bin/jsdoc\"\nif [ -x $JSDOC_PATH ]; then\n\nif [ ${CONFIGURATION} == \"Release\" ]; then\nrm -r ${PROJECT_DIR}/${PRODUCT_NAME}Docs/weblib # Needed because jsdoc only overwrites, but doesnt delete old files\n$JSDOC_PATH ${PROJECT_DIR}/${PRODUCT_NAME}Resources/weblib/connichiwa.js -c ${PROJECT_DIR}/${PRODUCT_NAME}Docs/jsdoc_conf.json -d ${PROJECT_DIR}/${PRODUCT_NAME}Docs/weblib\nfi;\n\nelse\necho \"install jsdoc globally via npm to create a web library documentation\"\nfi;";
-		};
-		33BC69DB1973EB3B0026043A /* Concatenate & Minify Remote Web Library */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Concatenate & Minify Remote Web Library";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "PATH=$(bash -l -c 'echo $PATH')\n\nCONCAT_FILE=\"${PROJECT_DIR}/${PRODUCT_NAME}/weblib/remote.js\"\nCONCAT_FILE_MIN=\"${PROJECT_DIR}/${PRODUCT_NAME}/weblib/remote.min.js\"\n\nrm -f ${CONCAT_FILE}\nrm -f ${CONCAT_FILE_MIN}\n\n# CONCATENATE\n# Concatenates everything in the weblib folder\ncat \"${PROJECT_DIR}/${PRODUCT_NAME}/scripts/OOP.js\" >> ${CONCAT_FILE};\nfor file in \"${PROJECT_DIR}/${PRODUCT_NAME}/weblib_source/common/*.js\"; do cat $file >> ${CONCAT_FILE}; done\nfor file in \"${PROJECT_DIR}/${PRODUCT_NAME}/weblib_source/remote/*.js\"; do cat $file >> ${CONCAT_FILE}; done\n\n# MINIFY\n# Minifyjs needs to be installed (npm install -g minifyjs)\nMINIFYJS_PATH=\"/usr/local/bin/minifyjs\"\nif [ -x $MINIFYJS_PATH ]; then\nif [ -f $CONCAT_FILE ]; then\n\n${MINIFYJS_PATH} -m -i ${CONCAT_FILE} -o ${CONCAT_FILE_MIN}\nfi\nelse\necho \"install minifyjs globally via npm to create minified JS library versions\"\nfi;";
 		};
 		33CC8C2D194B1CD800D99851 /* Concatenate & Minify Web Library Script */ = {
 			isa = PBXShellScriptBuildPhase;

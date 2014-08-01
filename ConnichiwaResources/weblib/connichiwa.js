@@ -284,8 +284,18 @@ var CWEventManager = (function()
 
     for (var i = 0; i < _events[event].length; i++)
     {
+      //TODO
+      //This is a dirty hack to see if a requestAnimationFrame
+      //around a message callback will prevent crashes
+      //We need a cleaner solution in case this works
       var callback = _events[event][i];
-      callback.apply(null, args); //calls the callback with arguments args
+      // if (event.indexOf("message") === 0) {
+        // window.requestAnimationFrame(function() {
+          // callback.apply(null, args);
+        // });
+      // } else {
+        callback.apply(null, args); //calls the callback with arguments args
+      // }
     }
   };
 
@@ -303,11 +313,6 @@ $(document).ready(function() {
   var endLocation;
   $("body").on("mousedown touchstart", function(e) {
     startLocation = CWUtil.getEventLocation(e, "client");
-
-    // var client = CWUtil.getEventLocation(e, "client");
-    // var page = CWUtil.getEventLocation(e, "page");
-
-    // CWDebug.log(1, "Touch start. Screen: "+JSON.stringify(startLocation)+". Client: "+JSON.stringify(client)+". Page: "+JSON.stringify(page));
   });
 
   $("body").on("mousemove touchmove", function(e) {
@@ -957,7 +962,6 @@ var CWPinchManager = OOP.createSingleton("Connichiwa", "CWPinchManager", {
     //We need this so we can calculate the position of the new device
     var firstPinchedDevice = this._getPinchedDevice(firstDevice);
     var secondPinchedDevice = this._getPinchedDevice(secondDevice);
-
     if (firstPinchedDevice === undefined && secondPinchedDevice === undefined) return;
     if (firstPinchedDevice !== undefined && secondPinchedDevice !== undefined) return;
 
@@ -984,17 +988,22 @@ var CWPinchManager = OOP.createSingleton("Connichiwa", "CWPinchManager", {
 
     //Calculate the transformation of the new device based on the transformation
     //of the pinched device and the pinched edge on the pinched device
+    //iPhone 5/S/C 326PPI
+    //iPad Air     264PPI
+    //TODO hardcoded PPI, boooo...
+    var pinchedPPI = 264;
+    var newPPI = 326;
     if (pinchedData.edge === "right") {
       newPinchDevice.transformX = pinchedDevice.transformX + pinchedDevice.width;
-      newPinchDevice.transformY = pinchedDevice.transformY + pinchedData.y - newData.y;
+      newPinchDevice.transformY = pinchedDevice.transformY + pinchedData.y - newData.y * (newPPI / pinchedPPI);
     } else if (pinchedData.edge === "bottom") {
-      newPinchDevice.transformX = pinchedDevice.transformX + pinchedData.x;
+      newPinchDevice.transformX = pinchedDevice.transformX + pinchedData.x - newData.x * (newPPI / pinchedPPI);
       newPinchDevice.transformY = pinchedDevice.transformY + pinchedDevice.height;
     } else if (pinchedData.edge === "left") {
       newPinchDevice.transformX = pinchedDevice.transformX - newPinchDevice.width;
-      newPinchDevice.transformY = pinchedDevice.transformY + pinchedData.y;
+      newPinchDevice.transformY = pinchedDevice.transformY + pinchedData.y - newData.y * (newPPI / pinchedPPI);
     } else if (pinchedData.edge === "top") {
-      newPinchDevice.transformX = pinchedDevice.transformX + pinchedData.x;
+      newPinchDevice.transformX = pinchedDevice.transformX + pinchedData.x - newData.x * (newPPI / pinchedPPI);
       newPinchDevice.transformY = pinchedDevice.transformY - newPinchDevice.height;
     }
 
@@ -1234,9 +1243,14 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
     var message = JSON.parse(e.data);
     CWDebug.log(4, "Received message: " + e.data);
     
-    CWRemoteCommunication.parse(message);
+    //It seems that reacting immediatly to a websocket message
+    //sometimes causes crashes in Safari. I am unsure why.
+    //We use requestAnimationFrame in an attempt to prevent those crashes
+    window.requestAnimationFrame(function() {
+      CWRemoteCommunication.parse(message);
 
-    if (message.type) CWEventManager.trigger("message" + message.type, message);
+      if (message.type) CWEventManager.trigger("message" + message.type, message);
+    });
   },
 
 

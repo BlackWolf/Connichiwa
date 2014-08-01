@@ -7,11 +7,6 @@ $(document).ready(function() {
   var endLocation;
   $("body").on("mousedown touchstart", function(e) {
     startLocation = CWUtil.getEventLocation(e, "client");
-
-    // var client = CWUtil.getEventLocation(e, "client");
-    // var page = CWUtil.getEventLocation(e, "page");
-
-    // CWDebug.log(1, "Touch start. Screen: "+JSON.stringify(startLocation)+". Client: "+JSON.stringify(client)+". Page: "+JSON.stringify(page));
   });
 
   $("body").on("mousemove touchmove", function(e) {

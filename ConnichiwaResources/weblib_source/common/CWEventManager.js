@@ -52,8 +52,18 @@ var CWEventManager = (function()
 
     for (var i = 0; i < _events[event].length; i++)
     {
+      //TODO
+      //This is a dirty hack to see if a requestAnimationFrame
+      //around a message callback will prevent crashes
+      //We need a cleaner solution in case this works
       var callback = _events[event][i];
-      callback.apply(null, args); //calls the callback with arguments args
+      // if (event.indexOf("message") === 0) {
+        // window.requestAnimationFrame(function() {
+          // callback.apply(null, args);
+        // });
+      // } else {
+        callback.apply(null, args); //calls the callback with arguments args
+      // }
     }
   };
 
