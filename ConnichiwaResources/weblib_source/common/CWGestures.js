@@ -19,28 +19,61 @@ $(document).ready(function() {
   });
 
   $("body").on("mouseup touchend", function(e) {
-    if (startLocation === undefined || endLocation === undefined) return;
+    var swipeStart = startLocation;
+    var swipeEnd = endLocation;
 
-    //TODO check if the swipe had a certain minimum length
+    startLocation = undefined;
+    endLocation   = undefined;
 
-    //TODO check if the swipe was a straight line
+    if (swipeStart === undefined || swipeEnd === undefined) return;
+
+    var deltaX = swipeEnd.x - swipeStart.x;
+    var deltaY = swipeEnd.y - swipeStart.y;
+
+    //The swipe must have a minimum length to make sure its not a tap
+    var swipeLength = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
+    CWDebug.log(1, "Swipe length is "+swipeLength);
+    if (swipeLength <= 10) return;
+
+    //Check the direction of the swipe
+    //For example, if a swipe to the right is performed at y=10 we need this to
+    //recognize this swipe as a right-swipe instead of a top-swipe
+    //We check the deltaX to deltaY ratio to determine the direction
+    //For very short swipes, this ratio can be worse because short swipes tend
+    //to be less straight. For very short swipes we almost don't care anymore
+    var xyRatio = 0.25;
+    if (swipeLength < 100) xyRatio = 0.35; //short swipes tend to be less straight
+    if (swipeLength < 50)  xyRatio = 0.4;
+    if (swipeLength < 40)  xyRatio = 0.45;
+    if (swipeLength < 15)  xyRatio = 0.8; //doesn't matter that much anymore
+
+    var direction = "invalid";
+    if (Math.abs(deltaY) < (Math.abs(deltaX) * xyRatio)) {
+      if (deltaX > 0) direction = "right";
+      if (deltaX < 0) direction = "left";
+    }
+
+    if (Math.abs(deltaX) < (Math.abs(deltaY) * xyRatio)) {
+      if (deltaY > 0) direction = "down";
+      if (deltaY < 0) direction = "up";
+    }
+
+    CWDebug.log(1, "deltaX "+deltaX+", deltaY "+deltaY);
+    CWDebug.log(1, "swipe direction is "+direction);
 
     //Check if the touch ended at a device edge
-    //If so, it's a potential part of a multi-device pinch, so send it to the master
-    var endsAtTopEdge    = (endLocation.y <= 50);
-    var endsAtLeftEdge   = (endLocation.x <= 50);
-    var endsAtBottomEdge = (endLocation.y >= (screen.availHeight - 50));
-    var endsAtRightEdge  = (endLocation.x >= (screen.availWidth - 50));
+    var endsAtTopEdge    = (swipeEnd.y <= 50);
+    var endsAtLeftEdge   = (swipeEnd.x <= 50);
+    var endsAtBottomEdge = (swipeEnd.y >= (screen.availHeight - 50));
+    var endsAtRightEdge  = (swipeEnd.x >= (screen.availWidth - 50));
 
     var edge = "invalid";
-    if (endsAtTopEdge)         edge = "top";
-    else if (endsAtLeftEdge)   edge = "left";
-    else if (endsAtBottomEdge) edge = "bottom";
-    else if (endsAtRightEdge)  edge = "right";
+    if (endsAtTopEdge    && direction === "up")    edge = "top";
+    if (endsAtLeftEdge   && direction === "left")  edge = "left";
+    if (endsAtBottomEdge && direction === "down")  edge = "bottom";
+    if (endsAtRightEdge  && direction === "right") edge = "right";
 
     if (edge === "invalid") return;
-
-    CWDebug.log(1, "Endlocation is "+JSON.stringify(endLocation)+", edge is "+edge);
 
     var message = {
       type   : "pinchswipe",
@@ -48,12 +81,9 @@ $(document).ready(function() {
       edge   : edge,
       width  : screen.availWidth,
       height : screen.availHeight,
-      x      : endLocation.x,
-      y      : endLocation.y
+      x      : swipeEnd.x,
+      y      : swipeEnd.y
     };
     Connichiwa.send(message);
-
-    startLocation = undefined;
-    endLocation   = undefined;
   });
 });

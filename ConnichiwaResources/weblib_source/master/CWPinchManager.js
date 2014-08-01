@@ -18,7 +18,7 @@ var CWPinchManager = OOP.createSingleton("Connichiwa", "CWPinchManager", {
 
 
   "package detectedSwipe": function(data) {
-    CWDebug.log(3, "Detected swipe on " +data.edge+", device "+data.device);
+    CWDebug.log(3, "Detected swipe on " +data.edge+" edge, device "+data.device);
     var device = CWDeviceManager.getDeviceWithIdentifier(data.device);
     if (device === null || device.isConnected() === false) return;
 
