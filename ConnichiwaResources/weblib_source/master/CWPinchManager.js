@@ -8,11 +8,12 @@ var CWPinchManager = OOP.createSingleton("Connichiwa", "CWPinchManager", {
 
 
   "public getDeviceTransformation": function(device) {
-    if (device.getIdentifier() in this._devices === false) return { x: 0, y: 0 };
+    if (device.getIdentifier() in this._devices === false) return { x: 0, y: 0, scale: 1.0 };
 
     return { 
-      x : this._devices[device.getIdentifier()].transformX, 
-      y : this._devices[device.getIdentifier()].transformY
+      x     : this._devices[device.getIdentifier()].transformX, 
+      y     : this._devices[device.getIdentifier()].transformY,
+      scale : this._devices[device.getIdentifier()].scale
     };
   },
 
@@ -109,6 +110,7 @@ var CWPinchManager = OOP.createSingleton("Connichiwa", "CWPinchManager", {
       newPinchDevice.transformX = pinchedDevice.transformX + pinchedData.x - newData.x * (newPPI / pinchedPPI);
       newPinchDevice.transformY = pinchedDevice.transformY - newPinchDevice.height;
     }
+    newPinchDevice.scale = (newPPI / pinchedPPI);
 
     this._devices[newDevice.getIdentifier()] = newPinchDevice;
 
@@ -133,6 +135,7 @@ var CWPinchManager = OOP.createSingleton("Connichiwa", "CWPinchManager", {
       height     : data.height,
       transformX : 0,
       transformY : 0,
+      scale      : 1.0,
       left       : {},
       right      : {},
       top        : {},

@@ -8,7 +8,7 @@
 
 #import "CWDebug.h"
 
-int const MAX_LOG_PRIORITY = 3;
+int const MAX_LOG_PRIORITY = 4;
 
 
 
