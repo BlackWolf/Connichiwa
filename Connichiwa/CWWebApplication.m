@@ -15,6 +15,7 @@
 #import "CWRemoteLibraryManager.h"
 #import "CWWebLibraryManager.h"
 #import "CWWebLibraryManagerDelegate.h"
+#import "CWiDevice.h"
 #import "CWDebug.h"
 
 
@@ -122,6 +123,8 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
     self.bluetoothManager = [[CWBluetoothManager alloc] initWithApplicationState:self];
     [self.bluetoothManager setDelegate:self];
     
+    CWLog(1, @"PPI: %d", [self ppi]);
+    
     return self;
 }
 
@@ -171,6 +174,29 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
 
 
 #pragma mark CWWebApplicationState Protocol
+
+
+- (int)ppi
+{
+    //iPhone and iPod are the same: 326ppi for retina, 163 otherwise
+    if ([CWiDevice isiPhone] || [CWiDevice isiPod]) {
+        if ([CWiDevice isRetina])   return 326;
+        else                        return 163;
+    }
+    
+    //iPad's are a little more complex: 264ppi for retina, 132 for non-retina
+    //Exception: The new iPad mini 2G has 326ppi.
+    if ([CWiDevice isiPad]) {
+        if ([CWiDevice isRetina]) {
+            if ([CWiDevice model] >= CWiDeviceModeliPadMini2G)  return 326;
+            else                                                return 264;
+        } else {
+            return 132;
+        }
+    }
+    
+    return -1;
+}
 
 
 /**

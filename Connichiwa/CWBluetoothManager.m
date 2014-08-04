@@ -481,7 +481,7 @@ double const URL_CHECK_TIMEOUT = 2.0;
 
 - (void)_sendInitialDataToCentral:(CBCentral *)central
 {    
-    NSDictionary *sendDictionary = @{ @"identifier": self.appState.identifier, @"name": self.appState.deviceName };
+    NSDictionary *sendDictionary = @{ @"identifier": self.appState.identifier, @"name": self.appState.deviceName, @"ppi": @(self.appState.ppi) };
     NSData *initialData = [NSJSONSerialization dataWithJSONObject:sendDictionary options:NSJSONWritingPrettyPrinted error:nil];
     [self.transferManager sendData:initialData toCentral:central withCharacteristic:self.advertisedInitialCharacteristic];
 }

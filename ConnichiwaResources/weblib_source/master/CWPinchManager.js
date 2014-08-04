@@ -92,25 +92,22 @@ var CWPinchManager = OOP.createSingleton("Connichiwa", "CWPinchManager", {
 
     //Calculate the transformation of the new device based on the transformation
     //of the pinched device and the pinched edge on the pinched device
-    //iPhone 5/S/C 326PPI
-    //iPad Air     264PPI
-    //TODO hardcoded PPI, boooo...
-    var pinchedPPI = 264;
-    var newPPI = 326;
+    //In particular, we need to convert between different ppi screens
+    newPinchDevice.scale = newPinchDevice.device.getPPI() / pinchedDevice.device.getPPI() * pinchedDevice.scale;
+    CWDebug.log(1, newPinchDevice.device.getPPI()+" / "+pinchedDevice.device.getPPI()+" * "+pinchedDevice.scale+" = "+newPinchDevice.scale);
     if (pinchedData.edge === "right") {
-      newPinchDevice.transformX = pinchedDevice.transformX + pinchedDevice.width;
-      newPinchDevice.transformY = pinchedDevice.transformY + pinchedData.y - newData.y * (newPPI / pinchedPPI);
+      newPinchDevice.transformX = pinchedDevice.transformX + pinchedDevice.width / pinchedDevice.scale;
+      newPinchDevice.transformY = pinchedDevice.transformY + pinchedData.y / pinchedDevice.scale - newData.y * newPinchDevice.scale;
     } else if (pinchedData.edge === "bottom") {
-      newPinchDevice.transformX = pinchedDevice.transformX + pinchedData.x - newData.x * (newPPI / pinchedPPI);
+      newPinchDevice.transformX = pinchedDevice.transformX + pinchedData.x - newData.x * newPinchDevice.scale;
       newPinchDevice.transformY = pinchedDevice.transformY + pinchedDevice.height;
     } else if (pinchedData.edge === "left") {
       newPinchDevice.transformX = pinchedDevice.transformX - newPinchDevice.width;
-      newPinchDevice.transformY = pinchedDevice.transformY + pinchedData.y - newData.y * (newPPI / pinchedPPI);
-    } else if (pinchedData.edge === "top") {
-      newPinchDevice.transformX = pinchedDevice.transformX + pinchedData.x - newData.x * (newPPI / pinchedPPI);
+      newPinchDevice.transformY = pinchedDevice.transformY + pinchedData.y - newData.y * newPinchDevice.scale;
+    } else if (pinchedData.edge === "top") {  
+      newPinchDevice.transformX = pinchedDevice.transformX + pinchedData.x - newData.x * newPinchDevice.scale;
       newPinchDevice.transformY = pinchedDevice.transformY - newPinchDevice.height;
     }
-    newPinchDevice.scale = (newPPI / pinchedPPI);
 
     this._devices[newDevice.getIdentifier()] = newPinchDevice;
 

@@ -31,17 +31,15 @@ function CWDevice(properties)
   this.discoveryState = CWDeviceDiscoveryState.DISCOVERED;
   this.connectionState = CWDeviceConnectionState.DISCONNECTED;
   this.distance = -1;
-  this.name = "unknown";
-  this._isLocal = false;
-
-  if (properties.name) this.name = properties.name;
-  if (properties.isLocal) this._isLocal = properties.isLocal;
-
-  /**
-   * A string representing a unique identifier of the device
-   */
   var _identifier = properties.identifier;
+  var _name = "unknown";
+  var _ppi = 96;
+  var _isLocal = false; 
 
+  if (properties.name) _name = properties.name;
+  if (properties.ppi && properties.ppi > 0) _ppi = properties.ppi;
+  if (properties.isLocal) _isLocal = properties.isLocal;
+  
   /**
    * Returns the identifier of this device
    *
@@ -51,6 +49,8 @@ function CWDevice(properties)
    * @memberof CWDevice
    */
   this.getIdentifier = function() { return _identifier; };
+
+  this.getPPI = function() { return _ppi; };
 
   this.isLocal = function() {
     return this._isLocal;

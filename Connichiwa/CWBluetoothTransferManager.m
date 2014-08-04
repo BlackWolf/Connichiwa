@@ -164,12 +164,12 @@
 {
     self = [super init];
     
-    self.peripheralManager = peripheralManager;
-    self.peripheralSends = [NSMutableDictionary dictionary];
-    self.centralSends = [NSMutableDictionary dictionary];
-    self.centralEOMSends = [NSMutableArray array];
+    self.peripheralManager  = peripheralManager;
+    self.peripheralSends    = [NSMutableDictionary dictionary];
+    self.centralSends       = [NSMutableDictionary dictionary];
+    self.centralEOMSends    = [NSMutableArray array];
     self.peripheralReceives = [NSMutableDictionary dictionary];
-    self.centralReceives = [NSMutableDictionary dictionary];
+    self.centralReceives    = [NSMutableDictionary dictionary];
     
     return self;
 }
@@ -258,7 +258,7 @@
     }
     else
     {
-        BTLog(4, @"Tried to send chunk of data to central %@, but queue was full", [key.central.identifier UUIDString]);
+        BTLog(5, @"Tried to send chunk of data to central %@, but queue was full", [key.central.identifier UUIDString]);
     }
 }
 
@@ -283,7 +283,7 @@
     }
     else
     {
-        BTLog(4, @"Tried to send EOM to central %@, but queue was full", [key.central.identifier UUIDString]);
+        BTLog(5, @"Tried to send EOM to central %@, but queue was full", [key.central.identifier UUIDString]);
     }
 }
 

@@ -1,4 +1,4 @@
-/* global CWDebug, Connichiwa, CWUtil */
+/* global CWVector, CWDebug, Connichiwa, CWUtil */
 "use strict";
 
 
@@ -34,15 +34,16 @@ $(document).ready(function() {
     //Furthermore, we add some noise reduction by making sure the last finger vector
     //has a minimum length of 2 and the entire swipe is at least 5 pixels in length
     if (touchLast !== undefined) {
-      var totalTouchVector = createVector(touchStart, newTouch);
-      var newTouchVector = createVector(touchLast, newTouch);
+      var totalTouchVector = new CWVector(touchStart, newTouch);
+      var newTouchVector   = new CWVector(touchLast, newTouch);
 
-      var touchCheckable = (touchCheckable || vectorLength(totalTouchVector) > 5);
-      if (touchCheckable && vectorLength(newTouchVector) > 1) {
+      var touchCheckable = (touchCheckable || totalTouchVector.length() > 5);
+      if (touchCheckable && newTouchVector.length() > 1) {
+
         //A previous touch was a direction change, compare with the saved
         //reference vector by calculating their angle
         if (touchAngleReferenceVector !== undefined) {
-          var referenceTouchAngle = vectorAngle(newTouchVector, touchAngleReferenceVector);
+          var referenceTouchAngle = newTouchVector.angle(touchAngleReferenceVector);
           if (referenceTouchAngle > 20) {
             touchAngleChangedCount++;
 
@@ -55,11 +56,12 @@ $(document).ready(function() {
             touchAngleReferenceVector = undefined;
             touchAngleChangedCount = 0;
           }
+
         //Compare the current finger vector to the last finger vector and see
         //if the direction has changed by calculating their angle
         } else {
           if (touchLastVector !== undefined) {
-            var newTouchAngle = vectorAngle(newTouchVector, touchLastVector);
+            var newTouchAngle = newTouchVector.angle(touchLastVector);
             if (newTouchAngle > 20) {
               touchAngleReferenceVector = touchLastVector;
               touchAngleChangedCount = 1;
@@ -68,39 +70,20 @@ $(document).ready(function() {
         }
       }
 
-      if (vectorLength(newTouchVector) > 0) touchLastVector = newTouchVector;
+      if (newTouchVector.length() > 0) touchLastVector = newTouchVector;
     } 
 
     touchLast = newTouch;
-
-    function createVector(p1, p2) {
-      return {
-        x : p2.x - p1.x,
-        y : p2.y - p1.y,
-      };
-    }
-
-    function vectorLength(vec) {
-      return Math.sqrt(Math.pow(vec.x, 2) + Math.pow(vec.y, 2));
-    }
-
-    function vectorAngle(vec1, vec2) {
-      var vectorProduct = vec1.x * vec2.x + vec1.y * vec2.y;
-      var vec1Length = Math.sqrt(Math.pow(vec1.x, 2) + Math.pow(vec1.y, 2));
-      var vec2Length = Math.sqrt(Math.pow(vec2.x, 2) + Math.pow(vec2.y, 2));
-      var vectorLength = vec1Length * vec2Length;
-      return Math.acos(vectorProduct / vectorLength) * (180.0 / Math.PI);
-    }
   });
 
   $("body").on("mouseup touchend", function(e) {
     var swipeStart = touchStart;
     var swipeEnd   = touchLast;
 
-    touchStart      = undefined;
-    touchLast       = undefined;
-    touchLastVector = undefined;
-    touchCheckable  = false;
+    touchStart                = undefined;
+    touchLast                 = undefined;
+    touchLastVector           = undefined;
+    touchCheckable            = false;
     touchAngleReferenceVector = undefined;
     touchAngleChangedCount    = 0;
 
@@ -111,7 +94,6 @@ $(document).ready(function() {
 
     //The swipe must have a minimum length to make sure its not a tap
     var swipeLength = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
-    CWDebug.log(1, "Swipe length is "+swipeLength);
     if (swipeLength <= 10) return;
 
     //Check the direction of the swipe
@@ -135,9 +117,6 @@ $(document).ready(function() {
       if (deltaY > 0) direction = "down";
       if (deltaY < 0) direction = "up";
     }
-
-    CWDebug.log(1, "deltaX "+deltaX+", deltaY "+deltaY);
-    CWDebug.log(1, "swipe direction is "+direction);
 
     //Check if the touch ended at a device edge
     var endsAtTopEdge    = (swipeEnd.y <= 25);

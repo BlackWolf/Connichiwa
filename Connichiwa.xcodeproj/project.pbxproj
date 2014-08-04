@@ -33,6 +33,8 @@
 		332B686F1959A2B5004B0600 /* scripts in Resources */ = {isa = PBXBuildFile; fileRef = 332B686E1959A2B5004B0600 /* scripts */; };
 		333A80671953996D00420D5A /* CWBluetoothManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 333A80651953996D00420D5A /* CWBluetoothManager.h */; };
 		333A80681953996D00420D5A /* CWBluetoothManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 333A80661953996D00420D5A /* CWBluetoothManager.m */; };
+		3349D1FC198F90EF0050AF1A /* CWiDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 3349D1FA198F90EF0050AF1A /* CWiDevice.h */; };
+		3349D1FD198F90EF0050AF1A /* CWiDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 3349D1FB198F90EF0050AF1A /* CWiDevice.m */; };
 		334AB741193FABAA00A15999 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 334AB740193FABAA00A15999 /* JavaScriptCore.framework */; };
 		334AB747193FDADC00A15999 /* CWWebApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = 334AB745193FDADC00A15999 /* CWWebApplication.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		334AB748193FDADC00A15999 /* CWWebApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 334AB746193FDADC00A15999 /* CWWebApplication.m */; };
@@ -139,6 +141,8 @@
 		333A80651953996D00420D5A /* CWBluetoothManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWBluetoothManager.h; sourceTree = "<group>"; };
 		333A80661953996D00420D5A /* CWBluetoothManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWBluetoothManager.m; sourceTree = "<group>"; };
 		333A806D1953997F00420D5A /* CWBluetoothManagerDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CWBluetoothManagerDelegate.h; sourceTree = "<group>"; };
+		3349D1FA198F90EF0050AF1A /* CWiDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWiDevice.h; sourceTree = "<group>"; };
+		3349D1FB198F90EF0050AF1A /* CWiDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWiDevice.m; sourceTree = "<group>"; };
 		334AB740193FABAA00A15999 /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		334AB745193FDADC00A15999 /* CWWebApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWWebApplication.h; sourceTree = "<group>"; };
 		334AB746193FDADC00A15999 /* CWWebApplication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWWebApplication.m; sourceTree = "<group>"; };
@@ -216,6 +220,8 @@
 				334AB756193FEC6000A15999 /* CWBundle.m */,
 				334AB751193FDDF800A15999 /* CWDebug.h */,
 				334AB752193FDDF800A15999 /* CWDebug.m */,
+				3349D1FA198F90EF0050AF1A /* CWiDevice.h */,
+				3349D1FB198F90EF0050AF1A /* CWiDevice.m */,
 			);
 			name = Helper;
 			sourceTree = "<group>";
@@ -359,6 +365,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3349D1FC198F90EF0050AF1A /* CWiDevice.h in Headers */,
 				33EE7EFA1955BC1500EFDE17 /* CWUtil.h in Headers */,
 				330CBB74193E75890064AD99 /* Connichiwa.h in Headers */,
 				3321DCDB196AA6830090D39C /* CWBluetoothTransferManager.h in Headers */,
@@ -653,6 +660,7 @@
 				33EE7EFB1955BC1500EFDE17 /* CWUtil.m in Sources */,
 				334AB754193FDDF800A15999 /* CWDebug.m in Sources */,
 				33618AC9195DEDFE006FA51B /* CWWebLibraryManager.m in Sources */,
+				3349D1FD198F90EF0050AF1A /* CWiDevice.m in Sources */,
 				33618AC1195DAD37006FA51B /* CWRemoteLibraryManager.m in Sources */,
 				334AB748193FDADC00A15999 /* CWWebApplication.m in Sources */,
 				333A80681953996D00420D5A /* CWBluetoothManager.m in Sources */,
