@@ -94,19 +94,18 @@ var CWPinchManager = OOP.createSingleton("Connichiwa", "CWPinchManager", {
     //of the pinched device and the pinched edge on the pinched device
     //In particular, we need to convert between different ppi screens
     newPinchDevice.scale = newPinchDevice.device.getPPI() / pinchedDevice.device.getPPI() * pinchedDevice.scale;
-    CWDebug.log(1, newPinchDevice.device.getPPI()+" / "+pinchedDevice.device.getPPI()+" * "+pinchedDevice.scale+" = "+newPinchDevice.scale);
     if (pinchedData.edge === "right") {
       newPinchDevice.transformX = pinchedDevice.transformX + pinchedDevice.width / pinchedDevice.scale;
       newPinchDevice.transformY = pinchedDevice.transformY + pinchedData.y / pinchedDevice.scale - newData.y * newPinchDevice.scale;
     } else if (pinchedData.edge === "bottom") {
-      newPinchDevice.transformX = pinchedDevice.transformX + pinchedData.x - newData.x * newPinchDevice.scale;
-      newPinchDevice.transformY = pinchedDevice.transformY + pinchedDevice.height;
+      newPinchDevice.transformX = pinchedDevice.transformX + pinchedData.x - newData.x / pinchedDevice.scale * newPinchDevice.scale;
+      newPinchDevice.transformY = pinchedDevice.transformY + pinchedDevice.height / pinchedDevice.scale;
     } else if (pinchedData.edge === "left") {
-      newPinchDevice.transformX = pinchedDevice.transformX - newPinchDevice.width;
-      newPinchDevice.transformY = pinchedDevice.transformY + pinchedData.y - newData.y * newPinchDevice.scale;
+      newPinchDevice.transformX = pinchedDevice.transformX - newPinchDevice.width / pinchedDevice.scale;
+      newPinchDevice.transformY = pinchedDevice.transformY + pinchedData.y - newData.y / pinchedDevice.scale * newPinchDevice.scale;
     } else if (pinchedData.edge === "top") {  
-      newPinchDevice.transformX = pinchedDevice.transformX + pinchedData.x - newData.x * newPinchDevice.scale;
-      newPinchDevice.transformY = pinchedDevice.transformY - newPinchDevice.height;
+      newPinchDevice.transformX = pinchedDevice.transformX + pinchedData.x - newData.x / pinchedDevice.scale * newPinchDevice.scale;
+      newPinchDevice.transformY = pinchedDevice.transformY - newPinchDevice.height / pinchedDevice.scale;
     }
 
     this._devices[newDevice.getIdentifier()] = newPinchDevice;
