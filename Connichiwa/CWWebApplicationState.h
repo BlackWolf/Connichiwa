@@ -24,6 +24,8 @@
 
 @property (readonly) int ppi;
 
+@property (readonly) NSDictionary *deviceInfo;
+
 /**
  *  The port that this web server listens on
  */

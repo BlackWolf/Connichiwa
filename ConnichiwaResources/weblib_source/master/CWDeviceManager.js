@@ -1,4 +1,5 @@
 /* global CWDevice, CWEventManager, CWDebug */
+/* global CWDeviceConnectionState, CWDeviceDiscoveryState */
 "use strict";
 
 
@@ -10,7 +11,7 @@
  */
 var CWDeviceManager = (function()
 {
-  var localDevice;
+  var _localDevice;
   /**
    * An array of detected remote devices as CWDevice objects. All detected devices are in here, they are not necessarily connected to or used in any way by this device.
    */
@@ -68,9 +69,9 @@ var CWDeviceManager = (function()
    */
   var getDeviceWithIdentifier = function(identifier)
   {
-    if (localDevice !== undefined && 
-      (identifier === localDevice.getIdentifier() || identifier === "master")) {
-      return localDevice;
+    if (_localDevice !== undefined && 
+      (identifier === _localDevice.getIdentifier() || identifier === "master")) {
+      return _localDevice;
     }
     
     for (var i = 0; i < _remoteDevices.length; i++)
@@ -99,20 +100,23 @@ var CWDeviceManager = (function()
   };
 
 
-  var createLocalDevice = function(identifier) {
-    var deviceProperties = {
-      identifier : identifier,
-      name       : "local",
-      isLocal    : true
-    };
-    localDevice = new CWDevice(deviceProperties);
-    localDevice.discoveryState = CWDeviceDiscoveryState.LOST;
-    localDevice.connectionState = CWDeviceConnectionState.CONNECTED;
+  var createLocalDevice = function(properties) {
+    if (_localDevice !== undefined) return false;
+
+    properties.isLocal = true;
+
+    _localDevice = new CWDevice(properties);
+    _localDevice.discoveryState = CWDeviceDiscoveryState.LOST;
+    _localDevice.connectionState = CWDeviceConnectionState.CONNECTED;
+
+    CWDebug.log(3, "Created local device: " + JSON.stringify(properties));
+
+    return true;
   };
 
 
   var getLocalDevice = function() {
-    return localDevice;
+    return _localDevice;
   };
 
   return {

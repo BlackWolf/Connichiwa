@@ -4,24 +4,27 @@
 
 
 var Connichiwa = OOP.createSingleton("Connichiwa", "Connichiwa", {
-  "private _identifier" : undefined,
   "private _websocket"  : undefined,
 
 
   "public getIdentifier": function() 
   {
-    return this._identifier;
+    //ABSTRACT, OVERWRITE IN SUBCLASSES
   },
 
 
-  "package _setIdentifier": function(value) 
-  {
-    if (this._identifier !== undefined) return false;
+  "public send": function(identifier, messageObject) {
+    //ABSTRACT, OVERWRITE IN SUBCLASSES
+  },
 
-    this._identifier = value;
-    CWDebug.log(2, "Identifier set to " + this._identifier);
 
-    return true;
+  "public broadcast": function(messageObject) {
+    //ABSTRACT, OVERWRITE IN SUBCLASSES
+  },
+
+
+  "public isMaster": function() {
+    //ABSTRACT, OVERWRITE IN SUBCLASSES
   },
 
 

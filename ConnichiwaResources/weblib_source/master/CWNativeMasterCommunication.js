@@ -67,7 +67,8 @@ var CWNativeMasterCommunication = OOP.createSingleton("Connichiwa", "CWNativeMas
   
   _parseLocalIdentifier: function(message)
   {
-    var success = this.package.Connichiwa._setIdentifier(message.identifier);
+    var success = CWDeviceManager.createLocalDevice(message);
+    // var success = this.package.Connichiwa._setIdentifier(message.identifier);
     if (success)
     {
       this.package.Connichiwa._sendObject(message); //needed so server recognizes us as local weblib

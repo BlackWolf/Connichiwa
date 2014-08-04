@@ -4,8 +4,14 @@
 
 
 OOP.extendSingleton("Connichiwa", "Connichiwa", {
-  "private _parsedURL"        : new CWUtil.parseURL(document.URL),
+  "private _identifier"       : undefined,
   "private _softDisconnected" : false,
+
+
+  "public getIdentifier": function() 
+  {
+    return this._identifier;
+  },
 
 
   "public isMaster": function() {
@@ -42,6 +48,17 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
   },
 
 
+  "package _setIdentifier": function(value) 
+  {
+    if (this._identifier !== undefined) return false;
+
+    this._identifier = value;
+    CWDebug.log(2, "Identifier set to " + this._identifier);
+
+    return true;
+  },
+
+
   "package _connectWebsocket": function()
   {
     //If we replace the websocket (or re-connect) we don't want to call onWebsocketClose
@@ -50,7 +67,9 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
     this._cleanupWebsocket();    
     if (oldWebsocket !== undefined) oldWebsocket.close();
 
-    this._websocket           = new WebSocket("ws://" + this._parsedURL.hostname + ":" + (parseInt(this._parsedURL.port) + 1));
+    var parsedURL = new CWUtil.parseURL(document.URL);
+
+    this._websocket           = new WebSocket("ws://" + parsedURL.hostname + ":" + (parseInt(parsedURL.port) + 1));
     this._websocket.onopen    = this._onWebsocketOpen;
     this._websocket.onmessage = this._onWebsocketMessage;
     this._websocket.onclose   = this._onWebsocketClose;

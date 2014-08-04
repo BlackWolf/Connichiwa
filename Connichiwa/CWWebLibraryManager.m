@@ -307,10 +307,13 @@
 
 - (void)_sendToView_localIdentifier
 {
-    NSDictionary *data = @{
+    /*NSDictionary *data = @{
                            @"type": @"localidentifier",
                            @"identifier": self.appState.identifier
-                           };
+                           }; */
+    NSMutableDictionary *data = [[self.appState deviceInfo] mutableCopy];
+    [data setObject:@"localidentifier" forKey:@"type"];
+    
     [self _sendToView_dictionary:data];
 }
 

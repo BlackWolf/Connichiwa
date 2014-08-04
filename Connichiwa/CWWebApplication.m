@@ -199,6 +199,15 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
 }
 
 
+- (NSDictionary *)deviceInfo {
+    return @{
+             @"identifier" : [self identifier],
+             @"name" : [self deviceName],
+             @"ppi" : @([self ppi])
+             };
+}
+
+
 /**
  *  See [CWWebApplicationState isWebserverRunning]
  *

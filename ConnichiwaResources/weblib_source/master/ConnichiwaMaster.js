@@ -10,6 +10,15 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
   // PUBLIC API
   
 
+  "public getIdentifier": function() 
+  {
+    var localDevice = CWDeviceManager.getLocalDevice();
+    if (localDevice === undefined) return undefined;
+
+    return localDevice.getIdentifier();
+  },
+  
+
   "public isMaster": function() {
     return true;
   },
@@ -62,21 +71,6 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
     if (CWUtil.inArray(event, validEvents) === false) throw "Registering for invalid event: " + event;
 
     CWEventManager.register(event, callback);
-  },
-
-
-  // OVERWRITES
-   
-  "package _setIdentifier": function(value) 
-  {
-    if (this._identifier !== undefined) return false;
-
-    this._identifier = value;
-    CWDebug.log(2, "Identifier set to " + this._identifier);
-
-    CWDeviceManager.createLocalDevice(this._identifier);
-
-    return true;
   },
 
   // WEBSOCKET
