@@ -312,7 +312,7 @@
                            @"identifier": self.appState.identifier
                            }; */
     NSMutableDictionary *data = [[self.appState deviceInfo] mutableCopy];
-    [data setObject:@"localidentifier" forKey:@"type"];
+    [data setObject:@"localinfo" forKey:@"type"];
     
     [self _sendToView_dictionary:data];
 }

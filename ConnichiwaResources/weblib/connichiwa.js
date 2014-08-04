@@ -914,7 +914,7 @@ var CWNativeMasterCommunication = OOP.createSingleton("Connichiwa", "CWNativeMas
     {
       case "connectwebsocket":      this._parseConnectWebsocket(object); break;
       case "cwdebug":               this._parseDebug(object); break;
-      case "localidentifier":       this._parseLocalIdentifier(object); break;
+      case "localinfo":             this._parseLocalInfo(object); break;
       case "devicedetected":        this._parseDeviceDetected(object); break;
       case "devicedistancechanged": this._parseDeviceDistanceChanged(object); break;
       case "devicelost":            this._parseDeviceLost(object); break;
@@ -937,10 +937,9 @@ var CWNativeMasterCommunication = OOP.createSingleton("Connichiwa", "CWNativeMas
   },
   
   
-  _parseLocalIdentifier: function(message)
+  _parseLocalInfo: function(message)
   {
     var success = CWDeviceManager.createLocalDevice(message);
-    // var success = this.package.Connichiwa._setIdentifier(message.identifier);
     if (success)
     {
       this.package.Connichiwa._sendObject(message); //needed so server recognizes us as local weblib

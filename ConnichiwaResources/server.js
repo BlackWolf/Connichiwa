@@ -189,7 +189,7 @@ var onUnidentifiedRemoteMessage = function(wsConnection)
     {
       var object = JSON.parse(message);
 
-      if (object.type === "localidentifier")
+      if (object.type === "localinfo")
       {
         log(3, "Websocket was determined to be local");
         wsLocalConnectionIdentifier = object.identifier;
