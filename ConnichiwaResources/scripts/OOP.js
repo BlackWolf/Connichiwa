@@ -38,7 +38,7 @@ var OOP = (function() {
     thePackage[className] = theClass.package;
     theClass.private.package = thePackage;
 
-    //Save all scopes of the class internally
+    //Save all scopes of the class OOP-internally
     //We need those if we want to extend the class later
     if (packageName in classes === false) classes[packageName] = {};
     classes[packageName][className] = theClass;
@@ -96,7 +96,7 @@ var OOP = (function() {
         // - package methods are in private and package scope (not available publicly)
         // - public methods are in private, package and public scope (available everywhere)
         // Furthermore, each method is bound to the private scope - from inside a class method 
-        // we can then access every class method using "this"
+        // we can then access every class method and property using "this"
         // 
         
         if (typeof properties[modifiedPropertyName] === "function")
@@ -109,11 +109,11 @@ var OOP = (function() {
               break;
             case "package":
               theClass.private[propertyName]  = theMethod;
-              theClass.package[propertyName] = theMethod;
+              theClass.package[propertyName]  = theMethod;
               break;
             case "public":
               theClass.private[propertyName]  = theMethod;
-              theClass.package[propertyName] = theMethod;
+              theClass.package[propertyName]  = theMethod;
               theClass.public[propertyName]   = theMethod;
               break;
           }
@@ -124,8 +124,8 @@ var OOP = (function() {
           // Properties are more complex than methods because primitives are not 
           // passed by reference. We still need to make sure we access the same
           // property in all scopes.
-          // To achieve that, we only define the property in the most visibile scope (e.g. in
-          // package scope if the property is marked package. The more limited scopes get
+          // To achieve that, we only define the property in the most visible scope (e.g. in
+          // package scope if the property is marked package). The more limited scopes get
           // getters & setters that access that property.
           // Furthermore, accessing a property that doesn't exist creates that property
           // in JavaScript. E.g., accessing a private property publicly does not fail, but creates
@@ -181,6 +181,10 @@ var OOP = (function() {
         }
       }
     }
+
+    //Now that the class is built, call a constructor if there is any
+    //Constructors have the magic name __constructor
+    if (theClass.private.__constructor) theClass.private.__constructor();
 
     return theClass.public;
   };

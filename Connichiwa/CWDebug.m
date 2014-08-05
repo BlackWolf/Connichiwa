@@ -15,6 +15,16 @@ int const MAX_LOG_PRIORITY = 3;
 @implementation CWDebug
 
 
++ (BOOL)isDebugging
+{
+    #ifdef CWDEBUG
+        return YES;
+    #else
+        return NO;
+    #endif
+}
+
+
 + (void)executeInDebug:(void (^)(void))block
 {
     #ifdef CWDEBUG

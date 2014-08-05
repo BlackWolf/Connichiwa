@@ -182,7 +182,6 @@
     
     self.state = CWRemoteLibraryManagerStateConnected;
     
-    [self _sendToView_cwdebug];
     [self _sendToView_remoteIdentifier];
     
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -242,7 +241,7 @@
 {
     NSDictionary *data = @{
                            @"type": @"cwdebug",
-                           @"cwdebug": @CWDEBUG
+                           @"cwdebug": @([CWDebug isDebugging])
                            };
     [self _sendToView_dictionary:data];
 }
@@ -314,9 +313,15 @@
             }
         };
         self.webViewContext[@"console"][@"log"] = logger;
+        self.webViewContext[@"console"][@"info"] = logger;
         self.webViewContext[@"console"][@"error"] = logger;
+        self.webViewContext[@"console"][@"warn"] = logger;
+        
+        //Make the remote library aware that it is backed up by a native layer
+        self.webViewContext[@"runsNative"] = @YES;
         
         [self _registerJSCallbacks];
+        [self _sendToView_cwdebug];
         [self _sendToView_connectWebsocket];
     }
     else if (self.state == CWRemoteLibraryManagerStateDisconnecting)

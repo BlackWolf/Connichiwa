@@ -14,9 +14,13 @@ var CWDebug = (function()
    */
   var debug = false;
 
-  var enableDebug = function()
-  {
+  var enableDebug = function() {
     debug = true;
+  };
+
+
+  var disableDebug = function() {
+    debug = false;
   };
 
   /**
@@ -33,7 +37,8 @@ var CWDebug = (function()
   };
 
   return {
-    enableDebug : enableDebug,
-    log         : log
+    enableDebug  : enableDebug,
+    disableDebug : disableDebug,
+    log          : log
   };
 })();

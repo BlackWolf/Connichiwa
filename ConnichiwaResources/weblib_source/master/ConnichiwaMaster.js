@@ -7,6 +7,7 @@
 OOP.extendSingleton("Connichiwa", "Connichiwa", {
   "private _connectionAttempts" : 0,
 
+
   // PUBLIC API
   
 

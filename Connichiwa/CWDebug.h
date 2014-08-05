@@ -40,6 +40,7 @@ void cwLogNew(int priority, NSString *source, NSString *file, int line, NSString
  */
 @interface CWDebug : NSObject
 
++ (BOOL)isDebugging;
 /**
  *  Executes the given code only when we are in debug mode
  *

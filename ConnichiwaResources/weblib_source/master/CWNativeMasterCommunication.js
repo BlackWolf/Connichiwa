@@ -62,6 +62,7 @@ var CWNativeMasterCommunication = OOP.createSingleton("Connichiwa", "CWNativeMas
   _parseDebug: function(message)
   {
     if (message.cwdebug) CWDebug.enableDebug();
+    else CWDebug.disableDebug();
   },
   
   

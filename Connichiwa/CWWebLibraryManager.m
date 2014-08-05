@@ -240,7 +240,6 @@
     
     self.state = CWWebLibraryManagerStateConnected;
     
-    [self _sendToView_cwdebug];
     [self _sendToView_localIdentifier];
     
     if ([self.delegate respondsToSelector:@selector(webLibraryIsReady)])
@@ -299,7 +298,7 @@
 {
     NSDictionary *data = @{
                            @"type": @"cwdebug",
-                           @"cwdebug": @CWDEBUG
+                           @"cwdebug": @([CWDebug isDebugging])
                            };
     [self _sendToView_dictionary:data];
 }
@@ -307,10 +306,6 @@
 
 - (void)_sendToView_localIdentifier
 {
-    /*NSDictionary *data = @{
-                           @"type": @"localidentifier",
-                           @"identifier": self.appState.identifier
-                           }; */
     NSMutableDictionary *data = [[self.appState deviceInfo] mutableCopy];
     [data setObject:@"localinfo" forKey:@"type"];
     
@@ -425,8 +420,10 @@
         self.webViewContext[@"console"][@"error"] = logger;
         self.webViewContext[@"console"][@"warn"] = logger;
         //TODO we should add the other console types (warn, ...) and maybe format them specially
+        //TODO another problem is that console.log's before this point are not grabbed, but we probably can't do anything about it
         
         [self _registerJSCallbacks];
+        [self _sendToView_cwdebug];
         [self _sendToView_connectWebsocket];
     }
     else if (self.state == CWWebLibraryManagerStateDisconnecting)
