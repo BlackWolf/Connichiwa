@@ -1,10 +1,10 @@
-/* global HTTP_PORT, DOCUMENT_ROOT, RESOURCES_PATH, CWDEBUG */
+/* global HTTP_PORT, DOCUMENT_ROOT, RESOURCES_PATH */
 /* global nativeCallServerDidStart, nativeCallRemoteWebsocketDidClose */
 "use strict";
 
 /**
  *
- * Constants passed from CWWebserver:
+ * Constants passed from native CWWebserver:
  *     HTTP_PORT -- the port the HTTP server is supposed to run on
  *     DOCUMENT_ROOT -- the root of the web application, defined by the iOS application.
  *     RESOURCES_PATH -- Full path to the root of ConnichiwaResources.bundle.

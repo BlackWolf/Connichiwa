@@ -35,7 +35,13 @@ var CWRemoteCommunication = OOP.createSingleton("Connichiwa", "CWRemoteCommunica
   _parseRemoteIdentifier: function(message)
   {
     var device = CWDeviceManager.getDeviceWithIdentifier(message.identifier);
-    if (device === null) return;
+    if (device === null) {
+      device = new CWDevice(message); //TODO change message to something useful
+      CWDeviceManager.addDevice(device);
+      //TODO
+      //a device connected not over BT but directly over the websocket
+      //create a CWDevice and store it
+    }
     
     device.connectionState = CWDeviceConnectionState.CONNECTED;
     nativeCallRemoteDidConnect(device.getIdentifier());
@@ -44,7 +50,8 @@ var CWRemoteCommunication = OOP.createSingleton("Connichiwa", "CWRemoteCommunica
     //I THINK this might be related to us sending a message to the remote device in the web app when this event is triggered
     //This does seem strange, though, considering we just received a message over the websocket (so it obviously is initialized and working)
     //As a temporary fix, I try to delay sending this event a little and see if it helps
-    setTimeout(function() { CWEventManager.trigger("deviceConnected", device); }, 1000);
+    // setTimeout(function() { CWEventManager.trigger("deviceConnected", device); }, 1000);
+    CWEventManager.trigger("deviceConnected", device);
   },
 
   _parsePinchSwipe: function(message) {

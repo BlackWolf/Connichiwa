@@ -38,7 +38,7 @@ var OOP = (function() {
     thePackage[className] = theClass.package;
     theClass.private.package = thePackage;
 
-    //Save all scopes of the class internally
+    //Save all scopes of the class OOP-internally
     //We need those if we want to extend the class later
     if (packageName in classes === false) classes[packageName] = {};
     classes[packageName][className] = theClass;
@@ -96,7 +96,7 @@ var OOP = (function() {
         // - package methods are in private and package scope (not available publicly)
         // - public methods are in private, package and public scope (available everywhere)
         // Furthermore, each method is bound to the private scope - from inside a class method 
-        // we can then access every class method using "this"
+        // we can then access every class method and property using "this"
         // 
         
         if (typeof properties[modifiedPropertyName] === "function")
@@ -109,11 +109,11 @@ var OOP = (function() {
               break;
             case "package":
               theClass.private[propertyName]  = theMethod;
-              theClass.package[propertyName] = theMethod;
+              theClass.package[propertyName]  = theMethod;
               break;
             case "public":
               theClass.private[propertyName]  = theMethod;
-              theClass.package[propertyName] = theMethod;
+              theClass.package[propertyName]  = theMethod;
               theClass.public[propertyName]   = theMethod;
               break;
           }
@@ -124,8 +124,8 @@ var OOP = (function() {
           // Properties are more complex than methods because primitives are not 
           // passed by reference. We still need to make sure we access the same
           // property in all scopes.
-          // To achieve that, we only define the property in the most visibile scope (e.g. in
-          // package scope if the property is marked package. The more limited scopes get
+          // To achieve that, we only define the property in the most visible scope (e.g. in
+          // package scope if the property is marked package). The more limited scopes get
           // getters & setters that access that property.
           // Furthermore, accessing a property that doesn't exist creates that property
           // in JavaScript. E.g., accessing a private property publicly does not fail, but creates
@@ -182,6 +182,10 @@ var OOP = (function() {
       }
     }
 
+    //Now that the class is built, call a constructor if there is any
+    //Constructors have the magic name __constructor
+    if (theClass.private.__constructor) theClass.private.__constructor();
+
     return theClass.public;
   };
 
@@ -205,11 +209,15 @@ var CWDebug = (function()
   /**
    * true if debug mode is on, otherwise false
    */
-  var debug = false;
+  var debug = true;
 
-  var enableDebug = function()
-  {
+  var enableDebug = function() {
     debug = true;
+  };
+
+
+  var disableDebug = function() {
+    debug = false;
   };
 
   /**
@@ -226,8 +234,9 @@ var CWDebug = (function()
   };
 
   return {
-    enableDebug : enableDebug,
-    log         : log
+    enableDebug  : enableDebug,
+    disableDebug : disableDebug,
+    log          : log
   };
 })();
 /* global CWDebug */
@@ -278,24 +287,14 @@ var CWEventManager = (function()
 
     if (!_events[event]) { CWDebug.log(1, "No callbacks registered"); return; }
 
-    //Get all arguments passed to trigger() and remove the event
+    //Get all arguments passed to trigger() and remove the event argument
     var args = Array.prototype.slice.call(arguments);
     args.shift();
 
     for (var i = 0; i < _events[event].length; i++)
     {
-      //TODO
-      //This is a dirty hack to see if a requestAnimationFrame
-      //around a message callback will prevent crashes
-      //We need a cleaner solution in case this works
       var callback = _events[event][i];
-      // if (event.indexOf("message") === 0) {
-        // window.requestAnimationFrame(function() {
-          // callback.apply(null, args);
-        // });
-      // } else {
-        callback.apply(null, args); //calls the callback with arguments args
-      // }
+      callback.apply(null, args); //calls the callback with arguments args
     }
   };
 
@@ -526,13 +525,19 @@ var CWUtil = (function()
     return (array.indexOf(value) > -1);
   };
 
+  //Crazy small code to create UUIDs - cudos to https://gist.github.com/jed/982883
+  var createUUID = function(a) { 
+    return a?(a^Math.random()*16>>a/4).toString(16):([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g,CWUtil.createUUID);
+  };
+
 
   return {
-    parseURL : parseURL,
+    parseURL         : parseURL,
     getEventLocation : getEventLocation,
-    isInt    : isInt,
-    isObject : isObject,
-    inArray  : inArray
+    isInt            : isInt,
+    isObject         : isObject,
+    inArray          : inArray,
+    createUUID       : createUUID
   };
 })();
 "use strict";
@@ -694,17 +699,50 @@ var CWMasterCommunication = OOP.createSingleton("Connichiwa", "CWMasterCommunica
 
 var CWNativeRemoteCommunication = OOP.createSingleton("Connichiwa", "CWNativeRemoteCommunication", 
 {
+  _runsNative: false,
+
+
+  "public isRunningNative": function() {
+    return (this._runsNative === true);
+  },
+
+
+  "public callOnNative": function(methodName) {
+    //If we are not running natively, all native method calls are simply ignored
+    if (this.isRunningNative() !== true) return;
+
+    //Grab additional arguments passed to this method, but not methodName
+    var args = Array.prototype.slice.call(arguments);
+    args.shift();
+
+    //Check if the given method is a valid function and invoke it
+    //Obviously, this could be used to call any method, but what's the point really?
+    var method = window[methodName];
+    if (typeof method === "function") {
+      method.apply(null, args);
+    } else { 
+      CWDebug.log(1, "ERROR: Tried to call native method with name " + methodName + ", but it doesn't exist!");
+    }
+  },
+
+
   "public parse": function(message)
   {
     CWDebug.log(4, "Parsing native message (remote): " + message);
     var object = JSON.parse(message);
     switch (object.type)
     {
+      case "runsnative":          this._parseRunsNative(object); break;
       case "connectwebsocket":    this._parseConnectWebsocket(object); break;
       case "cwdebug":             this._parseDebug(object); break;
       case "remoteidentifier":    this._parseRemoteIdentifier(object); break;
       case "disconnectwebsocket": this._parseDisconnectWebsocket(object); break;
     }
+  },
+
+
+  _parseRunsNative: function(message) {
+    this._runsNative = true;
   },
 
 
@@ -723,9 +761,6 @@ var CWNativeRemoteCommunication = OOP.createSingleton("Connichiwa", "CWNativeRem
   _parseRemoteIdentifier: function(message) 
   {
     this.package.Connichiwa._setIdentifier(message.identifier);
-    
-    var data = { type: "remoteidentifier", identifier: message.identifier };
-    this.package.Connichiwa.send(data);
   },
 
 
@@ -734,14 +769,31 @@ var CWNativeRemoteCommunication = OOP.createSingleton("Connichiwa", "CWNativeRem
     this.package.Connichiwa._disconnectWebsocket();  
   },
 });
-/* global OOP, CWUtil, CWDebug, CWMasterCommunication, CWEventManager */
-/* global nativeCallWebsocketDidOpen, nativeCallWebsocketDidClose, nativeCallSoftDisconnect */
+/* global OOP, CWUtil, CWDebug, CWMasterCommunication, CWNativeRemoteCommunication, CWEventManager */
+/* global runsNative */
 "use strict";
 
 
 OOP.extendSingleton("Connichiwa", "Connichiwa", {
   "private _identifier"       : undefined,
   "private _softDisconnected" : false,
+
+
+  __constructor: function() {
+    //We wait a few second for the native layer to tell us we are running native
+    //If we are not, we connect to the websocket by ourselves to establish a connection
+    var that = this;
+    window.setTimeout(function() {
+      var runsNative = that.package.CWNativeRemoteCommunication.isRunningNative();
+      if (runsNative !== true) {
+        that._connectWebsocket();
+        //TODO
+        //timeout seems like a bad way to do it
+      }
+    }, 5000);
+
+    CWEventManager.trigger("ready"); //trigger ready asap on remotes
+  },
 
 
   "public getIdentifier": function() 
@@ -791,6 +843,10 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
     this._identifier = value;
     CWDebug.log(2, "Identifier set to " + this._identifier);
 
+    //Pass the new identifier to the master device
+    var data = { type: "remoteidentifier", identifier: this._identifier };
+    this.send(data);
+
     return true;
   },
 
@@ -816,7 +872,8 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
   _softDisconnectWebsocket: function()
   {
     this._softDisconnected = true;
-    nativeCallSoftDisconnect();
+    // nativeSoftDisconnect();
+    CWNativeRemoteCommunication.callOnNative("nativeSoftDisconnect");
   },
 
 
@@ -824,7 +881,16 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
   {
     CWDebug.log(3, "Websocket opened");
     this._softDisconnected = false;
-    nativeCallWebsocketDidOpen();
+
+    var runsNative = this.package.CWNativeRemoteCommunication.isRunningNative();
+    if (runsNative === true) {
+      // nativeWebsocketDidOpen();
+      CWNativeRemoteCommunication.callOnNative("nativeWebsocketDidOpen");
+    } else {
+      //We have no native layer that backs us up
+      //Therefore, we create our own unique ID and set it
+      this._setIdentifier(CWUtil.createUUID());
+    }
   },
 
 
@@ -848,7 +914,8 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
   {
     CWDebug.log(3, "Websocket closed");
     this._cleanupWebsocket();
-    nativeCallWebsocketDidClose();
+    // nativeWebsocketDidClose();
+    CWNativeRemoteCommunication.callOnNative("nativeWebsocketDidClose");
   },
 
 
@@ -857,5 +924,3 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
     this._onWebsocketClose();
   }
 });
-
-CWEventManager.trigger("ready"); //trigger ready asap on remotes

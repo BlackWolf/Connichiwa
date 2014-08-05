@@ -1,11 +1,28 @@
-/* global OOP, CWUtil, CWDebug, CWMasterCommunication, CWEventManager */
-/* global nativeCallWebsocketDidOpen, nativeCallWebsocketDidClose, nativeCallSoftDisconnect */
+/* global OOP, CWUtil, CWDebug, CWMasterCommunication, CWNativeRemoteCommunication, CWEventManager */
+/* global runsNative */
 "use strict";
 
 
 OOP.extendSingleton("Connichiwa", "Connichiwa", {
   "private _identifier"       : undefined,
   "private _softDisconnected" : false,
+
+
+  __constructor: function() {
+    //We wait a few second for the native layer to tell us we are running native
+    //If we are not, we connect to the websocket by ourselves to establish a connection
+    var that = this;
+    window.setTimeout(function() {
+      var runsNative = that.package.CWNativeRemoteCommunication.isRunningNative();
+      if (runsNative !== true) {
+        that._connectWebsocket();
+        //TODO
+        //timeout seems like a bad way to do it
+      }
+    }, 5000);
+
+    CWEventManager.trigger("ready"); //trigger ready asap on remotes
+  },
 
 
   "public getIdentifier": function() 
@@ -55,6 +72,10 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
     this._identifier = value;
     CWDebug.log(2, "Identifier set to " + this._identifier);
 
+    //Pass the new identifier to the master device
+    var data = { type: "remoteidentifier", identifier: this._identifier };
+    this.send(data);
+
     return true;
   },
 
@@ -80,7 +101,8 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
   _softDisconnectWebsocket: function()
   {
     this._softDisconnected = true;
-    nativeCallSoftDisconnect();
+    // nativeSoftDisconnect();
+    CWNativeRemoteCommunication.callOnNative("nativeSoftDisconnect");
   },
 
 
@@ -88,7 +110,16 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
   {
     CWDebug.log(3, "Websocket opened");
     this._softDisconnected = false;
-    nativeCallWebsocketDidOpen();
+
+    var runsNative = this.package.CWNativeRemoteCommunication.isRunningNative();
+    if (runsNative === true) {
+      // nativeWebsocketDidOpen();
+      CWNativeRemoteCommunication.callOnNative("nativeWebsocketDidOpen");
+    } else {
+      //We have no native layer that backs us up
+      //Therefore, we create our own unique ID and set it
+      this._setIdentifier(CWUtil.createUUID());
+    }
   },
 
 
@@ -112,7 +143,8 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
   {
     CWDebug.log(3, "Websocket closed");
     this._cleanupWebsocket();
-    nativeCallWebsocketDidClose();
+    // nativeWebsocketDidClose();
+    CWNativeRemoteCommunication.callOnNative("nativeWebsocketDidClose");
   },
 
 
@@ -121,5 +153,3 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
     this._onWebsocketClose();
   }
 });
-
-CWEventManager.trigger("ready"); //trigger ready asap on remotes

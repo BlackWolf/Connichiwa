@@ -27,6 +27,26 @@
  * @namespace CWNativeCommunicationParser
  */
 var CWNativeMasterCommunication = OOP.createSingleton("Connichiwa", "CWNativeMasterCommunication", {
+
+  "public callOnNative": function(methodName) {
+    //If we are not running natively, all native method calls are simply ignored
+    if (this.isRunningNative() !== true) return;
+
+    //Grab additional arguments passed to this method, but not methodName
+    var args = Array.prototype.slice.call(arguments);
+    args.shift();
+
+    //Check if the given method is a valid function and invoke it
+    //Obviously, this could be used to call any method, but what's the point really?
+    var method = window[methodName];
+    if (typeof method === "function") {
+      method.apply(null, args);
+    } else { 
+      CWDebug.log(1, "ERROR: Tried to call native method with name " + methodName + ", but it doesn't exist!");
+    }
+  },
+
+
   /**
    * Parses a message from the websocket. If the message is none of the messages described by this class, this method will do nothing. Otherwise the message will trigger an appropiate action.
    *
@@ -40,8 +60,8 @@ var CWNativeMasterCommunication = OOP.createSingleton("Connichiwa", "CWNativeMas
     var object = JSON.parse(message);
     switch (object.type)
     {
-      case "connectwebsocket":      this._parseConnectWebsocket(object); break;
       case "cwdebug":               this._parseDebug(object); break;
+      case "connectwebsocket":      this._parseConnectWebsocket(object); break;
       case "localinfo":             this._parseLocalInfo(object); break;
       case "devicedetected":        this._parseDeviceDetected(object); break;
       case "devicedistancechanged": this._parseDeviceDistanceChanged(object); break;
@@ -51,18 +71,18 @@ var CWNativeMasterCommunication = OOP.createSingleton("Connichiwa", "CWNativeMas
       case "disconnectwebsocket":   this._parseDisconnectWebsocket(object); break;
     }
   },
+
+
+  _parseDebug: function(message)
+  {
+    if (message.cwdebug === true) CWDebug.enableDebug();
+    else CWDebug.disableDebug();
+  },
   
   
   _parseConnectWebsocket: function(message)
   {
     this.package.Connichiwa._connectWebsocket();
-  },
-  
-  
-  _parseDebug: function(message)
-  {
-    if (message.cwdebug) CWDebug.enableDebug();
-    else CWDebug.disableDebug();
   },
   
   

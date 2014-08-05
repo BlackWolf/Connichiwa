@@ -123,8 +123,6 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
     self.bluetoothManager = [[CWBluetoothManager alloc] initWithApplicationState:self];
     [self.bluetoothManager setDelegate:self];
     
-    CWLog(1, @"PPI: %d", [self ppi]);
-    
     return self;
 }
 

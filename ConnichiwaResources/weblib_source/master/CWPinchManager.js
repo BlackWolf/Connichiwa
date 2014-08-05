@@ -8,24 +8,26 @@ var CWPinchManager = OOP.createSingleton("Connichiwa", "CWPinchManager", {
 
 
   "public getDeviceTransformation": function(device) {
-    if (device.getIdentifier() in this._devices === false) return { x: 0, y: 0, scale: 1.0 };
+    var pinchedDevice = this._getPinchedDevice(device);
+    if (pinchedDevice === undefined) return { x: 0, y: 0, scale: 1.0 };
 
     return { 
-      x     : this._devices[device.getIdentifier()].transformX, 
-      y     : this._devices[device.getIdentifier()].transformY,
-      scale : this._devices[device.getIdentifier()].scale
+      x     : pinchedDevice.transformX, 
+      y     : pinchedDevice.transformY,
+      scale : pinchedDevice.scale
     };
   },
 
 
   "package detectedSwipe": function(data) {
-    CWDebug.log(3, "Detected swipe on " +data.edge+" edge, device "+data.device);
     var device = CWDeviceManager.getDeviceWithIdentifier(data.device);
     if (device === null || device.isConnected() === false) return;
 
-    //Check if the swipe corresponds with another swipe in the database to form a pinch
-    var now = new Date();
+    CWDebug.log(3, "Detected swipe on " + data.device + " on edge " + data.edge);
 
+    //Check if the swipe corresponds with another swipe in the array
+    //to form a pinch
+    var now = new Date();
     for (var key in this._swipes) {
       var savedSwipe = this._swipes[key];
 
@@ -45,7 +47,6 @@ var CWPinchManager = OOP.createSingleton("Connichiwa", "CWPinchManager", {
     }
 
     //If the swipe does not seem to be part of a pinch, remember it for later
-    CWDebug.log(3, "Adding swipe " + data.device);
     this._swipes[data.device] = { date: now, data: data };
 
     //TODO remove the swipes?
@@ -59,8 +60,6 @@ var CWPinchManager = OOP.createSingleton("Connichiwa", "CWPinchManager", {
       var localData = { width: screen.availWidth, height: screen.availHeight };
       this._devices[localDevice.getIdentifier()] = this._createNewPinchData(localDevice, localData);
     }
-
-    CWDebug.log(3, "Detected pinch");
 
     //Exactly one of the two devices needs to be pinched already
     //We need this so we can calculate the position of the new device
@@ -110,7 +109,7 @@ var CWPinchManager = OOP.createSingleton("Connichiwa", "CWPinchManager", {
 
     this._devices[newDevice.getIdentifier()] = newPinchDevice;
 
-    CWDebug.log(1, "Got pinch, devices look like this: " + JSON.stringify(this._devices));
+    CWDebug.log(3, "Detected pinch");
     CWEventManager.trigger("pinch", newDevice);
   },
 

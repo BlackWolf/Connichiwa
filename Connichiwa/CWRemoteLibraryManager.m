@@ -162,15 +162,15 @@
     
     __weak typeof(self) weakSelf = self;
     
-    self.webViewContext[@"nativeCallWebsocketDidOpen"] = ^{
+    self.webViewContext[@"nativeWebsocketDidOpen"] = ^{
         [weakSelf _receivedfromView_websocketDidOpen];
     };
     
-    self.webViewContext[@"nativeCallWebsocketDidClose"] = ^{
+    self.webViewContext[@"nativeWebsocketDidClose"] = ^{
         [weakSelf _receivedfromView_websocketDidClose];
     };
     
-    self.webViewContext[@"nativeCallSoftDisconnect"] = ^{
+    self.webViewContext[@"nativeSoftDisconnect"] = ^{
         [weakSelf _receivedfromView_softDisconnect];
     };
 }
@@ -232,6 +232,15 @@
 {
     NSDictionary *data = @{
                            @"type": @"disconnectwebsocket"
+                           };
+    [self _sendToView_dictionary:data];
+}
+
+
+- (void)_sendToView_runsNative
+{
+    NSDictionary *data = @{
+                           @"type": @"runsnative"
                            };
     [self _sendToView_dictionary:data];
 }
@@ -317,11 +326,8 @@
         self.webViewContext[@"console"][@"error"] = logger;
         self.webViewContext[@"console"][@"warn"] = logger;
         
-        //Make the remote library aware that it is backed up by a native layer
-        self.webViewContext[@"runsNative"] = @YES;
-        
         [self _registerJSCallbacks];
-        [self _sendToView_cwdebug];
+        [self _sendToView_runsNative];
         [self _sendToView_connectWebsocket];
     }
     else if (self.state == CWRemoteLibraryManagerStateDisconnecting)

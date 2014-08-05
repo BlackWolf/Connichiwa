@@ -12,7 +12,7 @@ var CWDebug = (function()
   /**
    * true if debug mode is on, otherwise false
    */
-  var debug = false;
+  var debug = true;
 
   var enableDebug = function() {
     debug = true;

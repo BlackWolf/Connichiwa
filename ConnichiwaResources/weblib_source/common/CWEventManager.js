@@ -44,26 +44,19 @@ var CWEventManager = (function()
   {
     CWDebug.log(4, "Triggering event " + event);
 
-    if (!_events[event]) { CWDebug.log(1, "No callbacks registered"); return; }
+    if (!_events[event]) { 
+      CWDebug.log(4, "No callbacks  for " + event + " registered"); 
+      return; 
+    }
 
-    //Get all arguments passed to trigger() and remove the event
+    //Get all arguments passed to trigger() and remove the event argument
     var args = Array.prototype.slice.call(arguments);
     args.shift();
 
     for (var i = 0; i < _events[event].length; i++)
     {
-      //TODO
-      //This is a dirty hack to see if a requestAnimationFrame
-      //around a message callback will prevent crashes
-      //We need a cleaner solution in case this works
       var callback = _events[event][i];
-      // if (event.indexOf("message") === 0) {
-        // window.requestAnimationFrame(function() {
-          // callback.apply(null, args);
-        // });
-      // } else {
-        callback.apply(null, args); //calls the callback with arguments args
-      // }
+      callback.apply(null, args); //calls the callback with arguments args
     }
   };
 
