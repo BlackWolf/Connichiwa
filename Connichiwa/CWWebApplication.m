@@ -189,7 +189,8 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
             if ([CWiDevice model] >= CWiDeviceModeliPadMini2G)  return 326;
             else                                                return 264;
         } else {
-            return 132;
+            if ([CWiDevice model] == CWiDeviceModeliPadMini1G)  return 163;
+            else                                                return 132;
         }
     }
     

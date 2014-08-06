@@ -123,7 +123,7 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.webView setDelegate:self];
         [self.webView setHidden:NO];
-        [self.webView loadRequest:URLRequest];        
+        [self.webView loadRequest:URLRequest];
     });
 }
 
@@ -237,15 +237,6 @@
 }
 
 
-- (void)_sendToView_runsNative
-{
-    NSDictionary *data = @{
-                           @"type": @"runsnative"
-                           };
-    [self _sendToView_dictionary:data];
-}
-
-
 - (void)_sendToView_cwdebug
 {
     NSDictionary *data = @{
@@ -288,6 +279,18 @@
 #pragma mark UIWebViewDelegate
 
 
+- (void)webViewDidStartLoad:(UIWebView *)webView
+{
+    //We need to tell the remote library it is run by a native application. This needs to be done ASAP (before the library loads).
+    //Therefore, we simply execute a script that sets a global variable to true. When the web library is loaded, it can check
+    //this variable and by that know that a native layer is running in the background.
+    self.webViewContext = [self.webView valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
+    NSString *js = [NSString stringWithFormat:@"var RUN_BY_CONNICHIWA_NATIVE = true;"];
+    [self.webView performSelectorOnMainThread:@selector(stringByEvaluatingJavaScriptFromString:) withObject:js waitUntilDone:NO];
+}
+
+
+
 /**
  *  Called by the UIWebView once it finished loading a page. This means the page is fully ready, the UIWebView JSContext is ready and we can start using the page.
  *
@@ -321,13 +324,12 @@
                 _CWLog([[components objectAtIndex:0] intValue], @"REMOTELIB", @"?????", -1, [components objectAtIndex:1]);
             }
         };
-        self.webViewContext[@"console"][@"log"] = logger;
-        self.webViewContext[@"console"][@"info"] = logger;
+        self.webViewContext[@"console"][@"log"]   = logger;
+        self.webViewContext[@"console"][@"info"]  = logger;
         self.webViewContext[@"console"][@"error"] = logger;
-        self.webViewContext[@"console"][@"warn"] = logger;
+        self.webViewContext[@"console"][@"warn"]  = logger;
         
         [self _registerJSCallbacks];
-        [self _sendToView_runsNative];
         [self _sendToView_connectWebsocket];
     }
     else if (self.state == CWRemoteLibraryManagerStateDisconnecting)

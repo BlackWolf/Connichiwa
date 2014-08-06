@@ -9,18 +9,28 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
 
 
   __constructor: function() {
+    if (window.RUN_BY_CONNICHIWA_NATIVE !== true) {
+      //Set runs native to true
+      this._connectWebsocket();
+    }
+
+
     //We wait a few second for the native layer to tell us we are running native
     //If we are not, we connect to the websocket by ourselves to establish a connection
-    var that = this;
-    window.setTimeout(function() {
-      var runsNative = that.package.CWNativeRemoteCommunication.isRunningNative();
-      if (runsNative !== true) {
-        that._connectWebsocket();
-        //TODO
-        //timeout seems like a bad way to do it
-      }
-    }, 5000);
+    // var that = this;
+    // window.setTimeout(function() {
+    //   var runsNative = that.package.CWNativeRemoteCommunication.isRunningNative();
+    //   if (runsNative !== true) {
+    //     that._connectWebsocket();
+    //     //TODO
+    //     //timeout seems like a bad way to do it
+    //   }
+    // }, 1000);
 
+    // CWDebug.log(1, "ROFLROFLROFL");
+    // if (window.test === undefined) alert("noooo");
+    // else alert(window.test);
+    // CWNativeRemoteCommunication.callOnNative("nativeTest");
     CWEventManager.trigger("ready"); //trigger ready asap on remotes
   },
 
@@ -133,7 +143,6 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
     //We use requestAnimationFrame in an attempt to prevent those crashes
     window.requestAnimationFrame(function() {
       CWMasterCommunication.parse(message);
-
       if (message.type) CWEventManager.trigger("message" + message.type, message);
     });
   },

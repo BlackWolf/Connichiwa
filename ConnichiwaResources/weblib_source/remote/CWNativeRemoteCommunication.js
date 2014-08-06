@@ -3,9 +3,18 @@
 
 
 
+//TODO refactor into common, remote, master parts
+//rename to CWNativeBridge or something like that
 var CWNativeRemoteCommunication = OOP.createSingleton("Connichiwa", "CWNativeRemoteCommunication", 
 {
   _runsNative: false,
+
+
+  __constructor: function() {
+    if (window.RUN_BY_CONNICHIWA_NATIVE === true) {
+      this._runsNative = true;
+    }
+  },
 
 
   "public isRunningNative": function() {
@@ -48,6 +57,7 @@ var CWNativeRemoteCommunication = OOP.createSingleton("Connichiwa", "CWNativeRem
 
 
   _parseRunsNative: function(message) {
+    CWDebug.log(1, "RUNS NATIVE SET TO "+JSON.stringify(message));
     this._runsNative = true;
   },
 
