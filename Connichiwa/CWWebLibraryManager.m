@@ -76,7 +76,7 @@
 /**
  *  Tells the web library the unique connichiwa identifier we are known under
  */
-- (void)_sendToView_localIdentifier;
+- (void)_sendToView_localInfo;
 
 /**
  *  Tells the web library that a new device was detected, also see sendDeviceDetected:
@@ -240,7 +240,7 @@
     
     self.state = CWWebLibraryManagerStateConnected;
     
-    [self _sendToView_localIdentifier];
+    [self _sendToView_localInfo];
     
     if ([self.delegate respondsToSelector:@selector(webLibraryIsReady)])
     {
@@ -304,7 +304,7 @@
 }
 
 
-- (void)_sendToView_localIdentifier
+- (void)_sendToView_localInfo
 {
     NSMutableDictionary *data = [[self.appState deviceInfo] mutableCopy];
     [data setObject:@"localinfo" forKey:@"type"];
@@ -415,10 +415,10 @@
                 _CWLog([[components objectAtIndex:0] intValue], @"WEBLIB", @"?????", -1, [components objectAtIndex:1]);
             }
         };
-        self.webViewContext[@"console"][@"log"] = logger;
-        self.webViewContext[@"console"][@"info"] = logger;
+        self.webViewContext[@"console"][@"log"]   = logger;
+        self.webViewContext[@"console"][@"info"]  = logger;
         self.webViewContext[@"console"][@"error"] = logger;
-        self.webViewContext[@"console"][@"warn"] = logger;
+        self.webViewContext[@"console"][@"warn"]  = logger;
         //TODO we should add the other console types (warn, ...) and maybe format them specially
         //TODO another problem is that console.log's before this point are not grabbed, but we probably can't do anything about it
         

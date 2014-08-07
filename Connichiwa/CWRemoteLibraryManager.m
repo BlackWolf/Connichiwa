@@ -67,7 +67,7 @@
 /**
  *  Tells the remote library the unique connichiwa identifier we are known under
  */
-- (void)_sendToView_remoteIdentifier;
+- (void)_sendToView_localInfo;
 
 /**
  *  Sends the given dictionary to the remote library as a JSON string
@@ -182,7 +182,7 @@
     
     self.state = CWRemoteLibraryManagerStateConnected;
     
-    [self _sendToView_remoteIdentifier];
+    [self _sendToView_localInfo];
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.webView setHidden:NO];
@@ -247,12 +247,11 @@
 }
 
 
-- (void)_sendToView_remoteIdentifier
+- (void)_sendToView_localInfo
 {
-    NSDictionary *data = @{
-                           @"type": @"remoteidentifier",
-                           @"identifier": self.appState.identifier
-                           };
+    NSMutableDictionary *data = [[self.appState deviceInfo] mutableCopy];
+    [data setObject:@"localinfo" forKey:@"type"];
+    
     [self _sendToView_dictionary:data];
 }
 

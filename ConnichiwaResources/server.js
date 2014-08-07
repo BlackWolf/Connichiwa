@@ -102,7 +102,6 @@ function cleanupWebsocketConnection(wsConnection)
 
 var onLocalMessage = function(message)
 {
-  log(4, "Message from web library: " + message);
   var object = JSON.parse(message);
 
   if (object.target === "broadcast")
@@ -203,7 +202,7 @@ var onUnidentifiedRemoteMessage = function(wsConnection)
         wsConnection.on("error", onLocalError);
       }
 
-      if (object.type === "remoteidentifier")
+      if (object.type === "remoteinfo")
       {
         log(3, "Websocket was determined to be remote");
         wsRemoteConnections[object.identifier] = wsConnection;
@@ -295,8 +294,11 @@ function sendToDevice(identifier, message)
     return;
   }
 
-  log(4, "Trying to send message to remote device " + identifier);
-  if (identifier in wsRemoteConnections === false) return;
+  if (identifier in wsRemoteConnections === false) {
+    log(4, "Message to remote device " + identifier + " WAS LOST(!), the device does not exist: " + message);
+    return;
+  }
+  
   log(4, "Sending message to remote device " + identifier + ": " + message);
   wsRemoteConnections[identifier].send(message);
 }

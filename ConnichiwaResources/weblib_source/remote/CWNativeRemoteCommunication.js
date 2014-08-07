@@ -50,7 +50,7 @@ var CWNativeRemoteCommunication = OOP.createSingleton("Connichiwa", "CWNativeRem
       case "runsnative":          this._parseRunsNative(object); break;
       case "connectwebsocket":    this._parseConnectWebsocket(object); break;
       case "cwdebug":             this._parseDebug(object); break;
-      case "remoteidentifier":    this._parseRemoteIdentifier(object); break;
+      case "localinfo":           this._parseLocalInfo(object); break;
       case "disconnectwebsocket": this._parseDisconnectWebsocket(object); break;
     }
   },
@@ -74,9 +74,10 @@ var CWNativeRemoteCommunication = OOP.createSingleton("Connichiwa", "CWNativeRem
   },
 
 
-  _parseRemoteIdentifier: function(message) 
+  _parseLocalInfo: function(message) 
   {
-    this.package.Connichiwa._setIdentifier(message.identifier);
+    this.package.Connichiwa._setLocalDevice(message);
+    //this.package.Connichiwa._setIdentifier(message.identifier);
   },
 
 

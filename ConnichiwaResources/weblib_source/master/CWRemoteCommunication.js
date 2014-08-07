@@ -26,22 +26,28 @@ var CWRemoteCommunication = OOP.createSingleton("Connichiwa", "CWRemoteCommunica
   {
     switch (message.type)
     {
-      case "remoteidentifier": this._parseRemoteIdentifier(message); break;
+      case "remoteinfo": this._parseRemoteInfo(message); break;
       case "pinchswipe": this._parsePinchSwipe(message); break;
     }
   },
   
   
-  _parseRemoteIdentifier: function(message)
+  _parseRemoteInfo: function(message)
   {
     var device = CWDeviceManager.getDeviceWithIdentifier(message.identifier);
+
+    //If we have a non-native remote no device might exist since
+    //no info was sent via BT. If so, create one now.
     if (device === null) {
-      device = new CWDevice(message); //TODO change message to something useful
+      device = new CWDevice(message); 
       CWDeviceManager.addDevice(device);
-      //TODO
-      //a device connected not over BT but directly over the websocket
-      //create a CWDevice and store it
+    } else {
+      //TODO although unnecessary, for cleanness sake we should probably
+      //overwrite any existing device data with the newly received data?
+      //If a device exists, that data should be the same as the one we received
+      //via BT anyways, so it shouldn't matter
     }
+    
     
     device.connectionState = CWDeviceConnectionState.CONNECTED;
     nativeCallRemoteDidConnect(device.getIdentifier());

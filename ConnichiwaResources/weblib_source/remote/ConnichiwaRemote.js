@@ -1,43 +1,24 @@
-/* global OOP, CWUtil, CWDebug, CWMasterCommunication, CWNativeRemoteCommunication, CWEventManager */
+/* global OOP, CWSystemInfo, CWUtil, CWDebug, CWMasterCommunication, CWNativeRemoteCommunication, CWEventManager */
 /* global runsNative */
 "use strict";
 
 
 OOP.extendSingleton("Connichiwa", "Connichiwa", {
-  "private _identifier"       : undefined,
+  "private _localDevice"      : undefined,
   "private _softDisconnected" : false,
 
 
   __constructor: function() {
     if (window.RUN_BY_CONNICHIWA_NATIVE !== true) {
-      //Set runs native to true
       this._connectWebsocket();
     }
-
-
-    //We wait a few second for the native layer to tell us we are running native
-    //If we are not, we connect to the websocket by ourselves to establish a connection
-    // var that = this;
-    // window.setTimeout(function() {
-    //   var runsNative = that.package.CWNativeRemoteCommunication.isRunningNative();
-    //   if (runsNative !== true) {
-    //     that._connectWebsocket();
-    //     //TODO
-    //     //timeout seems like a bad way to do it
-    //   }
-    // }, 1000);
-
-    // CWDebug.log(1, "ROFLROFLROFL");
-    // if (window.test === undefined) alert("noooo");
-    // else alert(window.test);
-    // CWNativeRemoteCommunication.callOnNative("nativeTest");
     CWEventManager.trigger("ready"); //trigger ready asap on remotes
   },
 
 
   "public getIdentifier": function() 
   {
-    return this._identifier;
+    return this._localDevice.getIdentifier();
   },
 
 
@@ -75,18 +56,29 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
   },
 
 
-  "package _setIdentifier": function(value) 
-  {
-    if (this._identifier !== undefined) return false;
+  // "package _setIdentifier": function(value) 
+  // {
+  //   if (this._identifier !== undefined) return false;
 
-    this._identifier = value;
-    CWDebug.log(2, "Identifier set to " + this._identifier);
+  //   this._identifier = value;
+  //   CWDebug.log(2, "Identifier set to " + this._identifier);
 
-    //Pass the new identifier to the master device
-    var data = { type: "remoteidentifier", identifier: this._identifier };
-    this.send(data);
+  //   //Pass the new identifier to the master device
+  //   var data = { type: "remoteidentifier", identifier: this._identifier };
+  //   this.send(data);
 
-    return true;
+  //   return true;
+  // },
+
+
+  "package _setLocalDevice": function(properties) {
+    if (this._localDevice !== undefined) return;
+
+    this._localDevice = new CWDevice(properties);
+
+    //var data = { type: "remoteinfo", };
+    properties.type = "remoteinfo";
+    this.send(properties);
   },
 
 
@@ -126,9 +118,14 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
       // nativeWebsocketDidOpen();
       CWNativeRemoteCommunication.callOnNative("nativeWebsocketDidOpen");
     } else {
-      //We have no native layer that backs us up
-      //Therefore, we create our own unique ID and set it
-      this._setIdentifier(CWUtil.createUUID());
+      //We have no native layer that delivers us accurate local device info
+      //Therefore, we create as much info as we can ourselves
+      var localInfo = {
+        identifier : CWUtil.createUUID(),
+        ppi        : CWSystemInfo.PPI()
+      };
+      this._setLocalDevice(localInfo);
+      // this._setIdentifier(CWUtil.createUUID());
     }
   },
 
