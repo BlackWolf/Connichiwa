@@ -184,7 +184,11 @@ var OOP = (function() {
 
     //Now that the class is built, call a constructor if there is any
     //Constructors have the magic name __constructor
-    if (theClass.private.__constructor) theClass.private.__constructor();
+    //We invoke the constructor in the next run loop, because we have to wait
+    //for other classes and parts of the package to be build
+    if (theClass.private.__constructor) {
+      window.setTimeout(theClass.private.__constructor, 0);
+    }
 
     return theClass.public;
   };
