@@ -184,7 +184,11 @@ var OOP = (function() {
 
     //Now that the class is built, call a constructor if there is any
     //Constructors have the magic name __constructor
-    if (theClass.private.__constructor) theClass.private.__constructor();
+    //We invoke the constructor in the next run loop, because we have to wait
+    //for other classes and parts of the package to be build
+    if (theClass.private.__constructor) {
+      window.setTimeout(theClass.private.__constructor, 0);
+    }
 
     return theClass.public;
   };
@@ -239,6 +243,122 @@ var CWDebug = (function()
     log          : log
   };
 })();
+/* global Connichiwa, CWSystemInfo, CWUtil, CWEventManager, CWDebug */
+/* global nativeCallConnectRemote */
+"use strict";
+
+
+
+var CWDeviceDiscoveryState = 
+{
+  DISCOVERED : "discovered",
+  LOST       : "lost"
+};
+
+var CWDeviceConnectionState =
+{
+  DISCONNECTED : "disconnected",
+  CONNECTING   : "connecting",
+  CONNECTED    : "connected"
+};
+
+
+
+/**
+ * An instance of this class describes a remote device that was detected nearby. It furthermore keeps information like the distance of the device and other connection-related information.
+ *
+ * @namespace CWDevice
+ */
+function CWDevice(properties)
+{
+  if (!properties.identifier) throw "Cannot instantiate CWDevice without an identifier";
+
+  this.discoveryState = CWDeviceDiscoveryState.LOST;
+  this.connectionState = CWDeviceConnectionState.DISCONNECTED;
+  this.distance = -1;
+  var _identifier = properties.identifier;
+  var _name = "unknown";
+  var _ppi = CWSystemInfo.DEFAULT_PPI();
+  var _isLocal = false; 
+
+  if (properties.name) _name = properties.name;
+  if (properties.ppi && properties.ppi > 0) _ppi = properties.ppi;
+  if (properties.isLocal) _isLocal = properties.isLocal;
+  
+  /**
+   * Returns the identifier of this device
+   *
+   * @returns {string} The identifier of this device
+   *
+   * @method getIdentifier
+   * @memberof CWDevice
+   */
+  this.getIdentifier = function() { return _identifier; };
+
+  this.getPPI = function() { return _ppi; };
+
+  this.isLocal = function() {
+    return this._isLocal;
+  };
+  
+  this.isNearby = function()
+  {
+    return (this.discoveryState === CWDeviceDiscoveryState.DISCOVERED);
+  };
+  
+  this.canBeConnected = function() 
+  { 
+    return (this.connectionState === CWDeviceConnectionState.DISCONNECTED && 
+      this.discoveryState === CWDeviceDiscoveryState.DISCOVERED);
+  };
+  
+  this.isConnected = function()
+  {
+    return (this.connectionState === CWDeviceConnectionState.CONNECTED);
+  };
+
+  return this;
+}
+
+
+CWDevice.prototype.connect = function()
+{
+  if (this.canBeConnected() === false) return;
+
+  this.connectionState = CWDeviceConnectionState.CONNECTING;
+  nativeCallConnectRemote(this.getIdentifier());
+};
+
+
+CWDevice.prototype.send = function(messageObject)
+{
+  Connichiwa.send(this.getIdentifier(), messageObject);
+  // messageObject.target = this.getIdentifier();
+  // Connichiwa._sendObject(messageObject);
+};
+
+
+/**
+ * Checks if the given object is equal to this device. Two devices are equal if they describe the same remote device (= their ID is the same). This does not do any pointer comparison.
+ *
+ * @param {object} object The object to compare this CWDevice to
+ * @returns {bool} true if the given object is equal to this CWDevice, otherwise false
+ */
+CWDevice.prototype.equalTo = function(object)
+{
+  if (CWDevice.prototype.isPrototypeOf(object) === false) return false;
+  return this.getIdentifier() === object.getIdentifier();
+};
+
+
+/**
+ * Returns a string representation of this CWDevice
+ *
+ * @returns {string} a string representation of this device
+ */
+CWDevice.prototype.toString = function() {
+  return this.getIdentifier();
+};
 /* global CWDebug */
 "use strict";
 
@@ -283,10 +403,8 @@ var CWEventManager = (function()
    */
   var trigger = function(event)
   {
-    CWDebug.log(4, "Triggering event " + event);
-
     if (!_events[event]) { 
-      CWDebug.log(4, "No callbacks  for " + event + " registered"); 
+      CWDebug.log(5, "No callbacks  for " + event + " registered"); 
       return; 
     }
 
@@ -294,6 +412,7 @@ var CWEventManager = (function()
     var args = Array.prototype.slice.call(arguments);
     args.shift();
 
+    CWDebug.log(4, "Triggering event " + event + " for "+_events[event].length + " callbacks");
     for (var i = 0; i < _events[event].length; i++)
     {
       var callback = _events[event][i];
@@ -306,7 +425,7 @@ var CWEventManager = (function()
     trigger  : trigger
   };
 })();
-/* global CWVector, CWDebug, Connichiwa, CWUtil */
+/* global CWEventManager, CWVector, CWDebug, Connichiwa, CWUtil */
 "use strict";
 
 
@@ -330,9 +449,9 @@ $(document).ready(function() {
     //the user starts swiping, then goes in the opposite direction and then in the
     //first direction again, which would be detected as a valid swipe.
     //To prevent this, we try to detect direction changes here by checking the angle
-    //between newTouch and touchLast and the previous finger vector.
+    //between the current and the previous finger vector.
     //
-    //Unfortunately, touches can have some "jitter", so we need to make sure that
+    //Unfortunately, touches can "jitter", so we need to make sure that
     //small (or very short) angle changes don't cancel the swipe. Because of this,
     //once we detect a direction change we save the last "valid" finger vector into
     //touchAngleReferenceVector. We then compare the following vectors to that 
@@ -440,17 +559,109 @@ $(document).ready(function() {
 
     if (edge === "invalid") return;
 
-    var message = {
-      type   : "pinchswipe",
-      device : Connichiwa.getIdentifier(),
+    var swipeData = {
+      // type   : "pinchswipe",
+      // device : Connichiwa.getIdentifier(),
       edge   : edge,
-      width  : screen.availWidth,
-      height : screen.availHeight,
+      // width  : screen.availWidth,
+      // height : screen.availHeight,
       x      : swipeEnd.x,
       y      : swipeEnd.y
     };
-    Connichiwa.send(message);
+    // Connichiwa.send(message);
+    CWEventManager.trigger("pinchswipe", swipeData);
   });
+});
+/* global OOP, gyro, CWEventManager, CWDebug */
+"use strict";
+
+
+
+var CWGyroscope = OOP.createSingleton("Connichiwa", "CWGyroscope", {
+  _lastMeasure: undefined,
+
+  __constructor: function() {
+    gyro.frequency = 1000;
+
+    // var that = this;
+    gyro.startTracking(this._onUpdate);
+  },
+
+  "private _onUpdate": function(o) {
+    if (this._lastMeasure === undefined) this._lastMeasure = o;
+    
+    //Send gyro update
+    var deltaAlpha = o.alpha - this._lastMeasure.alpha;
+    var deltaBeta  = o.beta  - this._lastMeasure.beta;
+    var deltaGamma = o.gamma - this._lastMeasure.gamma;
+    var gyroData = { 
+      alpha : o.alpha, 
+      beta  : o.beta, 
+      gamma : o.gamma,
+      delta : {
+        alpha : deltaAlpha, 
+        beta  : deltaBeta, 
+        gamma : deltaGamma
+      }
+    };
+    CWEventManager.trigger("gyroscopeUpdate", gyroData);
+
+    //Send accelerometer update
+    var deltaX = o.x - this._lastMeasure.x;
+    var deltaY = o.y - this._lastMeasure.y;
+    var deltaZ = o.z - this._lastMeasure.z;
+    var accelData = { 
+      x     : o.x, 
+      y     : o.y, 
+      z     : o.z,
+      delta : {
+        x : deltaX, 
+        y : deltaY, 
+        z : deltaZ
+      }
+    };
+    CWEventManager.trigger("accelerometerUpdate", accelData);
+
+    //We need to copy the values of o because o will be altered by gyro
+    this._lastMeasure = { x: o.x, y: o.y, z: o.z, alpha: o.alpha, beta: o.beta, gamma: o.gamma };
+  }
+});
+/* global OOP, Connichiwa, CWEventManager */
+"use strict";
+
+
+ 
+var CWPinchManager = OOP.createSingleton("Connichiwa", "CWPinchManager", {
+  "private _isPinched": false,
+
+
+  __constructor: function() {
+    Connichiwa.onMessage("wasPinched", this._onWasPinched);
+    CWEventManager.register("pinchswipe", this._onLocalSwipe);
+  },
+
+
+  _onWasPinched: function() {
+
+    //TODO set isPinched to true and listen to gyro updates that might cancel the pinch
+  },
+
+
+  _onLocalSwipe: function(swipeData) {
+    if (this.isPinched()) return;
+
+    //Prepare for the master and send away
+    swipeData.type   = "pinchswipe";
+    swipeData.device = Connichiwa.getIdentifier();
+    swipeData.width  = screen.availWidth;
+    swipeData.height = screen.availHeight;
+    Connichiwa.send(swipeData);
+  },
+
+
+  "public isPinched": function() {
+    return this._isPinched;
+  },
 });
 /* global OOP */
 "use strict";
@@ -466,14 +677,24 @@ var CWSystemInfo = OOP.createSingleton("Connichiwa", "CWSystemInfo", {
 
     this._ppi = this.DEFAULT_PPI();
 
+    // if (navigator.platform === "iPad") {
+    //   if (window.devicePixelRatio > 1) this._ppi = 264;
+    //   else this._ppi = 132;
+    // }
+
+    // if (navigator.platform === "iPhone" || navigator.platform === "iPod") {
+    //   if (window.devicePixelRatio > 1) this._ppi = 326;
+    //   else this._ppi = 264;
+    // }
+     
     if (navigator.platform === "iPad") {
-      if (window.devicePixelRatio > 1) this._ppi = 264;
-      else this._ppi = 132;
+      //TODO usually we would distinguish iPad Mini's (163dpi)
+      //but we can't, so we return normal iPad DPI
+      this._ppi = 132;
     }
 
     if (navigator.platform === "iPhone" || navigator.platform === "iPod") {
-      if (window.devicePixelRatio > 1) this._ppi = 326;
-      else this._ppi = 264;
+      this._ppi = 163;
     }
 
     return this._ppi;
@@ -1078,7 +1299,7 @@ var CWNativeMasterCommunication = OOP.createSingleton("Connichiwa", "CWNativeMas
 "use strict";
 
 
-var CWPinchManager = OOP.createSingleton("Connichiwa", "CWPinchManager", {
+OOP.extendSingleton("Connichiwa", "CWPinchManager", {
   "private _swipes"  : {},
   "private _devices" : {},
 
@@ -1185,8 +1406,16 @@ var CWPinchManager = OOP.createSingleton("Connichiwa", "CWPinchManager", {
 
     this._devices[newDevice.getIdentifier()] = newPinchDevice;
 
+    //Trigger a local (master) event and send a message to the newly pinched device
     CWDebug.log(3, "Detected pinch");
-    CWEventManager.trigger("pinch", newDevice);
+    CWEventManager.trigger("pinch", pinchedDevice.device, newDevice);
+
+    var pinchMessage = {
+      type                 : "wasPinched",
+      otherDevice          : pinchedDevice.device.getIdentifier(),
+      deviceTransformation : this.getDeviceTransformation(newDevice)
+    };
+    newDevice.send(pinchMessage);
   },
 
 
@@ -1278,22 +1507,28 @@ var CWRemoteCommunication = OOP.createSingleton("Connichiwa", "CWRemoteCommunica
   {
     switch (message.type)
     {
-      case "remoteidentifier": this._parseRemoteIdentifier(message); break;
+      case "remoteinfo": this._parseRemoteInfo(message); break;
       case "pinchswipe": this._parsePinchSwipe(message); break;
     }
   },
   
   
-  _parseRemoteIdentifier: function(message)
+  _parseRemoteInfo: function(message)
   {
     var device = CWDeviceManager.getDeviceWithIdentifier(message.identifier);
+
+    //If we have a non-native remote no device might exist since
+    //no info was sent via BT. If so, create one now.
     if (device === null) {
-      device = new CWDevice(message); //TODO change message to something useful
+      device = new CWDevice(message); 
       CWDeviceManager.addDevice(device);
-      //TODO
-      //a device connected not over BT but directly over the websocket
-      //create a CWDevice and store it
+    } else {
+      //TODO although unnecessary, for cleanness sake we should probably
+      //overwrite any existing device data with the newly received data?
+      //If a device exists, that data should be the same as the one we received
+      //via BT anyways, so it shouldn't matter
     }
+    
     
     device.connectionState = CWDeviceConnectionState.CONNECTED;
     nativeCallRemoteDidConnect(device.getIdentifier());

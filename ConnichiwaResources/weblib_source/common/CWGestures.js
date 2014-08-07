@@ -1,4 +1,4 @@
-/* global CWVector, CWDebug, Connichiwa, CWUtil */
+/* global CWEventManager, CWVector, CWDebug, Connichiwa, CWUtil */
 "use strict";
 
 
@@ -22,9 +22,9 @@ $(document).ready(function() {
     //the user starts swiping, then goes in the opposite direction and then in the
     //first direction again, which would be detected as a valid swipe.
     //To prevent this, we try to detect direction changes here by checking the angle
-    //between newTouch and touchLast and the previous finger vector.
+    //between the current and the previous finger vector.
     //
-    //Unfortunately, touches can have some "jitter", so we need to make sure that
+    //Unfortunately, touches can "jitter", so we need to make sure that
     //small (or very short) angle changes don't cancel the swipe. Because of this,
     //once we detect a direction change we save the last "valid" finger vector into
     //touchAngleReferenceVector. We then compare the following vectors to that 
@@ -132,15 +132,16 @@ $(document).ready(function() {
 
     if (edge === "invalid") return;
 
-    var message = {
-      type   : "pinchswipe",
-      device : Connichiwa.getIdentifier(),
+    var swipeData = {
+      // type   : "pinchswipe",
+      // device : Connichiwa.getIdentifier(),
       edge   : edge,
-      width  : screen.availWidth,
-      height : screen.availHeight,
+      // width  : screen.availWidth,
+      // height : screen.availHeight,
       x      : swipeEnd.x,
       y      : swipeEnd.y
     };
-    Connichiwa.send(message);
+    // Connichiwa.send(message);
+    CWEventManager.trigger("pinchswipe", swipeData);
   });
 });

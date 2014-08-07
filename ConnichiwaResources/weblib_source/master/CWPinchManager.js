@@ -2,7 +2,7 @@
 "use strict";
 
 
-var CWPinchManager = OOP.createSingleton("Connichiwa", "CWPinchManager", {
+OOP.extendSingleton("Connichiwa", "CWPinchManager", {
   "private _swipes"  : {},
   "private _devices" : {},
 
@@ -109,8 +109,16 @@ var CWPinchManager = OOP.createSingleton("Connichiwa", "CWPinchManager", {
 
     this._devices[newDevice.getIdentifier()] = newPinchDevice;
 
+    //Trigger a local (master) event and send a message to the newly pinched device
     CWDebug.log(3, "Detected pinch");
-    CWEventManager.trigger("pinch", newDevice);
+    CWEventManager.trigger("pinch", pinchedDevice.device, newDevice);
+
+    var pinchMessage = {
+      type                 : "wasPinched",
+      otherDevice          : pinchedDevice.device.getIdentifier(),
+      deviceTransformation : this.getDeviceTransformation(newDevice)
+    };
+    newDevice.send(pinchMessage);
   },
 
 

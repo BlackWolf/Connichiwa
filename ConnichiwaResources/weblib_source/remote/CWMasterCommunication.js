@@ -1,4 +1,4 @@
-/* global OOP, CWDebug */
+/* global OOP, Connichiwa, CWEventManager, CWDebug */
 "use strict";
 
 
@@ -59,5 +59,9 @@ var CWMasterCommunication = OOP.createSingleton("Connichiwa", "CWMasterCommunica
           CWDebug.log(1, "SCRIPT LOAD FAILED HARD: "+t);
         });
     }
+
+    // if (message.type === "wasPinched") {
+    //   CWEventManager.trigger("wasPinched", message);
+    // }
   },
 });
