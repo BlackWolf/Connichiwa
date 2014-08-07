@@ -6,6 +6,7 @@
 var CWPinchManager = OOP.createSingleton("Connichiwa", "CWPinchManager", {
   "private _isPinched": false,
   "private _deviceTransformation": { x: 0, y: 0, scale: 1.0 },
+  "private _gyroDataOnPinch": undefined,
 
 
   __constructor: function() {
@@ -18,6 +19,7 @@ var CWPinchManager = OOP.createSingleton("Connichiwa", "CWPinchManager", {
 
 
   _onWasPinched: function(message) {
+    this._gyroDataOnPinch = this.package.CWGyroscope.getLastGyroscopeMeasure();
     this._deviceTransformation = message.deviceTransformation;
     this._isPinched = true;
 
@@ -26,6 +28,7 @@ var CWPinchManager = OOP.createSingleton("Connichiwa", "CWPinchManager", {
 
 
   _onWasUnpinched: function(message) {
+    this._gyroDataOnPinch = undefined;
     this._deviceTransformation = { x: 0, y: 0, scale: 1.0 };
     this._isPinched = false;
 
@@ -47,10 +50,21 @@ var CWPinchManager = OOP.createSingleton("Connichiwa", "CWPinchManager", {
 
   _onGyroUpdate: function(gyroData) {
     if (this.isPinched() === false) return;
-    
-    if (gyroData.beta > 20) {
+
+    //Might happen if _onWasPinched is called before the first gyro measure arrived
+    if (this._gyroDataOnPinch === undefined) {
+      this._gyroDataOnPinch = gyroData;
+    }
+
+    var deltaAlpha = Math.abs(gyroData.alpha - this._gyroDataOnPinch.alpha);
+    var deltaBeta  = Math.abs(gyroData.beta  - this._gyroDataOnPinch.beta);
+    var deltaGamma = Math.abs(gyroData.gamma - this._gyroDataOnPinch.gamma);
+
+    //If the device was rotated more than 25º in any direction, we back
+    //out of the current pinch
+    if (deltaAlpha >= 25 || deltaBeta >= 25 || deltaGamma >= 25) {
       var data = {
-        type   : "didQuitPinch",
+        type   : "quitPinch",
         device : Connichiwa.getIdentifier()
       };
       Connichiwa.send(data);

@@ -55,9 +55,12 @@ OOP.extendSingleton("Connichiwa", "CWPinchManager", {
   },
 
 
-  "package removeDevice": function(identifier) {
+  "package unpinchDevice": function(identifier) {
     if (identifier in this._devices) {
       delete this._devices[identifier];
+
+      var unpinchMessage = { type : "wasUnpinched" };
+      Connichiwa.send(identifier, unpinchMessage);
     }
   },
 

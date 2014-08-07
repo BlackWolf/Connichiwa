@@ -589,8 +589,6 @@ var CWGyroscope = OOP.createSingleton("Connichiwa", "CWGyroscope", {
 
   "private _onUpdate": function(o) {
     if (this._lastMeasure === undefined) this._lastMeasure = o;
-
-    CWDebug.log(1, o.beta);
     
     //Send gyro update
     var deltaAlpha = o.alpha - this._lastMeasure.alpha;
@@ -642,6 +640,8 @@ var CWPinchManager = OOP.createSingleton("Connichiwa", "CWPinchManager", {
     Connichiwa.onMessage("wasPinched", this._onWasPinched);
     Connichiwa.onMessage("wasUnpinched", this._onWasUnpinched);
     CWEventManager.register("pinchswipe", this._onLocalSwipe);
+
+    CWEventManager.register("gyroscopeUpdate", this._onGyroUpdate);
   },
 
 
@@ -649,7 +649,7 @@ var CWPinchManager = OOP.createSingleton("Connichiwa", "CWPinchManager", {
     this._deviceTransformation = message.deviceTransformation;
     this._isPinched = true;
 
-    CWEventManager.register("gyroscopeUpdate", this._onGyroUpdate);
+    //TODO register for gyroscopeUpdate instead of in constructor
   },
 
 
@@ -674,6 +674,8 @@ var CWPinchManager = OOP.createSingleton("Connichiwa", "CWPinchManager", {
 
 
   _onGyroUpdate: function(gyroData) {
+    if (this.isPinched() === false) return;
+    
     if (gyroData.beta > 20) {
       var data = {
         type   : "didQuitPinch",
