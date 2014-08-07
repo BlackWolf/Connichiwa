@@ -8,6 +8,8 @@ OOP.extendSingleton("Connichiwa", "CWPinchManager", {
 
 
   "public getDeviceTransformation": function(device) {
+    if (device === undefined) device = CWDeviceManager.getLocalDevice();
+
     var pinchedDevice = this._getPinchedDevice(device);
     if (pinchedDevice === undefined) return { x: 0, y: 0, scale: 1.0 };
 
@@ -50,6 +52,13 @@ OOP.extendSingleton("Connichiwa", "CWPinchManager", {
     this._swipes[data.device] = { date: now, data: data };
 
     //TODO remove the swipes?
+  },
+
+
+  "package removeDevice": function(identifier) {
+    if (identifier in this._devices) {
+      delete this._devices[identifier];
+    }
   },
 
 

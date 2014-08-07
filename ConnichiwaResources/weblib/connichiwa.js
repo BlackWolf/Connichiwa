@@ -581,7 +581,7 @@ var CWGyroscope = OOP.createSingleton("Connichiwa", "CWGyroscope", {
   _lastMeasure: undefined,
 
   __constructor: function() {
-    gyro.frequency = 1000;
+    gyro.frequency = 500;
 
     // var that = this;
     gyro.startTracking(this._onUpdate);
@@ -589,6 +589,8 @@ var CWGyroscope = OOP.createSingleton("Connichiwa", "CWGyroscope", {
 
   "private _onUpdate": function(o) {
     if (this._lastMeasure === undefined) this._lastMeasure = o;
+
+    CWDebug.log(1, o.beta);
     
     //Send gyro update
     var deltaAlpha = o.alpha - this._lastMeasure.alpha;
@@ -633,17 +635,29 @@ var CWGyroscope = OOP.createSingleton("Connichiwa", "CWGyroscope", {
  
 var CWPinchManager = OOP.createSingleton("Connichiwa", "CWPinchManager", {
   "private _isPinched": false,
+  "private _deviceTransformation": { x: 0, y: 0, scale: 1.0 },
 
 
   __constructor: function() {
     Connichiwa.onMessage("wasPinched", this._onWasPinched);
+    Connichiwa.onMessage("wasUnpinched", this._onWasUnpinched);
     CWEventManager.register("pinchswipe", this._onLocalSwipe);
   },
 
 
-  _onWasPinched: function() {
+  _onWasPinched: function(message) {
+    this._deviceTransformation = message.deviceTransformation;
+    this._isPinched = true;
 
-    //TODO set isPinched to true and listen to gyro updates that might cancel the pinch
+    CWEventManager.register("gyroscopeUpdate", this._onGyroUpdate);
+  },
+
+
+  _onWasUnpinched: function(message) {
+    this._deviceTransformation = { x: 0, y: 0, scale: 1.0 };
+    this._isPinched = false;
+
+    //TODO unregister from gyroscopeUpdate
   },
 
 
@@ -659,8 +673,24 @@ var CWPinchManager = OOP.createSingleton("Connichiwa", "CWPinchManager", {
   },
 
 
+  _onGyroUpdate: function(gyroData) {
+    if (gyroData.beta > 20) {
+      var data = {
+        type   : "didQuitPinch",
+        device : Connichiwa.getIdentifier()
+      };
+      Connichiwa.send(data);
+    }
+  },
+
+
   "public isPinched": function() {
     return this._isPinched;
+  },
+
+
+  "public getDeviceTransformation": function() {
+    return this._deviceTransformation;
   },
 });
 /* global OOP */
@@ -1305,6 +1335,8 @@ OOP.extendSingleton("Connichiwa", "CWPinchManager", {
 
 
   "public getDeviceTransformation": function(device) {
+    if (device === undefined) device = CWDeviceManager.getLocalDevice();
+
     var pinchedDevice = this._getPinchedDevice(device);
     if (pinchedDevice === undefined) return { x: 0, y: 0, scale: 1.0 };
 
@@ -1347,6 +1379,13 @@ OOP.extendSingleton("Connichiwa", "CWPinchManager", {
     this._swipes[data.device] = { date: now, data: data };
 
     //TODO remove the swipes?
+  },
+
+
+  "package removeDevice": function(identifier) {
+    if (identifier in this._devices) {
+      delete this._devices[identifier];
+    }
   },
 
 
@@ -1479,7 +1518,7 @@ OOP.extendSingleton("Connichiwa", "CWPinchManager", {
     return "invalid";
   }
 });
-/* global OOP, CWPinchManager, CWDebug, CWDeviceManager, CWDeviceConnectionState, CWEventManager */
+/* global OOP, Connichiwa, CWPinchManager, CWDebug, CWDeviceManager, CWDeviceConnectionState, CWEventManager */
 /* global nativeCallRemoteDidConnect */
 "use strict";
 
@@ -1507,8 +1546,9 @@ var CWRemoteCommunication = OOP.createSingleton("Connichiwa", "CWRemoteCommunica
   {
     switch (message.type)
     {
-      case "remoteinfo": this._parseRemoteInfo(message); break;
-      case "pinchswipe": this._parsePinchSwipe(message); break;
+      case "remoteinfo"   : this._parseRemoteInfo(message); break;
+      case "pinchswipe"   : this._parsePinchSwipe(message); break;
+      case "didQuitPinch" : this._parseDidQuitPinch(message); break;
     }
   },
   
@@ -1543,6 +1583,15 @@ var CWRemoteCommunication = OOP.createSingleton("Connichiwa", "CWRemoteCommunica
 
   _parsePinchSwipe: function(message) {
     this.package.CWPinchManager.detectedSwipe(message);
+  },
+
+  _parseDidQuitPinch: function(message) {
+    this.package.CWPinchManager.removeDevice(message.device);
+
+    var unpinchMessage = {
+      type : "wasUnpinched"
+    };
+    Connichiwa.send(message.device, unpinchMessage);
   },
 });
 /* global OOP, CWDebug, CWRemoteCommunication, CWEventManager, CWUtil, CWDeviceManager */

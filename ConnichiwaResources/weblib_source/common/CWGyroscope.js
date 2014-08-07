@@ -7,7 +7,7 @@ var CWGyroscope = OOP.createSingleton("Connichiwa", "CWGyroscope", {
   _lastMeasure: undefined,
 
   __constructor: function() {
-    gyro.frequency = 1000;
+    gyro.frequency = 500;
 
     // var that = this;
     gyro.startTracking(this._onUpdate);

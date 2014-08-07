@@ -581,7 +581,7 @@ var CWGyroscope = OOP.createSingleton("Connichiwa", "CWGyroscope", {
   _lastMeasure: undefined,
 
   __constructor: function() {
-    gyro.frequency = 1000;
+    gyro.frequency = 500;
 
     // var that = this;
     gyro.startTracking(this._onUpdate);
@@ -589,6 +589,8 @@ var CWGyroscope = OOP.createSingleton("Connichiwa", "CWGyroscope", {
 
   "private _onUpdate": function(o) {
     if (this._lastMeasure === undefined) this._lastMeasure = o;
+
+    CWDebug.log(1, o.beta);
     
     //Send gyro update
     var deltaAlpha = o.alpha - this._lastMeasure.alpha;
@@ -633,17 +635,29 @@ var CWGyroscope = OOP.createSingleton("Connichiwa", "CWGyroscope", {
  
 var CWPinchManager = OOP.createSingleton("Connichiwa", "CWPinchManager", {
   "private _isPinched": false,
+  "private _deviceTransformation": { x: 0, y: 0, scale: 1.0 },
 
 
   __constructor: function() {
     Connichiwa.onMessage("wasPinched", this._onWasPinched);
+    Connichiwa.onMessage("wasUnpinched", this._onWasUnpinched);
     CWEventManager.register("pinchswipe", this._onLocalSwipe);
   },
 
 
-  _onWasPinched: function() {
+  _onWasPinched: function(message) {
+    this._deviceTransformation = message.deviceTransformation;
+    this._isPinched = true;
 
-    //TODO set isPinched to true and listen to gyro updates that might cancel the pinch
+    CWEventManager.register("gyroscopeUpdate", this._onGyroUpdate);
+  },
+
+
+  _onWasUnpinched: function(message) {
+    this._deviceTransformation = { x: 0, y: 0, scale: 1.0 };
+    this._isPinched = false;
+
+    //TODO unregister from gyroscopeUpdate
   },
 
 
@@ -659,8 +673,24 @@ var CWPinchManager = OOP.createSingleton("Connichiwa", "CWPinchManager", {
   },
 
 
+  _onGyroUpdate: function(gyroData) {
+    if (gyroData.beta > 20) {
+      var data = {
+        type   : "didQuitPinch",
+        device : Connichiwa.getIdentifier()
+      };
+      Connichiwa.send(data);
+    }
+  },
+
+
   "public isPinched": function() {
     return this._isPinched;
+  },
+
+
+  "public getDeviceTransformation": function() {
+    return this._deviceTransformation;
   },
 });
 /* global OOP */
