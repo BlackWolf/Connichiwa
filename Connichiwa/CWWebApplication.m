@@ -176,22 +176,33 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
 
 - (int)ppi
 {
-    //iPhone and iPod are the same: 326ppi for retina, 163 otherwise
-    if ([CWiDevice isiPhone] || [CWiDevice isiPod]) {
-        if ([CWiDevice isRetina])   return 326;
-        else                        return 163;
-    }
+//    //iPhone and iPod are the same: 326ppi for retina, 163 otherwise
+//    if ([CWiDevice isiPhone] || [CWiDevice isiPod]) {
+//        if ([CWiDevice isRetina])   return 326;
+//        else                        return 163;
+//    }
+//    
+//    //iPad's are a little more complex: 264ppi for retina, 132 for non-retina
+//    //Exception: The new iPad mini 2G has 326ppi.
+//    if ([CWiDevice isiPad]) {
+//        if ([CWiDevice isRetina]) {
+//            if ([CWiDevice model] >= CWiDeviceModeliPadMini2G)  return 326;
+//            else                                                return 264;
+//        } else {
+//            if ([CWiDevice model] == CWiDeviceModeliPadMini1G)  return 163;
+//            else                                                return 132;
+//        }
+//    }
+//    
+//    return -1;
     
-    //iPad's are a little more complex: 264ppi for retina, 132 for non-retina
-    //Exception: The new iPad mini 2G has 326ppi.
+    if ([CWiDevice isiPhone] || [CWiDevice isiPod]) return 163;
+    
     if ([CWiDevice isiPad]) {
-        if ([CWiDevice isRetina]) {
-            if ([CWiDevice model] >= CWiDeviceModeliPadMini2G)  return 326;
-            else                                                return 264;
-        } else {
-            if ([CWiDevice model] == CWiDeviceModeliPadMini1G)  return 163;
-            else                                                return 132;
-        }
+        if ([CWiDevice model] == CWiDeviceModeliPadMini1G) return 163;
+        if ([CWiDevice model] == CWiDeviceModeliPadMini2G) return 163;
+        
+        return 132;
     }
     
     return -1;

@@ -42,10 +42,8 @@ var CWEventManager = (function()
    */
   var trigger = function(event)
   {
-    CWDebug.log(4, "Triggering event " + event);
-
     if (!_events[event]) { 
-      CWDebug.log(4, "No callbacks  for " + event + " registered"); 
+      CWDebug.log(5, "No callbacks  for " + event + " registered"); 
       return; 
     }
 
@@ -53,6 +51,7 @@ var CWEventManager = (function()
     var args = Array.prototype.slice.call(arguments);
     args.shift();
 
+    CWDebug.log(4, "Triggering event " + event + " for "+_events[event].length + " callbacks");
     for (var i = 0; i < _events[event].length; i++)
     {
       var callback = _events[event][i];
