@@ -46,6 +46,11 @@ var CWUtil = (function()
   };
 
 
+  var isString = function(value) {
+    return (typeof(value) === "string");
+  };
+
+
   /**
    * Checks if the given parameter is an object and not null.
    *

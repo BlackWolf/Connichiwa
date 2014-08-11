@@ -1,4 +1,4 @@
-/* global CWDebug */
+/* global CWUtil, CWDebug */
 "use strict";
 
 
@@ -40,18 +40,28 @@ var CWEventManager = (function()
    *
    * @memberof CWEventManager
    */
-  var trigger = function(event)
+  var trigger = function(logPrio, event)
   {
+    //Get the arguments passed to trigger() without logPrio and event
+    var args = Array.prototype.slice.call(arguments);
+    if (CWUtil.isString(logPrio) === true) {
+      //Only the event was given, default logPrio is used
+      event = logPrio;
+      logPrio = 4;
+      args.shift();
+    } else {
+      //logPrio and event were given, remove both from args
+      args.shift();
+      args.shift();
+    }
+    
+
     if (!_events[event]) { 
       CWDebug.log(5, "No callbacks  for " + event + " registered"); 
       return; 
     }
 
-    //Get all arguments passed to trigger() and remove the event argument
-    var args = Array.prototype.slice.call(arguments);
-    args.shift();
-
-    CWDebug.log(4, "Triggering event " + event + " for "+_events[event].length + " callbacks");
+    CWDebug.log(logPrio, "Triggering event " + event + " for "+_events[event].length + " callbacks");
     for (var i = 0; i < _events[event].length; i++)
     {
       var callback = _events[event][i];

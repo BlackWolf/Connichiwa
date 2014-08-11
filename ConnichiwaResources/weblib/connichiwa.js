@@ -62,6 +62,7 @@ var OOP = (function() {
   var _extendSingletonInPackage = function(packageName, className, properties) {
     if (packageName in classes === false) return;
     if (className in classes[packageName] === false) return;
+    var addedConstructor = false;
     var theClass = classes[packageName][className];
 
     var getter = function(scope, propertyName) { return function() { return scope[propertyName]; }; };
@@ -116,6 +117,10 @@ var OOP = (function() {
               theClass.package[propertyName]  = theMethod;
               theClass.public[propertyName]   = theMethod;
               break;
+          }
+
+          if (modifiedPropertyName === "__constructor") {
+            addedConstructor = true;
           }
 
           //
@@ -186,7 +191,7 @@ var OOP = (function() {
     //Constructors have the magic name __constructor
     //We invoke the constructor in the next run loop, because we have to wait
     //for other classes and parts of the package to be build
-    if (theClass.private.__constructor) {
+    if (addedConstructor === true) {
       window.setTimeout(theClass.private.__constructor, 0);
     }
 
@@ -359,7 +364,7 @@ CWDevice.prototype.equalTo = function(object)
 CWDevice.prototype.toString = function() {
   return this.getIdentifier();
 };
-/* global CWDebug */
+/* global CWUtil, CWDebug */
 "use strict";
 
 
@@ -401,18 +406,28 @@ var CWEventManager = (function()
    *
    * @memberof CWEventManager
    */
-  var trigger = function(event)
+  var trigger = function(logPrio, event)
   {
+    //Get the arguments passed to trigger() without logPrio and event
+    var args = Array.prototype.slice.call(arguments);
+    if (CWUtil.isString(logPrio) === true) {
+      //Only the event was given, default logPrio is used
+      event = logPrio;
+      logPrio = 4;
+      args.shift();
+    } else {
+      //logPrio and event were given, remove both from args
+      args.shift();
+      args.shift();
+    }
+    
+
     if (!_events[event]) { 
       CWDebug.log(5, "No callbacks  for " + event + " registered"); 
       return; 
     }
 
-    //Get all arguments passed to trigger() and remove the event argument
-    var args = Array.prototype.slice.call(arguments);
-    args.shift();
-
-    CWDebug.log(4, "Triggering event " + event + " for "+_events[event].length + " callbacks");
+    CWDebug.log(logPrio, "Triggering event " + event + " for "+_events[event].length + " callbacks");
     for (var i = 0; i < _events[event].length; i++)
     {
       var callback = _events[event][i];
@@ -582,16 +597,30 @@ $(document).ready(function() {
 
 
 var CWGyroscope = OOP.createSingleton("Connichiwa", "CWGyroscope", {
+  // _requests: 0,
+  // _running: false,
   _lastMeasure: undefined,
 
   __constructor: function() {
-    gyro.frequency = 500;
-    gyro.startTracking(this._onUpdate);
+  gyro.frequency = 500;
+  gyro.startTracking(this._onUpdate);    
 
     //TODO we should only start tracking if necessary
     //necessary for now means the device has been pinched
     //but how do we best figure that out?
   },
+
+
+  // "public startUpdates": function() {
+  //   this._requests++;
+
+
+  // },
+
+
+  // "public done": function() {
+
+  // },
 
   "private _onUpdate": function(o) {
     if (o.alpha === null || o.beta === null || o.gamma === null ||
@@ -613,7 +642,7 @@ var CWGyroscope = OOP.createSingleton("Connichiwa", "CWGyroscope", {
         gamma : deltaGamma
       }
     };
-    CWEventManager.trigger("gyroscopeUpdate", gyroData);
+    CWEventManager.trigger(5, "gyroscopeUpdate", gyroData);
 
     //Send accelerometer update
     var deltaX = o.x - this._lastMeasure.x;
@@ -629,7 +658,7 @@ var CWGyroscope = OOP.createSingleton("Connichiwa", "CWGyroscope", {
         z : deltaZ
       }
     };
-    CWEventManager.trigger("accelerometerUpdate", accelData);
+    CWEventManager.trigger(5, "accelerometerUpdate", accelData);
 
     //We need to copy the values of o because o will be altered by gyro
     this._lastMeasure = { x: o.x, y: o.y, z: o.z, alpha: o.alpha, beta: o.beta, gamma: o.gamma };
@@ -669,11 +698,13 @@ var CWPinchManager = OOP.createSingleton("Connichiwa", "CWPinchManager", {
 
 
   __constructor: function() {
-    Connichiwa.onMessage("wasPinched", this._onWasPinched);
+    Connichiwa.onMessage("wasPinched",   this._onWasPinched);
     Connichiwa.onMessage("wasUnpinched", this._onWasUnpinched);
-    CWEventManager.register("pinchswipe", this._onLocalSwipe);
 
-    CWEventManager.register("gyroscopeUpdate", this._onGyroUpdate);
+    CWEventManager.register("pinchswipe",          this._onLocalSwipe);
+
+    CWEventManager.register("gyroscopeUpdate",     this._onGyroUpdate);
+    CWEventManager.register("accelerometerUpdate", this._onAccelerometerUpdate);
   },
 
 
@@ -696,19 +727,6 @@ var CWPinchManager = OOP.createSingleton("Connichiwa", "CWPinchManager", {
 
 
   _onLocalSwipe: function(swipeData) {
-    //availWidth/Height do not change when a device is rotated
-    //Therefore, we use innerHeight/Width to detect landscape and switch the values
-    // var screenWidth  = screen.availWidth;
-    // var screenHeight = screen.availHeight;
-    // if (window.innerHeight < window.innerWidth) { //landscape orienatation
-    //   screenWidth  = screen.availHeight;
-    //   screenHeight = screen.availWidth;
-    // }
-
-    // CWDebug.log(1, $(window).width()+" and "+$(window).height());
-    // CWDebug.log(1, window.outerWidth+" / "+window.outerHeight);
-    // CWDebug.log(1, JSON.stringify($("body").offset()));
-
     swipeData.type   = "pinchswipe";
     swipeData.device = Connichiwa.getIdentifier();
     swipeData.width  = CWSystemInfo.viewportWidth();
@@ -725,34 +743,44 @@ var CWPinchManager = OOP.createSingleton("Connichiwa", "CWPinchManager", {
       this._gyroDataOnPinch = gyroData;
     }
 
-    //If the device was tilted more than 20º in any direction, we back our of the pinch
-    //A problem are angles such as 1º and 359º - it's a 2º difference but gives 358º. 
-    //Because of that, we use a modulo to get the smallest possible difference    
+    //If the device is tilted more than 20º, we back our of the pinch
+    //We give a little more room for alpha. Alpha means the device was tilted on the
+    //table, which is not as bad as actually picking it up.  
     var deltaAlpha = Math.abs(gyroData.alpha - this._gyroDataOnPinch.alpha);
     var deltaBeta  = Math.abs(gyroData.beta  - this._gyroDataOnPinch.beta);
     var deltaGamma = Math.abs(gyroData.gamma - this._gyroDataOnPinch.gamma);
+    //Modulo gives us the smallest possible angle (e.g. 1º and 359º gives us 2º)
     deltaAlpha = Math.abs((deltaAlpha + 180) % 360 - 180);
     deltaBeta  = Math.abs((deltaBeta  + 180) % 360 - 180);
     deltaGamma = Math.abs((deltaGamma + 180) % 360 - 180);
 
-    // CWDebug.log(1, "DELTAS: "+deltaAlpha.toFixed(2)+", "+deltaBeta.toFixed(2)+", "+deltaGamma.toFixed(2));
-    if (deltaAlpha >= 20 || deltaBeta >= 20 || deltaGamma >= 20) {
-      var data = {
-        type   : "quitPinch",
-        device : Connichiwa.getIdentifier()
-      };
-      Connichiwa.send(data);
+    if (deltaAlpha >= 35 || deltaBeta >= 20 || deltaGamma >= 20) {
+      this._quitPinch();
     }
+  },
 
-    //TODO
-    //we need to add accelerometer support. Using the gyroscope only works pretty well
-    //with something around 20-25 degrees, but you can move devices from one side of
-    //a device to another without it being unpinched. This should be captured with the
-    //accelerometer. Of course, if we REALLY CAREFULLY move a device we can still trick
-    //the system, but whatever
-    //TODO furthermore, it might be good to give some more room for deltaAlpha - tilting
-    //the device on the table without picking it up is not so bad, except for 45º or more 
-    //or something like that
+
+  _onAccelerometerUpdate: function(accelData) {
+    if (this.isPinched() === false) return;
+
+    var x = Math.abs(accelData.x);
+    var y = Math.abs(accelData.y);
+    var z = Math.abs(accelData.z + 9.8); //earth's gravitational force ~ -9.8
+
+    //1.0 seems about a good value which doesn't trigger on every little shake,
+    //but triggers when the device is actually moved
+    if (x >= 1.0 || y >= 1.0 || z >= 1.0) {
+      this._quitPinch();
+    }
+  },
+
+
+  "private _quitPinch": function() {
+    var data = {
+      type   : "quitPinch",
+      device : Connichiwa.getIdentifier()
+    };
+    Connichiwa.send(data);
   },
 
 
@@ -868,6 +896,11 @@ var CWUtil = (function()
   var isInt = function(value)
   {
     return (value === parseInt(value));
+  };
+
+
+  var isString = function(value) {
+    return (typeof(value) === "string");
   };
 
 
@@ -1646,9 +1679,9 @@ var CWRemoteCommunication = OOP.createSingleton("Connichiwa", "CWRemoteCommunica
   {
     switch (message.type)
     {
-      case "remoteinfo" : this._parseRemoteInfo(message); break;
-      case "pinchswipe" : this._parsePinchSwipe(message); break;
-      case "quitPinch"  : this._parseQuitPinch(message); break;
+      case "remoteinfo" :  this._parseRemoteInfo(message); break;
+      case "pinchswipe" :  this._parsePinchSwipe(message); break;
+      case "quitPinch"  :  this._parseQuitPinch(message); break;
     }
   },
   
@@ -1802,7 +1835,7 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
     CWDebug.log(4, "Received message: " + e.data);
     
     //It seems that reacting immediatly to a websocket message
-    //sometimes causes crashes in Safari. I am unsure why.
+    //sometimes causes crashes in UIWebView. I am unsure why.
     //We use requestAnimationFrame in an attempt to prevent those crashes
     window.requestAnimationFrame(function() {
       CWRemoteCommunication.parse(message);

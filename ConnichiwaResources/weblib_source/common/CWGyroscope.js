@@ -4,16 +4,30 @@
 
 
 var CWGyroscope = OOP.createSingleton("Connichiwa", "CWGyroscope", {
+  // _requests: 0,
+  // _running: false,
   _lastMeasure: undefined,
 
   __constructor: function() {
-    gyro.frequency = 500;
-    gyro.startTracking(this._onUpdate);
+  gyro.frequency = 500;
+  gyro.startTracking(this._onUpdate);    
 
     //TODO we should only start tracking if necessary
     //necessary for now means the device has been pinched
     //but how do we best figure that out?
   },
+
+
+  // "public startUpdates": function() {
+  //   this._requests++;
+
+
+  // },
+
+
+  // "public done": function() {
+
+  // },
 
   "private _onUpdate": function(o) {
     if (o.alpha === null || o.beta === null || o.gamma === null ||
@@ -35,7 +49,7 @@ var CWGyroscope = OOP.createSingleton("Connichiwa", "CWGyroscope", {
         gamma : deltaGamma
       }
     };
-    CWEventManager.trigger("gyroscopeUpdate", gyroData);
+    CWEventManager.trigger(5, "gyroscopeUpdate", gyroData);
 
     //Send accelerometer update
     var deltaX = o.x - this._lastMeasure.x;
@@ -51,7 +65,7 @@ var CWGyroscope = OOP.createSingleton("Connichiwa", "CWGyroscope", {
         z : deltaZ
       }
     };
-    CWEventManager.trigger("accelerometerUpdate", accelData);
+    CWEventManager.trigger(5, "accelerometerUpdate", accelData);
 
     //We need to copy the values of o because o will be altered by gyro
     this._lastMeasure = { x: o.x, y: o.y, z: o.z, alpha: o.alpha, beta: o.beta, gamma: o.gamma };
