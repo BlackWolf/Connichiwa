@@ -4,8 +4,6 @@
 
 
 var CWGyroscope = OOP.createSingleton("Connichiwa", "CWGyroscope", {
-  // _requests: 0,
-  // _running: false,
   _lastMeasure: undefined,
 
   __constructor: function() {
@@ -13,21 +11,9 @@ var CWGyroscope = OOP.createSingleton("Connichiwa", "CWGyroscope", {
   gyro.startTracking(this._onUpdate);    
 
     //TODO we should only start tracking if necessary
-    //necessary for now means the device has been pinched
+    //necessary for now means the device has been stitched
     //but how do we best figure that out?
   },
-
-
-  // "public startUpdates": function() {
-  //   this._requests++;
-
-
-  // },
-
-
-  // "public done": function() {
-
-  // },
 
   "private _onUpdate": function(o) {
     if (o.alpha === null || o.beta === null || o.gamma === null ||

@@ -1,4 +1,4 @@
-/* global OOP, Connichiwa, CWPinchManager, CWDebug, CWDeviceManager, CWDeviceConnectionState, CWEventManager */
+/* global OOP, Connichiwa, CWDebug, CWDeviceManager, CWDeviceConnectionState, CWEventManager */
 /* global nativeCallRemoteDidConnect */
 "use strict";
 
@@ -27,8 +27,8 @@ var CWRemoteCommunication = OOP.createSingleton("Connichiwa", "CWRemoteCommunica
     switch (message.type)
     {
       case "remoteinfo" :  this._parseRemoteInfo(message); break;
-      case "pinchswipe" :  this._parsePinchSwipe(message); break;
-      case "quitPinch"  :  this._parseQuitPinch(message); break;
+      case "stitchswipe" :  this._parseStitchSwipe(message); break;
+      case "quitStitch"  :  this._parseQuitStitch(message); break;
     }
   },
   
@@ -61,11 +61,11 @@ var CWRemoteCommunication = OOP.createSingleton("Connichiwa", "CWRemoteCommunica
     CWEventManager.trigger("deviceConnected", device);
   },
 
-  _parsePinchSwipe: function(message) {
-    this.package.CWPinchManager.detectedSwipe(message);
+  _parseStitchSwipe: function(message) {
+    this.package.CWStitchManager.detectedSwipe(message);
   },
 
-  _parseQuitPinch: function(message) {
-    this.package.CWPinchManager.unpinchDevice(message.device);
+  _parseQuitStitch: function(message) {
+    this.package.CWStitchManager.unstitchDevice(message.device);
   },
 });

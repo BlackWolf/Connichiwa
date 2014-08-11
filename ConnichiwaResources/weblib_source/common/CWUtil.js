@@ -89,6 +89,7 @@ var CWUtil = (function()
     parseURL         : parseURL,
     getEventLocation : getEventLocation,
     isInt            : isInt,
+    isString         : isString,
     isObject         : isObject,
     inArray          : inArray,
     createUUID       : createUUID

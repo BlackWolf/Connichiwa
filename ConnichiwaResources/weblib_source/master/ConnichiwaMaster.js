@@ -66,7 +66,7 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
       "deviceConnected",
       "deviceDisconnected",
       "connectFailed",
-      "pinch"
+      "stitch"
     ];
     
     if (CWUtil.inArray(event, validEvents) === false) throw "Registering for invalid event: " + event;

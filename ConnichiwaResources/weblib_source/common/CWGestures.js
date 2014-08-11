@@ -146,6 +146,6 @@ $(document).ready(function() {
       x    : swipeEnd.x,
       y    : swipeEnd.y
     };
-    CWEventManager.trigger("pinchswipe", swipeData);
+    CWEventManager.trigger("stitchswipe", swipeData);
   });
 });

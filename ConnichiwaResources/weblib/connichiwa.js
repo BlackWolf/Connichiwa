@@ -588,7 +588,7 @@ $(document).ready(function() {
       x    : swipeEnd.x,
       y    : swipeEnd.y
     };
-    CWEventManager.trigger("pinchswipe", swipeData);
+    CWEventManager.trigger("stitchswipe", swipeData);
   });
 });
 /* global OOP, gyro, CWEventManager, CWDebug */
@@ -597,8 +597,6 @@ $(document).ready(function() {
 
 
 var CWGyroscope = OOP.createSingleton("Connichiwa", "CWGyroscope", {
-  // _requests: 0,
-  // _running: false,
   _lastMeasure: undefined,
 
   __constructor: function() {
@@ -606,21 +604,9 @@ var CWGyroscope = OOP.createSingleton("Connichiwa", "CWGyroscope", {
   gyro.startTracking(this._onUpdate);    
 
     //TODO we should only start tracking if necessary
-    //necessary for now means the device has been pinched
+    //necessary for now means the device has been stitched
     //but how do we best figure that out?
   },
-
-
-  // "public startUpdates": function() {
-  //   this._requests++;
-
-
-  // },
-
-
-  // "public done": function() {
-
-  // },
 
   "private _onUpdate": function(o) {
     if (o.alpha === null || o.beta === null || o.gamma === null ||
@@ -691,43 +677,43 @@ var CWGyroscope = OOP.createSingleton("Connichiwa", "CWGyroscope", {
 
 
  
-var CWPinchManager = OOP.createSingleton("Connichiwa", "CWPinchManager", {
-  "private _isPinched": false,
+var CWStitchManager = OOP.createSingleton("Connichiwa", "CWStitchManager", {
+  "private _isStitched": false,
   "private _deviceTransformation": { x: 0, y: 0, scale: 1.0 },
-  "private _gyroDataOnPinch": undefined,
+  "private _gyroDataOnStitch": undefined,
 
 
   __constructor: function() {
-    Connichiwa.onMessage("wasPinched",   this._onWasPinched);
-    Connichiwa.onMessage("wasUnpinched", this._onWasUnpinched);
+    Connichiwa.onMessage("wasStitched",   this._onWasStitched);
+    Connichiwa.onMessage("wasUnstitched", this._onWasUnstitched);
 
-    CWEventManager.register("pinchswipe",          this._onLocalSwipe);
+    CWEventManager.register("stitchswipe",          this._onLocalSwipe);
 
     CWEventManager.register("gyroscopeUpdate",     this._onGyroUpdate);
     CWEventManager.register("accelerometerUpdate", this._onAccelerometerUpdate);
   },
 
 
-  _onWasPinched: function(message) {
-    this._gyroDataOnPinch = this.package.CWGyroscope.getLastGyroscopeMeasure();
+  _onWasStitched: function(message) {
+    this._gyroDataOnStitch = this.package.CWGyroscope.getLastGyroscopeMeasure();
     this._deviceTransformation = message.deviceTransformation;
-    this._isPinched = true;
+    this._isStitched = true;
 
     //TODO register for gyroscopeUpdate instead of in constructor
   },
 
 
-  _onWasUnpinched: function(message) {
-    this._gyroDataOnPinch = undefined;
+  _onWasUnstitched: function(message) {
+    this._gyroDataOnStitch = undefined;
     this._deviceTransformation = { x: 0, y: 0, scale: 1.0 };
-    this._isPinched = false;
+    this._isStitched = false;
 
     //TODO unregister from gyroscopeUpdate
   },
 
 
   _onLocalSwipe: function(swipeData) {
-    swipeData.type   = "pinchswipe";
+    swipeData.type   = "stitchswipe";
     swipeData.device = Connichiwa.getIdentifier();
     swipeData.width  = CWSystemInfo.viewportWidth();
     swipeData.height = CWSystemInfo.viewportHeight();
@@ -736,32 +722,32 @@ var CWPinchManager = OOP.createSingleton("Connichiwa", "CWPinchManager", {
 
 
   _onGyroUpdate: function(gyroData) {
-    if (this.isPinched() === false) return;
+    if (this.isStitched() === false) return;
 
-    //Might happen if _onWasPinched is called before the first gyro measure arrived
-    if (this._gyroDataOnPinch === undefined) {
-      this._gyroDataOnPinch = gyroData;
+    //Might happen if _onWasStitched is called before the first gyro measure arrived
+    if (this._gyroDataOnStitch === undefined) {
+      this._gyroDataOnStitch = gyroData;
     }
 
-    //If the device is tilted more than 20º, we back our of the pinch
-    //We give a little more room for alpha. Alpha means the device was tilted on the
+    //If the device is tilted more than 20º, we back our of the stitch
+    //We give a little more room for alpha. Alpha means the device was moved on the
     //table, which is not as bad as actually picking it up.  
-    var deltaAlpha = Math.abs(gyroData.alpha - this._gyroDataOnPinch.alpha);
-    var deltaBeta  = Math.abs(gyroData.beta  - this._gyroDataOnPinch.beta);
-    var deltaGamma = Math.abs(gyroData.gamma - this._gyroDataOnPinch.gamma);
+    var deltaAlpha = Math.abs(gyroData.alpha - this._gyroDataOnStitch.alpha);
+    var deltaBeta  = Math.abs(gyroData.beta  - this._gyroDataOnStitch.beta);
+    var deltaGamma = Math.abs(gyroData.gamma - this._gyroDataOnStitch.gamma);
     //Modulo gives us the smallest possible angle (e.g. 1º and 359º gives us 2º)
     deltaAlpha = Math.abs((deltaAlpha + 180) % 360 - 180);
     deltaBeta  = Math.abs((deltaBeta  + 180) % 360 - 180);
     deltaGamma = Math.abs((deltaGamma + 180) % 360 - 180);
 
     if (deltaAlpha >= 35 || deltaBeta >= 20 || deltaGamma >= 20) {
-      this._quitPinch();
+      this._quitStitch();
     }
   },
 
 
   _onAccelerometerUpdate: function(accelData) {
-    if (this.isPinched() === false) return;
+    if (this.isStitched() === false) return;
 
     var x = Math.abs(accelData.x);
     var y = Math.abs(accelData.y);
@@ -770,22 +756,22 @@ var CWPinchManager = OOP.createSingleton("Connichiwa", "CWPinchManager", {
     //1.0 seems about a good value which doesn't trigger on every little shake,
     //but triggers when the device is actually moved
     if (x >= 1.0 || y >= 1.0 || z >= 1.0) {
-      this._quitPinch();
+      this._quitStitch();
     }
   },
 
 
-  "private _quitPinch": function() {
+  "private _quitStitch": function() {
     var data = {
-      type   : "quitPinch",
+      type   : "quitStitch",
       device : Connichiwa.getIdentifier()
     };
     Connichiwa.send(data);
   },
 
 
-  "public isPinched": function() {
-    return this._isPinched;
+  "public isStitched": function() {
+    return this._isStitched;
   },
 
 
@@ -942,6 +928,7 @@ var CWUtil = (function()
     parseURL         : parseURL,
     getEventLocation : getEventLocation,
     isInt            : isInt,
+    isString         : isString,
     isObject         : isObject,
     inArray          : inArray,
     createUUID       : createUUID
@@ -1447,11 +1434,82 @@ var CWNativeMasterCommunication = OOP.createSingleton("Connichiwa", "CWNativeMas
     this.package.Connichiwa._disconnectWebsocket();  
   },
 });
+/* global OOP, Connichiwa, CWDebug, CWDeviceManager, CWDeviceConnectionState, CWEventManager */
+/* global nativeCallRemoteDidConnect */
+"use strict";
+
+
+/**
+ * The Connichiwa Communication Protocol Parser (Remote Device).  
+ * Here the protocol used to communicate between this library and a connected remote device is parsed. The communication is done via JSON.
+ *
+ * **Remote ID Information** -- type="remoteidentifier"  
+ * Contains the identifier of a connected remote device. Format:
+ * * identifier -- a string identifying the unique ID of the device the weblib runs on
+ *
+ * @namespace CWRemoteCommunicationParser
+ */
+var CWRemoteCommunication = OOP.createSingleton("Connichiwa", "CWRemoteCommunication", 
+{
+  /**
+   * Parses a message from the websocket. If the message is none of the messages described by this class, this method will do nothing. Otherwise the message will trigger an appropiate action.
+   *
+   * @param {string} message The message from the websocket
+   *
+   * @memberof CWRemoteCommunicationParser
+   */
+  "public parse": function(message)
+  {
+    switch (message.type)
+    {
+      case "remoteinfo" :  this._parseRemoteInfo(message); break;
+      case "stitchswipe" :  this._parseStitchSwipe(message); break;
+      case "quitStitch"  :  this._parseQuitStitch(message); break;
+    }
+  },
+  
+  
+  _parseRemoteInfo: function(message)
+  {
+    var device = CWDeviceManager.getDeviceWithIdentifier(message.identifier);
+
+    //If we have a non-native remote no device might exist since
+    //no info was sent via BT. If so, create one now.
+    if (device === null) {
+      device = new CWDevice(message); 
+      CWDeviceManager.addDevice(device);
+    } else {
+      //TODO although unnecessary, for cleanness sake we should probably
+      //overwrite any existing device data with the newly received data?
+      //If a device exists, that data should be the same as the one we received
+      //via BT anyways, so it shouldn't matter
+    }
+    
+    
+    device.connectionState = CWDeviceConnectionState.CONNECTED;
+    nativeCallRemoteDidConnect(device.getIdentifier());
+    
+    //For some reason, it seems that triggering this messages sometimes causes the iOS WebThread to crash
+    //I THINK this might be related to us sending a message to the remote device in the web app when this event is triggered
+    //This does seem strange, though, considering we just received a message over the websocket (so it obviously is initialized and working)
+    //As a temporary fix, I try to delay sending this event a little and see if it helps
+    // setTimeout(function() { CWEventManager.trigger("deviceConnected", device); }, 1000);
+    CWEventManager.trigger("deviceConnected", device);
+  },
+
+  _parseStitchSwipe: function(message) {
+    this.package.CWStitchManager.detectedSwipe(message);
+  },
+
+  _parseQuitStitch: function(message) {
+    this.package.CWStitchManager.unstitchDevice(message.device);
+  },
+});
 /* global OOP, Connichiwa, CWSystemInfo, CWUtil, CWDevice, CWDeviceManager, CWEventManager, CWDebug */
 "use strict";
 
 
-OOP.extendSingleton("Connichiwa", "CWPinchManager", {
+OOP.extendSingleton("Connichiwa", "CWStitchManager", {
   "private _swipes"  : {},
   "private _devices" : {},
 
@@ -1459,13 +1517,13 @@ OOP.extendSingleton("Connichiwa", "CWPinchManager", {
   "public getDeviceTransformation": function(device) {
     if (device === undefined) device = CWDeviceManager.getLocalDevice();
 
-    var pinchedDevice = this._getPinchedDevice(device);
-    if (pinchedDevice === undefined) return { x: 0, y: 0, scale: 1.0 };
+    var stitchedDevice = this._getStitchedDevice(device);
+    if (stitchedDevice === undefined) return { x: 0, y: 0, scale: 1.0 };
 
     return { 
-      x     : pinchedDevice.transformX, 
-      y     : pinchedDevice.transformY,
-      scale : pinchedDevice.scale
+      x     : stitchedDevice.transformX, 
+      y     : stitchedDevice.transformY,
+      scale : stitchedDevice.scale
     };
   },
 
@@ -1476,13 +1534,12 @@ OOP.extendSingleton("Connichiwa", "CWPinchManager", {
 
     CWDebug.log(3, "Detected swipe on " + data.device + " on edge " + data.edge);
 
-    //Check if the swipe corresponds with another swipe in the array
-    //to form a pinch
+    //Check if the swipe combines with another swipe to a stitch
     var now = new Date();
     for (var key in this._swipes) {
       var savedSwipe = this._swipes[key];
 
-      //We can't create a pinch on a single device
+      //We can't create a stitch on a single device
       if (savedSwipe.data.device === data.device) continue;
 
       //If the existing swipe is too old, it is invalid
@@ -1493,105 +1550,109 @@ OOP.extendSingleton("Connichiwa", "CWPinchManager", {
       var otherDevice = CWDeviceManager.getDeviceWithIdentifier(savedSwipe.data.device); 
       if (otherDevice === null || otherDevice.isConnected() === false) continue;
 
-      this._detectedPinch(device, data, otherDevice, savedSwipe.data);
+      this._detectedStitch(device, data, otherDevice, savedSwipe.data);
+      //TODO remove the swipes?
       return;
     }
 
-    //If the swipe does not seem to be part of a pinch, remember it for later
+    //If the swipe does not seem to be part of a stitch, remember it for later
     this._swipes[data.device] = { date: now, data: data };
-
-    //TODO remove the swipes?
   },
 
 
-  "package unpinchDevice": function(identifier) {
+  "package unstitchDevice": function(identifier) {
     if (identifier in this._devices) {
       delete this._devices[identifier];
 
-      var unpinchMessage = { type : "wasUnpinched" };
-      Connichiwa.send(identifier, unpinchMessage);
+      var unstitchMessage = { type : "wasUnstitched" };
+      Connichiwa.send(identifier, unstitchMessage);
 
+      //If only one device remains, we also unstitch it. 
       var length = Object.keys(this._devices).length;
       if (length === 1) {
         for (var key in this._devices) {
-          this.unpinchDevice(key);
+          this.unstitchDevice(key);
         }
       }
     }
   },
 
 
-  "private _detectedPinch": function(firstDevice, firstData, secondDevice, secondData) {
+  "private _detectedStitch": function(firstDevice, firstData, secondDevice, secondData) {
     //Always add the master device as the first device
     if (Object.keys(this._devices).length === 0) {
       var localDevice = CWDeviceManager.getLocalDevice();
       var localData = { width: CWSystemInfo.viewportWidth(), height: CWSystemInfo.viewportHeight() };
-      this._devices[localDevice.getIdentifier()] = this._createNewPinchData(localDevice, localData);
-      this._isPinched = true;
+      this._devices[localDevice.getIdentifier()] = this._createNewStitchData(localDevice, localData);
+      this._isStitched = true;
     }
 
-    //Exactly one of the two devices needs to be pinched already
+    //Exactly one of the two devices needs to be stitched already
     //We need this so we can calculate the position of the new device
-    var firstPinchedDevice = this._getPinchedDevice(firstDevice);
-    var secondPinchedDevice = this._getPinchedDevice(secondDevice);
-    if (firstPinchedDevice === undefined && secondPinchedDevice === undefined) return;
-    if (firstPinchedDevice !== undefined && secondPinchedDevice !== undefined) return;
+    var firstStitchedDevice = this._getStitchedDevice(firstDevice);
+    var secondStitchedDevice = this._getStitchedDevice(secondDevice);
+    if (firstStitchedDevice === undefined && secondStitchedDevice === undefined) return;
+    if (firstStitchedDevice !== undefined && secondStitchedDevice !== undefined) return;
 
-    var pinchedDevice, newDevice, pinchedData, newData;
-    if (firstPinchedDevice !== undefined) {
-      pinchedDevice = firstPinchedDevice;
-      pinchedData = firstData;
+    var stitchedDevice, newDevice, stitchedData, newData;
+    if (firstStitchedDevice !== undefined) {
+      stitchedDevice = firstStitchedDevice;
+      stitchedData = firstData;
       newDevice = secondDevice;
       newData = secondData;
     } else {
-      pinchedDevice = secondPinchedDevice;
-      pinchedData = secondData;
+      stitchedDevice = secondStitchedDevice;
+      stitchedData = secondData;
       newDevice = firstDevice;
       newData = firstData;
     }
 
     //Add the devices to each others neighbors at the relative positions
-    //Furthermore, create the pinch data for the new device, including the
+    //Furthermore, create the stitch data for the new device, including the
     //position relative to the master device
-    pinchedDevice[pinchedData.edge][newDevice.getIdentifier()] = this._coordinateForEdge(pinchedData.edge, pinchedData);
+    stitchedDevice[stitchedData.edge][newDevice.getIdentifier()] = this._coordinateForEdge(stitchedData.edge, stitchedData);
 
-    var newPinchDevice = this._createNewPinchData(newDevice, newData);
-    newPinchDevice[newData.edge][pinchedDevice.device.getIdentifier()] = this._coordinateForEdge(newData.edge, newData);
+    var newStitchDevice = this._createNewStitchData(newDevice, newData);
+    newStitchDevice[newData.edge][stitchedDevice.device.getIdentifier()] = this._coordinateForEdge(newData.edge, newData);
 
-    //Calculate the transformation of the new device based on the transformation
-    //of the pinched device and the pinched edge on the pinched device
-    //In particular, we need to convert between different ppi screens
-    newPinchDevice.scale = newPinchDevice.device.getPPI() / pinchedDevice.device.getPPI() * pinchedDevice.scale;
-    if (pinchedData.edge === "right") {
-      newPinchDevice.transformX = pinchedDevice.transformX + pinchedDevice.width / pinchedDevice.scale;
-      newPinchDevice.transformY = pinchedDevice.transformY + pinchedData.y / pinchedDevice.scale - newData.y / newPinchDevice.scale;
-    } else if (pinchedData.edge === "bottom") {
-      newPinchDevice.transformX = pinchedDevice.transformX + pinchedData.x / pinchedDevice.scale  - newData.x / newPinchDevice.scale;
-      newPinchDevice.transformY = pinchedDevice.transformY + pinchedDevice.height / pinchedDevice.scale;
-    } else if (pinchedData.edge === "left") {
-      newPinchDevice.transformX = pinchedDevice.transformX - newPinchDevice.width / newPinchDevice.scale;
-      newPinchDevice.transformY = pinchedDevice.transformY + pinchedData.y / pinchedDevice.scale - newData.y / newPinchDevice.scale;
-    } else if (pinchedData.edge === "top") {  
-      newPinchDevice.transformX = pinchedDevice.transformX + pinchedData.x / pinchedDevice.scale - newData.x / newPinchDevice.scale;
-      newPinchDevice.transformY = pinchedDevice.transformY - newPinchDevice.height / newPinchDevice.scale;
+    //Calculate the transformation of the new device based on the transformation of the stitched device and the pinched edge
+    //We also need to take care of differnet PPIs by performing a scaling:
+    //The scale of the new device is calculated so that using that scale content appears the same size as on the master device
+    //Dividing coordinates of any device by the devices scale will transform the coordinates into global coordinates
+    //To be exact, global coordinates are coordinates in the PPI of the master device
+    //transformX and transformY are calculated in a way that they result in global coordinates!
+    newStitchDevice.scale = newStitchDevice.device.getPPI() / stitchedDevice.device.getPPI() * stitchedDevice.scale;
+
+    if (stitchedData.edge === "right") {
+      newStitchDevice.transformX = stitchedDevice.transformX + stitchedDevice.width / stitchedDevice.scale;
+      newStitchDevice.transformY = stitchedDevice.transformY + stitchedData.y / stitchedDevice.scale - newData.y / newStitchDevice.scale;
+    } else if (stitchedData.edge === "bottom") {
+      newStitchDevice.transformX = stitchedDevice.transformX + stitchedData.x / stitchedDevice.scale  - newData.x / newStitchDevice.scale;
+      newStitchDevice.transformY = stitchedDevice.transformY + stitchedDevice.height / stitchedDevice.scale;
+    } else if (stitchedData.edge === "left") {
+      newStitchDevice.transformX = stitchedDevice.transformX - newStitchDevice.width / newStitchDevice.scale;
+      newStitchDevice.transformY = stitchedDevice.transformY + stitchedData.y / stitchedDevice.scale - newData.y / newStitchDevice.scale;
+    } else if (stitchedData.edge === "top") {  
+      newStitchDevice.transformX = stitchedDevice.transformX + stitchedData.x / stitchedDevice.scale - newData.x / newStitchDevice.scale;
+      newStitchDevice.transformY = stitchedDevice.transformY - newStitchDevice.height / newStitchDevice.scale;
     }
 
-    this._devices[newDevice.getIdentifier()] = newPinchDevice;
+    this._devices[newDevice.getIdentifier()] = newStitchDevice;
 
-    //Trigger a local (master) event and send a message to the newly pinched device
-    CWDebug.log(3, "Detected pinch");
-    CWEventManager.trigger("pinch", pinchedDevice.device, newDevice);
+    //Trigger both a local (master) event and also send a message to the newly stitched device
+    CWDebug.log(3, "Detected stitch");
+    CWEventManager.trigger("stitch", stitchedDevice.device, newDevice);
 
-    var pinchMessage = {
-      type                 : "wasPinched",
-      otherDevice          : pinchedDevice.device.getIdentifier(),
+    var stitchMessage = {
+      type                 : "wasStitched",
+      otherDevice          : stitchedDevice.device.getIdentifier(),
       deviceTransformation : this.getDeviceTransformation(newDevice)
     };
-    newDevice.send(pinchMessage);
+    newDevice.send(stitchMessage);
   },
 
 
-  "private _getPinchedDevice": function(device) {
+  "private _getStitchedDevice": function(device) {
     if (device.getIdentifier() in this._devices) {
       return this._devices[device.getIdentifier()];
     } else {
@@ -1600,7 +1661,7 @@ OOP.extendSingleton("Connichiwa", "CWPinchManager", {
   },
 
 
-  "private _createNewPinchData": function(device, data) {
+  "private _createNewStitchData": function(device, data) {
     return {
       device     : device,
       width      : data.width,
@@ -1650,77 +1711,6 @@ OOP.extendSingleton("Connichiwa", "CWPinchManager", {
 
     return "invalid";
   }
-});
-/* global OOP, Connichiwa, CWPinchManager, CWDebug, CWDeviceManager, CWDeviceConnectionState, CWEventManager */
-/* global nativeCallRemoteDidConnect */
-"use strict";
-
-
-/**
- * The Connichiwa Communication Protocol Parser (Remote Device).  
- * Here the protocol used to communicate between this library and a connected remote device is parsed. The communication is done via JSON.
- *
- * **Remote ID Information** -- type="remoteidentifier"  
- * Contains the identifier of a connected remote device. Format:
- * * identifier -- a string identifying the unique ID of the device the weblib runs on
- *
- * @namespace CWRemoteCommunicationParser
- */
-var CWRemoteCommunication = OOP.createSingleton("Connichiwa", "CWRemoteCommunication", 
-{
-  /**
-   * Parses a message from the websocket. If the message is none of the messages described by this class, this method will do nothing. Otherwise the message will trigger an appropiate action.
-   *
-   * @param {string} message The message from the websocket
-   *
-   * @memberof CWRemoteCommunicationParser
-   */
-  "public parse": function(message)
-  {
-    switch (message.type)
-    {
-      case "remoteinfo" :  this._parseRemoteInfo(message); break;
-      case "pinchswipe" :  this._parsePinchSwipe(message); break;
-      case "quitPinch"  :  this._parseQuitPinch(message); break;
-    }
-  },
-  
-  
-  _parseRemoteInfo: function(message)
-  {
-    var device = CWDeviceManager.getDeviceWithIdentifier(message.identifier);
-
-    //If we have a non-native remote no device might exist since
-    //no info was sent via BT. If so, create one now.
-    if (device === null) {
-      device = new CWDevice(message); 
-      CWDeviceManager.addDevice(device);
-    } else {
-      //TODO although unnecessary, for cleanness sake we should probably
-      //overwrite any existing device data with the newly received data?
-      //If a device exists, that data should be the same as the one we received
-      //via BT anyways, so it shouldn't matter
-    }
-    
-    
-    device.connectionState = CWDeviceConnectionState.CONNECTED;
-    nativeCallRemoteDidConnect(device.getIdentifier());
-    
-    //For some reason, it seems that triggering this messages sometimes causes the iOS WebThread to crash
-    //I THINK this might be related to us sending a message to the remote device in the web app when this event is triggered
-    //This does seem strange, though, considering we just received a message over the websocket (so it obviously is initialized and working)
-    //As a temporary fix, I try to delay sending this event a little and see if it helps
-    // setTimeout(function() { CWEventManager.trigger("deviceConnected", device); }, 1000);
-    CWEventManager.trigger("deviceConnected", device);
-  },
-
-  _parsePinchSwipe: function(message) {
-    this.package.CWPinchManager.detectedSwipe(message);
-  },
-
-  _parseQuitPinch: function(message) {
-    this.package.CWPinchManager.unpinchDevice(message.device);
-  },
 });
 /* global OOP, CWDebug, CWRemoteCommunication, CWEventManager, CWUtil, CWDeviceManager */
 /* global CONNECTING, OPEN */
@@ -1790,7 +1780,7 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
       "deviceConnected",
       "deviceDisconnected",
       "connectFailed",
-      "pinch"
+      "stitch"
     ];
     
     if (CWUtil.inArray(event, validEvents) === false) throw "Registering for invalid event: " + event;
