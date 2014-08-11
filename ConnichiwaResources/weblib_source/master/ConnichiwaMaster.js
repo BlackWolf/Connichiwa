@@ -111,7 +111,7 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
     CWDebug.log(4, "Received message: " + e.data);
     
     //It seems that reacting immediatly to a websocket message
-    //sometimes causes crashes in Safari. I am unsure why.
+    //sometimes causes crashes in UIWebView. I am unsure why.
     //We use requestAnimationFrame in an attempt to prevent those crashes
     window.requestAnimationFrame(function() {
       CWRemoteCommunication.parse(message);

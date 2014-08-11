@@ -26,9 +26,9 @@ var CWRemoteCommunication = OOP.createSingleton("Connichiwa", "CWRemoteCommunica
   {
     switch (message.type)
     {
-      case "remoteinfo" : this._parseRemoteInfo(message); break;
-      case "pinchswipe" : this._parsePinchSwipe(message); break;
-      case "quitPinch"  : this._parseQuitPinch(message); break;
+      case "remoteinfo" :  this._parseRemoteInfo(message); break;
+      case "pinchswipe" :  this._parsePinchSwipe(message); break;
+      case "quitPinch"  :  this._parseQuitPinch(message); break;
     }
   },
   
