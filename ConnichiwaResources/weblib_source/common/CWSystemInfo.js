@@ -35,6 +35,23 @@ var CWSystemInfo = OOP.createSingleton("Connichiwa", "CWSystemInfo", {
     return this._ppi;
   },
 
+
+  "public isLandscape": function() {
+    return (window.innerHeight < window.innerWidth);
+  },
+
+
+  "public viewportWidth": function() {
+    return $(window).width();
+  },
+
+
+  "public viewportHeight": function() {
+    //This seems to break in landscape when using meta-viewport height-device-height
+    //so basically for now: don't use that
+    return $(window).height();
+  },
+
   "public DEFAULT_PPI": function() {
     return 96;
   }

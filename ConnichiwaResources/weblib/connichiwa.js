@@ -521,7 +521,10 @@ $(document).ready(function() {
 
     //The swipe must have a minimum length to make sure its not a tap
     var swipeLength = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
-    if (swipeLength <= 10) return;
+    if (swipeLength <= 10) {
+      CWDebug.log(3, "Swipe REJECTED because it was too short (" + swipeLength + ")");
+      return;
+    }
 
     //Check the direction of the swipe
     //For example, if a swipe to the right is performed at y=10 we need this to
@@ -546,10 +549,13 @@ $(document).ready(function() {
     }
 
     //Check if the touch ended at a device edge
-    var endsAtTopEdge    = (swipeEnd.y <= 25);
-    var endsAtLeftEdge   = (swipeEnd.x <= 25);
-    var endsAtBottomEdge = (swipeEnd.y >= (screen.availHeight - 25));
-    var endsAtRightEdge  = (swipeEnd.x >= (screen.availWidth - 25));
+    //Lucky us, touch coordinates incorporate rubber banding - this means that a swipe down with rubber banding
+    //will give us smaller values than it should, because the gray top area is subtracted
+    //To compensate for that, we use window.innerWidth/Height, which also subtracts the rubber banded area
+    var endsAtTopEdge    = (swipeEnd.y <= 50);
+    var endsAtLeftEdge   = (swipeEnd.x <= 50);
+    var endsAtBottomEdge = (swipeEnd.y >= (window.innerHeight  - 50));
+    var endsAtRightEdge  = (swipeEnd.x >= (window.innerWidth - 50));
 
     var edge = "invalid";
     if (endsAtTopEdge    && direction === "up")    edge = "top";
@@ -557,18 +563,16 @@ $(document).ready(function() {
     if (endsAtBottomEdge && direction === "down")  edge = "bottom";
     if (endsAtRightEdge  && direction === "right") edge = "right";
 
-    if (edge === "invalid") return;
+    if (edge === "invalid") {
+      CWDebug.log(3, "Swipe REJECTED. Ending: x - " + swipeEnd.x + "/" + (window.innerWidth - 30) + ", y - " + swipeEnd.y + "/" + (window.innerHeight - 30) + ". Direction: " + direction + ". Edge endings: " + endsAtTopEdge + ", " + endsAtRightEdge + ", " + endsAtBottomEdge + ", " + endsAtLeftEdge);
+      return;
+    }
 
     var swipeData = {
-      // type   : "pinchswipe",
-      // device : Connichiwa.getIdentifier(),
-      edge   : edge,
-      // width  : screen.availWidth,
-      // height : screen.availHeight,
-      x      : swipeEnd.x,
-      y      : swipeEnd.y
+      edge : edge,
+      x    : swipeEnd.x,
+      y    : swipeEnd.y
     };
-    // Connichiwa.send(message);
     CWEventManager.trigger("pinchswipe", swipeData);
   });
 });
@@ -582,12 +586,17 @@ var CWGyroscope = OOP.createSingleton("Connichiwa", "CWGyroscope", {
 
   __constructor: function() {
     gyro.frequency = 500;
-
-    // var that = this;
     gyro.startTracking(this._onUpdate);
+
+    //TODO we should only start tracking if necessary
+    //necessary for now means the device has been pinched
+    //but how do we best figure that out?
   },
 
   "private _onUpdate": function(o) {
+    if (o.alpha === null || o.beta === null || o.gamma === null ||
+      o.x === null || o.y === null || o.z === null) return;
+
     if (this._lastMeasure === undefined) this._lastMeasure = o;
     
     //Send gyro update
@@ -624,9 +633,31 @@ var CWGyroscope = OOP.createSingleton("Connichiwa", "CWGyroscope", {
 
     //We need to copy the values of o because o will be altered by gyro
     this._lastMeasure = { x: o.x, y: o.y, z: o.z, alpha: o.alpha, beta: o.beta, gamma: o.gamma };
+  },
+
+
+  "package getLastGyroscopeMeasure": function() {
+    if (this._lastMeasure === undefined) return undefined;
+
+    return { 
+      alpha : this._lastMeasure.alpha, 
+      beta  : this._lastMeasure.beta,
+      gamma : this._lastMeasure.gamma
+    };
+  },
+
+
+  "package getLastAccelerometerMeasure": function() {
+    if (this._lastMeasure === undefined) return undefined;
+    
+    return {
+      x : this._lastMeasure.x,
+      y : this._lastMeasure.y,
+      z : this._lastMeasure.z
+    };
   }
 });
-/* global OOP, Connichiwa, CWEventManager */
+/* global OOP, Connichiwa, CWEventManager, CWSystemInfo */
 "use strict";
 
 
@@ -634,6 +665,7 @@ var CWGyroscope = OOP.createSingleton("Connichiwa", "CWGyroscope", {
 var CWPinchManager = OOP.createSingleton("Connichiwa", "CWPinchManager", {
   "private _isPinched": false,
   "private _deviceTransformation": { x: 0, y: 0, scale: 1.0 },
+  "private _gyroDataOnPinch": undefined,
 
 
   __constructor: function() {
@@ -646,6 +678,7 @@ var CWPinchManager = OOP.createSingleton("Connichiwa", "CWPinchManager", {
 
 
   _onWasPinched: function(message) {
+    this._gyroDataOnPinch = this.package.CWGyroscope.getLastGyroscopeMeasure();
     this._deviceTransformation = message.deviceTransformation;
     this._isPinched = true;
 
@@ -654,6 +687,7 @@ var CWPinchManager = OOP.createSingleton("Connichiwa", "CWPinchManager", {
 
 
   _onWasUnpinched: function(message) {
+    this._gyroDataOnPinch = undefined;
     this._deviceTransformation = { x: 0, y: 0, scale: 1.0 };
     this._isPinched = false;
 
@@ -662,27 +696,63 @@ var CWPinchManager = OOP.createSingleton("Connichiwa", "CWPinchManager", {
 
 
   _onLocalSwipe: function(swipeData) {
-    if (this.isPinched()) return;
+    //availWidth/Height do not change when a device is rotated
+    //Therefore, we use innerHeight/Width to detect landscape and switch the values
+    // var screenWidth  = screen.availWidth;
+    // var screenHeight = screen.availHeight;
+    // if (window.innerHeight < window.innerWidth) { //landscape orienatation
+    //   screenWidth  = screen.availHeight;
+    //   screenHeight = screen.availWidth;
+    // }
 
-    //Prepare for the master and send away
+    // CWDebug.log(1, $(window).width()+" and "+$(window).height());
+    // CWDebug.log(1, window.outerWidth+" / "+window.outerHeight);
+    // CWDebug.log(1, JSON.stringify($("body").offset()));
+
     swipeData.type   = "pinchswipe";
     swipeData.device = Connichiwa.getIdentifier();
-    swipeData.width  = screen.availWidth;
-    swipeData.height = screen.availHeight;
+    swipeData.width  = CWSystemInfo.viewportWidth();
+    swipeData.height = CWSystemInfo.viewportHeight();
     Connichiwa.send(swipeData);
   },
 
 
   _onGyroUpdate: function(gyroData) {
     if (this.isPinched() === false) return;
-    
-    if (gyroData.beta > 20) {
+
+    //Might happen if _onWasPinched is called before the first gyro measure arrived
+    if (this._gyroDataOnPinch === undefined) {
+      this._gyroDataOnPinch = gyroData;
+    }
+
+    //If the device was tilted more than 20º in any direction, we back our of the pinch
+    //A problem are angles such as 1º and 359º - it's a 2º difference but gives 358º. 
+    //Because of that, we use a modulo to get the smallest possible difference    
+    var deltaAlpha = Math.abs(gyroData.alpha - this._gyroDataOnPinch.alpha);
+    var deltaBeta  = Math.abs(gyroData.beta  - this._gyroDataOnPinch.beta);
+    var deltaGamma = Math.abs(gyroData.gamma - this._gyroDataOnPinch.gamma);
+    deltaAlpha = Math.abs((deltaAlpha + 180) % 360 - 180);
+    deltaBeta  = Math.abs((deltaBeta  + 180) % 360 - 180);
+    deltaGamma = Math.abs((deltaGamma + 180) % 360 - 180);
+
+    // CWDebug.log(1, "DELTAS: "+deltaAlpha.toFixed(2)+", "+deltaBeta.toFixed(2)+", "+deltaGamma.toFixed(2));
+    if (deltaAlpha >= 20 || deltaBeta >= 20 || deltaGamma >= 20) {
       var data = {
-        type   : "didQuitPinch",
+        type   : "quitPinch",
         device : Connichiwa.getIdentifier()
       };
       Connichiwa.send(data);
     }
+
+    //TODO
+    //we need to add accelerometer support. Using the gyroscope only works pretty well
+    //with something around 20-25 degrees, but you can move devices from one side of
+    //a device to another without it being unpinched. This should be captured with the
+    //accelerometer. Of course, if we REALLY CAREFULLY move a device we can still trick
+    //the system, but whatever
+    //TODO furthermore, it might be good to give some more room for deltaAlpha - tilting
+    //the device on the table without picking it up is not so bad, except for 45º or more 
+    //or something like that
   },
 
 
@@ -730,6 +800,23 @@ var CWSystemInfo = OOP.createSingleton("Connichiwa", "CWSystemInfo", {
     }
 
     return this._ppi;
+  },
+
+
+  "public isLandscape": function() {
+    return (window.innerHeight < window.innerWidth);
+  },
+
+
+  "public viewportWidth": function() {
+    return $(window).width();
+  },
+
+
+  "public viewportHeight": function() {
+    //This seems to break in landscape when using meta-viewport height-device-height
+    //so basically for now: don't use that
+    return $(window).height();
   },
 
   "public DEFAULT_PPI": function() {
@@ -1327,7 +1414,7 @@ var CWNativeMasterCommunication = OOP.createSingleton("Connichiwa", "CWNativeMas
     this.package.Connichiwa._disconnectWebsocket();  
   },
 });
-/* global OOP, Connichiwa, CWUtil, CWDevice, CWDeviceManager, CWEventManager, CWDebug */
+/* global OOP, Connichiwa, CWSystemInfo, CWUtil, CWDevice, CWDeviceManager, CWEventManager, CWDebug */
 "use strict";
 
 
@@ -1384,9 +1471,19 @@ OOP.extendSingleton("Connichiwa", "CWPinchManager", {
   },
 
 
-  "package removeDevice": function(identifier) {
+  "package unpinchDevice": function(identifier) {
     if (identifier in this._devices) {
       delete this._devices[identifier];
+
+      var unpinchMessage = { type : "wasUnpinched" };
+      Connichiwa.send(identifier, unpinchMessage);
+
+      var length = Object.keys(this._devices).length;
+      if (length === 1) {
+        for (var key in this._devices) {
+          this.unpinchDevice(key);
+        }
+      }
     }
   },
 
@@ -1395,8 +1492,9 @@ OOP.extendSingleton("Connichiwa", "CWPinchManager", {
     //Always add the master device as the first device
     if (Object.keys(this._devices).length === 0) {
       var localDevice = CWDeviceManager.getLocalDevice();
-      var localData = { width: screen.availWidth, height: screen.availHeight };
+      var localData = { width: CWSystemInfo.viewportWidth(), height: CWSystemInfo.viewportHeight() };
       this._devices[localDevice.getIdentifier()] = this._createNewPinchData(localDevice, localData);
+      this._isPinched = true;
     }
 
     //Exactly one of the two devices needs to be pinched already
@@ -1433,16 +1531,16 @@ OOP.extendSingleton("Connichiwa", "CWPinchManager", {
     newPinchDevice.scale = newPinchDevice.device.getPPI() / pinchedDevice.device.getPPI() * pinchedDevice.scale;
     if (pinchedData.edge === "right") {
       newPinchDevice.transformX = pinchedDevice.transformX + pinchedDevice.width / pinchedDevice.scale;
-      newPinchDevice.transformY = pinchedDevice.transformY + pinchedData.y / pinchedDevice.scale - newData.y * newPinchDevice.scale;
+      newPinchDevice.transformY = pinchedDevice.transformY + pinchedData.y / pinchedDevice.scale - newData.y / newPinchDevice.scale;
     } else if (pinchedData.edge === "bottom") {
-      newPinchDevice.transformX = pinchedDevice.transformX + pinchedData.x - newData.x / pinchedDevice.scale * newPinchDevice.scale;
+      newPinchDevice.transformX = pinchedDevice.transformX + pinchedData.x / pinchedDevice.scale  - newData.x / newPinchDevice.scale;
       newPinchDevice.transformY = pinchedDevice.transformY + pinchedDevice.height / pinchedDevice.scale;
     } else if (pinchedData.edge === "left") {
-      newPinchDevice.transformX = pinchedDevice.transformX - newPinchDevice.width / pinchedDevice.scale;
-      newPinchDevice.transformY = pinchedDevice.transformY + pinchedData.y - newData.y / pinchedDevice.scale * newPinchDevice.scale;
+      newPinchDevice.transformX = pinchedDevice.transformX - newPinchDevice.width / newPinchDevice.scale;
+      newPinchDevice.transformY = pinchedDevice.transformY + pinchedData.y / pinchedDevice.scale - newData.y / newPinchDevice.scale;
     } else if (pinchedData.edge === "top") {  
-      newPinchDevice.transformX = pinchedDevice.transformX + pinchedData.x - newData.x / pinchedDevice.scale * newPinchDevice.scale;
-      newPinchDevice.transformY = pinchedDevice.transformY - newPinchDevice.height / pinchedDevice.scale;
+      newPinchDevice.transformX = pinchedDevice.transformX + pinchedData.x / pinchedDevice.scale - newData.x / newPinchDevice.scale;
+      newPinchDevice.transformY = pinchedDevice.transformY - newPinchDevice.height / newPinchDevice.scale;
     }
 
     this._devices[newDevice.getIdentifier()] = newPinchDevice;
@@ -1548,9 +1646,9 @@ var CWRemoteCommunication = OOP.createSingleton("Connichiwa", "CWRemoteCommunica
   {
     switch (message.type)
     {
-      case "remoteinfo"   : this._parseRemoteInfo(message); break;
-      case "pinchswipe"   : this._parsePinchSwipe(message); break;
-      case "didQuitPinch" : this._parseDidQuitPinch(message); break;
+      case "remoteinfo" : this._parseRemoteInfo(message); break;
+      case "pinchswipe" : this._parsePinchSwipe(message); break;
+      case "quitPinch"  : this._parseQuitPinch(message); break;
     }
   },
   
@@ -1587,13 +1685,8 @@ var CWRemoteCommunication = OOP.createSingleton("Connichiwa", "CWRemoteCommunica
     this.package.CWPinchManager.detectedSwipe(message);
   },
 
-  _parseDidQuitPinch: function(message) {
-    this.package.CWPinchManager.removeDevice(message.device);
-
-    var unpinchMessage = {
-      type : "wasUnpinched"
-    };
-    Connichiwa.send(message.device, unpinchMessage);
+  _parseQuitPinch: function(message) {
+    this.package.CWPinchManager.unpinchDevice(message.device);
   },
 });
 /* global OOP, CWDebug, CWRemoteCommunication, CWEventManager, CWUtil, CWDeviceManager */

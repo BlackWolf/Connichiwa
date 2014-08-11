@@ -1,4 +1,4 @@
-/* global OOP, Connichiwa, CWUtil, CWDevice, CWDeviceManager, CWEventManager, CWDebug */
+/* global OOP, Connichiwa, CWSystemInfo, CWUtil, CWDevice, CWDeviceManager, CWEventManager, CWDebug */
 "use strict";
 
 
@@ -61,6 +61,13 @@ OOP.extendSingleton("Connichiwa", "CWPinchManager", {
 
       var unpinchMessage = { type : "wasUnpinched" };
       Connichiwa.send(identifier, unpinchMessage);
+
+      var length = Object.keys(this._devices).length;
+      if (length === 1) {
+        for (var key in this._devices) {
+          this.unpinchDevice(key);
+        }
+      }
     }
   },
 
@@ -69,8 +76,9 @@ OOP.extendSingleton("Connichiwa", "CWPinchManager", {
     //Always add the master device as the first device
     if (Object.keys(this._devices).length === 0) {
       var localDevice = CWDeviceManager.getLocalDevice();
-      var localData = { width: screen.availWidth, height: screen.availHeight };
+      var localData = { width: CWSystemInfo.viewportWidth(), height: CWSystemInfo.viewportHeight() };
       this._devices[localDevice.getIdentifier()] = this._createNewPinchData(localDevice, localData);
+      this._isPinched = true;
     }
 
     //Exactly one of the two devices needs to be pinched already
@@ -107,16 +115,16 @@ OOP.extendSingleton("Connichiwa", "CWPinchManager", {
     newPinchDevice.scale = newPinchDevice.device.getPPI() / pinchedDevice.device.getPPI() * pinchedDevice.scale;
     if (pinchedData.edge === "right") {
       newPinchDevice.transformX = pinchedDevice.transformX + pinchedDevice.width / pinchedDevice.scale;
-      newPinchDevice.transformY = pinchedDevice.transformY + pinchedData.y / pinchedDevice.scale - newData.y * newPinchDevice.scale;
+      newPinchDevice.transformY = pinchedDevice.transformY + pinchedData.y / pinchedDevice.scale - newData.y / newPinchDevice.scale;
     } else if (pinchedData.edge === "bottom") {
-      newPinchDevice.transformX = pinchedDevice.transformX + pinchedData.x - newData.x / pinchedDevice.scale * newPinchDevice.scale;
+      newPinchDevice.transformX = pinchedDevice.transformX + pinchedData.x / pinchedDevice.scale  - newData.x / newPinchDevice.scale;
       newPinchDevice.transformY = pinchedDevice.transformY + pinchedDevice.height / pinchedDevice.scale;
     } else if (pinchedData.edge === "left") {
-      newPinchDevice.transformX = pinchedDevice.transformX - newPinchDevice.width / pinchedDevice.scale;
-      newPinchDevice.transformY = pinchedDevice.transformY + pinchedData.y - newData.y / pinchedDevice.scale * newPinchDevice.scale;
+      newPinchDevice.transformX = pinchedDevice.transformX - newPinchDevice.width / newPinchDevice.scale;
+      newPinchDevice.transformY = pinchedDevice.transformY + pinchedData.y / pinchedDevice.scale - newData.y / newPinchDevice.scale;
     } else if (pinchedData.edge === "top") {  
-      newPinchDevice.transformX = pinchedDevice.transformX + pinchedData.x - newData.x / pinchedDevice.scale * newPinchDevice.scale;
-      newPinchDevice.transformY = pinchedDevice.transformY - newPinchDevice.height / pinchedDevice.scale;
+      newPinchDevice.transformX = pinchedDevice.transformX + pinchedData.x / pinchedDevice.scale - newData.x / newPinchDevice.scale;
+      newPinchDevice.transformY = pinchedDevice.transformY - newPinchDevice.height / newPinchDevice.scale;
     }
 
     this._devices[newDevice.getIdentifier()] = newPinchDevice;

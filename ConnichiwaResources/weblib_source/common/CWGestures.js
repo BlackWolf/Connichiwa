@@ -94,7 +94,10 @@ $(document).ready(function() {
 
     //The swipe must have a minimum length to make sure its not a tap
     var swipeLength = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
-    if (swipeLength <= 10) return;
+    if (swipeLength <= 10) {
+      CWDebug.log(3, "Swipe REJECTED because it was too short (" + swipeLength + ")");
+      return;
+    }
 
     //Check the direction of the swipe
     //For example, if a swipe to the right is performed at y=10 we need this to
@@ -119,10 +122,13 @@ $(document).ready(function() {
     }
 
     //Check if the touch ended at a device edge
-    var endsAtTopEdge    = (swipeEnd.y <= 25);
-    var endsAtLeftEdge   = (swipeEnd.x <= 25);
-    var endsAtBottomEdge = (swipeEnd.y >= (screen.availHeight - 25));
-    var endsAtRightEdge  = (swipeEnd.x >= (screen.availWidth - 25));
+    //Lucky us, touch coordinates incorporate rubber banding - this means that a swipe down with rubber banding
+    //will give us smaller values than it should, because the gray top area is subtracted
+    //To compensate for that, we use window.innerWidth/Height, which also subtracts the rubber banded area
+    var endsAtTopEdge    = (swipeEnd.y <= 50);
+    var endsAtLeftEdge   = (swipeEnd.x <= 50);
+    var endsAtBottomEdge = (swipeEnd.y >= (window.innerHeight  - 50));
+    var endsAtRightEdge  = (swipeEnd.x >= (window.innerWidth - 50));
 
     var edge = "invalid";
     if (endsAtTopEdge    && direction === "up")    edge = "top";
@@ -130,18 +136,16 @@ $(document).ready(function() {
     if (endsAtBottomEdge && direction === "down")  edge = "bottom";
     if (endsAtRightEdge  && direction === "right") edge = "right";
 
-    if (edge === "invalid") return;
+    if (edge === "invalid") {
+      CWDebug.log(3, "Swipe REJECTED. Ending: x - " + swipeEnd.x + "/" + (window.innerWidth - 30) + ", y - " + swipeEnd.y + "/" + (window.innerHeight - 30) + ". Direction: " + direction + ". Edge endings: " + endsAtTopEdge + ", " + endsAtRightEdge + ", " + endsAtBottomEdge + ", " + endsAtLeftEdge);
+      return;
+    }
 
     var swipeData = {
-      // type   : "pinchswipe",
-      // device : Connichiwa.getIdentifier(),
-      edge   : edge,
-      // width  : screen.availWidth,
-      // height : screen.availHeight,
-      x      : swipeEnd.x,
-      y      : swipeEnd.y
+      edge : edge,
+      x    : swipeEnd.x,
+      y    : swipeEnd.y
     };
-    // Connichiwa.send(message);
     CWEventManager.trigger("pinchswipe", swipeData);
   });
 });
