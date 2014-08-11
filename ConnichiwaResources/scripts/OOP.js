@@ -62,6 +62,7 @@ var OOP = (function() {
   var _extendSingletonInPackage = function(packageName, className, properties) {
     if (packageName in classes === false) return;
     if (className in classes[packageName] === false) return;
+    var addedConstructor = false;
     var theClass = classes[packageName][className];
 
     var getter = function(scope, propertyName) { return function() { return scope[propertyName]; }; };
@@ -116,6 +117,10 @@ var OOP = (function() {
               theClass.package[propertyName]  = theMethod;
               theClass.public[propertyName]   = theMethod;
               break;
+          }
+
+          if (modifiedPropertyName === "__constructor") {
+            addedConstructor = true;
           }
 
           //
@@ -186,7 +191,7 @@ var OOP = (function() {
     //Constructors have the magic name __constructor
     //We invoke the constructor in the next run loop, because we have to wait
     //for other classes and parts of the package to be build
-    if (theClass.private.__constructor) {
+    if (addedConstructor === true) {
       window.setTimeout(theClass.private.__constructor, 0);
     }
 
