@@ -57,7 +57,7 @@ OOP.extendSingleton("Connichiwa", "CWStitchManager", {
     if (identifier in this._devices) {
       delete this._devices[identifier];
 
-      var unstitchMessage = { type : "wasUnstitched" };
+      var unstitchMessage = { type : "wasunstitched" };
       Connichiwa.send(identifier, unstitchMessage);
 
       //If only one device remains, we also unstitch it. 
@@ -137,7 +137,7 @@ OOP.extendSingleton("Connichiwa", "CWStitchManager", {
     CWEventManager.trigger("stitch", stitchedDevice.device, newDevice);
 
     var stitchMessage = {
-      type                 : "wasStitched",
+      type                 : "wasstitched",
       otherDevice          : stitchedDevice.device.getIdentifier(),
       deviceTransformation : this.getDeviceTransformation(newDevice)
     };

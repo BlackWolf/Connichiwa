@@ -282,10 +282,12 @@ function CWDevice(properties)
   this.connectionState = CWDeviceConnectionState.DISCONNECTED;
   this.distance = -1;
   var _identifier = properties.identifier;
+  var _launchDate = Date.now() / 1000.0;
   var _name = "unknown";
   var _ppi = CWSystemInfo.DEFAULT_PPI();
   var _isLocal = false; 
 
+  if (properties.launchDate) _launchDate = properties.launchDate;
   if (properties.name) _name = properties.name;
   if (properties.ppi && properties.ppi > 0) _ppi = properties.ppi;
   if (properties.isLocal) _isLocal = properties.isLocal;
@@ -299,6 +301,8 @@ function CWDevice(properties)
    * @memberof CWDevice
    */
   this.getIdentifier = function() { return _identifier; };
+
+  this.getLaunchDate = function() { return _launchDate; };
 
   this.getPPI = function() { return _ppi; };
 
@@ -326,20 +330,22 @@ function CWDevice(properties)
 }
 
 
-CWDevice.prototype.connect = function()
-{
-  if (this.canBeConnected() === false) return;
+// DEVICE COMMUNICATION API
 
-  this.connectionState = CWDeviceConnectionState.CONNECTING;
-  nativeCallConnectRemote(this.getIdentifier());
+
+CWDevice.prototype.append = function(html) {
+  Connichiwa.append(this.getIdentifier(), html);
+};
+
+
+CWDevice.prototype.loadScript = function(url) {
+  Connichiwa.loadScript(this.getIdentifier(), url);
 };
 
 
 CWDevice.prototype.send = function(messageObject)
 {
   Connichiwa.send(this.getIdentifier(), messageObject);
-  // messageObject.target = this.getIdentifier();
-  // Connichiwa._sendObject(messageObject);
 };
 
 
@@ -393,6 +399,14 @@ var CWEventManager = (function()
   {
     if (typeof(event) !== "string") throw "Event name must be a string";
     if (typeof(callback) !== "function") throw "Event callback must be a function";
+
+    //event can be a space-seperated list of event names
+    if (event.indexOf(" ") !== -1) {
+      var events = event.split(" ");
+      for (var i = 0; i < events.length; i++) {
+        CWEventManager.register(events[i], callback);
+      }
+    }
 
     if (!_events[event]) _events[event] = [];
     _events[event].push(callback);
@@ -763,7 +777,7 @@ var CWStitchManager = OOP.createSingleton("Connichiwa", "CWStitchManager", {
 
   "private _quitStitch": function() {
     var data = {
-      type   : "quitStitch",
+      type   : "quitstitch",
       device : Connichiwa.getIdentifier()
     };
     Connichiwa.send(data);
@@ -959,45 +973,105 @@ CWVector.prototype.angle = function(otherVector) {
 };
 
 
-/* global OOP, CWEventManager, CWDebug */
+/* global OOP, Connichiwa, CWDebug */
+"use strict";
+
+
+var CWWebsocketMessageParser = OOP.createSingleton("Connichiwa", "CWWebsocketMessageParser", 
+{
+  "package parse": function(message) {
+    switch (message.type) {
+      case "append"     : this._parseAppend(message);     break;
+      case "loadscript" : this._parseLoadScript(message); break;
+    }
+  },
+
+  _parseAppend: function(message) {
+    $("body").append(message.html);
+  },
+
+  _parseLoadScript: function(message) {
+    $.getScript(message.url).done(function() {
+      // CWDebug.log(1, "SCRIPT WAS LOADED");
+      var replyMessage = {
+        type    : "scriptloaded",
+        request : message
+      };
+      Connichiwa.send(message.source, replyMessage);
+    }).fail(function(f, s, t) {
+      CWDebug.log(1, "There was an error loading '" + message.url + "': " + t);
+    });
+  }
+});
+/* global OOP, CWEventManager, CWUtil, CWDebug */
 "use strict";
 
 
 
 var Connichiwa = OOP.createSingleton("Connichiwa", "Connichiwa", {
-  "private _websocket"  : undefined,
+  "private _websocket" : undefined,
 
 
-  "public getIdentifier": function() 
+  "public getIdentifier" : function()                          { /* ABSTRACT */ },
+  "public isMaster"      : function()                          { /* ABSTRACT */ },
+
+
+  "public on": function(eventName, callback) {
+    CWEventManager.register(eventName, callback);
+  },
+
+
+  "public onMessage": function(messageName, callback) {
+    this.on("message" + messageName, callback);
+  },
+
+
+  // DEVICE COMMUNICATION API
+
+
+  "public append": function(identifier, html) {
+    //html can also be a DOM or jQuery element
+    if (CWUtil.isObject(html) === true) {
+      var el = $(html);
+      var clone = el.clone();
+      clone[0].style.cssText = el[0].style.cssText; //TODO really needed?
+      html = clone[0].outerHTML;
+    }
+
+    var message = {
+      type : "append",
+      html : html
+    };
+    this.send(identifier, message);
+  },
+
+
+  "public loadScript": function(identifier, url) {
+    var message = {
+      type : "loadscript",
+      url  : url
+    };
+    this.send(identifier, message);
+  },
+
+
+  "public send": function(targetIdentifier, messageObject) {
+    if (messageObject === undefined) {
+      messageObject = targetIdentifier;
+      targetIdentifier = "master";
+    }
+
+    messageObject.source = this.getIdentifier();
+    messageObject.target = targetIdentifier;
+    this._sendObject(messageObject);
+  },
+
+
+  "public broadcast": function(messageObject) 
   {
-    //ABSTRACT, OVERWRITE IN SUBCLASSES
+    this.send("broadcast", messageObject);
   },
 
-
-  "public send": function(identifier, messageObject) {
-    //ABSTRACT, OVERWRITE IN SUBCLASSES
-  },
-
-
-  "public broadcast": function(messageObject) {
-    //ABSTRACT, OVERWRITE IN SUBCLASSES
-  },
-
-
-  "public isMaster": function() {
-    //ABSTRACT, OVERWRITE IN SUBCLASSES
-  },
-
-
-  "public onMessage": function(type, callback) {
-    CWEventManager.register("message" + type, callback);
-  },
-
-
-  "package _disconnectWebsocket": function()
-  {
-    this._websocket.close();
-  },
 
   "package _sendObject": function(messageObject)
   {
@@ -1011,6 +1085,12 @@ var Connichiwa = OOP.createSingleton("Connichiwa", "Connichiwa", {
   },
 
 
+  "package _disconnectWebsocket": function()
+  {
+    this._websocket.close();
+  },
+
+
   _cleanupWebsocket: function()
   {
     if (this._websocket !== undefined) 
@@ -1020,69 +1100,6 @@ var Connichiwa = OOP.createSingleton("Connichiwa", "Connichiwa", {
       this._websocket.onclose   = undefined;
       this._websocket.onerror   = undefined;
       this._websocket           = undefined;
-    }
-  },
-});
-/* global OOP, Connichiwa, CWEventManager, CWDebug */
-"use strict";
-
-
-
-var CWMasterCommunication = OOP.createSingleton("Connichiwa", "CWMasterCommunication", 
-{
-  "public parse": function(message)
-  {
-    if (message.type === "softdisconnect")
-    {
-      this.package.Connichiwa._softDisconnectWebsocket();
-    }
-
-    if (message.type === "show")
-    {
-      $("body").append(message.content);
-    }
-
-    if (message.type === "update")
-    {
-      $(message.element).html(message.content);
-    }
-
-    if (message.type === "beginPath")
-    {
-      var context = $(message.element)[0].getContext("2d");
-      context.beginPath();
-      context.moveTo(message.coords.x, message.coords.y);
-    }
-
-    if (message.type === "updatePath")
-    {
-      var context = $(message.element)[0].getContext("2d");
-      context.lineTo(message.coords.x, message.coords.y);
-      context.stroke();
-    }
-
-    if (message.type === "endPath")
-    {
-      var context = $(message.element)[0].getContext("2d");
-      context.closePath();
-    }
-    
-    if (message.type === "loadScript")
-    {
-      CWDebug.log(1, "LOADING SCRIPT "+message.url);
-      $.getScript(message.url)
-        .done(function() {
-          CWDebug.log(1, "SCRIPT WAS LOADED");
-          //TODO check for AJAX errors n stuff
-          var message = {
-            type    : "scriptLoaded",
-            request : message
-          };
-          Connichiwa.send(message);
-        })
-        .fail(function(f, s, t) {
-          CWDebug.log(1, "SCRIPT LOAD FAILED HARD: "+t);
-        });
     }
   },
 });
@@ -1174,8 +1191,36 @@ var CWNativeRemoteCommunication = OOP.createSingleton("Connichiwa", "CWNativeRem
     this.package.Connichiwa._disconnectWebsocket();  
   },
 });
-/* global OOP, CWSystemInfo, CWUtil, CWDebug, CWMasterCommunication, CWNativeRemoteCommunication, CWEventManager */
-/* global runsNative */
+/* global OOP, CWEventManager */
+"use strict";
+
+
+OOP.extendSingleton("Connichiwa", "CWWebsocketMessageParser", 
+{
+  "package parseOnRemote": function(message) {
+    switch (message.type) {
+      case "softdisconnect" : this._parseSoftDisconnect(message); break;
+      case "wasstitched"    : this._parseWasStitched(message);    break;
+      case "wasunstitched"  : this._parseWasUnstitched(message);  break;
+    }
+  },
+
+
+  _parseSoftDisconnect: function(message) {
+    this.package.Connichiwa._softDisconnectWebsocket();
+  },
+
+
+  _parseWasStitched: function(message) {
+    CWEventManager.trigger("wasStitched", message);
+  },
+
+
+  _parseWasUnstitched: function(message) {
+    CWEventManager.trigger("wasUnstitched");
+  }
+});
+/* global OOP, CWWebsocketMessageParser, CWDevice, CWSystemInfo, CWUtil, CWDebug, CWMasterCommunication, CWNativeRemoteCommunication, CWEventManager */
 "use strict";
 
 
@@ -1185,6 +1230,8 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
 
 
   __constructor: function() {
+    //If no native layer runs in the background, we have to take care of 
+    //establishing a connection ourselves
     if (window.RUN_BY_CONNICHIWA_NATIVE !== true) {
       this._connectWebsocket();
     }
@@ -1203,56 +1250,12 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
   },
 
 
-  "public send": function(identifier, messageObject) {
-    if (identifier === "broadcast") {
-      this.broadcast(messageObject);
-      return;
-    }
-
-    if (messageObject === undefined) {
-      messageObject = identifier;
-      identifier = undefined;
-      messageObject.source = this.getIdentifier();
-      messageObject.target = "master";
-      this._sendObject(messageObject);
-      return;
-    }
-
-    messageObject.source = this.getIdentifier();
-    messageObject.target = identifier;
-    this._sendObject(messageObject);
-  },
-
-
-  "public broadcast": function(messageObject) 
-  {
-    messageObject.source = this.getIdentifier();
-    messageObject.target = "broadcast";
-    this._sendObject(messageObject);
-  },
-
-
-  // "package _setIdentifier": function(value) 
-  // {
-  //   if (this._identifier !== undefined) return false;
-
-  //   this._identifier = value;
-  //   CWDebug.log(2, "Identifier set to " + this._identifier);
-
-  //   //Pass the new identifier to the master device
-  //   var data = { type: "remoteidentifier", identifier: this._identifier };
-  //   this.send(data);
-
-  //   return true;
-  // },
-
-
   "package _setLocalDevice": function(properties) {
     if (this._localDevice !== undefined) return;
 
     this._localDevice = new CWDevice(properties);
 
-    //var data = { type: "remoteinfo", };
+    //Let the master know about our new device information
     properties.type = "remoteinfo";
     this.send(properties);
   },
@@ -1296,12 +1299,13 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
     } else {
       //We have no native layer that delivers us accurate local device info
       //Therefore, we create as much info as we can ourselves
+      CWDebug.log(Date.now()+" / "+1000.0+" = "+(Date.now()/1000.0));
       var localInfo = {
         identifier : CWUtil.createUUID(),
+        launchDate : Date.now() / 1000.0,
         ppi        : CWSystemInfo.PPI()
       };
       this._setLocalDevice(localInfo);
-      // this._setIdentifier(CWUtil.createUUID());
     }
   },
 
@@ -1314,8 +1318,11 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
     //It seems that reacting immediatly to a websocket message
     //sometimes causes crashes in Safari. I am unsure why.
     //We use requestAnimationFrame in an attempt to prevent those crashes
+    var that = this;
     window.requestAnimationFrame(function() {
-      CWMasterCommunication.parse(message);
+      that.package.CWWebsocketMessageParser.parse(message);
+      that.package.CWWebsocketMessageParser.parseOnRemote(message);
+
       if (message.type) CWEventManager.trigger("message" + message.type, message);
     });
   },

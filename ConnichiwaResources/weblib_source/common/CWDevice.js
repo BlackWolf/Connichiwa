@@ -32,10 +32,12 @@ function CWDevice(properties)
   this.connectionState = CWDeviceConnectionState.DISCONNECTED;
   this.distance = -1;
   var _identifier = properties.identifier;
+  var _launchDate = Date.now() / 1000.0;
   var _name = "unknown";
   var _ppi = CWSystemInfo.DEFAULT_PPI();
   var _isLocal = false; 
 
+  if (properties.launchDate) _launchDate = properties.launchDate;
   if (properties.name) _name = properties.name;
   if (properties.ppi && properties.ppi > 0) _ppi = properties.ppi;
   if (properties.isLocal) _isLocal = properties.isLocal;
@@ -49,6 +51,8 @@ function CWDevice(properties)
    * @memberof CWDevice
    */
   this.getIdentifier = function() { return _identifier; };
+
+  this.getLaunchDate = function() { return _launchDate; };
 
   this.getPPI = function() { return _ppi; };
 
@@ -76,20 +80,22 @@ function CWDevice(properties)
 }
 
 
-CWDevice.prototype.connect = function()
-{
-  if (this.canBeConnected() === false) return;
+// DEVICE COMMUNICATION API
 
-  this.connectionState = CWDeviceConnectionState.CONNECTING;
-  nativeCallConnectRemote(this.getIdentifier());
+
+CWDevice.prototype.append = function(html) {
+  Connichiwa.append(this.getIdentifier(), html);
+};
+
+
+CWDevice.prototype.loadScript = function(url) {
+  Connichiwa.loadScript(this.getIdentifier(), url);
 };
 
 
 CWDevice.prototype.send = function(messageObject)
 {
   Connichiwa.send(this.getIdentifier(), messageObject);
-  // messageObject.target = this.getIdentifier();
-  // Connichiwa._sendObject(messageObject);
 };
 
 

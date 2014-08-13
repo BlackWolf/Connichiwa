@@ -1,5 +1,4 @@
-/* global OOP, CWSystemInfo, CWUtil, CWDebug, CWMasterCommunication, CWNativeRemoteCommunication, CWEventManager */
-/* global runsNative */
+/* global OOP, CWWebsocketMessageParser, CWDevice, CWSystemInfo, CWUtil, CWDebug, CWMasterCommunication, CWNativeRemoteCommunication, CWEventManager */
 "use strict";
 
 
@@ -9,6 +8,8 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
 
 
   __constructor: function() {
+    //If no native layer runs in the background, we have to take care of 
+    //establishing a connection ourselves
     if (window.RUN_BY_CONNICHIWA_NATIVE !== true) {
       this._connectWebsocket();
     }
@@ -27,56 +28,12 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
   },
 
 
-  "public send": function(identifier, messageObject) {
-    if (identifier === "broadcast") {
-      this.broadcast(messageObject);
-      return;
-    }
-
-    if (messageObject === undefined) {
-      messageObject = identifier;
-      identifier = undefined;
-      messageObject.source = this.getIdentifier();
-      messageObject.target = "master";
-      this._sendObject(messageObject);
-      return;
-    }
-
-    messageObject.source = this.getIdentifier();
-    messageObject.target = identifier;
-    this._sendObject(messageObject);
-  },
-
-
-  "public broadcast": function(messageObject) 
-  {
-    messageObject.source = this.getIdentifier();
-    messageObject.target = "broadcast";
-    this._sendObject(messageObject);
-  },
-
-
-  // "package _setIdentifier": function(value) 
-  // {
-  //   if (this._identifier !== undefined) return false;
-
-  //   this._identifier = value;
-  //   CWDebug.log(2, "Identifier set to " + this._identifier);
-
-  //   //Pass the new identifier to the master device
-  //   var data = { type: "remoteidentifier", identifier: this._identifier };
-  //   this.send(data);
-
-  //   return true;
-  // },
-
-
   "package _setLocalDevice": function(properties) {
     if (this._localDevice !== undefined) return;
 
     this._localDevice = new CWDevice(properties);
 
-    //var data = { type: "remoteinfo", };
+    //Let the master know about our new device information
     properties.type = "remoteinfo";
     this.send(properties);
   },
@@ -122,10 +79,10 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
       //Therefore, we create as much info as we can ourselves
       var localInfo = {
         identifier : CWUtil.createUUID(),
+        launchDate : Date.now() / 1000.0,
         ppi        : CWSystemInfo.PPI()
       };
       this._setLocalDevice(localInfo);
-      // this._setIdentifier(CWUtil.createUUID());
     }
   },
 
@@ -138,8 +95,11 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
     //It seems that reacting immediatly to a websocket message
     //sometimes causes crashes in Safari. I am unsure why.
     //We use requestAnimationFrame in an attempt to prevent those crashes
+    var that = this;
     window.requestAnimationFrame(function() {
-      CWMasterCommunication.parse(message);
+      that.package.CWWebsocketMessageParser.parse(message);
+      that.package.CWWebsocketMessageParser.parseOnRemote(message);
+
       if (message.type) CWEventManager.trigger("message" + message.type, message);
     });
   },

@@ -1,38 +1,18 @@
-/* global OOP, Connichiwa, CWDebug, CWDeviceManager, CWDeviceConnectionState, CWEventManager */
-/* global nativeCallRemoteDidConnect */
+/* global OOP, CWEventManager, CWDeviceManager, CWDevice, CWDeviceConnectionState */
 "use strict";
 
 
-/**
- * The Connichiwa Communication Protocol Parser (Remote Device).  
- * Here the protocol used to communicate between this library and a connected remote device is parsed. The communication is done via JSON.
- *
- * **Remote ID Information** -- type="remoteidentifier"  
- * Contains the identifier of a connected remote device. Format:
- * * identifier -- a string identifying the unique ID of the device the weblib runs on
- *
- * @namespace CWRemoteCommunicationParser
- */
-var CWRemoteCommunication = OOP.createSingleton("Connichiwa", "CWRemoteCommunication", 
+OOP.extendSingleton("Connichiwa", "CWWebsocketMessageParser", 
 {
-  /**
-   * Parses a message from the websocket. If the message is none of the messages described by this class, this method will do nothing. Otherwise the message will trigger an appropiate action.
-   *
-   * @param {string} message The message from the websocket
-   *
-   * @memberof CWRemoteCommunicationParser
-   */
-  "public parse": function(message)
-  {
-    switch (message.type)
-    {
-      case "remoteinfo" :  this._parseRemoteInfo(message); break;
+  "package parseOnMaster": function(message) {
+    switch (message.type) {
+      case "remoteinfo"  :  this._parseRemoteInfo(message);  break;
       case "stitchswipe" :  this._parseStitchSwipe(message); break;
-      case "quitStitch"  :  this._parseQuitStitch(message); break;
+      case "quitstitch"  :  this._parseQuitStitch(message);  break;
     }
   },
-  
-  
+
+
   _parseRemoteInfo: function(message)
   {
     var device = CWDeviceManager.getDeviceWithIdentifier(message.identifier);
@@ -61,9 +41,11 @@ var CWRemoteCommunication = OOP.createSingleton("Connichiwa", "CWRemoteCommunica
     CWEventManager.trigger("deviceConnected", device);
   },
 
+
   _parseStitchSwipe: function(message) {
     this.package.CWStitchManager.detectedSwipe(message);
   },
+
 
   _parseQuitStitch: function(message) {
     this.package.CWStitchManager.unstitchDevice(message.device);

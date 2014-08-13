@@ -1,4 +1,4 @@
-/* global OOP, CWDebug, CWRemoteCommunication, CWEventManager, CWUtil, CWDeviceManager */
+/* global OOP, CWDebug, CWWebsocketMessageParser, CWEventManager, CWUtil, CWDeviceManager */
 /* global CONNECTING, OPEN */
 /* global nativeCallWebsocketDidOpen, nativeCallWebsocketDidClose */
 "use strict";
@@ -6,6 +6,7 @@
 
 OOP.extendSingleton("Connichiwa", "Connichiwa", {
   "private _connectionAttempts" : 0,
+  "public autoConnect": false,
 
 
   // PUBLIC API
@@ -24,55 +25,6 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
     return true;
   },
 
-
-  "public send": function(identifier, messageObject) {
-    if (identifier === "broadcast") {
-      this.broadcast(messageObject);
-      return;
-    }
-
-    //If we sent a message to ourself, just parse it as if
-    //it was sent by a  remote device
-    if (messageObject === undefined) {
-      messageObject = identifier;
-      identifier = undefined;
-      messageObject.target = "master";
-      messageObject.source = "master";
-      CWRemoteCommunication.parse(messageObject);
-      return;
-    }
-
-    messageObject.source = "master";
-    messageObject.target = identifier;
-    this._sendObject(messageObject);
-  },
-
-
-  "public broadcast": function(messageObject) 
-  {
-    messageObject.source = "master";
-    messageObject.target = "broadcast";
-    this._sendObject(messageObject);
-  },
-  
-  
-  "public on": function(event, callback)
-  {
-    var validEvents = [ 
-      "ready", 
-      "deviceDetected", 
-      "deviceDistanceChanged", 
-      "deviceLost",
-      "deviceConnected",
-      "deviceDisconnected",
-      "connectFailed",
-      "stitch"
-    ];
-    
-    if (CWUtil.inArray(event, validEvents) === false) throw "Registering for invalid event: " + event;
-
-    CWEventManager.register(event, callback);
-  },
 
   // WEBSOCKET
 
@@ -113,8 +65,10 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
     //It seems that reacting immediatly to a websocket message
     //sometimes causes crashes in UIWebView. I am unsure why.
     //We use requestAnimationFrame in an attempt to prevent those crashes
+    var that = this;
     window.requestAnimationFrame(function() {
-      CWRemoteCommunication.parse(message);
+      that.package.CWWebsocketMessageParser.parse(message);
+      that.package.CWWebsocketMessageParser.parseOnMaster(message);
 
       if (message.type) CWEventManager.trigger("message" + message.type, message);
     });

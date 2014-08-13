@@ -89,7 +89,7 @@ var CWStitchManager = OOP.createSingleton("Connichiwa", "CWStitchManager", {
 
   "private _quitStitch": function() {
     var data = {
-      type   : "quitStitch",
+      type   : "quitstitch",
       device : Connichiwa.getIdentifier()
     };
     Connichiwa.send(data);

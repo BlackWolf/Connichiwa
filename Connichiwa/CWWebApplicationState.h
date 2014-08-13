@@ -20,6 +20,8 @@
  */
 @property (readonly) NSString *identifier;
 
+@property (readonly) NSDate *launchDate;
+
 @property (readonly) NSString *deviceName;
 
 @property (readonly) int ppi;

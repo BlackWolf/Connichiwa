@@ -33,6 +33,8 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
  */
 @property (readwrite, strong) NSString *identifier;
 
+@property (readwrite, strong) NSDate *launchDate;
+
 /**
  *  The port the webserver will run on
  */
@@ -109,6 +111,7 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
     self = [super init];
     
     self.identifier = [[NSUUID UUID] UUIDString];
+    self.launchDate = [NSDate date];
     self.pendingRemoteDevices = [NSMutableArray array];
     self.remoteDevices = [NSMutableArray array];
     
@@ -212,6 +215,7 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
 - (NSDictionary *)deviceInfo {
     return @{
              @"identifier" : [self identifier],
+             @"launchDate" : @([[self launchDate] timeIntervalSince1970]),
              @"name" : [self deviceName],
              @"ppi" : @([self ppi])
              };

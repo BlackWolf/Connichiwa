@@ -1,4 +1,4 @@
-/* global OOP, CWDeviceManager, CWDevice, CWDeviceDiscoveryState, CWDeviceConnectionState, CWEventManager, CWDebug */
+/* global OOP, Connichiwa, CWDeviceManager, CWDevice, CWDeviceDiscoveryState, CWDeviceConnectionState, CWEventManager, CWDebug */
 "use strict";
 
 
@@ -107,11 +107,22 @@ var CWNativeMasterCommunication = OOP.createSingleton("Connichiwa", "CWNativeMas
       device = new CWDevice(message);
       CWDeviceManager.addDevice(device);
     }
-
     device.discoveryState = CWDeviceDiscoveryState.DISCOVERED;
 
     CWDebug.log(2, "Detected device: " + device.getIdentifier());
     CWEventManager.trigger("deviceDetected", device);
+
+    //If autoconnect is enabled, the device that launched first will 
+    //automatically connect to all other devices
+    CWDebug.log(1, "CHECKING AUTOCONNECT: "+Connichiwa.autoConnect);
+    if (Connichiwa.autoConnect === true) {
+      var localDevice = CWDeviceManager.getLocalDevice();
+
+      CWDebug.log(1, "CHECKING LAUNCH DATE: "+localDevice.getLaunchDate()+" VS "+device.getLaunchDate());
+      if (localDevice.getLaunchDate() < device.getLaunchDate()) {
+        device.connect();
+      }
+    } 
   },
   
   

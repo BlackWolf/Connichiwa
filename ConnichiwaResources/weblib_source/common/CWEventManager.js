@@ -28,6 +28,14 @@ var CWEventManager = (function()
     if (typeof(event) !== "string") throw "Event name must be a string";
     if (typeof(callback) !== "function") throw "Event callback must be a function";
 
+    //event can be a space-seperated list of event names
+    if (event.indexOf(" ") !== -1) {
+      var events = event.split(" ");
+      for (var i = 0; i < events.length; i++) {
+        CWEventManager.register(events[i], callback);
+      }
+    }
+
     if (!_events[event]) _events[event] = [];
     _events[event].push(callback);
     CWDebug.log(3, "Attached callback to " + event);

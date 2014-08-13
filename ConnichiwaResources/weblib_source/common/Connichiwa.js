@@ -1,42 +1,72 @@
-/* global OOP, CWEventManager, CWDebug */
+/* global OOP, CWEventManager, CWUtil, CWDebug */
 "use strict";
 
 
 
 var Connichiwa = OOP.createSingleton("Connichiwa", "Connichiwa", {
-  "private _websocket"  : undefined,
+  "private _websocket" : undefined,
 
 
-  "public getIdentifier": function() 
+  "public getIdentifier" : function()                          { /* ABSTRACT */ },
+  "public isMaster"      : function()                          { /* ABSTRACT */ },
+
+
+  "public on": function(eventName, callback) {
+    CWEventManager.register(eventName, callback);
+  },
+
+
+  "public onMessage": function(messageName, callback) {
+    this.on("message" + messageName, callback);
+  },
+
+
+  // DEVICE COMMUNICATION API
+
+
+  "public append": function(identifier, html) {
+    //html can also be a DOM or jQuery element
+    if (CWUtil.isObject(html) === true) {
+      var el = $(html);
+      var clone = el.clone();
+      clone[0].style.cssText = el[0].style.cssText; //TODO really needed?
+      html = clone[0].outerHTML;
+    }
+
+    var message = {
+      type : "append",
+      html : html
+    };
+    this.send(identifier, message);
+  },
+
+
+  "public loadScript": function(identifier, url) {
+    var message = {
+      type : "loadscript",
+      url  : url
+    };
+    this.send(identifier, message);
+  },
+
+
+  "public send": function(targetIdentifier, messageObject) {
+    if (messageObject === undefined) {
+      messageObject = targetIdentifier;
+      targetIdentifier = "master";
+    }
+
+    messageObject.source = this.getIdentifier();
+    messageObject.target = targetIdentifier;
+    this._sendObject(messageObject);
+  },
+
+
+  "public broadcast": function(messageObject) 
   {
-    //ABSTRACT, OVERWRITE IN SUBCLASSES
+    this.send("broadcast", messageObject);
   },
 
-
-  "public send": function(identifier, messageObject) {
-    //ABSTRACT, OVERWRITE IN SUBCLASSES
-  },
-
-
-  "public broadcast": function(messageObject) {
-    //ABSTRACT, OVERWRITE IN SUBCLASSES
-  },
-
-
-  "public isMaster": function() {
-    //ABSTRACT, OVERWRITE IN SUBCLASSES
-  },
-
-
-  "public onMessage": function(type, callback) {
-    CWEventManager.register("message" + type, callback);
-  },
-
-
-  "package _disconnectWebsocket": function()
-  {
-    this._websocket.close();
-  },
 
   "package _sendObject": function(messageObject)
   {
@@ -47,6 +77,12 @@ var Connichiwa = OOP.createSingleton("Connichiwa", "Connichiwa", {
   "package _send": function(message) {
     CWDebug.log(4, "Sending message: " + message);
     this._websocket.send(message);
+  },
+
+
+  "package _disconnectWebsocket": function()
+  {
+    this._websocket.close();
   },
 
 
