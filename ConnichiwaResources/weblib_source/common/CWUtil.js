@@ -31,6 +31,21 @@ var CWUtil = (function()
     return pos;
   };
 
+
+  var randomInt = function(min, max) {
+    //Only one parameter was given, use it as max, 0 as min
+    if (max === undefined && min !== undefined) {
+      max = min;
+      min = 0;
+    //No parameter was given, use 0 as min, maxint as max
+    } else if (max === undefined && min === undefined) {
+      min = 0;
+      max = Number.MAX_VALUE;
+    }
+
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  };
+
   
   /**
    * Checks if the given parameter is an Int.
@@ -88,6 +103,7 @@ var CWUtil = (function()
   return {
     parseURL         : parseURL,
     getEventLocation : getEventLocation,
+    randomInt        : randomInt,
     isInt            : isInt,
     isString         : isString,
     isObject         : isObject,

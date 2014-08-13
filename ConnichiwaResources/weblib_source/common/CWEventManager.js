@@ -13,7 +13,7 @@ var CWEventManager = (function()
   /**
    * A dictionary where each entry represents a single event. The key is the event name. Each entry of the dictionary is an array of callbacks that should be called when the event is triggered.
    */
-  var _events = {};
+  var _callbacks = {};
 
   /**
    * Registers the given callback function for the given event. When the event is triggered, the callback will be executed.
@@ -36,8 +36,8 @@ var CWEventManager = (function()
       }
     }
 
-    if (!_events[event]) _events[event] = [];
-    _events[event].push(callback);
+    if (!_callbacks[event]) _callbacks[event] = [];
+    _callbacks[event].push(callback);
     CWDebug.log(3, "Attached callback to " + event);
   };
 
@@ -64,15 +64,15 @@ var CWEventManager = (function()
     }
     
 
-    if (!_events[event]) { 
+    if (!_callbacks[event]) { 
       CWDebug.log(5, "No callbacks  for " + event + " registered"); 
       return; 
     }
 
-    CWDebug.log(logPrio, "Triggering event " + event + " for "+_events[event].length + " callbacks");
-    for (var i = 0; i < _events[event].length; i++)
+    CWDebug.log(logPrio, "Triggering event " + event + " for "+_callbacks[event].length + " callbacks");
+    for (var i = 0; i < _callbacks[event].length; i++)
     {
-      var callback = _events[event][i];
+      var callback = _callbacks[event][i];
       callback.apply(null, args); //calls the callback with arguments args
     }
   };

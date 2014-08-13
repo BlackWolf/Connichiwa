@@ -41,12 +41,16 @@ var Connichiwa = OOP.createSingleton("Connichiwa", "Connichiwa", {
   },
 
 
-  "public loadScript": function(identifier, url) {
+  "public loadScript": function(identifier, url, callback) {
     var message = {
       type : "loadscript",
       url  : url
     };
-    this.send(identifier, message);
+    var messageID = this.send(identifier, message);
+
+    if (callback !== undefined) {
+      this.on("__messageack__id" + messageID, callback);
+    }
   },
 
 
@@ -58,7 +62,7 @@ var Connichiwa = OOP.createSingleton("Connichiwa", "Connichiwa", {
 
     messageObject.source = this.getIdentifier();
     messageObject.target = targetIdentifier;
-    this._sendObject(messageObject);
+    return this._sendObject(messageObject);
   },
 
 
@@ -68,15 +72,24 @@ var Connichiwa = OOP.createSingleton("Connichiwa", "Connichiwa", {
   },
 
 
-  "package _sendObject": function(messageObject)
-  {
-    this._send(JSON.stringify(messageObject));
+  "package _sendAck": function(messageObject) {
+    var ackMessage = {
+      type     : "ack",
+      original : messageObject
+    };
+    this.send(messageObject.source, ackMessage);
   },
 
 
-  "package _send": function(message) {
-    CWDebug.log(4, "Sending message: " + message);
-    this._websocket.send(message);
+  "package _sendObject": function(messageObject)
+  {
+    messageObject._id = CWUtil.randomInt();
+
+    var messageString = JSON.stringify(messageObject);
+    CWDebug.log(4, "Sending message: " + messageString);
+    this._websocket.send(messageString);
+
+    return messageObject._id;
   },
 
 

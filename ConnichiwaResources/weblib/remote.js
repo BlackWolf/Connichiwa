@@ -338,8 +338,8 @@ CWDevice.prototype.append = function(html) {
 };
 
 
-CWDevice.prototype.loadScript = function(url) {
-  Connichiwa.loadScript(this.getIdentifier(), url);
+CWDevice.prototype.loadScript = function(url, callback) {
+  Connichiwa.loadScript(this.getIdentifier(), url, callback);
 };
 
 
@@ -385,7 +385,7 @@ var CWEventManager = (function()
   /**
    * A dictionary where each entry represents a single event. The key is the event name. Each entry of the dictionary is an array of callbacks that should be called when the event is triggered.
    */
-  var _events = {};
+  var _callbacks = {};
 
   /**
    * Registers the given callback function for the given event. When the event is triggered, the callback will be executed.
@@ -408,8 +408,8 @@ var CWEventManager = (function()
       }
     }
 
-    if (!_events[event]) _events[event] = [];
-    _events[event].push(callback);
+    if (!_callbacks[event]) _callbacks[event] = [];
+    _callbacks[event].push(callback);
     CWDebug.log(3, "Attached callback to " + event);
   };
 
@@ -436,15 +436,15 @@ var CWEventManager = (function()
     }
     
 
-    if (!_events[event]) { 
+    if (!_callbacks[event]) { 
       CWDebug.log(5, "No callbacks  for " + event + " registered"); 
       return; 
     }
 
-    CWDebug.log(logPrio, "Triggering event " + event + " for "+_events[event].length + " callbacks");
-    for (var i = 0; i < _events[event].length; i++)
+    CWDebug.log(logPrio, "Triggering event " + event + " for "+_callbacks[event].length + " callbacks");
+    for (var i = 0; i < _callbacks[event].length; i++)
     {
-      var callback = _events[event][i];
+      var callback = _callbacks[event][i];
       callback.apply(null, args); //calls the callback with arguments args
     }
   };
@@ -884,6 +884,21 @@ var CWUtil = (function()
     return pos;
   };
 
+
+  var randomInt = function(min, max) {
+    //Only one parameter was given, use it as max, 0 as min
+    if (max === undefined && min !== undefined) {
+      max = min;
+      min = 0;
+    //No parameter was given, use 0 as min, maxint as max
+    } else if (max === undefined && min === undefined) {
+      min = 0;
+      max = Number.MAX_VALUE;
+    }
+
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  };
+
   
   /**
    * Checks if the given parameter is an Int.
@@ -941,6 +956,7 @@ var CWUtil = (function()
   return {
     parseURL         : parseURL,
     getEventLocation : getEventLocation,
+    randomInt        : randomInt,
     isInt            : isInt,
     isString         : isString,
     isObject         : isObject,
@@ -973,7 +989,7 @@ CWVector.prototype.angle = function(otherVector) {
 };
 
 
-/* global OOP, Connichiwa, CWDebug */
+/* global OOP, Connichiwa, CWEventManager, CWDebug */
 "use strict";
 
 
@@ -981,9 +997,15 @@ var CWWebsocketMessageParser = OOP.createSingleton("Connichiwa", "CWWebsocketMes
 {
   "package parse": function(message) {
     switch (message.type) {
+      case "ack"        : this._parseAck(message);        break;
       case "append"     : this._parseAppend(message);     break;
       case "loadscript" : this._parseLoadScript(message); break;
     }
+  },
+
+
+  _parseAck: function(message) {
+    CWEventManager.trigger("__messageack__id" + message.original._id);
   },
 
   _parseAppend: function(message) {
@@ -991,13 +1013,9 @@ var CWWebsocketMessageParser = OOP.createSingleton("Connichiwa", "CWWebsocketMes
   },
 
   _parseLoadScript: function(message) {
+    var that = this;
     $.getScript(message.url).done(function() {
-      // CWDebug.log(1, "SCRIPT WAS LOADED");
-      var replyMessage = {
-        type    : "scriptloaded",
-        request : message
-      };
-      Connichiwa.send(message.source, replyMessage);
+      that.package.Connichiwa._sendAck(message);
     }).fail(function(f, s, t) {
       CWDebug.log(1, "There was an error loading '" + message.url + "': " + t);
     });
@@ -1046,12 +1064,16 @@ var Connichiwa = OOP.createSingleton("Connichiwa", "Connichiwa", {
   },
 
 
-  "public loadScript": function(identifier, url) {
+  "public loadScript": function(identifier, url, callback) {
     var message = {
       type : "loadscript",
       url  : url
     };
-    this.send(identifier, message);
+    var messageID = this.send(identifier, message);
+
+    if (callback !== undefined) {
+      this.on("__messageack__id" + messageID, callback);
+    }
   },
 
 
@@ -1063,7 +1085,7 @@ var Connichiwa = OOP.createSingleton("Connichiwa", "Connichiwa", {
 
     messageObject.source = this.getIdentifier();
     messageObject.target = targetIdentifier;
-    this._sendObject(messageObject);
+    return this._sendObject(messageObject);
   },
 
 
@@ -1073,15 +1095,24 @@ var Connichiwa = OOP.createSingleton("Connichiwa", "Connichiwa", {
   },
 
 
-  "package _sendObject": function(messageObject)
-  {
-    this._send(JSON.stringify(messageObject));
+  "package _sendAck": function(messageObject) {
+    var ackMessage = {
+      type     : "ack",
+      original : messageObject
+    };
+    this.send(messageObject.source, ackMessage);
   },
 
 
-  "package _send": function(message) {
-    CWDebug.log(4, "Sending message: " + message);
-    this._websocket.send(message);
+  "package _sendObject": function(messageObject)
+  {
+    messageObject._id = CWUtil.randomInt();
+
+    var messageString = JSON.stringify(messageObject);
+    CWDebug.log(4, "Sending message: " + messageString);
+    this._websocket.send(messageString);
+
+    return messageObject._id;
   },
 
 
@@ -1299,7 +1330,6 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
     } else {
       //We have no native layer that delivers us accurate local device info
       //Therefore, we create as much info as we can ourselves
-      CWDebug.log(Date.now()+" / "+1000.0+" = "+(Date.now()/1000.0));
       var localInfo = {
         identifier : CWUtil.createUUID(),
         launchDate : Date.now() / 1000.0,

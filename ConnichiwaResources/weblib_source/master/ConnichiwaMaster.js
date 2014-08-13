@@ -7,6 +7,7 @@
 OOP.extendSingleton("Connichiwa", "Connichiwa", {
   "private _connectionAttempts" : 0,
   "public autoConnect": false,
+  "public autoLoadScripts": [],
 
 
   // PUBLIC API

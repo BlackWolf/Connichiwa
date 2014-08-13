@@ -1,4 +1,5 @@
-/* global OOP, CWEventManager, CWDeviceManager, CWDevice, CWDeviceConnectionState */
+/* global OOP, Connichiwa, CWEventManager, CWDeviceManager, CWDevice, CWDeviceConnectionState, CWDebug */
+/* global nativeCallRemoteDidConnect */
 "use strict";
 
 
@@ -27,6 +28,7 @@ OOP.extendSingleton("Connichiwa", "CWWebsocketMessageParser",
       //overwrite any existing device data with the newly received data?
       //If a device exists, that data should be the same as the one we received
       //via BT anyways, so it shouldn't matter
+      CWDebug.log(1, "TODO");
     }
     
     
@@ -38,7 +40,22 @@ OOP.extendSingleton("Connichiwa", "CWWebsocketMessageParser",
     //This does seem strange, though, considering we just received a message over the websocket (so it obviously is initialized and working)
     //As a temporary fix, I try to delay sending this event a little and see if it helps
     // setTimeout(function() { CWEventManager.trigger("deviceConnected", device); }, 1000);
-    CWEventManager.trigger("deviceConnected", device);
+    var connectedCallback = function() { 
+      CWEventManager.trigger("deviceConnected", device); 
+    };
+    
+    if (Connichiwa.autoLoadScripts.length > 0) {
+      for (var i = 0; i < Connichiwa.autoLoadScripts.length ; i++) {
+        var script = Connichiwa.autoLoadScripts[i];
+        if (i === (Connichiwa.autoLoadScripts.length - 1)) {
+          device.loadScript(script, connectedCallback);
+        } else {
+          device.loadScript(script);
+        }
+      }
+    } else {
+      connectedCallback();
+    }
   },
 
 

@@ -114,11 +114,8 @@ var CWNativeMasterCommunication = OOP.createSingleton("Connichiwa", "CWNativeMas
 
     //If autoconnect is enabled, the device that launched first will 
     //automatically connect to all other devices
-    CWDebug.log(1, "CHECKING AUTOCONNECT: "+Connichiwa.autoConnect);
     if (Connichiwa.autoConnect === true) {
       var localDevice = CWDeviceManager.getLocalDevice();
-
-      CWDebug.log(1, "CHECKING LAUNCH DATE: "+localDevice.getLaunchDate()+" VS "+device.getLaunchDate());
       if (localDevice.getLaunchDate() < device.getLaunchDate()) {
         device.connect();
       }

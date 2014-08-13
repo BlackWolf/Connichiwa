@@ -88,8 +88,8 @@ CWDevice.prototype.append = function(html) {
 };
 
 
-CWDevice.prototype.loadScript = function(url) {
-  Connichiwa.loadScript(this.getIdentifier(), url);
+CWDevice.prototype.loadScript = function(url, callback) {
+  Connichiwa.loadScript(this.getIdentifier(), url, callback);
 };
 
 
