@@ -101,19 +101,19 @@
 			remoteGlobalIDString = B54173161894341600B6636B;
 			remoteInfo = "Nodelike Tests";
 		};
-		3381A02C193F492600BDDF34 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3381A01E193F492600BDDF34 /* Nodelike.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 33819FDB193F3F6100BDDF34;
-			remoteInfo = NodelikeResources;
-		};
 		33A0515C193E61CC00FED071 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 33A0513E193E61CC00FED071 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 33A05145193E61CC00FED071;
 			remoteInfo = Connichiwa;
+		};
+		33ACB88C19ED227C001A465F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3381A01E193F492600BDDF34 /* Nodelike.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = B54C1F51180D37280051F826;
+			remoteInfo = uv;
 		};
 		33ACBECC193F4A3800CD51BC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -255,7 +255,6 @@
 				3381A027193F492600BDDF34 /* libNodelike.a */,
 				3381A029193F492600BDDF34 /* libuv.a */,
 				3381A02B193F492600BDDF34 /* Nodelike Tests.xctest */,
-				3381A02D193F492600BDDF34 /* NodelikeResources.bundle */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -418,6 +417,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				33ACB88D19ED227C001A465F /* PBXTargetDependency */,
 				33ACBECD193F4A3800CD51BC /* PBXTargetDependency */,
 				330CBB94193F17A40064AD99 /* PBXTargetDependency */,
 			);
@@ -499,13 +499,6 @@
 			fileType = wrapper.cfbundle;
 			path = "Nodelike Tests.xctest";
 			remoteRef = 3381A02A193F492600BDDF34 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		3381A02D193F492600BDDF34 /* NodelikeResources.bundle */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = NodelikeResources.bundle;
-			remoteRef = 3381A02C193F492600BDDF34 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -693,6 +686,11 @@
 			isa = PBXTargetDependency;
 			target = 33A05145193E61CC00FED071 /* Connichiwa */;
 			targetProxy = 33A0515C193E61CC00FED071 /* PBXContainerItemProxy */;
+		};
+		33ACB88D19ED227C001A465F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = uv;
+			targetProxy = 33ACB88C19ED227C001A465F /* PBXContainerItemProxy */;
 		};
 		33ACBECD193F4A3800CD51BC /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;

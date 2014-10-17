@@ -400,12 +400,15 @@ var CWEventManager = (function()
     if (typeof(event) !== "string") throw "Event name must be a string";
     if (typeof(callback) !== "function") throw "Event callback must be a function";
 
+    event = event.toLowerCase();
+
     //event can be a space-seperated list of event names
     if (event.indexOf(" ") !== -1) {
       var events = event.split(" ");
       for (var i = 0; i < events.length; i++) {
         CWEventManager.register(events[i], callback);
       }
+      return;
     }
 
     if (!_callbacks[event]) _callbacks[event] = [];
@@ -434,7 +437,8 @@ var CWEventManager = (function()
       args.shift();
       args.shift();
     }
-    
+
+    event = event.toLowerCase();
 
     if (!_callbacks[event]) { 
       CWDebug.log(5, "No callbacks  for " + event + " registered"); 
@@ -593,7 +597,7 @@ $(document).ready(function() {
     if (endsAtRightEdge  && direction === "right") edge = "right";
 
     if (edge === "invalid") {
-      CWDebug.log(3, "Swipe REJECTED. Ending: x - " + swipeEnd.x + "/" + (window.innerWidth - 30) + ", y - " + swipeEnd.y + "/" + (window.innerHeight - 30) + ". Direction: " + direction + ". Edge endings: " + endsAtTopEdge + ", " + endsAtRightEdge + ", " + endsAtBottomEdge + ", " + endsAtLeftEdge);
+      CWDebug.log(3, "Swipe REJECTED. Ending: x - " + swipeEnd.x + "/" + (window.innerWidth - 50) + ", y - " + swipeEnd.y + "/" + (window.innerHeight - 50) + ". Direction: " + direction + ". Edge endings: " + endsAtTopEdge + ", " + endsAtRightEdge + ", " + endsAtBottomEdge + ", " + endsAtLeftEdge);
       return;
     }
 
@@ -698,10 +702,12 @@ var CWStitchManager = OOP.createSingleton("Connichiwa", "CWStitchManager", {
 
 
   __constructor: function() {
-    Connichiwa.onMessage("wasStitched",   this._onWasStitched);
-    Connichiwa.onMessage("wasUnstitched", this._onWasUnstitched);
+    // Connichiwa.onMessage("wasStitched",   this._onWasStitched);
+    // Connichiwa.onMessage("wasUnstitched", this._onWasUnstitched);
 
     CWEventManager.register("stitchswipe",          this._onLocalSwipe);
+    CWEventManager.register("wasStitched",   this._onWasStitched);
+    CWEventManager.register("wasUnstitched",   this._onWasUnstitched);
 
     CWEventManager.register("gyroscopeUpdate",     this._onGyroUpdate);
     CWEventManager.register("accelerometerUpdate", this._onAccelerometerUpdate);
@@ -1481,17 +1487,21 @@ OOP.extendSingleton("Connichiwa", "CWStitchManager", {
     var now = new Date();
     for (var key in this._swipes) {
       var savedSwipe = this._swipes[key];
+      CWDebug.log(3, "Checking swipe");
 
       //We can't create a stitch on a single device
       if (savedSwipe.data.device === data.device) continue;
+      CWDebug.log(3, "Is not a single device");
 
       //If the existing swipe is too old, it is invalid
       if ((now.getTime() - savedSwipe.date.getTime()) > 1000) continue;
+      CWDebug.log(3, "Time is alright");
 
 
       //Check if the other device is still connected
       var otherDevice = CWDeviceManager.getDeviceWithIdentifier(savedSwipe.data.device); 
       if (otherDevice === null || otherDevice.isConnected() === false) continue;
+      CWDebug.log(3, "Still connected!");
 
       this._detectedStitch(device, data, otherDevice, savedSwipe.data);
       //TODO remove the swipes?

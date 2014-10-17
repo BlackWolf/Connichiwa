@@ -8,12 +8,13 @@
 
 #import "CWiDevice.h"
 
+#include <sys/socket.h> // Per msqr
+#include <sys/sysctl.h>
+
 @implementation CWiDevice
 
 
 /* Thanks to https://github.com/erica/uidevice-extension/blob/master/UIDevice-Hardware.m */
-#include <sys/socket.h> // Per msqr
-#include <sys/sysctl.h>
 + (NSString *)platform {
     //Get hw.machine string
     char *typeSpecifier = "hw.machine";

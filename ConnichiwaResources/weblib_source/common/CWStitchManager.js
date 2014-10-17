@@ -10,10 +10,9 @@ var CWStitchManager = OOP.createSingleton("Connichiwa", "CWStitchManager", {
 
 
   __constructor: function() {
-    Connichiwa.onMessage("wasStitched",   this._onWasStitched);
-    Connichiwa.onMessage("wasUnstitched", this._onWasUnstitched);
-
-    CWEventManager.register("stitchswipe",          this._onLocalSwipe);
+    CWEventManager.register("stitchswipe",         this._onLocalSwipe);
+    CWEventManager.register("wasStitched",         this._onWasStitched);
+    CWEventManager.register("wasUnstitched",       this._onWasUnstitched);
 
     CWEventManager.register("gyroscopeUpdate",     this._onGyroUpdate);
     CWEventManager.register("accelerometerUpdate", this._onAccelerometerUpdate);

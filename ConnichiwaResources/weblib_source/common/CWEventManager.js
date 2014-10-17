@@ -28,12 +28,15 @@ var CWEventManager = (function()
     if (typeof(event) !== "string") throw "Event name must be a string";
     if (typeof(callback) !== "function") throw "Event callback must be a function";
 
+    event = event.toLowerCase();
+
     //event can be a space-seperated list of event names
     if (event.indexOf(" ") !== -1) {
       var events = event.split(" ");
       for (var i = 0; i < events.length; i++) {
         CWEventManager.register(events[i], callback);
       }
+      return;
     }
 
     if (!_callbacks[event]) _callbacks[event] = [];
@@ -62,7 +65,8 @@ var CWEventManager = (function()
       args.shift();
       args.shift();
     }
-    
+
+    event = event.toLowerCase();
 
     if (!_callbacks[event]) { 
       CWDebug.log(5, "No callbacks  for " + event + " registered"); 

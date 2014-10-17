@@ -9,6 +9,8 @@
 #import "CWUtil.h"
 #import "CWDebug.h"
 
+#include <ifaddrs.h>
+#include <arpa/inet.h>
 
 
 /**
@@ -71,8 +73,6 @@
  http://stackoverflow.com/questions/3434192/alternatives-to-nshost-in-iphone-app and
  http://zachwaugh.me/posts/programmatically-retrieving-ip-address-of-iphone/
  */
-#include <ifaddrs.h>
-#include <arpa/inet.h>
 + (NSArray *)deviceInterfaceAddresses
 {
     struct ifaddrs *interfaces = NULL;

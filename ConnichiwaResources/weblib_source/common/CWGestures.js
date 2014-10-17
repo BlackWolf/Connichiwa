@@ -137,7 +137,7 @@ $(document).ready(function() {
     if (endsAtRightEdge  && direction === "right") edge = "right";
 
     if (edge === "invalid") {
-      CWDebug.log(3, "Swipe REJECTED. Ending: x - " + swipeEnd.x + "/" + (window.innerWidth - 30) + ", y - " + swipeEnd.y + "/" + (window.innerHeight - 30) + ". Direction: " + direction + ". Edge endings: " + endsAtTopEdge + ", " + endsAtRightEdge + ", " + endsAtBottomEdge + ", " + endsAtLeftEdge);
+      CWDebug.log(3, "Swipe REJECTED. Ending: x - " + swipeEnd.x + "/" + (window.innerWidth - 50) + ", y - " + swipeEnd.y + "/" + (window.innerHeight - 50) + ". Direction: " + direction + ". Edge endings: " + endsAtTopEdge + ", " + endsAtRightEdge + ", " + endsAtBottomEdge + ", " + endsAtLeftEdge);
       return;
     }
 
