@@ -7,8 +7,8 @@ var Connichiwa = OOP.createSingleton("Connichiwa", "Connichiwa", {
   "private _websocket" : undefined,
 
 
-  "public getIdentifier" : function()                          { /* ABSTRACT */ },
-  "public isMaster"      : function()                          { /* ABSTRACT */ },
+  "public getIdentifier" : function() { /* ABSTRACT */ },
+  "public isMaster"      : function() { /* ABSTRACT */ },
 
 
   "public on": function(eventName, callback) {
@@ -63,6 +63,11 @@ var Connichiwa = OOP.createSingleton("Connichiwa", "Connichiwa", {
     messageObject.source = this.getIdentifier();
     messageObject.target = targetIdentifier;
     return this._sendObject(messageObject);
+  },
+
+
+  "public respond": function(originalMessage, responseObject) {
+    this.send(originalMessage.source, responseObject);
   },
 
 

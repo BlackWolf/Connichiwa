@@ -1,19 +1,23 @@
-/* global OOP, Connichiwa, CWEventManager, CWSystemInfo */
+/* global OOP, Connichiwa, CWEventManager, CWSystemInfo, CWUtil */
 "use strict";
 
 
  
 var CWStitchManager = OOP.createSingleton("Connichiwa", "CWStitchManager", {
   "private _isStitched": false,
-  "private _deviceTransformation": { x: 0, y: 0, scale: 1.0 },
+  "private _deviceTransformation": undefined,
   "private _gyroDataOnStitch": undefined,
+
+  "public unstitchOnMove": true,
+  "public ignoreMoveAxis": [],
 
 
   __constructor: function() {
+    this._deviceTransformation = this.DEFAULT_DEVICE_TRANSFORMATION();
+
     CWEventManager.register("stitchswipe",         this._onLocalSwipe);
     CWEventManager.register("wasStitched",         this._onWasStitched);
     CWEventManager.register("wasUnstitched",       this._onWasUnstitched);
-
     CWEventManager.register("gyroscopeUpdate",     this._onGyroUpdate);
     CWEventManager.register("accelerometerUpdate", this._onAccelerometerUpdate);
   },
@@ -30,7 +34,7 @@ var CWStitchManager = OOP.createSingleton("Connichiwa", "CWStitchManager", {
 
   _onWasUnstitched: function(message) {
     this._gyroDataOnStitch = undefined;
-    this._deviceTransformation = { x: 0, y: 0, scale: 1.0 };
+    this._deviceTransformation = this.DEFAULT_DEVICE_TRANSFORMATION();
     this._isStitched = false;
 
     //TODO unregister from gyroscopeUpdate
@@ -48,24 +52,29 @@ var CWStitchManager = OOP.createSingleton("Connichiwa", "CWStitchManager", {
 
   _onGyroUpdate: function(gyroData) {
     if (this.isStitched() === false) return;
+    if (this.unstitchOnMove === false) return;
 
     //Might happen if _onWasStitched is called before the first gyro measure arrived
     if (this._gyroDataOnStitch === undefined) {
       this._gyroDataOnStitch = gyroData;
     }
-
-    //If the device is tilted more than 20º, we back our of the stitch
-    //We give a little more room for alpha. Alpha means the device was moved on the
-    //table, which is not as bad as actually picking it up.  
+     
     var deltaAlpha = Math.abs(gyroData.alpha - this._gyroDataOnStitch.alpha);
     var deltaBeta  = Math.abs(gyroData.beta  - this._gyroDataOnStitch.beta);
     var deltaGamma = Math.abs(gyroData.gamma - this._gyroDataOnStitch.gamma);
+
     //Modulo gives us the smallest possible angle (e.g. 1º and 359º gives us 2º)
     deltaAlpha = Math.abs((deltaAlpha + 180) % 360 - 180);
     deltaBeta  = Math.abs((deltaBeta  + 180) % 360 - 180);
     deltaGamma = Math.abs((deltaGamma + 180) % 360 - 180);
 
-    if (deltaAlpha >= 35 || deltaBeta >= 20 || deltaGamma >= 20) {
+    //If the device is tilted more than 20º, we back out of the stitch
+    //We give a little more room for alpha. Alpha means the device was moved on the
+    //table, which is not as bad as actually picking it up. 
+    //Axises in the "ignoreMoveAxis" array are not checked
+    if ((CWUtil.inArray("alpha", this.ignoreMoveAxis) === false && deltaAlpha >= 35) || 
+        (CWUtil.inArray("beta",  this.ignoreMoveAxis) === false && deltaBeta  >= 20) ||
+        (CWUtil.inArray("gamma", this.ignoreMoveAxis) === false && deltaGamma >= 20)) {
       this._quitStitch();
     }
   },
@@ -73,14 +82,18 @@ var CWStitchManager = OOP.createSingleton("Connichiwa", "CWStitchManager", {
 
   _onAccelerometerUpdate: function(accelData) {
     if (this.isStitched() === false) return;
+    if (this.unstitchOnMove === false) return;
 
     var x = Math.abs(accelData.x);
     var y = Math.abs(accelData.y);
     var z = Math.abs(accelData.z + 9.8); //earth's gravitational force ~ -9.8
 
     //1.0 seems about a good value which doesn't trigger on every little shake,
-    //but triggers when the device is actually moved
-    if (x >= 1.0 || y >= 1.0 || z >= 1.0) {
+    //but triggers when the device is actually moved 
+    //Axises in the "ignoreMoveAxis" array are not checked
+    if ((CWUtil.inArray("x", this.ignoreMoveAxis) === false && x >= 1.0) || 
+        (CWUtil.inArray("y", this.ignoreMoveAxis) === false && y >= 1.0) ||
+        (CWUtil.inArray("z", this.ignoreMoveAxis) === false && z >= 1.0)) {
       this._quitStitch();
     }
   },
@@ -95,6 +108,24 @@ var CWStitchManager = OOP.createSingleton("Connichiwa", "CWStitchManager", {
   },
 
 
+  "public toMasterCoordinates": function(lcoords) {
+    var transformation = this.getDeviceTransformation();
+
+    var x = lcoords.x;
+    var y = lcoords.y;
+    
+    if (transformation.rotation === 180) {
+      x = CWSystemInfo.viewportWidth()  - x;
+      y = CWSystemInfo.viewportHeight() - y;
+    }
+
+    x += transformation.x;
+    y += transformation.y;
+
+    return { x: x, y: y };
+  },
+
+
   "public isStitched": function() {
     return this._isStitched;
   },
@@ -103,4 +134,8 @@ var CWStitchManager = OOP.createSingleton("Connichiwa", "CWStitchManager", {
   "public getDeviceTransformation": function() {
     return this._deviceTransformation;
   },
+
+  "private DEFAULT_DEVICE_TRANSFORMATION": function() {
+    return { x: 0, y: 0, rotation: 0, scale: 1.0 };
+  }
 });

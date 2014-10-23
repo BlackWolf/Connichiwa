@@ -18,6 +18,11 @@ $(document).ready(function() {
 
     var newTouch = CWUtil.getEventLocation(e, "client");
 
+    // CWDebug.log(3, JSON.stringify(CWUtil.getEventLocation(e, "client")));
+    // CWDebug.log(3, JSON.stringify(CWUtil.getEventLocation(e, "page")));
+    // CWDebug.log(3, JSON.stringify(CWUtil.getEventLocation(e, "screen")));
+    // CWDebug.log(3, window.innerHeight+" || "+window.outerHeight+" || "+$(window).height()+" || "+$(window).innerHeight()+" || "+$(window).outerHeight())
+
     //In touchend, we only compare touchStart to touchLast, so it is possible that
     //the user starts swiping, then goes in the opposite direction and then in the
     //first direction again, which would be detected as a valid swipe.
@@ -124,11 +129,15 @@ $(document).ready(function() {
     //Check if the touch ended at a device edge
     //Lucky us, touch coordinates incorporate rubber banding - this means that a swipe down with rubber banding
     //will give us smaller values than it should, because the gray top area is subtracted
-    //To compensate for that, we use window.innerWidth/Height, which also subtracts the rubber banded area
+    //Luckily, window.innerHeight incorporates rubber banding as well, so we can calculate the missing pixels
+    // CWDebug.log(3, "Original Y: "+swipeEnd.y);
+    // CWDebug.log(3, window.innerHeight+" || "+window.outerHeight+" || "+$(window).height()+" || "+$(window).innerHeight()+" || "+$(window).outerHeight())
+    var rubberBanding = $(window).height() - window.innerHeight;
+    swipeEnd.y += rubberBanding;
     var endsAtTopEdge    = (swipeEnd.y <= 50);
     var endsAtLeftEdge   = (swipeEnd.x <= 50);
-    var endsAtBottomEdge = (swipeEnd.y >= (window.innerHeight  - 50));
-    var endsAtRightEdge  = (swipeEnd.x >= (window.innerWidth - 50));
+    var endsAtBottomEdge = (swipeEnd.y >= ($(window).height() - 50));
+    var endsAtRightEdge  = (swipeEnd.x >= ($(window).width()  - 50));
 
     var edge = "invalid";
     if (endsAtTopEdge    && direction === "up")    edge = "top";
@@ -137,9 +146,16 @@ $(document).ready(function() {
     if (endsAtRightEdge  && direction === "right") edge = "right";
 
     if (edge === "invalid") {
-      CWDebug.log(3, "Swipe REJECTED. Ending: x - " + swipeEnd.x + "/" + (window.innerWidth - 50) + ", y - " + swipeEnd.y + "/" + (window.innerHeight - 50) + ". Direction: " + direction + ". Edge endings: " + endsAtTopEdge + ", " + endsAtRightEdge + ", " + endsAtBottomEdge + ", " + endsAtLeftEdge);
+      CWDebug.log(3, "Swipe REJECTED. Ending: x - " + swipeEnd.x + "/" + ($(window).width() - 50) + ", y - " + swipeEnd.y + "/" + ($(window).height() - 50) + ". Direction: " + direction + ". Edge endings: " + endsAtTopEdge + ", " + endsAtRightEdge + ", " + endsAtBottomEdge + ", " + endsAtLeftEdge);
       return;
     }
+
+    //Make sure the data really ends at an edge, even if rubber banding occured or the user lifted the finger 
+    //slightly before the edge of the device
+    if (edge === "top")    swipeEnd.y = 0;
+    if (edge === "left")   swipeEnd.x = 0;
+    if (edge === "bottom") swipeEnd.y = $(window).height();
+    if (edge === "right")  swipeEnd.x = $(window).width();      
 
     var swipeData = {
       edge : edge,

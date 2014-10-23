@@ -478,6 +478,11 @@ $(document).ready(function() {
 
     var newTouch = CWUtil.getEventLocation(e, "client");
 
+    // CWDebug.log(3, JSON.stringify(CWUtil.getEventLocation(e, "client")));
+    // CWDebug.log(3, JSON.stringify(CWUtil.getEventLocation(e, "page")));
+    // CWDebug.log(3, JSON.stringify(CWUtil.getEventLocation(e, "screen")));
+    // CWDebug.log(3, window.innerHeight+" || "+window.outerHeight+" || "+$(window).height()+" || "+$(window).innerHeight()+" || "+$(window).outerHeight())
+
     //In touchend, we only compare touchStart to touchLast, so it is possible that
     //the user starts swiping, then goes in the opposite direction and then in the
     //first direction again, which would be detected as a valid swipe.
@@ -584,11 +589,15 @@ $(document).ready(function() {
     //Check if the touch ended at a device edge
     //Lucky us, touch coordinates incorporate rubber banding - this means that a swipe down with rubber banding
     //will give us smaller values than it should, because the gray top area is subtracted
-    //To compensate for that, we use window.innerWidth/Height, which also subtracts the rubber banded area
+    //Luckily, window.innerHeight incorporates rubber banding as well, so we can calculate the missing pixels
+    // CWDebug.log(3, "Original Y: "+swipeEnd.y);
+    // CWDebug.log(3, window.innerHeight+" || "+window.outerHeight+" || "+$(window).height()+" || "+$(window).innerHeight()+" || "+$(window).outerHeight())
+    var rubberBanding = $(window).height() - window.innerHeight;
+    swipeEnd.y += rubberBanding;
     var endsAtTopEdge    = (swipeEnd.y <= 50);
     var endsAtLeftEdge   = (swipeEnd.x <= 50);
-    var endsAtBottomEdge = (swipeEnd.y >= (window.innerHeight  - 50));
-    var endsAtRightEdge  = (swipeEnd.x >= (window.innerWidth - 50));
+    var endsAtBottomEdge = (swipeEnd.y >= ($(window).height() - 50));
+    var endsAtRightEdge  = (swipeEnd.x >= ($(window).width()  - 50));
 
     var edge = "invalid";
     if (endsAtTopEdge    && direction === "up")    edge = "top";
@@ -597,9 +606,16 @@ $(document).ready(function() {
     if (endsAtRightEdge  && direction === "right") edge = "right";
 
     if (edge === "invalid") {
-      CWDebug.log(3, "Swipe REJECTED. Ending: x - " + swipeEnd.x + "/" + (window.innerWidth - 50) + ", y - " + swipeEnd.y + "/" + (window.innerHeight - 50) + ". Direction: " + direction + ". Edge endings: " + endsAtTopEdge + ", " + endsAtRightEdge + ", " + endsAtBottomEdge + ", " + endsAtLeftEdge);
+      CWDebug.log(3, "Swipe REJECTED. Ending: x - " + swipeEnd.x + "/" + ($(window).width() - 50) + ", y - " + swipeEnd.y + "/" + ($(window).height() - 50) + ". Direction: " + direction + ". Edge endings: " + endsAtTopEdge + ", " + endsAtRightEdge + ", " + endsAtBottomEdge + ", " + endsAtLeftEdge);
       return;
     }
+
+    //Make sure the data really ends at an edge, even if rubber banding occured or the user lifted the finger 
+    //slightly before the edge of the device
+    if (edge === "top")    swipeEnd.y = 0;
+    if (edge === "left")   swipeEnd.x = 0;
+    if (edge === "bottom") swipeEnd.y = $(window).height();
+    if (edge === "right")  swipeEnd.x = $(window).width();      
 
     var swipeData = {
       edge : edge,
@@ -690,25 +706,26 @@ var CWGyroscope = OOP.createSingleton("Connichiwa", "CWGyroscope", {
     };
   }
 });
-/* global OOP, Connichiwa, CWEventManager, CWSystemInfo */
+/* global OOP, Connichiwa, CWEventManager, CWSystemInfo, CWUtil */
 "use strict";
 
 
  
 var CWStitchManager = OOP.createSingleton("Connichiwa", "CWStitchManager", {
   "private _isStitched": false,
-  "private _deviceTransformation": { x: 0, y: 0, scale: 1.0 },
+  "private _deviceTransformation": undefined,
   "private _gyroDataOnStitch": undefined,
+
+  "public unstitchOnMove": true,
+  "public ignoreMoveAxis": [],
 
 
   __constructor: function() {
-    // Connichiwa.onMessage("wasStitched",   this._onWasStitched);
-    // Connichiwa.onMessage("wasUnstitched", this._onWasUnstitched);
+    this._deviceTransformation = this.DEFAULT_DEVICE_TRANSFORMATION();
 
-    CWEventManager.register("stitchswipe",          this._onLocalSwipe);
-    CWEventManager.register("wasStitched",   this._onWasStitched);
-    CWEventManager.register("wasUnstitched",   this._onWasUnstitched);
-
+    CWEventManager.register("stitchswipe",         this._onLocalSwipe);
+    CWEventManager.register("wasStitched",         this._onWasStitched);
+    CWEventManager.register("wasUnstitched",       this._onWasUnstitched);
     CWEventManager.register("gyroscopeUpdate",     this._onGyroUpdate);
     CWEventManager.register("accelerometerUpdate", this._onAccelerometerUpdate);
   },
@@ -725,7 +742,7 @@ var CWStitchManager = OOP.createSingleton("Connichiwa", "CWStitchManager", {
 
   _onWasUnstitched: function(message) {
     this._gyroDataOnStitch = undefined;
-    this._deviceTransformation = { x: 0, y: 0, scale: 1.0 };
+    this._deviceTransformation = this.DEFAULT_DEVICE_TRANSFORMATION();
     this._isStitched = false;
 
     //TODO unregister from gyroscopeUpdate
@@ -743,24 +760,29 @@ var CWStitchManager = OOP.createSingleton("Connichiwa", "CWStitchManager", {
 
   _onGyroUpdate: function(gyroData) {
     if (this.isStitched() === false) return;
+    if (this.unstitchOnMove === false) return;
 
     //Might happen if _onWasStitched is called before the first gyro measure arrived
     if (this._gyroDataOnStitch === undefined) {
       this._gyroDataOnStitch = gyroData;
     }
-
-    //If the device is tilted more than 20º, we back our of the stitch
-    //We give a little more room for alpha. Alpha means the device was moved on the
-    //table, which is not as bad as actually picking it up.  
+     
     var deltaAlpha = Math.abs(gyroData.alpha - this._gyroDataOnStitch.alpha);
     var deltaBeta  = Math.abs(gyroData.beta  - this._gyroDataOnStitch.beta);
     var deltaGamma = Math.abs(gyroData.gamma - this._gyroDataOnStitch.gamma);
+
     //Modulo gives us the smallest possible angle (e.g. 1º and 359º gives us 2º)
     deltaAlpha = Math.abs((deltaAlpha + 180) % 360 - 180);
     deltaBeta  = Math.abs((deltaBeta  + 180) % 360 - 180);
     deltaGamma = Math.abs((deltaGamma + 180) % 360 - 180);
 
-    if (deltaAlpha >= 35 || deltaBeta >= 20 || deltaGamma >= 20) {
+    //If the device is tilted more than 20º, we back out of the stitch
+    //We give a little more room for alpha. Alpha means the device was moved on the
+    //table, which is not as bad as actually picking it up. 
+    //Axises in the "ignoreMoveAxis" array are not checked
+    if ((CWUtil.inArray("alpha", this.ignoreMoveAxis) === false && deltaAlpha >= 35) || 
+        (CWUtil.inArray("beta",  this.ignoreMoveAxis) === false && deltaBeta  >= 20) ||
+        (CWUtil.inArray("gamma", this.ignoreMoveAxis) === false && deltaGamma >= 20)) {
       this._quitStitch();
     }
   },
@@ -768,14 +790,18 @@ var CWStitchManager = OOP.createSingleton("Connichiwa", "CWStitchManager", {
 
   _onAccelerometerUpdate: function(accelData) {
     if (this.isStitched() === false) return;
+    if (this.unstitchOnMove === false) return;
 
     var x = Math.abs(accelData.x);
     var y = Math.abs(accelData.y);
     var z = Math.abs(accelData.z + 9.8); //earth's gravitational force ~ -9.8
 
     //1.0 seems about a good value which doesn't trigger on every little shake,
-    //but triggers when the device is actually moved
-    if (x >= 1.0 || y >= 1.0 || z >= 1.0) {
+    //but triggers when the device is actually moved 
+    //Axises in the "ignoreMoveAxis" array are not checked
+    if ((CWUtil.inArray("x", this.ignoreMoveAxis) === false && x >= 1.0) || 
+        (CWUtil.inArray("y", this.ignoreMoveAxis) === false && y >= 1.0) ||
+        (CWUtil.inArray("z", this.ignoreMoveAxis) === false && z >= 1.0)) {
       this._quitStitch();
     }
   },
@@ -790,6 +816,24 @@ var CWStitchManager = OOP.createSingleton("Connichiwa", "CWStitchManager", {
   },
 
 
+  "public toMasterCoordinates": function(lcoords) {
+    var transformation = this.getDeviceTransformation();
+
+    var x = lcoords.x;
+    var y = lcoords.y;
+    
+    if (transformation.rotation === 180) {
+      x = CWSystemInfo.viewportWidth()  - x;
+      y = CWSystemInfo.viewportHeight() - y;
+    }
+
+    x += transformation.x;
+    y += transformation.y;
+
+    return { x: x, y: y };
+  },
+
+
   "public isStitched": function() {
     return this._isStitched;
   },
@@ -798,6 +842,10 @@ var CWStitchManager = OOP.createSingleton("Connichiwa", "CWStitchManager", {
   "public getDeviceTransformation": function() {
     return this._deviceTransformation;
   },
+
+  "private DEFAULT_DEVICE_TRANSFORMATION": function() {
+    return { x: 0, y: 0, rotation: 0, scale: 1.0 };
+  }
 });
 /* global OOP */
 "use strict";
@@ -1036,8 +1084,8 @@ var Connichiwa = OOP.createSingleton("Connichiwa", "Connichiwa", {
   "private _websocket" : undefined,
 
 
-  "public getIdentifier" : function()                          { /* ABSTRACT */ },
-  "public isMaster"      : function()                          { /* ABSTRACT */ },
+  "public getIdentifier" : function() { /* ABSTRACT */ },
+  "public isMaster"      : function() { /* ABSTRACT */ },
 
 
   "public on": function(eventName, callback) {
@@ -1092,6 +1140,11 @@ var Connichiwa = OOP.createSingleton("Connichiwa", "Connichiwa", {
     messageObject.source = this.getIdentifier();
     messageObject.target = targetIdentifier;
     return this._sendObject(messageObject);
+  },
+
+
+  "public respond": function(originalMessage, responseObject) {
+    this.send(originalMessage.source, responseObject);
   },
 
 
