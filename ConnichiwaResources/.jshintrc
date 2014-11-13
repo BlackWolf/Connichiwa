@@ -67,5 +67,7 @@
     "wsh"           : false,
     "yui"           : false,
 
-    "globals"       : {}
+    "globals"       : {},
+
+    "-W080"         : false
 }

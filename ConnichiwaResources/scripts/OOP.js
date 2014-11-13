@@ -119,7 +119,7 @@ var OOP = (function() {
               break;
           }
 
-          if (modifiedPropertyName === "__constructor") {
+          if (propertyName === "__constructor") {
             addedConstructor = true;
           }
 

@@ -18,11 +18,6 @@ $(document).ready(function() {
 
     var newTouch = CWUtil.getEventLocation(e, "client");
 
-    // CWDebug.log(3, JSON.stringify(CWUtil.getEventLocation(e, "client")));
-    // CWDebug.log(3, JSON.stringify(CWUtil.getEventLocation(e, "page")));
-    // CWDebug.log(3, JSON.stringify(CWUtil.getEventLocation(e, "screen")));
-    // CWDebug.log(3, window.innerHeight+" || "+window.outerHeight+" || "+$(window).height()+" || "+$(window).innerHeight()+" || "+$(window).outerHeight())
-
     //In touchend, we only compare touchStart to touchLast, so it is possible that
     //the user starts swiping, then goes in the opposite direction and then in the
     //first direction again, which would be detected as a valid swipe.
@@ -130,8 +125,6 @@ $(document).ready(function() {
     //Lucky us, touch coordinates incorporate rubber banding - this means that a swipe down with rubber banding
     //will give us smaller values than it should, because the gray top area is subtracted
     //Luckily, window.innerHeight incorporates rubber banding as well, so we can calculate the missing pixels
-    // CWDebug.log(3, "Original Y: "+swipeEnd.y);
-    // CWDebug.log(3, window.innerHeight+" || "+window.outerHeight+" || "+$(window).height()+" || "+$(window).innerHeight()+" || "+$(window).outerHeight())
     var rubberBanding = $(window).height() - window.innerHeight;
     swipeEnd.y += rubberBanding;
     var endsAtTopEdge    = (swipeEnd.y <= 50);

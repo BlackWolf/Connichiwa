@@ -119,7 +119,7 @@ var OOP = (function() {
               break;
           }
 
-          if (modifiedPropertyName === "__constructor") {
+          if (propertyName === "__constructor") {
             addedConstructor = true;
           }
 
@@ -478,11 +478,6 @@ $(document).ready(function() {
 
     var newTouch = CWUtil.getEventLocation(e, "client");
 
-    // CWDebug.log(3, JSON.stringify(CWUtil.getEventLocation(e, "client")));
-    // CWDebug.log(3, JSON.stringify(CWUtil.getEventLocation(e, "page")));
-    // CWDebug.log(3, JSON.stringify(CWUtil.getEventLocation(e, "screen")));
-    // CWDebug.log(3, window.innerHeight+" || "+window.outerHeight+" || "+$(window).height()+" || "+$(window).innerHeight()+" || "+$(window).outerHeight())
-
     //In touchend, we only compare touchStart to touchLast, so it is possible that
     //the user starts swiping, then goes in the opposite direction and then in the
     //first direction again, which would be detected as a valid swipe.
@@ -590,8 +585,6 @@ $(document).ready(function() {
     //Lucky us, touch coordinates incorporate rubber banding - this means that a swipe down with rubber banding
     //will give us smaller values than it should, because the gray top area is subtracted
     //Luckily, window.innerHeight incorporates rubber banding as well, so we can calculate the missing pixels
-    // CWDebug.log(3, "Original Y: "+swipeEnd.y);
-    // CWDebug.log(3, window.innerHeight+" || "+window.outerHeight+" || "+$(window).height()+" || "+$(window).innerHeight()+" || "+$(window).outerHeight())
     var rubberBanding = $(window).height() - window.innerHeight;
     swipeEnd.y += rubberBanding;
     var endsAtTopEdge    = (swipeEnd.y <= 50);
@@ -706,6 +699,226 @@ var CWGyroscope = OOP.createSingleton("Connichiwa", "CWGyroscope", {
     };
   }
 });
+/* global CWStitchManager */
+"use strict";
+
+function CWLocation(x, y, width, height, isLocal) {
+  //
+  // TODO
+  // 
+  // make x, y, widht, height private so it can only be accessed through
+  // setLocal/setGlobal
+  // 
+  
+  if (isLocal === true) {
+    var global = CWLocation.toGlobal(x, y, width, height);
+    this.x      = global.x;
+    this.y      = global.y;
+    this.width  = global.width;
+    this.height = global.height;
+  } else {
+    //By default, we assume the location to be global coordinates
+    this.x      = x;
+    this.y      = y;
+    this.width  = width;
+    this.height = height;
+  }
+
+  this.getGlobal = function() {
+    return { 
+      x      : this.x, 
+      y      : this.y, 
+      width  : this.width, 
+      height : this.height
+    };
+  };
+
+  this.getLocal = function() {
+    return CWLocation.toLocal(this.x, this.y, this.width, this.height);
+  };
+
+  this.getGlobalX = function() { return this.x; };
+
+  this.getGlobalY = function() { return this.y; };
+
+  this.getGlobalWidth = function() { return this.width; };
+
+  this.getGlobalHeight = function() { return this.height; };
+
+  this.getLocalX = function() { return this.getLocal().x; };
+
+  this.getLocalY = function() { return this.getLocal().y; };
+
+  this.getLocalWidth = function() { return this.getLocal().width; };
+
+  this.getLocalHeight = function() { return this.getLocal().height; };
+
+  this.setGlobal = function(x, y, width, height) {
+    if (x      !== undefined) this.x      = x;
+    if (y      !== undefined) this.y      = y;
+    if (width  !== undefined) this.width  = width;
+    if (height !== undefined) this.height = height;
+  };
+
+  this.setLocal = function(x, y, width, height) {
+    CWDebug.log(3, "To Global: "+x+", "+y+", "+width+", "+height);
+    var global = CWLocation.toGlobal(x, y, width, height);
+    CWDebug.log(3, JSON.stringify(global));
+    this.x      = global.x;
+    this.y      = global.y;
+    this.width  = global.width;
+    this.height = global.height;
+  };
+
+  this.setGlobalX = function(v) { this.setGlobal(v, this.y, this.width, this.height); };
+
+  this.setGlobalY = function(v) { this.setGlobal(this.x, v, this.width, this.height); };
+
+  this.setGlobalWidth = function(v) { this.setGlobal(this.x, this.y, v, this.height); };
+
+  this.setGlobalHeight = function(v) { this.setGlobal(this.x, this.y, this.width, v); };
+
+  this.setLocalX = function(v) {
+    var local = this.getLocal();
+    this.setLocal(v, local.y, local.width, local.height);
+  };
+
+  this.setLocalY = function(v) {
+    var local = this.getLocal();
+    this.setLocal(local.x, v, local.width, local.height);
+  };
+
+  this.setLocalWidth = function(v) {
+    var local = this.getLocal();
+    this.setLocal(local.x, local.y, v, local.height);
+  };
+
+  this.setLocalHeight = function(v) {
+    var local = this.getLocal();
+    this.setLocal(local.x, local.y, local.width, v);
+  };
+
+  this.toString = function() {
+    return JSON.stringify(this.getGlobal());
+  };
+}
+
+CWLocation.toGlobal = function(x, y, width, height) {
+  if (x === undefined) x = 0;
+  if (y === undefined) y = 0;
+  if (width  === undefined) width = 0;
+  if (height === undefined) height = 0;
+
+  var result = { x: x, y: y, width: width, height: height };
+
+  var transformation = CWStitchManager.getDeviceTransformation();
+  
+  //Adjust x/y values from our rotation to the master device, which always has 0º rotation
+  if (transformation.rotation === 0) {
+    result.y      = y;
+    result.x      = x;
+    result.width  = width;
+    result.height = height;
+  }
+  if (transformation.rotation === 90) {
+    result.y      = (transformation.height * transformation.scale) - x - width;
+    result.x      = y;
+    result.width  = height;
+    result.height = width;
+  }
+  if (transformation.rotation === 180) {
+    result.y      = (transformation.height * transformation.scale) - y - height;
+    result.x      = (transformation.width * transformation.scale)  - x - width;
+    result.width  = width;
+    result.height = height;
+  }
+  if (transformation.rotation === 270) {
+    result.y      = x;
+    result.x      = (transformation.width * transformation.scale) - y - height;
+    result.width  = height;
+    result.height = width;
+  }
+
+  //To get actual global coordinates we need to add the device's translation
+  result.x += (transformation.x * transformation.scale);
+  result.y += (transformation.y * transformation.scale);
+
+  //Finally, adjust the scale to the scale of the master device
+  result.x      /= transformation.scale;
+  result.y      /= transformation.scale;
+  result.width  /= transformation.scale;
+  result.height /= transformation.scale;
+
+  return result;
+};
+
+CWLocation.toLocal = function(x, y, width, height) {
+  if (x === undefined) x = 0;
+  if (y === undefined) y = 0;
+  if (width  === undefined) width = 0;
+  if (height === undefined) height = 0;
+
+  var result = { x: x, y: y, width: width, height: height };
+
+  var transformation = CWStitchManager.getDeviceTransformation();
+
+  //Adjust values from the master rotation (0º) to our rotation
+  //Also, we incorporate device translation here - we can't do that afterwards
+  //because transformation.x/y are in local coordinates and therefore need to be
+  //applied differently depending on rotation
+  if (transformation.rotation === 0) {
+    result.y      = y - transformation.y;
+    result.x      = x - transformation.x;
+    result.width  = width;
+    result.height = height;
+  }
+  if (transformation.rotation === 90) {
+    result.y      = x - transformation.x;
+    result.x      = transformation.height - (y - transformation.y + height);
+    result.width  = height;
+    result.height = width;
+  }
+  if (transformation.rotation === 180) {   
+    result.y      = transformation.height - (y - transformation.y + height);
+    result.x      = transformation.width  - (x - transformation.x + width);
+    result.width  = width;
+    result.height = height;
+  }
+  if (transformation.rotation === 270) {        
+    result.y      = transformation.width - (x - transformation.x + width);
+    result.x      = (y - transformation.y);
+    result.width  = height;
+    result.height = width;
+  }
+
+  //Get values in the local device's scaling
+  result.x      *= transformation.scale;
+  result.y      *= transformation.scale;
+  result.width  *= transformation.scale;
+  result.height *= transformation.scale;
+
+  return result;
+};
+
+CWLocation.fromString = function(s) {
+  var obj = JSON.parse(s);
+
+  return new CWLocation(
+    parseFloat(obj.x),
+    parseFloat(obj.y),
+    parseFloat(obj.width),
+    parseFloat(obj.height),
+    false
+  );
+};
+
+function CWPoint(x, y, isLocal) {
+  return new CWLocation(x, y, undefined, undefined, isLocal);
+}
+
+function CWSize(width, height, isLocal) {
+  return new CWLocation(undefined, undefined, width, height, isLocal);
+}
 /* global OOP, Connichiwa, CWEventManager, CWSystemInfo, CWUtil */
 "use strict";
 
@@ -780,7 +993,7 @@ var CWStitchManager = OOP.createSingleton("Connichiwa", "CWStitchManager", {
     //We give a little more room for alpha. Alpha means the device was moved on the
     //table, which is not as bad as actually picking it up. 
     //Axises in the "ignoreMoveAxis" array are not checked
-    if ((CWUtil.inArray("alpha", this.ignoreMoveAxis) === false && deltaAlpha >= 35) || 
+    if ((CWUtil.inArray("alpha", this.ignoreMoveAxis) === false && deltaAlpha >= 35) ||
         (CWUtil.inArray("beta",  this.ignoreMoveAxis) === false && deltaBeta  >= 20) ||
         (CWUtil.inArray("gamma", this.ignoreMoveAxis) === false && deltaGamma >= 20)) {
       this._quitStitch();
@@ -816,22 +1029,22 @@ var CWStitchManager = OOP.createSingleton("Connichiwa", "CWStitchManager", {
   },
 
 
-  "public toMasterCoordinates": function(lcoords) {
-    var transformation = this.getDeviceTransformation();
+  // "public toMasterCoordinates": function(lcoords) {
+  //   var transformation = this.getDeviceTransformation();
 
-    var x = lcoords.x;
-    var y = lcoords.y;
+  //   var x = lcoords.x;
+  //   var y = lcoords.y;
     
-    if (transformation.rotation === 180) {
-      x = CWSystemInfo.viewportWidth()  - x;
-      y = CWSystemInfo.viewportHeight() - y;
-    }
+  //   if (transformation.rotation === 180) {
+  //     x = CWSystemInfo.viewportWidth()  - x;
+  //     y = CWSystemInfo.viewportHeight() - y;
+  //   }
 
-    x += transformation.x;
-    y += transformation.y;
+  //   x += transformation.x;
+  //   y += transformation.y;
 
-    return { x: x, y: y };
-  },
+  //   return { x: x, y: y };
+  // },
 
 
   "public isStitched": function() {
@@ -844,9 +1057,170 @@ var CWStitchManager = OOP.createSingleton("Connichiwa", "CWStitchManager", {
   },
 
   "private DEFAULT_DEVICE_TRANSFORMATION": function() {
-    return { x: 0, y: 0, rotation: 0, scale: 1.0 };
+    return { 
+      x: 0, 
+      y: 0, 
+      width: CWSystemInfo.viewportWidth(), 
+      height: CWSystemInfo.viewportHeight(),
+      rotation: 0, 
+      scale: 1.0 
+    };
   }
 });
+// /* global CWDeviceManager */
+// "use strict";
+
+
+// function CWStitch(existingDeviceSwipe, newDeviceSwipe) {
+//   if (existingDeviceSwipe === undefined || newDeviceSwipe === undefined) {
+//     throw "Cannot instantiate CWStitch without two valid swipes";
+//   }
+
+
+// }
+
+// function CWSwipe(data) {
+//   if (data === undefined) throw "Cannot instantiate CWSwipe without data";
+
+//   var _date             = new Date();
+//   var _deviceIdentifier = data.device;
+//   var _scale            = 1.0;
+//   var _rotation         = 0;
+//   var _originalEdge     = data.edge;
+//   var _originalWidth    = data.width;
+//   var _originalHeight   = data.height;
+//   var _originalX        = data.x;
+//   var _originalY        = data.y;
+//   var _relativeEdge     = _originalEdge;
+//   var _relativeWidth    = _originalWidth;
+//   var _relativeHeight   = _originalHeight;
+//   var _relativeX        = _originalX;
+//   var _relativeY        = _originalY;
+
+//   this.getDate = function() { return _date; };
+//   this.getDeviceIdentifier = function() { return _deviceIdentifier; };
+
+//   this.getEdge = function() { 
+//     return { 
+//       raw     : _originalEdge,
+//       rotated : _relativeEdge
+//     };
+//   };
+
+//   this.getWidth = function() { 
+//     return { 
+//       raw      : _originalWidth,
+//       relative : (_relativeWidth / this.getScale())
+//     };
+//   };
+
+//   this.getHeight = function() { 
+//     return { 
+//       raw      : _originalHeight,
+//       relative : (_relativeHeight / this.getScale())
+//     };
+//   };
+
+//   this.getX = function() { 
+//     return { 
+//       raw      : _originalX,
+//       relative : (_relativeX / this.getScale())
+//     };
+//   };
+
+//   this.getY = function() { 
+//     return { 
+//       raw      : _originalY,
+//       relative : (_relativeY / this.getScale())
+//     };
+//   };
+
+//   var _device;
+//   this.getDevice = function() { 
+//     if (_device === undefined) _device = CWDeviceManager.getDeviceWithIdentifier(this.getDeviceIdentifier());
+//     return _device;
+//   };
+
+//   this.getScale = function() { return _scale; };
+
+//   this.getRotation = function() { return _rotation; };
+//   this.setRotation = function(value) {
+//     value = value % 360;
+//     if (value !== 0 && 
+//         value !== 90 && 
+//         value !== 180 && 
+//         value !== 270) {
+//       return;
+//     }
+
+//     _rotation = value;
+
+//     //Recalculate rotational values
+//     //Edge
+//     var edgeIndex = (_indexForEdge(_originalEdge) + _rotation / 90) % 4;
+//     _rotatedEdge = _edgeForIndex(edgeIndex);
+
+//     //width, height, x, y
+//     //We also swap those as needed
+//     if (_rotation === 0) {
+//       _relativeY      = _originalY;
+//       _relativeX      = _originalX;
+//       _relativeWidth  = _originalWidth;
+//       _relativeHeight = _originalHeight;
+//     }
+
+//     if (_rotation === 90) {
+//       _relativeY      = _originalWidth - _originalX;
+//       _relativeX      = _originalY;
+//       _relativeWidth  = _originalHeight;
+//       _relativeHeight = _originalWidth;
+//     }
+
+//     if (_rotation === 180) {
+//       _relativeY      = _originalHeight - _originalY;
+//       _relativeX      = _originalWidth  - _originalX;
+//       _relativeWidth  = _originalWidth;
+//       _relativeHeight = _originalHeight;
+//     }
+
+//     if (_rotation === 270) {
+//       _relativeY      = _originalX;
+//       _relativeX      = _originalHeight - _originalY;
+//       _relativeWidth  = _originalHeight;
+//       _relativeHeight = _originalWidth;
+//     }
+//   };
+
+//   function _indexForEdge(edge) {
+//     switch (edge) {
+//       case "top":    return 0;
+//       case "bottom": return 2;
+//       case "left":   return 1;
+//       case "right":  return 3;
+//     }
+
+//     return -1;
+//   } 
+  
+//   function _edgeForIndex(index) {
+//     switch (index) {
+//       case 0: return "top";
+//       case 2: return "bottom";
+//       case 3: return "right";
+//       case 1: return "left";
+//     }
+
+//     return "invalid";
+//   } 
+// }
+
+// // CWVector.prototype.angle = function(otherVector) {
+// //   var vectorsProduct = this.deltaX() * otherVector.deltaX() + this.deltaY() * otherVector.deltaY();
+// //   var vectorsLength = this.length() * otherVector.length();
+// //   return Math.acos(vectorsProduct / vectorsLength) * (180.0 / Math.PI);
+// // };
+
+
 /* global OOP */
 "use strict";
 
@@ -1051,9 +1425,10 @@ var CWWebsocketMessageParser = OOP.createSingleton("Connichiwa", "CWWebsocketMes
 {
   "package parse": function(message) {
     switch (message.type) {
-      case "ack"        : this._parseAck(message);        break;
-      case "append"     : this._parseAppend(message);     break;
-      case "loadscript" : this._parseLoadScript(message); break;
+      case "ack"               : this._parseAck(message);               break;
+      case "append"            : this._parseAppend(message);            break;
+      case "loadscript"        : this._parseLoadScript(message);        break;
+      case "gotstitchneighbor" : this._parseGotStitchNeighbor(message); break;
     }
   },
 
@@ -1073,6 +1448,10 @@ var CWWebsocketMessageParser = OOP.createSingleton("Connichiwa", "CWWebsocketMes
     }).fail(function(f, s, t) {
       CWDebug.log(1, "There was an error loading '" + message.url + "': " + t);
     });
+  },
+
+  _parseGotStitchNeighbor: function(message) {
+    CWEventManager.trigger("gotstitchneighbor", message);
   }
 });
 /* global OOP, CWEventManager, CWUtil, CWDebug */

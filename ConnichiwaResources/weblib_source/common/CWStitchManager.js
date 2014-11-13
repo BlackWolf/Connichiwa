@@ -72,7 +72,7 @@ var CWStitchManager = OOP.createSingleton("Connichiwa", "CWStitchManager", {
     //We give a little more room for alpha. Alpha means the device was moved on the
     //table, which is not as bad as actually picking it up. 
     //Axises in the "ignoreMoveAxis" array are not checked
-    if ((CWUtil.inArray("alpha", this.ignoreMoveAxis) === false && deltaAlpha >= 35) || 
+    if ((CWUtil.inArray("alpha", this.ignoreMoveAxis) === false && deltaAlpha >= 35) ||
         (CWUtil.inArray("beta",  this.ignoreMoveAxis) === false && deltaBeta  >= 20) ||
         (CWUtil.inArray("gamma", this.ignoreMoveAxis) === false && deltaGamma >= 20)) {
       this._quitStitch();
@@ -108,22 +108,22 @@ var CWStitchManager = OOP.createSingleton("Connichiwa", "CWStitchManager", {
   },
 
 
-  "public toMasterCoordinates": function(lcoords) {
-    var transformation = this.getDeviceTransformation();
+  // "public toMasterCoordinates": function(lcoords) {
+  //   var transformation = this.getDeviceTransformation();
 
-    var x = lcoords.x;
-    var y = lcoords.y;
+  //   var x = lcoords.x;
+  //   var y = lcoords.y;
     
-    if (transformation.rotation === 180) {
-      x = CWSystemInfo.viewportWidth()  - x;
-      y = CWSystemInfo.viewportHeight() - y;
-    }
+  //   if (transformation.rotation === 180) {
+  //     x = CWSystemInfo.viewportWidth()  - x;
+  //     y = CWSystemInfo.viewportHeight() - y;
+  //   }
 
-    x += transformation.x;
-    y += transformation.y;
+  //   x += transformation.x;
+  //   y += transformation.y;
 
-    return { x: x, y: y };
-  },
+  //   return { x: x, y: y };
+  // },
 
 
   "public isStitched": function() {
@@ -136,6 +136,13 @@ var CWStitchManager = OOP.createSingleton("Connichiwa", "CWStitchManager", {
   },
 
   "private DEFAULT_DEVICE_TRANSFORMATION": function() {
-    return { x: 0, y: 0, rotation: 0, scale: 1.0 };
+    return { 
+      x: 0, 
+      y: 0, 
+      width: CWSystemInfo.viewportWidth(), 
+      height: CWSystemInfo.viewportHeight(),
+      rotation: 0, 
+      scale: 1.0 
+    };
   }
 });
