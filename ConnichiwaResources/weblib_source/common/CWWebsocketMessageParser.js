@@ -9,6 +9,8 @@ var CWWebsocketMessageParser = OOP.createSingleton("Connichiwa", "CWWebsocketMes
       case "ack"               : this._parseAck(message);               break;
       case "append"            : this._parseAppend(message);            break;
       case "loadscript"        : this._parseLoadScript(message);        break;
+      case "wasstitched"       : this._parseWasStitched(message);       break;
+      case "wasunstitched"     : this._parseWasUnstitched(message);     break;
       case "gotstitchneighbor" : this._parseGotStitchNeighbor(message); break;
     }
   },
@@ -29,6 +31,14 @@ var CWWebsocketMessageParser = OOP.createSingleton("Connichiwa", "CWWebsocketMes
     }).fail(function(f, s, t) {
       CWDebug.log(1, "There was an error loading '" + message.url + "': " + t);
     });
+  },
+
+  _parseWasStitched: function(message) {
+    CWEventManager.trigger("wasStitched", message);
+  },
+
+  _parseWasUnstitched: function(message) {
+    CWEventManager.trigger("wasUnstitched", message);
   },
 
   _parseGotStitchNeighbor: function(message) {

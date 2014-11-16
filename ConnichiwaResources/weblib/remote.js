@@ -239,6 +239,7 @@ var CWDebug = (function()
    */
   var log = function(priority, message)
   {
+    // if (priority > 3) return;
     if (debug) console.log(priority + "|" + message);
   };
 
@@ -699,7 +700,7 @@ var CWGyroscope = OOP.createSingleton("Connichiwa", "CWGyroscope", {
     };
   }
 });
-/* global CWStitchManager */
+/* global CWEventManager, CWStitchManager */
 "use strict";
 
 function CWLocation(x, y, width, height, isLocal) {
@@ -723,6 +724,30 @@ function CWLocation(x, y, width, height, isLocal) {
     this.width  = width;
     this.height = height;
   }
+
+  //When this device is stitched or unstitched, we adjust the values to the
+  //new device transformation so that the local coordinates stay the same
+  //This is done so that content shown on this device does not change location or
+  //size on a stitch or unstitch
+  CWEventManager.register("wasUnstitched", function(message) {
+    this.x -= message.deviceTransformation.x;
+    this.y -= message.deviceTransformation.y;
+
+    this.x *= message.deviceTransformation.scale;
+    this.y *= message.deviceTransformation.scale;
+    this.width *= message.deviceTransformation.scale;
+    this.height *= message.deviceTransformation.scale;
+  }.bind(this));
+
+  CWEventManager.register("wasStitched", function(message) {
+    this.x /= message.deviceTransformation.scale;
+    this.y /= message.deviceTransformation.scale;
+    this.width /= message.deviceTransformation.scale;
+    this.height /= message.deviceTransformation.scale;
+
+    this.x += message.deviceTransformation.x;
+    this.y += message.deviceTransformation.y;
+  }.bind(this));
 
   this.getGlobal = function() {
     return { 
@@ -801,6 +826,10 @@ function CWLocation(x, y, width, height, isLocal) {
   this.toString = function() {
     return JSON.stringify(this.getGlobal());
   };
+
+  this.copy = function() {
+    return CWLocation.fromString(this.toString());
+  };
 }
 
 CWLocation.toGlobal = function(x, y, width, height) {
@@ -812,6 +841,7 @@ CWLocation.toGlobal = function(x, y, width, height) {
   var result = { x: x, y: y, width: width, height: height };
 
   var transformation = CWStitchManager.getDeviceTransformation();
+  CWDebug.log(3, JSON.stringify(transformation));
   
   //Adjust x/y values from our rotation to the master device, which always has 0º rotation
   if (transformation.rotation === 0) {
@@ -934,8 +964,6 @@ var CWStitchManager = OOP.createSingleton("Connichiwa", "CWStitchManager", {
 
 
   __constructor: function() {
-    this._deviceTransformation = this.DEFAULT_DEVICE_TRANSFORMATION();
-
     CWEventManager.register("stitchswipe",         this._onLocalSwipe);
     CWEventManager.register("wasStitched",         this._onWasStitched);
     CWEventManager.register("wasUnstitched",       this._onWasUnstitched);
@@ -1029,22 +1057,9 @@ var CWStitchManager = OOP.createSingleton("Connichiwa", "CWStitchManager", {
   },
 
 
-  // "public toMasterCoordinates": function(lcoords) {
-  //   var transformation = this.getDeviceTransformation();
-
-  //   var x = lcoords.x;
-  //   var y = lcoords.y;
-    
-  //   if (transformation.rotation === 180) {
-  //     x = CWSystemInfo.viewportWidth()  - x;
-  //     y = CWSystemInfo.viewportHeight() - y;
-  //   }
-
-  //   x += transformation.x;
-  //   y += transformation.y;
-
-  //   return { x: x, y: y };
-  // },
+  "public unstitch": function() {
+    this._quitStitch();
+  },
 
 
   "public isStitched": function() {
@@ -1053,174 +1068,24 @@ var CWStitchManager = OOP.createSingleton("Connichiwa", "CWStitchManager", {
 
 
   "public getDeviceTransformation": function() {
+    if (this._deviceTransformation === undefined) {
+      return this.DEFAULT_DEVICE_TRANSFORMATION();
+    }
+    
     return this._deviceTransformation;
   },
 
   "private DEFAULT_DEVICE_TRANSFORMATION": function() {
     return { 
-      x: 0, 
-      y: 0, 
-      width: CWSystemInfo.viewportWidth(), 
-      height: CWSystemInfo.viewportHeight(),
-      rotation: 0, 
-      scale: 1.0 
+      x        : 0, 
+      y        : 0, 
+      width    : CWSystemInfo.viewportWidth(), 
+      height   : CWSystemInfo.viewportHeight(),
+      rotation : 0, 
+      scale    : 1.0 
     };
   }
 });
-// /* global CWDeviceManager */
-// "use strict";
-
-
-// function CWStitch(existingDeviceSwipe, newDeviceSwipe) {
-//   if (existingDeviceSwipe === undefined || newDeviceSwipe === undefined) {
-//     throw "Cannot instantiate CWStitch without two valid swipes";
-//   }
-
-
-// }
-
-// function CWSwipe(data) {
-//   if (data === undefined) throw "Cannot instantiate CWSwipe without data";
-
-//   var _date             = new Date();
-//   var _deviceIdentifier = data.device;
-//   var _scale            = 1.0;
-//   var _rotation         = 0;
-//   var _originalEdge     = data.edge;
-//   var _originalWidth    = data.width;
-//   var _originalHeight   = data.height;
-//   var _originalX        = data.x;
-//   var _originalY        = data.y;
-//   var _relativeEdge     = _originalEdge;
-//   var _relativeWidth    = _originalWidth;
-//   var _relativeHeight   = _originalHeight;
-//   var _relativeX        = _originalX;
-//   var _relativeY        = _originalY;
-
-//   this.getDate = function() { return _date; };
-//   this.getDeviceIdentifier = function() { return _deviceIdentifier; };
-
-//   this.getEdge = function() { 
-//     return { 
-//       raw     : _originalEdge,
-//       rotated : _relativeEdge
-//     };
-//   };
-
-//   this.getWidth = function() { 
-//     return { 
-//       raw      : _originalWidth,
-//       relative : (_relativeWidth / this.getScale())
-//     };
-//   };
-
-//   this.getHeight = function() { 
-//     return { 
-//       raw      : _originalHeight,
-//       relative : (_relativeHeight / this.getScale())
-//     };
-//   };
-
-//   this.getX = function() { 
-//     return { 
-//       raw      : _originalX,
-//       relative : (_relativeX / this.getScale())
-//     };
-//   };
-
-//   this.getY = function() { 
-//     return { 
-//       raw      : _originalY,
-//       relative : (_relativeY / this.getScale())
-//     };
-//   };
-
-//   var _device;
-//   this.getDevice = function() { 
-//     if (_device === undefined) _device = CWDeviceManager.getDeviceWithIdentifier(this.getDeviceIdentifier());
-//     return _device;
-//   };
-
-//   this.getScale = function() { return _scale; };
-
-//   this.getRotation = function() { return _rotation; };
-//   this.setRotation = function(value) {
-//     value = value % 360;
-//     if (value !== 0 && 
-//         value !== 90 && 
-//         value !== 180 && 
-//         value !== 270) {
-//       return;
-//     }
-
-//     _rotation = value;
-
-//     //Recalculate rotational values
-//     //Edge
-//     var edgeIndex = (_indexForEdge(_originalEdge) + _rotation / 90) % 4;
-//     _rotatedEdge = _edgeForIndex(edgeIndex);
-
-//     //width, height, x, y
-//     //We also swap those as needed
-//     if (_rotation === 0) {
-//       _relativeY      = _originalY;
-//       _relativeX      = _originalX;
-//       _relativeWidth  = _originalWidth;
-//       _relativeHeight = _originalHeight;
-//     }
-
-//     if (_rotation === 90) {
-//       _relativeY      = _originalWidth - _originalX;
-//       _relativeX      = _originalY;
-//       _relativeWidth  = _originalHeight;
-//       _relativeHeight = _originalWidth;
-//     }
-
-//     if (_rotation === 180) {
-//       _relativeY      = _originalHeight - _originalY;
-//       _relativeX      = _originalWidth  - _originalX;
-//       _relativeWidth  = _originalWidth;
-//       _relativeHeight = _originalHeight;
-//     }
-
-//     if (_rotation === 270) {
-//       _relativeY      = _originalX;
-//       _relativeX      = _originalHeight - _originalY;
-//       _relativeWidth  = _originalHeight;
-//       _relativeHeight = _originalWidth;
-//     }
-//   };
-
-//   function _indexForEdge(edge) {
-//     switch (edge) {
-//       case "top":    return 0;
-//       case "bottom": return 2;
-//       case "left":   return 1;
-//       case "right":  return 3;
-//     }
-
-//     return -1;
-//   } 
-  
-//   function _edgeForIndex(index) {
-//     switch (index) {
-//       case 0: return "top";
-//       case 2: return "bottom";
-//       case 3: return "right";
-//       case 1: return "left";
-//     }
-
-//     return "invalid";
-//   } 
-// }
-
-// // CWVector.prototype.angle = function(otherVector) {
-// //   var vectorsProduct = this.deltaX() * otherVector.deltaX() + this.deltaY() * otherVector.deltaY();
-// //   var vectorsLength = this.length() * otherVector.length();
-// //   return Math.acos(vectorsProduct / vectorsLength) * (180.0 / Math.PI);
-// // };
-
-
 /* global OOP */
 "use strict";
 
@@ -1428,6 +1293,8 @@ var CWWebsocketMessageParser = OOP.createSingleton("Connichiwa", "CWWebsocketMes
       case "ack"               : this._parseAck(message);               break;
       case "append"            : this._parseAppend(message);            break;
       case "loadscript"        : this._parseLoadScript(message);        break;
+      case "wasstitched"       : this._parseWasStitched(message);       break;
+      case "wasunstitched"     : this._parseWasUnstitched(message);     break;
       case "gotstitchneighbor" : this._parseGotStitchNeighbor(message); break;
     }
   },
@@ -1448,6 +1315,14 @@ var CWWebsocketMessageParser = OOP.createSingleton("Connichiwa", "CWWebsocketMes
     }).fail(function(f, s, t) {
       CWDebug.log(1, "There was an error loading '" + message.url + "': " + t);
     });
+  },
+
+  _parseWasStitched: function(message) {
+    CWEventManager.trigger("wasStitched", message);
+  },
+
+  _parseWasUnstitched: function(message) {
+    CWEventManager.trigger("wasUnstitched", message);
   },
 
   _parseGotStitchNeighbor: function(message) {
@@ -1669,8 +1544,6 @@ OOP.extendSingleton("Connichiwa", "CWWebsocketMessageParser",
   "package parseOnRemote": function(message) {
     switch (message.type) {
       case "softdisconnect" : this._parseSoftDisconnect(message); break;
-      case "wasstitched"    : this._parseWasStitched(message);    break;
-      case "wasunstitched"  : this._parseWasUnstitched(message);  break;
     }
   },
 
@@ -1678,16 +1551,6 @@ OOP.extendSingleton("Connichiwa", "CWWebsocketMessageParser",
   _parseSoftDisconnect: function(message) {
     this.package.Connichiwa._softDisconnectWebsocket();
   },
-
-
-  _parseWasStitched: function(message) {
-    CWEventManager.trigger("wasStitched", message);
-  },
-
-
-  _parseWasUnstitched: function(message) {
-    CWEventManager.trigger("wasUnstitched");
-  }
 });
 /* global OOP, CWWebsocketMessageParser, CWDevice, CWSystemInfo, CWUtil, CWDebug, CWMasterCommunication, CWNativeRemoteCommunication, CWEventManager */
 "use strict";

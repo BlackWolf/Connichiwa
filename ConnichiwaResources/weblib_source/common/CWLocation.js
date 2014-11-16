@@ -1,4 +1,4 @@
-/* global CWStitchManager */
+/* global CWEventManager, CWStitchManager */
 "use strict";
 
 function CWLocation(x, y, width, height, isLocal) {
@@ -22,6 +22,30 @@ function CWLocation(x, y, width, height, isLocal) {
     this.width  = width;
     this.height = height;
   }
+
+  //When this device is stitched or unstitched, we adjust the values to the
+  //new device transformation so that the local coordinates stay the same
+  //This is done so that content shown on this device does not change location or
+  //size on a stitch or unstitch
+  CWEventManager.register("wasUnstitched", function(message) {
+    this.x -= message.deviceTransformation.x;
+    this.y -= message.deviceTransformation.y;
+
+    this.x *= message.deviceTransformation.scale;
+    this.y *= message.deviceTransformation.scale;
+    this.width *= message.deviceTransformation.scale;
+    this.height *= message.deviceTransformation.scale;
+  }.bind(this));
+
+  CWEventManager.register("wasStitched", function(message) {
+    this.x /= message.deviceTransformation.scale;
+    this.y /= message.deviceTransformation.scale;
+    this.width /= message.deviceTransformation.scale;
+    this.height /= message.deviceTransformation.scale;
+
+    this.x += message.deviceTransformation.x;
+    this.y += message.deviceTransformation.y;
+  }.bind(this));
 
   this.getGlobal = function() {
     return { 
@@ -100,6 +124,10 @@ function CWLocation(x, y, width, height, isLocal) {
   this.toString = function() {
     return JSON.stringify(this.getGlobal());
   };
+
+  this.copy = function() {
+    return CWLocation.fromString(this.toString());
+  };
 }
 
 CWLocation.toGlobal = function(x, y, width, height) {
@@ -111,6 +139,7 @@ CWLocation.toGlobal = function(x, y, width, height) {
   var result = { x: x, y: y, width: width, height: height };
 
   var transformation = CWStitchManager.getDeviceTransformation();
+  CWDebug.log(3, JSON.stringify(transformation));
   
   //Adjust x/y values from our rotation to the master device, which always has 0º rotation
   if (transformation.rotation === 0) {

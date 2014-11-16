@@ -13,8 +13,6 @@ var CWStitchManager = OOP.createSingleton("Connichiwa", "CWStitchManager", {
 
 
   __constructor: function() {
-    this._deviceTransformation = this.DEFAULT_DEVICE_TRANSFORMATION();
-
     CWEventManager.register("stitchswipe",         this._onLocalSwipe);
     CWEventManager.register("wasStitched",         this._onWasStitched);
     CWEventManager.register("wasUnstitched",       this._onWasUnstitched);
@@ -108,22 +106,9 @@ var CWStitchManager = OOP.createSingleton("Connichiwa", "CWStitchManager", {
   },
 
 
-  // "public toMasterCoordinates": function(lcoords) {
-  //   var transformation = this.getDeviceTransformation();
-
-  //   var x = lcoords.x;
-  //   var y = lcoords.y;
-    
-  //   if (transformation.rotation === 180) {
-  //     x = CWSystemInfo.viewportWidth()  - x;
-  //     y = CWSystemInfo.viewportHeight() - y;
-  //   }
-
-  //   x += transformation.x;
-  //   y += transformation.y;
-
-  //   return { x: x, y: y };
-  // },
+  "public unstitch": function() {
+    this._quitStitch();
+  },
 
 
   "public isStitched": function() {
@@ -132,17 +117,21 @@ var CWStitchManager = OOP.createSingleton("Connichiwa", "CWStitchManager", {
 
 
   "public getDeviceTransformation": function() {
+    if (this._deviceTransformation === undefined) {
+      return this.DEFAULT_DEVICE_TRANSFORMATION();
+    }
+    
     return this._deviceTransformation;
   },
 
   "private DEFAULT_DEVICE_TRANSFORMATION": function() {
     return { 
-      x: 0, 
-      y: 0, 
-      width: CWSystemInfo.viewportWidth(), 
-      height: CWSystemInfo.viewportHeight(),
-      rotation: 0, 
-      scale: 1.0 
+      x        : 0, 
+      y        : 0, 
+      width    : CWSystemInfo.viewportWidth(), 
+      height   : CWSystemInfo.viewportHeight(),
+      rotation : 0, 
+      scale    : 1.0 
     };
   }
 });

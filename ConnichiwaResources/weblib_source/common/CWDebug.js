@@ -33,6 +33,7 @@ var CWDebug = (function()
    */
   var log = function(priority, message)
   {
+    // if (priority > 3) return;
     if (debug) console.log(priority + "|" + message);
   };
 
