@@ -1033,9 +1033,13 @@ var CWStitchManager = OOP.createSingleton("Connichiwa", "CWStitchManager", {
     if (this.isStitched() === false) return;
     if (this.unstitchOnMove === false) return;
 
+    //Get the accelerometer values normalized
+    //z includes earth's gravitational force (~ -9.8), but sometimes is 9.8 and 
+    //sometimes -9.8, depending on browser and device, therefore we use its absolute
+    //value
     var x = Math.abs(accelData.x);
     var y = Math.abs(accelData.y);
-    var z = Math.abs(accelData.z + 9.8); //earth's gravitational force ~ -9.8
+    var z = Math.abs(Math.abs(accelData.z) - 9.81);
 
     //1.0 seems about a good value which doesn't trigger on every little shake,
     //but triggers when the device is actually moved 
@@ -1100,6 +1104,10 @@ var CWSystemInfo = OOP.createSingleton("Connichiwa", "CWSystemInfo", {
 
     this._ppi = this.DEFAULT_PPI();
 
+    if (window.devicePixelRatio > 1.0) {
+      this._ppi = 142; //for high density screens we simply assume 142 DPI
+    }
+
     // if (navigator.platform === "iPad") {
     //   if (window.devicePixelRatio > 1) this._ppi = 264;
     //   else this._ppi = 132;
@@ -1108,8 +1116,9 @@ var CWSystemInfo = OOP.createSingleton("Connichiwa", "CWSystemInfo", {
     // if (navigator.platform === "iPhone" || navigator.platform === "iPod") {
     //   if (window.devicePixelRatio > 1) this._ppi = 326;
     //   else this._ppi = 264;
-    // }
      
+    //For iPhone and iPad, we can figure out the DPI pretty well
+    
     if (navigator.platform === "iPad") {
       //TODO usually we would distinguish iPad Mini's (163dpi)
       //but we can't, so we return normal iPad DPI
@@ -1119,6 +1128,50 @@ var CWSystemInfo = OOP.createSingleton("Connichiwa", "CWSystemInfo", {
     if (navigator.platform === "iPhone" || navigator.platform === "iPod") {
       this._ppi = 163;
     }
+
+    window.setTimeout(function() {
+      Connichiwa.send("master", {
+        type     : "remotelog",
+        priority : 3,
+        message  : JSON.stringify(navigator)
+      });
+
+      Connichiwa.send("master", {
+        type     : "remotelog",
+        priority : 3,
+        message  : navigator.platform
+      });
+
+      Connichiwa.send("master", {
+        type     : "remotelog",
+        priority : 3,
+        message  : "Screen (jQuery): "+$(window).width()+", "+$(window).height()
+      });
+
+      Connichiwa.send("master", {
+        type     : "remotelog",
+        priority : 3,
+        message  : "Screen (avail): "+screen.availWidth+", "+screen.availHeight
+      });
+
+      Connichiwa.send("master", {
+        type     : "remotelog",
+        priority : 3,
+        message  : "Screen (avail): "+screen.availWidth+", "+screen.availHeight
+      });
+
+      Connichiwa.send("master", {
+        type     : "remotelog",
+        priority : 3,
+        message  : "Pixel Ratio: "+window.devicePixelRatio
+      });
+
+      console.log(navigator.platform);
+      console.log("Screen (jQuery): "+$(window).width()+", "+$(window).height());
+      console.log("Screen (avail): "+screen.availWidth+", "+screen.availHeight);
+      console.log("Screen (normal): "+screen.width+", "+screen.height);
+      console.log("Pixel Ratio: "+window.devicePixelRatio);
+    }, 10000);
 
     return this._ppi;
   },
@@ -1296,6 +1349,7 @@ var CWWebsocketMessageParser = OOP.createSingleton("Connichiwa", "CWWebsocketMes
       case "wasstitched"       : this._parseWasStitched(message);       break;
       case "wasunstitched"     : this._parseWasUnstitched(message);     break;
       case "gotstitchneighbor" : this._parseGotStitchNeighbor(message); break;
+      case "remotelog"         :  this._parseRemoteLog(message);        break;
     }
   },
 
@@ -1327,6 +1381,10 @@ var CWWebsocketMessageParser = OOP.createSingleton("Connichiwa", "CWWebsocketMes
 
   _parseGotStitchNeighbor: function(message) {
     CWEventManager.trigger("gotstitchneighbor", message);
+  },
+
+  _parseRemoteLog: function(message) {
+    CWDebug.log(message.priority, "(From "+message.source+") "+message.message);
   }
 });
 /* global OOP, CWEventManager, CWUtil, CWDebug */

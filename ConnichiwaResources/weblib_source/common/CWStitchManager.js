@@ -82,9 +82,13 @@ var CWStitchManager = OOP.createSingleton("Connichiwa", "CWStitchManager", {
     if (this.isStitched() === false) return;
     if (this.unstitchOnMove === false) return;
 
+    //Get the accelerometer values normalized
+    //z includes earth's gravitational force (~ -9.8), but sometimes is 9.8 and 
+    //sometimes -9.8, depending on browser and device, therefore we use its absolute
+    //value
     var x = Math.abs(accelData.x);
     var y = Math.abs(accelData.y);
-    var z = Math.abs(accelData.z + 9.8); //earth's gravitational force ~ -9.8
+    var z = Math.abs(Math.abs(accelData.z) - 9.81);
 
     //1.0 seems about a good value which doesn't trigger on every little shake,
     //but triggers when the device is actually moved 

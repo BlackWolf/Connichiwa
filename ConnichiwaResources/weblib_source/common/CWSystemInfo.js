@@ -12,22 +12,18 @@ var CWSystemInfo = OOP.createSingleton("Connichiwa", "CWSystemInfo", {
 
     this._ppi = this.DEFAULT_PPI();
 
-    // if (navigator.platform === "iPad") {
-    //   if (window.devicePixelRatio > 1) this._ppi = 264;
-    //   else this._ppi = 132;
-    // }
-
-    // if (navigator.platform === "iPhone" || navigator.platform === "iPod") {
-    //   if (window.devicePixelRatio > 1) this._ppi = 326;
-    //   else this._ppi = 264;
-    // }
+    //For high density screens we simply assume 142 DPI
+    //This, luckily, is correct for a lot of android devices
+    if (window.devicePixelRatio > 1.0) {
+      this._ppi = 142; 
+    }
      
+    //For iPhone and iPad, we can figure out the DPI pretty well
     if (navigator.platform === "iPad") {
       //TODO usually we would distinguish iPad Mini's (163dpi)
       //but we can't, so we return normal iPad DPI
       this._ppi = 132;
     }
-
     if (navigator.platform === "iPhone" || navigator.platform === "iPod") {
       this._ppi = 163;
     }
