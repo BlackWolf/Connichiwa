@@ -5,14 +5,15 @@
 OOP.extendSingleton("Connichiwa", "Connichiwa", {
   "private _localDevice"      : undefined,
   "private _softDisconnected" : false,
+  "private _isReconnecting"   : false,
 
 
   __constructor: function() {
     //If no native layer runs in the background, we have to take care of 
     //establishing a connection ourselves
-    if (window.RUN_BY_CONNICHIWA_NATIVE !== true) {
-      this._connectWebsocket();
-    }
+    var runsNative = this.package.CWNativeRemoteCommunication.isRunningNative();
+    if (runsNative !== true) this._connectWebsocket();
+
     CWEventManager.trigger("ready"); //trigger ready asap on remotes
   },
 
@@ -29,9 +30,9 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
 
 
   "package _setLocalDevice": function(properties) {
-    if (this._localDevice !== undefined) return;
-
-    this._localDevice = new CWDevice(properties);
+    if (this._localDevice === undefined) {
+      this._localDevice = new CWDevice(properties);
+    }
 
     //Let the master know about our new device information
     properties.type = "remoteinfo";
@@ -41,6 +42,7 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
 
   "package _connectWebsocket": function()
   {
+    CWDebug.log(3, "Connecting");
     //If we replace the websocket (or re-connect) we don't want to call onWebsocketClose
     //Therefore, first cleanup, then close
     var oldWebsocket = this._websocket;
@@ -71,10 +73,17 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
     this._softDisconnected = false;
 
     var runsNative = this.package.CWNativeRemoteCommunication.isRunningNative();
-    if (runsNative === true) {
-      // nativeWebsocketDidOpen();
-      CWNativeRemoteCommunication.callOnNative("nativeWebsocketDidOpen");
-    } else {
+
+    CWNativeRemoteCommunication.callOnNative("nativeWebsocketDidOpen");
+
+    if (runsNative === false) {
+      //If we have no native layer and are reconnecting we now need to refresh the
+      //page to reset the remote's state
+      if (this._isReconnecting === true) {
+        location.reload(true);
+        return;
+      }
+
       //We have no native layer that delivers us accurate local device info
       //Therefore, we create as much info as we can ourselves
       var localInfo = {
@@ -111,11 +120,41 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
     this._cleanupWebsocket();
     // nativeWebsocketDidClose();
     CWNativeRemoteCommunication.callOnNative("nativeWebsocketDidClose");
+
+    var runsNative = this.package.CWNativeRemoteCommunication.isRunningNative();
+
+    //If we are running natively, the remote webview will be cleared and a connection
+    //can be reestablished over Bluetooth. If we are running native-less we
+    //try to reconnect to the master
+    if (runsNative === false) {
+      // this._tryWebsocketReconnect();
+      window.setTimeout(this._tryWebsocketReconnect, 5000);
+    }
   },
 
 
   _onWebsocketError: function()
   {
+    CWDebug.log(3, "Error");
     this._onWebsocketClose();
+  },
+
+  _tryWebsocketReconnect: function() {
+    if (this._websocket !== undefined && 
+       (this._websocket.readyState === WebSocket.OPEN || this._websocket.readyState === WebSocket.CONNECTING)) {
+      return;
+    }
+
+    this._isReconnecting = true;
+
+    // if (this._websocket !== undefined && this._websocket.readyState === WebSocket.CONNECTING) {
+    //   window.setTimeout(this._tryWebsocketReconnect(), 1000);
+    //   return;
+    // }
+
+
+    CWDebug.log(3, "Try reconnect");
+    this._connectWebsocket();
+    // window.setTimeout(this._tryWebsocketReconnect, 5000);
   }
 });
