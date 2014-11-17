@@ -95,14 +95,6 @@ OOP.extendSingleton("Connichiwa", "CWStitchManager", {
 
       delete this._devices[identifier];
       CWDebug.log(3, "Device was unstitched: " + identifier);
-
-      //If only one device remains, we also unstitch it. 
-      // var length = Object.keys(this._devices).length;
-      // if (length === 1) {
-      //   for (var key in this._devices) {
-      //     this.unstitchDevice(key);
-      //   }
-      // }
     }
   },
 
@@ -111,8 +103,6 @@ OOP.extendSingleton("Connichiwa", "CWStitchManager", {
     //This device will then become the reference and its origin and axis will be the origin
     //and axis of the global coordinate system
     if (Object.keys(this._devices).length === 0) {
-      // var localDevice = CWDeviceManager.getLocalDevice();
-      // var stitchData = this._createStitchData(localDevice.getIdentifier());
       var stitchData = this._createStitchData(firstSwipe.device);
       stitchData.width  = firstSwipe.width;
       stitchData.height = firstSwipe.height;
@@ -127,7 +117,6 @@ OOP.extendSingleton("Connichiwa", "CWStitchManager", {
         otherDevice          : secondSwipe.device,
         edge                 : firstSwipe.edge, //TODO should this be in here? and if so, should it be relative?
         deviceTransformation : this.getDeviceTransformation(firstSwipe.device, true)
-        // deviceTransformation : this.getDeviceTransformation(firstSwipe.device)
       };
       Connichiwa.send(firstSwipe.device, wasstitchMessage);
     }

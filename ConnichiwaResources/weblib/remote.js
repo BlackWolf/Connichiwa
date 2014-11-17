@@ -1413,9 +1413,13 @@ var Connichiwa = OOP.createSingleton("Connichiwa", "Connichiwa", {
   },
 
 
-  "public broadcast": function(messageObject) 
+  "public broadcast": function(messageObject, sendToSelf) 
   {
     this.send("broadcast", messageObject);
+
+    if (sendToSelf === true) {
+      this.send(this.getIdentifier(), messageObject);
+    }
   },
 
 
