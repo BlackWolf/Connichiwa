@@ -25,7 +25,13 @@ var CWSystemInfo = OOP.createSingleton("Connichiwa", "CWSystemInfo", {
       this._ppi = 132;
     }
     if (navigator.platform === "iPhone" || navigator.platform === "iPod") {
-      this._ppi = 163;
+      //Newer iPhones (for now iPhone 6+) have a different resolution, luckily they
+      //also return a new devicePixelRatio
+      if (window.devicePixelRatio === 3) {
+        this._ppi = 133;
+      } else {
+        this._ppi = 163;
+      }
     }
 
     return this._ppi;
@@ -49,6 +55,6 @@ var CWSystemInfo = OOP.createSingleton("Connichiwa", "CWSystemInfo", {
   },
 
   "public DEFAULT_PPI": function() {
-    return 96;
+    return 100; //HD on a 22'' monitor
   }
 });

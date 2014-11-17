@@ -1104,74 +1104,27 @@ var CWSystemInfo = OOP.createSingleton("Connichiwa", "CWSystemInfo", {
 
     this._ppi = this.DEFAULT_PPI();
 
+    //For high density screens we simply assume 142 DPI
+    //This, luckily, is correct for a lot of android devices
     if (window.devicePixelRatio > 1.0) {
-      this._ppi = 142; //for high density screens we simply assume 142 DPI
+      this._ppi = 142; 
     }
-
-    // if (navigator.platform === "iPad") {
-    //   if (window.devicePixelRatio > 1) this._ppi = 264;
-    //   else this._ppi = 132;
-    // }
-
-    // if (navigator.platform === "iPhone" || navigator.platform === "iPod") {
-    //   if (window.devicePixelRatio > 1) this._ppi = 326;
-    //   else this._ppi = 264;
      
     //For iPhone and iPad, we can figure out the DPI pretty well
-    
     if (navigator.platform === "iPad") {
       //TODO usually we would distinguish iPad Mini's (163dpi)
       //but we can't, so we return normal iPad DPI
       this._ppi = 132;
     }
-
     if (navigator.platform === "iPhone" || navigator.platform === "iPod") {
-      this._ppi = 163;
+      //Newer iPhones (for now iPhone 6+) have a different resolution, luckily they
+      //also return a new devicePixelRatio
+      if (window.devicePixelRatio === 3) {
+        this._ppi = 133;
+      } else {
+        this._ppi = 163;
+      }
     }
-
-    window.setTimeout(function() {
-      Connichiwa.send("master", {
-        type     : "remotelog",
-        priority : 3,
-        message  : JSON.stringify(navigator)
-      });
-
-      Connichiwa.send("master", {
-        type     : "remotelog",
-        priority : 3,
-        message  : navigator.platform
-      });
-
-      Connichiwa.send("master", {
-        type     : "remotelog",
-        priority : 3,
-        message  : "Screen (jQuery): "+$(window).width()+", "+$(window).height()
-      });
-
-      Connichiwa.send("master", {
-        type     : "remotelog",
-        priority : 3,
-        message  : "Screen (avail): "+screen.availWidth+", "+screen.availHeight
-      });
-
-      Connichiwa.send("master", {
-        type     : "remotelog",
-        priority : 3,
-        message  : "Screen (avail): "+screen.availWidth+", "+screen.availHeight
-      });
-
-      Connichiwa.send("master", {
-        type     : "remotelog",
-        priority : 3,
-        message  : "Pixel Ratio: "+window.devicePixelRatio
-      });
-
-      console.log(navigator.platform);
-      console.log("Screen (jQuery): "+$(window).width()+", "+$(window).height());
-      console.log("Screen (avail): "+screen.availWidth+", "+screen.availHeight);
-      console.log("Screen (normal): "+screen.width+", "+screen.height);
-      console.log("Pixel Ratio: "+window.devicePixelRatio);
-    }, 10000);
 
     return this._ppi;
   },
@@ -1194,7 +1147,7 @@ var CWSystemInfo = OOP.createSingleton("Connichiwa", "CWSystemInfo", {
   },
 
   "public DEFAULT_PPI": function() {
-    return 96;
+    return 100; //HD on a 22'' monitor
   }
 });
 "use strict";
