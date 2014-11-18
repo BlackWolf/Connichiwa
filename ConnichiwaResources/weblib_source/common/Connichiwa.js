@@ -12,12 +12,28 @@ var Connichiwa = OOP.createSingleton("Connichiwa", "Connichiwa", {
 
 
   "public on": function(eventName, callback) {
+    //We can't use the normal event system for the load event, so
+    //forward it
+    if (eventName === "load") {
+      this.onLoad(callback);
+      return;
+    } 
+    
     CWEventManager.register(eventName, callback);
   },
 
 
   "public onMessage": function(messageName, callback) {
     this.on("message" + messageName, callback);
+  },
+
+
+  "public onLoad": function(callback) {
+    if (document.readyState === 'complete') {
+      callback();
+    } else {
+      $(window).load(callback);
+    }
   },
 
 

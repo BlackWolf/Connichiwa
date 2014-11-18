@@ -1354,12 +1354,28 @@ var Connichiwa = OOP.createSingleton("Connichiwa", "Connichiwa", {
 
 
   "public on": function(eventName, callback) {
+    //We can't use the normal event system for the load event, so
+    //forward it
+    if (eventName === "load") {
+      this.onLoad(callback);
+      return;
+    } 
+    
     CWEventManager.register(eventName, callback);
   },
 
 
   "public onMessage": function(messageName, callback) {
     this.on("message" + messageName, callback);
+  },
+
+
+  "public onLoad": function(callback) {
+    if (document.readyState === 'complete') {
+      callback();
+    } else {
+      $(window).load(callback);
+    }
   },
 
 
@@ -1881,6 +1897,13 @@ OOP.extendSingleton("Connichiwa", "CWStitchManager", {
     //This device will then become the reference and its origin and axis will be the origin
     //and axis of the global coordinate system
     if (Object.keys(this._devices).length === 0) {
+      //If one of the devices is the master, make sure we stitch it first
+      //Some applications might rely on that, and those that don't are not harmed
+      if (secondSwipe.device === Connichiwa.getIdentifier()) {
+        var tempSwipe = firstSwipe;
+        firstSwipe = secondSwipe;
+        secondSwipe = tempSwipe;
+      }
       var stitchData = this._createStitchData(firstSwipe.device);
       stitchData.width  = firstSwipe.width;
       stitchData.height = firstSwipe.height;
