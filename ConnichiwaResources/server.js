@@ -42,7 +42,7 @@ app.use("/check", function(req, res, next) {
 //Make sure the server only delivers "safe" filetypes
 app.use(function(req, res, next) {
   var validExtensionRegexp = /\.(html|htm|css|js|jpg|jpeg|png|gif|ico|pdf|mp3|m4a)\??.*$/;
-  if (validExtensionRegexp.test(Path.extname(req.url)) === false && req.url !== "/") {
+  if (validExtensionRegexp.test(Path.extname(req.url)) === false && req.url !== "/" && req.url !== "/remote") {
     log(1, req.url + " rejected because of file extension");
     res.status(404).send("File not found");
     return;
@@ -51,7 +51,8 @@ app.use(function(req, res, next) {
   next();
 });
 
-app.use("/connichiwa/remote.html", function(req, res, next) 
+// app.use("/connichiwa/remote.html", function(req, res, next) 
+app.use("/remote", function(req, res, next) 
 {
   res.sendfile(RESOURCES_PATH + "/remote.html");
 });
