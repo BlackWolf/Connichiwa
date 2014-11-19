@@ -28,7 +28,7 @@ var CWSystemInfo = OOP.createSingleton("Connichiwa", "CWSystemInfo", {
       //Newer iPhones (for now iPhone 6+) have a different resolution, luckily they
       //also return a new devicePixelRatio
       if (window.devicePixelRatio === 3) {
-        this._ppi = 133;
+        this._ppi = 153;
       } else {
         this._ppi = 163;
       }
