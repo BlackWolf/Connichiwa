@@ -40,8 +40,21 @@ var Connichiwa = OOP.createSingleton("Connichiwa", "Connichiwa", {
   // DEVICE COMMUNICATION API
 
 
-  "public append": function(identifier, html) {
-    //html can also be a DOM or jQuery element
+  "public append": function(identifier, target, html) {
+    //if html is missing, html is target and target is body
+    if (html === undefined) {
+      html = target;
+      target = "body";
+    }
+
+    //target should be a selector but can also be a DOM or jQuery element
+    //If so, we try to get it by its ID on the other side
+    if (CWUtil.isObject(target)) {
+      target = $(target).attr("id");
+    }
+    
+    //html can be a DOM or jQuery element - if so, send the outerHTML including 
+    //all styles
     if (CWUtil.isObject(html) === true) {
       var el = $(html);
       var clone = el.clone();
@@ -50,8 +63,9 @@ var Connichiwa = OOP.createSingleton("Connichiwa", "Connichiwa", {
     }
 
     var message = {
-      type : "append",
-      html : html
+      type           : "append",
+      targetSelector : target,
+      html           : html
     };
     this.send(identifier, message);
   },

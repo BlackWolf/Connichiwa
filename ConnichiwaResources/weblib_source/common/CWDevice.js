@@ -54,6 +54,8 @@ function CWDevice(properties)
 
   this.getLaunchDate = function() { return _launchDate; };
 
+  this.getName = function() { return _name; };
+
   this.getPPI = function() { return _ppi; };
 
   this.isLocal = function() {
@@ -83,8 +85,8 @@ function CWDevice(properties)
 // DEVICE COMMUNICATION API
 
 
-CWDevice.prototype.append = function(html) {
-  Connichiwa.append(this.getIdentifier(), html);
+CWDevice.prototype.append = function(target, html) {
+  Connichiwa.append(this.getIdentifier(), target, html);
 };
 
 

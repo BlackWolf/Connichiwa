@@ -12,7 +12,7 @@ var CWWebsocketMessageParser = OOP.createSingleton("Connichiwa", "CWWebsocketMes
       case "wasstitched"       : this._parseWasStitched(message);       break;
       case "wasunstitched"     : this._parseWasUnstitched(message);     break;
       case "gotstitchneighbor" : this._parseGotStitchNeighbor(message); break;
-      case "remotelog"         :  this._parseRemoteLog(message);        break;
+      case "remotelog"         : this._parseRemoteLog(message);         break;
     }
   },
 
@@ -22,7 +22,7 @@ var CWWebsocketMessageParser = OOP.createSingleton("Connichiwa", "CWWebsocketMes
   },
 
   _parseAppend: function(message) {
-    $("body").append(message.html);
+    $(message.targetSelector).append(message.html);
   },
 
   _parseLoadScript: function(message) {

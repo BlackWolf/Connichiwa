@@ -45,6 +45,7 @@ $(document).ready(function() {
         if (touchAngleReferenceVector !== undefined) {
           var referenceTouchAngle = newTouchVector.angle(touchAngleReferenceVector);
           if (referenceTouchAngle > 20) {
+          // if (referenceTouchAngle > 30) {
             touchAngleChangedCount++;
 
             if (touchAngleChangedCount === 3) {
@@ -63,6 +64,7 @@ $(document).ready(function() {
           if (touchLastVector !== undefined) {
             var newTouchAngle = newTouchVector.angle(touchLastVector);
             if (newTouchAngle > 20) {
+            // if (newTouchAngle > 30) {
               touchAngleReferenceVector = touchLastVector;
               touchAngleChangedCount = 1;
             }
@@ -110,6 +112,11 @@ $(document).ready(function() {
     if (swipeLength < 50)  xyRatio = 0.4;
     if (swipeLength < 40)  xyRatio = 0.45;
     if (swipeLength < 15)  xyRatio = 0.8; //doesn't matter that much anymore
+    // var xyRatio = 0.65;
+    // if (swipeLength < 100) xyRatio = 0.75; //short swipes tend to be less straight
+    // if (swipeLength < 50)  xyRatio = 0.85;
+    // if (swipeLength < 40)  xyRatio = 0.95;
+    // if (swipeLength < 15)  xyRatio = 0.95; //doesn't matter that much anymore
 
     var direction = "invalid";
     if (Math.abs(deltaY) < (Math.abs(deltaX) * xyRatio)) {
@@ -131,6 +138,10 @@ $(document).ready(function() {
     var endsAtLeftEdge   = (swipeEnd.x <= 50);
     var endsAtBottomEdge = (swipeEnd.y >= ($(window).height() - 50));
     var endsAtRightEdge  = (swipeEnd.x >= ($(window).width()  - 50));
+    // var endsAtTopEdge    = (swipeEnd.y <= 100);
+    // var endsAtLeftEdge   = (swipeEnd.x <= 100);
+    // var endsAtBottomEdge = (swipeEnd.y >= ($(window).height() - 100));
+    // var endsAtRightEdge  = (swipeEnd.x >= ($(window).width()  - 100));
 
     var edge = "invalid";
     if (endsAtTopEdge    && direction === "up")    edge = "top";

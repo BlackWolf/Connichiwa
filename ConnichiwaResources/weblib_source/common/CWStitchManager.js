@@ -82,6 +82,7 @@ var CWStitchManager = OOP.createSingleton("Connichiwa", "CWStitchManager", {
     if (this.isStitched() === false) return;
     if (this.unstitchOnMove === false) return;
 
+
     //Get the accelerometer values normalized
     //z includes earth's gravitational force (~ -9.8), but sometimes is 9.8 and 
     //sometimes -9.8, depending on browser and device, therefore we use its absolute

@@ -64,11 +64,17 @@ OOP.extendSingleton("Connichiwa", "CWStitchManager", {
     for (var key in this._swipes) {
       var savedSwipe = this._swipes[key];
 
+      CWDebug.log(4, "Checking existing swipe: "+key);
+
       //We can't create a stitch on a single device
       if (savedSwipe.device === swipe.device) continue;
 
+      CWDebug.log(4, "Checking time constraint");
+
       //If the existing swipe is too old, it is invalid
       if ((swipe.date.getTime() - savedSwipe.date.getTime()) > 1000) continue;
+
+      CWDebug.log(4, "Checking connection constraint");
 
       //Check if the other device is still connected
       var savedDevice = CWDeviceManager.getDeviceWithIdentifier(savedSwipe.device);
@@ -127,6 +133,10 @@ OOP.extendSingleton("Connichiwa", "CWStitchManager", {
       };
       Connichiwa.send(firstSwipe.device, wasstitchMessage);
     }
+
+    CWDebug.log(3, "STITCHING DATA COMING IN");
+    CWDebug.log(3, JSON.stringify(firstSwipe));
+    CWDebug.log(3, JSON.stringify(secondSwipe));
 
     //
     // PREPARATION

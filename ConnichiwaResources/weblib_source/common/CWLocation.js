@@ -139,7 +139,6 @@ CWLocation.toGlobal = function(x, y, width, height) {
   var result = { x: x, y: y, width: width, height: height };
 
   var transformation = CWStitchManager.getDeviceTransformation();
-  CWDebug.log(3, JSON.stringify(transformation));
   
   //Adjust x/y values from our rotation to the master device, which always has 0º rotation
   if (transformation.rotation === 0) {
@@ -226,6 +225,45 @@ CWLocation.toLocal = function(x, y, width, height) {
   result.height *= transformation.scale;
 
   return result;
+};
+
+CWLocation.applyRotation = function(x, y, width, height, rotation) {
+  var transformation = CWStitchManager.getDeviceTransformation();
+
+  if (x === undefined) x = 0;
+  if (y === undefined) y = 0;
+  if (width  === undefined) width = 0;
+  if (height === undefined) height = 0;
+  if (rotation === undefined) rotation = transformation.rotation;
+
+  var result = { x: x, y: y, width: width, height: height };
+
+  if (transformation.rotation === 0) {
+    result.y      = y;
+    result.x      = x;
+    result.width  = width;
+    result.height = height;
+  }
+  if (transformation.rotation === 90) {
+    result.y      = -x;
+    result.x      = y;
+    result.width  = height;
+    result.height = width;
+  }
+  if (transformation.rotation === 180) {   
+    result.y      = -y;
+    result.x      = -x;
+    result.width  = width;
+    result.height = height;
+  }
+  if (transformation.rotation === 270) {        
+    result.y      = x;
+    result.x      = -y;
+    result.width  = height;
+    result.height = width;
+  }
+
+  return result;  
 };
 
 CWLocation.fromString = function(s) {

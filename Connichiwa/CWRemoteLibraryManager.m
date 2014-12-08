@@ -117,7 +117,7 @@
     self.state = CWRemoteLibraryManagerStateConnecting;
     
     //URL is in the form http://IP:PORT - we need to make it http://IP:PORT/remote
-    NSURL *finalURL = [URL URLByAppendingPathComponent:@"remote" isDirectory:YES];
+    NSURL *finalURL = [URL URLByAppendingPathComponent:@"remote" isDirectory:NO]; //directory NO to avoid trailing slash
     
     NSURLRequest *URLRequest = [NSURLRequest requestWithURL:finalURL];
     dispatch_async(dispatch_get_main_queue(), ^{

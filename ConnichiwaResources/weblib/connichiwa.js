@@ -305,6 +305,8 @@ function CWDevice(properties)
 
   this.getLaunchDate = function() { return _launchDate; };
 
+  this.getName = function() { return _name; };
+
   this.getPPI = function() { return _ppi; };
 
   this.isLocal = function() {
@@ -334,8 +336,8 @@ function CWDevice(properties)
 // DEVICE COMMUNICATION API
 
 
-CWDevice.prototype.append = function(html) {
-  Connichiwa.append(this.getIdentifier(), html);
+CWDevice.prototype.append = function(target, html) {
+  Connichiwa.append(this.getIdentifier(), target, html);
 };
 
 
@@ -506,6 +508,7 @@ $(document).ready(function() {
         if (touchAngleReferenceVector !== undefined) {
           var referenceTouchAngle = newTouchVector.angle(touchAngleReferenceVector);
           if (referenceTouchAngle > 20) {
+          // if (referenceTouchAngle > 30) {
             touchAngleChangedCount++;
 
             if (touchAngleChangedCount === 3) {
@@ -524,6 +527,7 @@ $(document).ready(function() {
           if (touchLastVector !== undefined) {
             var newTouchAngle = newTouchVector.angle(touchLastVector);
             if (newTouchAngle > 20) {
+            // if (newTouchAngle > 30) {
               touchAngleReferenceVector = touchLastVector;
               touchAngleChangedCount = 1;
             }
@@ -571,6 +575,11 @@ $(document).ready(function() {
     if (swipeLength < 50)  xyRatio = 0.4;
     if (swipeLength < 40)  xyRatio = 0.45;
     if (swipeLength < 15)  xyRatio = 0.8; //doesn't matter that much anymore
+    // var xyRatio = 0.65;
+    // if (swipeLength < 100) xyRatio = 0.75; //short swipes tend to be less straight
+    // if (swipeLength < 50)  xyRatio = 0.85;
+    // if (swipeLength < 40)  xyRatio = 0.95;
+    // if (swipeLength < 15)  xyRatio = 0.95; //doesn't matter that much anymore
 
     var direction = "invalid";
     if (Math.abs(deltaY) < (Math.abs(deltaX) * xyRatio)) {
@@ -592,6 +601,10 @@ $(document).ready(function() {
     var endsAtLeftEdge   = (swipeEnd.x <= 50);
     var endsAtBottomEdge = (swipeEnd.y >= ($(window).height() - 50));
     var endsAtRightEdge  = (swipeEnd.x >= ($(window).width()  - 50));
+    // var endsAtTopEdge    = (swipeEnd.y <= 100);
+    // var endsAtLeftEdge   = (swipeEnd.x <= 100);
+    // var endsAtBottomEdge = (swipeEnd.y >= ($(window).height() - 100));
+    // var endsAtRightEdge  = (swipeEnd.x >= ($(window).width()  - 100));
 
     var edge = "invalid";
     if (endsAtTopEdge    && direction === "up")    edge = "top";
@@ -841,7 +854,6 @@ CWLocation.toGlobal = function(x, y, width, height) {
   var result = { x: x, y: y, width: width, height: height };
 
   var transformation = CWStitchManager.getDeviceTransformation();
-  CWDebug.log(3, JSON.stringify(transformation));
   
   //Adjust x/y values from our rotation to the master device, which always has 0º rotation
   if (transformation.rotation === 0) {
@@ -928,6 +940,45 @@ CWLocation.toLocal = function(x, y, width, height) {
   result.height *= transformation.scale;
 
   return result;
+};
+
+CWLocation.applyRotation = function(x, y, width, height, rotation) {
+  var transformation = CWStitchManager.getDeviceTransformation();
+
+  if (x === undefined) x = 0;
+  if (y === undefined) y = 0;
+  if (width  === undefined) width = 0;
+  if (height === undefined) height = 0;
+  if (rotation === undefined) rotation = transformation.rotation;
+
+  var result = { x: x, y: y, width: width, height: height };
+
+  if (transformation.rotation === 0) {
+    result.y      = y;
+    result.x      = x;
+    result.width  = width;
+    result.height = height;
+  }
+  if (transformation.rotation === 90) {
+    result.y      = -x;
+    result.x      = y;
+    result.width  = height;
+    result.height = width;
+  }
+  if (transformation.rotation === 180) {   
+    result.y      = -y;
+    result.x      = -x;
+    result.width  = width;
+    result.height = height;
+  }
+  if (transformation.rotation === 270) {        
+    result.y      = x;
+    result.x      = -y;
+    result.width  = height;
+    result.height = width;
+  }
+
+  return result;  
 };
 
 CWLocation.fromString = function(s) {
@@ -1033,6 +1084,7 @@ var CWStitchManager = OOP.createSingleton("Connichiwa", "CWStitchManager", {
     if (this.isStitched() === false) return;
     if (this.unstitchOnMove === false) return;
 
+
     //Get the accelerometer values normalized
     //z includes earth's gravitational force (~ -9.8), but sometimes is 9.8 and 
     //sometimes -9.8, depending on browser and device, therefore we use its absolute
@@ -1120,7 +1172,7 @@ var CWSystemInfo = OOP.createSingleton("Connichiwa", "CWSystemInfo", {
       //Newer iPhones (for now iPhone 6+) have a different resolution, luckily they
       //also return a new devicePixelRatio
       if (window.devicePixelRatio === 3) {
-        this._ppi = 133;
+        this._ppi = 153;
       } else {
         this._ppi = 163;
       }
@@ -1302,7 +1354,7 @@ var CWWebsocketMessageParser = OOP.createSingleton("Connichiwa", "CWWebsocketMes
       case "wasstitched"       : this._parseWasStitched(message);       break;
       case "wasunstitched"     : this._parseWasUnstitched(message);     break;
       case "gotstitchneighbor" : this._parseGotStitchNeighbor(message); break;
-      case "remotelog"         :  this._parseRemoteLog(message);        break;
+      case "remotelog"         : this._parseRemoteLog(message);         break;
     }
   },
 
@@ -1312,7 +1364,7 @@ var CWWebsocketMessageParser = OOP.createSingleton("Connichiwa", "CWWebsocketMes
   },
 
   _parseAppend: function(message) {
-    $("body").append(message.html);
+    $(message.targetSelector).append(message.html);
   },
 
   _parseLoadScript: function(message) {
@@ -1382,8 +1434,21 @@ var Connichiwa = OOP.createSingleton("Connichiwa", "Connichiwa", {
   // DEVICE COMMUNICATION API
 
 
-  "public append": function(identifier, html) {
-    //html can also be a DOM or jQuery element
+  "public append": function(identifier, target, html) {
+    //if html is missing, html is target and target is body
+    if (html === undefined) {
+      html = target;
+      target = "body";
+    }
+
+    //target should be a selector but can also be a DOM or jQuery element
+    //If so, we try to get it by its ID on the other side
+    if (CWUtil.isObject(target)) {
+      target = $(target).attr("id");
+    }
+    
+    //html can be a DOM or jQuery element - if so, send the outerHTML including 
+    //all styles
     if (CWUtil.isObject(html) === true) {
       var el = $(html);
       var clone = el.clone();
@@ -1392,8 +1457,9 @@ var Connichiwa = OOP.createSingleton("Connichiwa", "Connichiwa", {
     }
 
     var message = {
-      type : "append",
-      html : html
+      type           : "append",
+      targetSelector : target,
+      html           : html
     };
     this.send(identifier, message);
   },
@@ -1858,11 +1924,17 @@ OOP.extendSingleton("Connichiwa", "CWStitchManager", {
     for (var key in this._swipes) {
       var savedSwipe = this._swipes[key];
 
+      CWDebug.log(4, "Checking existing swipe: "+key);
+
       //We can't create a stitch on a single device
       if (savedSwipe.device === swipe.device) continue;
 
+      CWDebug.log(4, "Checking time constraint");
+
       //If the existing swipe is too old, it is invalid
       if ((swipe.date.getTime() - savedSwipe.date.getTime()) > 1000) continue;
+
+      CWDebug.log(4, "Checking connection constraint");
 
       //Check if the other device is still connected
       var savedDevice = CWDeviceManager.getDeviceWithIdentifier(savedSwipe.device);
@@ -1921,6 +1993,10 @@ OOP.extendSingleton("Connichiwa", "CWStitchManager", {
       };
       Connichiwa.send(firstSwipe.device, wasstitchMessage);
     }
+
+    CWDebug.log(3, "STITCHING DATA COMING IN");
+    CWDebug.log(3, JSON.stringify(firstSwipe));
+    CWDebug.log(3, JSON.stringify(secondSwipe));
 
     //
     // PREPARATION
@@ -2210,15 +2286,9 @@ OOP.extendSingleton("Connichiwa", "CWWebsocketMessageParser",
       CWDebug.log(1, "TODO");
     }
     
-    
     device.connectionState = CWDeviceConnectionState.CONNECTED;
     nativeCallRemoteDidConnect(device.getIdentifier());
     
-    //For some reason, it seems that triggering this messages sometimes causes the iOS WebThread to crash
-    //I THINK this might be related to us sending a message to the remote device in the web app when this event is triggered
-    //This does seem strange, though, considering we just received a message over the websocket (so it obviously is initialized and working)
-    //As a temporary fix, I try to delay sending this event a little and see if it helps
-    // setTimeout(function() { CWEventManager.trigger("deviceConnected", device); }, 1000);
     var connectedCallback = function() { 
       CWEventManager.trigger("deviceConnected", device); 
     };
