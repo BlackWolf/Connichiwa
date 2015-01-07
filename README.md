@@ -1,9 +1,11 @@
 Connichiwa
 ==========
 
-A framework for local multi-device web applications
+A framework for local multi-device web applications. In development.
 
-**In development, not ready for use**
+Installation
+==========
+For installation instructions visit the [Wiki](http://wiki.connichiwa.info)
 
 Used Projects
 ==========
