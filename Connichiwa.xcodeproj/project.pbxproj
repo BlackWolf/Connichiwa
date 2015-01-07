@@ -115,12 +115,19 @@
 			remoteGlobalIDString = B54C1F51180D37280051F826;
 			remoteInfo = uv;
 		};
-		33ACBECC193F4A3800CD51BC /* PBXContainerItemProxy */ = {
+		33ED02A51A5D7C07009ED3A5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3381A01E193F492600BDDF34 /* Nodelike.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 33819FDB193F3F6100BDDF34;
+			remoteInfo = NodelikeResources;
+		};
+		33ED02A71A5D7C0B009ED3A5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3381A01E193F492600BDDF34 /* Nodelike.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = B59EA08D180CB587005BF5C1;
-			remoteInfo = Nodelike;
+			remoteGlobalIDString = 33819FCF193F3EEB00BDDF34;
+			remoteInfo = "Nodelike Fat Binary";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -255,6 +262,7 @@
 				3381A027193F492600BDDF34 /* libNodelike.a */,
 				3381A029193F492600BDDF34 /* libuv.a */,
 				3381A02B193F492600BDDF34 /* Nodelike Tests.xctest */,
+				33ED02A61A5D7C07009ED3A5 /* NodelikeResources.bundle */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -418,7 +426,7 @@
 			);
 			dependencies = (
 				33ACB88D19ED227C001A465F /* PBXTargetDependency */,
-				33ACBECD193F4A3800CD51BC /* PBXTargetDependency */,
+				33ED02A81A5D7C0B009ED3A5 /* PBXTargetDependency */,
 				330CBB94193F17A40064AD99 /* PBXTargetDependency */,
 			);
 			name = Connichiwa;
@@ -499,6 +507,13 @@
 			fileType = wrapper.cfbundle;
 			path = "Nodelike Tests.xctest";
 			remoteRef = 3381A02A193F492600BDDF34 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		33ED02A61A5D7C07009ED3A5 /* NodelikeResources.bundle */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = NodelikeResources.bundle;
+			remoteRef = 33ED02A51A5D7C07009ED3A5 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -692,10 +707,10 @@
 			name = uv;
 			targetProxy = 33ACB88C19ED227C001A465F /* PBXContainerItemProxy */;
 		};
-		33ACBECD193F4A3800CD51BC /* PBXTargetDependency */ = {
+		33ED02A81A5D7C0B009ED3A5 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			name = Nodelike;
-			targetProxy = 33ACBECC193F4A3800CD51BC /* PBXContainerItemProxy */;
+			name = "Nodelike Fat Binary";
+			targetProxy = 33ED02A71A5D7C0B009ED3A5 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 

@@ -24,11 +24,11 @@
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>7780E198A46684277B6C53D1786393EB194B54A1</key>
-		<string>../..Nodelike/</string>
+		<string>../..Nodelike</string>
 		<key>90C3FD88F8002F902A5FDF9D64063244571F233C</key>
-		<string>../..Nodelike/http-parser/</string>
+		<string>../..Nodelike/http-parser</string>
 		<key>BC09C09DC2853BA9B3A84860F78F2E9FD790D8C3</key>
-		<string>../..Nodelike/libuv/</string>
+		<string>../..Nodelike/libuv</string>
 		<key>FD1855F54C7DDCF3F483FF38859A9A0B74A5A04E</key>
 		<string>../..</string>
 	</dict>
@@ -52,6 +52,14 @@
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>7780E198A46684277B6C53D1786393EB194B54A1</string>
+			<key>IDESourceControlWCCName</key>
+			<string>ConnichiwaNodelike</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
 			<string>90C3FD88F8002F902A5FDF9D64063244571F233C</string>
 			<key>IDESourceControlWCCName</key>
 			<string>http-parser</string>
@@ -63,14 +71,6 @@
 			<string>BC09C09DC2853BA9B3A84860F78F2E9FD790D8C3</string>
 			<key>IDESourceControlWCCName</key>
 			<string>libuv</string>
-		</dict>
-		<dict>
-			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
-			<string>public.vcs.git</string>
-			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>7780E198A46684277B6C53D1786393EB194B54A1</string>
-			<key>IDESourceControlWCCName</key>
-			<string>Nodelike</string>
 		</dict>
 	</array>
 </dict>
