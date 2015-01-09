@@ -5,7 +5,7 @@
 OOP.extendSingleton("Connichiwa", "CWWebsocketMessageParser", 
 {
   "package parseOnRemote": function(message) {
-    switch (message.type) {
+    switch (message._name) {
       case "softdisconnect" : this._parseSoftDisconnect(message); break;
     }
   },

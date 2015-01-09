@@ -346,9 +346,9 @@ CWDevice.prototype.loadScript = function(url, callback) {
 };
 
 
-CWDevice.prototype.send = function(messageObject)
+CWDevice.prototype.send = function(name, message)
 {
-  Connichiwa.send(this.getIdentifier(), messageObject);
+  Connichiwa.send(this.getIdentifier(), name, message);
 };
 
 
@@ -1042,11 +1042,10 @@ var CWStitchManager = OOP.createSingleton("Connichiwa", "CWStitchManager", {
 
 
   _onLocalSwipe: function(swipeData) {
-    swipeData.type   = "stitchswipe";
     swipeData.device = Connichiwa.getIdentifier();
     swipeData.width  = CWSystemInfo.viewportWidth();
     swipeData.height = CWSystemInfo.viewportHeight();
-    Connichiwa.send(swipeData);
+    Connichiwa.send("master", "stitchswipe", swipeData);
   },
 
 
@@ -1105,11 +1104,8 @@ var CWStitchManager = OOP.createSingleton("Connichiwa", "CWStitchManager", {
 
 
   "private _quitStitch": function() {
-    var data = {
-      type   : "quitstitch",
-      device : Connichiwa.getIdentifier()
-    };
-    Connichiwa.send(data);
+    var data = { device : Connichiwa.getIdentifier() };
+    Connichiwa.send("master", "quitstitch", data);
   },
 
 
@@ -1347,7 +1343,7 @@ CWVector.prototype.angle = function(otherVector) {
 var CWWebsocketMessageParser = OOP.createSingleton("Connichiwa", "CWWebsocketMessageParser", 
 {
   "package parse": function(message) {
-    switch (message.type) {
+    switch (message._name) {
       case "ack"               : this._parseAck(message);               break;
       case "append"            : this._parseAppend(message);            break;
       case "loadscript"        : this._parseLoadScript(message);        break;
@@ -1389,10 +1385,10 @@ var CWWebsocketMessageParser = OOP.createSingleton("Connichiwa", "CWWebsocketMes
   },
 
   _parseRemoteLog: function(message) {
-    CWDebug.log(message.priority, "(From "+message.source+") "+message.message);
+    CWDebug.log(message.priority, "(From "+message._source+") "+message.message);
   }
 });
-/* global OOP, CWEventManager, CWUtil, CWDebug */
+/* global OOP, CWDevice, CWEventManager, CWUtil, CWDebug */
 "use strict";
 
 
@@ -1417,13 +1413,13 @@ var Connichiwa = OOP.createSingleton("Connichiwa", "Connichiwa", {
   },
 
 
-  "public onMessage": function(messageName, callback) {
-    this.on("message" + messageName, callback);
+  "public onMessage": function(name, callback) {
+    this.on("message" + name, callback);
   },
 
 
   "public onLoad": function(callback) {
-    if (document.readyState === 'complete') {
+    if (document.readyState === "complete") {
       callback();
     } else {
       $(window).load(callback);
@@ -1435,7 +1431,7 @@ var Connichiwa = OOP.createSingleton("Connichiwa", "Connichiwa", {
 
 
   "public append": function(identifier, target, html) {
-    //if html is missing, html is target and target is body
+    //With two args, we handle them as identifier and htmlspot
     if (html === undefined) {
       html = target;
       target = "body";
@@ -1457,20 +1453,16 @@ var Connichiwa = OOP.createSingleton("Connichiwa", "Connichiwa", {
     }
 
     var message = {
-      type           : "append",
       targetSelector : target,
       html           : html
     };
-    this.send(identifier, message);
+    this.send(identifier, "append", message);
   },
 
 
   "public loadScript": function(identifier, url, callback) {
-    var message = {
-      type : "loadscript",
-      url  : url
-    };
-    var messageID = this.send(identifier, message);
+    var message = { url  : url };
+    var messageID = this.send(identifier, "loadscript", message);
 
     if (callback !== undefined) {
       this.on("__messageack__id" + messageID, callback);
@@ -1478,51 +1470,55 @@ var Connichiwa = OOP.createSingleton("Connichiwa", "Connichiwa", {
   },
 
 
-  "public send": function(targetIdentifier, messageObject) {
-    if (messageObject === undefined) {
-      messageObject = targetIdentifier;
-      targetIdentifier = "master";
+  "public send": function(target, name, message) {
+    if (message === undefined) {
+      CWDebug.log(3, "SWITCHING, target is "+target+", name is "+JSON.stringify(name)+" message is "+JSON.stringify(message));
+      message = target;
+      target = "master";
     }
 
-    messageObject.source = this.getIdentifier();
-    messageObject.target = targetIdentifier;
-    return this._sendObject(messageObject);
+    if (CWDevice.prototype.isPrototypeOf(target)) {
+      target = target.getIdentifier();
+    }
+
+    CWDebug.log(3, JSON.stringify(message));
+    message._name = name;
+    message._source = this.getIdentifier();
+    message._target = target;
+    return this._sendObject(message);
   },
 
 
-  "public respond": function(originalMessage, responseObject) {
-    this.send(originalMessage.source, responseObject);
+  "public respond": function(originalMessage, name, responseObject) {
+    this.send(originalMessage._source, name, responseObject);
   },
 
 
-  "public broadcast": function(messageObject, sendToSelf) 
+  "public broadcast": function(name, message, sendToSelf) 
   {
-    this.send("broadcast", messageObject);
+    this.send("broadcast", name, message);
 
     if (sendToSelf === true) {
-      this.send(this.getIdentifier(), messageObject);
+      this.send(this.getIdentifier(), name, message);
     }
   },
 
 
-  "package _sendAck": function(messageObject) {
-    var ackMessage = {
-      type     : "ack",
-      original : messageObject
-    };
-    this.send(messageObject.source, ackMessage);
+  "package _sendAck": function(message) {
+    var ackMessage = { original : message };
+    this.send(message._source, "ack", ackMessage);
   },
 
 
-  "package _sendObject": function(messageObject)
+  "package _sendObject": function(message)
   {
-    messageObject._id = CWUtil.randomInt();
+    message._id = CWUtil.randomInt();
 
-    var messageString = JSON.stringify(messageObject);
+    var messageString = JSON.stringify(message);
     CWDebug.log(4, "Sending message: " + messageString);
     this._websocket.send(messageString);
 
-    return messageObject._id;
+    return message._id;
   },
 
 
@@ -1591,7 +1587,7 @@ var CWNativeRemoteCommunication = OOP.createSingleton("Connichiwa", "CWNativeRem
   {
     CWDebug.log(4, "Parsing native message (remote): " + message);
     var object = JSON.parse(message);
-    switch (object.type)
+    switch (object._name)
     {
       case "runsnative":          this._parseRunsNative(object); break;
       case "connectwebsocket":    this._parseConnectWebsocket(object); break;
@@ -1639,7 +1635,7 @@ var CWNativeRemoteCommunication = OOP.createSingleton("Connichiwa", "CWNativeRem
 OOP.extendSingleton("Connichiwa", "CWWebsocketMessageParser", 
 {
   "package parseOnRemote": function(message) {
-    switch (message.type) {
+    switch (message._name) {
       case "softdisconnect" : this._parseSoftDisconnect(message); break;
     }
   },
@@ -1686,8 +1682,7 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
     }
 
     //Let the master know about our new device information
-    properties.type = "remoteinfo";
-    this.send(properties);
+    this.send("master", "remoteinfo", properties);
   },
 
 
@@ -1760,7 +1755,7 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
       that.package.CWWebsocketMessageParser.parse(message);
       that.package.CWWebsocketMessageParser.parseOnRemote(message);
 
-      if (message.type) CWEventManager.trigger("message" + message.type, message);
+      if (message._name) CWEventManager.trigger("message" + message._name, message);
     });
   },
 
@@ -1778,7 +1773,6 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
     //can be reestablished over Bluetooth. If we are running native-less we
     //try to reconnect to the master
     if (runsNative === false) {
-      // this._tryWebsocketReconnect();
       window.setTimeout(this._tryWebsocketReconnect, 5000);
     }
   },

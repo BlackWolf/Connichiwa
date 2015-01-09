@@ -5,7 +5,7 @@
 var CWWebsocketMessageParser = OOP.createSingleton("Connichiwa", "CWWebsocketMessageParser", 
 {
   "package parse": function(message) {
-    switch (message.type) {
+    switch (message._name) {
       case "ack"               : this._parseAck(message);               break;
       case "append"            : this._parseAppend(message);            break;
       case "loadscript"        : this._parseLoadScript(message);        break;
@@ -47,6 +47,6 @@ var CWWebsocketMessageParser = OOP.createSingleton("Connichiwa", "CWWebsocketMes
   },
 
   _parseRemoteLog: function(message) {
-    CWDebug.log(message.priority, "(From "+message.source+") "+message.message);
+    CWDebug.log(message.priority, "(From "+message._source+") "+message.message);
   }
 });

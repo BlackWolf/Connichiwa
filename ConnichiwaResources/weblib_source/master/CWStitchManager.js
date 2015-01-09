@@ -94,10 +94,9 @@ OOP.extendSingleton("Connichiwa", "CWStitchManager", {
   "package unstitchDevice": function(identifier) {
     if (identifier in this._devices) {
       var unstitchMessage = { 
-        type                 : "wasunstitched", 
         deviceTransformation : this.getDeviceTransformation(identifier)
       };
-      Connichiwa.send(identifier, unstitchMessage);
+      Connichiwa.send(identifier, "wasunstitched", unstitchMessage);
 
       delete this._devices[identifier];
       CWDebug.log(3, "Device was unstitched: " + identifier);
@@ -126,17 +125,12 @@ OOP.extendSingleton("Connichiwa", "CWStitchManager", {
       CWEventManager.trigger("stitch", secondSwipe.device, firstSwipe.device);
 
       var wasstitchMessage = {
-        type                 : "wasstitched",
         otherDevice          : secondSwipe.device,
         edge                 : firstSwipe.edge, //TODO should this be in here? and if so, should it be relative?
         deviceTransformation : this.getDeviceTransformation(firstSwipe.device, true)
       };
-      Connichiwa.send(firstSwipe.device, wasstitchMessage);
+      Connichiwa.send(firstSwipe.device, "wasstitched", wasstitchMessage);
     }
-
-    CWDebug.log(3, "STITCHING DATA COMING IN");
-    CWDebug.log(3, JSON.stringify(firstSwipe));
-    CWDebug.log(3, JSON.stringify(secondSwipe));
 
     //
     // PREPARATION
@@ -301,19 +295,17 @@ OOP.extendSingleton("Connichiwa", "CWStitchManager", {
     CWEventManager.trigger("stitch", stitchedSwipe.device, newSwipe.device);
 
     var wasstitchMessage = {
-      type                 : "wasstitched",
       otherDevice          : stitchedSwipe.device,
       edge                 : newSwipe.edge, //TODO should this be in here? and if so, should it be relative?
       deviceTransformation : this.getDeviceTransformation(newSwipe.device, true)
     };
-    newDevice.send(wasstitchMessage);
+    newDevice.send("wasstitched", wasstitchMessage);
 
     var gotneighborMessage = {
-      type                 : "gotstitchneighbor",
       otherDevice          : newSwipe.device,
       edge                 : stitchedSwipe.edge, //TODO should this be in here? and if so, should it be relative?
     };
-    stitchedDevice.send(gotneighborMessage);
+    stitchedDevice.send("gotstitchneighbor", gotneighborMessage);
   },
 
 

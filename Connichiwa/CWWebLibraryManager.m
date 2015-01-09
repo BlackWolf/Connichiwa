@@ -279,7 +279,7 @@
 - (void)_sendToView_connectWebsocket
 {
     NSDictionary *data = @{
-                           @"type": @"connectwebsocket"
+                           @"_name": @"connectwebsocket"
                            };
     [self _sendToView_dictionary:data];
 }
@@ -288,7 +288,7 @@
 - (void)_sendToView_disconnectWebsocket
 {
     NSDictionary *data = @{
-                           @"type": @"disconnectwebsocket"
+                           @"_name": @"disconnectwebsocket"
                            };
     [self _sendToView_dictionary:data];
 }
@@ -297,7 +297,7 @@
 - (void)_sendToView_cwdebug
 {
     NSDictionary *data = @{
-                           @"type": @"cwdebug",
+                           @"_name": @"cwdebug",
                            @"cwdebug": @([CWDebug isDebugging])
                            };
     [self _sendToView_dictionary:data];
@@ -307,7 +307,7 @@
 - (void)_sendToView_localInfo
 {
     NSMutableDictionary *data = [[self.appState deviceInfo] mutableCopy];
-    [data setObject:@"localinfo" forKey:@"type"];
+    [data setObject:@"localinfo" forKey:@"_name"];
     
     [self _sendToView_dictionary:data];
 }
@@ -317,7 +317,7 @@
 {
     NSMutableDictionary *data = [deviceInfo mutableCopy];
     NSDictionary *moreData = @{
-                           @"type": @"devicedetected",
+                           @"_name": @"devicedetected",
                            @"identifier": identifier
                            };
     [data addEntriesFromDictionary:moreData];
@@ -328,7 +328,7 @@
 - (void)_sendToView_device:(NSString *)identifier changedDistance:(double)distance
 {
     NSDictionary *data = @{
-                           @"type": @"devicedistancechanged",
+                           @"_name": @"devicedistancechanged",
                            @"identifier": identifier,
                            @"distance": [NSNumber numberWithDouble:(round(distance * 10) / 10)]
                            };
@@ -339,7 +339,7 @@
 - (void)_sendToView_deviceLost:(NSString *)identifier
 {
     NSDictionary *data = @{
-                           @"type": @"devicelost",
+                           @"_name": @"devicelost",
                            @"identifier": identifier
                            };
     [self _sendToView_dictionary:data];
@@ -349,7 +349,7 @@
 - (void)_sendToView_remoteConnectFailed:(NSString *)identifier
 {
     NSDictionary *data = @{
-                           @"type": @"remoteconnectfailed",
+                           @"_name": @"remoteconnectfailed",
                            @"identifier": identifier
                            };
     [self _sendToView_dictionary:data];
@@ -359,7 +359,7 @@
 - (void)_sendToView_remoteDisconnected:(NSString *)identifier
 {
     NSDictionary *data = @{
-                           @"type": @"remotedisconnected",
+                           @"_name": @"remotedisconnected",
                            @"identifier": identifier
                            };
     [self _sendToView_dictionary:data];

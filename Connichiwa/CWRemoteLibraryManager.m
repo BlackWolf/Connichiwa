@@ -222,7 +222,7 @@
 - (void)_sendToView_connectWebsocket
 {
     NSDictionary *data = @{
-                           @"type": @"connectwebsocket"
+                           @"_name": @"connectwebsocket"
                            };
     [self _sendToView_dictionary:data];
 }
@@ -231,7 +231,7 @@
 - (void)_sendToView_disconnectWebsocket
 {
     NSDictionary *data = @{
-                           @"type": @"disconnectwebsocket"
+                           @"_name": @"disconnectwebsocket"
                            };
     [self _sendToView_dictionary:data];
 }
@@ -240,7 +240,7 @@
 - (void)_sendToView_cwdebug
 {
     NSDictionary *data = @{
-                           @"type": @"cwdebug",
+                           @"_name": @"cwdebug",
                            @"cwdebug": @([CWDebug isDebugging])
                            };
     [self _sendToView_dictionary:data];
@@ -250,7 +250,7 @@
 - (void)_sendToView_localInfo
 {
     NSMutableDictionary *data = [[self.appState deviceInfo] mutableCopy];
-    [data setObject:@"localinfo" forKey:@"type"];
+    [data setObject:@"localinfo" forKey:@"_name"];
     
     [self _sendToView_dictionary:data];
 }

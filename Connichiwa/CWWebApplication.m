@@ -15,6 +15,7 @@
 #import "CWRemoteLibraryManager.h"
 #import "CWWebLibraryManager.h"
 #import "CWWebLibraryManagerDelegate.h"
+#import "CWUtil.h"
 #import "CWiDevice.h"
 #import "CWDebug.h"
 
@@ -126,6 +127,11 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
     self.bluetoothManager = [[CWBluetoothManager alloc] initWithApplicationState:self];
     [self.bluetoothManager setDelegate:self];
     
+    NSArray *ips = [CWUtil deviceInterfaceAddresses];
+    if ([ips count] > 0) {
+        CWLog(1, @"IP: %@", [ips objectAtIndex:0]);
+    }
+    
     return self;
 }
 
@@ -216,8 +222,9 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
     return @{
              @"identifier" : [self identifier],
              @"launchDate" : @([[self launchDate] timeIntervalSince1970]),
-             @"name" : [self deviceName],
-             @"ppi" : @([self ppi])
+             @"name"       : [self deviceName],
+             @"ppi"        : @([self ppi]),
+             @"supportsMC" : @YES
              };
 }
 

@@ -58,7 +58,7 @@ var CWNativeMasterCommunication = OOP.createSingleton("Connichiwa", "CWNativeMas
   {
     CWDebug.log(4, "Parsing native message (master): " + message);
     var object = JSON.parse(message);
-    switch (object.type)
+    switch (object._name)
     {
       case "cwdebug":               this._parseDebug(object); break;
       case "connectwebsocket":      this._parseConnectWebsocket(object); break;

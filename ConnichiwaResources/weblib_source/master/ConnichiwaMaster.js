@@ -71,7 +71,7 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
       that.package.CWWebsocketMessageParser.parse(message);
       that.package.CWWebsocketMessageParser.parseOnMaster(message);
 
-      if (message.type) CWEventManager.trigger("message" + message.type, message);
+      if (message._name) CWEventManager.trigger("message" + message._name, message);
     });
   },
 

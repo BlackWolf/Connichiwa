@@ -105,13 +105,13 @@ var onLocalMessage = function(message)
 {
   var object = JSON.parse(message);
 
-  if (object.target === "broadcast")
+  if (object._target === "broadcast")
   {
-    sendAsBroadcast(object.source, message);
+    sendAsBroadcast(object._source, message);
   } 
   else 
   {
-    sendToDevice(object.target, message);
+    sendToDevice(object._target, message);
   }
 }; 
 
@@ -137,13 +137,13 @@ var onRemoteMessage = function(wsConnection)
   {
     var object = JSON.parse(message);
 
-    if (object.target === "broadcast")
+    if (object._target === "broadcast")
     {
-      sendAsBroadcast(object.source, message);
+      sendAsBroadcast(object._source, message);
     } 
     else 
     {
-      sendToDevice(object.target, message);
+      sendToDevice(object._target, message);
     }
   };
 };
@@ -189,7 +189,7 @@ var onUnidentifiedRemoteMessage = function(wsConnection)
     {
       var object = JSON.parse(message);
 
-      if (object.type === "localinfo")
+      if (object._name === "localinfo")
       {
         log(3, "Websocket was determined to be local");
         wsLocalConnectionIdentifier = object.identifier;
@@ -203,7 +203,7 @@ var onUnidentifiedRemoteMessage = function(wsConnection)
         wsConnection.on("error", onLocalError);
       }
 
-      if (object.type === "remoteinfo")
+      if (object._name === "remoteinfo")
       {
         log(3, "Websocket was determined to be remote");
         wsRemoteConnections[object.identifier] = wsConnection;
@@ -354,7 +354,7 @@ function startListening()
 function softDisconnectAllRemotes()
 {
   log(3, "Soft-Disconnecting all remotes");
-  var shutdownMessage = JSON.stringify({ type: "softdisconnect" });
+  var shutdownMessage = JSON.stringify({ _name: "softdisconnect" });
   for (var key in wsRemoteConnections)
   {
     if (wsRemoteConnections.hasOwnProperty(key))

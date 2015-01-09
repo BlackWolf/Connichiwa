@@ -6,7 +6,7 @@
 OOP.extendSingleton("Connichiwa", "CWWebsocketMessageParser", 
 {
   "package parseOnMaster": function(message) {
-    switch (message.type) {
+    switch (message._name) {
       case "remoteinfo"  :  this._parseRemoteInfo(message);  break;
       case "stitchswipe" :  this._parseStitchSwipe(message); break;
       case "quitstitch"  :  this._parseQuitStitch(message);  break;

@@ -35,8 +35,7 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
     }
 
     //Let the master know about our new device information
-    properties.type = "remoteinfo";
-    this.send(properties);
+    this.send("master", "remoteinfo", properties);
   },
 
 
@@ -109,7 +108,7 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
       that.package.CWWebsocketMessageParser.parse(message);
       that.package.CWWebsocketMessageParser.parseOnRemote(message);
 
-      if (message.type) CWEventManager.trigger("message" + message.type, message);
+      if (message._name) CWEventManager.trigger("message" + message._name, message);
     });
   },
 
@@ -127,7 +126,6 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
     //can be reestablished over Bluetooth. If we are running native-less we
     //try to reconnect to the master
     if (runsNative === false) {
-      // this._tryWebsocketReconnect();
       window.setTimeout(this._tryWebsocketReconnect, 5000);
     }
   },

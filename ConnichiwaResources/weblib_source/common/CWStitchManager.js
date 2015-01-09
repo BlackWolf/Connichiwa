@@ -40,11 +40,10 @@ var CWStitchManager = OOP.createSingleton("Connichiwa", "CWStitchManager", {
 
 
   _onLocalSwipe: function(swipeData) {
-    swipeData.type   = "stitchswipe";
     swipeData.device = Connichiwa.getIdentifier();
     swipeData.width  = CWSystemInfo.viewportWidth();
     swipeData.height = CWSystemInfo.viewportHeight();
-    Connichiwa.send(swipeData);
+    Connichiwa.send("master", "stitchswipe", swipeData);
   },
 
 
@@ -103,11 +102,8 @@ var CWStitchManager = OOP.createSingleton("Connichiwa", "CWStitchManager", {
 
 
   "private _quitStitch": function() {
-    var data = {
-      type   : "quitstitch",
-      device : Connichiwa.getIdentifier()
-    };
-    Connichiwa.send(data);
+    var data = { device : Connichiwa.getIdentifier() };
+    Connichiwa.send("master", "quitstitch", data);
   },
 
 

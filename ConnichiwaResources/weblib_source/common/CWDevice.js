@@ -95,9 +95,9 @@ CWDevice.prototype.loadScript = function(url, callback) {
 };
 
 
-CWDevice.prototype.send = function(messageObject)
+CWDevice.prototype.send = function(name, message)
 {
-  Connichiwa.send(this.getIdentifier(), messageObject);
+  Connichiwa.send(this.getIdentifier(), name, message);
 };
 
 

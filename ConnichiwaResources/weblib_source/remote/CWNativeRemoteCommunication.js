@@ -45,7 +45,7 @@ var CWNativeRemoteCommunication = OOP.createSingleton("Connichiwa", "CWNativeRem
   {
     CWDebug.log(4, "Parsing native message (remote): " + message);
     var object = JSON.parse(message);
-    switch (object.type)
+    switch (object._name)
     {
       case "runsnative":          this._parseRunsNative(object); break;
       case "connectwebsocket":    this._parseConnectWebsocket(object); break;
