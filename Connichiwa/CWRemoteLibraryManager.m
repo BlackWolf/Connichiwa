@@ -124,6 +124,7 @@
         [self.webView setDelegate:self];
         [self.webView setHidden:NO];
         [self.webView loadRequest:URLRequest];
+        [self createWebViewContext];
     });
 }
 
@@ -301,32 +302,9 @@
     {
         CWLog(3, @"Remote webview did load, setting things up and connecting websocket");
         
-        //Loaded a remote server URL, set up its context
-        self.webViewContext = [self.webView valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
-
-        //Register JS error handler
-        self.webViewContext.exceptionHandler = ^(JSContext *c, JSValue *e) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                _CWLog(1, @"REMOTELIB", @"?????", -1, @"JAVASCRIPT ERROR: %@. Stack: %@", e, [e valueForProperty:@"stack"]);
-            });
-        };
-        
-        id logger = ^(NSString *logMessage)
-        {
-            NSArray *components = [logMessage componentsSeparatedByString:@"|"]; //array should contain: prio, message
-            if ([components count] != 2)
-            {
-                _CWLog(1, @"REMOTELIB", @"?????", -1, logMessage);
-            }
-            else
-            {
-                _CWLog([[components objectAtIndex:0] intValue], @"REMOTELIB", @"?????", -1, [components objectAtIndex:1]);
-            }
-        };
-        self.webViewContext[@"console"][@"log"]   = logger;
-        self.webViewContext[@"console"][@"info"]  = logger;
-        self.webViewContext[@"console"][@"error"] = logger;
-        self.webViewContext[@"console"][@"warn"]  = logger;
+        //WebView's are a strange little thing - the JS context might or might not change between our load request and
+        //this point. Therefore, create the context again even though we already did so in connect:
+        [self createWebViewContext];
         
         [self _registerJSCallbacks];
         [self _sendToView_connectWebsocket];
@@ -339,6 +317,35 @@
         self.webViewContext = nil;
         self.state = CWRemoteLibraryManagerStateDisconnected;
     }
+}
+
+-(void)createWebViewContext {
+    //Loaded a remote server URL, set up its context
+    self.webViewContext = [self.webView valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
+    
+    //Register JS error handler
+    self.webViewContext.exceptionHandler = ^(JSContext *c, JSValue *e) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            _CWLog(1, @"REMOTELIB", @"?????", -1, @"JAVASCRIPT ERROR: %@. Stack: %@", e, [e valueForProperty:@"stack"]);
+        });
+    };
+    
+    id logger = ^(NSString *logMessage)
+    {
+        NSArray *components = [logMessage componentsSeparatedByString:@"|"]; //array should contain: prio, message
+        if ([components count] != 2)
+        {
+            _CWLog(1, @"REMOTELIB", @"?????", -1, logMessage);
+        }
+        else
+        {
+            _CWLog([[components objectAtIndex:0] intValue], @"REMOTELIB", @"?????", -1, [components objectAtIndex:1]);
+        }
+    };
+    self.webViewContext[@"console"][@"log"]   = logger;
+    self.webViewContext[@"console"][@"info"]  = logger;
+    self.webViewContext[@"console"][@"error"] = logger;
+    self.webViewContext[@"console"][@"warn"]  = logger;
 }
 
 @end

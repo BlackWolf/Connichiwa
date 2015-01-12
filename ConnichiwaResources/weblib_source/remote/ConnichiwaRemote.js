@@ -13,8 +13,6 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
     //establishing a connection ourselves
     var runsNative = this.package.CWNativeRemoteCommunication.isRunningNative();
     if (runsNative !== true) this._connectWebsocket();
-
-    CWEventManager.trigger("ready"); //trigger ready asap on remotes
   },
 
 
@@ -31,6 +29,7 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
 
   "package _setLocalDevice": function(properties) {
     if (this._localDevice === undefined) {
+      properties.isLocal = true;
       this._localDevice = new CWDevice(properties);
     }
 

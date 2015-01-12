@@ -167,6 +167,7 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.webView setDelegate:self];
         [self.webView loadRequest:localhostURLRequest];
+        [self createWebViewContext];
     });
 }
 
@@ -394,33 +395,7 @@
     {
         CWLog(3, @"Web library webview did load, setting things up and connecting websocket");
         
-        self.webViewContext = [self.webView valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
         
-        //Register JS error handler
-        self.webViewContext.exceptionHandler = ^(JSContext *c, JSValue *e) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                _CWLog(1, @"WEBLIB", @"?????", -1, @"JAVASCRIPT ERROR: %@. Stack: %@", e, [e valueForProperty:@"stack"]);
-            });
-        };
-        
-        id logger = ^(NSString *logMessage)
-        {
-            NSArray *components = [logMessage componentsSeparatedByString:@"|"]; //array should contain: prio, message
-            if ([components count] != 2)
-            {
-                _CWLog(1, @"WEBLIB", @"?????", -1, logMessage);
-            }
-            else
-            {
-                _CWLog([[components objectAtIndex:0] intValue], @"WEBLIB", @"?????", -1, [components objectAtIndex:1]);
-            }
-        };
-        self.webViewContext[@"console"][@"log"]   = logger;
-        self.webViewContext[@"console"][@"info"]  = logger;
-        self.webViewContext[@"console"][@"error"] = logger;
-        self.webViewContext[@"console"][@"warn"]  = logger;
-        //TODO we should add the other console types (warn, ...) and maybe format them specially
-        //TODO another problem is that console.log's before this point are not grabbed, but we probably can't do anything about it
         
         [self _registerJSCallbacks];
         [self _sendToView_cwdebug];
@@ -430,10 +405,45 @@
     {
         CWLog(3, @"Web library webview did blank, we are fully disconnected... why would we want that?");
         
+        //WebView's are a strange little thing - the JS context might or might not change between our load request and
+        //this point. Therefore, create the context again even though we already did so in connect:
+        [self createWebViewContext];
+        
         //Loaded the empty page in the process of disconnecting, clear the context
         self.webViewContext = nil;
         self.state = CWWebLibraryManagerStateDisconnected;
     }
+}
+
+- (void)createWebViewContext {
+    //Find the context
+    self.webViewContext = [self.webView valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
+    
+    //Register JS error handler
+    self.webViewContext.exceptionHandler = ^(JSContext *c, JSValue *e) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            _CWLog(1, @"WEBLIB", @"?????", -1, @"JAVASCRIPT ERROR: %@. Stack: %@", e, [e valueForProperty:@"stack"]);
+        });
+    };
+    
+    //Attach logger
+    id logger = ^(NSString *logMessage)
+    {
+        NSArray *components = [logMessage componentsSeparatedByString:@"|"]; //array should contain: prio, message
+        if ([components count] != 2)
+        {
+            _CWLog(1, @"WEBLIB", @"?????", -1, logMessage);
+        }
+        else
+        {
+            _CWLog([[components objectAtIndex:0] intValue], @"WEBLIB", @"?????", -1, [components objectAtIndex:1]);
+        }
+    };
+    self.webViewContext[@"console"][@"log"]   = logger;
+    self.webViewContext[@"console"][@"info"]  = logger;
+    self.webViewContext[@"console"][@"error"] = logger;
+    self.webViewContext[@"console"][@"warn"]  = logger;
+    //TODO it seems that everything besides "log" is not working as of now
 }
 
 @end

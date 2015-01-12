@@ -7,7 +7,8 @@ var CWWebsocketMessageParser = OOP.createSingleton("Connichiwa", "CWWebsocketMes
   "package parse": function(message) {
     switch (message._name) {
       case "ack"               : this._parseAck(message);               break;
-      case "append"            : this._parseAppend(message);            break;
+      case "_insert"           : this._parseInsert(message);            break;
+      case "_replace"          : this._parseReplace(message);           break;
       case "loadscript"        : this._parseLoadScript(message);        break;
       case "wasstitched"       : this._parseWasStitched(message);       break;
       case "wasunstitched"     : this._parseWasUnstitched(message);     break;
@@ -21,8 +22,16 @@ var CWWebsocketMessageParser = OOP.createSingleton("Connichiwa", "CWWebsocketMes
     CWEventManager.trigger("__messageack__id" + message.original._id);
   },
 
-  _parseAppend: function(message) {
-    $(message.targetSelector).append(message.html);
+  _parseInsert: function(message) {
+    $(message.selector).append(message.html);
+  },
+
+  _parseReplace: function(message) {
+    if (message.contentOnly === true) {
+      $(message.selector).html(message.html);
+    } else {
+      $(message.selector).replaceWith(message.html);
+    }
   },
 
   _parseLoadScript: function(message) {

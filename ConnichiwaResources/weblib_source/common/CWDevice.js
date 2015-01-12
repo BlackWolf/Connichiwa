@@ -33,11 +33,15 @@ function CWDevice(properties)
   this.distance = -1;
   var _identifier = properties.identifier;
   var _launchDate = Date.now() / 1000.0;
+  var _ips = [];
+  var _port = undefined;
   var _name = "unknown";
   var _ppi = CWSystemInfo.DEFAULT_PPI();
   var _isLocal = false; 
 
   if (properties.launchDate) _launchDate = properties.launchDate;
+  if (properties.ips) _ips = properties.ips;
+  if (properties.port) _port = properties.port;
   if (properties.name) _name = properties.name;
   if (properties.ppi && properties.ppi > 0) _ppi = properties.ppi;
   if (properties.isLocal) _isLocal = properties.isLocal;
@@ -53,6 +57,10 @@ function CWDevice(properties)
   this.getIdentifier = function() { return _identifier; };
 
   this.getLaunchDate = function() { return _launchDate; };
+
+  this.getIPs = function() { return _ips; };
+
+  this.getPort = function() { return _port; };
 
   this.getName = function() { return _name; };
 
@@ -85,8 +93,18 @@ function CWDevice(properties)
 // DEVICE COMMUNICATION API
 
 
-CWDevice.prototype.append = function(target, html) {
-  Connichiwa.append(this.getIdentifier(), target, html);
+CWDevice.prototype.insert = function(target, html) {
+  Connichiwa.insert(this.getIdentifier(), target, html);
+};
+
+
+CWDevice.prototype.replace = function(target, html) {
+  Connichiwa.replace(this.getIdentifier(), target, html);
+};
+
+
+CWDevice.prototype.replaceContent = function(target, html) {
+  Connichiwa.replaceContent(this.getIdentifier(), target, html);
 };
 
 

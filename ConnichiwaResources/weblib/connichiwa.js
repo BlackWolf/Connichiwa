@@ -279,16 +279,21 @@ function CWDevice(properties)
 {
   if (!properties.identifier) throw "Cannot instantiate CWDevice without an identifier";
 
+  CWDebug.log(1, JSON.stringify(properties));
   this.discoveryState = CWDeviceDiscoveryState.LOST;
   this.connectionState = CWDeviceConnectionState.DISCONNECTED;
   this.distance = -1;
   var _identifier = properties.identifier;
   var _launchDate = Date.now() / 1000.0;
+  var _ips = [];
+  var _port = undefined;
   var _name = "unknown";
   var _ppi = CWSystemInfo.DEFAULT_PPI();
   var _isLocal = false; 
 
   if (properties.launchDate) _launchDate = properties.launchDate;
+  if (properties.ips) _ips = properties.ips;
+  if (properties.port) _port = properties.port;
   if (properties.name) _name = properties.name;
   if (properties.ppi && properties.ppi > 0) _ppi = properties.ppi;
   if (properties.isLocal) _isLocal = properties.isLocal;
@@ -304,6 +309,10 @@ function CWDevice(properties)
   this.getIdentifier = function() { return _identifier; };
 
   this.getLaunchDate = function() { return _launchDate; };
+
+  this.getIPs = function() { return _ips; };
+
+  this.getPort = function() { return _port; };
 
   this.getName = function() { return _name; };
 
@@ -336,8 +345,18 @@ function CWDevice(properties)
 // DEVICE COMMUNICATION API
 
 
-CWDevice.prototype.append = function(target, html) {
-  Connichiwa.append(this.getIdentifier(), target, html);
+CWDevice.prototype.insert = function(target, html) {
+  Connichiwa.insert(this.getIdentifier(), target, html);
+};
+
+
+CWDevice.prototype.replace = function(target, html) {
+  Connichiwa.replace(this.getIdentifier(), target, html);
+};
+
+
+CWDevice.prototype.replaceContent = function(target, html) {
+  Connichiwa.replaceContent(this.getIdentifier(), target, html);
 };
 
 
@@ -1345,7 +1364,8 @@ var CWWebsocketMessageParser = OOP.createSingleton("Connichiwa", "CWWebsocketMes
   "package parse": function(message) {
     switch (message._name) {
       case "ack"               : this._parseAck(message);               break;
-      case "append"            : this._parseAppend(message);            break;
+      case "_insert"           : this._parseInsert(message);            break;
+      case "_replace"          : this._parseReplace(message);           break;
       case "loadscript"        : this._parseLoadScript(message);        break;
       case "wasstitched"       : this._parseWasStitched(message);       break;
       case "wasunstitched"     : this._parseWasUnstitched(message);     break;
@@ -1359,8 +1379,16 @@ var CWWebsocketMessageParser = OOP.createSingleton("Connichiwa", "CWWebsocketMes
     CWEventManager.trigger("__messageack__id" + message.original._id);
   },
 
-  _parseAppend: function(message) {
-    $(message.targetSelector).append(message.html);
+  _parseInsert: function(message) {
+    $(message.selector).append(message.html);
+  },
+
+  _parseReplace: function(message) {
+    if (message.contentOnly === true) {
+      $(message.selector).html(message.html);
+    } else {
+      $(message.selector).replaceWith(message.html);
+    }
   },
 
   _parseLoadScript: function(message) {
@@ -1422,7 +1450,7 @@ var Connichiwa = OOP.createSingleton("Connichiwa", "Connichiwa", {
     if (document.readyState === "complete") {
       callback();
     } else {
-      $(window).load(callback);
+      Connichiwa.on("ready", callback);
     }
   },
 
@@ -1430,8 +1458,9 @@ var Connichiwa = OOP.createSingleton("Connichiwa", "Connichiwa", {
   // DEVICE COMMUNICATION API
 
 
-  "public append": function(identifier, target, html) {
-    //With two args, we handle them as identifier and htmlspot
+  "public insert": function(identifier, target, html) {
+    //With two args, we handle them as identifier and html
+    //target is assumed as the body
     if (html === undefined) {
       html = target;
       target = "body";
@@ -1440,7 +1469,7 @@ var Connichiwa = OOP.createSingleton("Connichiwa", "Connichiwa", {
     //target should be a selector but can also be a DOM or jQuery element
     //If so, we try to get it by its ID on the other side
     if (CWUtil.isObject(target)) {
-      target = $(target).attr("id");
+      target = "#"+$(target).attr("id");
     }
     
     //html can be a DOM or jQuery element - if so, send the outerHTML including 
@@ -1452,11 +1481,74 @@ var Connichiwa = OOP.createSingleton("Connichiwa", "Connichiwa", {
       html = clone[0].outerHTML;
     }
 
+    //identifier can also be a CWDevice
+    if (CWDevice.prototype.isPrototypeOf(identifier)) {
+      identifier = identifier.getIdentifier();
+    }
+
     var message = {
-      targetSelector : target,
-      html           : html
+      selector : target,
+      html     : html
     };
-    this.send(identifier, "append", message);
+    this.send(identifier, "_insert", message);
+  },
+
+  "public replace": function(identifier, target, html) {
+    //With two args, we handle them as identifier and html
+    //target is assumed as the body
+    if (html === undefined) {
+      html = target;
+      target = "body";
+    }
+
+    this._replace(identifier, target, html, false);
+  },
+
+  "public replaceContent": function(identifier, target, html) {
+    //With two args, we handle them as identifier and html
+    //target is assumed as the body
+    if (html === undefined) {
+      html = target;
+      target = "body";
+    }
+
+    this._replace(identifier, target, html, true);
+  },
+
+  "private _replace": function(identifier, target, html, contentOnly) {
+    //With two args, we handle them as identifier and html
+    //target is assumed as the body
+    if (html === undefined) {
+      html = target;
+      target = "body";
+    }
+
+    //target should be a selector but can also be a DOM or jQuery element
+    //If so, we try to get it by its ID on the other side
+    if (CWUtil.isObject(target)) {
+      target = "#"+$(target).attr("id");
+    }
+    
+    //html can be a DOM or jQuery element - if so, send the outerHTML including 
+    //all styles
+    if (CWUtil.isObject(html) === true) {
+      var el = $(html);
+      var clone = el.clone();
+      clone[0].style.cssText = el[0].style.cssText; //TODO really needed?
+      html = clone[0].outerHTML;
+    }
+
+    //identifier can also be a CWDevice
+    if (CWDevice.prototype.isPrototypeOf(identifier)) {
+      identifier = identifier.getIdentifier();
+    }
+
+    var message = {
+      selector    : target,
+      html        : html,
+      contentOnly : contentOnly,
+    };
+    this.send(identifier, "_replace", message);
   },
 
 
@@ -1472,7 +1564,6 @@ var Connichiwa = OOP.createSingleton("Connichiwa", "Connichiwa", {
 
   "public send": function(target, name, message) {
     if (message === undefined) {
-      CWDebug.log(3, "SWITCHING, target is "+target+", name is "+JSON.stringify(name)+" message is "+JSON.stringify(message));
       message = target;
       target = "master";
     }
@@ -1481,7 +1572,6 @@ var Connichiwa = OOP.createSingleton("Connichiwa", "Connichiwa", {
       target = target.getIdentifier();
     }
 
-    CWDebug.log(3, JSON.stringify(message));
     message._name = name;
     message._source = this.getIdentifier();
     message._target = target;
@@ -2331,6 +2421,21 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
 
   "public isMaster": function() {
     return true;
+  },
+
+
+  "public getIPs": function() {
+    var localDevice = CWDeviceManager.getLocalDevice();
+    if (localDevice === undefined) return undefined;
+
+    return localDevice.getIPs();
+  },
+
+  "public getPort": function() {
+    var localDevice = CWDeviceManager.getLocalDevice();
+    if (localDevice === undefined) return undefined;
+
+    return localDevice.getPort();
   },
 
 

@@ -222,6 +222,8 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
     return @{
              @"identifier" : [self identifier],
              @"launchDate" : @([[self launchDate] timeIntervalSince1970]),
+             @"ips"        : [CWUtil deviceInterfaceAddresses],
+             @"port"       : @(self.webserverPort),
              @"name"       : [self deviceName],
              @"ppi"        : @([self ppi]),
              @"supportsMC" : @YES

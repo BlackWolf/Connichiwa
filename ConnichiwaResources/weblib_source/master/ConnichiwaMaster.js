@@ -27,6 +27,21 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
   },
 
 
+  "public getIPs": function() {
+    var localDevice = CWDeviceManager.getLocalDevice();
+    if (localDevice === undefined) return undefined;
+
+    return localDevice.getIPs();
+  },
+
+  "public getPort": function() {
+    var localDevice = CWDeviceManager.getLocalDevice();
+    if (localDevice === undefined) return undefined;
+
+    return localDevice.getPort();
+  },
+
+
   // WEBSOCKET
 
 

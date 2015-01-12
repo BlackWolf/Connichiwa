@@ -1,4 +1,4 @@
-/* global OOP, CWDebug */
+/* global OOP, CWEventManager, CWDebug */
 "use strict";
 
 
@@ -77,7 +77,7 @@ var CWNativeRemoteCommunication = OOP.createSingleton("Connichiwa", "CWNativeRem
   _parseLocalInfo: function(message) 
   {
     this.package.Connichiwa._setLocalDevice(message);
-    //this.package.Connichiwa._setIdentifier(message.identifier);
+    CWEventManager.trigger("ready"); 
   },
 
 
