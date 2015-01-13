@@ -32,7 +32,7 @@ var http;
 var httpListening;
 
 //Activate logging
-app.use(new Morgan( { immediate: true, format: "2|Request from :remote-addr: :url (:response-time ms)" } ));
+app.use(new Morgan( { immediate: true, format: "2|Request from :remote-addr: :url" } ));
 
 //Deliver a minimal page for '/check', which can be used to check if the webserver responds
 app.use("/check", function(req, res, next) {
@@ -51,20 +51,18 @@ app.use(function(req, res, next) {
   next();
 });
 
-// app.use("/connichiwa/remote.html", function(req, res, next) 
-app.use("/remote", function(req, res, next) 
+//Serve the file accessed by remote devices
+//I am not entirely sure why Express.static() doesn't work here, but it doesn't
+app.use("/remote", function(req, res, next)
 {
   res.sendfile(RESOURCES_PATH + "/remote.html");
 });
 
+//Serve scripts delivered with Connichiwa
+app.use("/connichiwa/scripts", Express.static(RESOURCES_PATH + "/scripts"));
+
 //Make sure we serve the Connichiwa Web Library to the web app under /connichiwa/
 app.use("/connichiwa", Express.static(RESOURCES_PATH + "/weblib"));
-
-//Serve the webpage that is accessed by remote devices
-// app.use("/remote", Express.static(RESOURCES_PATH + "/remote"));
-
-//Serve scripts delivered with Connichiwa
-app.use("/connichiwa-scripts", Express.static(RESOURCES_PATH + "/scripts"));
 
 //DOCUMENT_ROOT (web app) is served as /
 app.use("/", Express.static(DOCUMENT_ROOT));
