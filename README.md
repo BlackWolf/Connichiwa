@@ -44,4 +44,4 @@ Also, I want to thank the people behind [VVDocumenter-Xcode](https://github.com/
 
 Furthermore, thanks to [jsdoc](https://github.com/jsdoc3/jsdoc) for creating the documentation seen in `ConnichiwaDocs/weblib` and to the people behind [jshint](http://www.jshint.com) and [jscs](https://www.npmjs.org/package/jscs) for making it easily possible to check my JS code for flaws. Also, thanks to the people who created atom.io packages for [Linter](https://github.com/AtomLinter/Linter), [Linter Jscs](https://github.com/AtomLinter/linter-jscs) and [Linter Jshint](https://github.com/AtomLinter/linter-jshint) :-)
 
-For minification of the web library, I used [minifyjs](https://github.com/clarkf/minifyjs).
+For minification of the JavaScript library and creation of sourcemaps, I used [uglifyjs](https://github.com/mishoo/UglifyJS2).
