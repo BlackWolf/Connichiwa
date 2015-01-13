@@ -279,7 +279,6 @@ function CWDevice(properties)
 {
   if (!properties.identifier) throw "Cannot instantiate CWDevice without an identifier";
 
-  CWDebug.log(1, JSON.stringify(properties));
   this.discoveryState = CWDeviceDiscoveryState.LOST;
   this.connectionState = CWDeviceConnectionState.DISCONNECTED;
   this.distance = -1;
