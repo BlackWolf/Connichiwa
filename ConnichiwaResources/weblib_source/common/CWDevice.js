@@ -113,6 +113,11 @@ CWDevice.prototype.loadScript = function(url, callback) {
 };
 
 
+CWDevice.prototype.loadCSS = function(url) {
+  Connichiwa.loadCSS(this.getIdentifier(), url);
+};
+
+
 CWDevice.prototype.send = function(name, message)
 {
   Connichiwa.send(this.getIdentifier(), name, message);

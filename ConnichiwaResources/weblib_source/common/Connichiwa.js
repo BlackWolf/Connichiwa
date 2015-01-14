@@ -143,6 +143,11 @@ var Connichiwa = OOP.createSingleton("Connichiwa", "Connichiwa", {
     }
   },
 
+  "public loadCSS": function(identifier, url) {
+    var message = { url  : url };
+    var messageID = this.send(identifier, "_loadcss", message);
+  },
+
 
   "public send": function(target, name, message) {
     if (message === undefined) {
@@ -184,7 +189,13 @@ var Connichiwa = OOP.createSingleton("Connichiwa", "Connichiwa", {
 
   "package _sendObject": function(message)
   {
+    if (("_name" in message) === false) {
+      console.warn("Tried to send message without _name, ignoring: "+JSON.stringify(message));
+      return;
+    }
+
     message._id = CWUtil.randomInt();
+    message._name = message._name.toLowerCase();
 
     var messageString = JSON.stringify(message);
     CWDebug.log(4, "Sending message: " + messageString);

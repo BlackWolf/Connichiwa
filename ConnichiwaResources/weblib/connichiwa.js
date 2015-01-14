@@ -364,6 +364,11 @@ CWDevice.prototype.loadScript = function(url, callback) {
 };
 
 
+CWDevice.prototype.loadCSS = function(url) {
+  Connichiwa.loadCSS(this.getIdentifier(), url);
+};
+
+
 CWDevice.prototype.send = function(name, message)
 {
   Connichiwa.send(this.getIdentifier(), name, message);
@@ -1366,6 +1371,7 @@ var CWWebsocketMessageParser = OOP.createSingleton("Connichiwa", "CWWebsocketMes
       case "_insert"           : this._parseInsert(message);            break;
       case "_replace"          : this._parseReplace(message);           break;
       case "loadscript"        : this._parseLoadScript(message);        break;
+      case "_loadcss"          : this._parseLoadCSS(message);           break;
       case "wasstitched"       : this._parseWasStitched(message);       break;
       case "wasunstitched"     : this._parseWasUnstitched(message);     break;
       case "gotstitchneighbor" : this._parseGotStitchNeighbor(message); break;
@@ -1390,6 +1396,7 @@ var CWWebsocketMessageParser = OOP.createSingleton("Connichiwa", "CWWebsocketMes
     }
   },
 
+
   _parseLoadScript: function(message) {
     var that = this;
     $.getScript(message.url).done(function() {
@@ -1398,6 +1405,17 @@ var CWWebsocketMessageParser = OOP.createSingleton("Connichiwa", "CWWebsocketMes
       CWDebug.log(1, "There was an error loading '" + message.url + "': " + t);
     });
   },
+
+
+  _parseLoadCSS: function(message) {
+    var cssEntry = document.createElement("link");
+    cssEntry.setAttribute("rel", "stylesheet");
+    cssEntry.setAttribute("type", "text/css");
+    cssEntry.setAttribute("href", message.url);
+    $("head").append(cssEntry);
+    this.package.Connichiwa._sendAck(message);
+  },
+
 
   _parseWasStitched: function(message) {
     CWEventManager.trigger("wasStitched", message);
@@ -1560,6 +1578,11 @@ var Connichiwa = OOP.createSingleton("Connichiwa", "Connichiwa", {
     }
   },
 
+  "public loadCSS": function(identifier, url) {
+    var message = { url  : url };
+    var messageID = this.send(identifier, "_loadcss", message);
+  },
+
 
   "public send": function(target, name, message) {
     if (message === undefined) {
@@ -1601,7 +1624,12 @@ var Connichiwa = OOP.createSingleton("Connichiwa", "Connichiwa", {
 
   "package _sendObject": function(message)
   {
+    if (("_name" in message) === false) {
+      console.warn("Tried to send message without _name, ignoring: "+JSON.stringify(message));
+    }
+
     message._id = CWUtil.randomInt();
+    message._name = message._name.toLowerCase();
 
     var messageString = JSON.stringify(message);
     CWDebug.log(4, "Sending message: " + messageString);
@@ -2366,21 +2394,50 @@ OOP.extendSingleton("Connichiwa", "CWWebsocketMessageParser",
     device.connectionState = CWDeviceConnectionState.CONNECTED;
     nativeCallRemoteDidConnect(device.getIdentifier());
     
-    var connectedCallback = function() { 
+    var didConnectCallback = function() { 
       CWEventManager.trigger("deviceConnected", device); 
     };
+
+    var loadOtherFile = function(device, file) {
+      //As of now, "other" files are only CSS
+      var extension = file.split(".").pop().toLowerCase();
+      if (extension === "css") {
+        device.loadCSS(file);
+      } 
+    };
     
-    if (Connichiwa.autoLoadScripts.length > 0) {
-      for (var i = 0; i < Connichiwa.autoLoadScripts.length ; i++) {
-        var script = Connichiwa.autoLoadScripts[i];
-        if (i === (Connichiwa.autoLoadScripts.length - 1)) {
-          device.loadScript(script, connectedCallback);
+    //We need to separate JS files from other filetypes in Connichiwa.autoLoad
+    //The reason is that we want to attach a callback to the last JS file we
+    //load, so we are informed when it was loaded. 
+    var autoLoadJS    = [];
+    var autoLoadOther = [];
+    for (var i=0; i<Connichiwa.autoLoad.length; i++) {
+      var file = Connichiwa.autoLoad[i];
+      var extension = file.split(".").pop().toLowerCase();
+
+      if (extension === "js") autoLoadJS.push(file);
+      else autoLoadOther.push(file);
+    }
+
+    //First, let's load all non-JS files
+    for (var i=0; i<autoLoadOther.length; i++) {
+      var file = autoLoadOther[i];
+      loadOtherFile(device, file);
+    }
+
+    //Now load all JS files and attach the callback to the last one
+    //If no JS files are auto-loaded, execute the callback immediately
+    if (autoLoadJS.lenth > 0) {
+      for (var i=0; i<autoLoadJS.length; i++) {
+        var script = autoLoadJS[i];
+        if (i === (autoLoadJS.length - 1)) {
+          device.loadScript(script, didConnectCallback);
         } else {
           device.loadScript(script);
         }
       }
     } else {
-      connectedCallback();
+      didConnectCallback();
     }
   },
 
@@ -2403,7 +2460,7 @@ OOP.extendSingleton("Connichiwa", "CWWebsocketMessageParser",
 OOP.extendSingleton("Connichiwa", "Connichiwa", {
   "private _connectionAttempts" : 0,
   "public autoConnect": false,
-  "public autoLoadScripts": [],
+  "public autoLoad": [],
 
 
   // PUBLIC API
