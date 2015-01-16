@@ -96,7 +96,7 @@ OOP.extendSingleton("Connichiwa", "CWStitchManager", {
       var unstitchMessage = { 
         deviceTransformation : this.getDeviceTransformation(identifier)
       };
-      Connichiwa.send(identifier, "wasunstitched", unstitchMessage);
+      Connichiwa.send(identifier, "_wasunstitched", unstitchMessage);
 
       delete this._devices[identifier];
       CWDebug.log(3, "Device was unstitched: " + identifier);
@@ -129,7 +129,7 @@ OOP.extendSingleton("Connichiwa", "CWStitchManager", {
         edge                 : firstSwipe.edge, //TODO should this be in here? and if so, should it be relative?
         deviceTransformation : this.getDeviceTransformation(firstSwipe.device, true)
       };
-      Connichiwa.send(firstSwipe.device, "wasstitched", wasstitchMessage);
+      Connichiwa.send(firstSwipe.device, "_wasstitched", wasstitchMessage);
     }
 
     //
@@ -299,13 +299,13 @@ OOP.extendSingleton("Connichiwa", "CWStitchManager", {
       edge                 : newSwipe.edge, //TODO should this be in here? and if so, should it be relative?
       deviceTransformation : this.getDeviceTransformation(newSwipe.device, true)
     };
-    newDevice.send("wasstitched", wasstitchMessage);
+    newDevice.send("_wasstitched", wasstitchMessage);
 
     var gotneighborMessage = {
       otherDevice          : newSwipe.device,
       edge                 : stitchedSwipe.edge, //TODO should this be in here? and if so, should it be relative?
     };
-    stitchedDevice.send("gotstitchneighbor", gotneighborMessage);
+    stitchedDevice.send("_gotstitchneighbor", gotneighborMessage);
   },
 
 

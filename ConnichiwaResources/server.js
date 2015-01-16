@@ -201,7 +201,7 @@ var onUnidentifiedRemoteMessage = function(wsConnection)
         wsConnection.on("error", onLocalError);
       }
 
-      if (object._name === "remoteinfo")
+      if (object._name === "_remoteinfo")
       {
         log(3, "Websocket was determined to be remote");
         wsRemoteConnections[object.identifier] = wsConnection;
@@ -352,7 +352,7 @@ function startListening()
 function softDisconnectAllRemotes()
 {
   log(3, "Soft-Disconnecting all remotes");
-  var shutdownMessage = JSON.stringify({ _name: "softdisconnect" });
+  var shutdownMessage = JSON.stringify({ _name: "_softdisconnect" });
   for (var key in wsRemoteConnections)
   {
     if (wsRemoteConnections.hasOwnProperty(key))

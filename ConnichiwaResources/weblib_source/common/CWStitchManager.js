@@ -13,11 +13,11 @@ var CWStitchManager = OOP.createSingleton("Connichiwa", "CWStitchManager", {
 
 
   __constructor: function() {
-    CWEventManager.register("stitchswipe",         this._onLocalSwipe);
-    CWEventManager.register("wasStitched",         this._onWasStitched);
-    CWEventManager.register("wasUnstitched",       this._onWasUnstitched);
-    CWEventManager.register("gyroscopeUpdate",     this._onGyroUpdate);
-    CWEventManager.register("accelerometerUpdate", this._onAccelerometerUpdate);
+    Connichiwa.on("stitchswipe",         this._onLocalSwipe);
+    Connichiwa.on("wasStitched",         this._onWasStitched);
+    Connichiwa.on("wasUnstitched",       this._onWasUnstitched);
+    Connichiwa.on("gyroscopeUpdate",     this._onGyroUpdate);
+    Connichiwa.on("accelerometerUpdate", this._onAccelerometerUpdate);
   },
 
 
@@ -43,7 +43,7 @@ var CWStitchManager = OOP.createSingleton("Connichiwa", "CWStitchManager", {
     swipeData.device = Connichiwa.getIdentifier();
     swipeData.width  = CWSystemInfo.viewportWidth();
     swipeData.height = CWSystemInfo.viewportHeight();
-    Connichiwa.send("master", "stitchswipe", swipeData);
+    Connichiwa.send("master", "_stitchswipe", swipeData);
   },
 
 
@@ -103,7 +103,7 @@ var CWStitchManager = OOP.createSingleton("Connichiwa", "CWStitchManager", {
 
   "private _quitStitch": function() {
     var data = { device : Connichiwa.getIdentifier() };
-    Connichiwa.send("master", "quitstitch", data);
+    Connichiwa.send("master", "_quitstitch", data);
   },
 
 

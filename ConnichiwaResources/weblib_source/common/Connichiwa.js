@@ -136,10 +136,10 @@ var Connichiwa = OOP.createSingleton("Connichiwa", "Connichiwa", {
 
   "public loadScript": function(identifier, url, callback) {
     var message = { url  : url };
-    var messageID = this.send(identifier, "loadscript", message);
+    var messageID = this.send(identifier, "_loadscript", message);
 
     if (callback !== undefined) {
-      this.on("__messageack__id" + messageID, callback);
+      this.on("__ack_message" + messageID, callback);
     }
   },
 
@@ -183,7 +183,7 @@ var Connichiwa = OOP.createSingleton("Connichiwa", "Connichiwa", {
 
   "package _sendAck": function(message) {
     var ackMessage = { original : message };
-    this.send(message._source, "ack", ackMessage);
+    this.send(message._source, "_ack", ackMessage);
   },
 
 

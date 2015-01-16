@@ -34,7 +34,7 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
     }
 
     //Let the master know about our new device information
-    this.send("master", "remoteinfo", properties);
+    this.send("master", "_remoteinfo", properties);
   },
 
 

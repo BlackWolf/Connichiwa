@@ -6,21 +6,20 @@ var CWWebsocketMessageParser = OOP.createSingleton("Connichiwa", "CWWebsocketMes
 {
   "package parse": function(message) {
     switch (message._name) {
-      case "ack"               : this._parseAck(message);               break;
-      case "_insert"           : this._parseInsert(message);            break;
-      case "_replace"          : this._parseReplace(message);           break;
-      case "loadscript"        : this._parseLoadScript(message);        break;
-      case "_loadcss"          : this._parseLoadCSS(message);           break;
-      case "wasstitched"       : this._parseWasStitched(message);       break;
-      case "wasunstitched"     : this._parseWasUnstitched(message);     break;
-      case "gotstitchneighbor" : this._parseGotStitchNeighbor(message); break;
-      case "remotelog"         : this._parseRemoteLog(message);         break;
+      case "_ack"               : this._parseAck(message);               break;
+      case "_insert"            : this._parseInsert(message);            break;
+      case "_replace"           : this._parseReplace(message);           break;
+      case "_loadscript"        : this._parseLoadScript(message);        break;
+      case "_loadcss"           : this._parseLoadCSS(message);           break;
+      case "_wasstitched"       : this._parseWasStitched(message);       break;
+      case "_wasunstitched"     : this._parseWasUnstitched(message);     break;
+      case "_gotstitchneighbor" : this._parseGotStitchNeighbor(message); break;
     }
   },
 
 
   _parseAck: function(message) {
-    CWEventManager.trigger("__messageack__id" + message.original._id);
+    CWEventManager.trigger("__ack_message" + message.original._id);
   },
 
   _parseInsert: function(message) {
@@ -66,9 +65,5 @@ var CWWebsocketMessageParser = OOP.createSingleton("Connichiwa", "CWWebsocketMes
 
   _parseGotStitchNeighbor: function(message) {
     CWEventManager.trigger("gotstitchneighbor", message);
-  },
-
-  _parseRemoteLog: function(message) {
-    CWDebug.log(message.priority, "(From "+message._source+") "+message.message);
   }
 });

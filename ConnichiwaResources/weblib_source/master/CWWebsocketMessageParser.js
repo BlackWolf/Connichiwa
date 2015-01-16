@@ -7,9 +7,9 @@ OOP.extendSingleton("Connichiwa", "CWWebsocketMessageParser",
 {
   "package parseOnMaster": function(message) {
     switch (message._name) {
-      case "remoteinfo"  :  this._parseRemoteInfo(message);  break;
-      case "stitchswipe" :  this._parseStitchSwipe(message); break;
-      case "quitstitch"  :  this._parseQuitStitch(message);  break;
+      case "_remoteinfo"   :  this._parseRemoteInfo(message);  break;
+      case "_stitchswipe" :  this._parseStitchSwipe(message); break;
+      case "_quitstitch"  :  this._parseQuitStitch(message);  break;
     }
   },
 
@@ -67,7 +67,7 @@ OOP.extendSingleton("Connichiwa", "CWWebsocketMessageParser",
 
     //Now load all JS files and attach the callback to the last one
     //If no JS files are auto-loaded, execute the callback immediately
-    if (autoLoadJS.lenth > 0) {
+    if (autoLoadJS.length > 0) {
       for (var i=0; i<autoLoadJS.length; i++) {
         var script = autoLoadJS[i];
         if (i === (autoLoadJS.length - 1)) {

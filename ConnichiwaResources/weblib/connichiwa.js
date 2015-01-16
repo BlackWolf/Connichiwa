@@ -1038,11 +1038,11 @@ var CWStitchManager = OOP.createSingleton("Connichiwa", "CWStitchManager", {
 
 
   __constructor: function() {
-    CWEventManager.register("stitchswipe",         this._onLocalSwipe);
-    CWEventManager.register("wasStitched",         this._onWasStitched);
-    CWEventManager.register("wasUnstitched",       this._onWasUnstitched);
-    CWEventManager.register("gyroscopeUpdate",     this._onGyroUpdate);
-    CWEventManager.register("accelerometerUpdate", this._onAccelerometerUpdate);
+    Connichiwa.on("stitchswipe",         this._onLocalSwipe);
+    Connichiwa.on("wasStitched",         this._onWasStitched);
+    Connichiwa.on("wasUnstitched",       this._onWasUnstitched);
+    Connichiwa.on("gyroscopeUpdate",     this._onGyroUpdate);
+    Connichiwa.on("accelerometerUpdate", this._onAccelerometerUpdate);
   },
 
 
@@ -1068,7 +1068,7 @@ var CWStitchManager = OOP.createSingleton("Connichiwa", "CWStitchManager", {
     swipeData.device = Connichiwa.getIdentifier();
     swipeData.width  = CWSystemInfo.viewportWidth();
     swipeData.height = CWSystemInfo.viewportHeight();
-    Connichiwa.send("master", "stitchswipe", swipeData);
+    Connichiwa.send("master", "_stitchswipe", swipeData);
   },
 
 
@@ -1128,7 +1128,7 @@ var CWStitchManager = OOP.createSingleton("Connichiwa", "CWStitchManager", {
 
   "private _quitStitch": function() {
     var data = { device : Connichiwa.getIdentifier() };
-    Connichiwa.send("master", "quitstitch", data);
+    Connichiwa.send("master", "_quitstitch", data);
   },
 
 
@@ -1367,21 +1367,20 @@ var CWWebsocketMessageParser = OOP.createSingleton("Connichiwa", "CWWebsocketMes
 {
   "package parse": function(message) {
     switch (message._name) {
-      case "ack"               : this._parseAck(message);               break;
-      case "_insert"           : this._parseInsert(message);            break;
-      case "_replace"          : this._parseReplace(message);           break;
-      case "loadscript"        : this._parseLoadScript(message);        break;
-      case "_loadcss"          : this._parseLoadCSS(message);           break;
-      case "wasstitched"       : this._parseWasStitched(message);       break;
-      case "wasunstitched"     : this._parseWasUnstitched(message);     break;
-      case "gotstitchneighbor" : this._parseGotStitchNeighbor(message); break;
-      case "remotelog"         : this._parseRemoteLog(message);         break;
+      case "_ack"               : this._parseAck(message);               break;
+      case "_insert"            : this._parseInsert(message);            break;
+      case "_replace"           : this._parseReplace(message);           break;
+      case "_loadscript"        : this._parseLoadScript(message);        break;
+      case "_loadcss"           : this._parseLoadCSS(message);           break;
+      case "_wasstitched"       : this._parseWasStitched(message);       break;
+      case "_wasunstitched"     : this._parseWasUnstitched(message);     break;
+      case "_gotstitchneighbor" : this._parseGotStitchNeighbor(message); break;
     }
   },
 
 
   _parseAck: function(message) {
-    CWEventManager.trigger("__messageack__id" + message.original._id);
+    CWEventManager.trigger("__ack_message" + message.original._id);
   },
 
   _parseInsert: function(message) {
@@ -1427,10 +1426,6 @@ var CWWebsocketMessageParser = OOP.createSingleton("Connichiwa", "CWWebsocketMes
 
   _parseGotStitchNeighbor: function(message) {
     CWEventManager.trigger("gotstitchneighbor", message);
-  },
-
-  _parseRemoteLog: function(message) {
-    CWDebug.log(message.priority, "(From "+message._source+") "+message.message);
   }
 });
 /* global OOP, CWDevice, CWEventManager, CWUtil, CWDebug */
@@ -1571,10 +1566,10 @@ var Connichiwa = OOP.createSingleton("Connichiwa", "Connichiwa", {
 
   "public loadScript": function(identifier, url, callback) {
     var message = { url  : url };
-    var messageID = this.send(identifier, "loadscript", message);
+    var messageID = this.send(identifier, "_loadscript", message);
 
     if (callback !== undefined) {
-      this.on("__messageack__id" + messageID, callback);
+      this.on("__ack_message" + messageID, callback);
     }
   },
 
@@ -1618,7 +1613,7 @@ var Connichiwa = OOP.createSingleton("Connichiwa", "Connichiwa", {
 
   "package _sendAck": function(message) {
     var ackMessage = { original : message };
-    this.send(message._source, "ack", ackMessage);
+    this.send(message._source, "_ack", ackMessage);
   },
 
 
@@ -1626,6 +1621,7 @@ var Connichiwa = OOP.createSingleton("Connichiwa", "Connichiwa", {
   {
     if (("_name" in message) === false) {
       console.warn("Tried to send message without _name, ignoring: "+JSON.stringify(message));
+      return;
     }
 
     message._id = CWUtil.randomInt();
@@ -2069,7 +2065,7 @@ OOP.extendSingleton("Connichiwa", "CWStitchManager", {
       var unstitchMessage = { 
         deviceTransformation : this.getDeviceTransformation(identifier)
       };
-      Connichiwa.send(identifier, "wasunstitched", unstitchMessage);
+      Connichiwa.send(identifier, "_wasunstitched", unstitchMessage);
 
       delete this._devices[identifier];
       CWDebug.log(3, "Device was unstitched: " + identifier);
@@ -2102,7 +2098,7 @@ OOP.extendSingleton("Connichiwa", "CWStitchManager", {
         edge                 : firstSwipe.edge, //TODO should this be in here? and if so, should it be relative?
         deviceTransformation : this.getDeviceTransformation(firstSwipe.device, true)
       };
-      Connichiwa.send(firstSwipe.device, "wasstitched", wasstitchMessage);
+      Connichiwa.send(firstSwipe.device, "_wasstitched", wasstitchMessage);
     }
 
     //
@@ -2272,13 +2268,13 @@ OOP.extendSingleton("Connichiwa", "CWStitchManager", {
       edge                 : newSwipe.edge, //TODO should this be in here? and if so, should it be relative?
       deviceTransformation : this.getDeviceTransformation(newSwipe.device, true)
     };
-    newDevice.send("wasstitched", wasstitchMessage);
+    newDevice.send("_wasstitched", wasstitchMessage);
 
     var gotneighborMessage = {
       otherDevice          : newSwipe.device,
       edge                 : stitchedSwipe.edge, //TODO should this be in here? and if so, should it be relative?
     };
-    stitchedDevice.send("gotstitchneighbor", gotneighborMessage);
+    stitchedDevice.send("_gotstitchneighbor", gotneighborMessage);
   },
 
 
@@ -2367,9 +2363,9 @@ OOP.extendSingleton("Connichiwa", "CWWebsocketMessageParser",
 {
   "package parseOnMaster": function(message) {
     switch (message._name) {
-      case "remoteinfo"  :  this._parseRemoteInfo(message);  break;
-      case "stitchswipe" :  this._parseStitchSwipe(message); break;
-      case "quitstitch"  :  this._parseQuitStitch(message);  break;
+      case "_remoteinfo"   :  this._parseRemoteInfo(message);  break;
+      case "_stitchswipe" :  this._parseStitchSwipe(message); break;
+      case "_quitstitch"  :  this._parseQuitStitch(message);  break;
     }
   },
 
@@ -2427,7 +2423,7 @@ OOP.extendSingleton("Connichiwa", "CWWebsocketMessageParser",
 
     //Now load all JS files and attach the callback to the last one
     //If no JS files are auto-loaded, execute the callback immediately
-    if (autoLoadJS.lenth > 0) {
+    if (autoLoadJS.length > 0) {
       for (var i=0; i<autoLoadJS.length; i++) {
         var script = autoLoadJS[i];
         if (i === (autoLoadJS.length - 1)) {
