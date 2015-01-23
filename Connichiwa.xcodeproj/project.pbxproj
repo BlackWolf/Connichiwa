@@ -23,8 +23,8 @@
 
 /* Begin PBXBuildFile section */
 		3306A79E1940A386001B999A /* server.js in Resources */ = {isa = PBXBuildFile; fileRef = 3306A7981940A2DF001B999A /* server.js */; };
-		330BA3D3193F8CB300D9E54C /* CWWebserverManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 330BA3D1193F8CB300D9E54C /* CWWebserverManager.h */; };
-		330BA3D4193F8CB300D9E54C /* CWWebserverManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 330BA3D2193F8CB300D9E54C /* CWWebserverManager.m */; };
+		330BA3D3193F8CB300D9E54C /* CWServerManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 330BA3D1193F8CB300D9E54C /* CWServerManager.h */; };
+		330BA3D4193F8CB300D9E54C /* CWServerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 330BA3D2193F8CB300D9E54C /* CWServerManager.m */; };
 		330CBB74193E75890064AD99 /* Connichiwa.h in Headers */ = {isa = PBXBuildFile; fileRef = 33A0514E193E61CC00FED071 /* Connichiwa.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		330CBB88193F14B60064AD99 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 330CBB87193F14B60064AD99 /* CoreFoundation.framework */; };
 		330CBB8E193F14B60064AD99 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 330CBB8C193F14B60064AD99 /* InfoPlist.strings */; };
@@ -101,7 +101,7 @@
 		33618AC9195DEDFE006FA51B /* CWWebLibraryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 33618AC7195DEDFE006FA51B /* CWWebLibraryManager.m */; };
 		3362DB801A72C8BE0038985E /* BLWebSocketConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 3362DB7E1A72C8BE0038985E /* BLWebSocketConnection.h */; };
 		3362DB811A72C8BE0038985E /* BLWebSocketConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 3362DB7F1A72C8BE0038985E /* BLWebSocketConnection.m */; };
-		3367186C194776C1000A7164 /* CWWebserverManagerDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 3367186B194776C1000A7164 /* CWWebserverManagerDelegate.h */; };
+		3367186C194776C1000A7164 /* CWServerManagerDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 3367186B194776C1000A7164 /* CWServerManagerDelegate.h */; };
 		337FE7961977E07B00912293 /* weblib in Resources */ = {isa = PBXBuildFile; fileRef = 337FE7951977E07B00912293 /* weblib */; };
 		337FE7981977E2FA00912293 /* remote.html in Resources */ = {isa = PBXBuildFile; fileRef = 337FE7971977E2FA00912293 /* remote.html */; };
 		33A0514A193E61CC00FED071 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33A05149193E61CC00FED071 /* Foundation.framework */; };
@@ -191,8 +191,8 @@
 
 /* Begin PBXFileReference section */
 		3306A7981940A2DF001B999A /* server.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = server.js; sourceTree = "<group>"; };
-		330BA3D1193F8CB300D9E54C /* CWWebserverManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWWebserverManager.h; sourceTree = "<group>"; };
-		330BA3D2193F8CB300D9E54C /* CWWebserverManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWWebserverManager.m; sourceTree = "<group>"; };
+		330BA3D1193F8CB300D9E54C /* CWServerManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWServerManager.h; sourceTree = "<group>"; };
+		330BA3D2193F8CB300D9E54C /* CWServerManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWServerManager.m; sourceTree = "<group>"; };
 		330CBB86193F14B60064AD99 /* ConnichiwaResources.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ConnichiwaResources.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		330CBB87193F14B60064AD99 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		330CBB8B193F14B60064AD99 /* ConnichiwaResources-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ConnichiwaResources-Info.plist"; sourceTree = "<group>"; };
@@ -275,7 +275,7 @@
 		33618ACA195E233D006FA51B /* CWWebLibraryManagerDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CWWebLibraryManagerDelegate.h; sourceTree = "<group>"; };
 		3362DB7E1A72C8BE0038985E /* BLWebSocketConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BLWebSocketConnection.h; sourceTree = "<group>"; };
 		3362DB7F1A72C8BE0038985E /* BLWebSocketConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BLWebSocketConnection.m; sourceTree = "<group>"; };
-		3367186B194776C1000A7164 /* CWWebserverManagerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWWebserverManagerDelegate.h; sourceTree = "<group>"; };
+		3367186B194776C1000A7164 /* CWServerManagerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWServerManagerDelegate.h; sourceTree = "<group>"; };
 		337FE7951977E07B00912293 /* weblib */ = {isa = PBXFileReference; lastKnownFileType = folder; path = weblib; sourceTree = "<group>"; };
 		337FE7971977E2FA00912293 /* remote.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = remote.html; sourceTree = "<group>"; };
 		3381A01E193F492600BDDF34 /* Nodelike.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Nodelike.xcodeproj; path = Nodelike/Nodelike.xcodeproj; sourceTree = "<group>"; };
@@ -554,9 +554,9 @@
 				33618ACA195E233D006FA51B /* CWWebLibraryManagerDelegate.h */,
 				33618ABE195DAD37006FA51B /* CWRemoteLibraryManager.h */,
 				33618ABF195DAD37006FA51B /* CWRemoteLibraryManager.m */,
-				330BA3D1193F8CB300D9E54C /* CWWebserverManager.h */,
-				330BA3D2193F8CB300D9E54C /* CWWebserverManager.m */,
-				3367186B194776C1000A7164 /* CWWebserverManagerDelegate.h */,
+				330BA3D1193F8CB300D9E54C /* CWServerManager.h */,
+				330BA3D2193F8CB300D9E54C /* CWServerManager.m */,
+				3367186B194776C1000A7164 /* CWServerManagerDelegate.h */,
 				3317C6D51A714BCB008BD104 /* BLWebSocketsServer */,
 				3338A7821A71204300898D4E /* GCDWebServer */,
 				339A4BBD194F8D6C0072A4FC /* Bluetooth */,
@@ -621,13 +621,13 @@
 				3338A7A61A71204300898D4E /* GCDWebServerFunctions.h in Headers */,
 				3338A7A81A71204300898D4E /* GCDWebServerHTTPStatusCodes.h in Headers */,
 				3317C6F01A714BCB008BD104 /* BLWebSocketsServer.h in Headers */,
-				330BA3D3193F8CB300D9E54C /* CWWebserverManager.h in Headers */,
+				330BA3D3193F8CB300D9E54C /* CWServerManager.h in Headers */,
 				3317C7021A714BCB008BD104 /* libwebsockets.h in Headers */,
 				33A87DF71951037A001BDC09 /* CWBluetoothConnection.h in Headers */,
 				3338A7B61A71204300898D4E /* GCDWebServerDataResponse.h in Headers */,
 				3338A7AA1A71204300898D4E /* GCDWebServerRequest.h in Headers */,
 				334AB757193FEC6000A15999 /* CWBundle.h in Headers */,
-				3367186C194776C1000A7164 /* CWWebserverManagerDelegate.h in Headers */,
+				3367186C194776C1000A7164 /* CWServerManagerDelegate.h in Headers */,
 				334AB753193FDDF800A15999 /* CWDebug.h in Headers */,
 				33618AC8195DEDFE006FA51B /* CWWebLibraryManager.h in Headers */,
 				3338A7B41A71204300898D4E /* GCDWebServerURLEncodedFormRequest.h in Headers */,
@@ -915,7 +915,7 @@
 				3317C6F91A714BCB008BD104 /* extension-deflate-frame.c in Sources */,
 				3338A7A51A71204300898D4E /* GCDWebServerConnection.m in Sources */,
 				33A87DF81951037A001BDC09 /* CWBluetoothConnection.m in Sources */,
-				330BA3D4193F8CB300D9E54C /* CWWebserverManager.m in Sources */,
+				330BA3D4193F8CB300D9E54C /* CWServerManager.m in Sources */,
 				3338A7B71A71204300898D4E /* GCDWebServerDataResponse.m in Sources */,
 				3317C7081A714BCB008BD104 /* sha-1.c in Sources */,
 				3338A7AD1A71204300898D4E /* GCDWebServerResponse.m in Sources */,

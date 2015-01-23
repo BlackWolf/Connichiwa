@@ -7,13 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
-@class CWWebserverManager;
+@class CWServerManager;
 
 
 /**
  *  A delegate protocol that receives different events from the CWWebserverManager instance
  */
-@protocol CWWebserverManagerDelegate <NSObject>
+@protocol CWServerManagerDelegate <NSObject>
 
 @optional
 

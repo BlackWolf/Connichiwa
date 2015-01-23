@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CWWebserverManagerDelegate.h"
+#import "CWServerManagerDelegate.h"
 @class NLContext;
 
 
@@ -15,24 +15,24 @@
 /**
  *  Represents the state of the webserver controlled by this manager
  */
-typedef NS_ENUM(NSInteger, CWWebserverManagerState)
+typedef NS_ENUM(NSInteger, CWServerManagerState)
 {
     /**
      *  The webserver is stopped
      */
-    CWWebserverManagerStateStopped,
+    CWServerManagerStateStopped,
     /**
      *  The webserver is starting
      */
-    CWWebserverManagerStateStarting,
+    CWServerManagerStateStarting,
     /**
      *  The webserver has started and accepts connections
      */
-    CWWebserverManagerStateStarted,
+    CWServerManagerStateStarted,
     /**
      *  The webserver is currently suspended - it is still running but does not accept connections
      */
-    CWWebserverManagerStateSuspended
+    CWServerManagerStateSuspended
 };
 
 
@@ -42,18 +42,18 @@ typedef NS_ENUM(NSInteger, CWWebserverManagerState)
  *  It is responsible for launching and managing the webserver that offers an HTTP and Websocket server. The manager also receives information about established or closed websocket connections.
  *  Only one instance of the webserver should be running on a device.
  */
-@interface CWWebserverManager : NSObject
+@interface CWServerManager : NSObject
 
 
 /**
  *  The delegate to receive events by this class
  */
-@property (readwrite, strong) id<CWWebserverManagerDelegate> delegate;
+@property (readwrite, strong) id<CWServerManagerDelegate> delegate;
 
 /**
  *  The current state of this manager
  */
-@property (readonly) CWWebserverManagerState state;
+@property (readonly) CWServerManagerState state;
 
 /**
  *  Path to the folder acting as the root of the web server. '/' on the web server will be mapped to this path. 

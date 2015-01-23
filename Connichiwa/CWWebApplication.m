@@ -7,8 +7,8 @@
 //
 
 #import "CWWebApplication.h"
-#import "CWWebserverManager.h"
-#import "CWWebserverManagerDelegate.h"
+#import "CWServerManager.h"
+#import "CWServerManagerDelegate.h"
 #import "CWBluetoothManager.h"
 #import "CWBluetoothManagerDelegate.h"
 #import "CWWebApplicationState.h"
@@ -27,7 +27,7 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
 
 
 
-@interface CWWebApplication () <CWWebserverManagerDelegate, CWBluetoothManagerDelegate, CWWebApplicationState, CWWebLibraryManagerDelegate>
+@interface CWWebApplication () <CWServerManagerDelegate, CWBluetoothManagerDelegate, CWWebApplicationState, CWWebLibraryManagerDelegate>
 
 /**
  *  The unique identifier of this device that is used amongst all the different parts of Connichiwa
@@ -54,7 +54,7 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
 /**
  *  The main instance of CWWebserverManager. Runs the local webserver and forwards and receives messages from it
  */
-@property (readwrite, strong) CWWebserverManager *webserverManager;
+@property (readwrite, strong) CWServerManager *webserverManager;
 
 /**
  *  The main instance of CWBluetoothManager. Advertises this device via BT, looks for other BT devices and allows for data exchange with other BT devices.
@@ -121,7 +121,7 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
     
     self.remoteLibManager = [[CWRemoteLibraryManager alloc] initWithApplicationState:self];
     
-    self.webserverManager = [[CWWebserverManager alloc] init];
+    self.webserverManager = [[CWServerManager alloc] init];
     [self.webserverManager setDelegate:self];
     
     self.bluetoothManager = [[CWBluetoothManager alloc] initWithApplicationState:self];
@@ -238,7 +238,7 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
  */
 - (BOOL)isWebserverRunning
 {
-    return (self.webserverManager.state == CWWebserverManagerStateStarted);
+    return (self.webserverManager.state == CWServerManagerStateStarted);
 }
 
 

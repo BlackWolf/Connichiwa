@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Mario Schreiner. All rights reserved.
 //
 
-#import "CWWebserverManager.h"
+#import "CWServerManager.h"
 #import <Nodelike/NLContext.h>
 #import "GCDWebServer.h"
 #import "GCDWebServerDataResponse.h"
@@ -17,9 +17,9 @@
 
 
 
-@interface CWWebserverManager ()
+@interface CWServerManager ()
 
-@property (readwrite) CWWebserverManagerState state;
+@property (readwrite) CWServerManagerState state;
 
 @property (readwrite, strong) NSString *documentRoot;
 
@@ -53,14 +53,14 @@
 
 
 
-@implementation CWWebserverManager
+@implementation CWServerManager
 
 
 - (instancetype)initWithDocumentRoot:(NSString *)documentRoot
 {
     self = [super init];
     
-    self.state = CWWebserverManagerStateStopped;
+    self.state = CWServerManagerStateStopped;
     self.documentRoot = documentRoot;
     
     return self;
@@ -71,7 +71,7 @@
 {
     CWLog(1, @"Webserver is starting with document root %@ on port %d", documentRoot, port);
     
-    self.state = CWWebserverManagerStateStarting;
+    self.state = CWServerManagerStateStarting;
     
     self.documentRoot = documentRoot;
     self.websocketIdentifiers = [NSMutableDictionary dictionary];
@@ -140,12 +140,12 @@
 
 - (void)suspendWebserver
 {
-    if (self.state != CWWebserverManagerStateStarted) return;
+    if (self.state != CWServerManagerStateStarted) return;
     
     CWLog(1, @"Webserver is suspended, all remotes are soft-disconnected");
     
     //Make the server send a _softDisconnect message to all remotes
-    self.state = CWWebserverManagerStateSuspended;
+    self.state = CWServerManagerStateSuspended;
     [self.nodelikeContext evaluateScript:@"softDisconnectAllRemotes();"];
 }
 
@@ -157,7 +157,7 @@
     // When we suspended, we soft disconnected all remotes
     // On resume, we don't need to do anything - we just make it possible for remotes to connect again
     // Furthermore, the local web library connection will automatically reconnect without us doing anything
-    self.state = CWWebserverManagerStateStarted;
+    self.state = CWServerManagerStateStarted;
 }
 
 #pragma mark Websocket Callbacks
@@ -246,7 +246,7 @@
 {
     CWLog(1, @"Webserver did start");
     
-    self.state = CWWebserverManagerStateStarted;
+    self.state = CWServerManagerStateStarted;
     
     if ([self.delegate respondsToSelector:@selector(didStartWebserver)])
     {
