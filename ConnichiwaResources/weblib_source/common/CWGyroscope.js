@@ -5,6 +5,7 @@
 
 var CWGyroscope = OOP.createSingleton("Connichiwa", "CWGyroscope", {
   _lastMeasure: undefined,
+  _alphaGammaFlipped: false,
 
   __constructor: function() {
   gyro.frequency = 500;
@@ -20,15 +21,34 @@ var CWGyroscope = OOP.createSingleton("Connichiwa", "CWGyroscope", {
       o.x === null || o.y === null || o.z === null) return;
 
     if (this._lastMeasure === undefined) this._lastMeasure = o;
+
+    // GYROSCOPE
+
+    //Fuck you Microsoft
+    //On "some devices" (so far on Surface Pro 2) the alpha and gamma
+    //values are flipped for no reason. There is no good way to detect this,
+    //only if alpha or gamma are out of their range we know this is the case
+    if (o.alpha < 0 || o.gamma > 180) {
+      this._alphaGammaFlipped = true;
+
+      //Flip last measure so we don't screw up our delta calculations
+      var temp = this._lastMeasure.alpha;
+      this._lastMeasure.alpha = this._lastMeasure.gamma;
+      this._lastMeasure.gamma - temp;
+    }
     
-    //Send gyro update
-    var deltaAlpha = o.alpha - this._lastMeasure.alpha;
-    var deltaBeta  = o.beta  - this._lastMeasure.beta;
-    var deltaGamma = o.gamma - this._lastMeasure.gamma;
+    var alpha = this._alphaGammaFlipped ? o.gamma : o.alpha;
+    var beta  = o.beta;
+    var gamma = this._alphaGammaFlipped ? o.alpha : o.gamma;
+
+    var deltaAlpha = alpha - this._lastMeasure.alpha;
+    var deltaBeta  = beta  - this._lastMeasure.beta;
+    var deltaGamma = gamma - this._lastMeasure.gamma;
+
     var gyroData = { 
-      alpha : o.alpha, 
-      beta  : o.beta, 
-      gamma : o.gamma,
+      alpha : alpha, 
+      beta  : beta, 
+      gamma : gamma,
       delta : {
         alpha : deltaAlpha, 
         beta  : deltaBeta, 
@@ -37,7 +57,8 @@ var CWGyroscope = OOP.createSingleton("Connichiwa", "CWGyroscope", {
     };
     CWEventManager.trigger(5, "gyroscopeUpdate", gyroData);
 
-    //Send accelerometer update
+    // ACCELEROMETER
+
     var deltaX = o.x - this._lastMeasure.x;
     var deltaY = o.y - this._lastMeasure.y;
     var deltaZ = o.z - this._lastMeasure.z;
@@ -54,7 +75,7 @@ var CWGyroscope = OOP.createSingleton("Connichiwa", "CWGyroscope", {
     CWEventManager.trigger(5, "accelerometerUpdate", accelData);
 
     //We need to copy the values of o because o will be altered by gyro
-    this._lastMeasure = { x: o.x, y: o.y, z: o.z, alpha: o.alpha, beta: o.beta, gamma: o.gamma };
+    this._lastMeasure = { x: o.x, y: o.y, z: o.z, alpha: alpha, beta: beta, gamma: gamma };
   },
 
 

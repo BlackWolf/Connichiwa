@@ -73,6 +73,12 @@
     }
 }
 
+- (void)enqueueMessage:(NSData *)message forUserWithId:(int)userId {
+    @synchronized(self) {
+        [self.usersMessageQueues[[NSNumber numberWithInt:userId]] enqueue:message];
+    }
+}
+
 - (NSData *)messageForUserWithId:(int)userId {
     NSData *message;
     @synchronized(self) {

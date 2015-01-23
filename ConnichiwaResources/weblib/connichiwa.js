@@ -286,16 +286,14 @@ function CWDevice(properties)
   var _launchDate = Date.now() / 1000.0;
   var _ips = [];
   var _port = undefined;
-  var _name = "unknown";
+  var _name = "remote device";
   var _ppi = CWSystemInfo.DEFAULT_PPI();
-  var _isLocal = false; 
 
   if (properties.launchDate) _launchDate = properties.launchDate;
   if (properties.ips) _ips = properties.ips;
   if (properties.port) _port = properties.port;
   if (properties.name) _name = properties.name;
   if (properties.ppi && properties.ppi > 0) _ppi = properties.ppi;
-  if (properties.isLocal) _isLocal = properties.isLocal;
   
   /**
    * Returns the identifier of this device
@@ -318,7 +316,7 @@ function CWDevice(properties)
   this.getPPI = function() { return _ppi; };
 
   this.isLocal = function() {
-    return this._isLocal;
+    return this.equalTo(Connichiwa.getLocalDevice());
   };
   
   this.isNearby = function()
@@ -484,27 +482,38 @@ var CWEventManager = (function()
     trigger  : trigger
   };
 })();
-/* global CWEventManager, CWVector, CWDebug, Connichiwa, CWUtil */
+/* global OOP, CWEventManager, CWVector, CWDebug, Connichiwa, CWUtil */
 "use strict";
 
 
-$(document).ready(function() {
-  var touchStart;
-  var touchLast;
-  var touchLastVector;
-  var touchCheckable = false;
-  var touchAngleReferenceVector;
-  var touchAngleChangedCount = 0;
-  $("body").on("mousedown touchstart", function(e) {
-    touchStart = CWUtil.getEventLocation(e, "client");
-  });
 
-  $("body").on("mousemove touchmove", function(e) {
-    if (touchStart === undefined) return;
+var CWGestures = OOP.createSingleton("Connichiwa", "CWGestures", {
+  "private _touchStart": undefined,
+  "private _touchLast": undefined,
+  "private _touchLastVector": undefined,
+  "private _touchCheckable": false,
+  "private _touchAngleReferenceVector": undefined,
+  "private _touchAngleChangedCount": 0,
+
+  __constructor: function() {
+    var that = this;
+    $(document).ready(function() {
+      that.captureOn($("body"));
+    });
+  },
+
+
+  "private _onDown": function(e) {
+    this._touchStart = CWUtil.getEventLocation(e, "client");
+  },
+
+
+  "private _onMove": function(e) {
+    if (this._touchStart === undefined) return;
 
     var newTouch = CWUtil.getEventLocation(e, "client");
 
-    //In touchend, we only compare touchStart to touchLast, so it is possible that
+    //In touchend, we only compare this._touchStart to this._touchLast, so it is possible that
     //the user starts swiping, then goes in the opposite direction and then in the
     //first direction again, which would be detected as a valid swipe.
     //To prevent this, we try to detect direction changes here by checking the angle
@@ -513,67 +522,68 @@ $(document).ready(function() {
     //Unfortunately, touches can "jitter", so we need to make sure that
     //small (or very short) angle changes don't cancel the swipe. Because of this,
     //once we detect a direction change we save the last "valid" finger vector into
-    //touchAngleReferenceVector. We then compare the following vectors to that 
+    //this._touchAngleReferenceVector. We then compare the following vectors to that 
     //reference vector. Only if 3 touches in a row have a direction change, we cancel
     //the swipe.
     //
     //Furthermore, we add some noise reduction by making sure the last finger vector
     //has a minimum length of 2 and the entire swipe is at least 5 pixels in length
-    if (touchLast !== undefined) {
-      var totalTouchVector = new CWVector(touchStart, newTouch);
-      var newTouchVector   = new CWVector(touchLast, newTouch);
+    if (this._touchLast !== undefined) {
+      var totalTouchVector = new CWVector(this._touchStart, newTouch);
+      var newTouchVector   = new CWVector(this._touchLast,  newTouch);
 
-      var touchCheckable = (touchCheckable || totalTouchVector.length() > 5);
-      if (touchCheckable && newTouchVector.length() > 1) {
+      this._touchCheckable = (this._touchCheckable || totalTouchVector.length() > 5);
+      if (this._touchCheckable && newTouchVector.length() > 1) {
 
         //A previous touch was a direction change, compare with the saved
         //reference vector by calculating their angle
-        if (touchAngleReferenceVector !== undefined) {
-          var referenceTouchAngle = newTouchVector.angle(touchAngleReferenceVector);
+        if (this._touchAngleReferenceVector !== undefined) {
+          var referenceTouchAngle = newTouchVector.angle(this._touchAngleReferenceVector);
           if (referenceTouchAngle > 20) {
           // if (referenceTouchAngle > 30) {
-            touchAngleChangedCount++;
+            this._touchAngleChangedCount++;
 
-            if (touchAngleChangedCount === 3) {
-              touchStart = undefined;
-              touchLast  = undefined;
+            if (this._touchAngleChangedCount === 3) {
+              this._touchStart = undefined;
+              this._touchLast  = undefined;
               return;
             }
           } else {
-            touchAngleReferenceVector = undefined;
-            touchAngleChangedCount = 0;
+            this._touchAngleReferenceVector = undefined;
+            this._touchAngleChangedCount = 0;
           }
 
         //Compare the current finger vector to the last finger vector and see
         //if the direction has changed by calculating their angle
         } else {
-          if (touchLastVector !== undefined) {
-            var newTouchAngle = newTouchVector.angle(touchLastVector);
+          if (this._touchLastVector !== undefined) {
+            var newTouchAngle = newTouchVector.angle(this._touchLastVector);
             if (newTouchAngle > 20) {
             // if (newTouchAngle > 30) {
-              touchAngleReferenceVector = touchLastVector;
-              touchAngleChangedCount = 1;
+              this._touchAngleReferenceVector = this._touchLastVector;
+              this._touchAngleChangedCount = 1;
             }
           }
         }
       }
 
-      if (newTouchVector.length() > 0) touchLastVector = newTouchVector;
+      if (newTouchVector.length() > 0) this._touchLastVector = newTouchVector;
     } 
 
-    touchLast = newTouch;
-  });
+    this._touchLast = newTouch;
+  },
 
-  $("body").on("mouseup touchend", function(e) {
-    var swipeStart = touchStart;
-    var swipeEnd   = touchLast;
 
-    touchStart                = undefined;
-    touchLast                 = undefined;
-    touchLastVector           = undefined;
-    touchCheckable            = false;
-    touchAngleReferenceVector = undefined;
-    touchAngleChangedCount    = 0;
+  "private _onUp": function(e) {
+    var swipeStart = this._touchStart;
+    var swipeEnd   = this._touchLast;
+
+    this._touchStart                = undefined;
+    this._touchLast                 = undefined;
+    this._touchLastVector           = undefined;
+    this._touchCheckable            = false;
+    this._touchAngleReferenceVector = undefined;
+    this._touchAngleChangedCount    = 0;
 
     if (swipeStart === undefined || swipeEnd === undefined) return;
 
@@ -653,7 +663,24 @@ $(document).ready(function() {
       y    : swipeEnd.y
     };
     CWEventManager.trigger("stitchswipe", swipeData);
-  });
+  },
+
+
+  "public captureOn": function(el) {
+    if (el instanceof jQuery) el = el.get(0);
+
+    //el.on("mousedown this._touchStart", this._onDown);
+    el.addEventListener("mousedown",  this._onDown, true);
+    el.addEventListener("touchstart", this._onDown, true);
+
+    //el.on("mousemove touchmove", this._onMove);
+    el.addEventListener("mousemove", this._onMove, true);
+    el.addEventListener("touchmove", this._onMove, true);
+
+    //el.on("mouseup touchend", this._onUp);
+    el.addEventListener("mouseup",  this._onUp, true);
+    el.addEventListener("touchend", this._onUp, true);
+  }
 });
 /* global OOP, gyro, CWEventManager, CWDebug */
 "use strict";
@@ -662,6 +689,7 @@ $(document).ready(function() {
 
 var CWGyroscope = OOP.createSingleton("Connichiwa", "CWGyroscope", {
   _lastMeasure: undefined,
+  _alphaGammaFlipped: false,
 
   __constructor: function() {
   gyro.frequency = 500;
@@ -677,15 +705,34 @@ var CWGyroscope = OOP.createSingleton("Connichiwa", "CWGyroscope", {
       o.x === null || o.y === null || o.z === null) return;
 
     if (this._lastMeasure === undefined) this._lastMeasure = o;
+
+    // GYROSCOPE
+
+    //Fuck you Microsoft
+    //On "some devices" (so far on Surface Pro 2) the alpha and gamma
+    //values are flipped for no reason. There is no good way to detect this,
+    //only if alpha or gamma are out of their range we know this is the case
+    if (o.alpha < 0 || o.gamma > 180) {
+      this._alphaGammaFlipped = true;
+
+      //Flip last measure so we don't screw up our delta calculations
+      var temp = this._lastMeasure.alpha;
+      this._lastMeasure.alpha = this._lastMeasure.gamma;
+      this._lastMeasure.gamma - temp;
+    }
     
-    //Send gyro update
-    var deltaAlpha = o.alpha - this._lastMeasure.alpha;
-    var deltaBeta  = o.beta  - this._lastMeasure.beta;
-    var deltaGamma = o.gamma - this._lastMeasure.gamma;
+    var alpha = this._alphaGammaFlipped ? o.gamma : o.alpha;
+    var beta  = o.beta;
+    var gamma = this._alphaGammaFlipped ? o.alpha : o.gamma;
+
+    var deltaAlpha = alpha - this._lastMeasure.alpha;
+    var deltaBeta  = beta  - this._lastMeasure.beta;
+    var deltaGamma = gamma - this._lastMeasure.gamma;
+
     var gyroData = { 
-      alpha : o.alpha, 
-      beta  : o.beta, 
-      gamma : o.gamma,
+      alpha : alpha, 
+      beta  : beta, 
+      gamma : gamma,
       delta : {
         alpha : deltaAlpha, 
         beta  : deltaBeta, 
@@ -694,7 +741,8 @@ var CWGyroscope = OOP.createSingleton("Connichiwa", "CWGyroscope", {
     };
     CWEventManager.trigger(5, "gyroscopeUpdate", gyroData);
 
-    //Send accelerometer update
+    // ACCELEROMETER
+
     var deltaX = o.x - this._lastMeasure.x;
     var deltaY = o.y - this._lastMeasure.y;
     var deltaZ = o.z - this._lastMeasure.z;
@@ -711,7 +759,7 @@ var CWGyroscope = OOP.createSingleton("Connichiwa", "CWGyroscope", {
     CWEventManager.trigger(5, "accelerometerUpdate", accelData);
 
     //We need to copy the values of o because o will be altered by gyro
-    this._lastMeasure = { x: o.x, y: o.y, z: o.z, alpha: o.alpha, beta: o.beta, gamma: o.gamma };
+    this._lastMeasure = { x: o.x, y: o.y, z: o.z, alpha: alpha, beta: beta, gamma: gamma };
   },
 
 
@@ -1245,10 +1293,12 @@ var CWUtil = (function()
   {
     if (type === undefined) type = "page";
 
-    var pos = { x: e[type+"X"], y: e[type+"Y"] };
+    var seen = [];
+    var pos = { x: e[type + "X"], y: e[type + "Y"] };
     if (pos.x === undefined || pos.y === undefined)
     {
-      pos = { x: e.originalEvent.targetTouches[0][type+"X"], y: e.originalEvent.targetTouches[0][type+"Y"] };
+      var touches = (e.originalEvent === undefined) ? e.targetTouches : e.originalEvent.targetTouches;
+      pos = { x: touches[0][type + "X"], y: touches[0][type + "Y"] };
     }
 
     return pos;
@@ -1376,6 +1426,8 @@ var CWWebsocketMessageParser = OOP.createSingleton("Connichiwa", "CWWebsocketMes
       case "_wasunstitched"     : this._parseWasUnstitched(message);     break;
       case "_gotstitchneighbor" : this._parseGotStitchNeighbor(message); break;
     }
+
+    return true;
   },
 
 
@@ -1437,8 +1489,9 @@ var Connichiwa = OOP.createSingleton("Connichiwa", "Connichiwa", {
   "private _websocket" : undefined,
 
 
-  "public getIdentifier" : function() { /* ABSTRACT */ },
-  "public isMaster"      : function() { /* ABSTRACT */ },
+  "public getLocalDevice" : function() { /* ABSTRACT */ },
+  "public getIdentifier"  : function() { /* ABSTRACT */ },
+  "public isMaster"       : function() { /* ABSTRACT */ },
 
 
   "public on": function(eventName, callback) {
@@ -1603,11 +1656,14 @@ var Connichiwa = OOP.createSingleton("Connichiwa", "Connichiwa", {
 
   "public broadcast": function(name, message, sendToSelf) 
   {
-    this.send("broadcast", name, message);
-
-    if (sendToSelf === true) {
-      this.send(this.getIdentifier(), name, message);
+    if (sendToSelf) {
+      message._broadcastToSource = true;
     }
+    
+    this.send("broadcast", name, message);
+    // if (sendToSelf === true) {
+      // this.send(this.getIdentifier(), name, message);
+    // }
   },
 
 
@@ -1624,7 +1680,7 @@ var Connichiwa = OOP.createSingleton("Connichiwa", "Connichiwa", {
       return;
     }
 
-    message._id = CWUtil.randomInt();
+    message._id = CWUtil.randomInt(0, 100000);
     message._name = message._name.toLowerCase();
 
     var messageString = JSON.stringify(message);
@@ -2363,7 +2419,7 @@ OOP.extendSingleton("Connichiwa", "CWWebsocketMessageParser",
 {
   "package parseOnMaster": function(message) {
     switch (message._name) {
-      case "_remoteinfo"   :  this._parseRemoteInfo(message);  break;
+      case "remoteinfo"   :  this._parseRemoteInfo(message);  break;
       case "_stitchswipe" :  this._parseStitchSwipe(message); break;
       case "_quitstitch"  :  this._parseQuitStitch(message);  break;
     }
@@ -2462,6 +2518,11 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
   // PUBLIC API
   
 
+  "public getLocalDevice": function() {
+    return CWDeviceManager.getLocalDevice();
+  },
+  
+
   "public getIdentifier": function() 
   {
     var localDevice = CWDeviceManager.getLocalDevice();
@@ -2525,6 +2586,15 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
   _onWebsocketMessage: function(e)
   {
     var message = JSON.parse(e.data);
+
+    //Filter messages that were broadcasted by us and do not have the
+    //"_broadcastToSource" flag set
+    if (message._target === "broadcast" && 
+      message._source === this.getLocalDevice().getIdentifier() && 
+      message._broadcastToSource !== true) {
+      return;
+    }
+
     CWDebug.log(4, "Received message: " + e.data);
     
     //It seems that reacting immediatly to a websocket message

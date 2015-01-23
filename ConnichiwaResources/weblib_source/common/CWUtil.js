@@ -22,10 +22,12 @@ var CWUtil = (function()
   {
     if (type === undefined) type = "page";
 
-    var pos = { x: e[type+"X"], y: e[type+"Y"] };
+    var seen = [];
+    var pos = { x: e[type + "X"], y: e[type + "Y"] };
     if (pos.x === undefined || pos.y === undefined)
     {
-      pos = { x: e.originalEvent.targetTouches[0][type+"X"], y: e.originalEvent.targetTouches[0][type+"Y"] };
+      var touches = (e.originalEvent === undefined) ? e.targetTouches : e.originalEvent.targetTouches;
+      pos = { x: touches[0][type + "X"], y: touches[0][type + "Y"] };
     }
 
     return pos;

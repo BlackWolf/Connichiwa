@@ -16,6 +16,11 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
   },
 
 
+  "public getLocalDevice": function() {
+    return this._localDevice;
+  },
+
+
   "public getIdentifier": function() 
   {
     return this._localDevice.getIdentifier();
@@ -34,7 +39,7 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
     }
 
     //Let the master know about our new device information
-    this.send("master", "_remoteinfo", properties);
+    this.send("master", "remoteinfo", properties);
   },
 
 
@@ -97,6 +102,15 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
   _onWebsocketMessage: function(e)
   {
     var message = JSON.parse(e.data);
+
+    //Filter messages that were broadcasted by us and do not have the
+    //"_broadcastToSource" flag set
+    if (message._target === "broadcast" && 
+      message._source === this.getLocalDevice().getIdentifier() && 
+      message._broadcastToSource !== true) {
+      return;
+    }
+
     CWDebug.log(4, "Received message: " + e.data);
 
     //It seems that reacting immediatly to a websocket message
@@ -125,7 +139,7 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
     //can be reestablished over Bluetooth. If we are running native-less we
     //try to reconnect to the master
     if (runsNative === false) {
-      window.setTimeout(this._tryWebsocketReconnect, 5000);
+      // window.setTimeout(this._tryWebsocketReconnect, 5000);
     }
   },
 

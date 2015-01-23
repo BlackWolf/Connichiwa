@@ -13,6 +13,11 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
   // PUBLIC API
   
 
+  "public getLocalDevice": function() {
+    return CWDeviceManager.getLocalDevice();
+  },
+  
+
   "public getIdentifier": function() 
   {
     var localDevice = CWDeviceManager.getLocalDevice();
@@ -76,6 +81,15 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
   _onWebsocketMessage: function(e)
   {
     var message = JSON.parse(e.data);
+
+    //Filter messages that were broadcasted by us and do not have the
+    //"_broadcastToSource" flag set
+    if (message._target === "broadcast" && 
+      message._source === this.getLocalDevice().getIdentifier() && 
+      message._broadcastToSource !== true) {
+      return;
+    }
+
     CWDebug.log(4, "Received message: " + e.data);
     
     //It seems that reacting immediatly to a websocket message

@@ -7,8 +7,9 @@ var Connichiwa = OOP.createSingleton("Connichiwa", "Connichiwa", {
   "private _websocket" : undefined,
 
 
-  "public getIdentifier" : function() { /* ABSTRACT */ },
-  "public isMaster"      : function() { /* ABSTRACT */ },
+  "public getLocalDevice" : function() { /* ABSTRACT */ },
+  "public getIdentifier"  : function() { /* ABSTRACT */ },
+  "public isMaster"       : function() { /* ABSTRACT */ },
 
 
   "public on": function(eventName, callback) {
@@ -173,11 +174,14 @@ var Connichiwa = OOP.createSingleton("Connichiwa", "Connichiwa", {
 
   "public broadcast": function(name, message, sendToSelf) 
   {
-    this.send("broadcast", name, message);
-
-    if (sendToSelf === true) {
-      this.send(this.getIdentifier(), name, message);
+    if (sendToSelf) {
+      message._broadcastToSource = true;
     }
+    
+    this.send("broadcast", name, message);
+    // if (sendToSelf === true) {
+      // this.send(this.getIdentifier(), name, message);
+    // }
   },
 
 
@@ -194,7 +198,7 @@ var Connichiwa = OOP.createSingleton("Connichiwa", "Connichiwa", {
       return;
     }
 
-    message._id = CWUtil.randomInt();
+    message._id = CWUtil.randomInt(0, 100000);
     message._name = message._name.toLowerCase();
 
     var messageString = JSON.stringify(message);

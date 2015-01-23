@@ -35,16 +35,14 @@ function CWDevice(properties)
   var _launchDate = Date.now() / 1000.0;
   var _ips = [];
   var _port = undefined;
-  var _name = "unknown";
+  var _name = "remote device";
   var _ppi = CWSystemInfo.DEFAULT_PPI();
-  var _isLocal = false; 
 
   if (properties.launchDate) _launchDate = properties.launchDate;
   if (properties.ips) _ips = properties.ips;
   if (properties.port) _port = properties.port;
   if (properties.name) _name = properties.name;
   if (properties.ppi && properties.ppi > 0) _ppi = properties.ppi;
-  if (properties.isLocal) _isLocal = properties.isLocal;
   
   /**
    * Returns the identifier of this device
@@ -67,7 +65,7 @@ function CWDevice(properties)
   this.getPPI = function() { return _ppi; };
 
   this.isLocal = function() {
-    return this._isLocal;
+    return this.equalTo(Connichiwa.getLocalDevice());
   };
   
   this.isNearby = function()

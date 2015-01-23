@@ -67,6 +67,7 @@ app.use("/connichiwa", Express.static(RESOURCES_PATH + "/weblib"));
 //DOCUMENT_ROOT (web app) is served as /
 app.use("/", Express.static(DOCUMENT_ROOT));
 
+httpListening = true;
 var onHttpListening = function()
 {
   httpListening = true;
@@ -343,9 +344,9 @@ function startListening()
   wsUnidentifiedConnections = [];
   wsRemoteConnections = {};
 
-  http = app.listen(HTTP_PORT, onHttpListening);
-  websocket = new WebsocketServer({ port: WEBSOCKET_PORT }, onWebsocketListening);
-  websocket.on("connection", onWebsocketConnection);
+  // http = app.listen(HTTP_PORT, onHttpListening);
+//  websocket = new WebsocketServer({ port: WEBSOCKET_PORT }, onWebsocketListening);
+//  websocket.on("connection", onWebsocketConnection);
 }
 
 

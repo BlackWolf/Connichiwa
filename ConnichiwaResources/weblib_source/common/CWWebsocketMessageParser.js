@@ -15,6 +15,8 @@ var CWWebsocketMessageParser = OOP.createSingleton("Connichiwa", "CWWebsocketMes
       case "_wasunstitched"     : this._parseWasUnstitched(message);     break;
       case "_gotstitchneighbor" : this._parseGotStitchNeighbor(message); break;
     }
+
+    return true;
   },
 
 

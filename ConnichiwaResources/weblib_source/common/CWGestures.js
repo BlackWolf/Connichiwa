@@ -1,24 +1,35 @@
-/* global CWEventManager, CWVector, CWDebug, Connichiwa, CWUtil */
+/* global OOP, CWEventManager, CWVector, CWDebug, Connichiwa, CWUtil */
 "use strict";
 
 
-$(document).ready(function() {
-  var touchStart;
-  var touchLast;
-  var touchLastVector;
-  var touchCheckable = false;
-  var touchAngleReferenceVector;
-  var touchAngleChangedCount = 0;
-  $("body").on("mousedown touchstart", function(e) {
-    touchStart = CWUtil.getEventLocation(e, "client");
-  });
 
-  $("body").on("mousemove touchmove", function(e) {
-    if (touchStart === undefined) return;
+var CWGestures = OOP.createSingleton("Connichiwa", "CWGestures", {
+  "private _touchStart": undefined,
+  "private _touchLast": undefined,
+  "private _touchLastVector": undefined,
+  "private _touchCheckable": false,
+  "private _touchAngleReferenceVector": undefined,
+  "private _touchAngleChangedCount": 0,
+
+  __constructor: function() {
+    var that = this;
+    $(document).ready(function() {
+      that.captureOn($("body"));
+    });
+  },
+
+
+  "private _onDown": function(e) {
+    this._touchStart = CWUtil.getEventLocation(e, "client");
+  },
+
+
+  "private _onMove": function(e) {
+    if (this._touchStart === undefined) return;
 
     var newTouch = CWUtil.getEventLocation(e, "client");
 
-    //In touchend, we only compare touchStart to touchLast, so it is possible that
+    //In touchend, we only compare this._touchStart to this._touchLast, so it is possible that
     //the user starts swiping, then goes in the opposite direction and then in the
     //first direction again, which would be detected as a valid swipe.
     //To prevent this, we try to detect direction changes here by checking the angle
@@ -27,67 +38,68 @@ $(document).ready(function() {
     //Unfortunately, touches can "jitter", so we need to make sure that
     //small (or very short) angle changes don't cancel the swipe. Because of this,
     //once we detect a direction change we save the last "valid" finger vector into
-    //touchAngleReferenceVector. We then compare the following vectors to that 
+    //this._touchAngleReferenceVector. We then compare the following vectors to that 
     //reference vector. Only if 3 touches in a row have a direction change, we cancel
     //the swipe.
     //
     //Furthermore, we add some noise reduction by making sure the last finger vector
     //has a minimum length of 2 and the entire swipe is at least 5 pixels in length
-    if (touchLast !== undefined) {
-      var totalTouchVector = new CWVector(touchStart, newTouch);
-      var newTouchVector   = new CWVector(touchLast, newTouch);
+    if (this._touchLast !== undefined) {
+      var totalTouchVector = new CWVector(this._touchStart, newTouch);
+      var newTouchVector   = new CWVector(this._touchLast,  newTouch);
 
-      var touchCheckable = (touchCheckable || totalTouchVector.length() > 5);
-      if (touchCheckable && newTouchVector.length() > 1) {
+      this._touchCheckable = (this._touchCheckable || totalTouchVector.length() > 5);
+      if (this._touchCheckable && newTouchVector.length() > 1) {
 
         //A previous touch was a direction change, compare with the saved
         //reference vector by calculating their angle
-        if (touchAngleReferenceVector !== undefined) {
-          var referenceTouchAngle = newTouchVector.angle(touchAngleReferenceVector);
+        if (this._touchAngleReferenceVector !== undefined) {
+          var referenceTouchAngle = newTouchVector.angle(this._touchAngleReferenceVector);
           if (referenceTouchAngle > 20) {
           // if (referenceTouchAngle > 30) {
-            touchAngleChangedCount++;
+            this._touchAngleChangedCount++;
 
-            if (touchAngleChangedCount === 3) {
-              touchStart = undefined;
-              touchLast  = undefined;
+            if (this._touchAngleChangedCount === 3) {
+              this._touchStart = undefined;
+              this._touchLast  = undefined;
               return;
             }
           } else {
-            touchAngleReferenceVector = undefined;
-            touchAngleChangedCount = 0;
+            this._touchAngleReferenceVector = undefined;
+            this._touchAngleChangedCount = 0;
           }
 
         //Compare the current finger vector to the last finger vector and see
         //if the direction has changed by calculating their angle
         } else {
-          if (touchLastVector !== undefined) {
-            var newTouchAngle = newTouchVector.angle(touchLastVector);
+          if (this._touchLastVector !== undefined) {
+            var newTouchAngle = newTouchVector.angle(this._touchLastVector);
             if (newTouchAngle > 20) {
             // if (newTouchAngle > 30) {
-              touchAngleReferenceVector = touchLastVector;
-              touchAngleChangedCount = 1;
+              this._touchAngleReferenceVector = this._touchLastVector;
+              this._touchAngleChangedCount = 1;
             }
           }
         }
       }
 
-      if (newTouchVector.length() > 0) touchLastVector = newTouchVector;
+      if (newTouchVector.length() > 0) this._touchLastVector = newTouchVector;
     } 
 
-    touchLast = newTouch;
-  });
+    this._touchLast = newTouch;
+  },
 
-  $("body").on("mouseup touchend", function(e) {
-    var swipeStart = touchStart;
-    var swipeEnd   = touchLast;
 
-    touchStart                = undefined;
-    touchLast                 = undefined;
-    touchLastVector           = undefined;
-    touchCheckable            = false;
-    touchAngleReferenceVector = undefined;
-    touchAngleChangedCount    = 0;
+  "private _onUp": function(e) {
+    var swipeStart = this._touchStart;
+    var swipeEnd   = this._touchLast;
+
+    this._touchStart                = undefined;
+    this._touchLast                 = undefined;
+    this._touchLastVector           = undefined;
+    this._touchCheckable            = false;
+    this._touchAngleReferenceVector = undefined;
+    this._touchAngleChangedCount    = 0;
 
     if (swipeStart === undefined || swipeEnd === undefined) return;
 
@@ -167,5 +179,22 @@ $(document).ready(function() {
       y    : swipeEnd.y
     };
     CWEventManager.trigger("stitchswipe", swipeData);
-  });
+  },
+
+
+  "public captureOn": function(el) {
+    if (el instanceof jQuery) el = el.get(0);
+
+    //el.on("mousedown this._touchStart", this._onDown);
+    el.addEventListener("mousedown",  this._onDown, true);
+    el.addEventListener("touchstart", this._onDown, true);
+
+    //el.on("mousemove touchmove", this._onMove);
+    el.addEventListener("mousemove", this._onMove, true);
+    el.addEventListener("touchmove", this._onMove, true);
+
+    //el.on("mouseup touchend", this._onUp);
+    el.addEventListener("mouseup",  this._onUp, true);
+    el.addEventListener("touchend", this._onUp, true);
+  }
 });
