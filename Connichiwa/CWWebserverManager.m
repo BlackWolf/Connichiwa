@@ -29,8 +29,8 @@
 @property (strong, readwrite) NLContext *nodelikeContext;
 @property (strong, readwrite) GCDWebServer *webServer;
 @property (strong, readwrite) BLWebSocketsServer *websocketServer;
-@property (readwrite) int localSession;
-@property (strong, readwrite) NSMutableDictionary *sessionIdentifiers;
+@property (readwrite) int localWebsocketID;
+@property (strong, readwrite) NSMutableDictionary *websocketIdentifiers;
 
 /**
  *  Registers callback functions that the webserver script can call to execute native methods
@@ -74,183 +74,67 @@
     self.state = CWWebserverManagerStateStarting;
     
     self.documentRoot = documentRoot;
-    self.sessionIdentifiers = [NSMutableDictionary dictionary];
+    self.websocketIdentifiers = [NSMutableDictionary dictionary];
+
+    //
+    // WEBSERVER
+    //
     
-    // Create server
     self.webServer = [[GCDWebServer alloc] init];
     
-    [self.webServer
-     addGETHandlerForBasePath:@"/"
-     directoryPath:self.documentRoot
-     indexFilename:@"index.html"
-     cacheAge:0
-     allowRangeRequests:YES];
-    
+    //Set up all the path handlers of the webserver that will deliver our files
+    //Note that they are handled in LIFO order, so the last handler will be checked first,
+    //and the server will then walk up until it finds a handler that fits
     NSMutableString *resourcePath = [[[CWBundle bundle] bundlePath] mutableCopy];
     
-    [self.webServer
-     addGETHandlerForBasePath:@"/connichiwa/"
-     directoryPath:[resourcePath stringByAppendingPathComponent:@"weblib"]
-     indexFilename:nil
-     cacheAge:0
-     allowRangeRequests:YES];
+    //Map documentRoot to the root (/), which will deliver the actual web application
+    [self.webServer addGETHandlerForBasePath:@"/"
+                               directoryPath:self.documentRoot
+                               indexFilename:@"index.html"
+                                    cacheAge:0
+                          allowRangeRequests:YES];
     
-    [self.webServer
-     addGETHandlerForBasePath:@"/connichiwa/scripts/"
-     directoryPath:[resourcePath stringByAppendingPathComponent:@"scripts"]
-     indexFilename:nil
-     cacheAge:0
-     allowRangeRequests:YES];
+    //Serve the Connichiwa Web Libraries under /connichiwa
+    [self.webServer addGETHandlerForBasePath:@"/connichiwa/"
+                               directoryPath:[resourcePath stringByAppendingPathComponent:@"weblib"]
+                               indexFilename:nil
+                                    cacheAge:0
+                          allowRangeRequests:YES];
     
-    [self.webServer addGETHandlerForPath:@"/remote" filePath:[resourcePath stringByAppendingPathComponent:@"remote.html"] isAttachment:NO cacheAge:0 allowRangeRequests:YES];
+    //Serve additional Connichiwa scripts under /connichiwa/scripts
+    [self.webServer addGETHandlerForBasePath:@"/connichiwa/scripts/"
+                               directoryPath:[resourcePath stringByAppendingPathComponent:@"scripts"]
+                               indexFilename:nil
+                                    cacheAge:0
+                          allowRangeRequests:YES];
     
-    [self.webServer
-     addHandlerForMethod:@"GET" path:@"/check" requestClass:[GCDWebServerRequest class] processBlock:^GCDWebServerResponse *(GCDWebServerRequest* request) {
+    //Serve the file accessed by remote devices under /remote
+    [self.webServer addGETHandlerForPath:@"/remote"
+                                filePath:[resourcePath stringByAppendingPathComponent:@"remote.html"]
+                            isAttachment:NO
+                                cacheAge:0
+                      allowRangeRequests:YES];
+    
+    //Deliver a minimal 200 response for /check, which can be used to check if this server exists
+    [self.webServer addHandlerForMethod:@"GET" path:@"/check"
+                           requestClass:[GCDWebServerRequest class]
+                           processBlock:^GCDWebServerResponse *(GCDWebServerRequest* request) {
          return [GCDWebServerResponse responseWithStatusCode:200];
      }];
-
-//    [self.webServer
-//     addGETHandlerForBasePath:@"/gallery/"
-//     directoryPath:[[self.documentRoot mutableCopy] stringByAppendingPathExtension:@"gallery/"]
-//     indexFilename:@"index.html"
-//     cacheAge:0
-//     allowRangeRequests:YES];
     
-    // Add a handler to respond to GET requests on any URL
-//    [self.webServer addDefaultHandlerForMethod:@"GET"
-//                              requestClass:[GCDWebServerRequest class]
-//                              processBlock:^GCDWebServerResponse *(GCDWebServerRequest* request) {
-//                                  
-//                                  return [GCDWebServerDataResponse responseWithHTML:@"<html><body><p>Hello World</p> <img src='/sound.png'></body></html>"];
-//                                  
-//                              }];
-    
+    //
+    // WEBSOCKET SERVER
+    //
     
     self.websocketServer = [BLWebSocketsServer sharedInstance];
     
-    __weak typeof(self) weakSelf = self;
-    static NSString *nexttarget;
-    [self.websocketServer setDefaultHandleRequestBlock:^NSData *(int session, NSData *requestData) {
-        NSString *string = [[NSString alloc] initWithData:requestData encoding:NSUTF8StringEncoding];
-        NSLog(@"GOT A MESSAGE: %@", string);
-        NSDictionary *msg = [CWUtil dictionaryFromJSONData:requestData];
-        
-        if ([[msg objectForKey:@"_name"] isEqualToString:@"localinfo"]) {
-            NSLog(@"FOUND LOCAL INFO");
-            weakSelf.localSession = session;
-            
-            NSString *identifier = [msg objectForKey:@"identifier"];
-            [weakSelf.sessionIdentifiers setObject:[NSNumber numberWithInt:session] forKey:identifier];
-            
-            // onLocalMessage
-            [weakSelf.websocketServer setHandleRequestBlock:^NSData *(int session, NSData *requestData) {
-                NSDictionary *msg = [CWUtil dictionaryFromJSONData:requestData];
-                NSString *target = [msg objectForKey:@"_target"];
-                if ([target isEqualToString:@"broadcast"]) {
-                    NSLog(@"BROADCASTING LOCAL MESSAGE");
-                    [weakSelf.websocketServer pushToAll:requestData];
-                } else {
-                    int targetSession = [[weakSelf.sessionIdentifiers objectForKey:target] intValue];
-                    NSLog(@"SENDING LOCAL MESSAGE TO %@ (%d)", target, targetSession);
-                    [weakSelf.websocketServer push:requestData toSession:targetSession];
-                }
-                return nil;
-            } forSession:session];
-        }
-        
-        if ([[msg objectForKey:@"_name"] isEqualToString:@"remoteinfo"]) {
-            NSLog(@"FOUND REMOTE INFO");
-            
-            NSString *identifier = [msg objectForKey:@"identifier"];
-            [weakSelf.sessionIdentifiers setObject:[NSNumber numberWithInt:session] forKey:identifier];
-            
-            // onRemoteMessage
-            [weakSelf.websocketServer setHandleRequestBlock:^NSData *(int session, NSData *requestData) {
-                NSDictionary *msg = [CWUtil dictionaryFromJSONData:requestData];
-                
-                if ([[msg objectForKey:@"_name"] isEqualToString:@"_nexttarget"]) {
-                    //Remember next target
-                    nexttarget = [msg objectForKey:@"_target"];
-                    return nil;
-                }
-                if ([[msg objectForKey:@"_target"] isEqualToString:@"broadcast"]) {
-                    NSLog(@"BROADCASTING REMOTE MESSAGE");
-                    [weakSelf.websocketServer pushToAll:requestData];
-                } else {
-                    NSString *target = [msg objectForKey:@"_target"];
-                    
-                    if (target == nil) target = nexttarget;
-                    
-                    int targetSession;
-                    if ([target isEqualToString:@"master"]) {
-                        targetSession = weakSelf.localSession;
-                    } else {
-                        targetSession = [[weakSelf.sessionIdentifiers objectForKey:target] intValue];
-                    }
-                    NSLog(@"SENDING REMOTE MESSAGE TO %@ (%d): %@", target, targetSession, @"");
-                    [weakSelf.websocketServer push:requestData toSession:targetSession];
-                }
-                return nil;
-            } forSession:session];
-            
-            //Relay remote info to the local weblib
-            [weakSelf.websocketServer push:requestData toSession:weakSelf.localSession];
-        }
-        
-        return nil;
-    }];
-    
-//    [self.websocketServer setHandleRequestBlock:^NSData *(int id, NSData *requestData) {
-//        NSLog(@"IT TOTALLY WORKS!!");
-//        return requestData;
-//    } forSession:0];
+    //Set the default handlers for unidentified connections
+    //A connection is considered "unidentified" as long as we can't map it to a connichiwa device identifier
+    //This mapping can be done once we received either the localinfo or remoteinfo message from a device
+    [self.websocketServer setDefaultHandleRequestBlock:[self onUnidentifiedWebsocketMessage]];
     
     [self.webServer startWithPort:port bonjourName:nil];
-//    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.websocketServer startListeningOnPort:(port+1) withProtocolName:nil andCompletionBlock:^(NSError *error) { [self _receivedFromServer_serverDidStart]; }];
-//    });
-    
-//    [self _receivedFromServer_serverDidStart];
-    
-//    self.nodelikeContext = [[NLContext alloc] initWithVirtualMachine:[[JSVirtualMachine alloc] init]];
-//    
-//    //Register JS error handler
-//    self.nodelikeContext.exceptionHandler = ^(JSContext *c, JSValue *e) {
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            _CWLog(1, @"WEBSERVER", @"?????", -1, @"JAVASCRIPT ERROR: %@. Stack: %@", e, [e valueForProperty:@"stack"]);
-//        });
-//    };
-//    
-//    id logger = ^(NSString *logMessage)
-//    {
-//        NSArray *components = [logMessage componentsSeparatedByString:@"|"]; //array should contain: prio, message
-//        if ([components count] != 2)
-//        {
-//            _CWLog(1, @"WEBSERVER", @"?????", -1, logMessage);
-//        }
-//        else
-//        {
-//            _CWLog([[components objectAtIndex:0] intValue], @"WEBSERVER", @"?????", -1, [components objectAtIndex:1]);
-//        }
-//    };
-//    self.nodelikeContext[@"console"][@"log"] = logger;
-//    self.nodelikeContext[@"console"][@"error"] = logger;
-//    //TODO we should add the other console types (warn, ...) and maybe format them specially
-//    
-//    [self _registerJSCallbacks];
-//    
-//    //Pass some infos to the webserver
-//    self.nodelikeContext[@"HTTP_PORT"] = [NSString stringWithFormat:@"%d", port];
-//    self.nodelikeContext[@"DOCUMENT_ROOT"] = self.documentRoot;
-//    self.nodelikeContext[@"RESOURCES_PATH"] = [[CWBundle bundle] bundlePath];
-//    
-//    //Start the actual webserver by executing our Node.JS server script
-//    NSString *serverScriptPath = [[CWBundle bundle] pathForResource:@"server" ofType:@"js"];
-//    NSString *serverScript = [NSString stringWithContentsOfFile:serverScriptPath encoding:NSUTF8StringEncoding error:nil];
-//    
-//    [self.nodelikeContext evaluateScript:serverScript];
-//    [self.nodelikeContext evaluateScript:@"startListening();"];
-//    [NLContext runEventLoopAsyncInContext:self.nodelikeContext];
+    [self.websocketServer startListeningOnPort:(port+1) withProtocolName:nil andCompletionBlock:^(NSError *error) { [self _receivedFromServer_serverDidStart]; }];
 }
 
 
@@ -274,6 +158,52 @@
     // On resume, we don't need to do anything - we just make it possible for remotes to connect again
     // Furthermore, the local web library connection will automatically reconnect without us doing anything
     self.state = CWWebserverManagerStateStarted;
+}
+
+#pragma mark Websocket Callbacks
+
+- (BLWebSocketsHandleRequestBlock)onUnidentifiedWebsocketMessage {
+    __weak typeof(self) weakSelf = self;
+    
+    return ^void (int connectionID, NSData *messageData) {
+        NSDictionary *message = [CWUtil dictionaryFromJSONData:messageData];
+        
+        //Check if the message identifies the local weblib's websocket
+        //If so, save this websocket as the local one
+        if ([[message objectForKey:@"_name"] isEqualToString:@"localinfo"]) {
+            weakSelf.localWebsocketID = connectionID;
+        }
+        
+        if ([[message objectForKey:@"_name"] isEqualToString:@"localinfo"] || [[message objectForKey:@"_name"] isEqualToString:@"remoteinfo"]) {
+            //Save the Connichiwa identifier that belongs to the websocket connection
+            [weakSelf.websocketIdentifiers setObject:[NSNumber numberWithInt:connectionID] forKey:[message objectForKey:@"identifier"]];
+            
+            //Make sure messages from this websocket are handled by the appropiate handler from now on
+            [weakSelf.websocketServer setHandleRequestBlock:[weakSelf onIdentifiedWebsocketMessage] forConnection:connectionID];
+            
+            //Push the message to the local weblibrary, so it knows about the device
+            [weakSelf.websocketServer push:messageData toConnection:weakSelf.localWebsocketID];
+            
+        }
+    };
+}
+
+- (BLWebSocketsHandleRequestBlock)onIdentifiedWebsocketMessage {
+    __weak typeof(self) weakSelf = self;
+    
+    return ^void (int connectionID, NSData *messageData) {
+        NSDictionary *message = [CWUtil dictionaryFromJSONData:messageData];
+        
+        //For identified websocket messages, the server basically acts as a message relay
+        //Check where the message is supposed to be sent to and deliver it
+        NSString *target = [message objectForKey:@"_target"];
+        if ([target isEqualToString:@"broadcast"]) {
+            [weakSelf.websocketServer pushToAll:messageData];
+        } else {
+            int targetConnection = [[weakSelf.websocketIdentifiers objectForKey:target] intValue];
+            [weakSelf.websocketServer push:messageData toConnection:targetConnection];
+        }
+    };
 }
 
 

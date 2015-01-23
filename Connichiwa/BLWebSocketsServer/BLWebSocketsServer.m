@@ -10,6 +10,7 @@
 #import "libwebsockets.h"
 #import "private-libwebsockets.h"
 #import "BLAsyncMessageQueue.h"
+#import "BLWebSocketConnection.h"
 
 static int pollingInterval = 20000;
 static NSString * http_only_protocol = @"http-only";
@@ -42,7 +43,7 @@ static dispatch_queue_t networkQueue;
 @property (nonatomic, assign) struct libwebsocket_context *context;
 @property (nonatomic, strong) BLAsyncMessageQueue *asyncMessageQueue;
 @property (nonatomic, strong, readwrite) BLWebSocketsHandleRequestBlock defaultHandleRequestBlock;
-@property (nonatomic, strong, readwrite) NSMutableDictionary *handleRequestBlocks;
+@property (nonatomic, strong, readwrite) NSMutableDictionary *connections;
 /* Temporary storage for the server stopped completion block */
 @property (nonatomic, strong) void(^serverStoppedCompletionBlock)();
 /* Incremental value that defines the sessionId */
@@ -61,7 +62,7 @@ static dispatch_queue_t networkQueue;
         sharedInstance = [[self alloc] init];
         sharedInstance.defaultHandleRequestBlock = NULL;
         sharedInstance.asyncMessageQueue = [[BLAsyncMessageQueue alloc] init];
-        sharedInstance.handleRequestBlocks = [NSMutableDictionary dictionary];
+        sharedInstance.connections = [NSMutableDictionary dictionary];
     });
     return sharedInstance;
 }
@@ -179,20 +180,21 @@ static dispatch_queue_t networkQueue;
 
 #pragma mark Session Management
 
-- (void)setHandleRequestBlock:(BLWebSocketsHandleRequestBlock)handleRequestBlock forSession:(int)user {
-    NSString *key = [NSString stringWithFormat:@"%d", user];
-    BLWebSocketsHandleRequestBlock value = [handleRequestBlock copy];
-    [self.handleRequestBlocks setValue:value forKey:key];
+- (void)setHandleRequestBlock:(BLWebSocketsHandleRequestBlock)handleRequestBlock forConnection:(int)connectionID {
+    id key = [BLWebSocketsServer keyForConnectionID:connectionID];
+    BLWebSocketConnection *connection = [self.connections objectForKey:key];
+    [connection setHandleRequestBlock:handleRequestBlock];
 }
 
 #pragma mark - Async messaging
 
-- (void)push:(NSData *)data toSession:(int)session {
-    [self.asyncMessageQueue enqueueMessage:data forUserWithId:session];
+- (void)push:(NSData *)data toConnection:(int)connectionID {
+    id key = [BLWebSocketsServer keyForConnectionID:connectionID];
+    [self.asyncMessageQueue enqueueMessage:data forUserWithId:connectionID];
+    BLWebSocketConnection *connection = [self.connections objectForKey:key];
     dispatch_async(networkQueue, ^{
-        //TODO we should change this to "libwebsocket_callback_on_writable", but we need the libwebsocket object that
-        //TODO corresponds with the session id for that. we might need to store that in an additional dictionary
-        libwebsocket_callback_on_writable_all_protocol(&(self.context->protocols[1]));
+        //Make sure the new message is sent as soon as the socket is writable
+        libwebsocket_callback_on_writable(self.context, connection.socket);
     });
 }
 
@@ -201,6 +203,10 @@ static dispatch_queue_t networkQueue;
     dispatch_async(networkQueue, ^{
         libwebsocket_callback_on_writable_all_protocol(&(self.context->protocols[1]));
     });
+}
+
++ (id)keyForConnectionID:(int)connectionID {
+    return [NSNumber numberWithInt:connectionID];
 }
 
 
@@ -228,30 +234,36 @@ static int callback_websockets(struct libwebsocket_context * this,
              void *user, void *in, size_t len) {
     int *session_id = (int *) user;
     switch (reason) {
-        case LWS_CALLBACK_ESTABLISHED:
-            NSLog(@"%@", @"Connection established");
+        case LWS_CALLBACK_ESTABLISHED: {
             *session_id = sharedInstance.sessionIdIncrementalCount++;
             [sharedInstance.asyncMessageQueue addMessageQueueForUserWithId:*session_id];
             
+            id sessionKey = [BLWebSocketsServer keyForConnectionID:*session_id];
+            BLWebSocketConnection *connection = [[BLWebSocketConnection alloc] initWithID:*session_id socket:wsi];
+            [sharedInstance.connections setObject:connection forKey:sessionKey];
+            
             break;
+        }
         case LWS_CALLBACK_RECEIVE: {
-            //TODO we can use libwebsocket_is_final_fragment() and libwebsockets_remaining_packet_payload() to check if this is just a fragment of the message
-            //If so, we should add it to a buffer and only deliver it to the HandleRequestBlock after the entire message has been received
-            const size_t remaining = libwebsockets_remaining_packet_payload(wsi);
-            NSLog(@"Receive. Is Final: %d || Remain: %zu", libwebsocket_is_final_fragment(wsi), remaining);
-            NSData *data = [NSData dataWithBytes:(const void *)in length:len];
-            NSData *response = nil;
-            NSString *key = [NSString stringWithFormat:@"%d", *session_id];
-            BLWebSocketsHandleRequestBlock hrb = (BLWebSocketsHandleRequestBlock)[sharedInstance.handleRequestBlocks objectForKey:key];
-            if (!hrb) {
-                hrb = sharedInstance.defaultHandleRequestBlock;
+            id sessionKey = [BLWebSocketsServer keyForConnectionID:*session_id];
+            
+            BLWebSocketConnection *connection = [sharedInstance.connections objectForKey:sessionKey];
+            
+            NSData *chunk = [NSData dataWithBytes:(const void *)in length:len];
+            if (connection.currentMessage == nil) connection.currentMessage = [NSMutableData data];
+            [connection.currentMessage appendData:chunk];
+            
+            int isFinalFragment = libwebsocket_is_final_fragment(wsi);
+            const size_t remainingBytes = libwebsockets_remaining_packet_payload(wsi);
+            if (isFinalFragment && remainingBytes == 0) {
+                //This is the last (or only) chunk, the message is complete. We trigger the callback
+                BLWebSocketsHandleRequestBlock hrb = connection.handleRequestBlock;
+                if (!hrb) hrb = sharedInstance.defaultHandleRequestBlock;
+                if (hrb) hrb(*session_id, connection.currentMessage);
+                connection.currentMessage = nil;
+                
             }
-            if (hrb) {
-                response = hrb(*session_id, data);
-            }
-            if (response) {
-                write_data_websockets(response, wsi);
-            }
+            
             break;
         }
         case LWS_CALLBACK_SERVER_WRITEABLE: {
@@ -259,14 +271,14 @@ static int callback_websockets(struct libwebsocket_context * this,
             if (message != nil) {
                 write_data_websockets(message, wsi);
                 
-                //TODO we need this so the writeable callback is called again
-                //this might produce a lot of overhead, we should check if there are messages in the queue left
-                //also, we should change writable_all_protocol to writeable
-                libwebsocket_callback_on_writable_all_protocol(&(sharedInstance.context->protocols[1]));
+                //Make sure the rest of the message queue is processed
+                libwebsocket_callback_on_writable(sharedInstance.context, wsi);
             }
             break;
         }
         case LWS_CALLBACK_CLOSED: {
+            id sessionKey = [BLWebSocketsServer keyForConnectionID:*session_id];
+            [sharedInstance.connections removeObjectForKey:sessionKey];
             [sharedInstance.asyncMessageQueue removeMessageQueueForUserWithId:*session_id];
             break;
         }
@@ -286,5 +298,4 @@ static int callback_http(struct libwebsocket_context *context,
 {
     return 0;
 }
-
 

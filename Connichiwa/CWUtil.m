@@ -59,6 +59,7 @@
 
 + (NSDictionary *)dictionaryFromJSONData:(NSData *)JSON
 {
+    if (JSON == nil) return [NSDictionary dictionary];
     return [NSJSONSerialization JSONObjectWithData:JSON options:0 error:nil];
 }
 

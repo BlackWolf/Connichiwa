@@ -101,6 +101,8 @@
 		33618AC1195DAD37006FA51B /* CWRemoteLibraryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 33618ABF195DAD37006FA51B /* CWRemoteLibraryManager.m */; };
 		33618AC8195DEDFE006FA51B /* CWWebLibraryManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 33618AC6195DEDFE006FA51B /* CWWebLibraryManager.h */; };
 		33618AC9195DEDFE006FA51B /* CWWebLibraryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 33618AC7195DEDFE006FA51B /* CWWebLibraryManager.m */; };
+		3362DB801A72C8BE0038985E /* BLWebSocketConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 3362DB7E1A72C8BE0038985E /* BLWebSocketConnection.h */; };
+		3362DB811A72C8BE0038985E /* BLWebSocketConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 3362DB7F1A72C8BE0038985E /* BLWebSocketConnection.m */; };
 		3367186C194776C1000A7164 /* CWWebserverManagerDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 3367186B194776C1000A7164 /* CWWebserverManagerDelegate.h */; };
 		337FE7961977E07B00912293 /* weblib in Resources */ = {isa = PBXBuildFile; fileRef = 337FE7951977E07B00912293 /* weblib */; };
 		337FE7981977E2FA00912293 /* remote.html in Resources */ = {isa = PBXBuildFile; fileRef = 337FE7971977E2FA00912293 /* remote.html */; };
@@ -275,6 +277,8 @@
 		33618AC6195DEDFE006FA51B /* CWWebLibraryManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWWebLibraryManager.h; sourceTree = "<group>"; };
 		33618AC7195DEDFE006FA51B /* CWWebLibraryManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWWebLibraryManager.m; sourceTree = "<group>"; };
 		33618ACA195E233D006FA51B /* CWWebLibraryManagerDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CWWebLibraryManagerDelegate.h; sourceTree = "<group>"; };
+		3362DB7E1A72C8BE0038985E /* BLWebSocketConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BLWebSocketConnection.h; sourceTree = "<group>"; };
+		3362DB7F1A72C8BE0038985E /* BLWebSocketConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BLWebSocketConnection.m; sourceTree = "<group>"; };
 		3367186B194776C1000A7164 /* CWWebserverManagerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWWebserverManagerDelegate.h; sourceTree = "<group>"; };
 		337FE7951977E07B00912293 /* weblib */ = {isa = PBXFileReference; lastKnownFileType = folder; path = weblib; sourceTree = "<group>"; };
 		337FE7971977E2FA00912293 /* remote.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = remote.html; sourceTree = "<group>"; };
@@ -382,6 +386,8 @@
 			children = (
 				3317C6D61A714BCB008BD104 /* BLWebSocketsServer.h */,
 				3317C6D71A714BCB008BD104 /* BLWebSocketsServer.m */,
+				3362DB7E1A72C8BE0038985E /* BLWebSocketConnection.h */,
+				3362DB7F1A72C8BE0038985E /* BLWebSocketConnection.m */,
 				3317C6D81A714BCB008BD104 /* libwebsockets */,
 			);
 			path = BLWebSocketsServer;
@@ -615,6 +621,7 @@
 				333A80671953996D00420D5A /* CWBluetoothManager.h in Headers */,
 				3338A7A41A71204300898D4E /* GCDWebServerConnection.h in Headers */,
 				334AB747193FDADC00A15999 /* CWWebApplication.h in Headers */,
+				3362DB801A72C8BE0038985E /* BLWebSocketConnection.h in Headers */,
 				3338A7BC1A71204300898D4E /* GCDWebServerStreamedResponse.h in Headers */,
 				3317C6FF1A714BCB008BD104 /* getifaddrs.h in Headers */,
 				3338A7A61A71204300898D4E /* GCDWebServerFunctions.h in Headers */,
@@ -953,6 +960,7 @@
 				3317C6FB1A714BCB008BD104 /* extension-deflate-stream.c in Sources */,
 				3317C7061A714BCB008BD104 /* server-handshake.c in Sources */,
 				3317C7011A714BCB008BD104 /* libwebsockets.c in Sources */,
+				3362DB811A72C8BE0038985E /* BLWebSocketConnection.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

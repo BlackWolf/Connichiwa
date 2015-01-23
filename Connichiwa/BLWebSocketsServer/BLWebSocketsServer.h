@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-typedef NSData *(^BLWebSocketsHandleRequestBlock)(int id, NSData * requestData);
+typedef void (^BLWebSocketsHandleRequestBlock)(int connectionID, NSData *messageData);
 
 @interface BLWebSocketsServer : NSObject
 
@@ -19,8 +19,8 @@ typedef NSData *(^BLWebSocketsHandleRequestBlock)(int id, NSData * requestData);
 - (void)startListeningOnPort:(int)port withProtocolName:(NSString *)protocolName andCompletionBlock:(void(^)(NSError *error))completionBlock;
 - (void)stopWithCompletionBlock:(void(^)())completionBlock;
 - (void)setDefaultHandleRequestBlock:(BLWebSocketsHandleRequestBlock)handleRequestBlock;
-- (void)setHandleRequestBlock:(BLWebSocketsHandleRequestBlock)handleRequestBlock forSession:(int)user;
-- (void)push:(NSData *)data toSession:(int)session;
+- (void)setHandleRequestBlock:(BLWebSocketsHandleRequestBlock)handleRequestBlock forConnection:(int)user;
+- (void)push:(NSData *)data toConnection:(int)connectionID;
 - (void)pushToAll:(NSData *)data;
 
 @end
