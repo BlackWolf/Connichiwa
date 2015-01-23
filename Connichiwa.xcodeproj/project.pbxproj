@@ -31,8 +31,6 @@
 		3317C6F01A714BCB008BD104 /* BLWebSocketsServer.h in Headers */ = {isa = PBXBuildFile; fileRef = 3317C6D61A714BCB008BD104 /* BLWebSocketsServer.h */; };
 		3317C6F11A714BCB008BD104 /* BLWebSocketsServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 3317C6D71A714BCB008BD104 /* BLWebSocketsServer.m */; };
 		3317C6F21A714BCB008BD104 /* base64-decode.c in Sources */ = {isa = PBXBuildFile; fileRef = 3317C6D91A714BCB008BD104 /* base64-decode.c */; };
-		3317C6F31A714BCB008BD104 /* BLAsyncMessageQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = 3317C6DA1A714BCB008BD104 /* BLAsyncMessageQueue.h */; };
-		3317C6F41A714BCB008BD104 /* BLAsyncMessageQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 3317C6DB1A714BCB008BD104 /* BLAsyncMessageQueue.m */; };
 		3317C6F51A714BCB008BD104 /* client-handshake.c in Sources */ = {isa = PBXBuildFile; fileRef = 3317C6DC1A714BCB008BD104 /* client-handshake.c */; };
 		3317C6F61A714BCB008BD104 /* client-parser.c in Sources */ = {isa = PBXBuildFile; fileRef = 3317C6DD1A714BCB008BD104 /* client-parser.c */; };
 		3317C6F71A714BCB008BD104 /* client.c in Sources */ = {isa = PBXBuildFile; fileRef = 3317C6DE1A714BCB008BD104 /* client.c */; };
@@ -203,8 +201,6 @@
 		3317C6D61A714BCB008BD104 /* BLWebSocketsServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BLWebSocketsServer.h; sourceTree = "<group>"; };
 		3317C6D71A714BCB008BD104 /* BLWebSocketsServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BLWebSocketsServer.m; sourceTree = "<group>"; };
 		3317C6D91A714BCB008BD104 /* base64-decode.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "base64-decode.c"; sourceTree = "<group>"; };
-		3317C6DA1A714BCB008BD104 /* BLAsyncMessageQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BLAsyncMessageQueue.h; sourceTree = "<group>"; };
-		3317C6DB1A714BCB008BD104 /* BLAsyncMessageQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BLAsyncMessageQueue.m; sourceTree = "<group>"; };
 		3317C6DC1A714BCB008BD104 /* client-handshake.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "client-handshake.c"; sourceTree = "<group>"; };
 		3317C6DD1A714BCB008BD104 /* client-parser.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "client-parser.c"; sourceTree = "<group>"; };
 		3317C6DE1A714BCB008BD104 /* client.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = client.c; sourceTree = "<group>"; };
@@ -397,8 +393,6 @@
 			isa = PBXGroup;
 			children = (
 				3317C6D91A714BCB008BD104 /* base64-decode.c */,
-				3317C6DA1A714BCB008BD104 /* BLAsyncMessageQueue.h */,
-				3317C6DB1A714BCB008BD104 /* BLAsyncMessageQueue.m */,
 				3317C6DC1A714BCB008BD104 /* client-handshake.c */,
 				3317C6DD1A714BCB008BD104 /* client-parser.c */,
 				3317C6DE1A714BCB008BD104 /* client.c */,
@@ -638,7 +632,6 @@
 				33618AC8195DEDFE006FA51B /* CWWebLibraryManager.h in Headers */,
 				3338A7B41A71204300898D4E /* GCDWebServerURLEncodedFormRequest.h in Headers */,
 				3338A7AE1A71204300898D4E /* GCDWebServerDataRequest.h in Headers */,
-				3317C6F31A714BCB008BD104 /* BLAsyncMessageQueue.h in Headers */,
 				3317C6FA1A714BCB008BD104 /* extension-deflate-frame.h in Headers */,
 				3317C7051A714BCB008BD104 /* private-libwebsockets.h in Headers */,
 			);
@@ -946,7 +939,6 @@
 				33618AC1195DAD37006FA51B /* CWRemoteLibraryManager.m in Sources */,
 				3338A7AF1A71204300898D4E /* GCDWebServerDataRequest.m in Sources */,
 				3317C6FE1A714BCB008BD104 /* getifaddrs.c in Sources */,
-				3317C6F41A714BCB008BD104 /* BLAsyncMessageQueue.m in Sources */,
 				3338A7A31A71204300898D4E /* GCDWebServer.m in Sources */,
 				3338A7B11A71204300898D4E /* GCDWebServerFileRequest.m in Sources */,
 				3317C6F21A714BCB008BD104 /* base64-decode.c in Sources */,

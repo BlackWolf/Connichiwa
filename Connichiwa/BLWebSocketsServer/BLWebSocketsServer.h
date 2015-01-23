@@ -8,7 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
-typedef void (^BLWebSocketsHandleRequestBlock)(int connectionID, NSData *messageData);
+typedef void (^BLWebSocketOnMessageHandler)(int connectionID, NSData *messageData);
+typedef void (^BLWebSocketOnCloseHandler)(int connectionID);
 
 @interface BLWebSocketsServer : NSObject
 
@@ -18,9 +19,10 @@ typedef void (^BLWebSocketsHandleRequestBlock)(int connectionID, NSData *message
 
 - (void)startListeningOnPort:(int)port withProtocolName:(NSString *)protocolName andCompletionBlock:(void(^)(NSError *error))completionBlock;
 - (void)stopWithCompletionBlock:(void(^)())completionBlock;
-- (void)setDefaultHandleRequestBlock:(BLWebSocketsHandleRequestBlock)handleRequestBlock;
-- (void)setHandleRequestBlock:(BLWebSocketsHandleRequestBlock)handleRequestBlock forConnection:(int)user;
-- (void)push:(NSData *)data toConnection:(int)connectionID;
-- (void)pushToAll:(NSData *)data;
+- (void)setDefaultOnMessageHandler:(BLWebSocketOnMessageHandler)handler;
+- (void)setOnMessageHandler:(BLWebSocketOnMessageHandler)handler forConnection:(int)user;
+- (void)setOnCloseHandler:(BLWebSocketOnCloseHandler)handler forConnection:(int)connectionID;
+- (void)pushMessage:(NSData *)message toConnection:(int)connectionID;
+- (void)pushMessageToAll:(NSData *)message;
 
 @end

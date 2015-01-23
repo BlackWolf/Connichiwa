@@ -131,7 +131,7 @@
     //Set the default handlers for unidentified connections
     //A connection is considered "unidentified" as long as we can't map it to a connichiwa device identifier
     //This mapping can be done once we received either the localinfo or remoteinfo message from a device
-    [self.websocketServer setDefaultHandleRequestBlock:[self onUnidentifiedWebsocketMessage]];
+    [self.websocketServer setDefaultOnMessageHandler:[self onUnidentifiedWebsocketMessage]];
     
     [self.webServer startWithPort:port bonjourName:nil];
     [self.websocketServer startListeningOnPort:(port+1) withProtocolName:nil andCompletionBlock:^(NSError *error) { [self _receivedFromServer_serverDidStart]; }];
@@ -162,14 +162,13 @@
 
 #pragma mark Websocket Callbacks
 
-- (BLWebSocketsHandleRequestBlock)onUnidentifiedWebsocketMessage {
+- (BLWebSocketOnMessageHandler)onUnidentifiedWebsocketMessage {
     __weak typeof(self) weakSelf = self;
     
     return ^void (int connectionID, NSData *messageData) {
         NSDictionary *message = [CWUtil dictionaryFromJSONData:messageData];
         
-        //Check if the message identifies the local weblib's websocket
-        //If so, save this websocket as the local one
+        //If the message identifies the local weblib's websocket, save its ID
         if ([[message objectForKey:@"_name"] isEqualToString:@"localinfo"]) {
             weakSelf.localWebsocketID = connectionID;
         }
@@ -178,17 +177,18 @@
             //Save the Connichiwa identifier that belongs to the websocket connection
             [weakSelf.websocketIdentifiers setObject:[NSNumber numberWithInt:connectionID] forKey:[message objectForKey:@"identifier"]];
             
-            //Make sure messages from this websocket are handled by the appropiate handler from now on
-            [weakSelf.websocketServer setHandleRequestBlock:[weakSelf onIdentifiedWebsocketMessage] forConnection:connectionID];
+            //Make sure events from this websocket are handled by the appropiate handler from now on
+            [weakSelf.websocketServer setOnMessageHandler:[weakSelf onIdentifiedWebsocketMessage] forConnection:connectionID];
+            [weakSelf.websocketServer setOnCloseHandler:[weakSelf onIdentifiedWebsocketClosed] forConnection:connectionID];
             
             //Push the message to the local weblibrary, so it knows about the device
-            [weakSelf.websocketServer push:messageData toConnection:weakSelf.localWebsocketID];
+            [weakSelf.websocketServer pushMessage:messageData toConnection:weakSelf.localWebsocketID];
             
         }
     };
 }
 
-- (BLWebSocketsHandleRequestBlock)onIdentifiedWebsocketMessage {
+- (BLWebSocketOnMessageHandler)onIdentifiedWebsocketMessage {
     __weak typeof(self) weakSelf = self;
     
     return ^void (int connectionID, NSData *messageData) {
@@ -198,10 +198,26 @@
         //Check where the message is supposed to be sent to and deliver it
         NSString *target = [message objectForKey:@"_target"];
         if ([target isEqualToString:@"broadcast"]) {
-            [weakSelf.websocketServer pushToAll:messageData];
+            [weakSelf.websocketServer pushMessageToAll:messageData];
         } else {
             int targetConnection = [[weakSelf.websocketIdentifiers objectForKey:target] intValue];
-            [weakSelf.websocketServer push:messageData toConnection:targetConnection];
+            [weakSelf.websocketServer pushMessage:messageData toConnection:targetConnection];
+        }
+    };
+}
+
+- (BLWebSocketOnCloseHandler)onIdentifiedWebsocketClosed {
+    __weak typeof(self) weakSelf = self;
+    
+    return ^void (int connectionID) {
+        for (NSString *identifier in self.websocketIdentifiers.allKeys) {
+            int existingID = [[weakSelf.websocketIdentifiers objectForKey:identifier] intValue];
+            if (existingID == connectionID) {
+                if (connectionID != weakSelf.localWebsocketID) {
+                    [weakSelf _receivedFromServer_remoteWebsocketDidClose:identifier];
+                }
+                [self.websocketIdentifiers removeObjectForKey:identifier];
+            }
         }
     };
 }
