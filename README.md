@@ -1,47 +1,22 @@
 Connichiwa
 ==========
 
-A framework for local multi-device web applications. In development.
+A framework for multi-device web applications. In development.
 
-Installation
+Installation & Usage
 ==========
-For installation instructions visit the [Wiki](http://wiki.connichiwa.info)
+For installation instructions and first steps visit the [Wiki](http://wiki.connichiwa.info).
+
+Documentation
+==========
+You can find first steps and an API overview in the [Wiki](http://wiki.connichiwa.info). The documentation of the Objective-C code can be found in `ConnichiwaDocs/native` and the documentation for the JS library can be found in `ConnichiwaDocs/weblib`. Both documentations are not ready for use yet and are only considered complete on releases.
 
 Used Projects
 ==========
-Connichiwa is based on a huge number of open source projects that are also included in this repository and that you therefore download when you clone this repo. Therefore, every one of those projects should be properly listed here. A big thanks to all those people that work in their free time to release open source code that makes something like Connichiwa possible. It's simply amazing!
+Connichiwa is based on a number of open source projects and tools. A particularly large "thank you" to the people who work on great open source projects in their free time and making something like Connichiwa possible. 
 
-* The underlying webserver of Connichiwa is a fork of [Nodelike](https://github.com/node-app/Nodelike), which in turn is a cocoa version of [Node.js](http://nodejs.org).
-
-Furthermore, the following Node.js modules have been used either as provided or with slight changes to make them compatible with Nodelike:
-* [crypto-js](https://github.com/evanvosberg/crypto-js) (as part of the Nodelike fork), which is based on the [CryptoJS Javascript Library](https://code.google.com/p/crypto-js/)
-* [buffer-crc32](https://github.com/brianloveswords/buffer-crc32)
-* [bytes](https://github.com/visionmedia/bytes.js)
-* [connect](https://github.com/senchalabs/connect)
-* [cookie-signature](https://github.com/visionmedia/node-cookie-signature)
-* [debug](https://github.com/visionmedia/debug)
-* [fresh](https://github.com/visionmedia/node-fresh)
-* [parseurl](https://github.com/expressjs/parseurl)
-* [range-parser](https://github.com/visionmedia/node-range-parser)
-* [send](https://github.com/visionmedia/send)
-* [serve-static](https://github.com/expressjs/serve-static)
-* [cookie](https://github.com/defunctzombie/node-cookie)
-* [mime](https://github.com/broofa/node-mime)
-* [accepts](https://github.com/expressjs/accepts)
-* [escape-html](https://github.com/component/escape-html)
-* [express](https://github.com/visionmedia/express)
-* [methods](https://github.com/visionmedia/node-methods)
-* [morgan](https://github.com/expressjs/morgan)
-* [negotiator](https://github.com/federomero/negotiator)
-* [path-to-regexp](https://github.com/component/path-to-regexp)
-* [qs](https://github.com/visionmedia/node-querystring)
-* [type-is](https://github.com/expressjs/type-is)
-* [utils-merge](https://github.com/jaredhanson/utils-merge)
-* [options](https://github.com/einaros/options.js)
-* [ws](https://github.com/einaros/ws)
-
-Also, I want to thank the people behind [VVDocumenter-Xcode](https://github.com/onevcat/VVDocumenter-Xcode) and [appledoc](https://github.com/tomaz/appledoc) that helped make that nice documentation possible that you find in the `ConnichiwaDocs/native` folder.
-
-Furthermore, thanks to [jsdoc](https://github.com/jsdoc3/jsdoc) for creating the documentation seen in `ConnichiwaDocs/weblib` and to the people behind [jshint](http://www.jshint.com) and [jscs](https://www.npmjs.org/package/jscs) for making it easily possible to check my JS code for flaws. Also, thanks to the people who created atom.io packages for [Linter](https://github.com/AtomLinter/Linter), [Linter Jscs](https://github.com/AtomLinter/linter-jscs) and [Linter Jshint](https://github.com/AtomLinter/linter-jshint) :-)
-
-For minification of the JavaScript library and creation of sourcemaps, I used [uglifyjs](https://github.com/mishoo/UglifyJS2).
+* The underlying HTTP server is based on [GCDWebServer](https://github.com/swisspol/GCDWebServer)
+* The underlying websocket server is based on [BLWebSocketsServer](https://github.com/benlodotcom/BLWebSocketsServer)
+* The documentation in `ConnichiwaDocs/native` is based on [appledoc](https://github.com/tomaz/appledoc) and supported by [VVDocumenter-Xcode](https://github.com/onevcat/VVDocumenter-Xcode) and  [Objective-Clean](http://objclean.com/index.php)
+* The documentation in `ConnichiwaDocs/weblib` is based on [jsdoc](https://github.com/jsdoc3/jsdoc) and supported by [jshint](http://www.jshint.com) and [jscs](https://www.npmjs.org/package/jscs).
+* JavaScript code minification and sourcemap creation was done with [uglifyjs](https://github.com/mishoo/UglifyJS2).
