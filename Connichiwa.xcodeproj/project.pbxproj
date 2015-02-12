@@ -22,79 +22,74 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		3306A79E1940A386001B999A /* server.js in Resources */ = {isa = PBXBuildFile; fileRef = 3306A7981940A2DF001B999A /* server.js */; };
 		330BA3D3193F8CB300D9E54C /* CWServerManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 330BA3D1193F8CB300D9E54C /* CWServerManager.h */; };
 		330BA3D4193F8CB300D9E54C /* CWServerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 330BA3D2193F8CB300D9E54C /* CWServerManager.m */; };
 		330CBB74193E75890064AD99 /* Connichiwa.h in Headers */ = {isa = PBXBuildFile; fileRef = 33A0514E193E61CC00FED071 /* Connichiwa.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		330CBB88193F14B60064AD99 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 330CBB87193F14B60064AD99 /* CoreFoundation.framework */; };
 		330CBB8E193F14B60064AD99 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 330CBB8C193F14B60064AD99 /* InfoPlist.strings */; };
 		3317C6F01A714BCB008BD104 /* BLWebSocketsServer.h in Headers */ = {isa = PBXBuildFile; fileRef = 3317C6D61A714BCB008BD104 /* BLWebSocketsServer.h */; };
-		3317C6F11A714BCB008BD104 /* BLWebSocketsServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 3317C6D71A714BCB008BD104 /* BLWebSocketsServer.m */; };
-		3317C6F21A714BCB008BD104 /* base64-decode.c in Sources */ = {isa = PBXBuildFile; fileRef = 3317C6D91A714BCB008BD104 /* base64-decode.c */; };
-		3317C6F51A714BCB008BD104 /* client-handshake.c in Sources */ = {isa = PBXBuildFile; fileRef = 3317C6DC1A714BCB008BD104 /* client-handshake.c */; };
-		3317C6F61A714BCB008BD104 /* client-parser.c in Sources */ = {isa = PBXBuildFile; fileRef = 3317C6DD1A714BCB008BD104 /* client-parser.c */; };
-		3317C6F71A714BCB008BD104 /* client.c in Sources */ = {isa = PBXBuildFile; fileRef = 3317C6DE1A714BCB008BD104 /* client.c */; };
-		3317C6F81A714BCB008BD104 /* daemonize.c in Sources */ = {isa = PBXBuildFile; fileRef = 3317C6DF1A714BCB008BD104 /* daemonize.c */; };
-		3317C6F91A714BCB008BD104 /* extension-deflate-frame.c in Sources */ = {isa = PBXBuildFile; fileRef = 3317C6E01A714BCB008BD104 /* extension-deflate-frame.c */; };
+		3317C6F11A714BCB008BD104 /* BLWebSocketsServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 3317C6D71A714BCB008BD104 /* BLWebSocketsServer.m */; settings = {COMPILER_FLAGS = "-w"; }; };
+		3317C6F21A714BCB008BD104 /* base64-decode.c in Sources */ = {isa = PBXBuildFile; fileRef = 3317C6D91A714BCB008BD104 /* base64-decode.c */; settings = {COMPILER_FLAGS = "-w"; }; };
+		3317C6F51A714BCB008BD104 /* client-handshake.c in Sources */ = {isa = PBXBuildFile; fileRef = 3317C6DC1A714BCB008BD104 /* client-handshake.c */; settings = {COMPILER_FLAGS = "-w"; }; };
+		3317C6F61A714BCB008BD104 /* client-parser.c in Sources */ = {isa = PBXBuildFile; fileRef = 3317C6DD1A714BCB008BD104 /* client-parser.c */; settings = {COMPILER_FLAGS = "-w"; }; };
+		3317C6F71A714BCB008BD104 /* client.c in Sources */ = {isa = PBXBuildFile; fileRef = 3317C6DE1A714BCB008BD104 /* client.c */; settings = {COMPILER_FLAGS = "-w"; }; };
+		3317C6F81A714BCB008BD104 /* daemonize.c in Sources */ = {isa = PBXBuildFile; fileRef = 3317C6DF1A714BCB008BD104 /* daemonize.c */; settings = {COMPILER_FLAGS = "-w"; }; };
+		3317C6F91A714BCB008BD104 /* extension-deflate-frame.c in Sources */ = {isa = PBXBuildFile; fileRef = 3317C6E01A714BCB008BD104 /* extension-deflate-frame.c */; settings = {COMPILER_FLAGS = "-w"; }; };
 		3317C6FA1A714BCB008BD104 /* extension-deflate-frame.h in Headers */ = {isa = PBXBuildFile; fileRef = 3317C6E11A714BCB008BD104 /* extension-deflate-frame.h */; };
-		3317C6FB1A714BCB008BD104 /* extension-deflate-stream.c in Sources */ = {isa = PBXBuildFile; fileRef = 3317C6E21A714BCB008BD104 /* extension-deflate-stream.c */; };
+		3317C6FB1A714BCB008BD104 /* extension-deflate-stream.c in Sources */ = {isa = PBXBuildFile; fileRef = 3317C6E21A714BCB008BD104 /* extension-deflate-stream.c */; settings = {COMPILER_FLAGS = "-w"; }; };
 		3317C6FC1A714BCB008BD104 /* extension-deflate-stream.h in Headers */ = {isa = PBXBuildFile; fileRef = 3317C6E31A714BCB008BD104 /* extension-deflate-stream.h */; };
-		3317C6FD1A714BCB008BD104 /* extension.c in Sources */ = {isa = PBXBuildFile; fileRef = 3317C6E41A714BCB008BD104 /* extension.c */; };
-		3317C6FE1A714BCB008BD104 /* getifaddrs.c in Sources */ = {isa = PBXBuildFile; fileRef = 3317C6E51A714BCB008BD104 /* getifaddrs.c */; };
+		3317C6FD1A714BCB008BD104 /* extension.c in Sources */ = {isa = PBXBuildFile; fileRef = 3317C6E41A714BCB008BD104 /* extension.c */; settings = {COMPILER_FLAGS = "-w"; }; };
+		3317C6FE1A714BCB008BD104 /* getifaddrs.c in Sources */ = {isa = PBXBuildFile; fileRef = 3317C6E51A714BCB008BD104 /* getifaddrs.c */; settings = {COMPILER_FLAGS = "-w"; }; };
 		3317C6FF1A714BCB008BD104 /* getifaddrs.h in Headers */ = {isa = PBXBuildFile; fileRef = 3317C6E61A714BCB008BD104 /* getifaddrs.h */; };
-		3317C7001A714BCB008BD104 /* handshake.c in Sources */ = {isa = PBXBuildFile; fileRef = 3317C6E71A714BCB008BD104 /* handshake.c */; };
-		3317C7011A714BCB008BD104 /* libwebsockets.c in Sources */ = {isa = PBXBuildFile; fileRef = 3317C6E81A714BCB008BD104 /* libwebsockets.c */; };
+		3317C7001A714BCB008BD104 /* handshake.c in Sources */ = {isa = PBXBuildFile; fileRef = 3317C6E71A714BCB008BD104 /* handshake.c */; settings = {COMPILER_FLAGS = "-w"; }; };
+		3317C7011A714BCB008BD104 /* libwebsockets.c in Sources */ = {isa = PBXBuildFile; fileRef = 3317C6E81A714BCB008BD104 /* libwebsockets.c */; settings = {COMPILER_FLAGS = "-w"; }; };
 		3317C7021A714BCB008BD104 /* libwebsockets.h in Headers */ = {isa = PBXBuildFile; fileRef = 3317C6E91A714BCB008BD104 /* libwebsockets.h */; };
-		3317C7031A714BCB008BD104 /* output.c in Sources */ = {isa = PBXBuildFile; fileRef = 3317C6EA1A714BCB008BD104 /* output.c */; };
-		3317C7041A714BCB008BD104 /* parsers.c in Sources */ = {isa = PBXBuildFile; fileRef = 3317C6EB1A714BCB008BD104 /* parsers.c */; };
+		3317C7031A714BCB008BD104 /* output.c in Sources */ = {isa = PBXBuildFile; fileRef = 3317C6EA1A714BCB008BD104 /* output.c */; settings = {COMPILER_FLAGS = "-w"; }; };
+		3317C7041A714BCB008BD104 /* parsers.c in Sources */ = {isa = PBXBuildFile; fileRef = 3317C6EB1A714BCB008BD104 /* parsers.c */; settings = {COMPILER_FLAGS = "-w"; }; };
 		3317C7051A714BCB008BD104 /* private-libwebsockets.h in Headers */ = {isa = PBXBuildFile; fileRef = 3317C6EC1A714BCB008BD104 /* private-libwebsockets.h */; };
-		3317C7061A714BCB008BD104 /* server-handshake.c in Sources */ = {isa = PBXBuildFile; fileRef = 3317C6ED1A714BCB008BD104 /* server-handshake.c */; };
-		3317C7071A714BCB008BD104 /* server.c in Sources */ = {isa = PBXBuildFile; fileRef = 3317C6EE1A714BCB008BD104 /* server.c */; };
-		3317C7081A714BCB008BD104 /* sha-1.c in Sources */ = {isa = PBXBuildFile; fileRef = 3317C6EF1A714BCB008BD104 /* sha-1.c */; };
+		3317C7061A714BCB008BD104 /* server-handshake.c in Sources */ = {isa = PBXBuildFile; fileRef = 3317C6ED1A714BCB008BD104 /* server-handshake.c */; settings = {COMPILER_FLAGS = "-w"; }; };
+		3317C7071A714BCB008BD104 /* server.c in Sources */ = {isa = PBXBuildFile; fileRef = 3317C6EE1A714BCB008BD104 /* server.c */; settings = {COMPILER_FLAGS = "-w"; }; };
+		3317C7081A714BCB008BD104 /* sha-1.c in Sources */ = {isa = PBXBuildFile; fileRef = 3317C6EF1A714BCB008BD104 /* sha-1.c */; settings = {COMPILER_FLAGS = "-w"; }; };
 		3321DCDB196AA6830090D39C /* CWBluetoothTransferManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 3321DCD9196AA6830090D39C /* CWBluetoothTransferManager.h */; };
 		3321DCDC196AA6830090D39C /* CWBluetoothTransferManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3321DCDA196AA6830090D39C /* CWBluetoothTransferManager.m */; };
 		332B686F1959A2B5004B0600 /* scripts in Resources */ = {isa = PBXBuildFile; fileRef = 332B686E1959A2B5004B0600 /* scripts */; };
 		3338A7A21A71204300898D4E /* GCDWebServer.h in Headers */ = {isa = PBXBuildFile; fileRef = 3338A7841A71204300898D4E /* GCDWebServer.h */; };
-		3338A7A31A71204300898D4E /* GCDWebServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 3338A7851A71204300898D4E /* GCDWebServer.m */; };
+		3338A7A31A71204300898D4E /* GCDWebServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 3338A7851A71204300898D4E /* GCDWebServer.m */; settings = {COMPILER_FLAGS = "-w"; }; };
 		3338A7A41A71204300898D4E /* GCDWebServerConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 3338A7861A71204300898D4E /* GCDWebServerConnection.h */; };
-		3338A7A51A71204300898D4E /* GCDWebServerConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 3338A7871A71204300898D4E /* GCDWebServerConnection.m */; };
+		3338A7A51A71204300898D4E /* GCDWebServerConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 3338A7871A71204300898D4E /* GCDWebServerConnection.m */; settings = {COMPILER_FLAGS = "-w"; }; };
 		3338A7A61A71204300898D4E /* GCDWebServerFunctions.h in Headers */ = {isa = PBXBuildFile; fileRef = 3338A7881A71204300898D4E /* GCDWebServerFunctions.h */; };
-		3338A7A71A71204300898D4E /* GCDWebServerFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 3338A7891A71204300898D4E /* GCDWebServerFunctions.m */; };
+		3338A7A71A71204300898D4E /* GCDWebServerFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 3338A7891A71204300898D4E /* GCDWebServerFunctions.m */; settings = {COMPILER_FLAGS = "-w"; }; };
 		3338A7A81A71204300898D4E /* GCDWebServerHTTPStatusCodes.h in Headers */ = {isa = PBXBuildFile; fileRef = 3338A78A1A71204300898D4E /* GCDWebServerHTTPStatusCodes.h */; };
 		3338A7A91A71204300898D4E /* GCDWebServerPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 3338A78B1A71204300898D4E /* GCDWebServerPrivate.h */; };
 		3338A7AA1A71204300898D4E /* GCDWebServerRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 3338A78C1A71204300898D4E /* GCDWebServerRequest.h */; };
-		3338A7AB1A71204300898D4E /* GCDWebServerRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3338A78D1A71204300898D4E /* GCDWebServerRequest.m */; };
+		3338A7AB1A71204300898D4E /* GCDWebServerRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3338A78D1A71204300898D4E /* GCDWebServerRequest.m */; settings = {COMPILER_FLAGS = "-w"; }; };
 		3338A7AC1A71204300898D4E /* GCDWebServerResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = 3338A78E1A71204300898D4E /* GCDWebServerResponse.h */; };
-		3338A7AD1A71204300898D4E /* GCDWebServerResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 3338A78F1A71204300898D4E /* GCDWebServerResponse.m */; };
+		3338A7AD1A71204300898D4E /* GCDWebServerResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 3338A78F1A71204300898D4E /* GCDWebServerResponse.m */; settings = {COMPILER_FLAGS = "-w"; }; };
 		3338A7AE1A71204300898D4E /* GCDWebServerDataRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 3338A7911A71204300898D4E /* GCDWebServerDataRequest.h */; };
-		3338A7AF1A71204300898D4E /* GCDWebServerDataRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3338A7921A71204300898D4E /* GCDWebServerDataRequest.m */; };
+		3338A7AF1A71204300898D4E /* GCDWebServerDataRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3338A7921A71204300898D4E /* GCDWebServerDataRequest.m */; settings = {COMPILER_FLAGS = "-w"; }; };
 		3338A7B01A71204300898D4E /* GCDWebServerFileRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 3338A7931A71204300898D4E /* GCDWebServerFileRequest.h */; };
-		3338A7B11A71204300898D4E /* GCDWebServerFileRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3338A7941A71204300898D4E /* GCDWebServerFileRequest.m */; };
+		3338A7B11A71204300898D4E /* GCDWebServerFileRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3338A7941A71204300898D4E /* GCDWebServerFileRequest.m */; settings = {COMPILER_FLAGS = "-w"; }; };
 		3338A7B21A71204300898D4E /* GCDWebServerMultiPartFormRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 3338A7951A71204300898D4E /* GCDWebServerMultiPartFormRequest.h */; };
-		3338A7B31A71204300898D4E /* GCDWebServerMultiPartFormRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3338A7961A71204300898D4E /* GCDWebServerMultiPartFormRequest.m */; };
+		3338A7B31A71204300898D4E /* GCDWebServerMultiPartFormRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3338A7961A71204300898D4E /* GCDWebServerMultiPartFormRequest.m */; settings = {COMPILER_FLAGS = "-w"; }; };
 		3338A7B41A71204300898D4E /* GCDWebServerURLEncodedFormRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 3338A7971A71204300898D4E /* GCDWebServerURLEncodedFormRequest.h */; };
-		3338A7B51A71204300898D4E /* GCDWebServerURLEncodedFormRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3338A7981A71204300898D4E /* GCDWebServerURLEncodedFormRequest.m */; };
+		3338A7B51A71204300898D4E /* GCDWebServerURLEncodedFormRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3338A7981A71204300898D4E /* GCDWebServerURLEncodedFormRequest.m */; settings = {COMPILER_FLAGS = "-w"; }; };
 		3338A7B61A71204300898D4E /* GCDWebServerDataResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = 3338A79A1A71204300898D4E /* GCDWebServerDataResponse.h */; };
-		3338A7B71A71204300898D4E /* GCDWebServerDataResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 3338A79B1A71204300898D4E /* GCDWebServerDataResponse.m */; };
+		3338A7B71A71204300898D4E /* GCDWebServerDataResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 3338A79B1A71204300898D4E /* GCDWebServerDataResponse.m */; settings = {COMPILER_FLAGS = "-w"; }; };
 		3338A7B81A71204300898D4E /* GCDWebServerErrorResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = 3338A79C1A71204300898D4E /* GCDWebServerErrorResponse.h */; };
-		3338A7B91A71204300898D4E /* GCDWebServerErrorResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 3338A79D1A71204300898D4E /* GCDWebServerErrorResponse.m */; };
+		3338A7B91A71204300898D4E /* GCDWebServerErrorResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 3338A79D1A71204300898D4E /* GCDWebServerErrorResponse.m */; settings = {COMPILER_FLAGS = "-w"; }; };
 		3338A7BA1A71204300898D4E /* GCDWebServerFileResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = 3338A79E1A71204300898D4E /* GCDWebServerFileResponse.h */; };
-		3338A7BB1A71204300898D4E /* GCDWebServerFileResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 3338A79F1A71204300898D4E /* GCDWebServerFileResponse.m */; };
+		3338A7BB1A71204300898D4E /* GCDWebServerFileResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 3338A79F1A71204300898D4E /* GCDWebServerFileResponse.m */; settings = {COMPILER_FLAGS = "-w"; }; };
 		3338A7BC1A71204300898D4E /* GCDWebServerStreamedResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = 3338A7A01A71204300898D4E /* GCDWebServerStreamedResponse.h */; };
-		3338A7BD1A71204300898D4E /* GCDWebServerStreamedResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 3338A7A11A71204300898D4E /* GCDWebServerStreamedResponse.m */; };
+		3338A7BD1A71204300898D4E /* GCDWebServerStreamedResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 3338A7A11A71204300898D4E /* GCDWebServerStreamedResponse.m */; settings = {COMPILER_FLAGS = "-w"; }; };
 		333A80671953996D00420D5A /* CWBluetoothManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 333A80651953996D00420D5A /* CWBluetoothManager.h */; };
 		333A80681953996D00420D5A /* CWBluetoothManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 333A80661953996D00420D5A /* CWBluetoothManager.m */; };
 		3349D1FC198F90EF0050AF1A /* CWiDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 3349D1FA198F90EF0050AF1A /* CWiDevice.h */; };
 		3349D1FD198F90EF0050AF1A /* CWiDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 3349D1FB198F90EF0050AF1A /* CWiDevice.m */; };
-		334AB741193FABAA00A15999 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 334AB740193FABAA00A15999 /* JavaScriptCore.framework */; };
 		334AB747193FDADC00A15999 /* CWWebApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = 334AB745193FDADC00A15999 /* CWWebApplication.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		334AB748193FDADC00A15999 /* CWWebApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 334AB746193FDADC00A15999 /* CWWebApplication.m */; };
 		334AB753193FDDF800A15999 /* CWDebug.h in Headers */ = {isa = PBXBuildFile; fileRef = 334AB751193FDDF800A15999 /* CWDebug.h */; };
 		334AB754193FDDF800A15999 /* CWDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = 334AB752193FDDF800A15999 /* CWDebug.m */; };
 		334AB757193FEC6000A15999 /* CWBundle.h in Headers */ = {isa = PBXBuildFile; fileRef = 334AB755193FEC6000A15999 /* CWBundle.h */; };
 		334AB758193FEC6000A15999 /* CWBundle.m in Sources */ = {isa = PBXBuildFile; fileRef = 334AB756193FEC6000A15999 /* CWBundle.m */; };
-		334AB76D19405F0C00A15999 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 334AB76C19405F0C00A15999 /* CoreBluetooth.framework */; };
-		334AB77319405F1100A15999 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 334AB77219405F1000A15999 /* CoreLocation.framework */; };
 		33618AC0195DAD37006FA51B /* CWRemoteLibraryManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 33618ABE195DAD37006FA51B /* CWRemoteLibraryManager.h */; };
 		33618AC1195DAD37006FA51B /* CWRemoteLibraryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 33618ABF195DAD37006FA51B /* CWRemoteLibraryManager.m */; };
 		33618AC8195DEDFE006FA51B /* CWWebLibraryManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 33618AC6195DEDFE006FA51B /* CWWebLibraryManager.h */; };
@@ -104,21 +99,12 @@
 		3367186C194776C1000A7164 /* CWServerManagerDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 3367186B194776C1000A7164 /* CWServerManagerDelegate.h */; };
 		337FE7961977E07B00912293 /* weblib in Resources */ = {isa = PBXBuildFile; fileRef = 337FE7951977E07B00912293 /* weblib */; };
 		337FE7981977E2FA00912293 /* remote.html in Resources */ = {isa = PBXBuildFile; fileRef = 337FE7971977E2FA00912293 /* remote.html */; };
-		33A0514A193E61CC00FED071 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33A05149193E61CC00FED071 /* Foundation.framework */; };
 		33A05158193E61CC00FED071 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33A05157193E61CC00FED071 /* XCTest.framework */; };
-		33A05159193E61CC00FED071 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33A05149193E61CC00FED071 /* Foundation.framework */; };
 		33A0515E193E61CC00FED071 /* libConnichiwa.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 33A05146193E61CC00FED071 /* libConnichiwa.a */; };
 		33A05164193E61CC00FED071 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 33A05162193E61CC00FED071 /* InfoPlist.strings */; };
 		33A05166193E61CC00FED071 /* ConnichiwaTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 33A05165193E61CC00FED071 /* ConnichiwaTests.m */; };
 		33A87DF71951037A001BDC09 /* CWBluetoothConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 33A87DF51951037A001BDC09 /* CWBluetoothConnection.h */; };
 		33A87DF81951037A001BDC09 /* CWBluetoothConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 33A87DF61951037A001BDC09 /* CWBluetoothConnection.m */; };
-		33ABFA401A71216000D76B03 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33ABFA3F1A71216000D76B03 /* MobileCoreServices.framework */; };
-		33ABFA451A71216400D76B03 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33ABFA441A71216400D76B03 /* CFNetwork.framework */; };
-		33ABFA491A71218B00D76B03 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 33ABFA481A71218B00D76B03 /* libxml2.dylib */; };
-		33ABFA4B1A7122A100D76B03 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33ABFA4A1A7122A100D76B03 /* SystemConfiguration.framework */; };
-		33ABFA501A71236D00D76B03 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 33ABFA461A71218500D76B03 /* libz.dylib */; };
-		33ACBED3193F4A6900CD51BC /* libNodelike.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3381A027193F492600BDDF34 /* libNodelike.a */; };
-		33C3127E1940AEF600F2541C /* node_modules in Resources */ = {isa = PBXBuildFile; fileRef = 33C3127D1940AEF600F2541C /* node_modules */; };
 		33EE7EFA1955BC1500EFDE17 /* CWUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = 33EE7EF81955BC1500EFDE17 /* CWUtil.h */; };
 		33EE7EFB1955BC1500EFDE17 /* CWUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 33EE7EF91955BC1500EFDE17 /* CWUtil.m */; };
 /* End PBXBuildFile section */
@@ -138,27 +124,6 @@
 			remoteGlobalIDString = 330CBB85193F14B60064AD99;
 			remoteInfo = ConnichiwaResources;
 		};
-		3381A026193F492600BDDF34 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3381A01E193F492600BDDF34 /* Nodelike.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = B59EA08E180CB587005BF5C1;
-			remoteInfo = Nodelike;
-		};
-		3381A028193F492600BDDF34 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3381A01E193F492600BDDF34 /* Nodelike.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = B54C1F52180D37280051F826;
-			remoteInfo = uv;
-		};
-		3381A02A193F492600BDDF34 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3381A01E193F492600BDDF34 /* Nodelike.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = B54173161894341600B6636B;
-			remoteInfo = "Nodelike Tests";
-		};
 		33A0515C193E61CC00FED071 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 33A0513E193E61CC00FED071 /* Project object */;
@@ -166,35 +131,12 @@
 			remoteGlobalIDString = 33A05145193E61CC00FED071;
 			remoteInfo = Connichiwa;
 		};
-		33ACB88C19ED227C001A465F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3381A01E193F492600BDDF34 /* Nodelike.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = B54C1F51180D37280051F826;
-			remoteInfo = uv;
-		};
-		33ED02A51A5D7C07009ED3A5 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3381A01E193F492600BDDF34 /* Nodelike.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 33819FDB193F3F6100BDDF34;
-			remoteInfo = NodelikeResources;
-		};
-		33ED02A71A5D7C0B009ED3A5 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3381A01E193F492600BDDF34 /* Nodelike.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 33819FCF193F3EEB00BDDF34;
-			remoteInfo = "Nodelike Fat Binary";
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		3306A7981940A2DF001B999A /* server.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = server.js; sourceTree = "<group>"; };
 		330BA3D1193F8CB300D9E54C /* CWServerManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWServerManager.h; sourceTree = "<group>"; };
 		330BA3D2193F8CB300D9E54C /* CWServerManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWServerManager.m; sourceTree = "<group>"; };
 		330CBB86193F14B60064AD99 /* ConnichiwaResources.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ConnichiwaResources.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
-		330CBB87193F14B60064AD99 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		330CBB8B193F14B60064AD99 /* ConnichiwaResources-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ConnichiwaResources-Info.plist"; sourceTree = "<group>"; };
 		330CBB8D193F14B60064AD99 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		330CBB8F193F14B60064AD99 /* ConnichiwaResources-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ConnichiwaResources-Prefix.pch"; sourceTree = "<group>"; };
@@ -259,15 +201,12 @@
 		333A806D1953997F00420D5A /* CWBluetoothManagerDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CWBluetoothManagerDelegate.h; sourceTree = "<group>"; };
 		3349D1FA198F90EF0050AF1A /* CWiDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWiDevice.h; sourceTree = "<group>"; };
 		3349D1FB198F90EF0050AF1A /* CWiDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWiDevice.m; sourceTree = "<group>"; };
-		334AB740193FABAA00A15999 /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		334AB745193FDADC00A15999 /* CWWebApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWWebApplication.h; sourceTree = "<group>"; };
 		334AB746193FDADC00A15999 /* CWWebApplication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWWebApplication.m; sourceTree = "<group>"; };
 		334AB751193FDDF800A15999 /* CWDebug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWDebug.h; sourceTree = "<group>"; };
 		334AB752193FDDF800A15999 /* CWDebug.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWDebug.m; sourceTree = "<group>"; };
 		334AB755193FEC6000A15999 /* CWBundle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWBundle.h; sourceTree = "<group>"; };
 		334AB756193FEC6000A15999 /* CWBundle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWBundle.m; sourceTree = "<group>"; };
-		334AB76C19405F0C00A15999 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
-		334AB77219405F1000A15999 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		33618ABE195DAD37006FA51B /* CWRemoteLibraryManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWRemoteLibraryManager.h; sourceTree = "<group>"; };
 		33618ABF195DAD37006FA51B /* CWRemoteLibraryManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWRemoteLibraryManager.m; sourceTree = "<group>"; };
 		33618AC6195DEDFE006FA51B /* CWWebLibraryManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWWebLibraryManager.h; sourceTree = "<group>"; };
@@ -278,9 +217,7 @@
 		3367186B194776C1000A7164 /* CWServerManagerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWServerManagerDelegate.h; sourceTree = "<group>"; };
 		337FE7951977E07B00912293 /* weblib */ = {isa = PBXFileReference; lastKnownFileType = folder; path = weblib; sourceTree = "<group>"; };
 		337FE7971977E2FA00912293 /* remote.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = remote.html; sourceTree = "<group>"; };
-		3381A01E193F492600BDDF34 /* Nodelike.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Nodelike.xcodeproj; path = Nodelike/Nodelike.xcodeproj; sourceTree = "<group>"; };
 		33A05146193E61CC00FED071 /* libConnichiwa.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libConnichiwa.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		33A05149193E61CC00FED071 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		33A0514D193E61CC00FED071 /* Connichiwa-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Connichiwa-Prefix.pch"; sourceTree = "<group>"; };
 		33A0514E193E61CC00FED071 /* Connichiwa.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Connichiwa.h; sourceTree = "<group>"; };
 		33A05156193E61CC00FED071 /* ConnichiwaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ConnichiwaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -290,12 +227,6 @@
 		33A05165193E61CC00FED071 /* ConnichiwaTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ConnichiwaTests.m; sourceTree = "<group>"; };
 		33A87DF51951037A001BDC09 /* CWBluetoothConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWBluetoothConnection.h; sourceTree = "<group>"; };
 		33A87DF61951037A001BDC09 /* CWBluetoothConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWBluetoothConnection.m; sourceTree = "<group>"; };
-		33ABFA3F1A71216000D76B03 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
-		33ABFA441A71216400D76B03 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
-		33ABFA461A71218500D76B03 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
-		33ABFA481A71218B00D76B03 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
-		33ABFA4A1A7122A100D76B03 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
-		33C3127D1940AEF600F2541C /* node_modules */ = {isa = PBXFileReference; lastKnownFileType = folder; path = node_modules; sourceTree = "<group>"; };
 		33EE7EF81955BC1500EFDE17 /* CWUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWUtil.h; sourceTree = "<group>"; };
 		33EE7EF91955BC1500EFDE17 /* CWUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWUtil.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -305,7 +236,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				330CBB88193F14B60064AD99 /* CoreFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -313,16 +243,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				33ABFA501A71236D00D76B03 /* libz.dylib in Frameworks */,
-				33ABFA4B1A7122A100D76B03 /* SystemConfiguration.framework in Frameworks */,
-				33ABFA401A71216000D76B03 /* MobileCoreServices.framework in Frameworks */,
-				33ABFA491A71218B00D76B03 /* libxml2.dylib in Frameworks */,
-				33ABFA451A71216400D76B03 /* CFNetwork.framework in Frameworks */,
-				334AB77319405F1100A15999 /* CoreLocation.framework in Frameworks */,
-				334AB76D19405F0C00A15999 /* CoreBluetooth.framework in Frameworks */,
-				33A0514A193E61CC00FED071 /* Foundation.framework in Frameworks */,
-				334AB741193FABAA00A15999 /* JavaScriptCore.framework in Frameworks */,
-				33ACBED3193F4A6900CD51BC /* libNodelike.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -332,7 +252,6 @@
 			files = (
 				33A0515E193E61CC00FED071 /* libConnichiwa.a in Frameworks */,
 				33A05158193E61CC00FED071 /* XCTest.framework in Frameworks */,
-				33A05159193E61CC00FED071 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -359,8 +278,6 @@
 			children = (
 				337FE7951977E07B00912293 /* weblib */,
 				332B686E1959A2B5004B0600 /* scripts */,
-				33C3127D1940AEF600F2541C /* node_modules */,
-				3306A7981940A2DF001B999A /* server.js */,
 				337FE7971977E2FA00912293 /* remote.html */,
 				330CBB8A193F14B60064AD99 /* Supporting Files */,
 			);
@@ -476,17 +393,6 @@
 			path = Responses;
 			sourceTree = "<group>";
 		};
-		3381A01F193F492600BDDF34 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				3381A027193F492600BDDF34 /* libNodelike.a */,
-				3381A029193F492600BDDF34 /* libuv.a */,
-				3381A02B193F492600BDDF34 /* Nodelike Tests.xctest */,
-				33ED02A61A5D7C07009ED3A5 /* NodelikeResources.bundle */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		339A4BBD194F8D6C0072A4FC /* Bluetooth */ = {
 			isa = PBXGroup;
 			children = (
@@ -526,18 +432,7 @@
 		33A05148193E61CC00FED071 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				33ABFA4A1A7122A100D76B03 /* SystemConfiguration.framework */,
-				33ABFA481A71218B00D76B03 /* libxml2.dylib */,
-				33ABFA461A71218500D76B03 /* libz.dylib */,
-				33ABFA441A71216400D76B03 /* CFNetwork.framework */,
-				33ABFA3F1A71216000D76B03 /* MobileCoreServices.framework */,
-				334AB77219405F1000A15999 /* CoreLocation.framework */,
-				334AB76C19405F0C00A15999 /* CoreBluetooth.framework */,
-				334AB740193FABAA00A15999 /* JavaScriptCore.framework */,
-				3381A01E193F492600BDDF34 /* Nodelike.xcodeproj */,
-				33A05149193E61CC00FED071 /* Foundation.framework */,
 				33A05157193E61CC00FED071 /* XCTest.framework */,
-				330CBB87193F14B60064AD99 /* CoreFoundation.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -557,10 +452,10 @@
 				330BA3D1193F8CB300D9E54C /* CWServerManager.h */,
 				330BA3D2193F8CB300D9E54C /* CWServerManager.m */,
 				3367186B194776C1000A7164 /* CWServerManagerDelegate.h */,
-				3317C6D51A714BCB008BD104 /* BLWebSocketsServer */,
-				3338A7821A71204300898D4E /* GCDWebServer */,
 				339A4BBD194F8D6C0072A4FC /* Bluetooth */,
 				3306A7951940970D001B999A /* Helper */,
+				3317C6D51A714BCB008BD104 /* BLWebSocketsServer */,
+				3338A7821A71204300898D4E /* GCDWebServer */,
 				33A0514C193E61CC00FED071 /* Supporting Files */,
 			);
 			path = Connichiwa;
@@ -674,8 +569,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				33ACB88D19ED227C001A465F /* PBXTargetDependency */,
-				33ED02A81A5D7C0B009ED3A5 /* PBXTargetDependency */,
 				330CBB94193F17A40064AD99 /* PBXTargetDependency */,
 			);
 			name = Connichiwa;
@@ -720,12 +613,6 @@
 			mainGroup = 33A0513D193E61CC00FED071;
 			productRefGroup = 33A05147193E61CC00FED071 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 3381A01F193F492600BDDF34 /* Products */;
-					ProjectRef = 3381A01E193F492600BDDF34 /* Nodelike.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				33A05145193E61CC00FED071 /* Connichiwa */,
@@ -736,37 +623,6 @@
 		};
 /* End PBXProject section */
 
-/* Begin PBXReferenceProxy section */
-		3381A027193F492600BDDF34 /* libNodelike.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libNodelike.a;
-			remoteRef = 3381A026193F492600BDDF34 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		3381A029193F492600BDDF34 /* libuv.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libuv.a;
-			remoteRef = 3381A028193F492600BDDF34 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		3381A02B193F492600BDDF34 /* Nodelike Tests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = "Nodelike Tests.xctest";
-			remoteRef = 3381A02A193F492600BDDF34 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		33ED02A61A5D7C07009ED3A5 /* NodelikeResources.bundle */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = NodelikeResources.bundle;
-			remoteRef = 33ED02A51A5D7C07009ED3A5 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
-
 /* Begin PBXResourcesBuildPhase section */
 		330CBB84193F14B60064AD99 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
@@ -774,8 +630,6 @@
 			files = (
 				337FE7981977E2FA00912293 /* remote.html in Resources */,
 				337FE7961977E07B00912293 /* weblib in Resources */,
-				3306A79E1940A386001B999A /* server.js in Resources */,
-				33C3127E1940AEF600F2541C /* node_modules in Resources */,
 				332B686F1959A2B5004B0600 /* scripts in Resources */,
 				330CBB8E193F14B60064AD99 /* InfoPlist.strings in Resources */,
 			);
@@ -860,7 +714,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Appledoc must be installed (from https://github.com/tomaz/appledoc)\n\n# Runs appledoc command is on release build and it is installed\n# On Release builds, we actually create the documentation\n# ON Debug builds, we only run appledoc to create warnings about missing documentation\n# If the project grows, we will have to see if appledoc takes to long - then we might have to remove it from debug builds\n\n# Look at appledoc --help for all the parameters\n\nAPPLEDOC_PATH=\"/usr/local/bin/appledoc\"\nif [ -x $APPLEDOC_PATH ]; then\n\nif [ ${CONFIGURATION} == \"Release\" ]; then\n$APPLEDOC_PATH \\\n--project-name ${PRODUCT_NAME} \\\n--project-company \"Mario Schreiner\" \\\n--company-id \"com.marioschreiner\" \\\n--output ${PRODUCT_NAME}Docs/native \\\n#--ignore \"*.m\" \\\n--create-html \\\n--create-docset \\\n--install-docset \\\n--keep-undocumented-objects \\\n--keep-undocumented-members \\\n--keep-intermediate-files \\\n--no-repeat-first-par \\\n--warn-undocumented-object \\\n--warn-undocumented-member \\\n--warn-empty-description \\\n--warn-unknown-directive  \\\n--warn-missing-arg \\\n--warn-invalid-crossref \\\n--logformat xcode \\\n--exit-threshold 2 \\\n${PROJECT_DIR}/${PRODUCT_NAME}\nfi;\n\nif [ ${CONFIGURATION} == \"Debug\" ]; then\n$APPLEDOC_PATH \\\n--project-name ${PRODUCT_NAME} \\\n--project-company \"Mario Schreiner\" \\\n--company-id \"com.marioschreiner\" \\\n--output ${PRODUCT_NAME}Docs \\\n--no-create-html \\\n--no-create-docset \\\n--no-install-docset \\\n--keep-undocumented-objects \\\n--keep-undocumented-members \\\n--no-keep-intermediate-files \\\n--no-repeat-first-par \\\n--warn-undocumented-object \\\n--warn-undocumented-member \\\n--warn-empty-description \\\n--warn-unknown-directive  \\\n--warn-missing-arg \\\n--warn-invalid-crossref \\\n--logformat xcode \\\n--exit-threshold 2 \\\n${PROJECT_DIR}/${PRODUCT_NAME}\nfi;\n\nelse\necho \"install appledoc to create the native documentation\"\nfi;";
+			shellScript = "# Appledoc must be installed (from https://github.com/tomaz/appledoc)\n\n# Runs appledoc command is on release build and it is installed\n# On Release builds, we actually create the documentation\n# On Debug builds we don't run appledoc because it just takes too long. Unfortunately this means we won't get any warnings about missing documentation in debug.\n\n# Look at appledoc --help for all the parameters\n\nAPPLEDOC_PATH=\"/usr/local/bin/appledoc\"\nif [ -x $APPLEDOC_PATH ]; then\n\nif [ ${CONFIGURATION} == \"Release\" ]; then\n$APPLEDOC_PATH \\\n--project-name ${PRODUCT_NAME} \\\n--project-company \"Mario Schreiner\" \\\n--company-id \"com.marioschreiner\" \\\n--output ${PRODUCT_NAME}Docs/native \\\n#--ignore \"*.m\" \\\n--create-html \\\n--create-docset \\\n--install-docset \\\n--keep-undocumented-objects \\\n--keep-undocumented-members \\\n--keep-intermediate-files \\\n--no-repeat-first-par \\\n--warn-undocumented-object \\\n--warn-undocumented-member \\\n--warn-empty-description \\\n--warn-unknown-directive  \\\n--warn-missing-arg \\\n--warn-invalid-crossref \\\n--logformat xcode \\\n--exit-threshold 2 \\\n${PROJECT_DIR}/${PRODUCT_NAME}\nfi;\n\n#if [ ${CONFIGURATION} == \"Debug\" ]; then\n#$APPLEDOC_PATH \\\n#--project-name ${PRODUCT_NAME} \\\n#--project-company \"Mario Schreiner\" \\\n#--company-id \"com.marioschreiner\" \\\n#--output ${PRODUCT_NAME}Docs \\\n#--no-create-html \\\n#--no-create-docset \\\n#--no-install-docset \\\n#--keep-undocumented-objects \\\n#--keep-undocumented-members \\\n#--no-keep-intermediate-files \\\n#--no-repeat-first-par \\\n#--warn-undocumented-object \\\n#--warn-undocumented-member \\\n#--warn-empty-description \\\n#--warn-unknown-directive  \\\n#--warn-missing-arg \\\n#--warn-invalid-crossref \\\n#--logformat xcode \\\n#--exit-threshold 2 \\\n#${PROJECT_DIR}/${PRODUCT_NAME}\n#fi;\n\nelse\necho \"install appledoc to create the native documentation\"\nfi;";
 		};
 		3367186D19489121000A7164 /* Create JSDoc Script */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -874,7 +728,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# CREATE JSDOC\n# Jsdoc needs to be installed (npm install -g jsdoc@\"<=3.3.0\")\n\nPATH=$(bash -l -c 'echo $PATH')\nJSDOC_PATH=\"/usr/local/bin/jsdoc\"\nif [ -x $JSDOC_PATH ]; then\n\nif [ ${CONFIGURATION} == \"Release\" ]; then\nrm -r ${PROJECT_DIR}/${PRODUCT_NAME}Docs/weblib # Needed because jsdoc only overwrites, but doesnt delete old files\n$JSDOC_PATH ${PROJECT_DIR}/${PRODUCT_NAME}Resources/weblib/connichiwa.js -c ${PROJECT_DIR}/${PRODUCT_NAME}Docs/jsdoc_conf.json -d ${PROJECT_DIR}/${PRODUCT_NAME}Docs/weblib\nfi;\n\nelse\necho \"install jsdoc globally via npm to create a web library documentation\"\nfi;";
+			shellScript = "# CREATE JSDOC\n# Jsdoc needs to be installed (npm install -g jsdoc@\"<=3.3.0\")\n# On Release builds we will create the JSDoc\n# On Debug builds we will do nothing to save time\n\nPATH=$(bash -l -c 'echo $PATH')\nJSDOC_PATH=\"/usr/local/bin/jsdoc\"\nif [ -x $JSDOC_PATH ]; then\n\nif [ ${CONFIGURATION} == \"Release\" ]; then\nrm -r ${PROJECT_DIR}/${PRODUCT_NAME}Docs/weblib # Needed because jsdoc only overwrites, but doesnt delete old files\n$JSDOC_PATH ${PROJECT_DIR}/${PRODUCT_NAME}Resources/weblib/connichiwa.js -c ${PROJECT_DIR}/${PRODUCT_NAME}Docs/jsdoc_conf.json -d ${PROJECT_DIR}/${PRODUCT_NAME}Docs/weblib\nfi;\n\nelse\necho \"install jsdoc globally via npm to create a web library documentation\"\nfi;";
 		};
 		33CC8C2D194B1CD800D99851 /* Concatenate & Minify Web Library Script */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -888,7 +742,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "PATH=$(bash -l -c 'echo $PATH')\n\nROOT_PATH=\"${PROJECT_DIR}/${PRODUCT_NAME}\"\nCONCAT_FILE=\"${ROOT_PATH}/weblib/connichiwa.js\"\nCONCAT_FILE_MIN=\"${ROOT_PATH}/weblib/connichiwa.min.js\"\nCONCAT_FILE_MAP=\"${CONCAT_FILE_MIN}.map\"\n\nrm -f ${CONCAT_FILE}\nrm -f ${CONCAT_FILE_MIN}\nrm -f ${CONCAT_FILE_MAP}\n\n# CONCATENATE\n# Concatenates everything in the weblib folder\ncat \"${ROOT_PATH}/scripts/OOP.js\" >> ${CONCAT_FILE};\nfor file in \"${ROOT_PATH}/weblib_source/common/*.js\"; do cat $file >> ${CONCAT_FILE}; done\nfor file in \"${ROOT_PATH}/weblib_source/master/*.js\"; do cat $file >> ${CONCAT_FILE}; done\n\n# MINIFY\n# Minifyjs needs to be installed (npm install -g minifyjs)\n#MINIFYJS_PATH=\"/usr/local/bin/minifyjs\"\n#if [ -x $MINIFYJS_PATH ]; then\n#if [ -f $CONCAT_FILE ]; then\n\n#${MINIFYJS_PATH} -m -i ${CONCAT_FILE} -o ${CONCAT_FILE_MIN}\n#fi\n#else\n#echo \"install minifyjs globally via npm to create minified JS library versions\"\n#fi;\n\n#UGLIFYJS\n# uglifyjs needs to be installed (npm install -g uglifyjs)\n# minifies the source file and creates a source map\nUGLIFYJS_PATH=\"uglifyjs\"\n#if [ -x $UGLIFYJS_PATH ]; then\nif [ -f $CONCAT_FILE ]; then\n\n${UGLIFYJS_PATH} ${CONCAT_FILE} -o ${CONCAT_FILE_MIN} --source-map ${CONCAT_FILE_MAP} --screw-ie8 --compress --mangle --prefix relative\n\nfi\n#else\n#echo \"install uglifyjs globally via npm to create minified JS library versions\"\n#fi;";
+			shellScript = "PATH=$(bash -l -c 'echo $PATH')\n\nROOT_PATH=\"${PROJECT_DIR}/${PRODUCT_NAME}\"\nCONCAT_FILE=\"${ROOT_PATH}/weblib/connichiwa.js\"\nCONCAT_FILE_MIN=\"${ROOT_PATH}/weblib/connichiwa.min.js\"\nCONCAT_FILE_MAP=\"${CONCAT_FILE_MIN}.map\"\n\nrm -f ${CONCAT_FILE}\nrm -f ${CONCAT_FILE_MIN}\nrm -f ${CONCAT_FILE_MAP}\n\n# CONCATENATE\n# Concatenates everything in the weblib folder\ncat \"${ROOT_PATH}/scripts/OOP.js\" >> ${CONCAT_FILE};\nfor file in \"${ROOT_PATH}/weblib_source/common/*.js\"; do cat $file >> ${CONCAT_FILE}; done\nfor file in \"${ROOT_PATH}/weblib_source/master/*.js\"; do cat $file >> ${CONCAT_FILE}; done\n\n#UGLIFYJS\n# uglifyjs needs to be installed (npm install -g uglifyjs)\n# minifies the source file and creates a source map\nUGLIFYJS_PATH=\"uglifyjs\"\n#if [ -x $UGLIFYJS_PATH ]; then\nif [ -f $CONCAT_FILE ]; then\n\n${UGLIFYJS_PATH} ${CONCAT_FILE} -o ${CONCAT_FILE_MIN} --source-map ${CONCAT_FILE_MAP} --screw-ie8 --compress --mangle --prefix relative\n\nfi\n#else\n#echo \"install uglifyjs globally via npm to create minified JS library versions\"\n#fi;";
 		};
 		33D197D9194B3D2100AE1E1D /* Touch Folder References Script */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -902,7 +756,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "touch -cm \"${PROJECT_DIR}/${PRODUCT_NAME}\"\ntouch -cm \"${PROJECT_DIR}/${PRODUCT_NAME}/weblib\"\ntouch -cm \"${PROJECT_DIR}/${PRODUCT_NAME}/remote\"\ntouch -cm \"${PROJECT_DIR}/${PRODUCT_NAME}/scripts\"\ntouch -cm \"${PROJECT_DIR}/${PRODUCT_NAME}/node_modules\"";
+			shellScript = "touch -cm \"${PROJECT_DIR}/${PRODUCT_NAME}\"\ntouch -cm \"${PROJECT_DIR}/${PRODUCT_NAME}/weblib\"\ntouch -cm \"${PROJECT_DIR}/${PRODUCT_NAME}/remote\"\ntouch -cm \"${PROJECT_DIR}/${PRODUCT_NAME}/scripts\"";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -981,16 +835,6 @@
 			isa = PBXTargetDependency;
 			target = 33A05145193E61CC00FED071 /* Connichiwa */;
 			targetProxy = 33A0515C193E61CC00FED071 /* PBXContainerItemProxy */;
-		};
-		33ACB88D19ED227C001A465F /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = uv;
-			targetProxy = 33ACB88C19ED227C001A465F /* PBXContainerItemProxy */;
-		};
-		33ED02A81A5D7C0B009ED3A5 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = "Nodelike Fat Binary";
-			targetProxy = 33ED02A71A5D7C0B009ED3A5 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1142,6 +986,7 @@
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DSTROOT = /tmp/Connichiwa.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Connichiwa/Connichiwa-Prefix.pch";

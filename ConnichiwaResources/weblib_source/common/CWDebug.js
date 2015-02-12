@@ -37,9 +37,14 @@ var CWDebug = (function()
     if (debug) console.log(priority + "|" + message);
   };
 
+  var err = function(priority, message) {
+    if (debug) console.err(priority + "|" + message);
+  };
+
   return {
     enableDebug  : enableDebug,
     disableDebug : disableDebug,
-    log          : log
+    log          : log,
+    err          : err
   };
 })();

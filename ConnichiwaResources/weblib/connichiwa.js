@@ -243,10 +243,15 @@ var CWDebug = (function()
     if (debug) console.log(priority + "|" + message);
   };
 
+  var err = function(priority, message) {
+    if (debug) console.err(priority + "|" + message);
+  };
+
   return {
     enableDebug  : enableDebug,
     disableDebug : disableDebug,
-    log          : log
+    log          : log,
+    err          : err
   };
 })();
 /* global Connichiwa, CWSystemInfo, CWUtil, CWEventManager, CWDebug */
@@ -1453,7 +1458,7 @@ var CWWebsocketMessageParser = OOP.createSingleton("Connichiwa", "CWWebsocketMes
     $.getScript(message.url).done(function() {
       that.package.Connichiwa._sendAck(message);
     }).fail(function(f, s, t) {
-      CWDebug.log(1, "There was an error loading '" + message.url + "': " + t);
+      CWDebug.err(1, "There was an error loading '" + message.url + "': " + t);
     });
   },
 
@@ -1513,7 +1518,9 @@ var Connichiwa = OOP.createSingleton("Connichiwa", "Connichiwa", {
 
   "public onLoad": function(callback) {
     if (document.readyState === "complete") {
-      callback();
+      //Timeout so we finish whatever we do right now
+      //before calling the ready callback
+      window.setTimeout(callback, 0);
     } else {
       Connichiwa.on("ready", callback);
     }
@@ -1680,7 +1687,7 @@ var Connichiwa = OOP.createSingleton("Connichiwa", "Connichiwa", {
       return;
     }
 
-    message._id = CWUtil.randomInt(0, 100000);
+    message._id = CWUtil.randomInt(0, 9999999999);
     message._name = message._name.toLowerCase();
 
     var messageString = JSON.stringify(message);
@@ -2612,6 +2619,7 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
 
   _onWebsocketClose: function()
   {
+    console.log("close");
     CWDebug.log(3, "Websocket closed");
     this._cleanupWebsocket();
 

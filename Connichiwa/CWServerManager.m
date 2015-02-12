@@ -7,7 +7,6 @@
 //
 
 #import "CWServerManager.h"
-#import <Nodelike/NLContext.h>
 #import "GCDWebServer.h"
 #import "GCDWebServerDataResponse.h"
 #import "BLWebSocketsServer.h"
@@ -70,7 +69,7 @@
 - (void)startWebserverWithDocumentRoot:(NSString *)documentRoot onPort:(int)port
 {
     CWLog(1, @"Webserver is starting with document root %@ on port %d", documentRoot, port);
-    
+
     self.state = CWServerManagerStateStarting;
     
     self.documentRoot = documentRoot;
@@ -81,9 +80,10 @@
     //
     
     self.webServer = [[GCDWebServer alloc] init];
+    [GCDWebServer setLogLevel:1];
     
     //Set up all the path handlers of the webserver that will deliver our files
-    //Note that they are handled in LIFO order, so the last handler will be checked first,
+    //Note that they are hand3560led in LIFO order, so the last handler will be checked first,
     //and the server will then walk up until it finds a handler that fits
     NSMutableString *resourcePath = [[[CWBundle bundle] bundlePath] mutableCopy];
     
@@ -133,6 +133,10 @@
     //This mapping can be done once we received either the localinfo or remoteinfo message from a device
     [self.websocketServer setDefaultOnMessageHandler:[self onUnidentifiedWebsocketMessage]];
     
+    //
+    // GO
+    //
+    
     [self.webServer startWithPort:port bonjourName:nil];
     [self.websocketServer startListeningOnPort:(port+1) withProtocolName:nil andCompletionBlock:^(NSError *error) { [self _receivedFromServer_serverDidStart]; }];
 }
@@ -146,7 +150,7 @@
     
     //Make the server send a _softDisconnect message to all remotes
     self.state = CWServerManagerStateSuspended;
-    [self.nodelikeContext evaluateScript:@"softDisconnectAllRemotes();"];
+//    [self.nodelikeContext evaluateScript:@"softDisconnectAllRemotes();"];
 }
 
 
@@ -194,6 +198,9 @@
     return ^void (int connectionID, NSData *messageData) {
         NSDictionary *message = [CWUtil dictionaryFromJSONData:messageData];
         
+        NSNumber *value = [NSNumber numberWithInt:connectionID];
+        WSLog(4, @"Websocket message from %@ to %@: %@", [self.websocketIdentifiers allKeysForObject:value][0], [message objectForKey:@"_target"],[[NSString alloc] initWithData:messageData encoding:NSUTF8StringEncoding]);
+        
         //For identified websocket messages, the server basically acts as a message relay
         //Check where the message is supposed to be sent to and deliver it
         NSString *target = [message objectForKey:@"_target"];
@@ -217,6 +224,8 @@
                     [weakSelf _receivedFromServer_remoteWebsocketDidClose:identifier];
                 }
                 [self.websocketIdentifiers removeObjectForKey:identifier];
+                
+                WSLog(3, @"Websocket closed (%@)", identifier);
             }
         }
     };
@@ -230,15 +239,15 @@
 {
     if (self.nodelikeContext == nil) return;
     
-    __weak typeof(self) weakSelf = self;
+//    __weak typeof(self) weakSelf = self;
     
-    self.nodelikeContext[@"nativeCallServerDidStart"] = ^(NSString *identifier) {
-        [weakSelf _receivedFromServer_serverDidStart];
-    };
-    
-    self.nodelikeContext[@"nativeCallRemoteWebsocketDidClose"] = ^(NSString *identifier) {
-        [weakSelf _receivedFromServer_remoteWebsocketDidClose:identifier];
-    };
+//    self.nodelikeContext[@"nativeCallServerDidStart"] = ^(NSString *identifier) {
+//        [weakSelf _receivedFromServer_serverDidStart];
+//    };
+//    
+//    self.nodelikeContext[@"nativeCallRemoteWebsocketDidClose"] = ^(NSString *identifier) {
+//        [weakSelf _receivedFromServer_remoteWebsocketDidClose:identifier];
+//    };
 }
 
 

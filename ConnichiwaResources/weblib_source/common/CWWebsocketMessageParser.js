@@ -42,7 +42,7 @@ var CWWebsocketMessageParser = OOP.createSingleton("Connichiwa", "CWWebsocketMes
     $.getScript(message.url).done(function() {
       that.package.Connichiwa._sendAck(message);
     }).fail(function(f, s, t) {
-      CWDebug.log(1, "There was an error loading '" + message.url + "': " + t);
+      CWDebug.err(1, "There was an error loading '" + message.url + "': " + t);
     });
   },
 
