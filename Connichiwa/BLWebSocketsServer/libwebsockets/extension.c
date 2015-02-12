@@ -11,11 +11,11 @@ struct libwebsocket_extension libwebsocket_internal_extensions[] = {
 		sizeof (struct lws_ext_deflate_stream_conn)
 	},
 #else
-	{
-		"x-webkit-deflate-frame",
-		lws_extension_callback_deflate_frame,
-		sizeof (struct lws_ext_deflate_frame_conn)
-	},
+//	{
+//		"x-webkit-deflate-frame",
+//		lws_extension_callback_deflate_frame,
+//		sizeof (struct lws_ext_deflate_frame_conn)
+//	},
 	{
 		"deflate-frame",
 		lws_extension_callback_deflate_frame,
