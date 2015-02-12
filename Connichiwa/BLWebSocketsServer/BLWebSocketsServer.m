@@ -11,7 +11,7 @@
 #import "private-libwebsockets.h"
 #import "BLWebSocketConnection.h"
 
-static int POLLING_INTERVAL = 20000;
+static int DEFAULT_POLLING_INTERVAL = INT_MAX;
 
 static NSString *HTTP_ONLY_PROTOCOL_NAME = @"http-only";
 
@@ -46,6 +46,7 @@ static dispatch_queue_t networkQueue;
 @property (nonatomic, strong, readwrite) BLWebSocketOnMessageHandler defaultOnMessageHandler;
 @property (nonatomic, strong, readwrite) BLWebSocketOnCloseHandler defaultOnCloseHandler;
 @property (nonatomic, strong, readwrite) NSMutableDictionary *connections;
+@property (strong, readwrite) NSTimer *stopFastPollingTimer;
 
 /* Temporary storage for the server stopped completion block */
 @property (nonatomic, strong) void(^serverStoppedCompletionBlock)();
@@ -135,11 +136,11 @@ static dispatch_queue_t networkQueue;
     
     timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, networkQueue);
     
-    dispatch_source_set_timer(timer,DISPATCH_TIME_NOW, POLLING_INTERVAL*NSEC_PER_USEC, (POLLING_INTERVAL/2)*NSEC_PER_USEC);
+    dispatch_source_set_timer(timer, DISPATCH_TIME_NOW, 1, 1);
     
     dispatch_source_set_event_handler(timer, ^{
         @autoreleasepool {
-            libwebsocket_service(self.context, 0);
+            libwebsocket_service(self.context, DEFAULT_POLLING_INTERVAL);
         }
     });
     
@@ -195,6 +196,10 @@ static dispatch_queue_t networkQueue;
 
 - (void)pushMessage:(NSData *)message toConnection:(int)connectionID {
     BLWebSocketConnection *connection = [BLWebSocketsServer connectionForID:connectionID];
+    if (connection == nil) {
+        NSLog(@"LOST MESSAGE %@", [[NSString alloc] initWithData:message encoding:NSUTF8StringEncoding]);
+        return;
+    }
     [connection enqueueOutgoingMessage:message];
     
     //Make sure the new message is sent as soon as the socket is writable
@@ -247,66 +252,68 @@ static int callback_websockets(struct libwebsocket_context * this,
              struct libwebsocket *wsi,
              enum libwebsocket_callback_reasons reason,
              void *user, void *in, size_t len) {
-    int *connectionID = (int *) user;
-    switch (reason) {
-        case LWS_CALLBACK_ESTABLISHED: {
-            *connectionID = sharedInstance.sessionIdIncrementalCount++;
-            
-            id connectionKey = [BLWebSocketsServer keyForConnectionID:*connectionID];
-            BLWebSocketConnection *connection = [[BLWebSocketConnection alloc] initWithID:*connectionID socket:wsi];
-            [sharedInstance.connections setObject:connection forKey:connectionKey];
-            
-            break;
-        }
-        case LWS_CALLBACK_RECEIVE: {
-            BLWebSocketConnection *connection = [BLWebSocketsServer connectionForID:*connectionID];
-            
-            NSData *chunk = [NSData dataWithBytes:(const void *)in length:len];
-            if (connection.incomingMessage == nil) connection.incomingMessage = [NSMutableData data];
-            [connection.incomingMessage appendData:chunk];
-            
-            //Check if this chunk is the last chunk of the message. If so we trigger the
-            //onMessage callback, otherwise we just keep on collecting chunks
-            int isFinalFragment = libwebsocket_is_final_fragment(wsi);
-            const size_t remainingBytes = libwebsockets_remaining_packet_payload(wsi);
-            if (isFinalFragment && remainingBytes == 0) {
-                BLWebSocketOnMessageHandler callback = connection.onMessageHandler;
-                if (!callback) callback = sharedInstance.defaultOnMessageHandler;
-                if (callback) callback(*connectionID, connection.incomingMessage);
-                connection.incomingMessage = nil;
-            }
-            
-            break;
-        }
-        case LWS_CALLBACK_SERVER_WRITEABLE: {
-            //Get the first message on the outgoing message queue of this connection and send it
-            BLWebSocketConnection *connection = [BLWebSocketsServer connectionForID:*connectionID];
-            NSData *message = [connection dequeueOutgoingMessage];
-            if (message != nil) {
-                write_data_websockets(message, wsi);
+        int *connectionID = (int *) user;
+        switch (reason) {
+            case LWS_CALLBACK_ESTABLISHED: {
+                *connectionID = sharedInstance.sessionIdIncrementalCount++;
                 
-                //Make sure the rest of the message queue is processed
-                libwebsocket_callback_on_writable(sharedInstance.context, wsi);
+                id connectionKey = [BLWebSocketsServer keyForConnectionID:*connectionID];
+                BLWebSocketConnection *connection = [[BLWebSocketConnection alloc] initWithID:*connectionID socket:wsi];
+                [sharedInstance.connections setObject:connection forKey:connectionKey];
+                
+                break;
             }
-            break;
+            case LWS_CALLBACK_RECEIVE: {
+                BLWebSocketConnection *connection = [BLWebSocketsServer connectionForID:*connectionID];
+                
+                NSData *chunk = [NSData dataWithBytes:(const void *)in length:len];
+                if (connection.incomingMessage == nil) connection.incomingMessage = [NSMutableData data];
+                [connection.incomingMessage appendData:chunk];
+                
+                //Check if this chunk is the last chunk of the message. If so we trigger the
+                //onMessage callback, otherwise we just keep on collecting chunks
+                int isFinalFragment = libwebsocket_is_final_fragment(wsi);
+                const size_t remainingBytes = libwebsockets_remaining_packet_payload(wsi);
+                if (isFinalFragment && remainingBytes == 0) {
+                    BLWebSocketOnMessageHandler callback = connection.onMessageHandler;
+                    if (!callback) callback = sharedInstance.defaultOnMessageHandler;
+                    if (callback) callback(*connectionID, connection.incomingMessage);
+                    connection.incomingMessage = nil;
+                }
+                
+                break;
+            }
+            case LWS_CALLBACK_SERVER_WRITEABLE: {
+                //Get the first message on the outgoing message queue of this connection and send it
+                BLWebSocketConnection *connection = [BLWebSocketsServer connectionForID:*connectionID];
+                NSData *message = [connection dequeueOutgoingMessage];
+                if (message != nil) {
+                    write_data_websockets(message, wsi);
+                    
+                    //Make sure the rest of the message queue is processed
+                    libwebsocket_callback_on_writable(sharedInstance.context, wsi);
+                }
+                break;
+            }
+            case LWS_CALLBACK_CLOSED: {
+                //Call the onClose handler
+                BLWebSocketConnection *connection = [BLWebSocketsServer connectionForID:*connectionID];
+                BLWebSocketOnCloseHandler callback = connection.onCloseHandler;
+                if (!callback) callback = sharedInstance.defaultOnCloseHandler;
+                if (callback) callback(*connectionID);
+                
+                //Cleanup the connection
+                id connectionKey = [BLWebSocketsServer keyForConnectionID:*connectionID];
+                [sharedInstance.connections removeObjectForKey:connectionKey];
+                break;
+            }
+            default:
+                break;
         }
-        case LWS_CALLBACK_CLOSED: {
-            //Call the onClose handler
-            BLWebSocketConnection *connection = [BLWebSocketsServer connectionForID:*connectionID];
-            BLWebSocketOnCloseHandler callback = connection.onCloseHandler;
-            if (!callback) callback = sharedInstance.defaultOnCloseHandler;
-            if (callback) callback(*connectionID);
-            
-            //Cleanup the connection
-            id connectionKey = [BLWebSocketsServer keyForConnectionID:*connectionID];
-            [sharedInstance.connections removeObjectForKey:connectionKey];
-            break;
-        }
-        default:
-            break;
-    }
     
-    return 0;
+//        dispatch_source_set_timer(timer,DISPATCH_TIME_NOW, FAST_POLLING_INTERVAL, (FAST_POLLING_INTERVAL/2));
+    
+        return 0;
 }
 
 
