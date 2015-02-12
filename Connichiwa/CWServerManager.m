@@ -25,7 +25,6 @@
 /**
  *  A Nodelike-specific subclass of JSContext that is used to execute code and for communication between Objective-C and the Nodelike server
  */
-@property (strong, readwrite) NLContext *nodelikeContext;
 @property (strong, readwrite) GCDWebServer *webServer;
 @property (strong, readwrite) BLWebSocketsServer *websocketServer;
 @property (readwrite) int localWebsocketID;
@@ -138,7 +137,16 @@
     //
     
     [self.webServer startWithPort:port bonjourName:nil];
-    [self.websocketServer startListeningOnPort:(port+1) withProtocolName:nil andCompletionBlock:^(NSError *error) { [self _receivedFromServer_serverDidStart]; }];
+    [self.websocketServer startListeningOnPort:(port+1) withProtocolName:nil andCompletionBlock:^(NSError *error) {
+        CWLog(1, @"HTTP & Websocket server did start");
+        
+        self.state = CWServerManagerStateStarted;
+        
+        if ([self.delegate respondsToSelector:@selector(didStartWebserver)])
+        {
+            [self.delegate didStartWebserver];
+        }
+    }];
 }
 
 
@@ -185,7 +193,7 @@
             [weakSelf.websocketServer setOnMessageHandler:[weakSelf onIdentifiedWebsocketMessage] forConnection:connectionID];
             [weakSelf.websocketServer setOnCloseHandler:[weakSelf onIdentifiedWebsocketClosed] forConnection:connectionID];
             
-            //Push the message to the local weblibrary, so it knows about the device
+            //Forward the message to the local weblibrary ., so it knows about the device
             [weakSelf.websocketServer pushMessage:messageData toConnection:weakSelf.localWebsocketID];
             
         }
@@ -207,8 +215,7 @@
         if ([target isEqualToString:@"broadcast"]) {
             [weakSelf.websocketServer pushMessageToAll:messageData];
         } else {
-            int targetConnection = [[weakSelf.websocketIdentifiers objectForKey:target] intValue];
-            [weakSelf.websocketServer pushMessage:messageData toConnection:targetConnection];
+            [weakSelf.websocketServer pushMessage:messageData toConnection:[weakSelf connectionIDForIdentifier:target]];
         }
     };
 }
@@ -217,61 +224,37 @@
     __weak typeof(self) weakSelf = self;
     
     return ^void (int connectionID) {
-        for (NSString *identifier in self.websocketIdentifiers.allKeys) {
-            int existingID = [[weakSelf.websocketIdentifiers objectForKey:identifier] intValue];
-            if (existingID == connectionID) {
-                if (connectionID != weakSelf.localWebsocketID) {
-                    [weakSelf _receivedFromServer_remoteWebsocketDidClose:identifier];
+        if (connectionID == self.localWebsocketID) {
+            //TODO: What to do here? This shouldn't happen!
+        } else {
+            //Find the remote websocket that was closed and report the close to our delegate
+            NSString *identifier = [weakSelf identifierForConnectionID:connectionID];
+            if (identifier != nil) {
+                WSLog(3, @"Remote websocket did close (%@)", identifier);
+                if ([weakSelf.delegate respondsToSelector:@selector(remoteDidDisconnect:)])
+                {
+                    [weakSelf.delegate remoteDidDisconnect:identifier];
                 }
-                [self.websocketIdentifiers removeObjectForKey:identifier];
                 
-                WSLog(3, @"Websocket closed (%@)", identifier);
+                [weakSelf.websocketIdentifiers removeObjectForKey:identifier];
             }
         }
     };
 }
 
 
-#pragma mark WebView Communication
-
-
-- (void)_registerJSCallbacks
-{
-    if (self.nodelikeContext == nil) return;
-    
-//    __weak typeof(self) weakSelf = self;
-    
-//    self.nodelikeContext[@"nativeCallServerDidStart"] = ^(NSString *identifier) {
-//        [weakSelf _receivedFromServer_serverDidStart];
-//    };
-//    
-//    self.nodelikeContext[@"nativeCallRemoteWebsocketDidClose"] = ^(NSString *identifier) {
-//        [weakSelf _receivedFromServer_remoteWebsocketDidClose:identifier];
-//    };
+- (int)connectionIDForIdentifier:(NSString *)targetIdentifier {
+    return [[self.websocketIdentifiers objectForKey:targetIdentifier] intValue];
 }
 
 
-- (void)_receivedFromServer_serverDidStart
-{
-    CWLog(1, @"Webserver did start");
-    
-    self.state = CWServerManagerStateStarted;
-    
-    if ([self.delegate respondsToSelector:@selector(didStartWebserver)])
-    {
-        [self.delegate didStartWebserver];
+- (NSString *)identifierForConnectionID:(int)targetID {
+    for (NSString *identifier in self.websocketIdentifiers.allKeys) {
+        int currentID = [[self.websocketIdentifiers objectForKey:identifier] intValue];
+        if (currentID == targetID) return identifier;
     }
-}
-
-
-- (void)_receivedFromServer_remoteWebsocketDidClose:(NSString *)identifier
-{
-    CWLog(3, @"Webserver reports a remote websocket did close");
     
-    if ([self.delegate respondsToSelector:@selector(remoteDidDisconnect:)])
-    {
-        [self.delegate remoteDidDisconnect:identifier];
-    }
+    return nil;
 }
 
 @end
