@@ -71,7 +71,7 @@
 /**
  *  Tells the web library if we are running in debug mode or not
  */
-- (void)_sendToView_cwdebug;
+- (void)_sendToView_debuginfo;
 
 /**
  *  Tells the web library the unique connichiwa identifier we are known under
@@ -295,11 +295,12 @@
 }
 
 
-- (void)_sendToView_cwdebug
+- (void)_sendToView_debuginfo
 {
     NSDictionary *data = @{
-                           @"_name": @"cwdebug",
-                           @"cwdebug": @([CWDebug isDebugging])
+                           @"_name": @"debuginfo",
+                           @"debug": @([CWDebug isDebugging]),
+                           @"logLevel": @([CWDebug logLevel])
                            };
     [self _sendToView_dictionary:data];
 }
@@ -395,10 +396,8 @@
     {
         CWLog(3, @"Web library webview did load, setting things up and connecting websocket");
         
-        
-        
         [self _registerJSCallbacks];
-        [self _sendToView_cwdebug];
+        [self _sendToView_debuginfo];
         [self _sendToView_connectWebsocket];
     }
     else if (self.state == CWWebLibraryManagerStateDisconnecting)
@@ -422,7 +421,7 @@
     //Register JS error handler
     self.webViewContext.exceptionHandler = ^(JSContext *c, JSValue *e) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            _CWLog(1, @"WEBLIB", @"?????", -1, @"JAVASCRIPT ERROR: %@. Stack: %@", e, [e valueForProperty:@"stack"]);
+            ErrLog(@"JAVASCRIPT ERROR: %@. Stack: %@", e, [e valueForProperty:@"stack"]);
         });
     };
     
@@ -432,11 +431,16 @@
         NSArray *components = [logMessage componentsSeparatedByString:@"|"]; //array should contain: prio, message
         if ([components count] != 2)
         {
-            _CWLog(1, @"WEBLIB", @"?????", -1, logMessage);
+            WLLog(1, logMessage);
         }
         else
         {
-            _CWLog([[components objectAtIndex:0] intValue], @"WEBLIB", @"?????", -1, [components objectAtIndex:1]);
+            //First component should be a priority or can be "ERROR" for logging an error
+            if ([[components objectAtIndex:0] isEqualToString:@"ERROR"]) {
+                ErrLog([components objectAtIndex:1]);
+            } else {
+                WLLog([[components objectAtIndex:0] intValue], [components objectAtIndex:1]);
+            }
         }
     };
     self.webViewContext[@"console"][@"log"]   = logger;

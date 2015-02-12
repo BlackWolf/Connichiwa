@@ -204,6 +204,7 @@ var OOP = (function() {
     extendSingleton : extendSingleton
   };
 })();  
+/* global OOP */
 "use strict";
 
 
@@ -213,48 +214,43 @@ var OOP = (function() {
  *
  * @namespace CWDebug
  */
-var CWDebug = (function()
-{
-  /**
-   * true if debug mode is on, otherwise false
-   */
-  var debug = true;
+var CWDebug = OOP.createSingleton("Connichiwa", "CWDebug", {
+  _debug: false,
+  _logLevel: 0,
 
-  var enableDebug = function() {
-    debug = true;
-  };
+  "public setDebug": function(v) {
+    this._debug = v;
+  },
+
+  "public setLogLevel": function(v) {
+    this._logLevel = v;
+  },
 
 
-  var disableDebug = function() {
-    debug = false;
-  };
+  "public setDebugInfo": function(info) {
+    console.log("SETTING DEBUG INFO: "+info.debug+" || "+info.logLevel);
+    if (info.debug)    CWDebug.setDebug(info.debug);
+    if (info.logLevel) CWDebug.setLogLevel(info.logLevel);
+  },
 
-  /**
-   * Logs a message to the console if debug mode is on
-   *
-   * @param {int} priority The priority of the message. Messages with lower priority are printed at lower debug states.
-   * @param {string} message the message to log
-   *
-   * @memberof CWDebug
-   */
-  var log = function(priority, message)
-  {
-    // if (priority > 3) return;
-    if (debug) console.log(priority + "|" + message);
-  };
 
-  var err = function(priority, message) {
-    if (debug) console.err(priority + "|" + message);
-  };
+  "public getDebugInfo": function() {
+    return { debug: this._debug, logLevel: this._logLevel };
+  },
 
-  return {
-    enableDebug  : enableDebug,
-    disableDebug : disableDebug,
-    log          : log,
-    err          : err
-  };
-})();
-/* global Connichiwa, CWSystemInfo, CWUtil, CWEventManager, CWDebug */
+
+  "public log": function(level, msg) {
+    if (this._debug && level <= this._logLevel) {
+      console.log(level + "|" + msg);
+    }
+  },
+
+  "public err": function(msg) {
+    if (this._debug) {
+      console.log("ERROR" + "|" + msg);
+    }
+  }
+});/* global Connichiwa, CWSystemInfo, CWUtil, CWEventManager, CWDebug */
 /* global nativeCallConnectRemote */
 "use strict";
 
@@ -1812,8 +1808,14 @@ OOP.extendSingleton("Connichiwa", "CWWebsocketMessageParser",
 {
   "package parseOnRemote": function(message) {
     switch (message._name) {
+      case "_debuginfo"      : this._parseDebugInfo(message); break;
       case "_softdisconnect" : this._parseSoftDisconnect(message); break;
     }
+  },
+
+
+  _parseDebugInfo: function(message) {
+    CWDebug.setDebugInfo(message);
   },
 
 
@@ -1951,7 +1953,6 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
 
   _onWebsocketClose: function()
   {
-    console.log("close");
     CWDebug.log(3, "Websocket closed");
     this._cleanupWebsocket();
     // nativeWebsocketDidClose();
@@ -1970,7 +1971,6 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
 
   _onWebsocketError: function()
   {
-    console.log("error");
     CWDebug.log(3, "Error");
     this._onWebsocketClose();
   },

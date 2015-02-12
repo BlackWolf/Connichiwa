@@ -1,3 +1,4 @@
+/* global OOP */
 "use strict";
 
 
@@ -7,44 +8,39 @@
  *
  * @namespace CWDebug
  */
-var CWDebug = (function()
-{
-  /**
-   * true if debug mode is on, otherwise false
-   */
-  var debug = true;
+var CWDebug = OOP.createSingleton("Connichiwa", "CWDebug", {
+  _debug: false,
+  _logLevel: 0,
 
-  var enableDebug = function() {
-    debug = true;
-  };
+  "public setDebug": function(v) {
+    this._debug = v;
+  },
+
+  "public setLogLevel": function(v) {
+    this._logLevel = v;
+  },
 
 
-  var disableDebug = function() {
-    debug = false;
-  };
+  "public setDebugInfo": function(info) {
+    if (info.debug)    CWDebug.setDebug(info.debug);
+    if (info.logLevel) CWDebug.setLogLevel(info.logLevel);
+  },
 
-  /**
-   * Logs a message to the console if debug mode is on
-   *
-   * @param {int} priority The priority of the message. Messages with lower priority are printed at lower debug states.
-   * @param {string} message the message to log
-   *
-   * @memberof CWDebug
-   */
-  var log = function(priority, message)
-  {
-    // if (priority > 3) return;
-    if (debug) console.log(priority + "|" + message);
-  };
 
-  var err = function(priority, message) {
-    if (debug) console.err(priority + "|" + message);
-  };
+  "public getDebugInfo": function() {
+    return { debug: this._debug, logLevel: this._logLevel };
+  },
 
-  return {
-    enableDebug  : enableDebug,
-    disableDebug : disableDebug,
-    log          : log,
-    err          : err
-  };
-})();
+
+  "public log": function(level, msg) {
+    if (this._debug && level <= this._logLevel) {
+      console.log(level + "|" + msg);
+    }
+  },
+
+  "public err": function(msg) {
+    if (this._debug) {
+      console.log("ERROR" + "|" + msg);
+    }
+  }
+});

@@ -33,11 +33,14 @@ OOP.extendSingleton("Connichiwa", "CWWebsocketMessageParser",
     
     device.connectionState = CWDeviceConnectionState.CONNECTED;
     nativeCallRemoteDidConnect(device.getIdentifier());
+
+    //Make sure the remote uses the same logging settings as we do
+    device.send("_debuginfo", CWDebug.getDebugInfo());
     
+    // AutoLoad files from Connichiwa.autoLoad on the new remote device
     var didConnectCallback = function() { 
       CWEventManager.trigger("deviceConnected", device); 
     };
-
     var loadOtherFile = function(device, file) {
       //As of now, "other" files are only CSS
       var extension = file.split(".").pop().toLowerCase();

@@ -16,7 +16,7 @@
 /**
  *  The options used when creating JSON strings. In debug mode, we use a pretty representation, otherwise a shorter, less readable presentation
  */
-#ifdef CWDEBUG
+#ifdef DEBUG
     NSJSONWritingOptions const JSON_WRITING_OPTIONS = NSJSONWritingPrettyPrinted;
 #else
     NSJSONWritingOptions const JSON_WRITING_OPTIONS = kNilOptions;
@@ -78,7 +78,7 @@
 {
     struct ifaddrs *interfaces = NULL;
     struct ifaddrs *temp_addr = NULL;
-    int success = 0;
+    int success = -1;
     
     NSMutableArray *ips = [NSMutableArray arrayWithCapacity:1];
     
@@ -117,6 +117,8 @@
             
             temp_addr = temp_addr->ifa_next;
         }
+    } else {
+        ErrLog(@"Error getting IPs: %@ (%d)", [NSString stringWithUTF8String:strerror(errno)], errno);
     }
     
     // Free memory

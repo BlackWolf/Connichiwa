@@ -204,6 +204,7 @@ var OOP = (function() {
     extendSingleton : extendSingleton
   };
 })();  
+/* global OOP */
 "use strict";
 
 
@@ -213,48 +214,43 @@ var OOP = (function() {
  *
  * @namespace CWDebug
  */
-var CWDebug = (function()
-{
-  /**
-   * true if debug mode is on, otherwise false
-   */
-  var debug = true;
+var CWDebug = OOP.createSingleton("Connichiwa", "CWDebug", {
+  _debug: false,
+  _logLevel: 0,
 
-  var enableDebug = function() {
-    debug = true;
-  };
+  "public setDebug": function(v) {
+    this._debug = v;
+  },
+
+  "public setLogLevel": function(v) {
+    this._logLevel = v;
+  },
 
 
-  var disableDebug = function() {
-    debug = false;
-  };
+  "public setDebugInfo": function(info) {
+    console.log("SETTING DEBUG INFO: "+info.debug+" || "+info.logLevel);
+    if (info.debug)    CWDebug.setDebug(info.debug);
+    if (info.logLevel) CWDebug.setLogLevel(info.logLevel);
+  },
 
-  /**
-   * Logs a message to the console if debug mode is on
-   *
-   * @param {int} priority The priority of the message. Messages with lower priority are printed at lower debug states.
-   * @param {string} message the message to log
-   *
-   * @memberof CWDebug
-   */
-  var log = function(priority, message)
-  {
-    // if (priority > 3) return;
-    if (debug) console.log(priority + "|" + message);
-  };
 
-  var err = function(priority, message) {
-    if (debug) console.err(priority + "|" + message);
-  };
+  "public getDebugInfo": function() {
+    return { debug: this._debug, logLevel: this._logLevel };
+  },
 
-  return {
-    enableDebug  : enableDebug,
-    disableDebug : disableDebug,
-    log          : log,
-    err          : err
-  };
-})();
-/* global Connichiwa, CWSystemInfo, CWUtil, CWEventManager, CWDebug */
+
+  "public log": function(level, msg) {
+    if (this._debug && level <= this._logLevel) {
+      console.log(level + "|" + msg);
+    }
+  },
+
+  "public err": function(msg) {
+    if (this._debug) {
+      console.log("ERROR" + "|" + msg);
+    }
+  }
+});/* global Connichiwa, CWSystemInfo, CWUtil, CWEventManager, CWDebug */
 /* global nativeCallConnectRemote */
 "use strict";
 
@@ -1919,7 +1915,7 @@ var CWNativeMasterCommunication = OOP.createSingleton("Connichiwa", "CWNativeMas
     var object = JSON.parse(message);
     switch (object._name)
     {
-      case "cwdebug":               this._parseDebug(object); break;
+      case "debuginfo":             this._parseDebugInfo(object); break;
       case "connectwebsocket":      this._parseConnectWebsocket(object); break;
       case "localinfo":             this._parseLocalInfo(object); break;
       case "devicedetected":        this._parseDeviceDetected(object); break;
@@ -1932,10 +1928,9 @@ var CWNativeMasterCommunication = OOP.createSingleton("Connichiwa", "CWNativeMas
   },
 
 
-  _parseDebug: function(message)
+  _parseDebugInfo: function(message)
   {
-    if (message.cwdebug === true) CWDebug.enableDebug();
-    else CWDebug.disableDebug();
+    CWDebug.setDebugInfo(message);
   },
   
   
@@ -2452,11 +2447,14 @@ OOP.extendSingleton("Connichiwa", "CWWebsocketMessageParser",
     
     device.connectionState = CWDeviceConnectionState.CONNECTED;
     nativeCallRemoteDidConnect(device.getIdentifier());
+
+    //Make sure the remote uses the same logging settings as we do
+    device.send("_debuginfo", CWDebug.getDebugInfo());
     
+    // AutoLoad files from Connichiwa.autoLoad on the new remote device
     var didConnectCallback = function() { 
       CWEventManager.trigger("deviceConnected", device); 
     };
-
     var loadOtherFile = function(device, file) {
       //As of now, "other" files are only CSS
       var extension = file.split(".").pop().toLowerCase();
@@ -2619,7 +2617,6 @@ OOP.extendSingleton("Connichiwa", "Connichiwa", {
 
   _onWebsocketClose: function()
   {
-    console.log("close");
     CWDebug.log(3, "Websocket closed");
     this._cleanupWebsocket();
 

@@ -2268,18 +2268,18 @@ void lwsl_emit_syslog(int level, const char *line)
 
 void _lws_log(int filter, const char *format, ...)
 {
-	char buf[256];
-	va_list ap;
-
-	if (!(log_level & filter))
-		return;
-
-	va_start(ap, format);
-	vsnprintf(buf, (sizeof buf), format, ap);
-	buf[(sizeof buf) - 1] = '\0';
-	va_end(ap);
-
-	lwsl_emit(filter, buf);
+//	char buf[256];
+//	va_list ap;
+//
+//	if (!(log_level & filter))
+//		return;
+//
+//	va_start(ap, format);
+//	vsnprintf(buf, (sizeof buf), format, ap);
+//	buf[(sizeof buf) - 1] = '\0';
+//	va_end(ap);
+//
+//	lwsl_emit(filter, buf);
 }
 
 /**

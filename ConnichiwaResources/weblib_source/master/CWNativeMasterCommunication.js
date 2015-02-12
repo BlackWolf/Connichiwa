@@ -60,7 +60,7 @@ var CWNativeMasterCommunication = OOP.createSingleton("Connichiwa", "CWNativeMas
     var object = JSON.parse(message);
     switch (object._name)
     {
-      case "cwdebug":               this._parseDebug(object); break;
+      case "debuginfo":             this._parseDebugInfo(object); break;
       case "connectwebsocket":      this._parseConnectWebsocket(object); break;
       case "localinfo":             this._parseLocalInfo(object); break;
       case "devicedetected":        this._parseDeviceDetected(object); break;
@@ -73,10 +73,9 @@ var CWNativeMasterCommunication = OOP.createSingleton("Connichiwa", "CWNativeMas
   },
 
 
-  _parseDebug: function(message)
+  _parseDebugInfo: function(message)
   {
-    if (message.cwdebug === true) CWDebug.enableDebug();
-    else CWDebug.disableDebug();
+    CWDebug.setDebugInfo(message);
   },
   
   
