@@ -23,26 +23,63 @@
 
 
 
+
 <section>
 
 <header>
-    <h2>
-    CWUtil
-    </h2>
+    
+        <h2>
+        CWUtil
+        </h2>
+        
+    
+
+    
+        <div class="description"><p>Utility module providing often-needed utility functions</p></div>
+    
+
+    
+    
+    <b>Methods</b><br />
+    <ul>
+    
+        <li><a href="CWUtil.html#.getEventLocation">getEventLocation</a></li>
+    
+        <li><a href="CWUtil.html#.inArray">inArray</a></li>
+    
+        <li><a href="CWUtil.html#.isInt">isInt</a></li>
+    
+        <li><a href="CWUtil.html#.isObject">isObject</a></li>
+    
+        <li><a href="CWUtil.html#.isString">isString</a></li>
+    
+        <li><a href="CWUtil.html#.parseURL">parseURL</a></li>
+    
+        <li><a href="CWUtil.html#.randomInt">randomInt</a></li>
+    
+    </ul>
+    
     
 </header>
 
 <article>
     <div class="container-overview">
     
+        
+            <!-- <div class="description"><p>Utility module providing often-needed utility functions</p></div> -->
+        
+
+        
+
+
+<dl class="details">
 
     
-        
-            <div class="description"><p>A utility class giving us some often needed utility functions.</p></div>
-        
 
-        
-<dl class="details">
+    
+
+    
+
     
 
     
@@ -64,7 +101,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="connichiwa.js.html">connichiwa.js</a>, <a href="connichiwa.js.html#line464">line 464</a>
+        <a href="common_CWUtil.js.html">common/CWUtil.js</a>, <a href="common_CWUtil.js.html#line5">line 5</a>
     </li></ul></dd>
     
 
@@ -86,8 +123,6 @@
 
     
 
-    
-
      
 
     
@@ -97,28 +132,255 @@
     
         <h3 class="subsection-title">Methods</h3>
 
-        <dl>
-            
-<dt>
-    <h4 class="name" id="inArray"><span class="type-signature">(static) </span>inArray<span class="signature">(value, array)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
-
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        <p>Checks if the given value is in the given array.</p>
-    </div>
-    
-
-    
-
-    
-
-    
-        <h5>Parameters:</h5>
         
+            
+
+    
+
+    <hr>
+
+    <h4 class="name" id=".getEventLocation"><span class="type-signature">(static) </span>getEventLocation<span class="signature">(e, type<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="global.html#Point">Point</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Returns the coordinate of a given mouse event or the first touch in a touch
+   event</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>e</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">TouchEvent</span>
+|
+
+<span class="param-type">MouseEvent</span>
+|
+
+<span class="param-type">jQuery.Event</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>A valid mouse or touch
+   event or a jQuery event wrapping such an event. Note that events
+   resulting from a &quot;touchend&quot; are not considered valid, as they do not
+   contain any touches</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    "page"
+                
+                </td>
+            
+
+            <td class="description last"><p>A string representing the type of locarion
+   that should be returned. Can be either &quot;page&quot;, &quot;client&quot; or &quot;screen&quot;. See
+   <a href="https://developer.mozilla.org/en-US/docs/Web/API/Touch">Touch Documentation</a> or [MouseEvent
+   Documentation]<a href="https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent">https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent</a></p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>The coordinate of the event</p>
+</div>
+
+
+
+<!-- <dl> -->
+    <!-- <dt> -->
+        <b>Type</b>
+    <!-- </dt> -->
+    <!-- <dd> -->
+        
+<span class="param-type"><a href="global.html#Point">Point</a></span>
+
+
+    <!-- </dd> -->
+<!-- </dl> -->
+
+    
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="common_CWUtil.js.html">common/CWUtil.js</a>, <a href="common_CWUtil.js.html#line43">line 43</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+        
+            
+
+    
+
+    <hr>
+
+    <h4 class="name" id=".inArray"><span class="type-signature">(static) </span>inArray<span class="signature">(value, array)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Checks if the given value is in the given array.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
 
 <table class="params">
     <thead>
@@ -187,102 +449,115 @@
     
     </tbody>
 </table>
-    
-
-    
-<dl class="details">
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="connichiwa.js.html">connichiwa.js</a>, <a href="connichiwa.js.html#line508">line 508</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
 
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
-    <h5>Returns:</h5>
-    
-            
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
 <div class="param-desc">
     <p>true if value is in array, otherwise false</p>
 </div>
 
 
 
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
+<!-- <dl> -->
+    <!-- <dt> -->
+        <b>Type</b>
+    <!-- </dt> -->
+    <!-- <dd> -->
         
 <span class="param-type">boolean</span>
 
 
-    </dd>
+    <!-- </dd> -->
+<!-- </dl> -->
+
+    
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="common_CWUtil.js.html">common/CWUtil.js</a>, <a href="common_CWUtil.js.html#line124">line 124</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
 </dl>
 
         
-
-    
-</dd>
-
-        
             
-<dt>
-    <h4 class="name" id="isInt"><span class="type-signature">(static) </span>isInt<span class="signature">(value)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
-
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        <p>Checks if the given parameter is an Int.</p>
-    </div>
-    
 
     
 
-    
+    <hr>
+
+    <h4 class="name" id=".isInt"><span class="type-signature">(static) </span>isInt<span class="signature">(value)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
 
     
-        <h5>Parameters:</h5>
-        
+
+
+
+<div class="description">
+    <p>Checks if the given object is a valid Int</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
 
 <table class="params">
     <thead>
@@ -312,7 +587,7 @@
             <td class="type">
             
                 
-<span class="param-type">object</span>
+<span class="param-type">Object</span>
 
 
             
@@ -322,108 +597,121 @@
 
             
 
-            <td class="description last"><p>A value to check</p></td>
+            <td class="description last"><p>The object to check</p></td>
         </tr>
 
     
     </tbody>
 </table>
-    
-
-    
-<dl class="details">
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="connichiwa.js.html">connichiwa.js</a>, <a href="connichiwa.js.html#line479">line 479</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
 
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
-    <h5>Returns:</h5>
-    
-            
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
 <div class="param-desc">
     <p>true if the given value is an Int, otherwise false</p>
 </div>
 
 
 
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
+<!-- <dl> -->
+    <!-- <dt> -->
+        <b>Type</b>
+    <!-- </dt> -->
+    <!-- <dd> -->
         
-<span class="param-type">boolean</span>
+<span class="param-type">Boolean</span>
 
 
-    </dd>
+    <!-- </dd> -->
+<!-- </dl> -->
+
+    
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="common_CWUtil.js.html">common/CWUtil.js</a>, <a href="common_CWUtil.js.html#line90">line 90</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
 </dl>
 
         
-
-    
-</dd>
-
-        
             
-<dt>
-    <h4 class="name" id="isObject"><span class="type-signature">(static) </span>isObject<span class="signature">(value)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
-
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        <p>Checks if the given parameter is an object and not null.</p>
-    </div>
-    
 
     
 
-    
+    <hr>
+
+    <h4 class="name" id=".isObject"><span class="type-signature">(static) </span>isObject<span class="signature">(value)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
 
     
-        <h5>Parameters:</h5>
-        
+
+
+
+<div class="description">
+    <p>Checks if the given object is an object and not null.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
 
 <table class="params">
     <thead>
@@ -453,7 +741,7 @@
             <td class="type">
             
                 
-<span class="param-type">object</span>
+<span class="param-type">Object</span>
 
 
             
@@ -463,16 +751,63 @@
 
             
 
-            <td class="description last"><p>A value to check</p></td>
+            <td class="description last"><p>The object to check</p></td>
         </tr>
 
     
     </tbody>
 </table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>true if the given object is an object, false otherwise
+   (e.g. for null, undefined or a primitive type).</p>
+</div>
+
+
+
+<!-- <dl> -->
+    <!-- <dt> -->
+        <b>Type</b>
+    <!-- </dt> -->
+    <!-- <dd> -->
+        
+<span class="param-type">boolean</span>
+
+
+    <!-- </dd> -->
+<!-- </dl> -->
+
+    
+
+
+
+
+
+
+<dl class="details">
+
     
 
     
-<dl class="details">
+
+    
+
     
 
     
@@ -494,7 +829,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="connichiwa.js.html">connichiwa.js</a>, <a href="connichiwa.js.html#line493">line 493</a>
+        <a href="common_CWUtil.js.html">common/CWUtil.js</a>, <a href="common_CWUtil.js.html#line113">line 113</a>
     </li></ul></dd>
     
 
@@ -505,45 +840,533 @@
     
 </dl>
 
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Returns:</h5>
-    
+        
             
-<div class="param-desc">
-    <p>true if the given value is an object, otherwise false</p>
+
+    
+
+    <hr>
+
+    <h4 class="name" id=".isString"><span class="type-signature">(static) </span>isString<span class="signature">(value)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Checks if the given object is a valid String</p>
 </div>
 
 
 
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
         
-<span class="param-type">boolean</span>
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
 
 
-    </dd>
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The object to check</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>true if the given value is a String, otherwise false</p>
+</div>
+
+
+
+<!-- <dl> -->
+    <!-- <dt> -->
+        <b>Type</b>
+    <!-- </dt> -->
+    <!-- <dd> -->
+        
+<span class="param-type">Boolean</span>
+
+
+    <!-- </dd> -->
+<!-- </dl> -->
+
+    
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="common_CWUtil.js.html">common/CWUtil.js</a>, <a href="common_CWUtil.js.html#line101">line 101</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
 </dl>
 
         
+            
 
     
-</dd>
 
-        </dl>
+    <hr>
+
+    <h4 class="name" id=".parseURL"><span class="type-signature">(static) </span>parseURL<span class="signature">(url)</span><span class="type-signature"> &rarr; {<a href="global.html#URL">URL</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Returns an object that parses the given URL into its parts</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>url</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The URL to parse, must be a valid URL</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>A parsed URL object where the different parts of the URL can
+   be accessed</p>
+</div>
+
+
+
+<!-- <dl> -->
+    <!-- <dt> -->
+        <b>Type</b>
+    <!-- </dt> -->
+    <!-- <dd> -->
+        
+<span class="param-type"><a href="global.html#URL">URL</a></span>
+
+
+    <!-- </dd> -->
+<!-- </dl> -->
+
+    
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="common_CWUtil.js.html">common/CWUtil.js</a>, <a href="common_CWUtil.js.html#line19">line 19</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+        
+            
+
+    
+
+    <hr>
+
+    <h4 class="name" id=".randomInt"><span class="type-signature">(static) </span>randomInt<span class="signature">(min<span class="signature-attributes">opt</span>, max<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Number}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Returns a random integer between min (inclusive) and max (inclusive). If
+   only one parameter is given, returns a random number between 0 and that
+   number. If no parameters are given, returns a random number between 0
+   and Number.MAX_VALUE</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>min</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    0
+                
+                </td>
+            
+
+            <td class="description last"><p>The smallest possible value that is returned</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>max</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    Number.MAX_VALUE
+                
+                </td>
+            
+
+            <td class="description last"><p>The largest possible value that is
+   returned</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>The generated random number between min and max</p>
+</div>
+
+
+
+<!-- <dl> -->
+    <!-- <dt> -->
+        <b>Type</b>
+    <!-- </dt> -->
+    <!-- <dd> -->
+        
+<span class="param-type">Number</span>
+
+
+    <!-- </dd> -->
+<!-- </dl> -->
+
+    
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="common_CWUtil.js.html">common/CWUtil.js</a>, <a href="common_CWUtil.js.html#line69">line 69</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+        
     
 
     
@@ -559,13 +1382,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Namespaces</h3><ul><li><a href="Connichiwa.html">Connichiwa</a></li><li><a href="Connichiwa.Events.html">Events</a></li><li><a href="Connichiwa.Websocket.html">Websocket</a></li><li><a href="CWDebug.html">CWDebug</a></li><li><a href="CWDevice.html">CWDevice</a></li><li><a href="CWDeviceManager.html">CWDeviceManager</a></li><li><a href="CWEventManager.html">CWEventManager</a></li><li><a href="CWNativeCommunicationParser.html">CWNativeCommunicationParser</a></li><li><a href="CWRemoteCommunicationParser.html">CWRemoteCommunicationParser</a></li><li><a href="CWUtil.html">CWUtil</a></li><li><a href="CWWebserverCommunicationParser.html">CWWebserverCommunicationParser</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="CWDevice.html">CWDevice</a></li><li><a href="CWLocation.html">CWLocation</a></li><li><a href="CWVector.html">CWVector</a></li></ul><h3>Namespaces</h3><ul><li><a href="Connichiwa.html">Connichiwa</a></li><li><a href="CWDebug.html">CWDebug</a></li><li><a href="CWDeviceManager.html">CWDeviceManager</a></li><li><a href="CWGyroscope.html">CWGyroscope</a></li><li><a href="CWStitchManager.html">CWStitchManager</a></li><li><a href="CWSystemInfo.html">CWSystemInfo</a></li><li><a href="CWUtil.html">CWUtil</a></li></ul><h3>Events</h3><ul><li><a href="Connichiwa.html#.event:onLoad">onLoad</a></li><li><a href="global.html#event:accelerometerUpdate">accelerometerUpdate</a></li><li><a href="global.html#event:connectfailed">connectfailed</a></li><li><a href="global.html#event:deviceconnected">deviceconnected</a></li><li><a href="global.html#event:devicedetected">devicedetected</a></li><li><a href="global.html#event:devicedisconnected">devicedisconnected</a></li><li><a href="global.html#event:devicedistancechanged">devicedistancechanged</a></li><li><a href="global.html#event:devicelost">devicelost</a></li><li><a href="global.html#event:gotstitchneighbor">gotstitchneighbor</a></li><li><a href="global.html#event:gyroscopeUpdate">gyroscopeUpdate</a></li><li><a href="global.html#event:ready">ready</a></li><li><a href="global.html#event:wasStitched">wasStitched</a></li><li><a href="global.html#event:wasUnstitched">wasUnstitched</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
-<br clear="both">
+<br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha7</a> on Thu Jun 26 2014 16:07:42 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta2</a> on Fri Mar 13 2015 16:04:19 GMT+0100 (CET)
 </footer>
 
 <script> prettyPrint(); </script>

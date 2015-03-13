@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: common/CWUtil.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: common/CWUtil.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>'use strict';
+
+
+
+/**
+ * Utility module providing often-needed utility functions
+ * @namespace CWUtil
+ */
+var CWUtil = CWUtil || {};
+
+
+/**
+ * Returns an object that parses the given URL into its parts
+ * @param  {String} url  The URL to parse, must be a valid URL
+ * @return {URL} A parsed URL object where the different parts of the URL can
+ *    be accessed
+ * @function
+ */
+CWUtil.parseURL = function(url) {
+  var parser = document.createElement('a');
+  parser.href = url;
+
+  return parser;
+}.bind(CWUtil);
+
+
+/**
+ * Returns the coordinate of a given mouse event or the first touch in a touch
+ *    event
+ * @param  {TouchEvent|MouseEvent|jQuery.Event} e     A valid mouse or touch
+ *    event or a jQuery event wrapping such an event. Note that events
+ *    resulting from a "touchend" are not considered valid, as they do not
+ *    contain any touches
+ * @param  {String} [type="page"] A string representing the type of locarion
+ *    that should be returned. Can be either "page", "client" or "screen". See
+ *    [Touch Documentation]{@link
+ *    https://developer.mozilla.org/en-US/docs/Web/API/Touch} or [MouseEvent
+ *    Documentation]{@link
+ *    https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent}
+ * @return {Point}  The coordinate of the event
+ * @function
+ */
+CWUtil.getEventLocation = function(e, type) {
+  if (type === undefined) type = 'page';
+
+  var seen = [];
+  var pos = { x: e[type + 'X'], y: e[type + 'Y'] };
+  if (pos.x === undefined || pos.y === undefined)
+  {
+    var touches = (e.originalEvent === undefined) ? e.targetTouches : e.originalEvent.targetTouches;
+    pos = { x: touches[0][type + 'X'], y: touches[0][type + 'Y'] };
+  }
+
+  return pos;
+}.bind(CWUtil);
+
+
+/**
+ * Returns a random integer between min (inclusive) and max (inclusive). If
+ *    only one parameter is given, returns a random number between 0 and that
+ *    number. If no parameters are given, returns a random number between 0
+ *    and Number.MAX_VALUE
+ * @param  {Number} [min=0] The smallest possible value that is returned
+ * @param  {Number} [max=Number.MAX_VALUE] The largest possible value that is
+ *    returned
+ * @return {Number} The generated random number between min and max
+ * @function
+ */
+CWUtil.randomInt = function(min, max) {
+  //Only one parameter was given, use it as max, 0 as min
+  if (max === undefined &amp;&amp; min !== undefined) {
+    max = min;
+    min = 0;
+  //No parameter was given, use 0 as min, maxint as max
+  } else if (max === undefined &amp;&amp; min === undefined) {
+    min = 0;
+    max = Number.MAX_VALUE;
+  }
+
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}.bind(CWUtil);
+
+
+/**
+ * Checks if the given object is a valid Int
+ * @param {Object} value  The object to check
+ * @returns {Boolean}  true if the given value is an Int, otherwise false
+ * @function
+ */
+CWUtil.isInt = function(value) {
+  return (value === parseInt(value));
+}.bind(CWUtil);
+
+
+/**
+ * Checks if the given object is a valid String
+ * @param  {Object}  value  The object to check
+ * @return {Boolean} true if the given value is a String, otherwise false
+ * @function
+ */
+CWUtil.isString = function(value) {
+  return (typeof(value) === 'string');
+}.bind(CWUtil);
+
+
+/**
+ * Checks if the given object is an object and not null.
+ * @param {Object} value  The object to check
+ * @returns {boolean}   true if the given object is an object, false otherwise
+ *    (e.g. for null, undefined or a primitive type).
+ * @function
+ */
+CWUtil.isObject = function(value) {
+  return (typeof(value) === 'object' &amp;&amp; value !== null);
+}.bind(CWUtil);
+
+/**
+ * Checks if the given value is in the given array.
+ * @param {object} value The value to check
+ * @param {array} array The array that the value should be in
+ * @returns {boolean} true if value is in array, otherwise false
+ * @function
+ */
+CWUtil.inArray = function(value, array) {
+  return (array.indexOf(value) > -1);
+}.bind(CWUtil);
+
+/**
+ * Creates a new random v4 UUID, thanks to {@link
+ *    https://gist.github.com/jed/982883}
+ * @return {String} A random v4 UUID string
+ * @function
+ * @protected
+ */
+CWUtil.createUUID = function(a) { 
+  return a?(a ^ Math.random() * 16 >> a / 4).toString(16):([ 1e7 ] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g,CWUtil.createUUID);
+}.bind(CWUtil);
+
+//Initalize module. Delayed call to make sure all modules are ready
+if (CWUtil.__constructor) window.setTimeout(CWUtil.__constructor, 0);
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="CWDevice.html">CWDevice</a></li><li><a href="CWLocation.html">CWLocation</a></li><li><a href="CWVector.html">CWVector</a></li></ul><h3>Namespaces</h3><ul><li><a href="Connichiwa.html">Connichiwa</a></li><li><a href="CWDebug.html">CWDebug</a></li><li><a href="CWDeviceManager.html">CWDeviceManager</a></li><li><a href="CWGyroscope.html">CWGyroscope</a></li><li><a href="CWStitchManager.html">CWStitchManager</a></li><li><a href="CWSystemInfo.html">CWSystemInfo</a></li><li><a href="CWUtil.html">CWUtil</a></li></ul><h3>Events</h3><ul><li><a href="Connichiwa.html#.event:onLoad">onLoad</a></li><li><a href="global.html#event:accelerometerUpdate">accelerometerUpdate</a></li><li><a href="global.html#event:connectfailed">connectfailed</a></li><li><a href="global.html#event:deviceconnected">deviceconnected</a></li><li><a href="global.html#event:devicedetected">devicedetected</a></li><li><a href="global.html#event:devicedisconnected">devicedisconnected</a></li><li><a href="global.html#event:devicedistancechanged">devicedistancechanged</a></li><li><a href="global.html#event:devicelost">devicelost</a></li><li><a href="global.html#event:gotstitchneighbor">gotstitchneighbor</a></li><li><a href="global.html#event:gyroscopeUpdate">gyroscopeUpdate</a></li><li><a href="global.html#event:ready">ready</a></li><li><a href="global.html#event:wasStitched">wasStitched</a></li><li><a href="global.html#event:wasUnstitched">wasUnstitched</a></li></ul><h3><a href="global.html">Global</a></h3>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta2</a> on Fri Mar 13 2015 16:04:19 GMT+0100 (CET)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Protocols/CWWebLibraryManagerDelegate.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intf/CWWebLibraryManagerDelegate</TokenIdentifier>
+			<Abstract type="html">A delegate protocol that receives different events from the CWWebLibraryManager (and therefore also from the web library)</Abstract>
+			<DeclaredIn>CWWebLibraryManagerDelegate.h</DeclaredIn>
+            
+			
+			<NodeRef refid="41"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/CWWebLibraryManagerDelegate/webLibraryIsReady</TokenIdentifier>
+			<Abstract type="html">Called when the web library has been loaded and established a connection to the local webserver</Abstract>
+			<DeclaredIn>CWWebLibraryManagerDelegate.h</DeclaredIn>
+			
+			<Declaration>- (void)webLibraryIsReady</Declaration>
+			
+			
+			<Anchor>//api/name/webLibraryIsReady</Anchor>
+            <NodeRef refid="41"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/CWWebLibraryManagerDelegate/didReceiveConnectionRequestForRemote:</TokenIdentifier>
+			<Abstract type="html">Called when the web library requested the connection to another device</Abstract>
+			<DeclaredIn>CWWebLibraryManagerDelegate.h</DeclaredIn>
+			
+			<Declaration>- (void)didReceiveConnectionRequestForRemote:(NSString *)identifier</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>identifier</Name>
+					<Abstract type="html">The identifier of the device that should be used as a remote device</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/didReceiveConnectionRequestForRemote:</Anchor>
+            <NodeRef refid="41"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/CWWebLibraryManagerDelegate/remoteDidConnect:</TokenIdentifier>
+			<Abstract type="html">Called when the connection to another device was successfully established</Abstract>
+			<DeclaredIn>CWWebLibraryManagerDelegate.h</DeclaredIn>
+			
+			<Declaration>- (void)remoteDidConnect:(NSString *)identifier</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>identifier</Name>
+					<Abstract type="html">The identifier of the connected device</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/remoteDidConnect:</Anchor>
+            <NodeRef refid="41"/>
+		</Token>
+		
+        
+	</File>
+</Tokens>

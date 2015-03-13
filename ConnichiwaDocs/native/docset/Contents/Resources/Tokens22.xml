@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Classes/GCDWebServerErrorResponse.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/cl/GCDWebServerErrorResponse</TokenIdentifier>
+			<Abstract type="html">The GCDWebServerDataResponse subclass of GCDWebServerDataResponse generates
+an HTML body from an HTTP status code and an error message.</Abstract>
+			<DeclaredIn>GCDWebServerErrorResponse.h</DeclaredIn>
+            
+			
+			<NodeRef refid="22"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/GCDWebServerErrorResponse/responseWithClientError:message:</TokenIdentifier>
+			<Abstract type="html">Creates a client error response with the corresponding HTTP status code.</Abstract>
+			<DeclaredIn>GCDWebServerErrorResponse.h</DeclaredIn>
+			
+			<Declaration>+ (instancetype)responseWithClientError:(GCDWebServerClientErrorHTTPStatusCode)errorCode message:(NSString *)format, ...</Declaration>
+			
+			
+			<Anchor>//api/name/responseWithClientError:message:</Anchor>
+            <NodeRef refid="22"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/GCDWebServerErrorResponse/responseWithServerError:message:</TokenIdentifier>
+			<Abstract type="html">Creates a server error response with the corresponding HTTP status code.</Abstract>
+			<DeclaredIn>GCDWebServerErrorResponse.h</DeclaredIn>
+			
+			<Declaration>+ (instancetype)responseWithServerError:(GCDWebServerServerErrorHTTPStatusCode)errorCode message:(NSString *)format, ...</Declaration>
+			
+			
+			<Anchor>//api/name/responseWithServerError:message:</Anchor>
+            <NodeRef refid="22"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/GCDWebServerErrorResponse/responseWithClientError:underlyingError:message:</TokenIdentifier>
+			<Abstract type="html">Creates a client error response with the corresponding HTTP status code
+and an underlying NSError.</Abstract>
+			<DeclaredIn>GCDWebServerErrorResponse.h</DeclaredIn>
+			
+			<Declaration>+ (instancetype)responseWithClientError:(GCDWebServerClientErrorHTTPStatusCode)errorCode underlyingError:(NSError *)underlyingError message:(NSString *)format, ...</Declaration>
+			
+			
+			<Anchor>//api/name/responseWithClientError:underlyingError:message:</Anchor>
+            <NodeRef refid="22"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/GCDWebServerErrorResponse/responseWithServerError:underlyingError:message:</TokenIdentifier>
+			<Abstract type="html">Creates a server error response with the corresponding HTTP status code
+and an underlying NSError.</Abstract>
+			<DeclaredIn>GCDWebServerErrorResponse.h</DeclaredIn>
+			
+			<Declaration>+ (instancetype)responseWithServerError:(GCDWebServerServerErrorHTTPStatusCode)errorCode underlyingError:(NSError *)underlyingError message:(NSString *)format, ...</Declaration>
+			
+			
+			<Anchor>//api/name/responseWithServerError:underlyingError:message:</Anchor>
+            <NodeRef refid="22"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerErrorResponse/initWithClientError:message:</TokenIdentifier>
+			<Abstract type="html">Initializes a client error response with the corresponding HTTP status code.</Abstract>
+			<DeclaredIn>GCDWebServerErrorResponse.h</DeclaredIn>
+			
+			<Declaration>- (instancetype)initWithClientError:(GCDWebServerClientErrorHTTPStatusCode)errorCode message:(NSString *)format, ...</Declaration>
+			
+			
+			<Anchor>//api/name/initWithClientError:message:</Anchor>
+            <NodeRef refid="22"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerErrorResponse/initWithServerError:message:</TokenIdentifier>
+			<Abstract type="html">Initializes a server error response with the corresponding HTTP status code.</Abstract>
+			<DeclaredIn>GCDWebServerErrorResponse.h</DeclaredIn>
+			
+			<Declaration>- (instancetype)initWithServerError:(GCDWebServerServerErrorHTTPStatusCode)errorCode message:(NSString *)format, ...</Declaration>
+			
+			
+			<Anchor>//api/name/initWithServerError:message:</Anchor>
+            <NodeRef refid="22"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerErrorResponse/initWithClientError:underlyingError:message:</TokenIdentifier>
+			<Abstract type="html">Initializes a client error response with the corresponding HTTP status code
+and an underlying NSError.</Abstract>
+			<DeclaredIn>GCDWebServerErrorResponse.h</DeclaredIn>
+			
+			<Declaration>- (instancetype)initWithClientError:(GCDWebServerClientErrorHTTPStatusCode)errorCode underlyingError:(NSError *)underlyingError message:(NSString *)format, ...</Declaration>
+			
+			
+			<Anchor>//api/name/initWithClientError:underlyingError:message:</Anchor>
+            <NodeRef refid="22"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerErrorResponse/initWithServerError:underlyingError:message:</TokenIdentifier>
+			<Abstract type="html">Initializes a server error response with the corresponding HTTP status code
+and an underlying NSError.</Abstract>
+			<DeclaredIn>GCDWebServerErrorResponse.h</DeclaredIn>
+			
+			<Declaration>- (instancetype)initWithServerError:(GCDWebServerServerErrorHTTPStatusCode)errorCode underlyingError:(NSError *)underlyingError message:(NSString *)format, ...</Declaration>
+			
+			
+			<Anchor>//api/name/initWithServerError:underlyingError:message:</Anchor>
+            <NodeRef refid="22"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerErrorResponse/initWithStatusCode:underlyingError:messageFormat:arguments:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerErrorResponse.m</DeclaredIn>
+			
+			<Declaration>- (instancetype)initWithStatusCode:(NSInteger)statusCode underlyingError:(NSError *)underlyingError messageFormat:(NSString *)format arguments:(va_list)arguments</Declaration>
+			
+			
+			<Anchor>//api/name/initWithStatusCode:underlyingError:messageFormat:arguments:</Anchor>
+            <NodeRef refid="22"/>
+		</Token>
+		
+        
+	</File>
+</Tokens>

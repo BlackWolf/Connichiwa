@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Classes/CWWebserverManager.html">
+	<File path="Classes/CWBluetoothTransferPeripheralKey.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/cl/CWWebserverManager</TokenIdentifier>
-			<Abstract type="html">The CWWebserverManager class represents the local webserver run by Connichiwa in order to run local web applications.
-It is responsible for launching and managing the webserver and acts as a bridge between Objective-C and the server, sending and receiving messages from it over the Connichiwa Communication Protocol (Native Layer).
-Only one instance of the webserver should be running on a device.</Abstract>
-			<DeclaredIn>CWWebserverManager.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/cl/CWBluetoothTransferPeripheralKey</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothTransferManager.m</DeclaredIn>
             
 			
 			<NodeRef refid="7"/>
@@ -15,179 +13,146 @@ Only one instance of the webserver should be running on a device.</Abstract>
 		
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWWebserverManager/setDelegate:</TokenIdentifier>
-			<Abstract type="html">The delegate to receive events by this class</Abstract>
-			<DeclaredIn>CWWebserverManager.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothTransferPeripheralKey/setPeripheral:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothTransferManager.m</DeclaredIn>
 			
-			<Declaration>@property (readwrite, strong) id&lt;CWWebserverManagerDelegate&gt; delegate</Declaration>
+			<Declaration>@property (readwrite, strong) CBPeripheral *peripheral</Declaration>
 			
 			
-			<Anchor>//api/name/delegate</Anchor>
+			<Anchor>//api/name/peripheral</Anchor>
             <NodeRef refid="7"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWWebserverManager/delegate</TokenIdentifier>
-			<Abstract type="html">The delegate to receive events by this class</Abstract>
-			<DeclaredIn>CWWebserverManager.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothTransferPeripheralKey/peripheral</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothTransferManager.m</DeclaredIn>
 			
-			<Declaration>@property (readwrite, strong) id&lt;CWWebserverManagerDelegate&gt; delegate</Declaration>
+			<Declaration>@property (readwrite, strong) CBPeripheral *peripheral</Declaration>
 			
 			
-			<Anchor>//api/name/delegate</Anchor>
+			<Anchor>//api/name/peripheral</Anchor>
             <NodeRef refid="7"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/CWWebserverManager/delegate</TokenIdentifier>
-			<Abstract type="html">The delegate to receive events by this class</Abstract>
-			<DeclaredIn>CWWebserverManager.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instp/CWBluetoothTransferPeripheralKey/peripheral</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothTransferManager.m</DeclaredIn>
 			
-			<Declaration>@property (readwrite, strong) id&lt;CWWebserverManagerDelegate&gt; delegate</Declaration>
+			<Declaration>@property (readwrite, strong) CBPeripheral *peripheral</Declaration>
 			
 			
-			<Anchor>//api/name/delegate</Anchor>
+			<Anchor>//api/name/peripheral</Anchor>
             <NodeRef refid="7"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWWebserverManager/setDocumentRoot:</TokenIdentifier>
-			<Abstract type="html">Path to the folder acting as the root of the web server. &apos;/&apos; on the web server will be mapped to this path.</Abstract>
-			<DeclaredIn>CWWebserverManager.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothTransferPeripheralKey/setCharacteristic:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothTransferManager.m</DeclaredIn>
 			
-			<Declaration>@property (readonly) NSString *documentRoot</Declaration>
+			<Declaration>@property (readwrite, strong) CBCharacteristic *characteristic</Declaration>
 			
 			
-			<Anchor>//api/name/documentRoot</Anchor>
+			<Anchor>//api/name/characteristic</Anchor>
             <NodeRef refid="7"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWWebserverManager/documentRoot</TokenIdentifier>
-			<Abstract type="html">Path to the folder acting as the root of the web server. &apos;/&apos; on the web server will be mapped to this path.</Abstract>
-			<DeclaredIn>CWWebserverManager.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothTransferPeripheralKey/characteristic</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothTransferManager.m</DeclaredIn>
 			
-			<Declaration>@property (readonly) NSString *documentRoot</Declaration>
+			<Declaration>@property (readwrite, strong) CBCharacteristic *characteristic</Declaration>
 			
 			
-			<Anchor>//api/name/documentRoot</Anchor>
+			<Anchor>//api/name/characteristic</Anchor>
             <NodeRef refid="7"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/CWWebserverManager/documentRoot</TokenIdentifier>
-			<Abstract type="html">Path to the folder acting as the root of the web server. &apos;/&apos; on the web server will be mapped to this path.</Abstract>
-			<DeclaredIn>CWWebserverManager.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instp/CWBluetoothTransferPeripheralKey/characteristic</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothTransferManager.m</DeclaredIn>
 			
-			<Declaration>@property (readonly) NSString *documentRoot</Declaration>
+			<Declaration>@property (readwrite, strong) CBCharacteristic *characteristic</Declaration>
 			
 			
-			<Anchor>//api/name/documentRoot</Anchor>
+			<Anchor>//api/name/characteristic</Anchor>
             <NodeRef refid="7"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWWebserverManager/initWithDocumentRoot:</TokenIdentifier>
-			<Abstract type="html">Initialize a new CWWebserverManager instance with the given document root (should point to the path where the web application resides). Calling this does not actually start the webserver, use startWebserver to do so.</Abstract>
-			<DeclaredIn>CWWebserverManager.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothTransferPeripheralKey/init</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothTransferManager.m</DeclaredIn>
 			
-			<Declaration>- (instancetype)initWithDocumentRoot:(NSString *)documentRoot</Declaration>
-			<Parameters>
-				<Parameter>
-					<Name>documentRoot</Name>
-					<Abstract type="html">The document root of the webserver, usually pointing to the path of the web application. &apos;/&apos; on the web server will be mapped to this path.</Abstract>
-				</Parameter>
-			</Parameters>
-			<ReturnValue><Abstract type="html">A new CWWebserverManager instance</Abstract></ReturnValue>
-			<Anchor>//api/name/initWithDocumentRoot:</Anchor>
+			<Declaration>- (instancetype)init</Declaration>
+			
+			
+			<Anchor>//api/name/init</Anchor>
             <NodeRef refid="7"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWWebserverManager/startWebserverOnPort:</TokenIdentifier>
-			<Abstract type="html">Starts the webserver on the given port, making it possible for web clients to connect to it</Abstract>
-			<DeclaredIn>CWWebserverManager.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothTransferPeripheralKey/initWithPeripheral:characteristic:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothTransferManager.m</DeclaredIn>
 			
-			<Declaration>- (void)startWebserverOnPort:(int)port</Declaration>
-			<Parameters>
-				<Parameter>
-					<Name>port</Name>
-					<Abstract type="html">The port the webserver should listen on. Note that the websocket server will listen on this + 1</Abstract>
-				</Parameter>
-			</Parameters>
+			<Declaration>- (instancetype)initWithPeripheral:(CBPeripheral *)peripheral characteristic:(CBCharacteristic *)characteristic</Declaration>
 			
-			<Anchor>//api/name/startWebserverOnPort:</Anchor>
+			
+			<Anchor>//api/name/initWithPeripheral:characteristic:</Anchor>
             <NodeRef refid="7"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWWebserverManager/sendToWeblib_localIdentifier:</TokenIdentifier>
-			<Abstract type="html">Sends the given identifier to the web library and tells the web library this is the identifier of this device. Should usually only be called once in the application&apos;s life cycle and only with the correct identifier, otherwise results are undefined.</Abstract>
-			<DeclaredIn>CWWebserverManager.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothTransferPeripheralKey/isEqual:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothTransferManager.m</DeclaredIn>
 			
-			<Declaration>- (void)sendToWeblib_localIdentifier:(NSString *)identifier</Declaration>
-			<Parameters>
-				<Parameter>
-					<Name>identifier</Name>
-					<Abstract type="html">The identifier that represents this device amongst Connichiwa</Abstract>
-				</Parameter>
-			</Parameters>
+			<Declaration>- (BOOL)isEqual:(id)object</Declaration>
 			
-			<Anchor>//api/name/sendToWeblib_localIdentifier:</Anchor>
+			
+			<Anchor>//api/name/isEqual:</Anchor>
             <NodeRef refid="7"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWWebserverManager/sendToWeblib_deviceDetected:</TokenIdentifier>
-			<Abstract type="html">Sends a message to the web library telling it about a newly detected, nearby device with the given identifier</Abstract>
-			<DeclaredIn>CWWebserverManager.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothTransferPeripheralKey/isEqualToCWBluetoothTransferPeripheralKey:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothTransferManager.m</DeclaredIn>
 			
-			<Declaration>- (void)sendToWeblib_deviceDetected:(NSString *)identifier</Declaration>
-			<Parameters>
-				<Parameter>
-					<Name>identifier</Name>
-					<Abstract type="html">The identifier of the device that was detected</Abstract>
-				</Parameter>
-			</Parameters>
+			<Declaration>- (BOOL)isEqualToCWBluetoothTransferPeripheralKey:(CWBluetoothTransferPeripheralKey *)otherKey</Declaration>
 			
-			<Anchor>//api/name/sendToWeblib_deviceDetected:</Anchor>
+			
+			<Anchor>//api/name/isEqualToCWBluetoothTransferPeripheralKey:</Anchor>
             <NodeRef refid="7"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWWebserverManager/sendToWeblib_device:changedDistance:</TokenIdentifier>
-			<Abstract type="html">Sends a message to the web library telling it that the distance of a previously detected device has changes</Abstract>
-			<DeclaredIn>CWWebserverManager.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothTransferPeripheralKey/hash</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothTransferManager.m</DeclaredIn>
 			
-			<Declaration>- (void)sendToWeblib_device:(NSString *)identifier changedDistance:(double)distance</Declaration>
-			<Parameters>
-				<Parameter>
-					<Name>identifier</Name>
-					<Abstract type="html">The identifier of the device whose distance changes</Abstract>
-				</Parameter><Parameter>
-					<Name>distance</Name>
-					<Abstract type="html">The new distance of the device in meters</Abstract>
-				</Parameter>
-			</Parameters>
+			<Declaration>- (NSUInteger)hash</Declaration>
 			
-			<Anchor>//api/name/sendToWeblib_device:changedDistance:</Anchor>
+			
+			<Anchor>//api/name/hash</Anchor>
             <NodeRef refid="7"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWWebserverManager/sendToWeblib_connectionRequestFailed:</TokenIdentifier>
-			<Abstract type="html">Sends a message to the web library telling it that a request to use another device as a remote device has failed</Abstract>
-			<DeclaredIn>CWWebserverManager.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothTransferPeripheralKey/copyWithZone:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothTransferManager.m</DeclaredIn>
 			
-			<Declaration>- (void)sendToWeblib_connectionRequestFailed:(NSString *)identifier</Declaration>
-			<Parameters>
-				<Parameter>
-					<Name>identifier</Name>
-					<Abstract type="html">The identifier of the device that should have been used as a remote device</Abstract>
-				</Parameter>
-			</Parameters>
+			<Declaration>- (id)copyWithZone:(NSZone *)zone</Declaration>
 			
-			<Anchor>//api/name/sendToWeblib_connectionRequestFailed:</Anchor>
+			
+			<Anchor>//api/name/copyWithZone:</Anchor>
             <NodeRef refid="7"/>
 		</Token>
 		

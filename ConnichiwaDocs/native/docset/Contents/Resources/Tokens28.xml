@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Classes/GCDWebServerMIMEStreamParser.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/cl/GCDWebServerMIMEStreamParser</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerMultiPartFormRequest.m</DeclaredIn>
+            
+			
+			<NodeRef refid="28"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerMIMEStreamParser/initWithBoundary:defaultControlName:arguments:files:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerMultiPartFormRequest.m</DeclaredIn>
+			
+			<Declaration>- (id)initWithBoundary:(NSString *)boundary defaultControlName:(NSString *)name arguments:(NSMutableArray *)arguments files:(NSMutableArray *)files</Declaration>
+			
+			
+			<Anchor>//api/name/initWithBoundary:defaultControlName:arguments:files:</Anchor>
+            <NodeRef refid="28"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerMIMEStreamParser/appendBytes:length:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerMultiPartFormRequest.m</DeclaredIn>
+			
+			<Declaration>- (BOOL)appendBytes:(const void *)bytes length:(NSUInteger)length</Declaration>
+			
+			
+			<Anchor>//api/name/appendBytes:length:</Anchor>
+            <NodeRef refid="28"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerMIMEStreamParser/isAtEnd</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerMultiPartFormRequest.m</DeclaredIn>
+			
+			<Declaration>- (BOOL)isAtEnd</Declaration>
+			
+			
+			<Anchor>//api/name/isAtEnd</Anchor>
+            <NodeRef refid="28"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/GCDWebServerMIMEStreamParser/initialize</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerMultiPartFormRequest.m</DeclaredIn>
+			
+			<Declaration>+ (void)initialize</Declaration>
+			
+			
+			<Anchor>//api/name/initialize</Anchor>
+            <NodeRef refid="28"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerMIMEStreamParser/dealloc</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerMultiPartFormRequest.m</DeclaredIn>
+			
+			<Declaration>- (void)dealloc</Declaration>
+			
+			
+			<Anchor>//api/name/dealloc</Anchor>
+            <NodeRef refid="28"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerMIMEStreamParser/_parseData</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerMultiPartFormRequest.m</DeclaredIn>
+			
+			<Declaration>- (BOOL)_parseData</Declaration>
+			
+			
+			<Anchor>//api/name/_parseData</Anchor>
+            <NodeRef refid="28"/>
+		</Token>
+		
+        
+	</File>
+</Tokens>

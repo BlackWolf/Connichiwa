@@ -1,923 +1,1602 @@
-"use strict";
-
-var OOP = (function() {
-  var DEFAULT_PACKAGE_NAME = "default";
-
-  var classes = {};
-  var packages = {};
-
-  var createSingleton = function(packageName, className, properties) {
-    //if we only get 2 arguments, the packageName was omitted
-    if (properties === undefined) {
-      properties = className;
-      className = packageName;
-      packageName = DEFAULT_PACKAGE_NAME;
-    }
-
-    return _createSingletonInPackage(packageName, className, properties);
-  };
-
-  var _createSingletonInPackage = function(packageName, className, properties) {
-    // To create a new class, we first create an empty class and then
-    // extend it with the given properties
-    var theClass = {
-      private : function() {},
-      package : function() {},
-      public  : function() {}
-    };
-
-    if (packageName in packages === false) {
-      packages[packageName] = function() {};
-    }
-
-    //Save the package-scoped properties of the class in the package so other
-    //classes in the same package get access to them
-    //Furthermore, set a private package property of the class to its package
-    //so the package is accessible inside the class via "this.package"
-    var thePackage = packages[packageName];
-    thePackage[className] = theClass.package;
-    theClass.private.package = thePackage;
-
-    //Save all scopes of the class OOP-internally
-    //We need those if we want to extend the class later
-    if (packageName in classes === false) classes[packageName] = {};
-    classes[packageName][className] = theClass;
-
-    return _extendSingletonInPackage(packageName, className, properties);
-  };
-
-
-  var extendSingleton = function(packageName, className, properties) {
-    //if we only get 2 arguments, the packageName was omitted
-    if (properties === undefined) {
-      properties = className;
-      className = packageName;
-      packageName = DEFAULT_PACKAGE_NAME;
-    }
-
-    return _extendSingletonInPackage(packageName, className, properties);
-  };
-
-
-  var _extendSingletonInPackage = function(packageName, className, properties) {
-    if (packageName in classes === false) return;
-    if (className in classes[packageName] === false) return;
-    var addedConstructor = false;
-    var theClass = classes[packageName][className];
-
-    var getter = function(scope, propertyName) { return function() { return scope[propertyName]; }; };
-    var setter = function(scope, propertyName) { return function(value) { scope[propertyName] = value; }; };
-    
-    var errorGetter = function() { return undefined; };
-    var errorSetter = function(value) { throw new TypeError("Cannot set non-visible property"); };
-  
-    // Walk over each property we got. Determine its visibility
-    // and add it to the right object so it has the correct scope 
-    for (var modifiedPropertyName in properties) {
-      if (properties.hasOwnProperty(modifiedPropertyName)) {
-
-        //Determine visibility
-        var visibility = "private";
-        var propertyName = modifiedPropertyName;
-        if (propertyName.indexOf("public ") === 0) {
-          visibility = "public";
-          propertyName = propertyName.substr(7);
-        } else if (propertyName.indexOf("package ") === 0) {
-          visibility = "package";
-          propertyName = propertyName.substr(8);
-        } else if (propertyName.indexOf("private ") === 0) {
-          propertyName = propertyName.substr(8);
-        }
-
-        //
-        // METHODS
-        // 
-        // Methods simply need to be added to the correct scope. This means:
-        // - private methods are only in private scope (available within the class)
-        // - package methods are in private and package scope (not available publicly)
-        // - public methods are in private, package and public scope (available everywhere)
-        // Furthermore, each method is bound to the private scope - from inside a class method 
-        // we can then access every class method and property using "this"
-        // 
-        
-        if (typeof properties[modifiedPropertyName] === "function")
-        {
-          var theMethod = properties[modifiedPropertyName].bind(theClass.private);
-
-          switch (visibility) {
-            case "private":
-              theClass.private[propertyName]  = theMethod;
-              break;
-            case "package":
-              theClass.private[propertyName]  = theMethod;
-              theClass.package[propertyName]  = theMethod;
-              break;
-            case "public":
-              theClass.private[propertyName]  = theMethod;
-              theClass.package[propertyName]  = theMethod;
-              theClass.public[propertyName]   = theMethod;
-              break;
-          }
-
-          if (propertyName === "__constructor") {
-            addedConstructor = true;
-          }
-
-          //
-          // PROPERTIES
-          // 
-          // Properties are more complex than methods because primitives are not 
-          // passed by reference. We still need to make sure we access the same
-          // property in all scopes.
-          // To achieve that, we only define the property in the most visible scope (e.g. in
-          // package scope if the property is marked package). The more limited scopes get
-          // getters & setters that access that property.
-          // Furthermore, accessing a property that doesn't exist creates that property
-          // in JavaScript. E.g., accessing a private property publicly does not fail, but creates
-          // that property in public scope. Therefore, we define getters & setters for the more
-          // public scopes that throw an error. 
-          // 
-          
-        } else {
-          switch (visibility) {
-            case "private":
-              theClass.private[propertyName] = properties[modifiedPropertyName];
-
-              Object.defineProperty(theClass.package, propertyName, {
-                get : errorGetter,
-                set : errorSetter
-              });
-
-              Object.defineProperty(theClass.public, propertyName, {
-                get : errorGetter,
-                set : errorSetter
-              });
-
-              break;
-            case "package":
-              theClass.package[propertyName] = properties[modifiedPropertyName];
-
-              Object.defineProperty(theClass.private, propertyName, {
-                get : getter(theClass.package, propertyName),
-                set : setter(theClass.package, propertyName)
-              });
-
-              Object.defineProperty(theClass.public, propertyName, {
-                get : errorGetter,
-                set : errorSetter
-              });
-
-              break;
-            case "public":
-              theClass.public[propertyName] = properties[modifiedPropertyName];
-
-              Object.defineProperty(theClass.private, propertyName, {
-                get : getter(theClass.public, propertyName),
-                set : setter(theClass.public, propertyName)
-              });
-
-              Object.defineProperty(theClass.package, propertyName, {
-                get : getter(theClass.public, propertyName),
-                set : setter(theClass.public, propertyName)
-              });
-
-              break;
-          }
-        }
-      }
-    }
-
-    //Now that the class is built, call a constructor if there is any
-    //Constructors have the magic name __constructor
-    //We invoke the constructor in the next run loop, because we have to wait
-    //for other classes and parts of the package to be build
-    if (addedConstructor === true) {
-      window.setTimeout(theClass.private.__constructor, 0);
-    }
-
-    return theClass.public;
-  };
-
-
-  return {
-    createSingleton : createSingleton,
-    extendSingleton : extendSingleton
-  };
-})();  
-/* global OOP */
-"use strict";
+'use strict';
 
 
 
 /**
- * Gives us some nice debug convenience functions
  *
+ * @typedef DebugInfo
+ * @type Object
+ * @property {Boolean} debug  A boolean that determines if debugging is
+ *    enabled or disabled
+ * @property {Number} logLevel  A log level, see {@link CWDebug.setLogLevel}
+ * @memberOf CWDebug
+ */
+
+
+
+/**
+ * Used for debugging in Connichiwa. Debug messages can be easily enabled or
+ *    disabled using {@link CWDebug.setDebug}. The level of logging can be set
+ *    using {@link CWDebug.setLogLevel} to control which messages are logged.
+ *
+ * To log messages, use either the {@link CWDebug.log} or {@link CWDebug.err}
+ *    methods.
+ *
+ * **IMPORTANT**: By default, debug and logLevel are set to the debug and logLevel
+ *    of the native application. So if debugging is enabled natively and a
+ *    logLevel of 3 is set, your web application will reflect that. You can,
+ *    however, change the defaults in {@link Connichiwa.event:onLoad}.
  * @namespace CWDebug
  */
-var CWDebug = OOP.createSingleton("Connichiwa", "CWDebug", {
-  _debug: false,
-  _logLevel: 0,
-
-  "public setDebug": function(v) {
-    this._debug = v;
-  },
-
-  "public setLogLevel": function(v) {
-    this._logLevel = v;
-  },
+var CWDebug = CWDebug || {};
 
 
-  "public setDebugInfo": function(info) {
-    console.log("SETTING DEBUG INFO: "+info.debug+" || "+info.logLevel);
-    if (info.debug)    CWDebug.setDebug(info.debug);
-    if (info.logLevel) CWDebug.setLogLevel(info.logLevel);
-  },
+/**
+ * Enables or disables debug logging
+ * @type {Boolean}
+ * @default [taken from native application]
+ * @private
+ */
+CWDebug._debug = false;
 
 
-  "public getDebugInfo": function() {
-    return { debug: this._debug, logLevel: this._logLevel };
-  },
+/**
+ * The current log level, see {@link CWDebug.setLogLevel}
+ * @type {Number}
+ * @default [taken from native application]
+ * @private
+ */
+CWDebug._logLevel = 0;
 
 
-  "public log": function(level, msg) {
-    if (this._debug && level <= this._logLevel) {
-      console.log(level + "|" + msg);
-    }
-  },
+/**
+ * Sets the current debug settings with a single object
+ * @param {CWDebug.DebugInfo} info The object containing the new debug
+ *    information
+ * @function
+ * @private
+ */
+CWDebug._setDebugInfo = function(info) {
+  if (info.debug)    CWDebug.setDebug(info.debug);
+  if (info.logLevel) CWDebug.setLogLevel(info.logLevel);
+}.bind(CWDebug);
 
-  "public err": function(msg) {
-    if (this._debug) {
-      console.log("ERROR" + "|" + msg);
-    }
+
+/**
+ * Returns an object that represents the current debug information
+ * @return {CWDebug.DebugInfo} An object that contains information about the
+ *    current debug settings
+ * @function
+ * @private
+ */
+CWDebug._getDebugInfo = function() {
+  return { debug: this._debug, logLevel: this._logLevel };
+}.bind(CWDebug);
+
+
+/**
+ * The main logging function. Use this function to log a debug message with
+ *    the given log level. If the currently set log level is equal or higher
+ *    than the message's level, it will be logged, otherwise it will be
+ *    ignored.
+ * @param  {Number} level  The log level of the message
+ * @param  {String} msg The log message. This message will be logged using
+ *    console.log(). If the current page is run on a device using a
+ *    Connichiwa-based application, the log will be redirected to the IDE's
+ *    log output
+ * @function
+ */
+CWDebug.log = function(level, msg) {
+  if (this._debug && level <= this._logLevel) {
+    console.log(level + '|' + msg);
   }
-});/* global Connichiwa, CWSystemInfo, CWUtil, CWEventManager, CWDebug */
-/* global nativeCallConnectRemote */
-"use strict";
+}.bind(CWDebug);
 
 
+/**
+ * Logs the given message as an error
+ * @param  {String} msg The error message that should be logged
+ * @function
+ */
+CWDebug.err = function(msg) {
+  if (this._debug) {
+    console.log('ERROR' + '|' + msg);
+  }
+}.bind(CWDebug);
 
-var CWDeviceDiscoveryState = 
-{
-  DISCOVERED : "discovered",
-  LOST       : "lost"
-};
+/**
+ * Enables or disables debugging output
+ * @param {Boolean} v True if debugging logs should be enabled, otherwise
+ *    false
+ * @function
+ */
+CWDebug.setDebug = function(v) {
+  this._debug = v;
+}.bind(CWDebug);
 
-var CWDeviceConnectionState =
-{
-  DISCONNECTED : "disconnected",
-  CONNECTING   : "connecting",
-  CONNECTED    : "connected"
-};
+/**
+ * Sets the log level. Can be a number from 0 to 5, whereas 0 means that no
+ *    logging will occur, and 5 means that everything will be logged. The
+ *    higher the logging level, the more "spammy" log messages will be
+ *    permitted.
+ * @param {Number} v The new log level
+ * @function
+ */
+CWDebug.setLogLevel = function(v) {
+  this._logLevel = v;
+}.bind(CWDebug);
+
+//Initalize module. Delayed call to make sure all modules are ready
+if (CWDebug.__constructor) window.setTimeout(CWDebug.__constructor, 0);
+/* global Connichiwa, CWSystemInfo */
+'use strict';
+
 
 
 
 /**
- * An instance of this class describes a remote device that was detected nearby. It furthermore keeps information like the distance of the device and other connection-related information.
+ * Constructs a new device with the given properties. **You should never
+ *    constructor a CWDevice yourself**
+ * @param {Object} properties The device's reported properties that will be
+ *    part of the CWDevice
+ * @constructor
+ * 
+ * @class CWDevice
+ * @classdesc Represents a physical device. When the master device detects a
+ *    device over Bluetooth, or when a device connects through a webbrowser, a
+ *    CWDevice object is constructed. The object is then passed to your
+ *    application through an event, for example {@link event:devicedetected}
+ *    or {@link event:deviceconnected}. Your application can then use the
+ *    CWDevice to get information about the device or to manipulate the
+ *    device.
  *
- * @namespace CWDevice
+ * When a device is detected over Bluetooth, the {@link event:devicedetected}
+ *    event is raised and {@link CWDevice#isNearby} will return `true`. While
+ *    the device is in Bluetooth range, {@link event:devicedistancechanged}
+ *    events are send whenever the approximated distance of the device
+ *    changes. That distance is then available via {@link
+ *    CWDevice#getDistance}. When the device disables Bluetooth, moves out of
+ *    range or in other ways stops being discoverable over Bluetooth a {@link
+ *    event:devicelost} event is raised and {@link CWDevice#isNearby} returns
+ *    `false`.
+ *
+ * In order to manipulate a remote device, it must connect through HTTP to our
+ *    application. As long as the device has not done so, {@link
+ *    CWDevice#isConnected} will return `false`. You can call {@link
+ *    CWDevice#connect} to attempt to establish a connection. If the attempt
+ *    is successful, the device is fully connected, a {@link
+ *    event:deviceconnected} event is raised and {@link CWDevice#isConnected}
+ *    returns `true`. If the device fails to connect, a {@link
+ *    event:connectfailed} event is raised.
+ *
+ * Once a device is connected, it is ready to be used. CWDevice offers a
+ *    number of functions to manipulate the device, such as {@link
+ *    CWDevice#loadScript} or {@link CWDevice#insert}.
+ *
+ * A connected device can also receive custom messages. Messages can be sent
+ *    to a device using {@link CWDevice#send}. The device can react to such
+ *    messages by registering for message events using {@link
+ *    Connichiwa.onMessage}.
+ *
+ * CWDevice further offers a number of information about the device, such as
+ *    the unique identifier, name or distance. Note that none of that
+ *    information is guaranteed to be present, except {@link
+ *    CWDevice#getIdentifier}.
+ *
+ * **IMPORTANT**: **You should never construct a CWDevice yourself**. CWDevice
+ *    objects represent a physical device detected by the Connichiwa framework
+ *    and are handed to your application through events such as {@link
+ *    event:devicedetected} or {@link event:deviceconnected}. 
  */
 function CWDevice(properties)
 {
-  if (!properties.identifier) throw "Cannot instantiate CWDevice without an identifier";
+  if (!properties.identifier) {
+    throw 'Cannot instantiate CWDevice without an identifier';
+  }
 
-  this.discoveryState = CWDeviceDiscoveryState.LOST;
-  this.connectionState = CWDeviceConnectionState.DISCONNECTED;
-  this.distance = -1;
-  var _identifier = properties.identifier;
-  var _launchDate = Date.now() / 1000.0;
-  var _ips = [];
-  var _port = undefined;
-  var _name = "remote device";
-  var _ppi = CWSystemInfo.DEFAULT_PPI();
-
-  if (properties.launchDate) _launchDate = properties.launchDate;
-  if (properties.ips) _ips = properties.ips;
-  if (properties.port) _port = properties.port;
-  if (properties.name) _name = properties.name;
-  if (properties.ppi && properties.ppi > 0) _ppi = properties.ppi;
-  
   /**
-   * Returns the identifier of this device
-   *
-   * @returns {string} The identifier of this device
-   *
-   * @method getIdentifier
-   * @memberof CWDevice
+   * A UUID string that uniquely identifies this device
+   * @type {String}
+   * @private
    */
-  this.getIdentifier = function() { return _identifier; };
+  this._identifier = properties.identifier;
 
-  this.getLaunchDate = function() { return _launchDate; };
+  /**
+   * The current Bluetooth discovery state of the device
+   * @type {CWDevice.DiscoveryState}
+   * @private
+   */
+  this._discoveryState = CWDevice.DiscoveryState.LOST;
 
-  this.getIPs = function() { return _ips; };
+  /**
+   * The current HTTP connection state of the device
+   * @type {CWDevice.ConnectionState}
+   * @private
+   */
+  this._connectionState = CWDevice.ConnectionState.DISCONNECTED;
 
-  this.getPort = function() { return _port; };
+  /**
+   * The current approximated distance between this device and the master
+   *    device. For devices without Bluetooth or devices where the distance
+   *    can not be approximated, this returns -1
+   * @type {Number}
+   * @private
+   */
+  this._distance = -1;
 
-  this.getName = function() { return _name; };
+  /**
+   * The date when this device launched the application
+   * @type {Date}
+   * @private
+   */
+  this._launchDate = Date.now() / 1000.0;
 
-  this.getPPI = function() { return _ppi; };
+  /**
+   * An array of IPs this device advertises its applications over
+   * @type {Array}
+   * @private
+   */
+  this._ips = [];
 
-  this.isLocal = function() {
-    return this.equalTo(Connichiwa.getLocalDevice());
-  };
-  
-  this.isNearby = function()
-  {
-    return (this.discoveryState === CWDeviceDiscoveryState.DISCOVERED);
-  };
-  
-  this.canBeConnected = function() 
-  { 
-    return (this.connectionState === CWDeviceConnectionState.DISCONNECTED && 
-      this.discoveryState === CWDeviceDiscoveryState.DISCOVERED);
-  };
-  
-  this.isConnected = function()
-  {
-    return (this.connectionState === CWDeviceConnectionState.CONNECTED);
-  };
+  /**
+   * The port the device's webserver runs on. undefined when the device does
+   *    not run a webserver
+   * @type {Number}
+   * @private
+   */
+  this._port = undefined;
 
-  return this;
+  /**
+   * The canonical name of the device, or "remote device" if the name is
+   *    unknown
+   * @type {String}
+   * @private
+   */
+  this._name = 'remote device';
+
+  /**
+   * The approximated PPI of the device's display
+   * @type {Number}
+   * @private
+   */
+  this._ppi = CWSystemInfo.DEFAULT_PPI;
+
+  if (properties.launchDate) this._launchDate = properties.launchDate;
+  if (properties.ips) this._ips = properties.ips;
+  if (properties.port) this._port = properties.port;
+  if (properties.name) this._name = properties.name;
+  if (properties.ppi && properties.ppi > 0) this._ppi = properties.ppi;
 }
 
 
-// DEVICE COMMUNICATION API
+//
+// STATE
+// 
+
+/**
+ * Indicates whether the CWDevice instance represents the current device
+ * @return {Boolean}  true if the CWDevice is the current device, otherwise
+ *    false
+ */
+CWDevice.prototype.isLocal = function() {
+  return this.equalTo(Connichiwa.getLocalDevice());
+};
 
 
+/**
+ * Indicates if the device is in Bluetooth range
+ * @return {Boolean} true if the device is reachable over Bluetooth, otherwise
+ *    false
+ */
+CWDevice.prototype.isNearby = function() {
+  return (this.discoveryState === CWDevice.DiscoveryState.DISCOVERED);
+};
+
+
+/**
+ * Indicates if a connection can be established using a Bluetooth handshake.
+ *    If this method returns false, a call to {@link CWDevice.connect} will
+ *    have no effect.
+ * @return {Boolean} true if the device can be connected, otherwise false
+ * @private
+ */
+CWDevice.prototype._canBeConnected = function() { 
+  return (this.connectionState === CWDevice.ConnectionState.DISCONNECTED && 
+    this.discoveryState === CWDevice.DiscoveryState.DISCOVERED);
+};
+
+
+/**
+ * Indicates whether this device is currently connected to the master device
+ *    over HTTP and Websocket. The device is only usable as a remote device if
+ *    this returns true. Otherwise, calls such as {@link CWDevice#insert} will
+ *    have no effect.
+ * @return {Boolean} true if the device is fully connected, otherwise false
+ */
+CWDevice.prototype.isConnected = function() {
+  return (this.connectionState === CWDevice.ConnectionState.CONNECTED);
+};
+
+
+//
+// DEVICE COMMUNICATION
+// 
+
+
+/**
+ * Inserts the given HTML, jQuery element or DOM element into the given target
+ *    element on the device. This will have no effect if the device is not
+ *    connected.
+ * @param  {String|HTMLElement|jQuery} target  The target element(s) on the
+ *    device to insert into. This can be either a CSS selector or a DOM or
+ *    jQuery element. If it is one of the latter two, this method will search
+ *    for an element with the same ID on the remote device.
+ * @param  {String|HTMLElement|jQuery} html The HTML that will be inserted
+ *    into the device's DOM. Can be either plain HTML as a string or a DOM or
+ *    jQuery element, in which case the element will be cloned and send to the
+ *    other device.
+ */
 CWDevice.prototype.insert = function(target, html) {
   Connichiwa.insert(this.getIdentifier(), target, html);
 };
 
 
+/**
+ * Replaces the given target element with the given piece of HTML code, jQuery
+ *    element or DOM element on the device. Note that this will replace the
+ *    entire target node, not only its content. For replacing only a node's
+ *    content use {@link CWDevice#replaceContent}. This will have no effect if
+ *    the device is not connected.
+ * @param  {String|HTMLElement|jQuery} target The target element(s) on the
+ *    remote device that will be replaced. This can be either a CSS selector
+ *    or a DOM or jQuery element. If it is one of the latter two, this method
+ *    will search for an element with the same ID on the remote device.
+ * @param  {String|HTMLElement|jQuery} html The HTML that will replace the
+ *    target node in the device's DOM. Can be either plain HTML as a string or
+ *    a DOM or jQuery element, in which case the element will be cloned and
+ *    send to the other device.
+ */
 CWDevice.prototype.replace = function(target, html) {
   Connichiwa.replace(this.getIdentifier(), target, html);
 };
 
 
+/**
+ * Replaces the given target element's content with the given piece of HTML
+ *    code, jQuery element or DOM element on the device. Note that this will
+ *    replace the node's content, to replace the entire node use {@link
+ *    CWDevice#replace} instead. This will have no effect if the device is not
+ *    connected.
+ * @param  {String|HTMLElement|jQuery} target The target element(s) on the
+ *    remote device whos content will be replaced. This can be either a CSS
+ *    selector or a DOM or jQuery element. If it is one of the latter two,
+ *    this method will search for an element with the same ID on the remote
+ *    device.
+ * @param  {String|HTMLElement|jQuery} html The HTML that will replace the
+ *    target node's content in the device's DOM. Can be either plain HTML as a
+ *    string or a DOM or jQuery element, in which case the element will be
+ *    cloned and send to the other device.
+ */
 CWDevice.prototype.replaceContent = function(target, html) {
   Connichiwa.replaceContent(this.getIdentifier(), target, html);
 };
 
 
+/**
+ * Loads the JavaScript file at the given URL on the remote device and
+ *    executes it. The optional callback will be called after the script was
+ *    loaded
+ * @param  {String}   url An URL to a valid JavaScript file
+ * @param  {Function} [callback] A callback function that will be called after
+ *    the JavaScript file was loaded and executed on the remote device
+ */
 CWDevice.prototype.loadScript = function(url, callback) {
   Connichiwa.loadScript(this.getIdentifier(), url, callback);
 };
 
 
+/**
+ * Loads the CSS file at the given URL on the remote device and inserts it
+ *    into the DOM.
+ * @param  {String}   url An URL to a valid CSS file
+ */
 CWDevice.prototype.loadCSS = function(url) {
   Connichiwa.loadCSS(this.getIdentifier(), url);
 };
 
 
-CWDevice.prototype.send = function(name, message)
-{
+/**
+ * Sends a custom message with the given name to the device. The message
+ *    itself must be an object that can be serialized using JSON.stringify.
+ *    Also note that the message may not contain keys beginning with an
+ *    underscore, as these are reserved by Connichiwa. The message will be
+ *    sent to the device using a websocket connection and will trigger a
+ *    message event with the given name on the other device. The remote device
+ *    can react to messages using {@link Connichiwa.onMessage}.
+ * @param  {String} name The message's name. A message event with this name
+ *    will be triggered on the remote device.
+ * @param  {Object} message An object that can be serialized using
+ *    JSON.stringify. The object may not contain keys starting with an
+ *    underscore. The message will be passed to the message event on the
+ *    remote device.
+ */
+CWDevice.prototype.send = function(name, message) {
   Connichiwa.send(this.getIdentifier(), name, message);
 };
 
 
 /**
- * Checks if the given object is equal to this device. Two devices are equal if they describe the same remote device (= their ID is the same). This does not do any pointer comparison.
- *
- * @param {object} object The object to compare this CWDevice to
- * @returns {bool} true if the given object is equal to this CWDevice, otherwise false
+ * Checks if the given object is equal to this device. Two devices are equal
+ *    if they describe the same physical device.
+ * @param  {Object} object The object to check
+ * @return {Boolean} true if the object describes the same device as this
+ *    CWDevice, otherwise false
  */
-CWDevice.prototype.equalTo = function(object)
-{
+CWDevice.prototype.equalTo = function(object) {
   if (CWDevice.prototype.isPrototypeOf(object) === false) return false;
   return this.getIdentifier() === object.getIdentifier();
 };
 
 
 /**
- * Returns a string representation of this CWDevice
- *
- * @returns {string} a string representation of this device
+ * Returns a unique string representation of this device
+ * @returns {String} The string representation of this device
  */
 CWDevice.prototype.toString = function() {
   return this.getIdentifier();
 };
+
+/**
+ * Returns the unique identifier of the device, which is a v4 UUID
+ * @return {String} The unique identifier of the device
+ */
+CWDevice.prototype.getIdentifier = function() { 
+  return this._identifier; 
+};
+
+
+/**
+ * Returns the approximated distance between the master device and this device
+ * @return {Number} The approximated distance or `-1` when the distance is not
+ *    avialable
+ */
+CWDevice.prototype.getDistance = function() {
+  return this._distance;
+};
+
+
+/**
+ * Returns the date the device launched the web application
+ * @return {Date} The Date the device launched the web application
+ * @protected
+ */
+CWDevice.prototype.getLaunchDate = function() { 
+  return this._launchDate; 
+};
+
+
+/**
+ * Returns an array of possible IPs this device advertises the web application
+ *    over
+ * @return {Array} An array of IPs, each entry is a possible IP where the
+ *    device's webserver is reachable
+ * @protected
+ */
+CWDevice.prototype.getIPs = function() { 
+  return this._ips; 
+};
+
+
+/**
+ * Returns the port the device's webserver runs on
+ * @return {Number} The port the device's webserver runs on or undefined when
+ *    the port is unknown or the device does not run a webserver
+ * @protected
+ */
+CWDevice.prototype.getPort = function() { 
+  return this._port; 
+};
+
+
+/**
+ * Returns the canonical name of the device
+ * @return {String} The canonical name of the device or "remote device" if the
+ *    name is unknown
+ */
+CWDevice.prototype.getName = function() { 
+  return this._name; 
+};
+
+
+/**
+ * Returns the approximated PPI of the device's display
+ * @return {Number} The approximated PPI of the device's display. Depending on
+ *    the available information about the device, this can be exact or just an
+ *    approximation
+ */
+CWDevice.prototype.getPPI = function() { 
+  return this._ppi; 
+};
+
+/**
+ * Specifies the Bluetooth discovery state between a CWDevice and the master
+ *    device
+ * @enum String
+ * @readOnly
+ * @private
+ */
+CWDevice.DiscoveryState = {
+  /**
+   * Specifies the master device has discovered the CWDevice over Bluetooth
+   * @type {String}
+   */
+  DISCOVERED: 'discovered',
+  /**
+   * Specifies the master device cannot find the CWDevice over Bluetooth
+   * @type {String}
+   */
+  LOST: 'lost'
+};
+
+
+/**
+ * Specifies the connection state between a CWDevice and the master device
+ * @enum String
+ * @readOnly
+ * @private
+ */
+CWDevice.ConnectionState = {
+  /**
+   * Specifies the CWDevice has disconnected from the master
+   * @type {String}
+   */
+  DISCONNECTED: 'disconnected',
+  /**
+   * Specifies the CWDevice is currently establishing a connection to the
+   *    master
+   * @type {String}
+   */
+  CONNECTING: 'connecting',
+  /**
+   * Specifies the CWDevice is successfully connected to the master and can
+   *    receive messages.
+   * @type {String}
+   */
+  CONNECTED: 'connected'
+};
 /* global CWUtil, CWDebug */
-"use strict";
+'use strict';
 
 
 
 /**
- * Manages events throughout Connichiwa. Allows all parts of Connichiwa to register for and trigger events.
- *
- * @namespace CWEventManager
+ * Manages event registration and triggering events throughout Connichiwa.
+ *    This includes registration for system events (such as {@link
+ *    Connichiwa.deviceDetected}) and registration for custom messages from
+ *    other devices. This manager is also used to trigger events, which will
+ *    then call every callback that was registered for the event.
+ * @namespace  CWEventManager
+ * @protected
  */
-var CWEventManager = (function()
-{
-  /**
-   * A dictionary where each entry represents a single event. The key is the event name. Each entry of the dictionary is an array of callbacks that should be called when the event is triggered.
-   */
-  var _callbacks = {};
+var CWEventManager = CWEventManager || {};
 
-  /**
-   * Registers the given callback function for the given event. When the event is triggered, the callback will be executed.
-   *
-   * @param {string} event The name of the event
-   * @param {function} callback The callback function to call when the event is triggered
-   *
-   * @memberof CWEventManager
-   */
-  var register = function(event, callback)
+
+/**
+ * The currently registered callbacks. The keys in this dictionary are event
+ *    names, the values are arrays of callbacks registered for the event.
+ * @type {Object}
+ * @private
+ */
+CWEventManager._callbacks = {};
+
+
+/**
+ * Registers the given callback for the given event. If an event with the
+ *    given name is triggered, the callback will be executed.
+ * @param  {String}   event    The name of the event to register for
+ * @param  {Function} callback The callback function that will be invoked if
+ *    the event is triggered
+ * @function
+ * @protected
+ */
+CWEventManager.register = function(event, callback) {
+  if (typeof(event) !== 'string') throw 'Event name must be a string';
+  if (typeof(callback) !== 'function') throw 'Event callback must be a function';
+
+  event = event.toLowerCase();
+
+  //event can be a space-seperated list of event names
+  if (event.indexOf(' ') !== -1) {
+    var events = event.split(' ');
+    for (var i = 0; i < events.length; i++) {
+      CWEventManager.register(events[i], callback);
+    }
+    return;
+  }
+
+  if (!this._callbacks[event]) this._callbacks[event] = [];
+  this._callbacks[event].push(callback);
+  CWDebug.log(3, 'Attached callback to ' + event);
+}.bind(CWEventManager);
+
+
+/**
+ * Triggers an event with the given name. All callback functions that were
+ *    registered for that event using {@link CWEventManager.register} will be
+ *    invoked. Any additional parameters passed to this function will be
+ *    passed to the callbacks. The optional log priority determines the
+ *    priority with which debug messages are logged. For events that occur
+ *    regularly, this priority should be set to 5.
+ * @param  {Number} [logPrio=4] Priority with which trigger-messages will be
+ *    logged. Should be set to 5 for events that occur very frequently. Also
+ *    see {@link CWDebug.setLogLevel}
+ * @param  {String} event   The name of the event to trigger
+ * @param  {...Mixed} [var_args] Any additional arguments will be passed to
+ *    the callback functions
+ * @function
+ * @protected
+ */
+CWEventManager.trigger = function(logPrio, event, var_args) {
+  //Get the arguments passed to trigger() without logPrio and event
+  var args = Array.prototype.slice.call(arguments);
+  if (CWUtil.isString(logPrio) === true) {
+    //Only the event was given, default logPrio is used
+    event = logPrio;
+    logPrio = 4;
+    args.shift();
+  } else {
+    //logPrio and event were given, remove both from args
+    args.shift();
+    args.shift();
+  }
+
+  event = event.toLowerCase();
+
+  if (!this._callbacks[event]) { 
+    CWDebug.log(5, 'No callbacks  for ' + event + ' registered'); 
+    return; 
+  }
+
+  CWDebug.log(logPrio, 'Triggering event ' + event + ' for ' + this._callbacks[event].length + ' callbacks');
+  for (var i = 0; i < this._callbacks[event].length; i++)
   {
-    if (typeof(event) !== "string") throw "Event name must be a string";
-    if (typeof(callback) !== "function") throw "Event callback must be a function";
+    var callback = this._callbacks[event][i];
+    callback.apply(null, args); //calls the callback with arguments args
+  }
+}.bind(CWEventManager);
 
-    event = event.toLowerCase();
-
-    //event can be a space-seperated list of event names
-    if (event.indexOf(" ") !== -1) {
-      var events = event.split(" ");
-      for (var i = 0; i < events.length; i++) {
-        CWEventManager.register(events[i], callback);
-      }
-      return;
-    }
-
-    if (!_callbacks[event]) _callbacks[event] = [];
-    _callbacks[event].push(callback);
-    CWDebug.log(3, "Attached callback to " + event);
-  };
-
-  /**
-   * Triggers the given events, calling all callback functions that have registered for the event.
-   *
-   * @param {string} event The name of the event to trigger
-   *
-   * @memberof CWEventManager
-   */
-  var trigger = function(logPrio, event)
-  {
-    //Get the arguments passed to trigger() without logPrio and event
-    var args = Array.prototype.slice.call(arguments);
-    if (CWUtil.isString(logPrio) === true) {
-      //Only the event was given, default logPrio is used
-      event = logPrio;
-      logPrio = 4;
-      args.shift();
-    } else {
-      //logPrio and event were given, remove both from args
-      args.shift();
-      args.shift();
-    }
-
-    event = event.toLowerCase();
-
-    if (!_callbacks[event]) { 
-      CWDebug.log(5, "No callbacks  for " + event + " registered"); 
-      return; 
-    }
-
-    CWDebug.log(logPrio, "Triggering event " + event + " for "+_callbacks[event].length + " callbacks");
-    for (var i = 0; i < _callbacks[event].length; i++)
-    {
-      var callback = _callbacks[event][i];
-      callback.apply(null, args); //calls the callback with arguments args
-    }
-  };
-
-  return {
-    register : register,
-    trigger  : trigger
-  };
-})();
-/* global OOP, CWEventManager, CWVector, CWDebug, Connichiwa, CWUtil */
-"use strict";
+//Initalize module. Delayed call to make sure all modules are ready
+if (CWEventManager.__constructor) window.setTimeout(CWEventManager.__constructor, 0);
+/* global CWEventManager, CWVector, CWUtil, CWDebug */
+'use strict';
 
 
 
-var CWGestures = OOP.createSingleton("Connichiwa", "CWGestures", {
-  "private _touchStart": undefined,
-  "private _touchLast": undefined,
-  "private _touchLastVector": undefined,
-  "private _touchCheckable": false,
-  "private _touchAngleReferenceVector": undefined,
-  "private _touchAngleChangedCount": 0,
-
-  __constructor: function() {
-    var that = this;
-    $(document).ready(function() {
-      that.captureOn($("body"));
-    });
-  },
+/**
+ * CWGestures is responsible for capturing gestures on DOM elements and
+ *    passing the detected gestures on to other parts of the library. Right
+ *    now, this is used to detect the pinch gesture used in device stitching
+ * @namespace CWGestures
+ * @private
+ */
+var CWGestures = CWGestures || {};
 
 
-  "private _onDown": function(e) {
-    this._touchStart = CWUtil.getEventLocation(e, "client");
-  },
+/**
+ * The start location of the current touch
+ * @type {Point}
+ * @private
+ */
+CWGestures._touchStart = undefined;
 
 
-  "private _onMove": function(e) {
-    if (this._touchStart === undefined) return;
+/**
+ * The last location of the current touch
+ * @type {Point}
+ * @private
+ */
+CWGestures._touchLast = undefined;
 
-    var newTouch = CWUtil.getEventLocation(e, "client");
 
-    //In touchend, we only compare this._touchStart to this._touchLast, so it is possible that
-    //the user starts swiping, then goes in the opposite direction and then in the
-    //first direction again, which would be detected as a valid swipe.
-    //To prevent this, we try to detect direction changes here by checking the angle
-    //between the current and the previous finger vector.
-    //
-    //Unfortunately, touches can "jitter", so we need to make sure that
-    //small (or very short) angle changes don't cancel the swipe. Because of this,
-    //once we detect a direction change we save the last "valid" finger vector into
-    //this._touchAngleReferenceVector. We then compare the following vectors to that 
-    //reference vector. Only if 3 touches in a row have a direction change, we cancel
-    //the swipe.
-    //
-    //Furthermore, we add some noise reduction by making sure the last finger vector
-    //has a minimum length of 2 and the entire swipe is at least 5 pixels in length
-    if (this._touchLast !== undefined) {
-      var totalTouchVector = new CWVector(this._touchStart, newTouch);
-      var newTouchVector   = new CWVector(this._touchLast,  newTouch);
+/**
+ * The vector between the last touch location ({@link CWGestures._touchLast})
+ *    and the touch before that. undefined if only one touch arrived so far
+ * @type {CWVector}
+ * @private
+ */
+CWGestures._touchLastVector = undefined;
 
-      this._touchCheckable = (this._touchCheckable || totalTouchVector.length() > 5);
-      if (this._touchCheckable && newTouchVector.length() > 1) {
 
-        //A previous touch was a direction change, compare with the saved
-        //reference vector by calculating their angle
-        if (this._touchAngleReferenceVector !== undefined) {
-          var referenceTouchAngle = newTouchVector.angle(this._touchAngleReferenceVector);
-          if (referenceTouchAngle > 20) {
-          // if (referenceTouchAngle > 30) {
-            this._touchAngleChangedCount++;
+/**
+ * Determines if the current gesture qualifies for a potential swipe
+ * @type {Boolean}
+ * @private
+ */
+CWGestures._touchCheckable = false;
 
-            if (this._touchAngleChangedCount === 3) {
-              this._touchStart = undefined;
-              this._touchLast  = undefined;
-              return;
-            }
-          } else {
-            this._touchAngleReferenceVector = undefined;
-            this._touchAngleChangedCount = 0;
+/**
+ * If a direction change occurs during a swipe, the original swipe direction is
+ *    stored in this property
+ * @type {CWVector}
+ * @private
+ */
+CWGestures._touchAngleReferenceVector = undefined;
+
+
+/**
+ * The number of touches that occured after a poential direction change
+ * @type {Number}
+ * @private
+ */
+CWGestures._touchAngleChangedCount = 0;
+
+
+/**
+ * Initializes the CWGestures object, should be called on application launch
+ * @function
+ * @private
+ */
+CWGestures.__constructor = function() {
+  var that = this;
+  $(document).ready(function() {
+    that._captureOn($('body'));
+  });
+}.bind(CWGestures);
+
+
+/**
+ * Called when a touchstart or mousedown occurs on one of the monitored 
+ * elements
+ * @param  {Event} e The touch or mouse event that triggered the function
+ * @function
+ * @private
+ */
+CWGestures._onDown = function(e) {
+  this._touchStart = CWUtil.getEventLocation(e, 'client');
+}.bind(CWGestures);
+
+
+/**
+ * Called when a touchmove or mousemove occurs on one of the monitored 
+ * elements
+ * @param  {Event} e The touch or mouse event that triggered the function
+ * @function
+ * @private
+ */
+CWGestures._onMove = function(e) {
+  if (this._touchStart === undefined) return;
+
+  var newTouch = CWUtil.getEventLocation(e, 'client');
+
+  //Just checking the swipe vector in _onEnd is not enough: If the finger 
+  //changes direction and then returns the original direction, this would be
+  //detected as a valid swipe. Therefore, we monitor for direction changes in
+  //this method and cancel a swipe on a direction change.
+  //Unfortunately, touches can "jitter", so we need to make sure that
+  //small (or very short) direction changes don't cancel the swipe. Therefore, 
+  //the original swipe direction is stored in _touchAngleReferenceVector and 
+  //successive touches are checked against that vector. If the user resumes the
+  //original direction within 3 touches, the swipe is still considered valid.
+  //
+  //Furthermore, we add some noise reduction by making sure the last finger 
+  //vector has a minimum length of 2 and the entire swipe is at least 5 pixels 
+  //in length
+  if (this._touchLast !== undefined) {
+    var totalTouchVector = new CWVector(this._touchStart, newTouch);
+    var newTouchVector   = new CWVector(this._touchLast,  newTouch);
+
+    this._touchCheckable = (this._touchCheckable || totalTouchVector.length() > 5);
+    if (this._touchCheckable && newTouchVector.length() > 1) {
+
+      //A previous touch was a direction change, compare with the saved
+      //reference vector by calculating their angle
+      if (this._touchAngleReferenceVector !== undefined) {
+        var referenceTouchAngle = newTouchVector.angleBetween(this._touchAngleReferenceVector);
+        if (referenceTouchAngle > 20) {
+        // if (referenceTouchAngle > 30) {
+          this._touchAngleChangedCount++;
+
+          //This is a security measure against "jitter": Only if 3 successive
+          //touches are a direction change do we invalidate the swipe
+          if (this._touchAngleChangedCount === 3) {
+            this._touchStart = undefined;
+            this._touchLast  = undefined;
+            return;
           }
-
-        //Compare the current finger vector to the last finger vector and see
-        //if the direction has changed by calculating their angle
         } else {
-          if (this._touchLastVector !== undefined) {
-            var newTouchAngle = newTouchVector.angle(this._touchLastVector);
-            if (newTouchAngle > 20) {
-            // if (newTouchAngle > 30) {
-              this._touchAngleReferenceVector = this._touchLastVector;
-              this._touchAngleChangedCount = 1;
-            }
+          this._touchAngleReferenceVector = undefined;
+          this._touchAngleChangedCount = 0;
+        }
+
+      //Compare the current finger vector to the last finger vector and see
+      //if the direction has changed by calculating their angle
+      } else {
+        if (this._touchLastVector !== undefined) {
+          var newTouchAngle = newTouchVector.angleBetween(this._touchLastVector);
+          if (newTouchAngle > 20) {
+          // if (newTouchAngle > 30) {
+            this._touchAngleReferenceVector = this._touchLastVector;
+            this._touchAngleChangedCount = 1;
           }
         }
       }
-
-      if (newTouchVector.length() > 0) this._touchLastVector = newTouchVector;
-    } 
-
-    this._touchLast = newTouch;
-  },
-
-
-  "private _onUp": function(e) {
-    var swipeStart = this._touchStart;
-    var swipeEnd   = this._touchLast;
-
-    this._touchStart                = undefined;
-    this._touchLast                 = undefined;
-    this._touchLastVector           = undefined;
-    this._touchCheckable            = false;
-    this._touchAngleReferenceVector = undefined;
-    this._touchAngleChangedCount    = 0;
-
-    if (swipeStart === undefined || swipeEnd === undefined) return;
-
-    var deltaX = swipeEnd.x - swipeStart.x;
-    var deltaY = swipeEnd.y - swipeStart.y;
-
-    //The swipe must have a minimum length to make sure its not a tap
-    var swipeLength = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
-    if (swipeLength <= 10) {
-      CWDebug.log(3, "Swipe REJECTED because it was too short (" + swipeLength + ")");
-      return;
     }
 
-    //Check the direction of the swipe
-    //For example, if a swipe to the right is performed at y=10 we need this to
-    //recognize this swipe as a right-swipe instead of a top-swipe
-    //We check the deltaX to deltaY ratio to determine the direction
-    //For very short swipes, this ratio can be worse because short swipes tend
-    //to be less straight. For very short swipes we almost don't care anymore
-    var xyRatio = 0.25;
-    if (swipeLength < 100) xyRatio = 0.35; //short swipes tend to be less straight
-    if (swipeLength < 50)  xyRatio = 0.4;
-    if (swipeLength < 40)  xyRatio = 0.45;
-    if (swipeLength < 15)  xyRatio = 0.8; //doesn't matter that much anymore
-    // var xyRatio = 0.65;
-    // if (swipeLength < 100) xyRatio = 0.75; //short swipes tend to be less straight
-    // if (swipeLength < 50)  xyRatio = 0.85;
-    // if (swipeLength < 40)  xyRatio = 0.95;
-    // if (swipeLength < 15)  xyRatio = 0.95; //doesn't matter that much anymore
+    if (newTouchVector.length() > 0) this._touchLastVector = newTouchVector;
+  } 
 
-    var direction = "invalid";
-    if (Math.abs(deltaY) < (Math.abs(deltaX) * xyRatio)) {
-      if (deltaX > 0) direction = "right";
-      if (deltaX < 0) direction = "left";
-    }
-    if (Math.abs(deltaX) < (Math.abs(deltaY) * xyRatio)) {
-      if (deltaY > 0) direction = "down";
-      if (deltaY < 0) direction = "up";
-    }
-
-    //Check if the touch ended at a device edge
-    //Lucky us, touch coordinates incorporate rubber banding - this means that a swipe down with rubber banding
-    //will give us smaller values than it should, because the gray top area is subtracted
-    //Luckily, window.innerHeight incorporates rubber banding as well, so we can calculate the missing pixels
-    var rubberBanding = $(window).height() - window.innerHeight;
-    swipeEnd.y += rubberBanding;
-    var endsAtTopEdge    = (swipeEnd.y <= 50);
-    var endsAtLeftEdge   = (swipeEnd.x <= 50);
-    var endsAtBottomEdge = (swipeEnd.y >= ($(window).height() - 50));
-    var endsAtRightEdge  = (swipeEnd.x >= ($(window).width()  - 50));
-    // var endsAtTopEdge    = (swipeEnd.y <= 100);
-    // var endsAtLeftEdge   = (swipeEnd.x <= 100);
-    // var endsAtBottomEdge = (swipeEnd.y >= ($(window).height() - 100));
-    // var endsAtRightEdge  = (swipeEnd.x >= ($(window).width()  - 100));
-
-    var edge = "invalid";
-    if (endsAtTopEdge    && direction === "up")    edge = "top";
-    if (endsAtLeftEdge   && direction === "left")  edge = "left";
-    if (endsAtBottomEdge && direction === "down")  edge = "bottom";
-    if (endsAtRightEdge  && direction === "right") edge = "right";
-
-    if (edge === "invalid") {
-      CWDebug.log(3, "Swipe REJECTED. Ending: x - " + swipeEnd.x + "/" + ($(window).width() - 50) + ", y - " + swipeEnd.y + "/" + ($(window).height() - 50) + ". Direction: " + direction + ". Edge endings: " + endsAtTopEdge + ", " + endsAtRightEdge + ", " + endsAtBottomEdge + ", " + endsAtLeftEdge);
-      return;
-    }
-
-    //Make sure the data really ends at an edge, even if rubber banding occured or the user lifted the finger 
-    //slightly before the edge of the device
-    if (edge === "top")    swipeEnd.y = 0;
-    if (edge === "left")   swipeEnd.x = 0;
-    if (edge === "bottom") swipeEnd.y = $(window).height();
-    if (edge === "right")  swipeEnd.x = $(window).width();      
-
-    var swipeData = {
-      edge : edge,
-      x    : swipeEnd.x,
-      y    : swipeEnd.y
-    };
-    CWEventManager.trigger("stitchswipe", swipeData);
-  },
+  this._touchLast = newTouch;
+}.bind(CWGestures);
 
 
-  "public captureOn": function(el) {
-    if (el instanceof jQuery) el = el.get(0);
+/**
+ * Called when a touchend or mouseup occurs on one of the monitored 
+ * elements
+ * @param  {Event} e The touch or mouse event that triggered the function
+ * @function
+ * @private
+ */
+CWGestures._onUp = function(e) {
+  var swipeStart = this._touchStart;
+  var swipeEnd   = this._touchLast;
 
-    //el.on("mousedown this._touchStart", this._onDown);
-    el.addEventListener("mousedown",  this._onDown, true);
-    el.addEventListener("touchstart", this._onDown, true);
+  this._touchStart                = undefined;
+  this._touchLast                 = undefined;
+  this._touchLastVector           = undefined;
+  this._touchCheckable            = false;
+  this._touchAngleReferenceVector = undefined;
+  this._touchAngleChangedCount    = 0;
 
-    //el.on("mousemove touchmove", this._onMove);
-    el.addEventListener("mousemove", this._onMove, true);
-    el.addEventListener("touchmove", this._onMove, true);
+  if (swipeStart === undefined || swipeEnd === undefined) return;
 
-    //el.on("mouseup touchend", this._onUp);
-    el.addEventListener("mouseup",  this._onUp, true);
-    el.addEventListener("touchend", this._onUp, true);
+  var deltaX = swipeEnd.x - swipeStart.x;
+  var deltaY = swipeEnd.y - swipeStart.y;
+
+  //The swipe must have a minimum length to make sure its not a tap
+  var swipeLength = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
+  if (swipeLength <= 10) {
+    CWDebug.log(3, 'Swipe REJECTED because it was too short (' + swipeLength + ')');
+    return;
   }
-});
-/* global OOP, gyro, CWEventManager, CWDebug */
-"use strict";
+
+  //Check the direction of the swipe
+  //For example, if a swipe to the right is performed at y=10 we need this to
+  //recognize this swipe as a right-swipe instead of a top-swipe
+  //We check the deltaX to deltaY ratio to determine the direction
+  //For very short swipes, this ratio can be worse because short swipes tend
+  //to be less straight. For very short swipes we almost don't care anymore
+  var xyRatio = 0.25;
+  if (swipeLength < 100) xyRatio = 0.35; //short swipes tend to be less straight
+  if (swipeLength < 50)  xyRatio = 0.4;
+  if (swipeLength < 40)  xyRatio = 0.45;
+  if (swipeLength < 15)  xyRatio = 0.8; //doesn't matter that much anymore
+  // var xyRatio = 0.65;
+  // if (swipeLength < 100) xyRatio = 0.75; //short swipes tend to be less straight
+  // if (swipeLength < 50)  xyRatio = 0.85;
+  // if (swipeLength < 40)  xyRatio = 0.95;
+  // if (swipeLength < 15)  xyRatio = 0.95; //doesn't matter that much anymore
+
+  var direction = "invalid";
+  if (Math.abs(deltaY) < (Math.abs(deltaX) * xyRatio)) {
+    if (deltaX > 0) direction = "right";
+    if (deltaX < 0) direction = "left";
+  }
+  if (Math.abs(deltaX) < (Math.abs(deltaY) * xyRatio)) {
+    if (deltaY > 0) direction = "down";
+    if (deltaY < 0) direction = "up";
+  }
+
+  //Check if the touch ended at a device edge
+  //Lucky us, touch coordinates incorporate rubber banding - this means that a swipe down with rubber banding
+  //will give us smaller values than it should, because the gray top area is subtracted
+  //Luckily, window.innerHeight incorporates rubber banding as well, so we can calculate the missing pixels
+  var rubberBanding = $(window).height() - window.innerHeight;
+  swipeEnd.y += rubberBanding;
+  var endsAtTopEdge    = (swipeEnd.y <= 50);
+  var endsAtLeftEdge   = (swipeEnd.x <= 50);
+  var endsAtBottomEdge = (swipeEnd.y >= ($(window).height() - 50));
+  var endsAtRightEdge  = (swipeEnd.x >= ($(window).width()  - 50));
+  // var endsAtTopEdge    = (swipeEnd.y <= 100);
+  // var endsAtLeftEdge   = (swipeEnd.x <= 100);
+  // var endsAtBottomEdge = (swipeEnd.y >= ($(window).height() - 100));
+  // var endsAtRightEdge  = (swipeEnd.x >= ($(window).width()  - 100));
+
+  var edge = "invalid";
+  if (endsAtTopEdge    && direction === "up")    edge = "top";
+  if (endsAtLeftEdge   && direction === "left")  edge = "left";
+  if (endsAtBottomEdge && direction === "down")  edge = "bottom";
+  if (endsAtRightEdge  && direction === "right") edge = "right";
+
+  if (edge === "invalid") {
+    CWDebug.log(3, "Swipe REJECTED. Ending: x - " + swipeEnd.x + "/" + ($(window).width() - 50) + ", y - " + swipeEnd.y + "/" + ($(window).height() - 50) + ". Direction: " + direction + ". Edge endings: " + endsAtTopEdge + ", " + endsAtRightEdge + ", " + endsAtBottomEdge + ", " + endsAtLeftEdge);
+    return;
+  }
+
+  //Make sure the data really ends at an edge, even if rubber banding occured or the user lifted the finger 
+  //slightly before the edge of the device
+  if (edge === "top")    swipeEnd.y = 0;
+  if (edge === "left")   swipeEnd.x = 0;
+  if (edge === "bottom") swipeEnd.y = $(window).height();
+  if (edge === "right")  swipeEnd.x = $(window).width();      
+
+  var swipeData = {
+    edge : edge,
+    x    : swipeEnd.x,
+    y    : swipeEnd.y
+  };
+  CWEventManager.trigger("stitchswipe", swipeData);
+}.bind(CWGestures);
+
+
+/**
+ * Installs the necessary event handlers on the given DOM or jQuery element to
+ *    capture gestures on that element
+ * @param  {HTMLElement|jQuery} el The element that should be monitored for
+ *    gestures
+ * @function
+ * @private
+ */
+CWGestures._captureOn = function(el) {
+  if (el instanceof jQuery) el = el.get(0);
+
+  //el.on("mousedown this._touchStart", this._onDown);
+  el.addEventListener("mousedown",  this._onDown, true);
+  el.addEventListener("touchstart", this._onDown, true);
+
+  //el.on("mousemove touchmove", this._onMove);
+  el.addEventListener("mousemove", this._onMove, true);
+  el.addEventListener("touchmove", this._onMove, true);
+
+  //el.on("mouseup touchend", this._onUp);
+  el.addEventListener("mouseup",  this._onUp, true);
+  el.addEventListener("touchend", this._onUp, true);
+}.bind(CWGestures);
+
+//Initalize module. Delayed call to make sure all modules are ready
+if (CWGestures.__constructor) window.setTimeout(CWGestures.__constructor, 0);
+/* global gyro, CWEventManager */
+'use strict';
 
 
 
-var CWGyroscope = OOP.createSingleton("Connichiwa", "CWGyroscope", {
-  _lastMeasure: undefined,
-  _alphaGammaFlipped: false,
+/**
+  * @typedef GyroscopeData
+  * @type {Object}
+  * @property {Number} alpha Gyroscope value on the alpha axis. The alpha axis
+  *    changes if the device rotates around the z axis
+  * @property {Number} beta Gyroscope value on the beta axis. The beta axis 
+  *    changes if the device rotates around the x axis
+  * @property {Number} gamma Gyroscope value on the gamma axis. The gamma axis
+  *    changes if the device rotates around the y axis
+  * @memberOf CWGyroscope
+  */
 
-  __constructor: function() {
+
+/**
+ *
+ * @typedef AccelerometerData
+ * @type {Object}
+ * @property {Number} x Accelerometer value on the x axis
+ * @property {Number} y Accelerometer value on the y axis
+ * @property {Number} z Accelerometer value on the z axis. This includes the
+ *    earth's gravitational force and is therefore 9.81 if the device lays
+ *    still. On some browsers and devices it can also be -9.81
+ * @memberOf CWGyroscope
+ */
+
+
+
+/**
+ * CWGyroscope encapsulates gyroscope and accelerometer data for use in
+ *    Connichiwa. It automatically receives the necessary data with the help
+ *    of [gyro.js](http://tomg.co/gyrojs) and forwards the data by sending
+ *    {@link event:gyroscopeUpdate} and {@link event:accelerometerUpdate}
+ *    events.
+ * @namespace CWGyroscope
+ */
+var CWGyroscope = CWGyroscope || {};
+
+
+/**
+ * Stores the last gyroscope and the last accelerometer measure received. This
+ *    combines a {@link CWGyroscope.GyroscopeData} and a {@link
+ *    CWGyroscope.AccelerometerData} object
+ * @type {Object}
+ * @private
+ */
+CWGyroscope._lastMeasure = undefined;
+
+
+/**
+ * Determines if the alpha and gamma values of the incoming gyroscope data is
+ *    flipped
+ * @type {Boolean}
+ * @private
+ */
+CWGyroscope._alphaGammaFlipped = false;
+
+
+/**
+ * Should be called on application launch, initalizes the CWGyroscope object
+ * @function
+ * @private
+ */
+CWGyroscope.__constructor = function() {
   gyro.frequency = 500;
-  gyro.startTracking(this._onUpdate);    
+  gyro.startTracking(this._onUpdate.bind(this));    
 
-    //TODO we should only start tracking if necessary
-    //necessary for now means the device has been stitched
-    //but how do we best figure that out?
-  },
-
-  "private _onUpdate": function(o) {
-    if (o.alpha === null || o.beta === null || o.gamma === null ||
-      o.x === null || o.y === null || o.z === null) return;
-
-    if (this._lastMeasure === undefined) this._lastMeasure = o;
-
-    // GYROSCOPE
-
-    //Fuck you Microsoft
-    //On "some devices" (so far on Surface Pro 2) the alpha and gamma
-    //values are flipped for no reason. There is no good way to detect this,
-    //only if alpha or gamma are out of their range we know this is the case
-    if (o.alpha < 0 || o.gamma > 180) {
-      this._alphaGammaFlipped = true;
-
-      //Flip last measure so we don't screw up our delta calculations
-      var temp = this._lastMeasure.alpha;
-      this._lastMeasure.alpha = this._lastMeasure.gamma;
-      this._lastMeasure.gamma - temp;
-    }
-    
-    var alpha = this._alphaGammaFlipped ? o.gamma : o.alpha;
-    var beta  = o.beta;
-    var gamma = this._alphaGammaFlipped ? o.alpha : o.gamma;
-
-    var deltaAlpha = alpha - this._lastMeasure.alpha;
-    var deltaBeta  = beta  - this._lastMeasure.beta;
-    var deltaGamma = gamma - this._lastMeasure.gamma;
-
-    var gyroData = { 
-      alpha : alpha, 
-      beta  : beta, 
-      gamma : gamma,
-      delta : {
-        alpha : deltaAlpha, 
-        beta  : deltaBeta, 
-        gamma : deltaGamma
-      }
-    };
-    CWEventManager.trigger(5, "gyroscopeUpdate", gyroData);
-
-    // ACCELEROMETER
-
-    var deltaX = o.x - this._lastMeasure.x;
-    var deltaY = o.y - this._lastMeasure.y;
-    var deltaZ = o.z - this._lastMeasure.z;
-    var accelData = { 
-      x     : o.x, 
-      y     : o.y, 
-      z     : o.z,
-      delta : {
-        x : deltaX, 
-        y : deltaY, 
-        z : deltaZ
-      }
-    };
-    CWEventManager.trigger(5, "accelerometerUpdate", accelData);
-
-    //We need to copy the values of o because o will be altered by gyro
-    this._lastMeasure = { x: o.x, y: o.y, z: o.z, alpha: alpha, beta: beta, gamma: gamma };
-  },
+  //TODO we should only start tracking if necessary
+  //necessary for now means the device has been stitched
+  //but how do we best figure that out?
+}.bind(CWGyroscope);
 
 
-  "package getLastGyroscopeMeasure": function() {
-    if (this._lastMeasure === undefined) return undefined;
+/**
+ * Called whenever the gyro library fetches new data
+ * @param  {Object} o Gyroscope/Accelerometer data passed by the gyro library
+ * @fires gyroscopeUpdate
+ * @fires accelerometerUpdate
+ * @function
+ * @private
+ */
+CWGyroscope._onUpdate = function(o) {
+  if (o.alpha === null || o.beta === null || o.gamma === null ||
+    o.x === null || o.y === null || o.z === null) return;
 
-    return { 
-      alpha : this._lastMeasure.alpha, 
-      beta  : this._lastMeasure.beta,
-      gamma : this._lastMeasure.gamma
-    };
-  },
+  if (this._lastMeasure === undefined) this._lastMeasure = o;
 
+  // GYROSCOPE
 
-  "package getLastAccelerometerMeasure": function() {
-    if (this._lastMeasure === undefined) return undefined;
-    
-    return {
-      x : this._lastMeasure.x,
-      y : this._lastMeasure.y,
-      z : this._lastMeasure.z
-    };
+  //Fuck you Microsoft
+  //On "some devices" (so far on Surface Pro 2) the alpha and gamma
+  //values are flipped for no reason. There is no good way to detect this,
+  //only if alpha or gamma are out of their range we know this is the case
+  if (o.alpha < 0 || o.gamma > 180) {
+    this._alphaGammaFlipped = true;
+
+    //Flip last measure so we don't screw up our delta calculations
+    var temp = this._lastMeasure.alpha;
+    this._lastMeasure.alpha = this._lastMeasure.gamma;
+    this._lastMeasure.gamma = temp;
   }
-});
-/* global CWEventManager, CWStitchManager */
-"use strict";
+  
+  var alpha = this._alphaGammaFlipped ? o.gamma : o.alpha;
+  var beta  = o.beta;
+  var gamma = this._alphaGammaFlipped ? o.alpha : o.gamma;
 
+  var deltaAlpha = alpha - this._lastMeasure.alpha;
+  var deltaBeta  = beta  - this._lastMeasure.beta;
+  var deltaGamma = gamma - this._lastMeasure.gamma;
+
+  var gyroData = { 
+    alpha : alpha, 
+    beta  : beta, 
+    gamma : gamma,
+    delta : {
+      alpha : deltaAlpha, 
+      beta  : deltaBeta, 
+      gamma : deltaGamma
+    }
+  };
+  CWEventManager.trigger(5, 'gyroscopeUpdate', gyroData);
+
+  // ACCELEROMETER
+
+  var deltaX = o.x - this._lastMeasure.x;
+  var deltaY = o.y - this._lastMeasure.y;
+  var deltaZ = o.z - this._lastMeasure.z;
+  var accelData = { 
+    x     : o.x, 
+    y     : o.y, 
+    z     : o.z,
+    delta : {
+      x : deltaX, 
+      y : deltaY, 
+      z : deltaZ
+    }
+  };
+  CWEventManager.trigger(5, 'accelerometerUpdate', accelData);
+
+  //We need to copy the values of o because o will be altered by gyro
+  this._lastMeasure = { x: o.x, y: o.y, z: o.z, alpha: alpha, beta: beta, gamma: gamma };
+}.bind(CWGyroscope);
+
+
+/**
+ * Returns the newest gyroscope data
+ * @return {CWGyroscope.GyroscopeData} The newest gyroscope measurement
+ * @function
+ */
+CWGyroscope.getLastGyroscopeMeasure = function() {
+  if (this._lastMeasure === undefined) return undefined;
+
+  return { 
+    alpha : this._lastMeasure.alpha, 
+    beta  : this._lastMeasure.beta,
+    gamma : this._lastMeasure.gamma
+  };
+}.bind(CWGyroscope);
+
+
+/**
+ * Returns the newest accelerometer data
+ * @return {CWGyroscope.AccelerometerData} The newest accelerometer
+ *    measurement
+ * @function
+ */
+CWGyroscope.getLastAccelerometerMeasure = function() {
+  if (this._lastMeasure === undefined) return undefined;
+  
+  return {
+    x : this._lastMeasure.x,
+    y : this._lastMeasure.y,
+    z : this._lastMeasure.z
+  };
+}.bind(CWGyroscope);
+
+//Initalize module. Delayed call to make sure all modules are ready
+if (CWGyroscope.__constructor) window.setTimeout(CWGyroscope.__constructor, 0);
+/* global CWEventManager, CWStitchManager */
+'use strict';
+
+
+
+/**
+ *
+  *
+  * @typedef Location
+  * @type Object
+  * @property {Number} x The x coordinate of the point or rectangle, or
+  *    undefined for a size
+  * @property {Number} y The y coordinate of the point or rectangle, or
+  *    undefined for a size
+  * @property {Number} width The width of the size or rectangle, or
+  *    undefined for a point
+  * @property {Number} height The height of the size or rectangle, or
+  *    undefined for a point
+  * @memberOf CWLocation
+ */
+
+
+
+/**
+ * Constructs a new CWLocation that represents a rectangle, positioned at the
+ *    given x/y coordinates and of size width/height.
+ *
+ * To represent only a point or a size, use the convenience functions {@link
+ *    CWLocation.fromPoint} and {@link CWLocation.fromSize}.
+ * @param {Number}  x       The x position of the rectangle
+ * @param {Number}  y       The y position of the rectangle
+ * @param {Number}  width   The width of the rectangle
+ * @param {Number}  height  The height of the rectangle
+ * @param {Boolean} [isLocal=true] If set to true, x, y, width and height are
+ *    given in the local coordinate system of the device. This is the case
+ *    most of the time, for example when retrieving the position and size of a
+ *    DOM element. Set this to false in case you pass global coordinates to
+ *    the constructor (for example from another CWLocation object).
+ * @constructor
+ *
+ * @class 
+ * @classdesc
+ * A CWLocation can be used to exchange points, sizes and rectangles between
+ *    stitched devices (for more information about stitching, see {@link
+ *    CWStitchManager}). A CWLocation will represent the same *physical*
+ *    location on every device.
+ *
+ * ![Local and Global Coordinate Systems in CWLocation](cwlocation1.jpg)
+ *    **Figure 1**: Local and Global coordinate system in Connichiwa
+ *
+ * As seen in figure 1, every device has its own local coordinate system where
+ *    `0,0` is the top left corner of the device. In fact, this coordinate
+ *    system is the same coordinate system used by CSS, for example when using
+ *    `position: fixed`. Connichiwa additionally introduces a *global
+ *    coordinate system*, which is a shared coordinate system for all stitched
+ *    devices. As you can see, this coordinate system spans across *all*
+ *    devices and is therefore perfect for sharing positions between devices.
+ *
+ * Imagine a scenario, where you want to show an element (in this case a
+ *    colored div) across multiple devices:
+ *
+ * ![Rectangle across two devices](cwlocation2.jpg) **Figure 2**: A rectangle
+ *    across two devices. CWLocation helps in positioning this element
+ *    correctly across both devices.
+ *
+ * As it can be seen in Figure 2, the global coordinate system used by
+ *    CWLocation can act as a bridge between the two local coordinate systems 
+ *    (green and blue). The green device can create a CWLocation that represents
+ *    the element. It will use its local coordinates for that:
+ *
+ * ```
+ * var location = new CWLocation(672, 256, 192, 256)
+ * ```
+ *    
+ *    The CWLocation object can now be shared with the blue device using 
+ *    {@link CWLocation#toString} and {@link CWLocation.fromString}). The blue
+ *    device can then get the element's position *relative to its own
+ *    coordinate system*:
+ *
+ * ```
+ * var location = CWLocation.fromString(locationSentByGreen);
+ * var localCoordinates = location.getLocal(); 
+ * ```
+ *    
+ *    The local position and size can then be set using CSS.
+ *
+ * As it can be seen in the previous example, CWLocation will also compensate
+ *    for different device rotations. This means that, even though the green 
+ *    and blue devices have different device rotations, the local coordinates
+ *    retrieved on the blue device will still be correct.
+ *
+ * Further, CWLocation also compensates for PPI differences. If
+ *    the green and blue device have different display PPI, using CWLocation
+ *    will ensure that the element still has the same *physical* size on both
+ *    devices and therefore appears as a single entity.
+ *
+ * **Example**: Create a div and position it across two devices. For a more
+ *    complete example of stitching and using CWLocation, see the tutorials.
+ *    
+ * ```
+ * //Create a new DOM element 
+ * var rect = $('<div></div>'); 
+ * rect.attr("id", "therect");
+ * rect.css({
+ *     position        : "absolute", 
+ *     top             : "200px", 
+ *     right           : "100px", 
+ *     width           : "200px",
+ *     height          : "200px", 
+ *     backgroundColor : "red" 
+ * }); 
+ * $("body").append(rect);
+ *
+ * //Also add the rectangle to another device
+ * //We assume we remembered another device as a CWDevice object 
+ * anotherDevice.insert(rect);
+ *
+ * //Create a CWLocation that represents the rectangle, and send it to another device
+ * var location = new CWLocation(
+ *     rect.offset().left, 
+ *     rect.offset().top, 
+ *     rect.width(), 
+ *     rect.height()
+ * );
+ * anotherDevice.send("rectlocation", {location: location.toString()});
+ *
+ * //
+ * // ... ON ANOTHER DEVICE ...
+ * //
+ *
+ * Connichiwa.onMessage("rectlocation", function(message) {
+ *     //Create the CWLocation from the location that was sent to us
+ *     var location = CWLocation.fromString(message.location);
+ *
+ *     //Retrieve the local coordinates and apply them
+ *     $("#therect").css({
+ *         top    : location.getLocalY(),
+ *         left   : location.getLocalX(),
+ *         width  : location.getLocalWidth(),
+ *         height : location.getLocalHeight()
+ *     });
+ *
+ *     //Lastly, in case of rotation, we need to apply that to the element
+ *     $("#therect").css("transform", "rotate(" + CWStitchManager.getDeviceTransformation().rotation + ")");
+ * });
+ * ```
+ */
 function CWLocation(x, y, width, height, isLocal) {
-  //
-  // TODO
-  // 
-  // make x, y, widht, height private so it can only be accessed through
-  // setLocal/setGlobal
-  // 
+  if (isLocal === undefined) isLocal = true;
+
+  /**
+   * The global x coordinate of the location, or undefined
+   * @type {Number}
+   * @private
+   */
+  this._x = undefined;
+
+  /**
+   * The global y coordinate of the location, or undefined
+   * @type {Number}
+   * @private
+   */
+  this._y = undefined;
+
+  /**
+   * The global width of the location, or undefined
+   * @type {Number}
+   * @private
+   */
+  this._width = undefined;
+
+  /**
+   * The global height of the location, or undefined
+   * @type {Number}
+   * @private
+   */
+  this._height = undefined;
   
   if (isLocal === true) {
-    var global = CWLocation.toGlobal(x, y, width, height);
-    this.x      = global.x;
-    this.y      = global.y;
-    this.width  = global.width;
-    this.height = global.height;
+    var global = CWLocation._toGlobal(x, y, width, height);
+    this._x      = global.x;
+    this._y      = global.y;
+    this._width  = global.width;
+    this._height = global.height;
   } else {
     //By default, we assume the location to be global coordinates
-    this.x      = x;
-    this.y      = y;
-    this.width  = width;
-    this.height = height;
+    this._x      = x;
+    this._y      = y;
+    this._width  = width;
+    this._height = height;
   }
 
   //When this device is stitched or unstitched, we adjust the values to the
   //new device transformation so that the local coordinates stay the same
-  //This is done so that content shown on this device does not change location or
-  //size on a stitch or unstitch
-  CWEventManager.register("wasUnstitched", function(message) {
-    this.x -= message.deviceTransformation.x;
-    this.y -= message.deviceTransformation.y;
+  //This is done so that content shown on this device does not change location 
+  //or size on a stitch or unstitch
+  CWEventManager.register('wasUnstitched', function(message) {
+    this._x -= message.deviceTransformation.x;
+    this._y -= message.deviceTransformation.y;
 
-    this.x *= message.deviceTransformation.scale;
-    this.y *= message.deviceTransformation.scale;
-    this.width *= message.deviceTransformation.scale;
-    this.height *= message.deviceTransformation.scale;
+    this._x *= message.deviceTransformation.scale;
+    this._y *= message.deviceTransformation.scale;
+    this._width *= message.deviceTransformation.scale;
+    this._height *= message.deviceTransformation.scale;
   }.bind(this));
 
-  CWEventManager.register("wasStitched", function(message) {
-    this.x /= message.deviceTransformation.scale;
-    this.y /= message.deviceTransformation.scale;
-    this.width /= message.deviceTransformation.scale;
-    this.height /= message.deviceTransformation.scale;
+  CWEventManager.register('wasStitched', function(message) {
+    this._x /= message.deviceTransformation.scale;
+    this._y /= message.deviceTransformation.scale;
+    this._width /= message.deviceTransformation.scale;
+    this._height /= message.deviceTransformation.scale;
 
-    this.x += message.deviceTransformation.x;
-    this.y += message.deviceTransformation.y;
+    this._x += message.deviceTransformation.x;
+    this._y += message.deviceTransformation.y;
   }.bind(this));
-
-  this.getGlobal = function() {
-    return { 
-      x      : this.x, 
-      y      : this.y, 
-      width  : this.width, 
-      height : this.height
-    };
-  };
-
-  this.getLocal = function() {
-    return CWLocation.toLocal(this.x, this.y, this.width, this.height);
-  };
-
-  this.getGlobalX = function() { return this.x; };
-
-  this.getGlobalY = function() { return this.y; };
-
-  this.getGlobalWidth = function() { return this.width; };
-
-  this.getGlobalHeight = function() { return this.height; };
-
-  this.getLocalX = function() { return this.getLocal().x; };
-
-  this.getLocalY = function() { return this.getLocal().y; };
-
-  this.getLocalWidth = function() { return this.getLocal().width; };
-
-  this.getLocalHeight = function() { return this.getLocal().height; };
-
-  this.setGlobal = function(x, y, width, height) {
-    if (x      !== undefined) this.x      = x;
-    if (y      !== undefined) this.y      = y;
-    if (width  !== undefined) this.width  = width;
-    if (height !== undefined) this.height = height;
-  };
-
-  this.setLocal = function(x, y, width, height) {
-    CWDebug.log(3, "To Global: "+x+", "+y+", "+width+", "+height);
-    var global = CWLocation.toGlobal(x, y, width, height);
-    CWDebug.log(3, JSON.stringify(global));
-    this.x      = global.x;
-    this.y      = global.y;
-    this.width  = global.width;
-    this.height = global.height;
-  };
-
-  this.setGlobalX = function(v) { this.setGlobal(v, this.y, this.width, this.height); };
-
-  this.setGlobalY = function(v) { this.setGlobal(this.x, v, this.width, this.height); };
-
-  this.setGlobalWidth = function(v) { this.setGlobal(this.x, this.y, v, this.height); };
-
-  this.setGlobalHeight = function(v) { this.setGlobal(this.x, this.y, this.width, v); };
-
-  this.setLocalX = function(v) {
-    var local = this.getLocal();
-    this.setLocal(v, local.y, local.width, local.height);
-  };
-
-  this.setLocalY = function(v) {
-    var local = this.getLocal();
-    this.setLocal(local.x, v, local.width, local.height);
-  };
-
-  this.setLocalWidth = function(v) {
-    var local = this.getLocal();
-    this.setLocal(local.x, local.y, v, local.height);
-  };
-
-  this.setLocalHeight = function(v) {
-    var local = this.getLocal();
-    this.setLocal(local.x, local.y, local.width, v);
-  };
-
-  this.toString = function() {
-    return JSON.stringify(this.getGlobal());
-  };
-
-  this.copy = function() {
-    return CWLocation.fromString(this.toString());
-  };
 }
 
-CWLocation.toGlobal = function(x, y, width, height) {
+
+/**
+ * Returns an object containing the current global coordinates
+ * @return {CWLocation.Location} The global coordinates
+ */
+CWLocation.prototype.getGlobal = function() {
+  return { 
+    x: this._x, 
+    y: this._y, 
+    width: this._width, 
+    height: this._height
+  };
+};
+
+
+/**
+ * Returns this CWLocation in the device's local coordinate system
+ * @return {CWLocation.Location} The local coordinates
+ */
+CWLocation.prototype.getLocal = function() {
+  return CWLocation._toLocal(this._x, this._y, this._width, this._height);
+};
+
+
+/**
+ * Returns the global x coordinate
+ * @return {Number} The global x coordinate of the point or rectangle, or
+ *    undefined for a size
+ */
+CWLocation.prototype.getGlobalX = function() { 
+  return this._x; 
+};
+
+
+/**
+ * Returns the global y coordinate
+ * @return {Number} The global y coordinate of the point or rectangle, or
+ *    undefined for a size
+ */
+CWLocation.prototype.getGlobalY = function() { 
+  return this._y; 
+};
+
+
+/**
+ * Returns the global width
+ * @return {Number} The global width of the size or rectangle, or
+ *    undefined for a point
+ */
+CWLocation.prototype.getGlobalWidth = function() { 
+  return this._width; 
+};
+
+
+/**
+ * Returns the global height
+ * @return {Number} The global height of the size or rectangle, or
+ *    undefined for a point
+ */
+CWLocation.prototype.getGlobalHeight = function() { 
+  return this._height; 
+};
+
+
+/**
+ * Returns the local x coordinate
+ * @return {Number} The local x coordinate of the point or rectangle, or
+ *    undefined for a size
+ */
+CWLocation.prototype.getLocalX = function() { 
+  return this.getLocal().x; 
+};
+
+
+/**
+ * Returns the local y coordinate
+ * @return {Number} The local y coordinate of the point or rectangle, or
+ *    undefined for a size
+ */
+CWLocation.prototype.getLocalY = function() { 
+  return this.getLocal().y; 
+};
+
+
+/**
+ * Returns the local width
+ * @return {Number} The local width of the size or rectangle, or
+ *    undefined for a point
+ */
+CWLocation.prototype.getLocalWidth = function() { 
+  return this.getLocal().width; 
+};
+
+
+/**
+ * Returns the local height
+ * @return {Number} The local height of the size or rectangle, or
+ *    undefined for a point
+ */
+CWLocation.prototype.getLocalHeight = function() { 
+  return this.getLocal().height; 
+};
+
+
+/**
+ * Sets the global coordinates of this location to the given x, y, width and
+ *    height.
+ * @param {Number} x      The new global x coordinate
+ * @param {Number} y      The new global y coordinate
+ * @param {Number} width  The new global width
+ * @param {Number} height The new global height
+ */
+CWLocation.prototype.setGlobal = function(x, y, width, height) {
+  if (x      !== undefined) this._x      = x;
+  if (y      !== undefined) this._y      = y;
+  if (width  !== undefined) this._width  = width;
+  if (height !== undefined) this._height = height;
+};
+
+
+/**
+ * Sets the local coordinates of this location to the given x, y, width and
+ *    height.
+ * @param {Number} x      The new local x coordinate
+ * @param {Number} y      The new local y coordinate
+ * @param {Number} width  The new local width
+ * @param {Number} height The new local height
+ */
+CWLocation.prototype.setLocal = function(x, y, width, height) {
+  var global = CWLocation._toGlobal(x, y, width, height);
+  this._x      = global.x;
+  this._y      = global.y;
+  this._width  = global.width;
+  this._height = global.height;
+};
+
+
+/**
+ * Sets the global x coordinate of this location to the given value
+ * @param {Number} v The new global x coordinate
+ */
+CWLocation.prototype.setGlobalX = function(v) { 
+  this.setGlobal(v, this._y, this._width, this._height); 
+};
+
+
+/**
+ * Sets the global y coordinate of this location to the given value
+ * @param {Number} v The new global y coordinate
+ */
+CWLocation.prototype.setGlobalY = function(v) { 
+  this.setGlobal(this._x, v, this._width, this._height); 
+};
+
+
+/**
+ * Sets the global width of this location to the given value
+ * @param {Number} v The new global width
+ */
+CWLocation.prototype.setGlobalWidth = function(v) { 
+  this.setGlobal(this._x, this._y, v, this._height); 
+};
+
+
+/**
+ * Sets the global height of this location to the given value
+ * @param {Number} v The new global height
+ */
+CWLocation.prototype.setGlobalHeight = function(v) { 
+  this.setGlobal(this._x, this._y, this._width, v); 
+};
+
+
+/**
+ * Sets the local x coordinate of this location to the given value
+ * @param {Number} v The new local x coordinate
+ */
+CWLocation.prototype.setLocalX = function(v) {
+  var local = this.getLocal();
+  this.setLocal(v, local.y, local.width, local.height);
+};
+
+
+/**
+ * Sets the local y coordinate of this location to the given value
+ * @param {Number} v The new local y coordinate
+ */
+CWLocation.prototype.setLocalY = function(v) {
+  var local = this.getLocal();
+  this.setLocal(local.x, v, local.width, local.height);
+};
+
+
+/**
+ * Sets the local width of this location to the given value
+ * @param {Number} v The new local width
+ */
+CWLocation.prototype.setLocalWidth = function(v) {
+  var local = this.getLocal();
+  this.setLocal(local.x, local.y, v, local.height);
+};
+
+
+/**
+ * Sets the local height of this location to the given value
+ * @param {Number} v The new local height
+ */
+CWLocation.prototype.setLocalHeight = function(v) {
+  var local = this.getLocal();
+  this.setLocal(local.x, local.y, local.width, v);
+};
+
+
+/**
+ * Serializes this location into a string. To construct a CWLocation object
+ *    from a string, see {@link CWLocation.fromString}
+ * @return {String} The string representation of this CWLocation
+ */
+CWLocation.prototype.toString = function() {
+  return JSON.stringify(this.getGlobal());
+};
+
+
+/**
+ * Returns a copy of this object
+ * @return {CWLocation} A new CWLocation object that represents the same
+ *    point, size or rectangle as this object
+ */
+CWLocation.prototype.copy = function() {
+  return CWLocation.fromString(this.toString());
+};
+
+
+/**
+ * Convenience function to convert the given x, y, width and height into
+ *    global coordinates without constructing a new CWLocation object
+ * @param  {Number} x      A local x coordinate or undefined
+ * @param  {Number} y      A local y coordinate or undefined
+ * @param  {Number} width  A local width or undefined
+ * @param  {Number} height A local height or undefined
+ * @return {Location}      An object containing global coordinates
+ * @private
+ */
+CWLocation._toGlobal = function(x, y, width, height) {
   if (x === undefined) x = 0;
   if (y === undefined) y = 0;
   if (width  === undefined) width = 0;
@@ -925,7 +1604,7 @@ CWLocation.toGlobal = function(x, y, width, height) {
 
   var result = { x: x, y: y, width: width, height: height };
 
-  var transformation = CWStitchManager.getDeviceTransformation();
+  var transformation = CWStitchManager.getLocalDeviceTransformation();
   
   //Adjust x/y values from our rotation to the master device, which always has 0º rotation
   if (transformation.rotation === 0) {
@@ -966,7 +1645,18 @@ CWLocation.toGlobal = function(x, y, width, height) {
   return result;
 };
 
-CWLocation.toLocal = function(x, y, width, height) {
+
+/**
+ * Convenience function to convert the given x, y, height and width into local
+ *    coordinates without constructing a new CWLocation object
+ * @param  {Number} x      A local x coordinate or undefined
+ * @param  {Number} y      A local y coordiante or undefined
+ * @param  {Number} width  A local width or undefined
+ * @param  {Number} height A local height or undefined
+ * @return {Location}      An object containing local coordinates
+ * @private
+ */
+CWLocation._toLocal = function(x, y, width, height) {
   if (x === undefined) x = 0;
   if (y === undefined) y = 0;
   if (width  === undefined) width = 0;
@@ -974,7 +1664,7 @@ CWLocation.toLocal = function(x, y, width, height) {
 
   var result = { x: x, y: y, width: width, height: height };
 
-  var transformation = CWStitchManager.getDeviceTransformation();
+  var transformation = CWStitchManager.getLocalDeviceTransformation();
 
   //Adjust values from the master rotation (0º) to our rotation
   //Also, we incorporate device translation here - we can't do that afterwards
@@ -1014,8 +1704,18 @@ CWLocation.toLocal = function(x, y, width, height) {
   return result;
 };
 
+
+/**
+ * TODO
+ * @param  {Number} x        [description]
+ * @param  {Number} y        [description]
+ * @param  {Number} width    [description]
+ * @param  {Number} height   [description]
+ * @param  {Number} rotation [description]
+ * @return {Location}          [description]
+ */
 CWLocation.applyRotation = function(x, y, width, height, rotation) {
-  var transformation = CWStitchManager.getDeviceTransformation();
+  var transformation = CWStitchManager.getLocalDeviceTransformation();
 
   if (x === undefined) x = 0;
   if (y === undefined) y = 0;
@@ -1053,6 +1753,13 @@ CWLocation.applyRotation = function(x, y, width, height, rotation) {
   return result;  
 };
 
+
+/**
+ * Constructs a new CWLocation object from a string (for example produced by
+ *    {@link CWLocation#toString}) and returns it
+ * @param  {String} s The string representation of a CWLocation
+ * @return {CWLocation}   A CWLocation object that corresponds to the string
+ */
 CWLocation.fromString = function(s) {
   var obj = JSON.parse(s);
 
@@ -1065,932 +1772,1833 @@ CWLocation.fromString = function(s) {
   );
 };
 
-function CWPoint(x, y, isLocal) {
+
+/**
+ * Constructs a new CWLocation that represents a point (has no width and
+ *    height) and returns it
+ * @param  {Number}  x       The x coordinate of the point
+ * @param  {Number}  y       The y coordinate of the point
+ * @param  {Boolean} isLocal Determines if the coordinates handed to this
+ *    function are local or global coordinates, also see {@link CWLocation}
+ * @return {CWLocation}      A CWLocation that represents the point at the
+ *    given coordaintes
+ */
+CWLocation.fromPoint = function(x, y, isLocal) {
   return new CWLocation(x, y, undefined, undefined, isLocal);
-}
+};
 
-function CWSize(width, height, isLocal) {
+
+/**
+ * Constructs a new CWLocation that represents a size (has no x and
+ *    y coordiantes) and returns it
+ * @param  {Number}  width   The width of the size
+ * @param  {Number}  height  The height of the size
+ * @param  {Boolean} isLocal Determines if the size handed to this
+ *    function is in local or global coordinates, also see {@link CWLocation}
+ * @return {CWLocation}      A CWLocation that represents the given size
+ */
+CWLocation.fromSize = function(width, height, isLocal) {
   return new CWLocation(undefined, undefined, width, height, isLocal);
-}
-/* global OOP, Connichiwa, CWEventManager, CWSystemInfo, CWUtil */
-"use strict";
-
-
- 
-var CWStitchManager = OOP.createSingleton("Connichiwa", "CWStitchManager", {
-  "private _isStitched": false,
-  "private _deviceTransformation": undefined,
-  "private _gyroDataOnStitch": undefined,
-
-  "public unstitchOnMove": true,
-  "public ignoreMoveAxis": [],
-
-
-  __constructor: function() {
-    Connichiwa.on("stitchswipe",         this._onLocalSwipe);
-    Connichiwa.on("wasStitched",         this._onWasStitched);
-    Connichiwa.on("wasUnstitched",       this._onWasUnstitched);
-    Connichiwa.on("gyroscopeUpdate",     this._onGyroUpdate);
-    Connichiwa.on("accelerometerUpdate", this._onAccelerometerUpdate);
-  },
-
-
-  _onWasStitched: function(message) {
-    this._gyroDataOnStitch = this.package.CWGyroscope.getLastGyroscopeMeasure();
-    this._deviceTransformation = message.deviceTransformation;
-    this._isStitched = true;
-
-    //TODO register for gyroscopeUpdate instead of in constructor
-  },
-
-
-  _onWasUnstitched: function(message) {
-    this._gyroDataOnStitch = undefined;
-    this._deviceTransformation = this.DEFAULT_DEVICE_TRANSFORMATION();
-    this._isStitched = false;
-
-    //TODO unregister from gyroscopeUpdate
-  },
-
-
-  _onLocalSwipe: function(swipeData) {
-    swipeData.device = Connichiwa.getIdentifier();
-    swipeData.width  = CWSystemInfo.viewportWidth();
-    swipeData.height = CWSystemInfo.viewportHeight();
-    Connichiwa.send("master", "_stitchswipe", swipeData);
-  },
-
-
-  _onGyroUpdate: function(gyroData) {
-    if (this.isStitched() === false) return;
-    if (this.unstitchOnMove === false) return;
-
-    //Might happen if _onWasStitched is called before the first gyro measure arrived
-    if (this._gyroDataOnStitch === undefined) {
-      this._gyroDataOnStitch = gyroData;
-    }
-     
-    var deltaAlpha = Math.abs(gyroData.alpha - this._gyroDataOnStitch.alpha);
-    var deltaBeta  = Math.abs(gyroData.beta  - this._gyroDataOnStitch.beta);
-    var deltaGamma = Math.abs(gyroData.gamma - this._gyroDataOnStitch.gamma);
-
-    //Modulo gives us the smallest possible angle (e.g. 1º and 359º gives us 2º)
-    deltaAlpha = Math.abs((deltaAlpha + 180) % 360 - 180);
-    deltaBeta  = Math.abs((deltaBeta  + 180) % 360 - 180);
-    deltaGamma = Math.abs((deltaGamma + 180) % 360 - 180);
-
-    //If the device is tilted more than 20º, we back out of the stitch
-    //We give a little more room for alpha. Alpha means the device was moved on the
-    //table, which is not as bad as actually picking it up. 
-    //Axises in the "ignoreMoveAxis" array are not checked
-    if ((CWUtil.inArray("alpha", this.ignoreMoveAxis) === false && deltaAlpha >= 35) ||
-        (CWUtil.inArray("beta",  this.ignoreMoveAxis) === false && deltaBeta  >= 20) ||
-        (CWUtil.inArray("gamma", this.ignoreMoveAxis) === false && deltaGamma >= 20)) {
-      this._quitStitch();
-    }
-  },
-
-
-  _onAccelerometerUpdate: function(accelData) {
-    if (this.isStitched() === false) return;
-    if (this.unstitchOnMove === false) return;
-
-
-    //Get the accelerometer values normalized
-    //z includes earth's gravitational force (~ -9.8), but sometimes is 9.8 and 
-    //sometimes -9.8, depending on browser and device, therefore we use its absolute
-    //value
-    var x = Math.abs(accelData.x);
-    var y = Math.abs(accelData.y);
-    var z = Math.abs(Math.abs(accelData.z) - 9.81);
-
-    //1.0 seems about a good value which doesn't trigger on every little shake,
-    //but triggers when the device is actually moved 
-    //Axises in the "ignoreMoveAxis" array are not checked
-    if ((CWUtil.inArray("x", this.ignoreMoveAxis) === false && x >= 1.0) || 
-        (CWUtil.inArray("y", this.ignoreMoveAxis) === false && y >= 1.0) ||
-        (CWUtil.inArray("z", this.ignoreMoveAxis) === false && z >= 1.0)) {
-      this._quitStitch();
-    }
-  },
-
-
-  "private _quitStitch": function() {
-    var data = { device : Connichiwa.getIdentifier() };
-    Connichiwa.send("master", "_quitstitch", data);
-  },
-
-
-  "public unstitch": function() {
-    this._quitStitch();
-  },
-
-
-  "public isStitched": function() {
-    return this._isStitched;
-  },
-
-
-  "public getDeviceTransformation": function() {
-    if (this._deviceTransformation === undefined) {
-      return this.DEFAULT_DEVICE_TRANSFORMATION();
-    }
-    
-    return this._deviceTransformation;
-  },
-
-  "private DEFAULT_DEVICE_TRANSFORMATION": function() {
-    return { 
-      x        : 0, 
-      y        : 0, 
-      width    : CWSystemInfo.viewportWidth(), 
-      height   : CWSystemInfo.viewportHeight(),
-      rotation : 0, 
-      scale    : 1.0 
-    };
-  }
-});
-/* global OOP */
-"use strict";
-
-
-
-var CWSystemInfo = OOP.createSingleton("Connichiwa", "CWSystemInfo", {
-  _ppi : undefined,
-
-
-  "public PPI": function() {
-    if (this._ppi !== undefined) return this._ppi;
-
-    this._ppi = this.DEFAULT_PPI();
-
-    //For high density screens we simply assume 142 DPI
-    //This, luckily, is correct for a lot of android devices
-    if (window.devicePixelRatio > 1.0) {
-      this._ppi = 142; 
-    }
-     
-    //For iPhone and iPad, we can figure out the DPI pretty well
-    if (navigator.platform === "iPad") {
-      //TODO usually we would distinguish iPad Mini's (163dpi)
-      //but we can't, so we return normal iPad DPI
-      this._ppi = 132;
-    }
-    if (navigator.platform === "iPhone" || navigator.platform === "iPod") {
-      //Newer iPhones (for now iPhone 6+) have a different resolution, luckily they
-      //also return a new devicePixelRatio
-      if (window.devicePixelRatio === 3) {
-        this._ppi = 153;
-      } else {
-        this._ppi = 163;
-      }
-    }
-
-    return this._ppi;
-  },
-
-
-  "public isLandscape": function() {
-    return (window.innerHeight < window.innerWidth);
-  },
-
-
-  "public viewportWidth": function() {
-    return $(window).width();
-  },
-
-
-  "public viewportHeight": function() {
-    //This seems to break in landscape when using meta-viewport height-device-height
-    //so basically for now: don't use that
-    return $(window).height();
-  },
-
-  "public DEFAULT_PPI": function() {
-    return 100; //HD on a 22'' monitor
-  }
-});
-"use strict";
+};
+/* global Connichiwa, CWDebug */
+'use strict';
 
 
 
 /**
- * A utility class giving us some often needed utility functions.
+ * This module is responsible for the communication between the JS library and
+ *    the native layer. On the master, such communication must exist. On a
+ *    remote, it is only possible if a native layer exists.This includes
+ *    receiving and reacting to messages from the native layer and also
+ *    calling methods on the native layer.
  *
+ * TODO details about the communication protocol
+ * @namespace CWNativeBridge
+ * @protected
+ */
+var CWNativeBridge = CWNativeBridge || {};
+
+
+/**
+ * Determines if this device is run by a native layer. Always true for the
+ *    master device
+ * @type {Boolean}
+ * @private
+ */
+CWNativeBridge._runsNative = false;
+
+
+/**
+ * Initializes the CWNativeBridge module. Must be called on load.
+ * @function
+ * @private
+ */
+CWNativeBridge.__constructor = function() {
+  if (Connichiwa.isMaster()) {
+    this._runsNative = true;
+  } else {
+    if (window.RUN_BY_CONNICHIWA_NATIVE === true) {
+      this._runsNative = true;
+    }
+  }
+}.bind(CWNativeBridge);
+
+
+/**
+ * Determines if this device is run by a native layer. Always true for the
+ *    master device
+ * @return {Boolean} true if a native layer is present, otherwise false
+ * @function
+ * @protected
+ */
+CWNativeBridge.isRunningNative = function() {
+  return (this._runsNative === true);
+}.bind(CWNativeBridge);
+
+
+/**
+ * Calls a method with the given name on the native layer. If there is no
+ *    native layer or the method does not exist, the call will do nothing
+ * @param  {String} methodName The name of the method to call
+ * @function
+ * @protected
+ */
+CWNativeBridge.callOnNative = function(methodName) {
+  //If we are not running natively, all native method calls are simply ignored
+  if (this.isRunningNative() !== true) return;
+
+  //Grab additional arguments passed to this method, but not methodName
+  var args = Array.prototype.slice.call(arguments);
+  args.shift();
+
+  //Check if the given method is a valid function and invoke it
+  //Obviously, this could be used to call any method, but what's the point really?
+  var method = window[methodName];
+  if (typeof method === 'function') {
+    method.apply(null, args);
+  } else { 
+    CWDebug.log(1, 'ERROR: Tried to call native method with name ' + methodName + ', but it doesn\'t exist!');
+  }
+}.bind(CWNativeBridge);
+
+
+/**
+ * This method is used to parse a message from the native layer. It will then
+ *    call the appropiate sub-parse method, if this message is a valid
+ *    message. This method should only be called by the native layer and never
+ *    by the JS code or the application code.
+ * @param  {Object} message The native layer's message
+ * @function
+ * @protected
+ */
+CWNativeBridge.parse = function(message) { /* ABSTRACT */ };
+
+
+//Initalize module. Delayed call to make sure all modules are ready
+if (CWNativeBridge.__constructor) window.setTimeout(CWNativeBridge.__constructor, 0);
+
+/* global Connichiwa, CWGyroscope, CWSystemInfo, CWUtil */
+'use strict';
+
+
+
+/**
+ * @typedef DeviceTransformation
+ * @type {Object}
+ * @property {Number} x The x offset of this device in the global coordinate
+ *    system
+ * @property {Number} y The y offset of this device in the global coordinate
+ *    system
+ * @property {Number} width The device's viewport width in the global
+ *    coordinate system, which can differ from the device's actual viewport
+ *    width due to PPI differences between the devices
+ * @property {Number} height The device's viewport height in the global
+ *    coordinate system, which can differ from the device's actual viewport
+ *    height due to PPI differences between the devices
+ * @property {Number} rotation The device's rotation relative to the global
+ *    coordinate system axis. Connichiwa can only detect 90º rotiations, so
+ *    this property is either 0, 90, 180 or 270
+ * @property {Number} scale The scale of this device's content. Connichiwa
+ *    adjusts the scale of stitched device's to compensate for display PPI
+ *    differences. If content is scaled with this scale on every device, it
+ *    will appear the same physicial size on all stitched devices
+ * @memberOf CWStitchManager
+ */
+
+
+
+/**
+ * This manager handles everything stitch-related. It detects stitch gestures,
+ *    calculates the stitched device's device transformation in the global
+ *    coordinate system and is also responsible for handling stitch-related
+ *    events and detecting unstitches. It also provides methods for accessing
+ *    stitch-related information, such as if the device is stitched and the
+ *    current device transformation
+ * @namespace CWStitchManager
+ */
+var CWStitchManager = CWStitchManager || {};
+
+
+/**
+ * Determines if this device is currently stitched
+ * @type {Boolean}
+ * @private
+ */
+CWStitchManager._isStitched = false;
+
+
+/**
+ * This object stores the current device transformation of this device or is
+ *    undefined, if the device is not stitched
+ * @type {CWStitchManager.DeviceTransformation}
+ * @private
+ */
+CWStitchManager._deviceTransformation = undefined;
+
+
+/**
+ * Remembers the gyroscope data when the device was stitched. Used to
+ *    calculate the unstitch on device movement
+ * @type {CWGyroscope.GyroscopeData}
+ * @private
+ */
+CWStitchManager._gyroDataOnStitch = undefined;
+
+
+/**
+ * Determines if Connichiwa will automatically unstitch this device if it is
+ *    moved
+ * @type {Boolean}
+ * @default true
+ */
+CWStitchManager.unstitchOnMove = true;
+
+
+/**
+ * If {@link CWStitchManager.unstitchOnMove} is set to true, this property
+ *    determines axis that do **not** cause an unstitch of the device. It is
+ *    an array that is either empty (all axis can cause an unstitch) or can
+ *    contain one or multiple of the string values "x", "y", "z" (to ignore
+ *    accelerometer axis) or "alpha", "beta", "gamma" (to ignore gyroscope
+ *    axis)
+ * @type {Array}
+ * @default  [ ]
+ */
+CWStitchManager.ignoreMoveAxis = [];
+
+
+/**
+ * Sets up the CWStitchManager object. Must be called on load
+ * @function
+ * @private
+ */
+CWStitchManager.__constructor = function() {
+  Connichiwa.on('stitchswipe',         this._onLocalSwipe);
+  Connichiwa.on('wasStitched',         this._onWasStitched);
+  Connichiwa.on('wasUnstitched',       this._onWasUnstitched);
+  Connichiwa.on('gyroscopeUpdate',     this._onGyroUpdate);
+  Connichiwa.on('accelerometerUpdate', this._onAccelerometerUpdate);
+}.bind(CWStitchManager);
+
+
+/**
+ * Called whenever the manager receives a {@link event:wasStitched} message
+ * @param  {Object} message The received message
+ * @function
+ * @private
+ */
+CWStitchManager._onWasStitched = function(message) {
+  this._gyroDataOnStitch = CWGyroscope.getLastGyroscopeMeasure();
+  this._deviceTransformation = message.deviceTransformation;
+  this._isStitched = true;
+
+  //TODO register for gyroscopeUpdate instead of in constructor
+}.bind(CWStitchManager);
+
+
+/**
+ * Called whenever the manager receives a {@link event:wasUnstitched} message
+ * @param  {Object} message The received message
+ * @function
+ * @private
+ */
+CWStitchManager._onWasUnstitched = function(message) {
+  this._gyroDataOnStitch = undefined;
+  this._deviceTransformation = this.getDefaultDeviceTransformation();
+  this._isStitched = false;
+
+  //TODO unregister from gyroscopeUpdate
+}.bind(CWStitchManager);
+
+
+/**
+ * Called whenever the manager receives a {@link event:stitchswipe} message
+ * @param  {Object} swipeData The received message
+ * @function
+ * @private
+ */
+CWStitchManager._onLocalSwipe = function(swipeData) {
+  swipeData.device = Connichiwa.getIdentifier();
+  swipeData.width  = CWSystemInfo.viewportWidth();
+  swipeData.height = CWSystemInfo.viewportHeight();
+  Connichiwa.send('master', '_stitchswipe', swipeData);
+}.bind(CWStitchManager);
+
+
+/**
+ * Called whenever the manager receives a new {@link event:gyroscopeUpdate}
+ *    event
+ * @param  {CWGyroscope.GyroscopeData} gyroData The new gyroscope measures
+ * @function
+ * @private
+ */
+CWStitchManager._onGyroUpdate = function(gyroData) {
+  if (this.isStitched() === false) return;
+  if (this.unstitchOnMove === false) return;
+
+  //Might happen if _onWasStitched is called before the first gyro measure arrived
+  if (this._gyroDataOnStitch === undefined) {
+    this._gyroDataOnStitch = gyroData;
+  }
+   
+  var deltaAlpha = Math.abs(gyroData.alpha - this._gyroDataOnStitch.alpha);
+  var deltaBeta  = Math.abs(gyroData.beta  - this._gyroDataOnStitch.beta);
+  var deltaGamma = Math.abs(gyroData.gamma - this._gyroDataOnStitch.gamma);
+
+  //Modulo gives us the smallest possible angle (e.g. 1º and 359º gives us 2º)
+  deltaAlpha = Math.abs((deltaAlpha + 180) % 360 - 180);
+  deltaBeta  = Math.abs((deltaBeta  + 180) % 360 - 180);
+  deltaGamma = Math.abs((deltaGamma + 180) % 360 - 180);
+
+  //If the device is tilted more than 20º, we back out of the stitch
+  //We give a little more room for alpha. Alpha means the device was moved on the
+  //table, which is not as bad as actually picking it up. 
+  //Axises in the "ignoreMoveAxis" array are not checked
+  if ((CWUtil.inArray('alpha', this.ignoreMoveAxis) === false && deltaAlpha >= 35) ||
+      (CWUtil.inArray('beta',  this.ignoreMoveAxis) === false && deltaBeta  >= 20) ||
+      (CWUtil.inArray('gamma', this.ignoreMoveAxis) === false && deltaGamma >= 20)) {
+    this._quitStitch();
+  }
+}.bind(CWStitchManager);
+
+
+/**
+ * Called whenever the manager receives a new {@link
+ *    event:accelerometerUpdate} event
+ * @param  {CWGyroscope.AccelerometerData} accelData The new accelerometer
+ *    measures
+ * @function
+ * @private
+ */
+CWStitchManager._onAccelerometerUpdate = function(accelData) {
+  if (this.isStitched() === false) return;
+  if (this.unstitchOnMove === false) return;
+
+
+  //Get the accelerometer values normalized
+  //z includes earth's gravitational force (~ -9.8), but sometimes is 9.8 and 
+  //sometimes -9.8, depending on browser and device, therefore we use its absolute
+  //value
+  var x = Math.abs(accelData.x);
+  var y = Math.abs(accelData.y);
+  var z = Math.abs(Math.abs(accelData.z) - 9.81);
+
+  //1.0 seems about a good value which doesn't trigger on every little shake,
+  //but triggers when the device is actually moved 
+  //Axises in the "ignoreMoveAxis" array are not checked
+  if ((CWUtil.inArray('x', this.ignoreMoveAxis) === false && x >= 1.0) || 
+      (CWUtil.inArray('y', this.ignoreMoveAxis) === false && y >= 1.0) ||
+      (CWUtil.inArray('z', this.ignoreMoveAxis) === false && z >= 1.0)) {
+    this._quitStitch();
+  }
+}.bind(CWStitchManager);
+
+
+/**
+ * Called whenever the manager wishes to quit the current stitching
+ * @function
+ * @private
+ */
+CWStitchManager._quitStitch = function() {
+  var data = { device : Connichiwa.getIdentifier() };
+  Connichiwa.send('master', '_quitstitch', data);
+}.bind(CWStitchManager);
+
+
+/**
+ * Unstitches this device or does nothing if the device is not stitched. Note
+ *    that the unstitch is done asynchronously. If you rely on the device
+ *    being unstitched, wait for the {@link event:wasunstitched} event to be
+ *    fired.
+ * @function
+ */
+CWStitchManager.unstitch = function() {
+  this._quitStitch();
+}.bind(CWStitchManager);
+
+
+/**
+ * Determines if the device is currently stitched
+ * @return {Boolean} true if the device is currently stitched, otherwise false
+ * @function
+ */
+CWStitchManager.isStitched = function() {
+  return this._isStitched;
+}.bind(CWStitchManager);
+
+
+/**
+ * Returns this device's current device transformation, which is this device's
+ *    position, rotation and size in the global coordinate system
+ * @return {CWStitchManager.DeviceTransformation} The current device
+ *    transformation
+ * @function
+ */
+CWStitchManager.getLocalDeviceTransformation = function() {
+  if (this._deviceTransformation === undefined) {
+    return this.getDefaultDeviceTransformation();
+  }
+  
+  return this._deviceTransformation;
+}.bind(CWStitchManager);
+
+
+/**
+ * Retrieves the default device transformation that represents a non-stitched
+ *    device
+ * @return {CWStitchManager.DeviceTransformation} The default device
+ *    transformation
+ * @function
+ * @protected
+ */
+CWStitchManager.getDefaultDeviceTransformation = function() {
+  return {
+    x        : 0, 
+    y        : 0, 
+    width    : CWSystemInfo.viewportWidth(), 
+    height   : CWSystemInfo.viewportHeight(),
+    rotation : 0, 
+    scale    : 1.0 
+  };
+}.bind(CWStitchManager);
+
+
+//Initalize module. Delayed call to make sure all modules are ready
+if (CWStitchManager.__constructor) window.setTimeout(CWStitchManager.__constructor, 0);
+'use strict';
+
+
+
+/**
+ * CWSystemInfo encapsulates some system-related information as far as they
+ *    are available. It can be used, for example, to access the display's PPI,
+ *    the browser window resolution or the orientation
+ * @namespace CWSystemInfo
+ */
+var CWSystemInfo = CWSystemInfo || {};
+
+
+/**
+ * The PPI value that will be used when other PPI information are not available
+ * @type {Number}
+ * @const
+ */
+CWSystemInfo.DEFAULT_PPI = 100; //HD on a 22'' monitor
+
+
+/**
+ * This device's display PPI, approximated. JavaScript does not have direct
+ *    access to the display size and therefore cannot retrieve the PPI value.
+ *    Depending on the available information, such as the devicePixelRatio or
+ *    navigator information, this method tries to approximate the display's
+ *    PPI as close as possible
+ * @return {Number} The device's approximated display PPI
+ * @function
+ */
+CWSystemInfo.PPI = function() {
+  var ppi = this.DEFAULT_PPI;
+
+  //For high density screens we simply assume 142 DPI
+  //This, luckily, is correct for a lot of android devices
+  if (window.devicePixelRatio > 1.0) {
+    ppi = 142; 
+  }
+   
+  //For iPhone and iPad, we can figure out the DPI pretty well
+  if (navigator.platform === 'iPad') {
+    //usually we would distinguish iPad Mini's (163dpi) but we can't, so we 
+    //return normal iPad DPI
+    ppi = 132;
+  }
+  if (navigator.platform === 'iPhone' || navigator.platform === 'iPod') {
+    //Newer iPhones (for now iPhone 6+) have a different resolution, luckily 
+    //they also return a new devicePixelRatio
+    if (window.devicePixelRatio === 3) {
+      ppi = 153;
+    } else {
+      ppi = 163;
+    }
+  }
+
+  return ppi;
+}.bind(CWSystemInfo);
+
+
+/**
+ * Determines if the device is in landscape orientation
+ * @return {Boolean} true if the device is in landscape orientation, otherwise
+ *    false
+ * @function
+ */
+CWSystemInfo.isLandscape = function() {
+  return (window.innerHeight < window.innerWidth);
+}.bind(CWSystemInfo);
+
+
+/**
+ * Returns the current viewport width of the browser or web view
+ * @return {Number} The current viewport width
+ * @function
+ */
+CWSystemInfo.viewportWidth = function() {
+  return $(window).width();
+}.bind(CWSystemInfo);
+
+
+/**
+ * Returns the current viewport height of the browser or web view. This method
+ *    should not be used when using the meta-tag viewport with the
+ *    height-device-height attribute
+ * @return {Number} The current viewport height
+ * @function
+ */
+CWSystemInfo.viewportHeight = function() {
+  //This seems to break in landscape when using meta-viewport 
+  //height-device-height so basically for now: don't use that
+  return $(window).height();
+}.bind(CWSystemInfo);
+
+//Initalize module. Delayed call to make sure all modules are ready
+if (CWSystemInfo.__constructor) window.setTimeout(CWSystemInfo.__constructor, 0);
+'use strict';
+
+
+
+/**
+ * Utility module providing often-needed utility functions
  * @namespace CWUtil
  */
-var CWUtil = (function()
-{
-  var parseURL = function(url) 
+var CWUtil = CWUtil || {};
+
+
+/**
+ * Returns an object that parses the given URL into its parts
+ * @param  {String} url  The URL to parse, must be a valid URL
+ * @return {URL} A parsed URL object where the different parts of the URL can
+ *    be accessed
+ * @function
+ */
+CWUtil.parseURL = function(url) {
+  var parser = document.createElement('a');
+  parser.href = url;
+
+  return parser;
+}.bind(CWUtil);
+
+
+/**
+ * Returns the coordinate of a given mouse event or the first touch in a touch
+ *    event
+ * @param  {TouchEvent|MouseEvent|jQuery.Event} e     A valid mouse or touch
+ *    event or a jQuery event wrapping such an event. Note that events
+ *    resulting from a "touchend" are not considered valid, as they do not
+ *    contain any touches
+ * @param  {String} [type="page"] A string representing the type of locarion
+ *    that should be returned. Can be either "page", "client" or "screen". See
+ *    [Touch Documentation]{@link
+ *    https://developer.mozilla.org/en-US/docs/Web/API/Touch} or [MouseEvent
+ *    Documentation]{@link
+ *    https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent}
+ * @return {Point}  The coordinate of the event
+ * @function
+ */
+CWUtil.getEventLocation = function(e, type) {
+  if (type === undefined) type = 'page';
+
+  var seen = [];
+  var pos = { x: e[type + 'X'], y: e[type + 'Y'] };
+  if (pos.x === undefined || pos.y === undefined)
   {
-    var parser = document.createElement("a");
-    parser.href = url;
+    var touches = (e.originalEvent === undefined) ? e.targetTouches : e.originalEvent.targetTouches;
+    pos = { x: touches[0][type + 'X'], y: touches[0][type + 'Y'] };
+  }
 
-    return parser;
-  };
-
-
-  var getEventLocation = function(e, type) 
-  {
-    if (type === undefined) type = "page";
-
-    var seen = [];
-    var pos = { x: e[type + "X"], y: e[type + "Y"] };
-    if (pos.x === undefined || pos.y === undefined)
-    {
-      var touches = (e.originalEvent === undefined) ? e.targetTouches : e.originalEvent.targetTouches;
-      pos = { x: touches[0][type + "X"], y: touches[0][type + "Y"] };
-    }
-
-    return pos;
-  };
+  return pos;
+}.bind(CWUtil);
 
 
-  var randomInt = function(min, max) {
-    //Only one parameter was given, use it as max, 0 as min
-    if (max === undefined && min !== undefined) {
-      max = min;
-      min = 0;
-    //No parameter was given, use 0 as min, maxint as max
-    } else if (max === undefined && min === undefined) {
-      min = 0;
-      max = Number.MAX_VALUE;
-    }
+/**
+ * Returns a random integer between min (inclusive) and max (inclusive). If
+ *    only one parameter is given, returns a random number between 0 and that
+ *    number. If no parameters are given, returns a random number between 0
+ *    and Number.MAX_VALUE
+ * @param  {Number} [min=0] The smallest possible value that is returned
+ * @param  {Number} [max=Number.MAX_VALUE] The largest possible value that is
+ *    returned
+ * @return {Number} The generated random number between min and max
+ * @function
+ */
+CWUtil.randomInt = function(min, max) {
+  //Only one parameter was given, use it as max, 0 as min
+  if (max === undefined && min !== undefined) {
+    max = min;
+    min = 0;
+  //No parameter was given, use 0 as min, maxint as max
+  } else if (max === undefined && min === undefined) {
+    min = 0;
+    max = Number.MAX_VALUE;
+  }
 
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  };
-
-  
-  /**
-   * Checks if the given parameter is an Int.
-   *
-   * @param {object} value A value to check
-   * @returns {boolean} true if the given value is an Int, otherwise false
-   *
-   * @memberof CWUtil
-   */
-  var isInt = function(value)
-  {
-    return (value === parseInt(value));
-  };
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}.bind(CWUtil);
 
 
-  var isString = function(value) {
-    return (typeof(value) === "string");
-  };
+/**
+ * Checks if the given object is a valid Int
+ * @param {Object} value  The object to check
+ * @returns {Boolean}  true if the given value is an Int, otherwise false
+ * @function
+ */
+CWUtil.isInt = function(value) {
+  return (value === parseInt(value));
+}.bind(CWUtil);
 
 
-  /**
-   * Checks if the given parameter is an object and not null.
-   *
-   * @param {object} value A value to check
-   * @returns {boolean} true if the given value is an object, otherwise false
-   *
-   * @memberof CWUtil
-   */
-  var isObject = function(value)
-  {
-    return (typeof(value) === "object" && value !== null);
-  };
+/**
+ * Checks if the given object is a valid String
+ * @param  {Object}  value  The object to check
+ * @return {Boolean} true if the given value is a String, otherwise false
+ * @function
+ */
+CWUtil.isString = function(value) {
+  return (typeof(value) === 'string');
+}.bind(CWUtil);
 
 
-  /**
-   * Checks if the given value is in the given array.
-   *
-   * @param {object} value The value to check
-   * @param {array} array The array that the value should be in
-   * @returns {boolean} true if value is in array, otherwise false
-   *
-   * @memberof CWUtil
-   */
-  var inArray = function(value, array)
-  {
-    return (array.indexOf(value) > -1);
-  };
+/**
+ * Checks if the given object is an object and not null.
+ * @param {Object} value  The object to check
+ * @returns {boolean}   true if the given object is an object, false otherwise
+ *    (e.g. for null, undefined or a primitive type).
+ * @function
+ */
+CWUtil.isObject = function(value) {
+  return (typeof(value) === 'object' && value !== null);
+}.bind(CWUtil);
 
-  //Crazy small code to create UUIDs - cudos to https://gist.github.com/jed/982883
-  var createUUID = function(a) { 
-    return a?(a^Math.random()*16>>a/4).toString(16):([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g,CWUtil.createUUID);
-  };
+/**
+ * Checks if the given value is in the given array.
+ * @param {object} value The value to check
+ * @param {array} array The array that the value should be in
+ * @returns {boolean} true if value is in array, otherwise false
+ * @function
+ */
+CWUtil.inArray = function(value, array) {
+  return (array.indexOf(value) > -1);
+}.bind(CWUtil);
 
+/**
+ * Creates a new random v4 UUID, thanks to {@link
+ *    https://gist.github.com/jed/982883}
+ * @return {String} A random v4 UUID string
+ * @function
+ * @protected
+ */
+CWUtil.createUUID = function(a) { 
+  return a?(a ^ Math.random() * 16 >> a / 4).toString(16):([ 1e7 ] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g,CWUtil.createUUID);
+}.bind(CWUtil);
 
-  return {
-    parseURL         : parseURL,
-    getEventLocation : getEventLocation,
-    randomInt        : randomInt,
-    isInt            : isInt,
-    isString         : isString,
-    isObject         : isObject,
-    inArray          : inArray,
-    createUUID       : createUUID
-  };
-})();
-"use strict";
+//Initalize module. Delayed call to make sure all modules are ready
+if (CWUtil.__constructor) window.setTimeout(CWUtil.__constructor, 0);
+'use strict';
 
+/**
+ * Constructs a new CWVector object from a start and an end point
+ * @param {Point} p1  Start point of the vector
+ * @param {Point} p2 End point of the vector
+ * @class
+ * @classdesc Represents a two-dimensional vector with a start and an end point
+ */
 function CWVector(p1, p2) {
-  if (p1 === undefined || p2 === undefined) throw "Cannot instantiate Vector without 2 points";
+  if (p1 === undefined || p2 === undefined) throw 'Cannot instantiate Vector without 2 points';
 
-  var _p1 = p1;
-  var _p2 = p2;
-  var _deltaX = _p2.x - _p1.x;
-  var _deltaY = _p2.y - _p1.y;
-  var _length = Math.sqrt(Math.pow(_deltaX, 2) + Math.pow(_deltaY, 2));
+  /**
+   * Start point of the vector
+   * 
+   * @type {Point}
+   * @private
+   */
+  this._p1 = p1;
 
-  this.p1 = function() { return _p1; };
-  this.p2 = function() { return _p2; };
-  this.deltaX = function() { return _deltaX; };
-  this.deltaY = function() { return _deltaY; };
-  this.length = function() { return _length; };
+  /**
+   * End point of the vector
+   * 
+   * @type {Point}
+   * @private
+   */
+  this._p2 = p2;
 }
 
-CWVector.prototype.angle = function(otherVector) {
+
+/**
+ * Returns the delta between the x values of the two points of the vector
+ * 
+ * @return {Number}
+ *         The delta x value
+ */
+CWVector.prototype.deltaX = function() {
+  return this._p2.x - this._p1.x;
+};
+
+
+/**
+ * Returns the delta between the y values of the two points of the vector
+ * 
+ * @return {Number}
+ *         The delta y value
+ */
+CWVector.prototype.deltaY = function() {
+  return this._p2.y - this._p1.y;
+};
+
+
+/**
+ * Returns the length of the vector
+ * 
+ * @return {Number}
+ *         The vector's length
+ */
+CWVector.prototype.length = function() {
+  return Math.sqrt(Math.pow(this._deltaX, 2) + Math.pow(this._deltaY, 2));
+};
+
+
+/**
+ * Returns the angle between this vector and the given vector
+ * 
+ * @param  {CWVector} otherVector 
+ *         The vector to measure the angle to
+ * @return {Number}
+ *         The angle between this vector and the given vector
+ */
+CWVector.prototype.angleBetween = function(otherVector) {
   var vectorsProduct = this.deltaX() * otherVector.deltaX() + this.deltaY() * otherVector.deltaY();
   var vectorsLength = this.length() * otherVector.length();
   return Math.acos(vectorsProduct / vectorsLength) * (180.0 / Math.PI);
 };
 
 
-/* global OOP, Connichiwa, CWEventManager, CWDebug */
+
+/**
+ * Returns the start point of the vector
+ *
+ * @return {Point}
+ *         The start point of the vector
+ */
+CWVector.prototype.getP1 = function() {
+  return this._p1;
+};
+
+/**
+ * Returns the end point of the vector
+ * 
+ * @return {Point}
+ *         The end point of the vector
+ */
+CWVector.prototype.getP2 = function() {
+  return this._p2;
+};
+/* global CWEventManager, CWDebug */
 "use strict";
 
 
-var CWWebsocketMessageParser = OOP.createSingleton("Connichiwa", "CWWebsocketMessageParser", 
-{
-  "package parse": function(message) {
-    switch (message._name) {
-      case "_ack"               : this._parseAck(message);               break;
-      case "_insert"            : this._parseInsert(message);            break;
-      case "_replace"           : this._parseReplace(message);           break;
-      case "_loadscript"        : this._parseLoadScript(message);        break;
-      case "_loadcss"           : this._parseLoadCSS(message);           break;
-      case "_wasstitched"       : this._parseWasStitched(message);       break;
-      case "_wasunstitched"     : this._parseWasUnstitched(message);     break;
-      case "_gotstitchneighbor" : this._parseGotStitchNeighbor(message); break;
-    }
 
-    return true;
-  },
+/**
+ * Parses messages from the websocket. All messages received should be handed
+ *    to the {@link CWWebsocketMessageParser.parse} method. If the message is
+ *    a system message, this method will handle the message appropiately.
+ * @namespace  CWWebsocketMessageParser
+ * @protected
+ */
+var CWWebsocketMessageParser = CWWebsocketMessageParser || {};
 
 
-  _parseAck: function(message) {
-    CWEventManager.trigger("__ack_message" + message.original._id);
-  },
-
-  _parseInsert: function(message) {
-    $(message.selector).append(message.html);
-  },
-
-  _parseReplace: function(message) {
-    if (message.contentOnly === true) {
-      $(message.selector).html(message.html);
-    } else {
-      $(message.selector).replaceWith(message.html);
-    }
-  },
-
-
-  _parseLoadScript: function(message) {
-    var that = this;
-    $.getScript(message.url).done(function() {
-      that.package.Connichiwa._sendAck(message);
-    }).fail(function(f, s, t) {
-      CWDebug.err(1, "There was an error loading '" + message.url + "': " + t);
-    });
-  },
-
-
-  _parseLoadCSS: function(message) {
-    var cssEntry = document.createElement("link");
-    cssEntry.setAttribute("rel", "stylesheet");
-    cssEntry.setAttribute("type", "text/css");
-    cssEntry.setAttribute("href", message.url);
-    $("head").append(cssEntry);
-    this.package.Connichiwa._sendAck(message);
-  },
-
-
-  _parseWasStitched: function(message) {
-    CWEventManager.trigger("wasStitched", message);
-  },
-
-  _parseWasUnstitched: function(message) {
-    CWEventManager.trigger("wasUnstitched", message);
-  },
-
-  _parseGotStitchNeighbor: function(message) {
-    CWEventManager.trigger("gotstitchneighbor", message);
+/**
+ * Parses a message from the Websocket and calls the appropiate sub-parse
+ *    method based on the `_name` property of the object. If the `_name` is
+ *    unknown, this method does nothing.
+ * @param  {Object} message  The object that represents the JSON message that
+ *    was received from the websocket
+ * @function
+ * @protected
+ */
+CWWebsocketMessageParser.parse = function(message) {
+  switch (message._name) {
+    case "_chunk"             : this._parseChunk(message);             break;
+    case "_ack"               : this._parseAck(message);               break;
+    case "_insert"            : this._parseInsert(message);            break;
+    case "_replace"           : this._parseReplace(message);           break;
+    case "_loadscript"        : this._parseLoadScript(message);        break;
+    case "_loadcss"           : this._parseLoadCSS(message);           break;
+    case "_wasstitched"       : this._parseWasStitched(message);       break;
+    case "_wasunstitched"     : this._parseWasUnstitched(message);     break;
+    case "_gotstitchneighbor" : this._parseGotStitchNeighbor(message); break;
   }
-});
-/* global OOP, CWDevice, CWEventManager, CWUtil, CWDebug */
-"use strict";
-
-
-
-var Connichiwa = OOP.createSingleton("Connichiwa", "Connichiwa", {
-  "private _websocket" : undefined,
-
-
-  "public getLocalDevice" : function() { /* ABSTRACT */ },
-  "public getIdentifier"  : function() { /* ABSTRACT */ },
-  "public isMaster"       : function() { /* ABSTRACT */ },
-
-
-  "public on": function(eventName, callback) {
-    //We can't use the normal event system for the load event, so
-    //forward it
-    if (eventName === "load") {
-      this.onLoad(callback);
-      return;
-    } 
-    
-    CWEventManager.register(eventName, callback);
-  },
-
-
-  "public onMessage": function(name, callback) {
-    this.on("message" + name, callback);
-  },
-
-
-  "public onLoad": function(callback) {
-    if (document.readyState === "complete") {
-      //Timeout so we finish whatever we do right now
-      //before calling the ready callback
-      window.setTimeout(callback, 0);
-    } else {
-      Connichiwa.on("ready", callback);
-    }
-  },
-
-
-  // DEVICE COMMUNICATION API
-
-
-  "public insert": function(identifier, target, html) {
-    //With two args, we handle them as identifier and html
-    //target is assumed as the body
-    if (html === undefined) {
-      html = target;
-      target = "body";
-    }
-
-    //target should be a selector but can also be a DOM or jQuery element
-    //If so, we try to get it by its ID on the other side
-    if (CWUtil.isObject(target)) {
-      target = "#"+$(target).attr("id");
-    }
-    
-    //html can be a DOM or jQuery element - if so, send the outerHTML including 
-    //all styles
-    if (CWUtil.isObject(html) === true) {
-      var el = $(html);
-      var clone = el.clone();
-      clone[0].style.cssText = el[0].style.cssText; //TODO really needed?
-      html = clone[0].outerHTML;
-    }
-
-    //identifier can also be a CWDevice
-    if (CWDevice.prototype.isPrototypeOf(identifier)) {
-      identifier = identifier.getIdentifier();
-    }
-
-    var message = {
-      selector : target,
-      html     : html
-    };
-    this.send(identifier, "_insert", message);
-  },
-
-  "public replace": function(identifier, target, html) {
-    //With two args, we handle them as identifier and html
-    //target is assumed as the body
-    if (html === undefined) {
-      html = target;
-      target = "body";
-    }
-
-    this._replace(identifier, target, html, false);
-  },
-
-  "public replaceContent": function(identifier, target, html) {
-    //With two args, we handle them as identifier and html
-    //target is assumed as the body
-    if (html === undefined) {
-      html = target;
-      target = "body";
-    }
-
-    this._replace(identifier, target, html, true);
-  },
-
-  "private _replace": function(identifier, target, html, contentOnly) {
-    //With two args, we handle them as identifier and html
-    //target is assumed as the body
-    if (html === undefined) {
-      html = target;
-      target = "body";
-    }
-
-    //target should be a selector but can also be a DOM or jQuery element
-    //If so, we try to get it by its ID on the other side
-    if (CWUtil.isObject(target)) {
-      target = "#"+$(target).attr("id");
-    }
-    
-    //html can be a DOM or jQuery element - if so, send the outerHTML including 
-    //all styles
-    if (CWUtil.isObject(html) === true) {
-      var el = $(html);
-      var clone = el.clone();
-      clone[0].style.cssText = el[0].style.cssText; //TODO really needed?
-      html = clone[0].outerHTML;
-    }
-
-    //identifier can also be a CWDevice
-    if (CWDevice.prototype.isPrototypeOf(identifier)) {
-      identifier = identifier.getIdentifier();
-    }
-
-    var message = {
-      selector    : target,
-      html        : html,
-      contentOnly : contentOnly,
-    };
-    this.send(identifier, "_replace", message);
-  },
-
-
-  "public loadScript": function(identifier, url, callback) {
-    var message = { url  : url };
-    var messageID = this.send(identifier, "_loadscript", message);
-
-    if (callback !== undefined) {
-      this.on("__ack_message" + messageID, callback);
-    }
-  },
-
-  "public loadCSS": function(identifier, url) {
-    var message = { url  : url };
-    var messageID = this.send(identifier, "_loadcss", message);
-  },
-
-
-  "public send": function(target, name, message) {
-    if (message === undefined) {
-      message = target;
-      target = "master";
-    }
-
-    if (CWDevice.prototype.isPrototypeOf(target)) {
-      target = target.getIdentifier();
-    }
-
-    message._name = name;
-    message._source = this.getIdentifier();
-    message._target = target;
-    return this._sendObject(message);
-  },
-
-
-  "public respond": function(originalMessage, name, responseObject) {
-    this.send(originalMessage._source, name, responseObject);
-  },
-
-
-  "public broadcast": function(name, message, sendToSelf) 
-  {
-    if (sendToSelf) {
-      message._broadcastToSource = true;
-    }
-    
-    this.send("broadcast", name, message);
-    // if (sendToSelf === true) {
-      // this.send(this.getIdentifier(), name, message);
-    // }
-  },
-
-
-  "package _sendAck": function(message) {
-    var ackMessage = { original : message };
-    this.send(message._source, "_ack", ackMessage);
-  },
-
-
-  "package _sendObject": function(message)
-  {
-    if (("_name" in message) === false) {
-      console.warn("Tried to send message without _name, ignoring: "+JSON.stringify(message));
-      return;
-    }
-
-    message._id = CWUtil.randomInt(0, 9999999999);
-    message._name = message._name.toLowerCase();
-
-    var messageString = JSON.stringify(message);
-    CWDebug.log(4, "Sending message: " + messageString);
-    this._websocket.send(messageString);
-
-    return message._id;
-  },
-
-
-  "package _disconnectWebsocket": function()
-  {
-    this._websocket.close();
-  },
-
-
-  _cleanupWebsocket: function()
-  {
-    if (this._websocket !== undefined) 
-    {
-      this._websocket.onopen    = undefined;
-      this._websocket.onmessage = undefined;
-      this._websocket.onclose   = undefined;
-      this._websocket.onerror   = undefined;
-      this._websocket           = undefined;
-    }
-  },
-});
-/* global OOP, CWEventManager, CWDebug */
-"use strict";
-
-
-
-//TODO refactor into common, remote, master parts
-//rename to CWNativeBridge or something like that
-var CWNativeRemoteCommunication = OOP.createSingleton("Connichiwa", "CWNativeRemoteCommunication", 
-{
-  _runsNative: false,
-
-
-  __constructor: function() {
-    if (window.RUN_BY_CONNICHIWA_NATIVE === true) {
-      this._runsNative = true;
-    }
-  },
-
-
-  "public isRunningNative": function() {
-    return (this._runsNative === true);
-  },
-
-
-  "public callOnNative": function(methodName) {
-    //If we are not running natively, all native method calls are simply ignored
-    if (this.isRunningNative() !== true) return;
-
-    //Grab additional arguments passed to this method, but not methodName
-    var args = Array.prototype.slice.call(arguments);
-    args.shift();
-
-    //Check if the given method is a valid function and invoke it
-    //Obviously, this could be used to call any method, but what's the point really?
-    var method = window[methodName];
-    if (typeof method === "function") {
-      method.apply(null, args);
-    } else { 
-      CWDebug.log(1, "ERROR: Tried to call native method with name " + methodName + ", but it doesn't exist!");
-    }
-  },
-
-
-  "public parse": function(message)
-  {
-    CWDebug.log(4, "Parsing native message (remote): " + message);
-    var object = JSON.parse(message);
-    switch (object._name)
-    {
-      case "runsnative":          this._parseRunsNative(object); break;
-      case "connectwebsocket":    this._parseConnectWebsocket(object); break;
-      case "cwdebug":             this._parseDebug(object); break;
-      case "localinfo":           this._parseLocalInfo(object); break;
-      case "disconnectwebsocket": this._parseDisconnectWebsocket(object); break;
-    }
-  },
-
-
-  _parseRunsNative: function(message) {
-    CWDebug.log(1, "RUNS NATIVE SET TO "+JSON.stringify(message));
-    this._runsNative = true;
-  },
-
-
-  _parseConnectWebsocket: function(message)
-  {
-    this.package.Connichiwa._connectWebsocket();
-  },
-
-
-  _parseDebug: function(message)
-  {
-    CWDebug.enableDebug();
-  },
-
-
-  _parseLocalInfo: function(message) 
-  {
-    this.package.Connichiwa._setLocalDevice(message);
-    CWEventManager.trigger("ready"); 
-  },
-
-
-  _parseDisconnectWebsocket: function(message)
-  {
-    this.package.Connichiwa._disconnectWebsocket();  
-  },
-});
-/* global OOP, CWEventManager */
-"use strict";
-
-
-OOP.extendSingleton("Connichiwa", "CWWebsocketMessageParser", 
-{
-  "package parseOnRemote": function(message) {
-    switch (message._name) {
-      case "_debuginfo"      : this._parseDebugInfo(message); break;
-      case "_softdisconnect" : this._parseSoftDisconnect(message); break;
-    }
-  },
-
-
-  _parseDebugInfo: function(message) {
-    CWDebug.setDebugInfo(message);
-  },
-
-
-  _parseSoftDisconnect: function(message) {
-    this.package.Connichiwa._softDisconnectWebsocket();
-  },
-});
-/* global OOP, CWWebsocketMessageParser, CWDevice, CWSystemInfo, CWUtil, CWDebug, CWMasterCommunication, CWNativeRemoteCommunication, CWEventManager */
-"use strict";
-
-
-OOP.extendSingleton("Connichiwa", "Connichiwa", {
-  "private _localDevice"      : undefined,
-  "private _softDisconnected" : false,
-  "private _isReconnecting"   : false,
-
-
-  __constructor: function() {
-    //If no native layer runs in the background, we have to take care of 
-    //establishing a connection ourselves
-    var runsNative = this.package.CWNativeRemoteCommunication.isRunningNative();
-    if (runsNative !== true) this._connectWebsocket();
-  },
-
-
-  "public getLocalDevice": function() {
-    return this._localDevice;
-  },
-
-
-  "public getIdentifier": function() 
-  {
-    return this._localDevice.getIdentifier();
-  },
-
-
-  "public isMaster": function() {
-    return false;
-  },
-
-
-  "package _setLocalDevice": function(properties) {
-    if (this._localDevice === undefined) {
-      properties.isLocal = true;
-      this._localDevice = new CWDevice(properties);
-    }
-
-    //Let the master know about our new device information
-    this.send("master", "remoteinfo", properties);
-  },
-
-
-  "package _connectWebsocket": function()
-  {
-    CWDebug.log(3, "Connecting");
-    //If we replace the websocket (or re-connect) we don't want to call onWebsocketClose
-    //Therefore, first cleanup, then close
-    var oldWebsocket = this._websocket;
-    this._cleanupWebsocket();    
-    if (oldWebsocket !== undefined) oldWebsocket.close();
-
-    var parsedURL = new CWUtil.parseURL(document.URL);
-
-    this._websocket           = new WebSocket("ws://" + parsedURL.hostname + ":" + (parseInt(parsedURL.port) + 1));
-    this._websocket.onopen    = this._onWebsocketOpen;
-    this._websocket.onmessage = this._onWebsocketMessage;
-    this._websocket.onclose   = this._onWebsocketClose;
-    this._websocket.onerror   = this._onWebsocketError;
-  },
-
-
-  _softDisconnectWebsocket: function()
-  {
-    this._softDisconnected = true;
-    // nativeSoftDisconnect();
-    CWNativeRemoteCommunication.callOnNative("nativeSoftDisconnect");
-  },
-
-
-  _onWebsocketOpen: function()
-  {
-    CWDebug.log(3, "Websocket opened");
-    this._softDisconnected = false;
-
-    var runsNative = this.package.CWNativeRemoteCommunication.isRunningNative();
-
-    CWNativeRemoteCommunication.callOnNative("nativeWebsocketDidOpen");
-
-    if (runsNative === false) {
-      //If we have no native layer and are reconnecting we now need to refresh the
-      //page to reset the remote's state
-      if (this._isReconnecting === true) {
-        location.reload(true);
-        return;
-      }
-
-      //We have no native layer that delivers us accurate local device info
-      //Therefore, we create as much info as we can ourselves
-      var localInfo = {
-        identifier : CWUtil.createUUID(),
-        launchDate : Date.now() / 1000.0,
-        ppi        : CWSystemInfo.PPI()
-      };
-      this._setLocalDevice(localInfo);
-    }
-  },
-
-
-  _onWebsocketMessage: function(e)
-  {
-    var message = JSON.parse(e.data);
-
-    //Filter messages that were broadcasted by us and do not have the
-    //"_broadcastToSource" flag set
-    if (message._target === "broadcast" && 
-      message._source === this.getLocalDevice().getIdentifier() && 
-      message._broadcastToSource !== true) {
-      return;
-    }
-
-    CWDebug.log(4, "Received message: " + e.data);
-
-    //It seems that reacting immediatly to a websocket message
-    //sometimes causes crashes in Safari. I am unsure why.
-    //We use requestAnimationFrame in an attempt to prevent those crashes
-    var that = this;
-    window.requestAnimationFrame(function() {
-      that.package.CWWebsocketMessageParser.parse(message);
-      that.package.CWWebsocketMessageParser.parseOnRemote(message);
-
-      if (message._name) CWEventManager.trigger("message" + message._name, message);
-    });
-  },
-
-
-  _onWebsocketClose: function()
-  {
-    CWDebug.log(3, "Websocket closed");
-    this._cleanupWebsocket();
-    // nativeWebsocketDidClose();
-    CWNativeRemoteCommunication.callOnNative("nativeWebsocketDidClose");
-
-    var runsNative = this.package.CWNativeRemoteCommunication.isRunningNative();
-
-    //If we are running natively, the remote webview will be cleared and a connection
-    //can be reestablished over Bluetooth. If we are running native-less we
-    //try to reconnect to the master
-    if (runsNative === false) {
-      // window.setTimeout(this._tryWebsocketReconnect, 5000);
-    }
-  },
-
-
-  _onWebsocketError: function()
-  {
-    CWDebug.log(3, "Error");
-    this._onWebsocketClose();
-  },
-
-  _tryWebsocketReconnect: function() {
-    if (this._websocket !== undefined && 
-       (this._websocket.readyState === WebSocket.OPEN || this._websocket.readyState === WebSocket.CONNECTING)) {
-      return;
-    }
-
-    this._isReconnecting = true;
-
-    // if (this._websocket !== undefined && this._websocket.readyState === WebSocket.CONNECTING) {
-    //   window.setTimeout(this._tryWebsocketReconnect(), 1000);
-    //   return;
-    // }
-
-
-    CWDebug.log(3, "Try reconnect");
+
+  return true;
+}.bind(CWWebsocketMessageParser);
+
+
+/**
+ * Parses `_ack` messages. Such messages are sent as acknowledgement for
+ *    receiving a message.
+ * @param  {Object} message The message from the websocket
+ * @fires __ack_message{ID}
+ * @function
+ * @private
+ */
+CWWebsocketMessageParser._parseAck = function(message) {
+  CWEventManager.trigger("__ack_message" + message.original._id);
+}.bind(CWWebsocketMessageParser);
+
+
+/**
+ * Parses `_insert` messages. Such messages contain HTML code that should be
+ *    inserted on this device's DOM and a target DOM element to insert into.
+ *    On failure, this does nothing.
+ * @param  {Object} message The message from the websocket
+ * @function
+ * @private
+ */
+CWWebsocketMessageParser._parseInsert = function(message) {
+  $(message.selector).append(message.html);
+}.bind(CWWebsocketMessageParser);
+
+
+/**
+ * Parses `_replace` messages. Such messages contain HTML code and a DOM
+ *    element that should be replaced with the HTML code. On failure, does
+ *    nothing.
+ * @param  {Object} message The message from the websocket
+ * @function
+ * @private
+ */
+CWWebsocketMessageParser._parseReplace = function(message) {
+  if (message.contentOnly === true) {
+    $(message.selector).html(message.html);
+  } else {
+    $(message.selector).replaceWith(message.html);
+  }
+}.bind(CWWebsocketMessageParser);
+
+
+/**
+ * Parses `_loadScript` messages. Such messages contain the path to a
+ *    JavaScript on the server side that will be loaded. An acknowledgement
+ *    will be sent to the other device after the script loaded.
+ * @param  {Object} message The message from the websocket
+ * @function
+ * @private
+ */
+CWWebsocketMessageParser._parseLoadScript = function(message) {
+  var that = this;
+  $.getScript(message.url).done(function() {
+    Connichiwa.package.Connichiwa._sendAck(message);
+  }).fail(function(f, s, t) {
+    CWDebug.err(1, "There was an error loading '" + message.url + "': " + t);
+  });
+}.bind(CWWebsocketMessageParser);
+
+
+/**
+ * Parses `_loadCSS` messages. Such messages contain HTML the path to a CSS
+ *    file on the server side that will be loaded. An acknowledgment will be
+ *    sent to the other device after the file loaded.
+ * @param  {Object} message The message from the websocket
+ * @function
+ * @private
+ */
+CWWebsocketMessageParser._parseLoadCSS = function(message) {
+  var cssEntry = document.createElement("link");
+  cssEntry.setAttribute("rel", "stylesheet");
+  cssEntry.setAttribute("type", "text/css");
+  cssEntry.setAttribute("href", message.url);
+  $("head").append(cssEntry);
+  Connichiwa.package.Connichiwa._sendAck(message);
+}.bind(CWWebsocketMessageParser);
+
+
+/**
+ * Parses `_wasStitched` messages. Such messages are sent when this device was
+ *    stitched to another device.
+ * @param  {Object} message The message from the websocket
+ * @fires wasStitched
+ * @function
+ * @private
+ */
+CWWebsocketMessageParser._parseWasStitched = function(message) {
+  CWEventManager.trigger("wasStitched", message);
+}.bind(CWWebsocketMessageParser);
+
+
+/**
+ * Parses `_wasUnstitched` messages. Such messages are sent when this device
+ *    was previously stitched and now loses its stiching.
+ * @param  {Object} message The message from the websocket
+ * @fires wasUntitched
+ * @function
+ * @private
+ */
+CWWebsocketMessageParser._parseWasUnstitched = function(message) {
+  CWEventManager.trigger("wasUnstitched", message);
+}.bind(CWWebsocketMessageParser);
+
+
+/**
+ * Parses `_gotStitchneighbor` messages. Such messages are sent when this
+ *    device was previously stitched and now used by another device to
+ *    determine the other devices relative position.
+ * @param  {Object} message The message from the websocket
+ * @fires gotstitchneighbor
+ * @function
+ * @private
+ */
+CWWebsocketMessageParser._parseGotStitchNeighbor = function(message) {
+  CWEventManager.trigger("gotstitchneighbor", message);
+}.bind(CWWebsocketMessageParser);
+
+//Initalize module. Delayed call to make sure all modules are ready
+if (CWWebsocketMessageParser.__constructor) window.setTimeout(CWWebsocketMessageParser.__constructor, 0);
+/* global CWEventManager, CWDevice, CWNativeBridge, CWUtil, CWDebug */
+'use strict';
+
+
+
+/**
+ * Connichiwa's main interface. Most of a web applications use of Connichiwa
+ *    will go through this interface. It allows the web application to
+ *    register for events, send messages, get information about this device
+ *    and other devices and more
+ * @namespace Connichiwa
+ */
+var Connichiwa = Connichiwa || {};
+
+
+/**
+ * The websocket connection to the websocket server running on the master
+ *    device
+ * @type {WebSocket}
+ * @private
+ */
+Connichiwa._websocket = undefined;
+
+
+/**
+ * Returns the {@link CWDevice} instance that represents the current device
+ * @return {CWDevice} The {@link CWDevice} instance that represents this
+ *    device
+ * @function
+ */
+Connichiwa.getLocalDevice = function() { /* ABSTRACT */ };
+
+
+/**
+ * Returns the unique identifier of this device
+ * @return {String} A v4 UUID as a string, uniquely identifies this device
+ * @function
+ */
+Connichiwa.getIdentifier = function() { /* ABSTRACT */ };
+
+
+/**
+ * Determines if the current device is the master device
+ * @return {Boolean} true if this device is the master device, otherwise false
+ * @function
+ */
+Connichiwa.isMaster = function() { /* ABSTRACT */ };
+
+
+/**
+ * Connects to the websocket server of the master
+ * @function
+ * @private
+ */
+Connichiwa._connectWebsocket = function() { /* ABSTRACT */ };
+
+
+/**
+ * Called when the websocket connection was successfully established
+ * @function
+ * @private
+ */
+Connichiwa._onWebsocketOpen = function() { /* ABSTRACT */ };
+
+
+/**
+ * Called whenever a message arrives through the websocket
+ * @function
+ * @private
+ */
+Connichiwa._onWebsocketMessage = function(e) { /* ABSTRACT */ };
+
+
+/**
+ * Called when the websocket connection is closed either by the server or by
+ *    the client. Can also indicate the server went offline.
+ * @function
+ * @private
+ */
+Connichiwa._onWebsocketClose = function(e) { /* ABSTRACT */ };
+
+
+/**
+ * Called when an error occurs on the websocket
+ * @function
+ * @private
+ */
+Connichiwa._onWebsocketError = function() { /* ABSTRACT */ };
+
+
+/**
+ * Initializes Connichiwa. Must be called on load.
+ * @function
+ * @private
+ */
+Connichiwa.__constructor = function() {
+  //If no native layer runs in the background, we have to take care of 
+  //establishing a connection ourselves
+  if (CWNativeBridge.isRunningNative() !== true) {
     this._connectWebsocket();
-    // window.setTimeout(this._tryWebsocketReconnect, 5000);
   }
-});
+}.bind(Connichiwa);
+
+
+/**
+ * Registers a callback for a Connichiwa system event. A number of such events
+ *    exist (e.g. {@link event:devicedetected} or {@link
+ *    event:deviceconnected}). See the event documentation for details. These
+ *    events are triggered by the framework. Registering multiple functions
+ *    for the same event will invoke all those functions whenever the event is
+ *    triggered
+ * @param  {String}   eventName The name of the event to register for. Must
+ *    match one of the documented system events, otherwise this method will do
+ *    nothing
+ * @param  {Function} callback  The callback function that will be invoked
+ *    whenever the event is triggered
+ * @function
+ */
+Connichiwa.on = function(eventName, callback) {
+  //We can't use the normal event system for the load event, so
+  //forward it
+  if (eventName === 'load') {
+    this.onLoad(callback);
+    return;
+  } 
+  
+  CWEventManager.register(eventName, callback);
+}.bind(Connichiwa);
+
+
+/**
+ * Register a callback for a custom message. The given callback will be
+ *    invoked whenever a custom message with the given name (sent using {@link
+ *    Connichiwa.send} or {@link CWDevice#send}) is received on this device.
+ *    The received message will be passed to the callback
+ * @param  {String}   name     The message to register for. Whenever a message
+ *    with this name is received, the callback will be called
+ * @param  {Function} callback The callback to invoke when a message with the
+ *    given name is received
+ * @function
+ */
+Connichiwa.onMessage = function(name, callback) {
+  this.on('message' + name, callback);
+}.bind(Connichiwa);
+
+
+/**
+ * Register a callback to be invoked once Connichiwa is ready. The callback
+ *    can be sure that the Connichiwa library is fully loaded and initialized.
+ *    Also, all scripts passed to {@link Connichiwa.autoLoad} are ensured to
+ *    have been loaded. Most Connichiwa-related code should be wrapped by this
+ *    function. If this method is called after Connichiwa is ready, the
+ *    callback will be invoked on the next run loop.
+ * @param  {Function} callback The callback to invoke once Connichiwa is ready 
+ * @function
+ */
+Connichiwa.onLoad = function(callback) {
+  if (document.readyState === 'complete') {
+    //Timeout so the callback is always called asynchronously
+    window.setTimeout(callback, 0);
+  } else {
+    Connichiwa.on('ready', callback);
+  }
+}.bind(Connichiwa);
+
+
+// DEVICE COMMUNICATION API
+
+
+Connichiwa.insert = function(identifier, target, html) {
+  //With two args, we handle them as identifier and html
+  //target is assumed as the body
+  if (html === undefined) {
+    html = target;
+    target = 'body';
+  }
+
+  //target should be a selector but can also be a DOM or jQuery element
+  //If so, we try to get it by its ID on the other side
+  if (CWUtil.isObject(target)) {
+    target = $(target);
+    target = '#' + target.attr('id');
+  }
+  
+  //html can be a DOM or jQuery element - if so, send the outerHTML including 
+  //all styles
+  if (CWUtil.isObject(html) === true) {
+    var el = $(html);
+    var clone = el.clone();
+    clone[0].style.cssText = el[0].style.cssText; //TODO really needed?
+    html = clone[0].outerHTML;
+  }
+
+  //identifier can also be a CWDevice
+  if (CWDevice.prototype.isPrototypeOf(identifier)) {
+    identifier = identifier.getIdentifier();
+  }
+
+  var message = {
+    selector : target,
+    html     : html
+  };
+  this.send(identifier, '_insert', message);
+}.bind(Connichiwa);
+
+Connichiwa.replace = function(identifier, target, html) {
+  //With two args, we handle them as identifier and html
+  //target is assumed as the body
+  if (html === undefined) {
+    html = target;
+    target = 'body';
+  }
+
+  this._replace(identifier, target, html, false);
+}.bind(Connichiwa);
+
+Connichiwa.replaceContent = function(identifier, target, html) {
+  //With two args, we handle them as identifier and html
+  //target is assumed as the body
+  if (html === undefined) {
+    html = target;
+    target = 'body';
+  }
+
+  this._replace(identifier, target, html, true);
+}.bind(Connichiwa);
+
+Connichiwa._replace = function(identifier, target, html, contentOnly) {
+  //With two args, we handle them as identifier and html
+  //target is assumed as the body
+  if (html === undefined) {
+    html = target;
+    target = 'body';
+  }
+
+  //target should be a selector but can also be a DOM or jQuery element
+  //If so, we try to get it by its ID on the other side
+  if (CWUtil.isObject(target)) {
+    target = '#' + $(target).attr('id');
+  }
+  
+  //html can be a DOM or jQuery element - if so, send the outerHTML including 
+  //all styles
+  if (CWUtil.isObject(html) === true) {
+    var el = $(html);
+    var clone = el.clone();
+    clone[0].style.cssText = el[0].style.cssText; //TODO really needed?
+    html = clone[0].outerHTML;
+  }
+
+  //identifier can also be a CWDevice
+  if (CWDevice.prototype.isPrototypeOf(identifier)) {
+    identifier = identifier.getIdentifier();
+  }
+
+  var message = {
+    selector    : target,
+    html        : html,
+    contentOnly : contentOnly,
+  };
+  this.send(identifier, '_replace', message);
+}.bind(Connichiwa);
+
+
+Connichiwa.loadScript = function(identifier, url, callback) {
+  var message = { url  : url }.bind(Connichiwa);
+  var messageID = this.send(identifier, '_loadscript', message);
+
+  if (callback !== undefined) {
+    this.on('__ack_message' + messageID, callback);
+  }
+}.bind(Connichiwa);
+
+Connichiwa.loadCSS = function(identifier, url) {
+  var message = { url  : url };
+  var messageID = this.send(identifier, '_loadcss', message);
+}.bind(Connichiwa);
+
+
+Connichiwa.send = function(target, name, message) {
+  if (message === undefined) {
+    message = target;
+    target = 'master';
+  }
+
+  if (CWDevice.prototype.isPrototypeOf(target)) {
+    target = target.getIdentifier();
+  }
+
+  message._name = name;
+  message._source = this.getIdentifier();
+  message._target = target;
+  return this._sendObject(message);
+}.bind(Connichiwa);
+
+
+/**
+ * Responds to a given message. This will send the given response to the
+ *    device where the given originalMessage originated from
+ * @param  {Object} originalMessage The message to respond to
+ * @param  {String} name            The message name of the response
+ * @param  {Object} responseObject  The message to send to the device where
+ *    originalMessage was sent from. Can be any object that is serializable
+ *    using `JSON.stringify`
+ * @function
+ * @protected
+ */
+Connichiwa.respond = function(originalMessage, name, responseObject) {
+  this.send(originalMessage._source, name, responseObject);
+}.bind(Connichiwa);
+
+
+/**
+ * Broadcasts a given message to all other devices (and, if requested, also to
+ *    this device). The message will have the given name and therefore trigger
+ *    all callback functions that were registered for this name using {@link
+ *    Connichiwa.onMessage}
+ * @param  {String} name       The name of the message
+ * @param  {Object} message    The message content. Can be any object that is
+ *    serializable using `JSON.stringify`
+ * @param  {Boolean} [sendToSelf=false] Set to true to make sure this message
+ *    is also delivered to the device where it is sent from, which will
+ *    trigger any registered callbacks for the message
+ * @function
+ */
+Connichiwa.broadcast = function(name, message, sendToSelf) {
+  if (sendToSelf) {
+    message._broadcastToSource = true;
+  }
+  
+  this.send('broadcast', name, message);
+}.bind(Connichiwa);
+
+
+/**
+ * Sends an acknowledgement message (with name `_ack`) back to the device
+ *    where the given message originated from. The given message will be
+ *    attached to the acknowledgement and sent back as well.
+ * @param  {Object} message A valid message object that was received from a
+ *    device
+ * @function
+ * @private
+ */
+Connichiwa._sendAck = function(message) {
+  var ackMessage = { original : message };
+  this.send(message._source, '_ack', ackMessage);
+}.bind(Connichiwa);
+
+
+/**
+ * The main, internal send method where all message sendings will sooner or
+ *    later end up. This will prepare the message object, serialize it and
+ *    send it via the websocket. The message must at least have a `_name` key,
+ *    otherwise this method will log an error and not send the message
+ * @param  {Object} message The message object to send
+ * @return {Number} The random ID that was assigned to the message
+ * @function
+ * @private
+ */
+Connichiwa._sendObject = function(message) {
+  if (('_name' in message) === false) {
+    CWDebug.err('Tried to send message without _name, ignoring: ' + JSON.stringify(message));
+    return;
+  }
+
+  message._id = CWUtil.randomInt(0, 9999999999); 
+  message._name = message._name.toLowerCase();
+
+  var messageString = JSON.stringify(message);
+  CWDebug.log(4, 'Sending message: ' + messageString);
+
+  //If the message is too long, chunk it in pieces of 2^15 bytes
+  //We need to do that because some browser (Safari *cough*) can't
+  //really handle messages that are very large.
+  //We chunk the messages by framing the message with another message
+  // if (messageString.length > 32700) {
+  //   var pos = 0;
+  //   while (pos < messageString.length) { 
+  //     var chunkMessage = {
+  //       _id        : CWUtil.randomInt(0, 9999999999),
+  //       _name      : "_chunk",
+  //       _source    : message._source,
+  //       _target    : message._target,
+  //       originalID : message._id,
+  //       payload    : "",
+  //       isFinal    : 0,
+  //     };
+  //     chunkMessage.payload = messageString.substr(pos, 32700);
+
+  //     var length = JSON.stringify(chunkMessage).length;
+  //     var overload = 0;
+  //     if (length > 32700) {
+  //       overload = length - 32700;
+  //       chunkMessage.payload = chunkMessage.payload.substr(0, 32700-overload);
+  //     }
+  //     chunkMessage.isFinal = (pos+(32700 - overload)>=messageString.length) ? 1 : 0;
+
+  //     CWDebug.log(1, "Sending chunk of size "+JSON.stringify(chunkMessage).length);
+  //     //Once again, we need a setTimeout to lower the possibility of a crash on iOS
+  //     window.setTimeout(function() { this._websocket.send(JSON.stringify(message)); }.bind(this), 0);
+
+  //     pos += 32700 - overload;
+  //     CWDebug.log(1, "Pos is now "+pos+"/"+messageString.length);
+  //   }
+  // } else {
+    //Once again, we need a setTimeout to lower the possibility of a crash on iOS
+    this._websocket.send(messageString);
+  // }
+
+  return message._id;
+}.bind(Connichiwa);
+
+
+
+/**
+ * Closes the websocket connection
+ * @function
+ * @private
+ */
+Connichiwa._disconnectWebsocket = function() {
+  this._websocket.close();
+}.bind(Connichiwa);
+
+
+/**
+ * Makes sure all websocket events are not called again and sets the websocket
+ *    object to `undefined`
+ * @function
+ * @private
+ */
+Connichiwa._cleanupWebsocket = function() {
+  if (this._websocket !== undefined) {
+    this._websocket.onopen    = undefined;
+    this._websocket.onmessage = undefined;
+    this._websocket.onclose   = undefined;
+    this._websocket.onerror   = undefined;
+    this._websocket           = undefined;
+  }
+}.bind(Connichiwa);
+/**
+ * Represents a two-dimensional points
+ * @typedef Point
+ * @type Object
+ * @property {Number} x  The x coordinate of the point
+ * @property {Number} y  The y coordinate of the point
+ */
+
+/**
+ * Represents a valid URL
+ * @typedef URL
+ * @type Object
+ * @property {String} protocol  The protocol of the URL (e.g. http)
+ * @property {String} hostname  The host name part of the URL (e.g.
+ *    "example.com")
+ * @property {String} host  The host part of the URL, which is the hostname
+ *    plus port
+ * @property {String} pathname  The path of the URL (e.g. "/some/path")
+ * @property {Number} port The port of the URL, empty if no port was given
+ * @property {String} search The query string of the URL
+ * @property {String} hash The hash of the URL
+ * @property {String} requestUri The URL without the protocol, hostname and
+ *    port (e.g. "/some/path?var=value#ahash")
+ */
+/**
+ * This event is a global, internal synonym for the {@link
+ *    Connichiwa.event:onLoad} event
+ * @event ready 
+ */
+
+/**
+ * This event is fired after Connichiwa was loaded and set up properly. You
+ *    can attach an event handler to this event by using the {@link
+ *    Connichiwa.onLoad} method.
+ *
+ * On remotes, onLoad will further ensure that every script added to {@link
+ *    Connichiwa.autoLoad} is loaded, so your code can rely on variables and
+ *    methods created in these scripts.
+ * @event onLoad
+ * @memberOf  Connichiwa
+ */
+
+/**
+ * This event is fired when an acknowledgment for receiving a message is
+ *    received. Such an acknowledgment can be sent using {@link
+ *    Connichiwa._sendAck}. The `{ID}` in the event name is replaced with the
+ *    ID of the message that was acknowledged. This way, a callback function
+ *    can be registered for the acknowledgement of a specific message using
+ *    {@link CWEventManager.on}
+ * @event __ack_message{ID}
+ * @param {Object} message TODO
+ * @protected
+ */
+
+/**
+ * This event is fired when a swipe was detected on this device that could
+ * be part of a stitch
+ * @event stitchswipe
+ * @param {Object} message TODO
+ * @protected
+ */
+
+/**
+ * This event is fired when this device was stitched to another device. This
+ *    means the device's relative location changed, which can be retrieved
+ *    using {@link CWStitchManager.getLocalDeviceTransformation}
+ * @event wasStitched
+ * @param {Object} message TODO
+ */
+
+/**
+ * This event is fired when this device was unstitched. The device's relative
+ *    position is now unknown and {@link
+ *    CWStitchManager.getLocalDeviceTransformation} will return default values
+ * @event wasUnstitched
+ * @param {Object} message TODO
+ */
+
+/**
+ * This event is fired when this device was used by another device to
+ *    determine the other device's relative position (which means the other
+ *    device is places next to this device)
+ * @event gotstitchneighbor
+ * @param {Object} message TODO
+ */
+
+/**
+ * This event is fired at a regular interval (usually every ~500ms) and
+ *    contains the latest gyroscope data from the device. If the device does
+ *    not feature a gyroscope, this event is never fired.
+ * @event gyroscopeUpdate
+ * @param {CWGyroscope.GyroscopeData} data The latest gyroscope data
+ */
+
+/**
+ * This event is fired at a regular interval (usually every ~500ms) and
+ *    contains the latest accelerometer data from the device. If the device
+ *    does not feature an accelerometer, this event is never fired.
+ * @event accelerometerUpdate
+ * @param {CWGyroscope.AccelerometerData} data The latest accelerometer data
+ */
+
+/**
+ * This event is fired when a new device is detected over Bluetooth
+ * @event devicedetected
+ * @param {CWDevice} device The detected device
+ */
+
+/**
+ * This event is fired when the approximated distance between the master and a
+ *    detected device changes. If multiple devices are nearby, this method is
+ *    called for each device seperately
+ * @event devicedistancechanged
+ * @param {CWDevice} device The device whose distance was changed
+ */
+
+/**
+ * This event is fired whenever a previously detected device is lost (for
+ *    example because it is switched off, closes the app or goes out of
+ *    Bluetooth-range)
+ * @event devicelost
+ * @param {CWDevice} device The lost device
+ */
+
+/**
+ * This event is fired whenever a device connects to the master's server,
+ *    either as the result of a call to {@link CWDevice#connect} or becuase it
+ *    manually connected (e.g. through a webbrowser)
+ * @event deviceconnected
+ * @param {CWDevice} device The connected device
+ */
+
+/**
+ * This event is fired whenever the connection attempt to a detected but
+ *    unconnected device failed. Such an attempt can fail, for example, if the
+ *    two devices do not share a common network and are unable to connect over
+ *    an ad hoc network. This is the opposing event to {@link
+ *    event:remoteconnected}
+ * @event connectfailed
+ * @param {CWDevice} device The device that could not be connected
+ */
+
+/**
+ * This event is fired when a previously connected remote device has
+ *    disconnected. A disconnect can happen for example because the app was
+ *    closed, the device was switched off, the device connected to another
+ *    device but also because of network failures. A disconnected device can
+ *    still be discovered if it remains in Bluetooth-range, in which case it
+ *    will continue to send events such as {@link event:devicedistancechanged}
+ * @event devicedisconnected
+ * @param {CWDevice} device The device that disconnected
+ *//* global Connichiwa, CWDeviceManager, CWEventManager, CWDevice, CWDebug */
+'use strict';
+
+
+
+var CWNativeBridge = CWNativeBridge || {};
+
+
+/**
+ * @override
+ * @ignore
+ */
+CWNativeBridge.parse = function(message) {
+  CWDebug.log(4, 'Parsing native message (remote): ' + message);
+  var object = JSON.parse(message);
+  switch (object._name)
+  {
+    case 'runsnative':          this._parseRunsNative(object); break;
+    case 'connectwebsocket':    this._parseConnectWebsocket(object); break;
+    case 'cwdebug':             this._parseDebug(object); break;
+    case 'localinfo':           this._parseLocalInfo(object); break;
+    case 'disconnectwebsocket': this._parseDisconnectWebsocket(object); break;
+  }
+}.bind(CWNativeBridge);
+
+
+/**
+ * (Available on remote devices only)
+ *
+ * Parses `connectwebsocket` messages. This message tells the library that the
+ *    native layer is ready and that the websocket should establish a
+ *    connection
+ * @param  {Object} message The object that represents the JSON message that
+ *    was received from the native layer
+ * @function
+ * @private
+ */
+CWNativeBridge._parseConnectWebsocket = function(message) {
+  Connichiwa._connectWebsocket();
+}.bind(CWNativeBridge);
+
+
+/**
+ * (Available on remote devices only)
+ *
+ * Parses `localinfo` messages. This message contains information about this
+ *    device that will be set as the local device information
+ * @param  {Object} message The object that represents the JSON message that
+ *    was received from the native layer
+ * @function
+ * @fires ready
+ * @private
+ */
+CWNativeBridge._parseLocalInfo = function(message)  {
+  Connichiwa._setLocalDevice(message);
+  CWEventManager.trigger('ready'); 
+}.bind(CWNativeBridge);
+
+
+
+/**
+ * (Available on remote devices only)
+ *
+ * Parses `disconnectwebsocket` messages. This message tells the library that
+ *    we need to disconnect the websocket. This can happen, for example, when
+ *    the device stops being a remote or an error occured.
+ * @param  {Object} message The object that represents the JSON message that
+ *    was received from the native layer
+ * @function
+ * @private
+ */
+CWNativeBridge._parseDisconnectWebsocket = function(message) {
+  Connichiwa._disconnectWebsocket();  
+}.bind(CWNativeBridge);
+/* global CWEventManager, CWDebug */
+'use strict';
+
+
+var CWWebsocketMessageParser = CWWebsocketMessageParser || {};
+
+/**
+ * (Available on remote devices only)
+ *
+ * Parses a message from the Websocket on the remote device and calls the
+ *    appropiate sub-parse message. Also see {@link
+ *    CWWebsocketMessageParser.parse}
+ * @param  {Object} message  The object that represents the JSON message that
+ *    was received from the websocket
+ * @function
+ * @protected
+ */
+CWWebsocketMessageParser.parseOnRemote = function(message) {
+  switch (message._name) {
+    case "_debuginfo"      : this._parseDebugInfo(message); break;
+    case "_softdisconnect" : this._parseSoftDisconnect(message); break;
+  }
+}.bind(CWWebsocketMessageParser);
+
+
+CWWebsocketMessageParser._parseDebugInfo = function(message) {
+  CWDebug._setDebugInfo(message);
+}.bind(CWWebsocketMessageParser);
+
+
+CWWebsocketMessageParser._parseSoftDisconnect = function(message) {
+  Connichiwa.package.Connichiwa._softDisconnectWebsocket();
+}.bind(CWWebsocketMessageParser);
+/* global CWEventManager, CWWebsocketMessageParser, CWDevice, CWNativeBridge, CWSystemInfo, CWUtil, CWDebug */
+'use strict';
+
+
+
+var Connichiwa = Connichiwa || {};
+
+
+
+/**
+ * (Available on remote devices only)
+ *
+ * The {@link CWDevice} instance that represents this device
+ * @type {CWDevice}
+ * @private
+ */
+Connichiwa._localDevice = undefined;
+
+
+Connichiwa._softDisconnected = false;
+
+
+/**
+ * (Available on remote devices only)
+ *
+ * Determines if the websocket connection is currently trying to reconnect
+ * @type {Boolean}
+ * @private
+ */
+Connichiwa._isReconnecting = false;
+
+
+/**
+ * @override
+ * @ignore
+ */
+Connichiwa.getLocalDevice = function() {
+  return this._localDevice;
+}.bind(Connichiwa);
+
+
+/**
+ * @override
+ * @ignore
+ */
+Connichiwa.getIdentifier = function() {
+  return this._localDevice.getIdentifier();
+}.bind(Connichiwa);
+
+
+/**
+ * @override
+ * @ignore
+ */
+Connichiwa.isMaster = function() {
+  return false;
+}.bind(Connichiwa);
+
+
+/**
+ * (Available on remote devices only)
+ *
+ * Creates a new {@link CWDevice}, applies the given properties and sets that
+ *    CWDevice as the instance representing this device. A locale device can
+ *    only be set once. This method will also send the properties of the local
+ *    device to the master using a `remoteinfo` message
+ * @param {Object} properties The properties of the local device
+ * @function
+ * @private
+ */
+Connichiwa._setLocalDevice = function(properties) {
+  if (this._localDevice === undefined) {
+    properties.isLocal = true;
+    this._localDevice = new CWDevice(properties);
+  }
+
+  //Let the master know about our new device information
+  this.send("master", "remoteinfo", properties);
+}.bind(Connichiwa);
+
+
+/**
+ * @override
+ * @ignore
+ */
+Connichiwa._connectWebsocket = function() {
+  CWDebug.log(3, "Connecting");
+  //If we replace the websocket (or re-connect) we don't want to call onWebsocketClose
+  //Therefore, first cleanup, then close
+  var oldWebsocket = this._websocket;
+  this._cleanupWebsocket();    
+  if (oldWebsocket !== undefined) oldWebsocket.close();
+
+  var parsedURL = new CWUtil.parseURL(document.URL);
+
+  this._websocket           = new WebSocket("ws://" + parsedURL.hostname + ":" + (parseInt(parsedURL.port) + 1));
+  this._websocket.onopen    = this._onWebsocketOpen;
+  this._websocket.onmessage = this._onWebsocketMessage;
+  this._websocket.onclose   = this._onWebsocketClose;
+  this._websocket.onerror   = this._onWebsocketError;
+}.bind(Connichiwa);
+
+
+/**
+ * @override
+ * @ignore
+ */
+Connichiwa._onWebsocketOpen = function() {
+  CWDebug.log(3, "Websocket opened");
+  this._softDisconnected = false;
+
+  var runsNative = CWNativeBridge.isRunningNative();
+
+  CWNativeBridge.callOnNative("nativeWebsocketDidOpen");
+
+  if (runsNative === false) {
+    //If we have no native layer and are reconnecting we now need to refresh the
+    //page to reset the remote's state
+    if (this._isReconnecting === true) {
+      location.reload(true);
+      return;
+    }
+
+    //We have no native layer that delivers us accurate local device info
+    //Therefore, we create as much info as we can ourselves
+    var localInfo = {
+      identifier : CWUtil.createUUID(),
+      launchDate : Date.now() / 1000.0,
+      ppi        : CWSystemInfo.PPI()
+    };
+    this._setLocalDevice(localInfo);
+  }
+}.bind(Connichiwa);
+
+
+/**
+ * @override
+ * @ignore
+ */
+Connichiwa._onWebsocketMessage = function(e) {
+  var message = JSON.parse(e.data);
+
+  //Filter messages that were broadcasted by us and do not have the
+  //"_broadcastToSource" flag set
+  if (message._target === "broadcast" && 
+    message._source === this.getLocalDevice().getIdentifier() && 
+    message._broadcastToSource !== true) {
+    return;
+  }
+
+  CWDebug.log(4, "Received message: " + e.data);
+
+  //It seems that reacting immediatly to a websocket message
+  //sometimes causes crashes in Safari. I am unsure why.
+  //We use requestAnimationFrame in an attempt to prevent those crashes
+  var that = this;
+  window.requestAnimationFrame(function() {
+    CWWebsocketMessageParser.parse(message);
+    CWWebsocketMessageParser.parseOnRemote(message);
+
+    if (message._name) CWEventManager.trigger("message" + message._name, message);
+  });
+}.bind(Connichiwa);
+
+
+/**
+ * @override
+ * @ignore
+ */
+Connichiwa._onWebsocketClose = function() {
+  CWDebug.log(3, "Websocket closed");
+  this._cleanupWebsocket();
+  // nativeWebsocketDidClose();
+  CWNativeBridge.callOnNative("nativeWebsocketDidClose");
+
+  var runsNative = CWNativeBridge.isRunningNative();
+
+  //If we are running natively, the remote webview will be cleared and a connection
+  //can be reestablished over Bluetooth. If we are running native-less we
+  //try to reconnect to the master
+  if (runsNative === false) {
+    window.setTimeout(this._tryWebsocketReconnect, 5000);
+  }
+}.bind(Connichiwa);
+
+
+/**
+ * @override
+ * @ignore
+ */
+Connichiwa._onWebsocketError = function() {
+  CWDebug.log(3, "Error");
+  this._onWebsocketClose();
+}.bind(Connichiwa);
+
+
+Connichiwa._softDisconnectWebsocket = function() {
+  this._softDisconnected = true;
+  // nativeSoftDisconnect();
+  CWNativeBridge.callOnNative("nativeSoftDisconnect");
+}.bind(Connichiwa);
+
+
+/**
+ * Tries to reconnect the websocket connection. If the reconnect fails, this
+ *    method will call itself again after an interval and try again. {@link
+ *    Connichiwa._isReconnecting} will be true during the reconnect process
+ * @function
+ * @private
+ */
+Connichiwa._tryWebsocketReconnect = function() {
+  if (this._websocket !== undefined && this._websocket.readyState === WebSocket.OPEN) {
+    return;
+  }
+
+  if (this._websocket !== undefined && this._websocket.readyState === WebSocket.CONNECTING) {
+    window.setTimeout(this._tryWebsocketReconnect(), 1000);
+    return;
+  }
+
+  this._isReconnecting = true;
+
+  CWDebug.log(3, "Try reconnect");
+  this._connectWebsocket();
+  window.setTimeout(this._tryWebsocketReconnect, 5000);
+}.bind(Connichiwa);

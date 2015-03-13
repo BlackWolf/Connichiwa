@@ -382,7 +382,7 @@
     //stringByEvaluatingJavaScriptFromString: must be called on the main thread, but it seems buggy with dispatch_async, so we use performSelectorOnMainThread:
     //Also see http://stackoverflow.com/questions/11593900/uiwebview-stringbyevaluatingjavascriptfromstring-hangs-on-ios5-0-5-1-when-called
     CWLog(4, @"Sending message to web library: %@", message);
-    NSString *js = [NSString stringWithFormat:@"CWNativeMasterCommunication.parse('%@')", message];
+    NSString *js = [NSString stringWithFormat:@"CWNativeBridge.parse('%@')", message];
     [self.webView performSelectorOnMainThread:@selector(stringByEvaluatingJavaScriptFromString:) withObject:js waitUntilDone:NO];
 }
 
@@ -399,14 +399,14 @@
         [self _registerJSCallbacks];
         [self _sendToView_debuginfo];
         [self _sendToView_connectWebsocket];
-    }
-    else if (self.state == CWWebLibraryManagerStateDisconnecting)
-    {
-        CWLog(3, @"Web library webview did blank, we are fully disconnected... why would we want that?");
         
         //WebView's are a strange little thing - the JS context might or might not change between our load request and
         //this point. Therefore, create the context again even though we already did so in connect:
         [self createWebViewContext];
+    }
+    else if (self.state == CWWebLibraryManagerStateDisconnecting)
+    {
+        CWLog(3, @"Web library webview did blank, we are fully disconnected... why would we want that?");
         
         //Loaded the empty page in the process of disconnecting, clear the context
         self.webViewContext = nil;

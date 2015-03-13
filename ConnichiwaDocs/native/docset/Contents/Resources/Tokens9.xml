@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Protocols/CWWebApplicationState.html">
+	<File path="Classes/CWDebug.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/intf/CWWebApplicationState</TokenIdentifier>
-			<Abstract type="html">Implemented by CWWebApplication, this protocol exposes the global state of the application. This can be passed to other classes that need to know about the global application state, keeping everything else in CWWebApplication hidden.</Abstract>
-			<DeclaredIn>CWWebApplicationState.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/cl/CWDebug</TokenIdentifier>
+			<Abstract type="html">Class that holds everything we need to nicely debug</Abstract>
+			<DeclaredIn>CWDebug.h</DeclaredIn>
             
 			
 			<NodeRef refid="9"/>
@@ -13,98 +13,43 @@
 		
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/intfm/CWWebApplicationState/setIdentifier:</TokenIdentifier>
-			<Abstract type="html">The unique identifier of this device that is used amongst all the different parts of Connichiwa</Abstract>
-			<DeclaredIn>CWWebApplicationState.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/clm/CWDebug/isDebugging</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWDebug.h</DeclaredIn>
 			
-			<Declaration>@property (readonly, strong) NSString *identifier</Declaration>
+			<Declaration>+ (BOOL)isDebugging</Declaration>
 			
 			
-			<Anchor>//api/name/identifier</Anchor>
+			<Anchor>//api/name/isDebugging</Anchor>
             <NodeRef refid="9"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/intfm/CWWebApplicationState/identifier</TokenIdentifier>
-			<Abstract type="html">The unique identifier of this device that is used amongst all the different parts of Connichiwa</Abstract>
-			<DeclaredIn>CWWebApplicationState.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/clm/CWDebug/executeInDebug:</TokenIdentifier>
+			<Abstract type="html">Executes the given code only when we are in debug mode</Abstract>
+			<DeclaredIn>CWDebug.h</DeclaredIn>
 			
-			<Declaration>@property (readonly, strong) NSString *identifier</Declaration>
+			<Declaration>+ (void)executeInDebug:(void ( ^ ) ( void ))block</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>block</Name>
+					<Abstract type="html">The code to execute in debug</Abstract>
+				</Parameter>
+			</Parameters>
 			
-			
-			<Anchor>//api/name/identifier</Anchor>
+			<Anchor>//api/name/executeInDebug:</Anchor>
             <NodeRef refid="9"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/intfp/CWWebApplicationState/identifier</TokenIdentifier>
-			<Abstract type="html">The unique identifier of this device that is used amongst all the different parts of Connichiwa</Abstract>
-			<DeclaredIn>CWWebApplicationState.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/clm/CWDebug/logLevel</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWDebug.h</DeclaredIn>
 			
-			<Declaration>@property (readonly, strong) NSString *identifier</Declaration>
-			
-			
-			<Anchor>//api/name/identifier</Anchor>
-            <NodeRef refid="9"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/intfm/CWWebApplicationState/setWebserverPort:</TokenIdentifier>
-			<Abstract type="html">The port that this web server listens on</Abstract>
-			<DeclaredIn>CWWebApplicationState.h</DeclaredIn>
-			
-			<Declaration>@property (readonly) int webserverPort</Declaration>
+			<Declaration>+ (int)logLevel</Declaration>
 			
 			
-			<Anchor>//api/name/webserverPort</Anchor>
-            <NodeRef refid="9"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/intfm/CWWebApplicationState/webserverPort</TokenIdentifier>
-			<Abstract type="html">The port that this web server listens on</Abstract>
-			<DeclaredIn>CWWebApplicationState.h</DeclaredIn>
-			
-			<Declaration>@property (readonly) int webserverPort</Declaration>
-			
-			
-			<Anchor>//api/name/webserverPort</Anchor>
-            <NodeRef refid="9"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/intfp/CWWebApplicationState/webserverPort</TokenIdentifier>
-			<Abstract type="html">The port that this web server listens on</Abstract>
-			<DeclaredIn>CWWebApplicationState.h</DeclaredIn>
-			
-			<Declaration>@property (readonly) int webserverPort</Declaration>
-			
-			
-			<Anchor>//api/name/webserverPort</Anchor>
-            <NodeRef refid="9"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/intfm/CWWebApplicationState/isRemote</TokenIdentifier>
-			<Abstract type="html">Determines if this device is currently running as a remote device for another Connichiwa device.</Abstract>
-			<DeclaredIn>CWWebApplicationState.h</DeclaredIn>
-			
-			<Declaration>- (BOOL)isRemote</Declaration>
-			
-			<ReturnValue><Abstract type="html">true if the device is currently used as a remote device, otherwise false</Abstract></ReturnValue>
-			<Anchor>//api/name/isRemote</Anchor>
-            <NodeRef refid="9"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/intfm/CWWebApplicationState/canBecomeRemote</TokenIdentifier>
-			<Abstract type="html">Determines if this device can still become a remote device. This is, for example, not possible if this device is already a remote device or if remote devices are connected to it.</Abstract>
-			<DeclaredIn>CWWebApplicationState.h</DeclaredIn>
-			
-			<Declaration>- (BOOL)canBecomeRemote</Declaration>
-			
-			<ReturnValue><Abstract type="html">true if the device can still become a remote device, otherwise false</Abstract></ReturnValue>
-			<Anchor>//api/name/canBecomeRemote</Anchor>
+			<Anchor>//api/name/logLevel</Anchor>
             <NodeRef refid="9"/>
 		</Token>
 		

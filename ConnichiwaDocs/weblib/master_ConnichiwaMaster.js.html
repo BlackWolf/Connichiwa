@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: master/ConnichiwaMaster.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: master/ConnichiwaMaster.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/* global CWDeviceManager, CWNativeBridge, CWWebsocketMessageParser, CWEventManager, CWDebug */
+/* global nativeCallWebsocketDidOpen */
+/* global CONNECTING, OPEN */
+'use strict';
+
+
+var Connichiwa = Connichiwa || {};
+
+
+/**
+ * (Available on master device only)
+ * 
+ * When the websocket connection fails, this stores the number of retry
+ *    attempts
+ * @type {Number}
+ * @private
+ */
+Connichiwa._connectionAttempts = 0;
+
+
+/**
+ * (Available on master device only)
+ * 
+ * Set to true to automatically connect nearby devices. If multiple devices
+ *    with autoConnect enabled meet each other, the one that where the
+ *    application was launched earlier will become the master device
+ * @type {Boolean}
+ * @default false
+ */
+Connichiwa.autoConnect = false;
+
+
+/**
+ * (Available on master device only)
+ *
+ * An array of URLs to JavaScript or CSS scripts that will be automatically
+ *    loaded on any device that is connected from now on. Further, on all
+ *    connected devices, the callbacks passed to {@link Connichiwa.onLoad}
+ *    will only be invoked after all the scripts in this array have been
+ *    loaded
+ * @type {Array}
+ * @default [ ]
+ */
+Connichiwa.autoLoad = [];
+
+
+// PUBLIC API
+
+
+/**
+ * @override
+ * @ignore
+ */
+Connichiwa.getLocalDevice = function() {
+  return CWDeviceManager.getLocalDevice();
+}.bind(Connichiwa);
+
+
+/**
+ * @override
+ * @ignore
+ */
+Connichiwa.getIdentifier = function() 
+{
+  var localDevice = CWDeviceManager.getLocalDevice();
+  if (localDevice === undefined) return undefined;
+
+  return localDevice.getIdentifier();
+}.bind(Connichiwa);
+
+
+/**
+ * @override
+ * @ignore
+ */
+Connichiwa.isMaster = function() {
+  return true;
+}.bind(Connichiwa);
+
+
+/**
+ * (Available on master device only)
+ *
+ * Returns an array of IPs over which the HTTP and websocket server running on
+ *    this device can be reached
+ * @return {Array} An array of IPs as strings
+ * @function
+ * @protected
+ */
+Connichiwa.getIPs = function() {
+  var localDevice = CWDeviceManager.getLocalDevice();
+  if (localDevice === undefined) return undefined;
+
+  return localDevice.getIPs();
+}.bind(Connichiwa);
+
+
+/**
+ * (Available on master device only)
+ *
+ * Returns the port where the HTTP server on this device runs on. The
+ *    websocket server runs on this port +1
+ * @return {Number} The port of the HTTP server on this device
+ * @function
+ * @protected
+ */
+Connichiwa.getPort = function() {
+  var localDevice = CWDeviceManager.getLocalDevice();
+  if (localDevice === undefined) return undefined;
+
+  return localDevice.getPort();
+}.bind(Connichiwa);
+
+
+// WEBSOCKET
+
+
+/**
+ * @override
+ * @ignore
+ */
+Connichiwa._connectWebsocket = function() {
+  if (this._websocket !== undefined &amp;&amp; (this._websocket.state === CONNECTING || this._websocket.state === OPEN)) {
+    return;
+  }
+
+  this._cleanupWebsocket();
+
+  CWDebug.log(3, 'Connecting websocket');
+
+  this._websocket           = new WebSocket('ws://127.0.0.1:8001');
+  this._websocket.onopen    = this._onWebsocketOpen;
+  this._websocket.onmessage = this._onWebsocketMessage;
+  this._websocket.onclose   = this._onWebsocketClose;
+  this._websocket.onerror   = this._onWebsocketError;
+
+  this._connectionAttempts++;
+}.bind(Connichiwa);
+
+
+/**
+ * @override
+ * @ignore
+ */
+Connichiwa._onWebsocketOpen = function() {
+  CWDebug.log(3, 'Websocket opened');
+  CWNativeBridge.callOnNative('nativeCallWebsocketDidOpen');
+  this._connectionAttempts = 0;
+}.bind(Connichiwa);
+
+
+/**
+ * @override
+ * @ignore
+ */
+Connichiwa._onWebsocketMessage = function(e) {
+  var message = JSON.parse(e.data);
+
+  //Filter messages that were broadcasted by us and do not have the
+  //'_broadcastToSource' flag set
+  if (message._target === 'broadcast' &amp;&amp; 
+    message._source === this.getLocalDevice().getIdentifier() &amp;&amp; 
+    message._broadcastToSource !== true) {
+    return;
+  }
+
+  CWDebug.log(4, 'Received message: ' + e.data);
+  
+  //It seems that reacting immediatly to a websocket message
+  //sometimes causes crashes in UIWebView. I am unsure why.
+  //We use requestAnimationFrame in an attempt to prevent those crashes
+  var that = this;
+  window.requestAnimationFrame(function() {
+    CWWebsocketMessageParser.parse(message);
+    CWWebsocketMessageParser.parseOnMaster(message);
+
+    if (message._name) CWEventManager.trigger('message' + message._name, message);
+  });
+}.bind(Connichiwa);
+
+
+/**
+ * @override
+ * @ignore
+ */
+Connichiwa._onWebsocketClose = function(e) {
+  CWDebug.log(3, 'Websocket closed');
+  CWDebug.log(3, e.code);
+  CWDebug.log(3, e.reason);
+  this._cleanupWebsocket();
+
+  if (this._connectionAttempts >= 5)
+  {
+    //Give up, guess we are fucked
+    CWNativeBridge.callOnNative('nativeCallWebsocketDidClose');
+    return;
+  }
+
+  //We can't allow this blashphemy! Try to reconnect!
+  // setTimeout(function() { this._connectWebsocket(); }.bind(this), this._connectionAttempts * 1000);
+}.bind(Connichiwa);
+
+
+/**
+ * @override
+ * @ignore
+ */
+Connichiwa._onWebsocketError = function() {
+  this._onWebsocketClose();
+}.bind(Connichiwa);
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="CWDevice.html">CWDevice</a></li><li><a href="CWLocation.html">CWLocation</a></li><li><a href="CWVector.html">CWVector</a></li></ul><h3>Namespaces</h3><ul><li><a href="Connichiwa.html">Connichiwa</a></li><li><a href="CWDebug.html">CWDebug</a></li><li><a href="CWDeviceManager.html">CWDeviceManager</a></li><li><a href="CWGyroscope.html">CWGyroscope</a></li><li><a href="CWStitchManager.html">CWStitchManager</a></li><li><a href="CWSystemInfo.html">CWSystemInfo</a></li><li><a href="CWUtil.html">CWUtil</a></li></ul><h3>Events</h3><ul><li><a href="Connichiwa.html#.event:onLoad">onLoad</a></li><li><a href="global.html#event:accelerometerUpdate">accelerometerUpdate</a></li><li><a href="global.html#event:connectfailed">connectfailed</a></li><li><a href="global.html#event:deviceconnected">deviceconnected</a></li><li><a href="global.html#event:devicedetected">devicedetected</a></li><li><a href="global.html#event:devicedisconnected">devicedisconnected</a></li><li><a href="global.html#event:devicedistancechanged">devicedistancechanged</a></li><li><a href="global.html#event:devicelost">devicelost</a></li><li><a href="global.html#event:gotstitchneighbor">gotstitchneighbor</a></li><li><a href="global.html#event:gyroscopeUpdate">gyroscopeUpdate</a></li><li><a href="global.html#event:ready">ready</a></li><li><a href="global.html#event:wasStitched">wasStitched</a></li><li><a href="global.html#event:wasUnstitched">wasUnstitched</a></li></ul><h3><a href="global.html">Global</a></h3>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta2</a> on Fri Mar 13 2015 16:04:19 GMT+0100 (CET)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

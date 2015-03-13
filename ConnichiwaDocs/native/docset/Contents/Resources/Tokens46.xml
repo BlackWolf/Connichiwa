@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Constants/CWBluetoothConnectionInitialDataState.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/c/tdef/CWBluetoothConnectionInitialDataState</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
+            
+			
+			<NodeRef refid="46"/>
+		</Token>
+		
+		
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/CWBluetoothConnectionInitialDataStateMissing</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>CWBluetoothConnectionInitialDataStateMissing</Declaration>
+            
+            <DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
+            
+            <NodeRef refid="46"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/CWBluetoothConnectionInitialDataStateConnecting</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>CWBluetoothConnectionInitialDataStateConnecting</Declaration>
+            
+            <DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
+            
+            <NodeRef refid="46"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/CWBluetoothConnectionInitialDataStateConnected</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>CWBluetoothConnectionInitialDataStateConnected</Declaration>
+            
+            <DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
+            
+            <NodeRef refid="46"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/CWBluetoothConnectionInitialDataStateReceived</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>CWBluetoothConnectionInitialDataStateReceived</Declaration>
+            
+            <DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
+            
+            <NodeRef refid="46"/>
+        </Token>
+        
+	</File>
+</Tokens>

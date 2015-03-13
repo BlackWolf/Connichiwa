@@ -1,136 +1,464 @@
 /* global CWEventManager, CWStitchManager */
-"use strict";
+'use strict';
 
+
+
+/**
+ *
+  *
+  * @typedef Location
+  * @type Object
+  * @property {Number} x The x coordinate of the point or rectangle, or
+  *    undefined for a size
+  * @property {Number} y The y coordinate of the point or rectangle, or
+  *    undefined for a size
+  * @property {Number} width The width of the size or rectangle, or
+  *    undefined for a point
+  * @property {Number} height The height of the size or rectangle, or
+  *    undefined for a point
+  * @memberOf CWLocation
+ */
+
+
+
+/**
+ * Constructs a new CWLocation that represents a rectangle, positioned at the
+ *    given x/y coordinates and of size width/height.
+ *
+ * To represent only a point or a size, use the convenience functions {@link
+ *    CWLocation.fromPoint} and {@link CWLocation.fromSize}.
+ * @param {Number}  x       The x position of the rectangle
+ * @param {Number}  y       The y position of the rectangle
+ * @param {Number}  width   The width of the rectangle
+ * @param {Number}  height  The height of the rectangle
+ * @param {Boolean} [isLocal=true] If set to true, x, y, width and height are
+ *    given in the local coordinate system of the device. This is the case
+ *    most of the time, for example when retrieving the position and size of a
+ *    DOM element. Set this to false in case you pass global coordinates to
+ *    the constructor (for example from another CWLocation object).
+ * @constructor
+ *
+ * @class 
+ * @classdesc
+ * A CWLocation can be used to exchange points, sizes and rectangles between
+ *    stitched devices (for more information about stitching, see {@link
+ *    CWStitchManager}). A CWLocation will represent the same *physical*
+ *    location on every device.
+ *
+ * ![Local and Global Coordinate Systems in CWLocation](cwlocation1.jpg)
+ *    **Figure 1**: Local and Global coordinate system in Connichiwa
+ *
+ * As seen in figure 1, every device has its own local coordinate system where
+ *    `0,0` is the top left corner of the device. In fact, this coordinate
+ *    system is the same coordinate system used by CSS, for example when using
+ *    `position: fixed`. Connichiwa additionally introduces a *global
+ *    coordinate system*, which is a shared coordinate system for all stitched
+ *    devices. As you can see, this coordinate system spans across *all*
+ *    devices and is therefore perfect for sharing positions between devices.
+ *
+ * Imagine a scenario, where you want to show an element (in this case a
+ *    colored div) across multiple devices:
+ *
+ * ![Rectangle across two devices](cwlocation2.jpg) **Figure 2**: A rectangle
+ *    across two devices. CWLocation helps in positioning this element
+ *    correctly across both devices.
+ *
+ * As it can be seen in Figure 2, the global coordinate system used by
+ *    CWLocation can act as a bridge between the two local coordinate systems 
+ *    (green and blue). The green device can create a CWLocation that represents
+ *    the element. It will use its local coordinates for that:
+ *
+ * ```
+ * var location = new CWLocation(672, 256, 192, 256)
+ * ```
+ *    
+ *    The CWLocation object can now be shared with the blue device using 
+ *    {@link CWLocation#toString} and {@link CWLocation.fromString}). The blue
+ *    device can then get the element's position *relative to its own
+ *    coordinate system*:
+ *
+ * ```
+ * var location = CWLocation.fromString(locationSentByGreen);
+ * var localCoordinates = location.getLocal(); 
+ * ```
+ *    
+ *    The local position and size can then be set using CSS.
+ *
+ * As it can be seen in the previous example, CWLocation will also compensate
+ *    for different device rotations. This means that, even though the green 
+ *    and blue devices have different device rotations, the local coordinates
+ *    retrieved on the blue device will still be correct.
+ *
+ * Further, CWLocation also compensates for PPI differences. If
+ *    the green and blue device have different display PPI, using CWLocation
+ *    will ensure that the element still has the same *physical* size on both
+ *    devices and therefore appears as a single entity.
+ *
+ * **Example**: Create a div and position it across two devices. For a more
+ *    complete example of stitching and using CWLocation, see the tutorials.
+ *    
+ * ```
+ * //Create a new DOM element 
+ * var rect = $('<div></div>'); 
+ * rect.attr("id", "therect");
+ * rect.css({
+ *     position        : "absolute", 
+ *     top             : "200px", 
+ *     right           : "100px", 
+ *     width           : "200px",
+ *     height          : "200px", 
+ *     backgroundColor : "red" 
+ * }); 
+ * $("body").append(rect);
+ *
+ * //Also add the rectangle to another device
+ * //We assume we remembered another device as a CWDevice object 
+ * anotherDevice.insert(rect);
+ *
+ * //Create a CWLocation that represents the rectangle, and send it to another device
+ * var location = new CWLocation(
+ *     rect.offset().left, 
+ *     rect.offset().top, 
+ *     rect.width(), 
+ *     rect.height()
+ * );
+ * anotherDevice.send("rectlocation", {location: location.toString()});
+ *
+ * //
+ * // ... ON ANOTHER DEVICE ...
+ * //
+ *
+ * Connichiwa.onMessage("rectlocation", function(message) {
+ *     //Create the CWLocation from the location that was sent to us
+ *     var location = CWLocation.fromString(message.location);
+ *
+ *     //Retrieve the local coordinates and apply them
+ *     $("#therect").css({
+ *         top    : location.getLocalY(),
+ *         left   : location.getLocalX(),
+ *         width  : location.getLocalWidth(),
+ *         height : location.getLocalHeight()
+ *     });
+ *
+ *     //Lastly, in case of rotation, we need to apply that to the element
+ *     $("#therect").css("transform", "rotate(" + CWStitchManager.getDeviceTransformation().rotation + ")");
+ * });
+ * ```
+ */
 function CWLocation(x, y, width, height, isLocal) {
-  //
-  // TODO
-  // 
-  // make x, y, widht, height private so it can only be accessed through
-  // setLocal/setGlobal
-  // 
+  if (isLocal === undefined) isLocal = true;
+
+  /**
+   * The global x coordinate of the location, or undefined
+   * @type {Number}
+   * @private
+   */
+  this._x = undefined;
+
+  /**
+   * The global y coordinate of the location, or undefined
+   * @type {Number}
+   * @private
+   */
+  this._y = undefined;
+
+  /**
+   * The global width of the location, or undefined
+   * @type {Number}
+   * @private
+   */
+  this._width = undefined;
+
+  /**
+   * The global height of the location, or undefined
+   * @type {Number}
+   * @private
+   */
+  this._height = undefined;
   
   if (isLocal === true) {
-    var global = CWLocation.toGlobal(x, y, width, height);
-    this.x      = global.x;
-    this.y      = global.y;
-    this.width  = global.width;
-    this.height = global.height;
+    var global = CWLocation._toGlobal(x, y, width, height);
+    this._x      = global.x;
+    this._y      = global.y;
+    this._width  = global.width;
+    this._height = global.height;
   } else {
     //By default, we assume the location to be global coordinates
-    this.x      = x;
-    this.y      = y;
-    this.width  = width;
-    this.height = height;
+    this._x      = x;
+    this._y      = y;
+    this._width  = width;
+    this._height = height;
   }
 
   //When this device is stitched or unstitched, we adjust the values to the
   //new device transformation so that the local coordinates stay the same
-  //This is done so that content shown on this device does not change location or
-  //size on a stitch or unstitch
-  CWEventManager.register("wasUnstitched", function(message) {
-    this.x -= message.deviceTransformation.x;
-    this.y -= message.deviceTransformation.y;
+  //This is done so that content shown on this device does not change location 
+  //or size on a stitch or unstitch
+  CWEventManager.register('wasUnstitched', function(message) {
+    this._x -= message.deviceTransformation.x;
+    this._y -= message.deviceTransformation.y;
 
-    this.x *= message.deviceTransformation.scale;
-    this.y *= message.deviceTransformation.scale;
-    this.width *= message.deviceTransformation.scale;
-    this.height *= message.deviceTransformation.scale;
+    this._x *= message.deviceTransformation.scale;
+    this._y *= message.deviceTransformation.scale;
+    this._width *= message.deviceTransformation.scale;
+    this._height *= message.deviceTransformation.scale;
   }.bind(this));
 
-  CWEventManager.register("wasStitched", function(message) {
-    this.x /= message.deviceTransformation.scale;
-    this.y /= message.deviceTransformation.scale;
-    this.width /= message.deviceTransformation.scale;
-    this.height /= message.deviceTransformation.scale;
+  CWEventManager.register('wasStitched', function(message) {
+    this._x /= message.deviceTransformation.scale;
+    this._y /= message.deviceTransformation.scale;
+    this._width /= message.deviceTransformation.scale;
+    this._height /= message.deviceTransformation.scale;
 
-    this.x += message.deviceTransformation.x;
-    this.y += message.deviceTransformation.y;
+    this._x += message.deviceTransformation.x;
+    this._y += message.deviceTransformation.y;
   }.bind(this));
-
-  this.getGlobal = function() {
-    return { 
-      x      : this.x, 
-      y      : this.y, 
-      width  : this.width, 
-      height : this.height
-    };
-  };
-
-  this.getLocal = function() {
-    return CWLocation.toLocal(this.x, this.y, this.width, this.height);
-  };
-
-  this.getGlobalX = function() { return this.x; };
-
-  this.getGlobalY = function() { return this.y; };
-
-  this.getGlobalWidth = function() { return this.width; };
-
-  this.getGlobalHeight = function() { return this.height; };
-
-  this.getLocalX = function() { return this.getLocal().x; };
-
-  this.getLocalY = function() { return this.getLocal().y; };
-
-  this.getLocalWidth = function() { return this.getLocal().width; };
-
-  this.getLocalHeight = function() { return this.getLocal().height; };
-
-  this.setGlobal = function(x, y, width, height) {
-    if (x      !== undefined) this.x      = x;
-    if (y      !== undefined) this.y      = y;
-    if (width  !== undefined) this.width  = width;
-    if (height !== undefined) this.height = height;
-  };
-
-  this.setLocal = function(x, y, width, height) {
-    CWDebug.log(3, "To Global: "+x+", "+y+", "+width+", "+height);
-    var global = CWLocation.toGlobal(x, y, width, height);
-    CWDebug.log(3, JSON.stringify(global));
-    this.x      = global.x;
-    this.y      = global.y;
-    this.width  = global.width;
-    this.height = global.height;
-  };
-
-  this.setGlobalX = function(v) { this.setGlobal(v, this.y, this.width, this.height); };
-
-  this.setGlobalY = function(v) { this.setGlobal(this.x, v, this.width, this.height); };
-
-  this.setGlobalWidth = function(v) { this.setGlobal(this.x, this.y, v, this.height); };
-
-  this.setGlobalHeight = function(v) { this.setGlobal(this.x, this.y, this.width, v); };
-
-  this.setLocalX = function(v) {
-    var local = this.getLocal();
-    this.setLocal(v, local.y, local.width, local.height);
-  };
-
-  this.setLocalY = function(v) {
-    var local = this.getLocal();
-    this.setLocal(local.x, v, local.width, local.height);
-  };
-
-  this.setLocalWidth = function(v) {
-    var local = this.getLocal();
-    this.setLocal(local.x, local.y, v, local.height);
-  };
-
-  this.setLocalHeight = function(v) {
-    var local = this.getLocal();
-    this.setLocal(local.x, local.y, local.width, v);
-  };
-
-  this.toString = function() {
-    return JSON.stringify(this.getGlobal());
-  };
-
-  this.copy = function() {
-    return CWLocation.fromString(this.toString());
-  };
 }
 
-CWLocation.toGlobal = function(x, y, width, height) {
+
+/**
+ * Returns an object containing the current global coordinates
+ * @return {CWLocation.Location} The global coordinates
+ */
+CWLocation.prototype.getGlobal = function() {
+  return { 
+    x: this._x, 
+    y: this._y, 
+    width: this._width, 
+    height: this._height
+  };
+};
+
+
+/**
+ * Returns this CWLocation in the device's local coordinate system
+ * @return {CWLocation.Location} The local coordinates
+ */
+CWLocation.prototype.getLocal = function() {
+  return CWLocation._toLocal(this._x, this._y, this._width, this._height);
+};
+
+
+/**
+ * Returns the global x coordinate
+ * @return {Number} The global x coordinate of the point or rectangle, or
+ *    undefined for a size
+ */
+CWLocation.prototype.getGlobalX = function() { 
+  return this._x; 
+};
+
+
+/**
+ * Returns the global y coordinate
+ * @return {Number} The global y coordinate of the point or rectangle, or
+ *    undefined for a size
+ */
+CWLocation.prototype.getGlobalY = function() { 
+  return this._y; 
+};
+
+
+/**
+ * Returns the global width
+ * @return {Number} The global width of the size or rectangle, or
+ *    undefined for a point
+ */
+CWLocation.prototype.getGlobalWidth = function() { 
+  return this._width; 
+};
+
+
+/**
+ * Returns the global height
+ * @return {Number} The global height of the size or rectangle, or
+ *    undefined for a point
+ */
+CWLocation.prototype.getGlobalHeight = function() { 
+  return this._height; 
+};
+
+
+/**
+ * Returns the local x coordinate
+ * @return {Number} The local x coordinate of the point or rectangle, or
+ *    undefined for a size
+ */
+CWLocation.prototype.getLocalX = function() { 
+  return this.getLocal().x; 
+};
+
+
+/**
+ * Returns the local y coordinate
+ * @return {Number} The local y coordinate of the point or rectangle, or
+ *    undefined for a size
+ */
+CWLocation.prototype.getLocalY = function() { 
+  return this.getLocal().y; 
+};
+
+
+/**
+ * Returns the local width
+ * @return {Number} The local width of the size or rectangle, or
+ *    undefined for a point
+ */
+CWLocation.prototype.getLocalWidth = function() { 
+  return this.getLocal().width; 
+};
+
+
+/**
+ * Returns the local height
+ * @return {Number} The local height of the size or rectangle, or
+ *    undefined for a point
+ */
+CWLocation.prototype.getLocalHeight = function() { 
+  return this.getLocal().height; 
+};
+
+
+/**
+ * Sets the global coordinates of this location to the given x, y, width and
+ *    height.
+ * @param {Number} x      The new global x coordinate
+ * @param {Number} y      The new global y coordinate
+ * @param {Number} width  The new global width
+ * @param {Number} height The new global height
+ */
+CWLocation.prototype.setGlobal = function(x, y, width, height) {
+  if (x      !== undefined) this._x      = x;
+  if (y      !== undefined) this._y      = y;
+  if (width  !== undefined) this._width  = width;
+  if (height !== undefined) this._height = height;
+};
+
+
+/**
+ * Sets the local coordinates of this location to the given x, y, width and
+ *    height.
+ * @param {Number} x      The new local x coordinate
+ * @param {Number} y      The new local y coordinate
+ * @param {Number} width  The new local width
+ * @param {Number} height The new local height
+ */
+CWLocation.prototype.setLocal = function(x, y, width, height) {
+  var global = CWLocation._toGlobal(x, y, width, height);
+  this._x      = global.x;
+  this._y      = global.y;
+  this._width  = global.width;
+  this._height = global.height;
+};
+
+
+/**
+ * Sets the global x coordinate of this location to the given value
+ * @param {Number} v The new global x coordinate
+ */
+CWLocation.prototype.setGlobalX = function(v) { 
+  this.setGlobal(v, this._y, this._width, this._height); 
+};
+
+
+/**
+ * Sets the global y coordinate of this location to the given value
+ * @param {Number} v The new global y coordinate
+ */
+CWLocation.prototype.setGlobalY = function(v) { 
+  this.setGlobal(this._x, v, this._width, this._height); 
+};
+
+
+/**
+ * Sets the global width of this location to the given value
+ * @param {Number} v The new global width
+ */
+CWLocation.prototype.setGlobalWidth = function(v) { 
+  this.setGlobal(this._x, this._y, v, this._height); 
+};
+
+
+/**
+ * Sets the global height of this location to the given value
+ * @param {Number} v The new global height
+ */
+CWLocation.prototype.setGlobalHeight = function(v) { 
+  this.setGlobal(this._x, this._y, this._width, v); 
+};
+
+
+/**
+ * Sets the local x coordinate of this location to the given value
+ * @param {Number} v The new local x coordinate
+ */
+CWLocation.prototype.setLocalX = function(v) {
+  var local = this.getLocal();
+  this.setLocal(v, local.y, local.width, local.height);
+};
+
+
+/**
+ * Sets the local y coordinate of this location to the given value
+ * @param {Number} v The new local y coordinate
+ */
+CWLocation.prototype.setLocalY = function(v) {
+  var local = this.getLocal();
+  this.setLocal(local.x, v, local.width, local.height);
+};
+
+
+/**
+ * Sets the local width of this location to the given value
+ * @param {Number} v The new local width
+ */
+CWLocation.prototype.setLocalWidth = function(v) {
+  var local = this.getLocal();
+  this.setLocal(local.x, local.y, v, local.height);
+};
+
+
+/**
+ * Sets the local height of this location to the given value
+ * @param {Number} v The new local height
+ */
+CWLocation.prototype.setLocalHeight = function(v) {
+  var local = this.getLocal();
+  this.setLocal(local.x, local.y, local.width, v);
+};
+
+
+/**
+ * Serializes this location into a string. To construct a CWLocation object
+ *    from a string, see {@link CWLocation.fromString}
+ * @return {String} The string representation of this CWLocation
+ */
+CWLocation.prototype.toString = function() {
+  return JSON.stringify(this.getGlobal());
+};
+
+
+/**
+ * Returns a copy of this object
+ * @return {CWLocation} A new CWLocation object that represents the same
+ *    point, size or rectangle as this object
+ */
+CWLocation.prototype.copy = function() {
+  return CWLocation.fromString(this.toString());
+};
+
+
+/**
+ * Convenience function to convert the given x, y, width and height into
+ *    global coordinates without constructing a new CWLocation object
+ * @param  {Number} x      A local x coordinate or undefined
+ * @param  {Number} y      A local y coordinate or undefined
+ * @param  {Number} width  A local width or undefined
+ * @param  {Number} height A local height or undefined
+ * @return {Location}      An object containing global coordinates
+ * @private
+ */
+CWLocation._toGlobal = function(x, y, width, height) {
   if (x === undefined) x = 0;
   if (y === undefined) y = 0;
   if (width  === undefined) width = 0;
@@ -138,7 +466,7 @@ CWLocation.toGlobal = function(x, y, width, height) {
 
   var result = { x: x, y: y, width: width, height: height };
 
-  var transformation = CWStitchManager.getDeviceTransformation();
+  var transformation = CWStitchManager.getLocalDeviceTransformation();
   
   //Adjust x/y values from our rotation to the master device, which always has 0º rotation
   if (transformation.rotation === 0) {
@@ -179,7 +507,18 @@ CWLocation.toGlobal = function(x, y, width, height) {
   return result;
 };
 
-CWLocation.toLocal = function(x, y, width, height) {
+
+/**
+ * Convenience function to convert the given x, y, height and width into local
+ *    coordinates without constructing a new CWLocation object
+ * @param  {Number} x      A local x coordinate or undefined
+ * @param  {Number} y      A local y coordiante or undefined
+ * @param  {Number} width  A local width or undefined
+ * @param  {Number} height A local height or undefined
+ * @return {Location}      An object containing local coordinates
+ * @private
+ */
+CWLocation._toLocal = function(x, y, width, height) {
   if (x === undefined) x = 0;
   if (y === undefined) y = 0;
   if (width  === undefined) width = 0;
@@ -187,7 +526,7 @@ CWLocation.toLocal = function(x, y, width, height) {
 
   var result = { x: x, y: y, width: width, height: height };
 
-  var transformation = CWStitchManager.getDeviceTransformation();
+  var transformation = CWStitchManager.getLocalDeviceTransformation();
 
   //Adjust values from the master rotation (0º) to our rotation
   //Also, we incorporate device translation here - we can't do that afterwards
@@ -227,8 +566,18 @@ CWLocation.toLocal = function(x, y, width, height) {
   return result;
 };
 
+
+/**
+ * TODO
+ * @param  {Number} x        [description]
+ * @param  {Number} y        [description]
+ * @param  {Number} width    [description]
+ * @param  {Number} height   [description]
+ * @param  {Number} rotation [description]
+ * @return {Location}          [description]
+ */
 CWLocation.applyRotation = function(x, y, width, height, rotation) {
-  var transformation = CWStitchManager.getDeviceTransformation();
+  var transformation = CWStitchManager.getLocalDeviceTransformation();
 
   if (x === undefined) x = 0;
   if (y === undefined) y = 0;
@@ -266,6 +615,13 @@ CWLocation.applyRotation = function(x, y, width, height, rotation) {
   return result;  
 };
 
+
+/**
+ * Constructs a new CWLocation object from a string (for example produced by
+ *    {@link CWLocation#toString}) and returns it
+ * @param  {String} s The string representation of a CWLocation
+ * @return {CWLocation}   A CWLocation object that corresponds to the string
+ */
 CWLocation.fromString = function(s) {
   var obj = JSON.parse(s);
 
@@ -278,10 +634,31 @@ CWLocation.fromString = function(s) {
   );
 };
 
-function CWPoint(x, y, isLocal) {
-  return new CWLocation(x, y, undefined, undefined, isLocal);
-}
 
-function CWSize(width, height, isLocal) {
+/**
+ * Constructs a new CWLocation that represents a point (has no width and
+ *    height) and returns it
+ * @param  {Number}  x       The x coordinate of the point
+ * @param  {Number}  y       The y coordinate of the point
+ * @param  {Boolean} isLocal Determines if the coordinates handed to this
+ *    function are local or global coordinates, also see {@link CWLocation}
+ * @return {CWLocation}      A CWLocation that represents the point at the
+ *    given coordaintes
+ */
+CWLocation.fromPoint = function(x, y, isLocal) {
+  return new CWLocation(x, y, undefined, undefined, isLocal);
+};
+
+
+/**
+ * Constructs a new CWLocation that represents a size (has no x and
+ *    y coordiantes) and returns it
+ * @param  {Number}  width   The width of the size
+ * @param  {Number}  height  The height of the size
+ * @param  {Boolean} isLocal Determines if the size handed to this
+ *    function is in local or global coordinates, also see {@link CWLocation}
+ * @return {CWLocation}      A CWLocation that represents the given size
+ */
+CWLocation.fromSize = function(width, height, isLocal) {
   return new CWLocation(undefined, undefined, width, height, isLocal);
-}
+};

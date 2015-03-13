@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: master/CWDeviceManager.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: master/CWDeviceManager.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/* global CWDevice, CWDebug */
+'use strict';
+
+
+
+/**
+ * (Available on master device only)
+ * 
+ * This manager keeps track of all devices in the Connichiwa infrastructure.
+ *    Devices can be added, removed and requested. Further, this manager keeps
+ *    track of the local device of the master.
+ * @namespace CWDeviceManager
+ */
+var CWDeviceManager = CWDeviceManager || {};
+
+
+/**
+ * (Available on master device only)
+ * 
+ * The CWDevice instance that represents the local (master) device, or
+ *    undefined if it has not yet been created
+ * @type {CWDevice}
+ * @private
+ */
+CWDeviceManager._localDevice = undefined;
+
+
+/**
+ * (Available on master device only)
+ * 
+ * An array of remote CWDevice objects that represent the currently connected
+ *    devices
+ * @type {Array}
+ * @default [ ]
+ * @private
+ */
+CWDeviceManager._remoteDevices = [];
+
+
+/**
+ * (Available on master device only)
+ * 
+ * Adds a device to the manager. Everytime a new device is detected or
+ *    connects, this method should be called
+ * @param {CWDevice} newDevice The newly detected or conected device
+ * @return {Boolean} true if the device was added, false otherwise
+ * @function
+ * @protected
+ */
+CWDeviceManager.addDevice = function(newDevice) {
+  if (CWDevice.prototype.isPrototypeOf(newDevice) === false) throw 'Cannot add a non-device';
+  if (this.getDeviceWithIdentifier(newDevice.getIdentifier()) !== null) return false;
+
+  CWDebug.log(3, 'Added device: ' + newDevice.getIdentifier());
+
+  this._remoteDevices.push(newDevice);
+  return true;
+}.bind(CWDeviceManager);
+
+
+/**
+ * (Available on master device only)
+ * 
+ * Removes the given device from the manager. Everytime a device is lost or
+ *    disconnects, this method should be called
+ * @param  {CWDevice|String} identifier The CWDevice to remove or the device's
+ *    identifier
+ * @return {Boolean} true if the device was removed, false otherwise
+ * @function
+ * @protected
+ */
+CWDeviceManager.removeDevice = function(identifier) {
+  if (CWDevice.prototype.isPrototypeOf(identifier) === true) identifier = identifier.getIdentifier();
+    
+  var device = this.getDeviceWithIdentifier(identifier);
+  if (device === null) return false;
+
+  CWDebug.log('Removed device: ' + identifier);
+
+  var index = this._remoteDevices.indexOf(device);
+  this._remoteDevices.splice(index, 1);
+  
+  return true;
+}.bind(CWDeviceManager);
+
+
+/**
+ * (Available on master device only)
+ * 
+ * Returns the CWDevice object for a given identifier
+ * @param  {String} identifier The identifier of a device
+ * @return {?CWDevice} The CWDevice that has the given identifier, or null if
+ *    no device matches
+ * @function
+ */
+CWDeviceManager.getDeviceWithIdentifier = function(identifier) {
+  if (this._localDevice !== undefined &amp;&amp; 
+    (identifier === this._localDevice.getIdentifier() || identifier === 'master')) {
+    return this._localDevice;
+  }
+  
+  for (var i = 0; i &lt; this._remoteDevices.length; i++)
+  {
+    var remoteDevice = this._remoteDevices[i];
+    if (remoteDevice.getIdentifier() === identifier)
+    {
+      return remoteDevice;
+    }
+  }
+
+  return null;
+}.bind(CWDeviceManager);
+
+
+/**
+ * (Available on master device only)
+ *
+ * Returns an array of all devices that are connected over HTTP and Websocket 
+ * @return {CWDevice} An array of all devices that are currently connected to
+ *    the master
+ * @function
+ */
+CWDeviceManager.getConnectedDevices = function() {
+  var connectedDevices = [];
+  for (var i = 0; i &lt; this._remoteDevices.length; i++)
+  {
+    var remoteDevice = this._remoteDevices[i];
+    if (remoteDevice.isConnected()) connectedDevices.push(remoteDevice);
+  }
+
+  return connectedDevices;
+}.bind(CWDeviceManager);
+
+
+/**
+ * (Available on master device only)
+ *
+ * Creates the local device of the master. Only one such device can be
+ *    created. If a local device already exists, this method will do nothing
+ * @param  {Object} properties The local device's properties
+ * @return {Bolean} true if the local device was created, otherwise false  
+ * @function
+ * @protected          
+ */
+CWDeviceManager.createLocalDevice = function(properties) {
+  if (this._localDevice !== undefined) return false;
+
+  properties.isLocal = true;
+
+  this._localDevice = new CWDevice(properties);
+  this._localDevice.discoveryState = CWDevice.DiscoveryState.LOST;
+  this._localDevice.connectionState = CWDevice.ConnectionState.CONNECTED;
+
+  CWDebug.log(3, 'Created local device: ' + JSON.stringify(properties));
+
+  return true;
+}.bind(CWDeviceManager);
+
+
+/**
+ * Returns the local device or undefined if it has not yet been created
+ * @function
+ */
+CWDeviceManager.getLocalDevice = function() {
+  return this._localDevice;
+}.bind(CWDeviceManager);
+
+//Initalize module. Delayed call to make sure all modules are ready
+if (CWDeviceManager.__constructor) window.setTimeout(CWDeviceManager.__constructor, 0);
+
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="CWDevice.html">CWDevice</a></li><li><a href="CWLocation.html">CWLocation</a></li><li><a href="CWVector.html">CWVector</a></li></ul><h3>Namespaces</h3><ul><li><a href="Connichiwa.html">Connichiwa</a></li><li><a href="CWDebug.html">CWDebug</a></li><li><a href="CWDeviceManager.html">CWDeviceManager</a></li><li><a href="CWGyroscope.html">CWGyroscope</a></li><li><a href="CWStitchManager.html">CWStitchManager</a></li><li><a href="CWSystemInfo.html">CWSystemInfo</a></li><li><a href="CWUtil.html">CWUtil</a></li></ul><h3>Events</h3><ul><li><a href="Connichiwa.html#.event:onLoad">onLoad</a></li><li><a href="global.html#event:accelerometerUpdate">accelerometerUpdate</a></li><li><a href="global.html#event:connectfailed">connectfailed</a></li><li><a href="global.html#event:deviceconnected">deviceconnected</a></li><li><a href="global.html#event:devicedetected">devicedetected</a></li><li><a href="global.html#event:devicedisconnected">devicedisconnected</a></li><li><a href="global.html#event:devicedistancechanged">devicedistancechanged</a></li><li><a href="global.html#event:devicelost">devicelost</a></li><li><a href="global.html#event:gotstitchneighbor">gotstitchneighbor</a></li><li><a href="global.html#event:gyroscopeUpdate">gyroscopeUpdate</a></li><li><a href="global.html#event:ready">ready</a></li><li><a href="global.html#event:wasStitched">wasStitched</a></li><li><a href="global.html#event:wasUnstitched">wasUnstitched</a></li></ul><h3><a href="global.html">Global</a></h3>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta2</a> on Fri Mar 13 2015 16:04:19 GMT+0100 (CET)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

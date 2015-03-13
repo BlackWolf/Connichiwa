@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Classes/GCDWebServerFileRequest.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/cl/GCDWebServerFileRequest</TokenIdentifier>
+			<Abstract type="html">The GCDWebServerFileRequest subclass of GCDWebServerRequest stores the body
+of the HTTP request to a file on disk.</Abstract>
+			<DeclaredIn>GCDWebServerFileRequest.h</DeclaredIn>
+            
+			
+			<NodeRef refid="23"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerFileRequest/setTemporaryPath:</TokenIdentifier>
+			<Abstract type="html">Returns the path to the temporary file containing the request body.</Abstract>
+			<DeclaredIn>GCDWebServerFileRequest.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly) NSString *temporaryPath</Declaration>
+			
+			
+			<Anchor>//api/name/temporaryPath</Anchor>
+            <NodeRef refid="23"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerFileRequest/temporaryPath</TokenIdentifier>
+			<Abstract type="html">Returns the path to the temporary file containing the request body.</Abstract>
+			<DeclaredIn>GCDWebServerFileRequest.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly) NSString *temporaryPath</Declaration>
+			
+			
+			<Anchor>//api/name/temporaryPath</Anchor>
+            <NodeRef refid="23"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/GCDWebServerFileRequest/temporaryPath</TokenIdentifier>
+			<Abstract type="html">Returns the path to the temporary file containing the request body.</Abstract>
+			<DeclaredIn>GCDWebServerFileRequest.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly) NSString *temporaryPath</Declaration>
+			
+			
+			<Anchor>//api/name/temporaryPath</Anchor>
+            <NodeRef refid="23"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerFileRequest/initWithMethod:url:headers:path:query:</TokenIdentifier>
+			<Abstract type="html">This method is the designated initializer for the class.</Abstract>
+			<DeclaredIn>GCDWebServerFileRequest.m</DeclaredIn>
+			
+			<Declaration>- (instancetype)initWithMethod:(NSString *)method url:(NSURL *)url headers:(NSDictionary *)headers path:(NSString *)path query:(NSDictionary *)query</Declaration>
+			
+			
+			<Anchor>//api/name/initWithMethod:url:headers:path:query:</Anchor>
+            <NodeRef refid="23"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerFileRequest/dealloc</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerFileRequest.m</DeclaredIn>
+			
+			<Declaration>- (void)dealloc</Declaration>
+			
+			
+			<Anchor>//api/name/dealloc</Anchor>
+            <NodeRef refid="23"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerFileRequest/open:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerFileRequest.m</DeclaredIn>
+			
+			<Declaration>- (BOOL)open:(NSError **)error</Declaration>
+			
+			
+			<Anchor>//api/name/open:</Anchor>
+            <NodeRef refid="23"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerFileRequest/writeData:error:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerFileRequest.m</DeclaredIn>
+			
+			<Declaration>- (BOOL)writeData:(NSData *)data error:(NSError **)error</Declaration>
+			
+			
+			<Anchor>//api/name/writeData:error:</Anchor>
+            <NodeRef refid="23"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerFileRequest/close:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerFileRequest.m</DeclaredIn>
+			
+			<Declaration>- (BOOL)close:(NSError **)error</Declaration>
+			
+			
+			<Anchor>//api/name/close:</Anchor>
+            <NodeRef refid="23"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerFileRequest/description</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerFileRequest.m</DeclaredIn>
+			
+			<Declaration>- (NSString *)description</Declaration>
+			
+			
+			<Anchor>//api/name/description</Anchor>
+            <NodeRef refid="23"/>
+		</Token>
+		
+        
+	</File>
+</Tokens>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Classes/GCDWebServerGZipDecoder.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/cl/GCDWebServerGZipDecoder</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerRequest.m</DeclaredIn>
+            
+			
+			<NodeRef refid="25"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerGZipDecoder/open:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerRequest.m</DeclaredIn>
+			
+			<Declaration>- (BOOL)open:(NSError **)error</Declaration>
+			
+			
+			<Anchor>//api/name/open:</Anchor>
+            <NodeRef refid="25"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerGZipDecoder/writeData:error:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerRequest.m</DeclaredIn>
+			
+			<Declaration>- (BOOL)writeData:(NSData *)data error:(NSError **)error</Declaration>
+			
+			
+			<Anchor>//api/name/writeData:error:</Anchor>
+            <NodeRef refid="25"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerGZipDecoder/close:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerRequest.m</DeclaredIn>
+			
+			<Declaration>- (BOOL)close:(NSError **)error</Declaration>
+			
+			
+			<Anchor>//api/name/close:</Anchor>
+            <NodeRef refid="25"/>
+		</Token>
+		
+        
+	</File>
+</Tokens>

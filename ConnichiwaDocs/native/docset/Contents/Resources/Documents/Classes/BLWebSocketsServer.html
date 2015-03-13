@@ -1,0 +1,837 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="html/html; charset=utf-8" />
+		<title>BLWebSocketsServer Class Reference</title>
+		<meta id="xcode-display" name="xcode-display" content="render"/>
+		<link rel="stylesheet" type="text/css" href="../css/styles.css" media="all" />
+		<link rel="stylesheet" type="text/css" media="print" href="../css/stylesPrint.css" />
+		<meta name="generator" content="appledoc 2.2 (build 963)" />
+	</head>
+	<body>
+		<header id="top_header">
+			<div id="library" class="hideInXcode">
+				<h1><a id="libraryTitle" href="../index.html">Connichiwa </a></h1>
+				<a id="developerHome" href="../index.html">Mario Schreiner</a>
+			</div>
+			
+			<div id="title" role="banner">
+				<h1 class="hideInXcode">BLWebSocketsServer Class Reference</h1>
+			</div>
+			<ul id="headerButtons" role="toolbar">
+				<li id="toc_button">
+					<button aria-label="Show Table of Contents" role="checkbox" class="open" id="table_of_contents"><span class="disclosure"></span>Table of Contents</button>
+				</li>
+				<li id="jumpto_button" role="navigation">
+					<select id="jumpTo">
+	<option value="top">Jump To&#133;</option>
+	
+	
+	
+	
+	<option value="tasks">Tasks</option>
+	
+	
+	
+	
+	
+	<option value="properties">Properties</option>
+	
+	<option value="//api/name/connections">&nbsp;&nbsp;&nbsp;&nbsp;connections</option>
+	
+	<option value="//api/name/context">&nbsp;&nbsp;&nbsp;&nbsp;context</option>
+	
+	<option value="//api/name/defaultOnCloseHandler">&nbsp;&nbsp;&nbsp;&nbsp;defaultOnCloseHandler</option>
+	
+	<option value="//api/name/defaultOnMessageHandler">&nbsp;&nbsp;&nbsp;&nbsp;defaultOnMessageHandler</option>
+	
+	<option value="//api/name/isRunning">&nbsp;&nbsp;&nbsp;&nbsp;isRunning</option>
+	
+	<option value="//api/name/networkQueue">&nbsp;&nbsp;&nbsp;&nbsp;networkQueue</option>
+	
+	<option value="//api/name/serverStoppedCompletionBlock">&nbsp;&nbsp;&nbsp;&nbsp;serverStoppedCompletionBlock</option>
+	
+	<option value="//api/name/sessionIdIncrementalCount">&nbsp;&nbsp;&nbsp;&nbsp;sessionIdIncrementalCount</option>
+	
+	<option value="//api/name/stopFastPollingTimer">&nbsp;&nbsp;&nbsp;&nbsp;stopFastPollingTimer</option>
+	
+	<option value="//api/name/timer">&nbsp;&nbsp;&nbsp;&nbsp;timer</option>
+	
+	
+	
+	
+	<option value="class_methods">Class Methods</option>
+	
+	<option value="//api/name/connectionForID:">&nbsp;&nbsp;&nbsp;&nbsp;+ connectionForID:</option>
+	
+	<option value="//api/name/keyForConnectionID:">&nbsp;&nbsp;&nbsp;&nbsp;+ keyForConnectionID:</option>
+	
+	<option value="//api/name/sharedInstance">&nbsp;&nbsp;&nbsp;&nbsp;+ sharedInstance</option>
+	
+	
+	
+	
+	<option value="instance_methods">Instance Methods</option>
+	
+	<option value="//api/name/cleanup">&nbsp;&nbsp;&nbsp;&nbsp;- cleanup</option>
+	
+	<option value="//api/name/createContextWithProtocolName:callbackFunction:andPort:">&nbsp;&nbsp;&nbsp;&nbsp;- createContextWithProtocolName:callbackFunction:andPort:</option>
+	
+	<option value="//api/name/createProtocol:withName:callback:andSessionDataSize:">&nbsp;&nbsp;&nbsp;&nbsp;- createProtocol:withName:callback:andSessionDataSize:</option>
+	
+	<option value="//api/name/destroyContext:">&nbsp;&nbsp;&nbsp;&nbsp;- destroyContext:</option>
+	
+	<option value="//api/name/destroyProtocol:">&nbsp;&nbsp;&nbsp;&nbsp;- destroyProtocol:</option>
+	
+	<option value="//api/name/init">&nbsp;&nbsp;&nbsp;&nbsp;- init</option>
+	
+	<option value="//api/name/pushMessage:toConnection:">&nbsp;&nbsp;&nbsp;&nbsp;- pushMessage:toConnection:</option>
+	
+	<option value="//api/name/pushMessageToAll:">&nbsp;&nbsp;&nbsp;&nbsp;- pushMessageToAll:</option>
+	
+	<option value="//api/name/setDefaultOnMessageHandler:">&nbsp;&nbsp;&nbsp;&nbsp;- setDefaultOnMessageHandler:</option>
+	
+	<option value="//api/name/setOnCloseHandler:forConnection:">&nbsp;&nbsp;&nbsp;&nbsp;- setOnCloseHandler:forConnection:</option>
+	
+	<option value="//api/name/setOnMessageHandler:forConnection:">&nbsp;&nbsp;&nbsp;&nbsp;- setOnMessageHandler:forConnection:</option>
+	
+	<option value="//api/name/startListeningOnPort:withProtocolName:andCompletionBlock:">&nbsp;&nbsp;&nbsp;&nbsp;- startListeningOnPort:withProtocolName:andCompletionBlock:</option>
+	
+	<option value="//api/name/stopWithCompletionBlock:">&nbsp;&nbsp;&nbsp;&nbsp;- stopWithCompletionBlock:</option>
+	
+	
+	
+</select>
+				</li>
+			</ul>
+		</header>
+		<nav id="tocContainer" class="isShowingTOC">
+			<ul id="toc" role="tree">
+				
+
+
+
+<li role="treeitem" id="task_treeitem"><span class="nodisclosure"></span><span class="sectionName"><a href="#tasks">Tasks</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Extension Methods">Extension Methods</a></span></li>
+	
+</ul></li>
+
+
+
+
+
+<li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#properties">Properties</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/connections">connections</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/context">context</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/defaultOnCloseHandler">defaultOnCloseHandler</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/defaultOnMessageHandler">defaultOnMessageHandler</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/isRunning">isRunning</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/networkQueue">networkQueue</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/serverStoppedCompletionBlock">serverStoppedCompletionBlock</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/sessionIdIncrementalCount">sessionIdIncrementalCount</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/stopFastPollingTimer">stopFastPollingTimer</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/timer">timer</a></span></li>
+	
+</ul></li>
+
+
+
+<li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#class_methods">Class Methods</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/connectionForID:">connectionForID:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/keyForConnectionID:">keyForConnectionID:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/sharedInstance">sharedInstance</a></span></li>
+	
+</ul></li>
+
+
+
+<li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#instance_methods">Instance Methods</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/cleanup">cleanup</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/createContextWithProtocolName:callbackFunction:andPort:">createContextWithProtocolName:callbackFunction:andPort:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/createProtocol:withName:callback:andSessionDataSize:">createProtocol:withName:callback:andSessionDataSize:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/destroyContext:">destroyContext:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/destroyProtocol:">destroyProtocol:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/init">init</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/pushMessage:toConnection:">pushMessage:toConnection:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/pushMessageToAll:">pushMessageToAll:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/setDefaultOnMessageHandler:">setDefaultOnMessageHandler:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/setOnCloseHandler:forConnection:">setOnCloseHandler:forConnection:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/setOnMessageHandler:forConnection:">setOnMessageHandler:forConnection:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/startListeningOnPort:withProtocolName:andCompletionBlock:">startListeningOnPort:withProtocolName:andCompletionBlock:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/stopWithCompletionBlock:">stopWithCompletionBlock:</a></span></li>
+	
+</ul></li>
+
+
+			</ul>
+		</nav>
+		<article>
+			<div id="contents" class="isShowingTOC" role="main">
+				<a title="BLWebSocketsServer Class Reference" name="top"></a>
+				<div class="main-navigation navigation-top">
+					<ul>
+	<li><a href="../index.html">Index</a></li>
+	<li><a href="../hierarchy.html">Hierarchy</a></li>
+</ul>
+				</div>
+				<div id="header">
+					<div class="section-header">
+						<h1 class="title title-header">BLWebSocketsServer Class Reference</h1>
+					</div>		
+				</div>
+				<div id="container">	
+					
+					<div class="section section-specification"><table cellspacing="0"><tbody>
+						<tr>
+	<td class="specification-title">Inherits from</td>
+	<td class="specification-value">NSObject</td>
+</tr><tr>
+	<td class="specification-title">Declared in</td>
+	<td class="specification-value">BLWebSocketsServer.h<br />BLWebSocketsServer.m</td>
+</tr>
+						</tbody></table></div>
+					
+                    
+                    
+					
+					
+					
+					<div class="section section-tasks">
+						<a title="Tasks" name="tasks"></a>
+						<h2 class="subtitle subtitle-tasks">Tasks</h2>
+						
+						
+						
+						<h3 class="subsubtitle task-title">Other Methods</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/isRunning">&nbsp;&nbsp;isRunning</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/sharedInstance">+&nbsp;sharedInstance</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/startListeningOnPort:withProtocolName:andCompletionBlock:">&ndash;&nbsp;startListeningOnPort:withProtocolName:andCompletionBlock:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/stopWithCompletionBlock:">&ndash;&nbsp;stopWithCompletionBlock:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/setDefaultOnMessageHandler:">&ndash;&nbsp;setDefaultOnMessageHandler:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/setOnMessageHandler:forConnection:">&ndash;&nbsp;setOnMessageHandler:forConnection:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/setOnCloseHandler:forConnection:">&ndash;&nbsp;setOnCloseHandler:forConnection:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/pushMessage:toConnection:">&ndash;&nbsp;pushMessage:toConnection:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/pushMessageToAll:">&ndash;&nbsp;pushMessageToAll:</a></code>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+						
+						
+						<h3 class="subsubtitle task-title">Other Methods</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/init">&ndash;&nbsp;init</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/createContextWithProtocolName:callbackFunction:andPort:">&ndash;&nbsp;createContextWithProtocolName:callbackFunction:andPort:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/createProtocol:withName:callback:andSessionDataSize:">&ndash;&nbsp;createProtocol:withName:callback:andSessionDataSize:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/destroyProtocol:">&ndash;&nbsp;destroyProtocol:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/destroyContext:">&ndash;&nbsp;destroyContext:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/cleanup">&ndash;&nbsp;cleanup</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/connectionForID:">+&nbsp;connectionForID:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/keyForConnectionID:">+&nbsp;keyForConnectionID:</a></code>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+						
+						<a title="Extension Methods" name="task_Extension Methods"></a>
+						<h3 class="subsubtitle task-title">Extension Methods</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/timer">&nbsp;&nbsp;timer</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/networkQueue">&nbsp;&nbsp;networkQueue</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/context">&nbsp;&nbsp;context</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/defaultOnMessageHandler">&nbsp;&nbsp;defaultOnMessageHandler</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/defaultOnCloseHandler">&nbsp;&nbsp;defaultOnCloseHandler</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/connections">&nbsp;&nbsp;connections</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/stopFastPollingTimer">&nbsp;&nbsp;stopFastPollingTimer</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/serverStoppedCompletionBlock">&nbsp;&nbsp;serverStoppedCompletionBlock</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/sessionIdIncrementalCount">&nbsp;&nbsp;sessionIdIncrementalCount</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li>
+						</ul>
+						
+					</div>
+					
+					
+					
+					
+					
+					<div class="section section-methods">
+						<a title="Properties" name="properties"></a>
+						<h2 class="subtitle subtitle-methods">Properties</h2>
+						
+						<div class="section-method">
+	<a name="//api/name/connections" title="connections"></a>
+	<h3 class="subsubtitle method-title">connections</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, strong, readwrite) NSMutableDictionary *connections</code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/context" title="context"></a>
+	<h3 class="subsubtitle method-title">context</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, assign) struct libwebsocket_context *context</code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/defaultOnCloseHandler" title="defaultOnCloseHandler"></a>
+	<h3 class="subsubtitle method-title">defaultOnCloseHandler</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, strong, readwrite) BLWebSocketOnCloseHandler defaultOnCloseHandler</code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/defaultOnMessageHandler" title="defaultOnMessageHandler"></a>
+	<h3 class="subsubtitle method-title">defaultOnMessageHandler</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, strong, readwrite) BLWebSocketOnMessageHandler defaultOnMessageHandler</code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/isRunning" title="isRunning"></a>
+	<h3 class="subsubtitle method-title">isRunning</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>@property (atomic, assign, readonly) BOOL isRunning</code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/networkQueue" title="networkQueue"></a>
+	<h3 class="subsubtitle method-title">networkQueue</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, retain) dispatch_queue_t networkQueue</code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/serverStoppedCompletionBlock" title="serverStoppedCompletionBlock"></a>
+	<h3 class="subsubtitle method-title">serverStoppedCompletionBlock</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, strong) void ( ^ ) ( ) serverStoppedCompletionBlock</code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/sessionIdIncrementalCount" title="sessionIdIncrementalCount"></a>
+	<h3 class="subsubtitle method-title">sessionIdIncrementalCount</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, assign) int sessionIdIncrementalCount</code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/stopFastPollingTimer" title="stopFastPollingTimer"></a>
+	<h3 class="subsubtitle method-title">stopFastPollingTimer</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>@property (strong, readwrite) NSTimer *stopFastPollingTimer</code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/timer" title="timer"></a>
+	<h3 class="subsubtitle method-title">timer</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, retain) dispatch_source_t timer</code></div>
+
+    
+</div>
+						
+					</div>
+					
+					
+					
+					<div class="section section-methods">
+						<a title="Class Methods" name="class_methods"></a>
+						<h2 class="subtitle subtitle-methods">Class Methods</h2>
+						
+						<div class="section-method">
+	<a name="//api/name/connectionForID:" title="connectionForID:"></a>
+	<h3 class="subsubtitle method-title">connectionForID:</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>+ (BLWebSocketConnection *)connectionForID:(int)<em>connectionID</em></code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/keyForConnectionID:" title="keyForConnectionID:"></a>
+	<h3 class="subsubtitle method-title">keyForConnectionID:</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>+ (id)keyForConnectionID:(int)<em>connectionID</em></code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/sharedInstance" title="sharedInstance"></a>
+	<h3 class="subsubtitle method-title">sharedInstance</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>+ (BLWebSocketsServer *)sharedInstance</code></div>
+
+    
+</div>
+						
+					</div>
+					
+					
+					
+					<div class="section section-methods">
+						<a title="Instance Methods" name="instance_methods"></a>
+						<h2 class="subtitle subtitle-methods">Instance Methods</h2>
+						
+						<div class="section-method">
+	<a name="//api/name/cleanup" title="cleanup"></a>
+	<h3 class="subsubtitle method-title">cleanup</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>- (void)cleanup</code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/createContextWithProtocolName:callbackFunction:andPort:" title="createContextWithProtocolName:callbackFunction:andPort:"></a>
+	<h3 class="subsubtitle method-title">createContextWithProtocolName:callbackFunction:andPort:</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>- (struct libwebsocket_context *)createContextWithProtocolName:(NSString *)<em>protocolName</em> callbackFunction:(callback_function)<em>callback</em> andPort:(int)<em>port</em></code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/createProtocol:withName:callback:andSessionDataSize:" title="createProtocol:withName:callback:andSessionDataSize:"></a>
+	<h3 class="subsubtitle method-title">createProtocol:withName:callback:andSessionDataSize:</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>- (void)createProtocol:(struct libwebsocket_protocols *)<em>protocol</em> withName:(NSString *)<em>name</em> callback:(callback_function)<em>callback</em> andSessionDataSize:(int)<em>sessionDataSize</em></code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/destroyContext:" title="destroyContext:"></a>
+	<h3 class="subsubtitle method-title">destroyContext:</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>- (void)destroyContext:(struct libwebsocket_context *)<em>context</em></code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/destroyProtocol:" title="destroyProtocol:"></a>
+	<h3 class="subsubtitle method-title">destroyProtocol:</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>- (void)destroyProtocol:(struct libwebsocket_protocols *)<em>protocol</em></code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/init" title="init"></a>
+	<h3 class="subsubtitle method-title">init</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>- (id)init</code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/pushMessage:toConnection:" title="pushMessage:toConnection:"></a>
+	<h3 class="subsubtitle method-title">pushMessage:toConnection:</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>- (void)pushMessage:(NSData *)<em>message</em> toConnection:(int)<em>connectionID</em></code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/pushMessageToAll:" title="pushMessageToAll:"></a>
+	<h3 class="subsubtitle method-title">pushMessageToAll:</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>- (void)pushMessageToAll:(NSData *)<em>message</em></code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/setDefaultOnMessageHandler:" title="setDefaultOnMessageHandler:"></a>
+	<h3 class="subsubtitle method-title">setDefaultOnMessageHandler:</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>- (void)setDefaultOnMessageHandler:(BLWebSocketOnMessageHandler)<em>handler</em></code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/setOnCloseHandler:forConnection:" title="setOnCloseHandler:forConnection:"></a>
+	<h3 class="subsubtitle method-title">setOnCloseHandler:forConnection:</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>- (void)setOnCloseHandler:(BLWebSocketOnCloseHandler)<em>handler</em> forConnection:(int)<em>connectionID</em></code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/setOnMessageHandler:forConnection:" title="setOnMessageHandler:forConnection:"></a>
+	<h3 class="subsubtitle method-title">setOnMessageHandler:forConnection:</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>- (void)setOnMessageHandler:(BLWebSocketOnMessageHandler)<em>handler</em> forConnection:(int)<em>user</em></code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/startListeningOnPort:withProtocolName:andCompletionBlock:" title="startListeningOnPort:withProtocolName:andCompletionBlock:"></a>
+	<h3 class="subsubtitle method-title">startListeningOnPort:withProtocolName:andCompletionBlock:</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>- (void)startListeningOnPort:(int)<em>port</em> withProtocolName:(NSString *)<em>protocolName</em> andCompletionBlock:(void ( ^ ) ( NSError *error ))<em>completionBlock</em></code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/stopWithCompletionBlock:" title="stopWithCompletionBlock:"></a>
+	<h3 class="subsubtitle method-title">stopWithCompletionBlock:</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>- (void)stopWithCompletionBlock:(void ( ^ ) ( ))<em>completionBlock</em></code></div>
+
+    
+</div>
+						
+					</div>
+					
+					
+                    
+                    
+				</div>
+				<div class="main-navigation navigation-bottom">
+					<ul>
+	<li><a href="../index.html">Index</a></li>
+	<li><a href="../hierarchy.html">Hierarchy</a></li>
+</ul>
+				</div>
+				<div id="footer">
+					<hr />
+					<div class="footer-copyright">
+						<p><span class="copyright">&copy; 2015 Mario Schreiner. All rights reserved. (Last updated: 2015-03-13)</span><br />
+						
+						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2 (build 963)</a>.</span></p>
+						
+					</div>
+				</div>
+			</div>
+		</article>
+		<script type="text/javascript">
+			function jumpToChange()
+			{
+				window.location.hash = this.options[this.selectedIndex].value;
+			}
+			
+			function toggleTOC()
+			{
+				var contents = document.getElementById('contents');
+				var tocContainer = document.getElementById('tocContainer');
+				
+				if (this.getAttribute('class') == 'open')
+				{
+					this.setAttribute('class', '');
+					contents.setAttribute('class', '');
+					tocContainer.setAttribute('class', '');
+					
+					window.name = "hideTOC";
+				}
+				else
+				{
+					this.setAttribute('class', 'open');
+					contents.setAttribute('class', 'isShowingTOC');
+					tocContainer.setAttribute('class', 'isShowingTOC');
+					
+					window.name = "";
+				}
+				return false;
+			}
+			
+			function toggleTOCEntryChildren(e)
+			{
+				e.stopPropagation();
+				var currentClass = this.getAttribute('class');
+				if (currentClass == 'children') {
+					this.setAttribute('class', 'children open');
+				}
+				else if (currentClass == 'children open') {
+					this.setAttribute('class', 'children');
+				}
+				return false;
+			}
+			
+			function tocEntryClick(e)
+			{
+				e.stopPropagation();
+				return true;
+			}
+			
+			function init()
+			{
+				var selectElement = document.getElementById('jumpTo');
+				selectElement.addEventListener('change', jumpToChange, false);
+				
+				var tocButton = document.getElementById('table_of_contents');
+				tocButton.addEventListener('click', toggleTOC, false);
+				
+				var taskTreeItem = document.getElementById('task_treeitem');
+				if (taskTreeItem.getElementsByTagName('li').length > 0)
+				{
+					taskTreeItem.setAttribute('class', 'children');
+					taskTreeItem.firstChild.setAttribute('class', 'disclosure');
+				}
+				
+				var tocList = document.getElementById('toc');
+				
+				var tocEntries = tocList.getElementsByTagName('li');
+				for (var i = 0; i < tocEntries.length; i++) {
+					tocEntries[i].addEventListener('click', toggleTOCEntryChildren, false);
+				}
+				
+				var tocLinks = tocList.getElementsByTagName('a');
+				for (var i = 0; i < tocLinks.length; i++) {
+					tocLinks[i].addEventListener('click', tocEntryClick, false);
+				}
+				
+				if (window.name == "hideTOC") {
+					toggleTOC.call(tocButton);
+				}
+			}
+			
+			window.onload = init;
+			
+			// If showing in Xcode, hide the TOC and Header
+			if (navigator.userAgent.match(/xcode/i)) {
+				document.getElementById("contents").className = "hideInXcode"
+				document.getElementById("tocContainer").className = "hideInXcode"
+				document.getElementById("top_header").className = "hideInXcode"
+			}
+			
+		</script>
+	</body>
+</html>

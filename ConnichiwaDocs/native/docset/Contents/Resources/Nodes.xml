@@ -18,6 +18,35 @@
 						<NodeRef refid="5"/>
 						<NodeRef refid="6"/>
 						<NodeRef refid="7"/>
+						<NodeRef refid="8"/>
+						<NodeRef refid="9"/>
+						<NodeRef refid="10"/>
+						<NodeRef refid="11"/>
+						<NodeRef refid="12"/>
+						<NodeRef refid="13"/>
+						<NodeRef refid="14"/>
+						<NodeRef refid="15"/>
+						<NodeRef refid="16"/>
+						<NodeRef refid="17"/>
+						<NodeRef refid="18"/>
+						<NodeRef refid="19"/>
+						<NodeRef refid="20"/>
+						<NodeRef refid="21"/>
+						<NodeRef refid="22"/>
+						<NodeRef refid="23"/>
+						<NodeRef refid="24"/>
+						<NodeRef refid="25"/>
+						<NodeRef refid="26"/>
+						<NodeRef refid="27"/>
+						<NodeRef refid="28"/>
+						<NodeRef refid="29"/>
+						<NodeRef refid="30"/>
+						<NodeRef refid="31"/>
+						<NodeRef refid="32"/>
+						<NodeRef refid="33"/>
+						<NodeRef refid="34"/>
+						<NodeRef refid="35"/>
+						<NodeRef refid="36"/>
 						
 					</Subnodes>
 				</Node>
@@ -28,9 +57,14 @@
 					<Name>Protocols</Name>
 					<Path>index.html</Path>
 					<Subnodes>
-						<NodeRef refid="8"/>
-						<NodeRef refid="9"/>
-						<NodeRef refid="10"/>
+						<NodeRef refid="37"/>
+						<NodeRef refid="38"/>
+						<NodeRef refid="39"/>
+						<NodeRef refid="40"/>
+						<NodeRef refid="41"/>
+						<NodeRef refid="42"/>
+						<NodeRef refid="43"/>
+						<NodeRef refid="44"/>
 						
 					</Subnodes>
 				</Node>
@@ -40,7 +74,19 @@
 					<Name>Constants</Name>
 					<Path>index.html</Path>
 					<Subnodes>
-						<NodeRef refid="11"/>
+						<NodeRef refid="45"/>
+						<NodeRef refid="46"/>
+						<NodeRef refid="47"/>
+						<NodeRef refid="48"/>
+						<NodeRef refid="49"/>
+						<NodeRef refid="50"/>
+						<NodeRef refid="51"/>
+						<NodeRef refid="52"/>
+						<NodeRef refid="53"/>
+						<NodeRef refid="54"/>
+						<NodeRef refid="55"/>
+						<NodeRef refid="56"/>
+						<NodeRef refid="57"/>
 						
 					</Subnodes>
 				</Node>
@@ -51,6 +97,78 @@
 	<Library>
 		
 		<Node id="1" type="file" documentType="reference">
+            <Name>BLWebSocketConnection</Name>
+            <Path>Classes/BLWebSocketConnection.html</Path>
+            
+                <Subnodes>
+                <Node type="section">
+                    <Path>Classes/BLWebSocketConnection.html</Path>
+                    <Name>Overview</Name>
+                    <Anchor>overview</Anchor>
+                </Node>
+                <Node type="section">
+                    <Path>Classes/BLWebSocketConnection.html</Path>
+                    <Name>Tasks</Name>
+                    <Anchor>tasks</Anchor>
+                </Node>
+                
+                <Node type="section">
+                    <Path>Classes/BLWebSocketConnection.html</Path>
+                    <Name>Properties</Name>
+                    <Anchor>properties</Anchor>
+                </Node>
+                
+                
+                
+                <Node type="section">
+                    <Path>Classes/BLWebSocketConnection.html</Path>
+                    <Name>Instance Methods</Name>
+                    <Anchor>instance_methods</Anchor>
+                </Node>
+                
+            </Subnodes>
+            
+        </Node>
+		<Node id="2" type="file" documentType="reference">
+            <Name>BLWebSocketsServer</Name>
+            <Path>Classes/BLWebSocketsServer.html</Path>
+            
+                <Subnodes>
+                <Node type="section">
+                    <Path>Classes/BLWebSocketsServer.html</Path>
+                    <Name>Overview</Name>
+                    <Anchor>overview</Anchor>
+                </Node>
+                <Node type="section">
+                    <Path>Classes/BLWebSocketsServer.html</Path>
+                    <Name>Tasks</Name>
+                    <Anchor>tasks</Anchor>
+                </Node>
+                
+                <Node type="section">
+                    <Path>Classes/BLWebSocketsServer.html</Path>
+                    <Name>Properties</Name>
+                    <Anchor>properties</Anchor>
+                </Node>
+                
+                
+                <Node type="section">
+                    <Path>Classes/BLWebSocketsServer.html</Path>
+                    <Name>Class Methods</Name>
+                    <Anchor>class_methods</Anchor>
+                </Node>
+                
+                
+                <Node type="section">
+                    <Path>Classes/BLWebSocketsServer.html</Path>
+                    <Name>Instance Methods</Name>
+                    <Anchor>instance_methods</Anchor>
+                </Node>
+                
+            </Subnodes>
+            
+        </Node>
+		<Node id="3" type="file" documentType="reference">
             <Name>CWBluetoothConnection</Name>
             <Path>Classes/CWBluetoothConnection.html</Path>
             
@@ -73,6 +191,12 @@
                 </Node>
                 
                 
+                <Node type="section">
+                    <Path>Classes/CWBluetoothConnection.html</Path>
+                    <Name>Class Methods</Name>
+                    <Anchor>class_methods</Anchor>
+                </Node>
+                
                 
                 <Node type="section">
                     <Path>Classes/CWBluetoothConnection.html</Path>
@@ -83,7 +207,7 @@
             </Subnodes>
             
         </Node>
-		<Node id="2" type="file" documentType="reference">
+		<Node id="4" type="file" documentType="reference">
             <Name>CWBluetoothManager</Name>
             <Path>Classes/CWBluetoothManager.html</Path>
             
@@ -116,7 +240,106 @@
             </Subnodes>
             
         </Node>
-		<Node id="3" type="file" documentType="reference">
+		<Node id="5" type="file" documentType="reference">
+            <Name>CWBluetoothTransferCentralKey</Name>
+            <Path>Classes/CWBluetoothTransferCentralKey.html</Path>
+            
+                <Subnodes>
+                <Node type="section">
+                    <Path>Classes/CWBluetoothTransferCentralKey.html</Path>
+                    <Name>Overview</Name>
+                    <Anchor>overview</Anchor>
+                </Node>
+                <Node type="section">
+                    <Path>Classes/CWBluetoothTransferCentralKey.html</Path>
+                    <Name>Tasks</Name>
+                    <Anchor>tasks</Anchor>
+                </Node>
+                
+                <Node type="section">
+                    <Path>Classes/CWBluetoothTransferCentralKey.html</Path>
+                    <Name>Properties</Name>
+                    <Anchor>properties</Anchor>
+                </Node>
+                
+                
+                
+                <Node type="section">
+                    <Path>Classes/CWBluetoothTransferCentralKey.html</Path>
+                    <Name>Instance Methods</Name>
+                    <Anchor>instance_methods</Anchor>
+                </Node>
+                
+            </Subnodes>
+            
+        </Node>
+		<Node id="6" type="file" documentType="reference">
+            <Name>CWBluetoothTransferManager</Name>
+            <Path>Classes/CWBluetoothTransferManager.html</Path>
+            
+                <Subnodes>
+                <Node type="section">
+                    <Path>Classes/CWBluetoothTransferManager.html</Path>
+                    <Name>Overview</Name>
+                    <Anchor>overview</Anchor>
+                </Node>
+                <Node type="section">
+                    <Path>Classes/CWBluetoothTransferManager.html</Path>
+                    <Name>Tasks</Name>
+                    <Anchor>tasks</Anchor>
+                </Node>
+                
+                <Node type="section">
+                    <Path>Classes/CWBluetoothTransferManager.html</Path>
+                    <Name>Properties</Name>
+                    <Anchor>properties</Anchor>
+                </Node>
+                
+                
+                
+                <Node type="section">
+                    <Path>Classes/CWBluetoothTransferManager.html</Path>
+                    <Name>Instance Methods</Name>
+                    <Anchor>instance_methods</Anchor>
+                </Node>
+                
+            </Subnodes>
+            
+        </Node>
+		<Node id="7" type="file" documentType="reference">
+            <Name>CWBluetoothTransferPeripheralKey</Name>
+            <Path>Classes/CWBluetoothTransferPeripheralKey.html</Path>
+            
+                <Subnodes>
+                <Node type="section">
+                    <Path>Classes/CWBluetoothTransferPeripheralKey.html</Path>
+                    <Name>Overview</Name>
+                    <Anchor>overview</Anchor>
+                </Node>
+                <Node type="section">
+                    <Path>Classes/CWBluetoothTransferPeripheralKey.html</Path>
+                    <Name>Tasks</Name>
+                    <Anchor>tasks</Anchor>
+                </Node>
+                
+                <Node type="section">
+                    <Path>Classes/CWBluetoothTransferPeripheralKey.html</Path>
+                    <Name>Properties</Name>
+                    <Anchor>properties</Anchor>
+                </Node>
+                
+                
+                
+                <Node type="section">
+                    <Path>Classes/CWBluetoothTransferPeripheralKey.html</Path>
+                    <Name>Instance Methods</Name>
+                    <Anchor>instance_methods</Anchor>
+                </Node>
+                
+            </Subnodes>
+            
+        </Node>
+		<Node id="8" type="file" documentType="reference">
             <Name>CWBundle</Name>
             <Path>Classes/CWBundle.html</Path>
             
@@ -143,7 +366,7 @@
             </Subnodes>
             
         </Node>
-		<Node id="4" type="file" documentType="reference">
+		<Node id="9" type="file" documentType="reference">
             <Name>CWDebug</Name>
             <Path>Classes/CWDebug.html</Path>
             
@@ -170,7 +393,73 @@
             </Subnodes>
             
         </Node>
-		<Node id="5" type="file" documentType="reference">
+		<Node id="10" type="file" documentType="reference">
+            <Name>CWRemoteLibraryManager</Name>
+            <Path>Classes/CWRemoteLibraryManager.html</Path>
+            
+                <Subnodes>
+                <Node type="section">
+                    <Path>Classes/CWRemoteLibraryManager.html</Path>
+                    <Name>Overview</Name>
+                    <Anchor>overview</Anchor>
+                </Node>
+                <Node type="section">
+                    <Path>Classes/CWRemoteLibraryManager.html</Path>
+                    <Name>Tasks</Name>
+                    <Anchor>tasks</Anchor>
+                </Node>
+                
+                <Node type="section">
+                    <Path>Classes/CWRemoteLibraryManager.html</Path>
+                    <Name>Properties</Name>
+                    <Anchor>properties</Anchor>
+                </Node>
+                
+                
+                
+                <Node type="section">
+                    <Path>Classes/CWRemoteLibraryManager.html</Path>
+                    <Name>Instance Methods</Name>
+                    <Anchor>instance_methods</Anchor>
+                </Node>
+                
+            </Subnodes>
+            
+        </Node>
+		<Node id="11" type="file" documentType="reference">
+            <Name>CWServerManager</Name>
+            <Path>Classes/CWServerManager.html</Path>
+            
+                <Subnodes>
+                <Node type="section">
+                    <Path>Classes/CWServerManager.html</Path>
+                    <Name>Overview</Name>
+                    <Anchor>overview</Anchor>
+                </Node>
+                <Node type="section">
+                    <Path>Classes/CWServerManager.html</Path>
+                    <Name>Tasks</Name>
+                    <Anchor>tasks</Anchor>
+                </Node>
+                
+                <Node type="section">
+                    <Path>Classes/CWServerManager.html</Path>
+                    <Name>Properties</Name>
+                    <Anchor>properties</Anchor>
+                </Node>
+                
+                
+                
+                <Node type="section">
+                    <Path>Classes/CWServerManager.html</Path>
+                    <Name>Instance Methods</Name>
+                    <Anchor>instance_methods</Anchor>
+                </Node>
+                
+            </Subnodes>
+            
+        </Node>
+		<Node id="12" type="file" documentType="reference">
             <Name>CWUtil</Name>
             <Path>Classes/CWUtil.html</Path>
             
@@ -197,7 +486,7 @@
             </Subnodes>
             
         </Node>
-		<Node id="6" type="file" documentType="reference">
+		<Node id="13" type="file" documentType="reference">
             <Name>CWWebApplication</Name>
             <Path>Classes/CWWebApplication.html</Path>
             
@@ -230,24 +519,24 @@
             </Subnodes>
             
         </Node>
-		<Node id="7" type="file" documentType="reference">
-            <Name>CWWebserverManager</Name>
-            <Path>Classes/CWWebserverManager.html</Path>
+		<Node id="14" type="file" documentType="reference">
+            <Name>CWWebLibraryManager</Name>
+            <Path>Classes/CWWebLibraryManager.html</Path>
             
                 <Subnodes>
                 <Node type="section">
-                    <Path>Classes/CWWebserverManager.html</Path>
+                    <Path>Classes/CWWebLibraryManager.html</Path>
                     <Name>Overview</Name>
                     <Anchor>overview</Anchor>
                 </Node>
                 <Node type="section">
-                    <Path>Classes/CWWebserverManager.html</Path>
+                    <Path>Classes/CWWebLibraryManager.html</Path>
                     <Name>Tasks</Name>
                     <Anchor>tasks</Anchor>
                 </Node>
                 
                 <Node type="section">
-                    <Path>Classes/CWWebserverManager.html</Path>
+                    <Path>Classes/CWWebLibraryManager.html</Path>
                     <Name>Properties</Name>
                     <Anchor>properties</Anchor>
                 </Node>
@@ -255,7 +544,733 @@
                 
                 
                 <Node type="section">
-                    <Path>Classes/CWWebserverManager.html</Path>
+                    <Path>Classes/CWWebLibraryManager.html</Path>
+                    <Name>Instance Methods</Name>
+                    <Anchor>instance_methods</Anchor>
+                </Node>
+                
+            </Subnodes>
+            
+        </Node>
+		<Node id="15" type="file" documentType="reference">
+            <Name>CWiDevice</Name>
+            <Path>Classes/CWiDevice.html</Path>
+            
+                <Subnodes>
+                <Node type="section">
+                    <Path>Classes/CWiDevice.html</Path>
+                    <Name>Overview</Name>
+                    <Anchor>overview</Anchor>
+                </Node>
+                <Node type="section">
+                    <Path>Classes/CWiDevice.html</Path>
+                    <Name>Tasks</Name>
+                    <Anchor>tasks</Anchor>
+                </Node>
+                
+                
+                <Node type="section">
+                    <Path>Classes/CWiDevice.html</Path>
+                    <Name>Class Methods</Name>
+                    <Anchor>class_methods</Anchor>
+                </Node>
+                
+                
+            </Subnodes>
+            
+        </Node>
+		<Node id="16" type="file" documentType="reference">
+            <Name>GCDWebServer</Name>
+            <Path>Classes/GCDWebServer.html</Path>
+            
+                <Subnodes>
+                <Node type="section">
+                    <Path>Classes/GCDWebServer.html</Path>
+                    <Name>Overview</Name>
+                    <Anchor>overview</Anchor>
+                </Node>
+                <Node type="section">
+                    <Path>Classes/GCDWebServer.html</Path>
+                    <Name>Tasks</Name>
+                    <Anchor>tasks</Anchor>
+                </Node>
+                
+                <Node type="section">
+                    <Path>Classes/GCDWebServer.html</Path>
+                    <Name>Properties</Name>
+                    <Anchor>properties</Anchor>
+                </Node>
+                
+                
+                <Node type="section">
+                    <Path>Classes/GCDWebServer.html</Path>
+                    <Name>Class Methods</Name>
+                    <Anchor>class_methods</Anchor>
+                </Node>
+                
+                
+                <Node type="section">
+                    <Path>Classes/GCDWebServer.html</Path>
+                    <Name>Instance Methods</Name>
+                    <Anchor>instance_methods</Anchor>
+                </Node>
+                
+            </Subnodes>
+            
+        </Node>
+		<Node id="17" type="file" documentType="reference">
+            <Name>GCDWebServerBodyDecoder</Name>
+            <Path>Classes/GCDWebServerBodyDecoder.html</Path>
+            
+                <Subnodes>
+                <Node type="section">
+                    <Path>Classes/GCDWebServerBodyDecoder.html</Path>
+                    <Name>Overview</Name>
+                    <Anchor>overview</Anchor>
+                </Node>
+                <Node type="section">
+                    <Path>Classes/GCDWebServerBodyDecoder.html</Path>
+                    <Name>Tasks</Name>
+                    <Anchor>tasks</Anchor>
+                </Node>
+                
+                
+                
+                <Node type="section">
+                    <Path>Classes/GCDWebServerBodyDecoder.html</Path>
+                    <Name>Instance Methods</Name>
+                    <Anchor>instance_methods</Anchor>
+                </Node>
+                
+            </Subnodes>
+            
+        </Node>
+		<Node id="18" type="file" documentType="reference">
+            <Name>GCDWebServerBodyEncoder</Name>
+            <Path>Classes/GCDWebServerBodyEncoder.html</Path>
+            
+                <Subnodes>
+                <Node type="section">
+                    <Path>Classes/GCDWebServerBodyEncoder.html</Path>
+                    <Name>Overview</Name>
+                    <Anchor>overview</Anchor>
+                </Node>
+                <Node type="section">
+                    <Path>Classes/GCDWebServerBodyEncoder.html</Path>
+                    <Name>Tasks</Name>
+                    <Anchor>tasks</Anchor>
+                </Node>
+                
+                
+                
+                <Node type="section">
+                    <Path>Classes/GCDWebServerBodyEncoder.html</Path>
+                    <Name>Instance Methods</Name>
+                    <Anchor>instance_methods</Anchor>
+                </Node>
+                
+            </Subnodes>
+            
+        </Node>
+		<Node id="19" type="file" documentType="reference">
+            <Name>GCDWebServerConnection</Name>
+            <Path>Classes/GCDWebServerConnection.html</Path>
+            
+                <Subnodes>
+                <Node type="section">
+                    <Path>Classes/GCDWebServerConnection.html</Path>
+                    <Name>Overview</Name>
+                    <Anchor>overview</Anchor>
+                </Node>
+                <Node type="section">
+                    <Path>Classes/GCDWebServerConnection.html</Path>
+                    <Name>Tasks</Name>
+                    <Anchor>tasks</Anchor>
+                </Node>
+                
+                <Node type="section">
+                    <Path>Classes/GCDWebServerConnection.html</Path>
+                    <Name>Properties</Name>
+                    <Anchor>properties</Anchor>
+                </Node>
+                
+                
+                <Node type="section">
+                    <Path>Classes/GCDWebServerConnection.html</Path>
+                    <Name>Class Methods</Name>
+                    <Anchor>class_methods</Anchor>
+                </Node>
+                
+                
+                <Node type="section">
+                    <Path>Classes/GCDWebServerConnection.html</Path>
+                    <Name>Instance Methods</Name>
+                    <Anchor>instance_methods</Anchor>
+                </Node>
+                
+            </Subnodes>
+            
+        </Node>
+		<Node id="20" type="file" documentType="reference">
+            <Name>GCDWebServerDataRequest</Name>
+            <Path>Classes/GCDWebServerDataRequest.html</Path>
+            
+                <Subnodes>
+                <Node type="section">
+                    <Path>Classes/GCDWebServerDataRequest.html</Path>
+                    <Name>Overview</Name>
+                    <Anchor>overview</Anchor>
+                </Node>
+                <Node type="section">
+                    <Path>Classes/GCDWebServerDataRequest.html</Path>
+                    <Name>Tasks</Name>
+                    <Anchor>tasks</Anchor>
+                </Node>
+                
+                <Node type="section">
+                    <Path>Classes/GCDWebServerDataRequest.html</Path>
+                    <Name>Properties</Name>
+                    <Anchor>properties</Anchor>
+                </Node>
+                
+                
+                
+                <Node type="section">
+                    <Path>Classes/GCDWebServerDataRequest.html</Path>
+                    <Name>Instance Methods</Name>
+                    <Anchor>instance_methods</Anchor>
+                </Node>
+                
+            </Subnodes>
+            
+        </Node>
+		<Node id="21" type="file" documentType="reference">
+            <Name>GCDWebServerDataResponse</Name>
+            <Path>Classes/GCDWebServerDataResponse.html</Path>
+            
+                <Subnodes>
+                <Node type="section">
+                    <Path>Classes/GCDWebServerDataResponse.html</Path>
+                    <Name>Overview</Name>
+                    <Anchor>overview</Anchor>
+                </Node>
+                <Node type="section">
+                    <Path>Classes/GCDWebServerDataResponse.html</Path>
+                    <Name>Tasks</Name>
+                    <Anchor>tasks</Anchor>
+                </Node>
+                
+                
+                <Node type="section">
+                    <Path>Classes/GCDWebServerDataResponse.html</Path>
+                    <Name>Class Methods</Name>
+                    <Anchor>class_methods</Anchor>
+                </Node>
+                
+                
+                <Node type="section">
+                    <Path>Classes/GCDWebServerDataResponse.html</Path>
+                    <Name>Instance Methods</Name>
+                    <Anchor>instance_methods</Anchor>
+                </Node>
+                
+            </Subnodes>
+            
+        </Node>
+		<Node id="22" type="file" documentType="reference">
+            <Name>GCDWebServerErrorResponse</Name>
+            <Path>Classes/GCDWebServerErrorResponse.html</Path>
+            
+                <Subnodes>
+                <Node type="section">
+                    <Path>Classes/GCDWebServerErrorResponse.html</Path>
+                    <Name>Overview</Name>
+                    <Anchor>overview</Anchor>
+                </Node>
+                <Node type="section">
+                    <Path>Classes/GCDWebServerErrorResponse.html</Path>
+                    <Name>Tasks</Name>
+                    <Anchor>tasks</Anchor>
+                </Node>
+                
+                
+                <Node type="section">
+                    <Path>Classes/GCDWebServerErrorResponse.html</Path>
+                    <Name>Class Methods</Name>
+                    <Anchor>class_methods</Anchor>
+                </Node>
+                
+                
+                <Node type="section">
+                    <Path>Classes/GCDWebServerErrorResponse.html</Path>
+                    <Name>Instance Methods</Name>
+                    <Anchor>instance_methods</Anchor>
+                </Node>
+                
+            </Subnodes>
+            
+        </Node>
+		<Node id="23" type="file" documentType="reference">
+            <Name>GCDWebServerFileRequest</Name>
+            <Path>Classes/GCDWebServerFileRequest.html</Path>
+            
+                <Subnodes>
+                <Node type="section">
+                    <Path>Classes/GCDWebServerFileRequest.html</Path>
+                    <Name>Overview</Name>
+                    <Anchor>overview</Anchor>
+                </Node>
+                <Node type="section">
+                    <Path>Classes/GCDWebServerFileRequest.html</Path>
+                    <Name>Tasks</Name>
+                    <Anchor>tasks</Anchor>
+                </Node>
+                
+                <Node type="section">
+                    <Path>Classes/GCDWebServerFileRequest.html</Path>
+                    <Name>Properties</Name>
+                    <Anchor>properties</Anchor>
+                </Node>
+                
+                
+                
+                <Node type="section">
+                    <Path>Classes/GCDWebServerFileRequest.html</Path>
+                    <Name>Instance Methods</Name>
+                    <Anchor>instance_methods</Anchor>
+                </Node>
+                
+            </Subnodes>
+            
+        </Node>
+		<Node id="24" type="file" documentType="reference">
+            <Name>GCDWebServerFileResponse</Name>
+            <Path>Classes/GCDWebServerFileResponse.html</Path>
+            
+                <Subnodes>
+                <Node type="section">
+                    <Path>Classes/GCDWebServerFileResponse.html</Path>
+                    <Name>Overview</Name>
+                    <Anchor>overview</Anchor>
+                </Node>
+                <Node type="section">
+                    <Path>Classes/GCDWebServerFileResponse.html</Path>
+                    <Name>Tasks</Name>
+                    <Anchor>tasks</Anchor>
+                </Node>
+                
+                
+                <Node type="section">
+                    <Path>Classes/GCDWebServerFileResponse.html</Path>
+                    <Name>Class Methods</Name>
+                    <Anchor>class_methods</Anchor>
+                </Node>
+                
+                
+                <Node type="section">
+                    <Path>Classes/GCDWebServerFileResponse.html</Path>
+                    <Name>Instance Methods</Name>
+                    <Anchor>instance_methods</Anchor>
+                </Node>
+                
+            </Subnodes>
+            
+        </Node>
+		<Node id="25" type="file" documentType="reference">
+            <Name>GCDWebServerGZipDecoder</Name>
+            <Path>Classes/GCDWebServerGZipDecoder.html</Path>
+            
+                <Subnodes>
+                <Node type="section">
+                    <Path>Classes/GCDWebServerGZipDecoder.html</Path>
+                    <Name>Overview</Name>
+                    <Anchor>overview</Anchor>
+                </Node>
+                <Node type="section">
+                    <Path>Classes/GCDWebServerGZipDecoder.html</Path>
+                    <Name>Tasks</Name>
+                    <Anchor>tasks</Anchor>
+                </Node>
+                
+                
+                
+                <Node type="section">
+                    <Path>Classes/GCDWebServerGZipDecoder.html</Path>
+                    <Name>Instance Methods</Name>
+                    <Anchor>instance_methods</Anchor>
+                </Node>
+                
+            </Subnodes>
+            
+        </Node>
+		<Node id="26" type="file" documentType="reference">
+            <Name>GCDWebServerGZipEncoder</Name>
+            <Path>Classes/GCDWebServerGZipEncoder.html</Path>
+            
+                <Subnodes>
+                <Node type="section">
+                    <Path>Classes/GCDWebServerGZipEncoder.html</Path>
+                    <Name>Overview</Name>
+                    <Anchor>overview</Anchor>
+                </Node>
+                <Node type="section">
+                    <Path>Classes/GCDWebServerGZipEncoder.html</Path>
+                    <Name>Tasks</Name>
+                    <Anchor>tasks</Anchor>
+                </Node>
+                
+                
+                
+                <Node type="section">
+                    <Path>Classes/GCDWebServerGZipEncoder.html</Path>
+                    <Name>Instance Methods</Name>
+                    <Anchor>instance_methods</Anchor>
+                </Node>
+                
+            </Subnodes>
+            
+        </Node>
+		<Node id="27" type="file" documentType="reference">
+            <Name>GCDWebServerHandler</Name>
+            <Path>Classes/GCDWebServerHandler.html</Path>
+            
+                <Subnodes>
+                <Node type="section">
+                    <Path>Classes/GCDWebServerHandler.html</Path>
+                    <Name>Overview</Name>
+                    <Anchor>overview</Anchor>
+                </Node>
+                <Node type="section">
+                    <Path>Classes/GCDWebServerHandler.html</Path>
+                    <Name>Tasks</Name>
+                    <Anchor>tasks</Anchor>
+                </Node>
+                
+                <Node type="section">
+                    <Path>Classes/GCDWebServerHandler.html</Path>
+                    <Name>Properties</Name>
+                    <Anchor>properties</Anchor>
+                </Node>
+                
+                
+                
+                <Node type="section">
+                    <Path>Classes/GCDWebServerHandler.html</Path>
+                    <Name>Instance Methods</Name>
+                    <Anchor>instance_methods</Anchor>
+                </Node>
+                
+            </Subnodes>
+            
+        </Node>
+		<Node id="28" type="file" documentType="reference">
+            <Name>GCDWebServerMIMEStreamParser</Name>
+            <Path>Classes/GCDWebServerMIMEStreamParser.html</Path>
+            
+                <Subnodes>
+                <Node type="section">
+                    <Path>Classes/GCDWebServerMIMEStreamParser.html</Path>
+                    <Name>Overview</Name>
+                    <Anchor>overview</Anchor>
+                </Node>
+                <Node type="section">
+                    <Path>Classes/GCDWebServerMIMEStreamParser.html</Path>
+                    <Name>Tasks</Name>
+                    <Anchor>tasks</Anchor>
+                </Node>
+                
+                
+                <Node type="section">
+                    <Path>Classes/GCDWebServerMIMEStreamParser.html</Path>
+                    <Name>Class Methods</Name>
+                    <Anchor>class_methods</Anchor>
+                </Node>
+                
+                
+                <Node type="section">
+                    <Path>Classes/GCDWebServerMIMEStreamParser.html</Path>
+                    <Name>Instance Methods</Name>
+                    <Anchor>instance_methods</Anchor>
+                </Node>
+                
+            </Subnodes>
+            
+        </Node>
+		<Node id="29" type="file" documentType="reference">
+            <Name>GCDWebServerMultiPart</Name>
+            <Path>Classes/GCDWebServerMultiPart.html</Path>
+            
+                <Subnodes>
+                <Node type="section">
+                    <Path>Classes/GCDWebServerMultiPart.html</Path>
+                    <Name>Overview</Name>
+                    <Anchor>overview</Anchor>
+                </Node>
+                <Node type="section">
+                    <Path>Classes/GCDWebServerMultiPart.html</Path>
+                    <Name>Tasks</Name>
+                    <Anchor>tasks</Anchor>
+                </Node>
+                
+                <Node type="section">
+                    <Path>Classes/GCDWebServerMultiPart.html</Path>
+                    <Name>Properties</Name>
+                    <Anchor>properties</Anchor>
+                </Node>
+                
+                
+                
+                <Node type="section">
+                    <Path>Classes/GCDWebServerMultiPart.html</Path>
+                    <Name>Instance Methods</Name>
+                    <Anchor>instance_methods</Anchor>
+                </Node>
+                
+            </Subnodes>
+            
+        </Node>
+		<Node id="30" type="file" documentType="reference">
+            <Name>GCDWebServerMultiPartArgument</Name>
+            <Path>Classes/GCDWebServerMultiPartArgument.html</Path>
+            
+                <Subnodes>
+                <Node type="section">
+                    <Path>Classes/GCDWebServerMultiPartArgument.html</Path>
+                    <Name>Overview</Name>
+                    <Anchor>overview</Anchor>
+                </Node>
+                <Node type="section">
+                    <Path>Classes/GCDWebServerMultiPartArgument.html</Path>
+                    <Name>Tasks</Name>
+                    <Anchor>tasks</Anchor>
+                </Node>
+                
+                <Node type="section">
+                    <Path>Classes/GCDWebServerMultiPartArgument.html</Path>
+                    <Name>Properties</Name>
+                    <Anchor>properties</Anchor>
+                </Node>
+                
+                
+                
+                <Node type="section">
+                    <Path>Classes/GCDWebServerMultiPartArgument.html</Path>
+                    <Name>Instance Methods</Name>
+                    <Anchor>instance_methods</Anchor>
+                </Node>
+                
+            </Subnodes>
+            
+        </Node>
+		<Node id="31" type="file" documentType="reference">
+            <Name>GCDWebServerMultiPartFile</Name>
+            <Path>Classes/GCDWebServerMultiPartFile.html</Path>
+            
+                <Subnodes>
+                <Node type="section">
+                    <Path>Classes/GCDWebServerMultiPartFile.html</Path>
+                    <Name>Overview</Name>
+                    <Anchor>overview</Anchor>
+                </Node>
+                <Node type="section">
+                    <Path>Classes/GCDWebServerMultiPartFile.html</Path>
+                    <Name>Tasks</Name>
+                    <Anchor>tasks</Anchor>
+                </Node>
+                
+                <Node type="section">
+                    <Path>Classes/GCDWebServerMultiPartFile.html</Path>
+                    <Name>Properties</Name>
+                    <Anchor>properties</Anchor>
+                </Node>
+                
+                
+                
+                <Node type="section">
+                    <Path>Classes/GCDWebServerMultiPartFile.html</Path>
+                    <Name>Instance Methods</Name>
+                    <Anchor>instance_methods</Anchor>
+                </Node>
+                
+            </Subnodes>
+            
+        </Node>
+		<Node id="32" type="file" documentType="reference">
+            <Name>GCDWebServerMultiPartFormRequest</Name>
+            <Path>Classes/GCDWebServerMultiPartFormRequest.html</Path>
+            
+                <Subnodes>
+                <Node type="section">
+                    <Path>Classes/GCDWebServerMultiPartFormRequest.html</Path>
+                    <Name>Overview</Name>
+                    <Anchor>overview</Anchor>
+                </Node>
+                <Node type="section">
+                    <Path>Classes/GCDWebServerMultiPartFormRequest.html</Path>
+                    <Name>Tasks</Name>
+                    <Anchor>tasks</Anchor>
+                </Node>
+                
+                <Node type="section">
+                    <Path>Classes/GCDWebServerMultiPartFormRequest.html</Path>
+                    <Name>Properties</Name>
+                    <Anchor>properties</Anchor>
+                </Node>
+                
+                
+                <Node type="section">
+                    <Path>Classes/GCDWebServerMultiPartFormRequest.html</Path>
+                    <Name>Class Methods</Name>
+                    <Anchor>class_methods</Anchor>
+                </Node>
+                
+                
+                <Node type="section">
+                    <Path>Classes/GCDWebServerMultiPartFormRequest.html</Path>
+                    <Name>Instance Methods</Name>
+                    <Anchor>instance_methods</Anchor>
+                </Node>
+                
+            </Subnodes>
+            
+        </Node>
+		<Node id="33" type="file" documentType="reference">
+            <Name>GCDWebServerRequest</Name>
+            <Path>Classes/GCDWebServerRequest.html</Path>
+            
+                <Subnodes>
+                <Node type="section">
+                    <Path>Classes/GCDWebServerRequest.html</Path>
+                    <Name>Overview</Name>
+                    <Anchor>overview</Anchor>
+                </Node>
+                <Node type="section">
+                    <Path>Classes/GCDWebServerRequest.html</Path>
+                    <Name>Tasks</Name>
+                    <Anchor>tasks</Anchor>
+                </Node>
+                
+                <Node type="section">
+                    <Path>Classes/GCDWebServerRequest.html</Path>
+                    <Name>Properties</Name>
+                    <Anchor>properties</Anchor>
+                </Node>
+                
+                
+                
+                <Node type="section">
+                    <Path>Classes/GCDWebServerRequest.html</Path>
+                    <Name>Instance Methods</Name>
+                    <Anchor>instance_methods</Anchor>
+                </Node>
+                
+            </Subnodes>
+            
+        </Node>
+		<Node id="34" type="file" documentType="reference">
+            <Name>GCDWebServerResponse</Name>
+            <Path>Classes/GCDWebServerResponse.html</Path>
+            
+                <Subnodes>
+                <Node type="section">
+                    <Path>Classes/GCDWebServerResponse.html</Path>
+                    <Name>Overview</Name>
+                    <Anchor>overview</Anchor>
+                </Node>
+                <Node type="section">
+                    <Path>Classes/GCDWebServerResponse.html</Path>
+                    <Name>Tasks</Name>
+                    <Anchor>tasks</Anchor>
+                </Node>
+                
+                <Node type="section">
+                    <Path>Classes/GCDWebServerResponse.html</Path>
+                    <Name>Properties</Name>
+                    <Anchor>properties</Anchor>
+                </Node>
+                
+                
+                <Node type="section">
+                    <Path>Classes/GCDWebServerResponse.html</Path>
+                    <Name>Class Methods</Name>
+                    <Anchor>class_methods</Anchor>
+                </Node>
+                
+                
+                <Node type="section">
+                    <Path>Classes/GCDWebServerResponse.html</Path>
+                    <Name>Instance Methods</Name>
+                    <Anchor>instance_methods</Anchor>
+                </Node>
+                
+            </Subnodes>
+            
+        </Node>
+		<Node id="35" type="file" documentType="reference">
+            <Name>GCDWebServerStreamedResponse</Name>
+            <Path>Classes/GCDWebServerStreamedResponse.html</Path>
+            
+                <Subnodes>
+                <Node type="section">
+                    <Path>Classes/GCDWebServerStreamedResponse.html</Path>
+                    <Name>Overview</Name>
+                    <Anchor>overview</Anchor>
+                </Node>
+                <Node type="section">
+                    <Path>Classes/GCDWebServerStreamedResponse.html</Path>
+                    <Name>Tasks</Name>
+                    <Anchor>tasks</Anchor>
+                </Node>
+                
+                
+                <Node type="section">
+                    <Path>Classes/GCDWebServerStreamedResponse.html</Path>
+                    <Name>Class Methods</Name>
+                    <Anchor>class_methods</Anchor>
+                </Node>
+                
+                
+                <Node type="section">
+                    <Path>Classes/GCDWebServerStreamedResponse.html</Path>
+                    <Name>Instance Methods</Name>
+                    <Anchor>instance_methods</Anchor>
+                </Node>
+                
+            </Subnodes>
+            
+        </Node>
+		<Node id="36" type="file" documentType="reference">
+            <Name>GCDWebServerURLEncodedFormRequest</Name>
+            <Path>Classes/GCDWebServerURLEncodedFormRequest.html</Path>
+            
+                <Subnodes>
+                <Node type="section">
+                    <Path>Classes/GCDWebServerURLEncodedFormRequest.html</Path>
+                    <Name>Overview</Name>
+                    <Anchor>overview</Anchor>
+                </Node>
+                <Node type="section">
+                    <Path>Classes/GCDWebServerURLEncodedFormRequest.html</Path>
+                    <Name>Tasks</Name>
+                    <Anchor>tasks</Anchor>
+                </Node>
+                
+                <Node type="section">
+                    <Path>Classes/GCDWebServerURLEncodedFormRequest.html</Path>
+                    <Name>Properties</Name>
+                    <Anchor>properties</Anchor>
+                </Node>
+                
+                
+                <Node type="section">
+                    <Path>Classes/GCDWebServerURLEncodedFormRequest.html</Path>
+                    <Name>Class Methods</Name>
+                    <Anchor>class_methods</Anchor>
+                </Node>
+                
+                
+                <Node type="section">
+                    <Path>Classes/GCDWebServerURLEncodedFormRequest.html</Path>
                     <Name>Instance Methods</Name>
                     <Anchor>instance_methods</Anchor>
                 </Node>
@@ -265,7 +1280,7 @@
         </Node>
 		
 		
-        <Node id="8" type="file" documentType="reference">
+        <Node id="37" type="file" documentType="reference">
             <Name>CWBluetoothManagerDelegate</Name>
             <Path>Protocols/CWBluetoothManagerDelegate.html</Path>
             
@@ -292,7 +1307,61 @@
             </Subnodes>
             
         </Node>
-		<Node id="9" type="file" documentType="reference">
+		<Node id="38" type="file" documentType="reference">
+            <Name>CWBluetoothTransferManagerDelegate</Name>
+            <Path>Protocols/CWBluetoothTransferManagerDelegate.html</Path>
+            
+                <Subnodes>
+                <Node type="section">
+                    <Path>Protocols/CWBluetoothTransferManagerDelegate.html</Path>
+                    <Name>Overview</Name>
+                    <Anchor>overview</Anchor>
+                </Node>
+                <Node type="section">
+                    <Path>Protocols/CWBluetoothTransferManagerDelegate.html</Path>
+                    <Name>Tasks</Name>
+                    <Anchor>tasks</Anchor>
+                </Node>
+                
+                
+                
+                <Node type="section">
+                    <Path>Protocols/CWBluetoothTransferManagerDelegate.html</Path>
+                    <Name>Instance Methods</Name>
+                    <Anchor>instance_methods</Anchor>
+                </Node>
+                
+            </Subnodes>
+            
+        </Node>
+		<Node id="39" type="file" documentType="reference">
+            <Name>CWServerManagerDelegate</Name>
+            <Path>Protocols/CWServerManagerDelegate.html</Path>
+            
+                <Subnodes>
+                <Node type="section">
+                    <Path>Protocols/CWServerManagerDelegate.html</Path>
+                    <Name>Overview</Name>
+                    <Anchor>overview</Anchor>
+                </Node>
+                <Node type="section">
+                    <Path>Protocols/CWServerManagerDelegate.html</Path>
+                    <Name>Tasks</Name>
+                    <Anchor>tasks</Anchor>
+                </Node>
+                
+                
+                
+                <Node type="section">
+                    <Path>Protocols/CWServerManagerDelegate.html</Path>
+                    <Name>Instance Methods</Name>
+                    <Anchor>instance_methods</Anchor>
+                </Node>
+                
+            </Subnodes>
+            
+        </Node>
+		<Node id="40" type="file" documentType="reference">
             <Name>CWWebApplicationState</Name>
             <Path>Protocols/CWWebApplicationState.html</Path>
             
@@ -325,18 +1394,18 @@
             </Subnodes>
             
         </Node>
-		<Node id="10" type="file" documentType="reference">
-            <Name>CWWebserverManagerDelegate</Name>
-            <Path>Protocols/CWWebserverManagerDelegate.html</Path>
+		<Node id="41" type="file" documentType="reference">
+            <Name>CWWebLibraryManagerDelegate</Name>
+            <Path>Protocols/CWWebLibraryManagerDelegate.html</Path>
             
                 <Subnodes>
                 <Node type="section">
-                    <Path>Protocols/CWWebserverManagerDelegate.html</Path>
+                    <Path>Protocols/CWWebLibraryManagerDelegate.html</Path>
                     <Name>Overview</Name>
                     <Anchor>overview</Anchor>
                 </Node>
                 <Node type="section">
-                    <Path>Protocols/CWWebserverManagerDelegate.html</Path>
+                    <Path>Protocols/CWWebLibraryManagerDelegate.html</Path>
                     <Name>Tasks</Name>
                     <Anchor>tasks</Anchor>
                 </Node>
@@ -344,7 +1413,88 @@
                 
                 
                 <Node type="section">
-                    <Path>Protocols/CWWebserverManagerDelegate.html</Path>
+                    <Path>Protocols/CWWebLibraryManagerDelegate.html</Path>
+                    <Name>Instance Methods</Name>
+                    <Anchor>instance_methods</Anchor>
+                </Node>
+                
+            </Subnodes>
+            
+        </Node>
+		<Node id="42" type="file" documentType="reference">
+            <Name>GCDWebServerBodyReader</Name>
+            <Path>Protocols/GCDWebServerBodyReader.html</Path>
+            
+                <Subnodes>
+                <Node type="section">
+                    <Path>Protocols/GCDWebServerBodyReader.html</Path>
+                    <Name>Overview</Name>
+                    <Anchor>overview</Anchor>
+                </Node>
+                <Node type="section">
+                    <Path>Protocols/GCDWebServerBodyReader.html</Path>
+                    <Name>Tasks</Name>
+                    <Anchor>tasks</Anchor>
+                </Node>
+                
+                
+                
+                <Node type="section">
+                    <Path>Protocols/GCDWebServerBodyReader.html</Path>
+                    <Name>Instance Methods</Name>
+                    <Anchor>instance_methods</Anchor>
+                </Node>
+                
+            </Subnodes>
+            
+        </Node>
+		<Node id="43" type="file" documentType="reference">
+            <Name>GCDWebServerBodyWriter</Name>
+            <Path>Protocols/GCDWebServerBodyWriter.html</Path>
+            
+                <Subnodes>
+                <Node type="section">
+                    <Path>Protocols/GCDWebServerBodyWriter.html</Path>
+                    <Name>Overview</Name>
+                    <Anchor>overview</Anchor>
+                </Node>
+                <Node type="section">
+                    <Path>Protocols/GCDWebServerBodyWriter.html</Path>
+                    <Name>Tasks</Name>
+                    <Anchor>tasks</Anchor>
+                </Node>
+                
+                
+                
+                <Node type="section">
+                    <Path>Protocols/GCDWebServerBodyWriter.html</Path>
+                    <Name>Instance Methods</Name>
+                    <Anchor>instance_methods</Anchor>
+                </Node>
+                
+            </Subnodes>
+            
+        </Node>
+		<Node id="44" type="file" documentType="reference">
+            <Name>GCDWebServerDelegate</Name>
+            <Path>Protocols/GCDWebServerDelegate.html</Path>
+            
+                <Subnodes>
+                <Node type="section">
+                    <Path>Protocols/GCDWebServerDelegate.html</Path>
+                    <Name>Overview</Name>
+                    <Anchor>overview</Anchor>
+                </Node>
+                <Node type="section">
+                    <Path>Protocols/GCDWebServerDelegate.html</Path>
+                    <Name>Tasks</Name>
+                    <Anchor>tasks</Anchor>
+                </Node>
+                
+                
+                
+                <Node type="section">
+                    <Path>Protocols/GCDWebServerDelegate.html</Path>
                     <Name>Instance Methods</Name>
                     <Anchor>instance_methods</Anchor>
                 </Node>
@@ -353,9 +1503,69 @@
             
         </Node>
 		
-        <Node id="11" type="file" documentType="reference">
-            <Name>CWBluetoothConnectionState</Name>
-            <Path>Constants/CWBluetoothConnectionState.html</Path>
+        <Node id="45" type="file" documentType="reference">
+            <Name>CWBluetoothConnectionIPWriteState</Name>
+            <Path>Constants/CWBluetoothConnectionIPWriteState.html</Path>
+            
+        </Node>
+		<Node id="46" type="file" documentType="reference">
+            <Name>CWBluetoothConnectionInitialDataState</Name>
+            <Path>Constants/CWBluetoothConnectionInitialDataState.html</Path>
+            
+        </Node>
+		<Node id="47" type="file" documentType="reference">
+            <Name>CWBluetoothConnectionMCState</Name>
+            <Path>Constants/CWBluetoothConnectionMCState.html</Path>
+            
+        </Node>
+		<Node id="48" type="file" documentType="reference">
+            <Name>CWRemoteLibraryManagerState</Name>
+            <Path>Constants/CWRemoteLibraryManagerState.html</Path>
+            
+        </Node>
+		<Node id="49" type="file" documentType="reference">
+            <Name>CWServerManagerState</Name>
+            <Path>Constants/CWServerManagerState.html</Path>
+            
+        </Node>
+		<Node id="50" type="file" documentType="reference">
+            <Name>CWWebLibraryManagerState</Name>
+            <Path>Constants/CWWebLibraryManagerState.html</Path>
+            
+        </Node>
+		<Node id="51" type="file" documentType="reference">
+            <Name>CWiDeviceModel</Name>
+            <Path>Constants/CWiDeviceModel.html</Path>
+            
+        </Node>
+		<Node id="52" type="file" documentType="reference">
+            <Name>GCDWebServerClientErrorHTTPStatusCode</Name>
+            <Path>Constants/GCDWebServerClientErrorHTTPStatusCode.html</Path>
+            
+        </Node>
+		<Node id="53" type="file" documentType="reference">
+            <Name>GCDWebServerInformationalHTTPStatusCode</Name>
+            <Path>Constants/GCDWebServerInformationalHTTPStatusCode.html</Path>
+            
+        </Node>
+		<Node id="54" type="file" documentType="reference">
+            <Name>GCDWebServerLoggingLevel</Name>
+            <Path>Constants/GCDWebServerLoggingLevel.html</Path>
+            
+        </Node>
+		<Node id="55" type="file" documentType="reference">
+            <Name>GCDWebServerRedirectionHTTPStatusCode</Name>
+            <Path>Constants/GCDWebServerRedirectionHTTPStatusCode.html</Path>
+            
+        </Node>
+		<Node id="56" type="file" documentType="reference">
+            <Name>GCDWebServerServerErrorHTTPStatusCode</Name>
+            <Path>Constants/GCDWebServerServerErrorHTTPStatusCode.html</Path>
+            
+        </Node>
+		<Node id="57" type="file" documentType="reference">
+            <Name>GCDWebServerSuccessfulHTTPStatusCode</Name>
+            <Path>Constants/GCDWebServerSuccessfulHTTPStatusCode.html</Path>
             
         </Node>
 		

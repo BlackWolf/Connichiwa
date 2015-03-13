@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Classes/CWBluetoothConnection.html">
+	<File path="Classes/BLWebSocketConnection.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/cl/CWBluetoothConnection</TokenIdentifier>
-			<Abstract type="html">Each instance of this class is a data container for the bluetooth-related data of a connection to another device. &quot;Connection&quot; does not necessarily mean a fully established connection in this case. An instance of CWBluetoothConnection can also represent a device that has been detected nearby but no connection is established, or a device that has been seen previously but that was lost. Besides that, this class stores the state of the connection to another device, its received initial data, can receive new RSSI measurements for the device or keep track of send and received data.</Abstract>
-			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/cl/BLWebSocketConnection</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketConnection.h</DeclaredIn>
             
 			
 			<NodeRef refid="1"/>
@@ -13,348 +13,266 @@
 		
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothConnection/setState:</TokenIdentifier>
-			<Abstract type="html">The current state of the connection</Abstract>
-			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/BLWebSocketConnection/setID:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketConnection.h</DeclaredIn>
 			
-			<Declaration>@property (readwrite) CWBluetoothConnectionState state</Declaration>
+			<Declaration>@property (readonly) int ID</Declaration>
 			
 			
-			<Anchor>//api/name/state</Anchor>
+			<Anchor>//api/name/ID</Anchor>
             <NodeRef refid="1"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothConnection/state</TokenIdentifier>
-			<Abstract type="html">The current state of the connection</Abstract>
-			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/BLWebSocketConnection/ID</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketConnection.h</DeclaredIn>
 			
-			<Declaration>@property (readwrite) CWBluetoothConnectionState state</Declaration>
+			<Declaration>@property (readonly) int ID</Declaration>
 			
 			
-			<Anchor>//api/name/state</Anchor>
+			<Anchor>//api/name/ID</Anchor>
             <NodeRef refid="1"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/CWBluetoothConnection/state</TokenIdentifier>
-			<Abstract type="html">The current state of the connection</Abstract>
-			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instp/BLWebSocketConnection/ID</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketConnection.h</DeclaredIn>
 			
-			<Declaration>@property (readwrite) CWBluetoothConnectionState state</Declaration>
+			<Declaration>@property (readonly) int ID</Declaration>
 			
 			
-			<Anchor>//api/name/state</Anchor>
+			<Anchor>//api/name/ID</Anchor>
             <NodeRef refid="1"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothConnection/setIdentifier:</TokenIdentifier>
-			<Abstract type="html">The unique Connichiwa identifier of the other device</Abstract>
-			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/BLWebSocketConnection/setSocket:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketConnection.h</DeclaredIn>
 			
-			<Declaration>@property (readwrite, strong) NSString *identifier</Declaration>
+			<Declaration>@property (readonly) struct libwebsocket *socket</Declaration>
 			
 			
-			<Anchor>//api/name/identifier</Anchor>
+			<Anchor>//api/name/socket</Anchor>
             <NodeRef refid="1"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothConnection/identifier</TokenIdentifier>
-			<Abstract type="html">The unique Connichiwa identifier of the other device</Abstract>
-			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/BLWebSocketConnection/socket</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketConnection.h</DeclaredIn>
 			
-			<Declaration>@property (readwrite, strong) NSString *identifier</Declaration>
+			<Declaration>@property (readonly) struct libwebsocket *socket</Declaration>
 			
 			
-			<Anchor>//api/name/identifier</Anchor>
+			<Anchor>//api/name/socket</Anchor>
             <NodeRef refid="1"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/CWBluetoothConnection/identifier</TokenIdentifier>
-			<Abstract type="html">The unique Connichiwa identifier of the other device</Abstract>
-			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instp/BLWebSocketConnection/socket</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketConnection.h</DeclaredIn>
 			
-			<Declaration>@property (readwrite, strong) NSString *identifier</Declaration>
+			<Declaration>@property (readonly) struct libwebsocket *socket</Declaration>
 			
 			
-			<Anchor>//api/name/identifier</Anchor>
+			<Anchor>//api/name/socket</Anchor>
             <NodeRef refid="1"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothConnection/setMeasuredPower:</TokenIdentifier>
-			<Abstract type="html">The measured power of the other device&apos;s BT transmitter, used to calculate the distance to the other device</Abstract>
-			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/BLWebSocketConnection/setOnMessageHandler:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketConnection.h</DeclaredIn>
 			
-			<Declaration>@property (readwrite) int measuredPower</Declaration>
+			<Declaration>@property (readwrite, copy) BLWebSocketOnMessageHandler onMessageHandler</Declaration>
 			
 			
-			<Anchor>//api/name/measuredPower</Anchor>
+			<Anchor>//api/name/onMessageHandler</Anchor>
             <NodeRef refid="1"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothConnection/measuredPower</TokenIdentifier>
-			<Abstract type="html">The measured power of the other device&apos;s BT transmitter, used to calculate the distance to the other device</Abstract>
-			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/BLWebSocketConnection/onMessageHandler</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketConnection.h</DeclaredIn>
 			
-			<Declaration>@property (readwrite) int measuredPower</Declaration>
+			<Declaration>@property (readwrite, copy) BLWebSocketOnMessageHandler onMessageHandler</Declaration>
 			
 			
-			<Anchor>//api/name/measuredPower</Anchor>
+			<Anchor>//api/name/onMessageHandler</Anchor>
             <NodeRef refid="1"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/CWBluetoothConnection/measuredPower</TokenIdentifier>
-			<Abstract type="html">The measured power of the other device&apos;s BT transmitter, used to calculate the distance to the other device</Abstract>
-			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instp/BLWebSocketConnection/onMessageHandler</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketConnection.h</DeclaredIn>
 			
-			<Declaration>@property (readwrite) int measuredPower</Declaration>
+			<Declaration>@property (readwrite, copy) BLWebSocketOnMessageHandler onMessageHandler</Declaration>
 			
 			
-			<Anchor>//api/name/measuredPower</Anchor>
+			<Anchor>//api/name/onMessageHandler</Anchor>
             <NodeRef refid="1"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothConnection/setPeripheral:</TokenIdentifier>
-			<Abstract type="html">The CBPeripheral instance associated with the device represented by this connection</Abstract>
-			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/BLWebSocketConnection/setOnCloseHandler:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketConnection.h</DeclaredIn>
 			
-			<Declaration>@property (readonly) CBPeripheral *peripheral</Declaration>
+			<Declaration>@property (readwrite, copy) BLWebSocketOnCloseHandler onCloseHandler</Declaration>
 			
 			
-			<Anchor>//api/name/peripheral</Anchor>
+			<Anchor>//api/name/onCloseHandler</Anchor>
             <NodeRef refid="1"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothConnection/peripheral</TokenIdentifier>
-			<Abstract type="html">The CBPeripheral instance associated with the device represented by this connection</Abstract>
-			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/BLWebSocketConnection/onCloseHandler</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketConnection.h</DeclaredIn>
 			
-			<Declaration>@property (readonly) CBPeripheral *peripheral</Declaration>
+			<Declaration>@property (readwrite, copy) BLWebSocketOnCloseHandler onCloseHandler</Declaration>
 			
 			
-			<Anchor>//api/name/peripheral</Anchor>
+			<Anchor>//api/name/onCloseHandler</Anchor>
             <NodeRef refid="1"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/CWBluetoothConnection/peripheral</TokenIdentifier>
-			<Abstract type="html">The CBPeripheral instance associated with the device represented by this connection</Abstract>
-			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instp/BLWebSocketConnection/onCloseHandler</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketConnection.h</DeclaredIn>
 			
-			<Declaration>@property (readonly) CBPeripheral *peripheral</Declaration>
+			<Declaration>@property (readwrite, copy) BLWebSocketOnCloseHandler onCloseHandler</Declaration>
 			
 			
-			<Anchor>//api/name/peripheral</Anchor>
+			<Anchor>//api/name/onCloseHandler</Anchor>
             <NodeRef refid="1"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothConnection/setAverageRSSI:</TokenIdentifier>
-			<Abstract type="html">The current average RSSI, results in a number of algorithms applied to RSSI measurements in order to compensate for outliers and jitter</Abstract>
-			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/BLWebSocketConnection/setIncomingMessage:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketConnection.h</DeclaredIn>
 			
-			<Declaration>@property (readonly) double averageRSSI</Declaration>
+			<Declaration>@property (readwrite, strong) NSMutableData *incomingMessage</Declaration>
 			
 			
-			<Anchor>//api/name/averageRSSI</Anchor>
+			<Anchor>//api/name/incomingMessage</Anchor>
             <NodeRef refid="1"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothConnection/averageRSSI</TokenIdentifier>
-			<Abstract type="html">The current average RSSI, results in a number of algorithms applied to RSSI measurements in order to compensate for outliers and jitter</Abstract>
-			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/BLWebSocketConnection/incomingMessage</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketConnection.h</DeclaredIn>
 			
-			<Declaration>@property (readonly) double averageRSSI</Declaration>
+			<Declaration>@property (readwrite, strong) NSMutableData *incomingMessage</Declaration>
 			
 			
-			<Anchor>//api/name/averageRSSI</Anchor>
+			<Anchor>//api/name/incomingMessage</Anchor>
             <NodeRef refid="1"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/CWBluetoothConnection/averageRSSI</TokenIdentifier>
-			<Abstract type="html">The current average RSSI, results in a number of algorithms applied to RSSI measurements in order to compensate for outliers and jitter</Abstract>
-			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instp/BLWebSocketConnection/incomingMessage</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketConnection.h</DeclaredIn>
 			
-			<Declaration>@property (readonly) double averageRSSI</Declaration>
+			<Declaration>@property (readwrite, strong) NSMutableData *incomingMessage</Declaration>
 			
 			
-			<Anchor>//api/name/averageRSSI</Anchor>
+			<Anchor>//api/name/incomingMessage</Anchor>
             <NodeRef refid="1"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothConnection/setLastSentRSSI:</TokenIdentifier>
-			<Abstract type="html">The average RSSI at the point were didSendDistance was last called</Abstract>
-			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/BLWebSocketConnection/initWithID:socket:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketConnection.h</DeclaredIn>
 			
-			<Declaration>@property (readonly) double lastSentRSSI</Declaration>
+			<Declaration>- (instancetype)initWithID:(int)ID socket:(struct libwebsocket *)socket</Declaration>
 			
 			
-			<Anchor>//api/name/lastSentRSSI</Anchor>
+			<Anchor>//api/name/initWithID:socket:</Anchor>
             <NodeRef refid="1"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothConnection/lastSentRSSI</TokenIdentifier>
-			<Abstract type="html">The average RSSI at the point were didSendDistance was last called</Abstract>
-			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/BLWebSocketConnection/enqueueOutgoingMessage:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketConnection.h</DeclaredIn>
 			
-			<Declaration>@property (readonly) double lastSentRSSI</Declaration>
+			<Declaration>- (void)enqueueOutgoingMessage:(NSData *)message</Declaration>
 			
 			
-			<Anchor>//api/name/lastSentRSSI</Anchor>
+			<Anchor>//api/name/enqueueOutgoingMessage:</Anchor>
             <NodeRef refid="1"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/CWBluetoothConnection/lastSentRSSI</TokenIdentifier>
-			<Abstract type="html">The average RSSI at the point were didSendDistance was last called</Abstract>
-			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/BLWebSocketConnection/dequeueOutgoingMessage</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketConnection.h</DeclaredIn>
 			
-			<Declaration>@property (readonly) double lastSentRSSI</Declaration>
+			<Declaration>- (NSData *)dequeueOutgoingMessage</Declaration>
 			
 			
-			<Anchor>//api/name/lastSentRSSI</Anchor>
+			<Anchor>//api/name/dequeueOutgoingMessage</Anchor>
             <NodeRef refid="1"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothConnection/setPendingIPWrites:</TokenIdentifier>
-			<Abstract type="html">When the local device writes its network interface addresses to the device represented by this class, this number representes the number of writes issued and therefore the number of responses expected. For each response, this should be decreased by one.</Abstract>
-			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/BLWebSocketConnection/removeAllOutgoingMessages</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketConnection.h</DeclaredIn>
 			
-			<Declaration>@property (readwrite) int pendingIPWrites</Declaration>
+			<Declaration>- (void)removeAllOutgoingMessages</Declaration>
 			
 			
-			<Anchor>//api/name/pendingIPWrites</Anchor>
+			<Anchor>//api/name/removeAllOutgoingMessages</Anchor>
             <NodeRef refid="1"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothConnection/pendingIPWrites</TokenIdentifier>
-			<Abstract type="html">When the local device writes its network interface addresses to the device represented by this class, this number representes the number of writes issued and therefore the number of responses expected. For each response, this should be decreased by one.</Abstract>
-			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/BLWebSocketConnection/setOutgoingMessagesQueue:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketConnection.m</DeclaredIn>
 			
-			<Declaration>@property (readwrite) int pendingIPWrites</Declaration>
+			<Declaration>@property (readwrite, strong) NSMutableArray *outgoingMessagesQueue</Declaration>
 			
 			
-			<Anchor>//api/name/pendingIPWrites</Anchor>
+			<Anchor>//api/name/outgoingMessagesQueue</Anchor>
             <NodeRef refid="1"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/CWBluetoothConnection/pendingIPWrites</TokenIdentifier>
-			<Abstract type="html">When the local device writes its network interface addresses to the device represented by this class, this number representes the number of writes issued and therefore the number of responses expected. For each response, this should be decreased by one.</Abstract>
-			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/BLWebSocketConnection/outgoingMessagesQueue</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketConnection.m</DeclaredIn>
 			
-			<Declaration>@property (readwrite) int pendingIPWrites</Declaration>
+			<Declaration>@property (readwrite, strong) NSMutableArray *outgoingMessagesQueue</Declaration>
 			
 			
-			<Anchor>//api/name/pendingIPWrites</Anchor>
+			<Anchor>//api/name/outgoingMessagesQueue</Anchor>
             <NodeRef refid="1"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothConnection/initWithPeripheral:</TokenIdentifier>
-			<Abstract type="html">Initializes a new CWBluetoothConnection for the given CBPeripheral. For each CBPeripheral, and therefore for each discovered device, only one CWBluetoothConnection should be created</Abstract>
-			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instp/BLWebSocketConnection/outgoingMessagesQueue</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketConnection.m</DeclaredIn>
 			
-			<Declaration>- (instancetype)initWithPeripheral:(CBPeripheral *)peripheral</Declaration>
-			<Parameters>
-				<Parameter>
-					<Name>peripheral</Name>
-					<Abstract type="html">The CBPeriphal that represents this device in the BT environment</Abstract>
-				</Parameter>
-			</Parameters>
-			<ReturnValue><Abstract type="html">A new CWBluetoothConnection instance</Abstract></ReturnValue>
-			<Anchor>//api/name/initWithPeripheral:</Anchor>
-            <NodeRef refid="1"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothConnection/addNewRSSIMeasure:</TokenIdentifier>
-			<Abstract type="html">Adds a new RSSI measurement to this device&apos;s RSSI. Using different algorithms, outlier RSSI&apos;s or jittering is reduce, the results of this algorithms can be found by retrieving averageRSSI from this class. Note that the original RSSI measurements can not be restored.</Abstract>
-			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
-			
-			<Declaration>- (void)addNewRSSIMeasure:(double)rssi</Declaration>
-			<Parameters>
-				<Parameter>
-					<Name>rssi</Name>
-					<Abstract type="html">The measured RSSI for the device</Abstract>
-				</Parameter>
-			</Parameters>
-			
-			<Anchor>//api/name/addNewRSSIMeasure:</Anchor>
-            <NodeRef refid="1"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothConnection/didSendDistance</TokenIdentifier>
-			<Abstract type="html">This should be called after the distance of this device was send to other Connichiwa components. It will save the current time and the current averageRSSI and make them available via lastSentRSSI and timeSinceLastSentRSSI. This can be used to determine the time passed or the RSSI change since the last RSSI send.</Abstract>
-			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
-			
-			<Declaration>- (void)didSendDistance</Declaration>
+			<Declaration>@property (readwrite, strong) NSMutableArray *outgoingMessagesQueue</Declaration>
 			
 			
-			<Anchor>//api/name/didSendDistance</Anchor>
-            <NodeRef refid="1"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothConnection/timeSinceLastSentRSSI</TokenIdentifier>
-			<Abstract type="html">The amount of time that elapsed since the last time didSendDistance was called</Abstract>
-			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
-			
-			<Declaration>- (NSTimeInterval)timeSinceLastSentRSSI</Declaration>
-			
-			<ReturnValue><Abstract type="html">A time interval in seconds</Abstract></ReturnValue>
-			<Anchor>//api/name/timeSinceLastSentRSSI</Anchor>
-            <NodeRef refid="1"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothConnection/averageDistance</TokenIdentifier>
-			<Abstract type="html">The averageRSSI transformed into a distance</Abstract>
-			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
-			
-			<Declaration>- (double)averageDistance</Declaration>
-			
-			<ReturnValue><Abstract type="html">The distance of the device according to averageRSSI, in meters</Abstract></ReturnValue>
-			<Anchor>//api/name/averageDistance</Anchor>
-            <NodeRef refid="1"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothConnection/lastSentDistance</TokenIdentifier>
-			<Abstract type="html">The lastSentRSSI transformed into a distance</Abstract>
-			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
-			
-			<Declaration>- (double)lastSentDistance</Declaration>
-			
-			<ReturnValue><Abstract type="html">The distance of the device when the RSSI was last sent, in meters</Abstract></ReturnValue>
-			<Anchor>//api/name/lastSentDistance</Anchor>
-            <NodeRef refid="1"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothConnection/isReady</TokenIdentifier>
-			<Abstract type="html">Determines if the device is ready to be used by other Connichiwa components</Abstract>
-			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
-			
-			<Declaration>- (BOOL)isReady</Declaration>
-			
-			<ReturnValue><Abstract type="html">YES if the device can be used by other Connichiwa components, otherwise NO</Abstract></ReturnValue>
-			<Anchor>//api/name/isReady</Anchor>
+			<Anchor>//api/name/outgoingMessagesQueue</Anchor>
             <NodeRef refid="1"/>
 		</Token>
 		

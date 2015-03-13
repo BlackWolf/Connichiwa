@@ -23,26 +23,61 @@
 
 
 
+
 <section>
 
 <header>
-    <h2>
-    CWDeviceManager
-    </h2>
+    
+        <h2>
+        CWDeviceManager
+        </h2>
+        
+    
+
+    
+        <div class="description"><p>(Available on master device only)</p>
+<p>This manager keeps track of all devices in the Connichiwa infrastructure.
+   Devices can be added, removed and requested. Further, this manager keeps
+   track of the local device of the master.</p></div>
+    
+
+    
+    
+    <b>Methods</b><br />
+    <ul>
+    
+        <li><a href="CWDeviceManager.html#.getConnectedDevices">getConnectedDevices</a></li>
+    
+        <li><a href="CWDeviceManager.html#.getDeviceWithIdentifier">getDeviceWithIdentifier</a></li>
+    
+        <li><a href="CWDeviceManager.html#.getLocalDevice">getLocalDevice</a></li>
+    
+    </ul>
+    
     
 </header>
 
 <article>
     <div class="container-overview">
     
+        
+            <!-- <div class="description"><p>(Available on master device only)</p>
+<p>This manager keeps track of all devices in the Connichiwa infrastructure.
+   Devices can be added, removed and requested. Further, this manager keeps
+   track of the local device of the master.</p></div> -->
+        
+
+        
+
+
+<dl class="details">
 
     
-        
-            <div class="description"><p>Manages the local device and all remote devices detected and connected to</p></div>
-        
 
-        
-<dl class="details">
+    
+
+    
+
     
 
     
@@ -64,7 +99,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="connichiwa.js.html">connichiwa.js</a>, <a href="connichiwa.js.html#line181">line 181</a>
+        <a href="master_CWDeviceManager.js.html">master/CWDeviceManager.js</a>, <a href="master_CWDeviceManager.js.html#line6">line 6</a>
     </li></ul></dd>
     
 
@@ -79,8 +114,6 @@
         
     
     </div>
-
-    
 
     
 
@@ -97,276 +130,141 @@
     
         <h3 class="subsection-title">Methods</h3>
 
-        <dl>
-            
-<dt>
-    <h4 class="name" id="addDevice"><span class="type-signature">(static) </span>addDevice<span class="signature">(newDevice)</span><span class="type-signature"></span></h4>
-
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        <p>Adds a new remote device to the manager</p>
-    </div>
-    
-
-    
-
-    
-
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>newDevice</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="CWDevice.html">CWDevice</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The newly detected device</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-    
-
-    
-<dl class="details">
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="connichiwa.js.html">connichiwa.js</a>, <a href="connichiwa.js.html#line223">line 223</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dd>
-
         
             
-<dt>
-    <h4 class="name" id="getDeviceWithIdentifier"><span class="type-signature">(static) </span>getDeviceWithIdentifier<span class="signature">(identifier)</span><span class="type-signature"></span></h4>
-
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        <p>Gets the CWDevice with the given identifier or null if the device is not stored in this manager</p>
-    </div>
-    
 
     
 
-    
+    <hr>
 
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>identifier</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The identifier of the device to search for</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-    
-
-    
-<dl class="details">
-    
+    <h4 class="name" id=".getConnectedDevices"><span class="type-signature">(static) </span>getConnectedDevices<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="CWDevice.html">CWDevice</a>}</span></h4>
 
     
 
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="connichiwa.js.html">connichiwa.js</a>, <a href="connichiwa.js.html#line261">line 261</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
 
 
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    <p>A CWDevice that belongs to the given ID or null if that device cannot be found</p>
+<div class="description">
+    <p>(Available on master device only)</p>
+<p>Returns an array of all devices that are connected over HTTP and Websocket</p>
 </div>
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
         
+<div class="param-desc">
+    <p>An array of all devices that are currently connected to
+   the master</p>
+</div>
+
+
+
+<!-- <dl> -->
+    <!-- <dt> -->
+        <b>Type</b>
+    <!-- </dt> -->
+    <!-- <dd> -->
+        
+<span class="param-type"><a href="CWDevice.html">CWDevice</a></span>
+
+
+    <!-- </dd> -->
+<!-- </dl> -->
 
     
-</dd>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="master_CWDeviceManager.js.html">master/CWDeviceManager.js</a>, <a href="master_CWDeviceManager.js.html#line123">line 123</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
 
         
             
-<dt>
-    <h4 class="name" id="removeDevice"><span class="type-signature">(static) </span>removeDevice<span class="signature">(identifier)</span><span class="type-signature"></span></h4>
-
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        <p>Removes a remote device from the manager</p>
-    </div>
-    
 
     
 
-    
+    <hr>
+
+    <h4 class="name" id=".getDeviceWithIdentifier"><span class="type-signature">(static) </span>getDeviceWithIdentifier<span class="signature">(identifier)</span><span class="type-signature"> &rarr; (nullable) {<a href="CWDevice.html">CWDevice</a>}</span></h4>
 
     
-        <h5>Parameters:</h5>
-        
+
+
+
+<div class="description">
+    <p>(Available on master device only)</p>
+<p>Returns the CWDevice object for a given identifier</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
 
 <table class="params">
     <thead>
@@ -396,7 +294,7 @@
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">String</span>
 
 
             
@@ -406,16 +304,63 @@
 
             
 
-            <td class="description last"><p>The identifier of the device to remove</p></td>
+            <td class="description last"><p>The identifier of a device</p></td>
         </tr>
 
     
     </tbody>
 </table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>The CWDevice that has the given identifier, or null if
+   no device matches</p>
+</div>
+
+
+
+<!-- <dl> -->
+    <!-- <dt> -->
+        <b>Type</b>
+    <!-- </dt> -->
+    <!-- <dd> -->
+        
+<span class="param-type"><a href="CWDevice.html">CWDevice</a></span>
+
+
+    <!-- </dd> -->
+<!-- </dl> -->
+
+    
+
+
+
+
+
+
+<dl class="details">
+
     
 
     
-<dl class="details">
+
+    
+
     
 
     
@@ -437,7 +382,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="connichiwa.js.html">connichiwa.js</a>, <a href="connichiwa.js.html#line241">line 241</a>
+        <a href="master_CWDeviceManager.js.html">master/CWDeviceManager.js</a>, <a href="master_CWDeviceManager.js.html#line96">line 96</a>
     </li></ul></dd>
     
 
@@ -448,93 +393,57 @@
     
 </dl>
 
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dd>
-
         
             
-<dt>
-    <h4 class="name" id="setLocalID"><span class="type-signature">(static) </span>setLocalID<span class="signature">(identifier)</span><span class="type-signature"></span></h4>
-
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        <p>Sets the identifier of the local device under which it is advertised to other devices</p>
-    </div>
-    
 
     
 
-    
+    <hr>
+
+    <h4 class="name" id=".getLocalDevice"><span class="type-signature">(static) </span>getLocalDevice<span class="signature">()</span><span class="type-signature"></span></h4>
 
     
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>identifier</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
 
 
-            
-            </td>
 
-            
+<div class="description">
+    <p>Returns the local device or undefined if it has not yet been created</p>
+</div>
 
-            
 
-            <td class="description last"><p>The identifier</p></td>
-        </tr>
 
-    
-    </tbody>
-</table>
-    
 
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <dl class="details">
+
+    
+
+    
+
+    
+
     
 
     
@@ -556,7 +465,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="connichiwa.js.html">connichiwa.js</a>, <a href="connichiwa.js.html#line206">line 206</a>
+        <a href="master_CWDeviceManager.js.html">master/CWDeviceManager.js</a>, <a href="master_CWDeviceManager.js.html#line164">line 164</a>
     </li></ul></dd>
     
 
@@ -567,23 +476,7 @@
     
 </dl>
 
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dd>
-
-        </dl>
+        
     
 
     
@@ -599,13 +492,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Namespaces</h3><ul><li><a href="Connichiwa.html">Connichiwa</a></li><li><a href="Connichiwa.Events.html">Events</a></li><li><a href="Connichiwa.Websocket.html">Websocket</a></li><li><a href="CWDebug.html">CWDebug</a></li><li><a href="CWDevice.html">CWDevice</a></li><li><a href="CWDeviceManager.html">CWDeviceManager</a></li><li><a href="CWEventManager.html">CWEventManager</a></li><li><a href="CWNativeCommunicationParser.html">CWNativeCommunicationParser</a></li><li><a href="CWRemoteCommunicationParser.html">CWRemoteCommunicationParser</a></li><li><a href="CWUtil.html">CWUtil</a></li><li><a href="CWWebserverCommunicationParser.html">CWWebserverCommunicationParser</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="CWDevice.html">CWDevice</a></li><li><a href="CWLocation.html">CWLocation</a></li><li><a href="CWVector.html">CWVector</a></li></ul><h3>Namespaces</h3><ul><li><a href="Connichiwa.html">Connichiwa</a></li><li><a href="CWDebug.html">CWDebug</a></li><li><a href="CWDeviceManager.html">CWDeviceManager</a></li><li><a href="CWGyroscope.html">CWGyroscope</a></li><li><a href="CWStitchManager.html">CWStitchManager</a></li><li><a href="CWSystemInfo.html">CWSystemInfo</a></li><li><a href="CWUtil.html">CWUtil</a></li></ul><h3>Events</h3><ul><li><a href="Connichiwa.html#.event:onLoad">onLoad</a></li><li><a href="global.html#event:accelerometerUpdate">accelerometerUpdate</a></li><li><a href="global.html#event:connectfailed">connectfailed</a></li><li><a href="global.html#event:deviceconnected">deviceconnected</a></li><li><a href="global.html#event:devicedetected">devicedetected</a></li><li><a href="global.html#event:devicedisconnected">devicedisconnected</a></li><li><a href="global.html#event:devicedistancechanged">devicedistancechanged</a></li><li><a href="global.html#event:devicelost">devicelost</a></li><li><a href="global.html#event:gotstitchneighbor">gotstitchneighbor</a></li><li><a href="global.html#event:gyroscopeUpdate">gyroscopeUpdate</a></li><li><a href="global.html#event:ready">ready</a></li><li><a href="global.html#event:wasStitched">wasStitched</a></li><li><a href="global.html#event:wasUnstitched">wasUnstitched</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
-<br clear="both">
+<br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha7</a> on Thu Jun 26 2014 16:07:42 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta2</a> on Fri Mar 13 2015 16:04:19 GMT+0100 (CET)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -1,0 +1,1512 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="html/html; charset=utf-8" />
+		<title>GCDWebServerConnection Class Reference</title>
+		<meta id="xcode-display" name="xcode-display" content="render"/>
+		<link rel="stylesheet" type="text/css" href="../css/styles.css" media="all" />
+		<link rel="stylesheet" type="text/css" media="print" href="../css/stylesPrint.css" />
+		<meta name="generator" content="appledoc 2.2 (build 963)" />
+	</head>
+	<body>
+		<header id="top_header">
+			<div id="library" class="hideInXcode">
+				<h1><a id="libraryTitle" href="../index.html">Connichiwa </a></h1>
+				<a id="developerHome" href="../index.html">Mario Schreiner</a>
+			</div>
+			
+			<div id="title" role="banner">
+				<h1 class="hideInXcode">GCDWebServerConnection Class Reference</h1>
+			</div>
+			<ul id="headerButtons" role="toolbar">
+				<li id="toc_button">
+					<button aria-label="Show Table of Contents" role="checkbox" class="open" id="table_of_contents"><span class="disclosure"></span>Table of Contents</button>
+				</li>
+				<li id="jumpto_button" role="navigation">
+					<select id="jumpTo">
+	<option value="top">Jump To&#133;</option>
+	
+	<option value="overview">Overview</option>
+	
+	
+	
+	
+	<option value="tasks">Tasks</option>
+	
+	
+	
+	
+	
+	<option value="properties">Properties</option>
+	
+	<option value="//api/name/localAddressData">&nbsp;&nbsp;&nbsp;&nbsp;localAddressData</option>
+	
+	<option value="//api/name/localAddressString">&nbsp;&nbsp;&nbsp;&nbsp;localAddressString</option>
+	
+	<option value="//api/name/remoteAddressData">&nbsp;&nbsp;&nbsp;&nbsp;remoteAddressData</option>
+	
+	<option value="//api/name/remoteAddressString">&nbsp;&nbsp;&nbsp;&nbsp;remoteAddressString</option>
+	
+	<option value="//api/name/server">&nbsp;&nbsp;&nbsp;&nbsp;server</option>
+	
+	<option value="//api/name/totalBytesRead">&nbsp;&nbsp;&nbsp;&nbsp;totalBytesRead</option>
+	
+	<option value="//api/name/totalBytesWritten">&nbsp;&nbsp;&nbsp;&nbsp;totalBytesWritten</option>
+	
+	<option value="//api/name/usingIPv6">&nbsp;&nbsp;&nbsp;&nbsp;usingIPv6</option>
+	
+	
+	
+	
+	<option value="class_methods">Class Methods</option>
+	
+	<option value="//api/name/initialize">&nbsp;&nbsp;&nbsp;&nbsp;+ initialize</option>
+	
+	
+	
+	
+	<option value="instance_methods">Instance Methods</option>
+	
+	<option value="//api/name/_finishProcessingRequest:">&nbsp;&nbsp;&nbsp;&nbsp;- _finishProcessingRequest:</option>
+	
+	<option value="//api/name/_initializeResponseHeadersWithStatusCode:">&nbsp;&nbsp;&nbsp;&nbsp;- _initializeResponseHeadersWithStatusCode:</option>
+	
+	<option value="//api/name/_readBodyWithLength:initialData:">&nbsp;&nbsp;&nbsp;&nbsp;- _readBodyWithLength:initialData:</option>
+	
+	<option value="//api/name/_readBodyWithRemainingLength:completionBlock:">&nbsp;&nbsp;&nbsp;&nbsp;- _readBodyWithRemainingLength:completionBlock:</option>
+	
+	<option value="//api/name/_readChunkedBodyWithInitialData:">&nbsp;&nbsp;&nbsp;&nbsp;- _readChunkedBodyWithInitialData:</option>
+	
+	<option value="//api/name/_readData:withLength:completionBlock:">&nbsp;&nbsp;&nbsp;&nbsp;- _readData:withLength:completionBlock:</option>
+	
+	<option value="//api/name/_readHeaders:withCompletionBlock:">&nbsp;&nbsp;&nbsp;&nbsp;- _readHeaders:withCompletionBlock:</option>
+	
+	<option value="//api/name/_readNextBodyChunk:completionBlock:">&nbsp;&nbsp;&nbsp;&nbsp;- _readNextBodyChunk:completionBlock:</option>
+	
+	<option value="//api/name/_readRequestHeaders">&nbsp;&nbsp;&nbsp;&nbsp;- _readRequestHeaders</option>
+	
+	<option value="//api/name/_startProcessingRequest">&nbsp;&nbsp;&nbsp;&nbsp;- _startProcessingRequest</option>
+	
+	<option value="//api/name/_writeBodyWithCompletionBlock:">&nbsp;&nbsp;&nbsp;&nbsp;- _writeBodyWithCompletionBlock:</option>
+	
+	<option value="//api/name/_writeData:withCompletionBlock:">&nbsp;&nbsp;&nbsp;&nbsp;- _writeData:withCompletionBlock:</option>
+	
+	<option value="//api/name/_writeHeadersWithCompletionBlock:">&nbsp;&nbsp;&nbsp;&nbsp;- _writeHeadersWithCompletionBlock:</option>
+	
+	<option value="//api/name/abortRequest:withStatusCode:">&nbsp;&nbsp;&nbsp;&nbsp;- abortRequest:withStatusCode:</option>
+	
+	<option value="//api/name/close">&nbsp;&nbsp;&nbsp;&nbsp;- close</option>
+	
+	<option value="//api/name/dealloc">&nbsp;&nbsp;&nbsp;&nbsp;- dealloc</option>
+	
+	<option value="//api/name/didReadBytes:length:">&nbsp;&nbsp;&nbsp;&nbsp;- didReadBytes:length:</option>
+	
+	<option value="//api/name/didWriteBytes:length:">&nbsp;&nbsp;&nbsp;&nbsp;- didWriteBytes:length:</option>
+	
+	<option value="//api/name/initWithServer:localAddress:remoteAddress:socket:">&nbsp;&nbsp;&nbsp;&nbsp;- initWithServer:localAddress:remoteAddress:socket:</option>
+	
+	<option value="//api/name/open">&nbsp;&nbsp;&nbsp;&nbsp;- open</option>
+	
+	<option value="//api/name/overrideResponse:forRequest:">&nbsp;&nbsp;&nbsp;&nbsp;- overrideResponse:forRequest:</option>
+	
+	<option value="//api/name/preflightRequest:">&nbsp;&nbsp;&nbsp;&nbsp;- preflightRequest:</option>
+	
+	<option value="//api/name/processRequest:completion:">&nbsp;&nbsp;&nbsp;&nbsp;- processRequest:completion:</option>
+	
+	<option value="//api/name/rewriteRequestURL:withMethod:headers:">&nbsp;&nbsp;&nbsp;&nbsp;- rewriteRequestURL:withMethod:headers:</option>
+	
+	
+	
+</select>
+				</li>
+			</ul>
+		</header>
+		<nav id="tocContainer" class="isShowingTOC">
+			<ul id="toc" role="tree">
+				
+<li role="treeitem"><span class="nodisclosure"></span><span class="sectionName"><a href="#overview">Overview</a></span></li>
+
+
+
+
+<li role="treeitem" id="task_treeitem"><span class="nodisclosure"></span><span class="sectionName"><a href="#tasks">Tasks</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Subclassing Methods">Subclassing Methods</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Write Methods">Write Methods</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Read Methods">Read Methods</a></span></li>
+	
+</ul></li>
+
+
+
+
+
+<li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#properties">Properties</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/localAddressData">localAddressData</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/localAddressString">localAddressString</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/remoteAddressData">remoteAddressData</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/remoteAddressString">remoteAddressString</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/server">server</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/totalBytesRead">totalBytesRead</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/totalBytesWritten">totalBytesWritten</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/usingIPv6">usingIPv6</a></span></li>
+	
+</ul></li>
+
+
+
+<li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#class_methods">Class Methods</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/initialize">initialize</a></span></li>
+	
+</ul></li>
+
+
+
+<li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#instance_methods">Instance Methods</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/_finishProcessingRequest:">_finishProcessingRequest:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/_initializeResponseHeadersWithStatusCode:">_initializeResponseHeadersWithStatusCode:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/_readBodyWithLength:initialData:">_readBodyWithLength:initialData:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/_readBodyWithRemainingLength:completionBlock:">_readBodyWithRemainingLength:completionBlock:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/_readChunkedBodyWithInitialData:">_readChunkedBodyWithInitialData:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/_readData:withLength:completionBlock:">_readData:withLength:completionBlock:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/_readHeaders:withCompletionBlock:">_readHeaders:withCompletionBlock:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/_readNextBodyChunk:completionBlock:">_readNextBodyChunk:completionBlock:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/_readRequestHeaders">_readRequestHeaders</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/_startProcessingRequest">_startProcessingRequest</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/_writeBodyWithCompletionBlock:">_writeBodyWithCompletionBlock:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/_writeData:withCompletionBlock:">_writeData:withCompletionBlock:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/_writeHeadersWithCompletionBlock:">_writeHeadersWithCompletionBlock:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/abortRequest:withStatusCode:">abortRequest:withStatusCode:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/close">close</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/dealloc">dealloc</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/didReadBytes:length:">didReadBytes:length:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/didWriteBytes:length:">didWriteBytes:length:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/initWithServer:localAddress:remoteAddress:socket:">initWithServer:localAddress:remoteAddress:socket:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/open">open</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/overrideResponse:forRequest:">overrideResponse:forRequest:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/preflightRequest:">preflightRequest:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/processRequest:completion:">processRequest:completion:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/rewriteRequestURL:withMethod:headers:">rewriteRequestURL:withMethod:headers:</a></span></li>
+	
+</ul></li>
+
+
+			</ul>
+		</nav>
+		<article>
+			<div id="contents" class="isShowingTOC" role="main">
+				<a title="GCDWebServerConnection Class Reference" name="top"></a>
+				<div class="main-navigation navigation-top">
+					<ul>
+	<li><a href="../index.html">Index</a></li>
+	<li><a href="../hierarchy.html">Hierarchy</a></li>
+</ul>
+				</div>
+				<div id="header">
+					<div class="section-header">
+						<h1 class="title title-header">GCDWebServerConnection Class Reference</h1>
+					</div>		
+				</div>
+				<div id="container">	
+					
+					<div class="section section-specification"><table cellspacing="0"><tbody>
+						<tr>
+	<td class="specification-title">Inherits from</td>
+	<td class="specification-value">NSObject</td>
+</tr><tr>
+	<td class="specification-title">Declared in</td>
+	<td class="specification-value">GCDWebServerConnection.h<br />GCDWebServerConnection.m</td>
+</tr>
+						</tbody></table></div>
+					
+                    
+                    
+					
+					<div class="section section-overview">
+						<a title="Overview" name="overview"></a>
+						<h2 class="subtitle subtitle-overview">Overview</h2>
+						<p>The GCDWebServerConnection class is instantiated by <a href="../Classes/GCDWebServer.html">GCDWebServer</a> to handle
+each new HTTP connection. Each instance stays alive until the connection is
+closed.</p>
+
+<p>You cannot use this class directly, but it is made public so you can
+subclass it to override some hooks. Use the GCDWebServerOption_ConnectionClass
+option for <a href="../Classes/GCDWebServer.html">GCDWebServer</a> to install your custom subclass.</p><div class="warning"><p><strong>Warning:</strong> The GCDWebServerConnection retains the <a href="../Classes/GCDWebServer.html">GCDWebServer</a> until the
+connection is closed.</p>
+
+<p>Hooks to customize the behavior of <a href="../Classes/GCDWebServer.html">GCDWebServer</a> HTTP connections.</p></div><div class="warning"><p><strong>Warning:</strong> These methods can be called on any GCD thread.
+Be sure to also call &ldquo;super&rdquo; when overriding them.</p>
+
+<p><a href="../Classes/GCDWebServer.html">GCDWebServer</a> internal constants and APIs.</p></div>
+					</div>
+					
+					
+					
+					
+					
+					<div class="section section-tasks">
+						<a title="Tasks" name="tasks"></a>
+						<h2 class="subtitle subtitle-tasks">Tasks</h2>
+						
+						
+						
+						<h3 class="subsubtitle task-title">Other Methods</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/server">&nbsp;&nbsp;server</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/usingIPv6">&nbsp;&nbsp;usingIPv6</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/localAddressData">&nbsp;&nbsp;localAddressData</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/localAddressString">&nbsp;&nbsp;localAddressString</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/remoteAddressData">&nbsp;&nbsp;remoteAddressData</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/remoteAddressString">&nbsp;&nbsp;remoteAddressString</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/totalBytesRead">&nbsp;&nbsp;totalBytesRead</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/totalBytesWritten">&nbsp;&nbsp;totalBytesWritten</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li>
+						</ul>
+						
+						
+						
+						<h3 class="subsubtitle task-title">Other Methods</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/initialize">+&nbsp;initialize</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/_initializeResponseHeadersWithStatusCode:">&ndash;&nbsp;_initializeResponseHeadersWithStatusCode:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/_startProcessingRequest">&ndash;&nbsp;_startProcessingRequest</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/_finishProcessingRequest:">&ndash;&nbsp;_finishProcessingRequest:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/_readBodyWithLength:initialData:">&ndash;&nbsp;_readBodyWithLength:initialData:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/_readChunkedBodyWithInitialData:">&ndash;&nbsp;_readChunkedBodyWithInitialData:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/_readRequestHeaders">&ndash;&nbsp;_readRequestHeaders</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/initWithServer:localAddress:remoteAddress:socket:">&ndash;&nbsp;initWithServer:localAddress:remoteAddress:socket:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/dealloc">&ndash;&nbsp;dealloc</a></code>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+						
+						<a title="Subclassing Methods" name="task_Subclassing Methods"></a>
+						<h3 class="subsubtitle task-title">Subclassing Methods</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/open">&ndash;&nbsp;open</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/didReadBytes:length:">&ndash;&nbsp;didReadBytes:length:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/didWriteBytes:length:">&ndash;&nbsp;didWriteBytes:length:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/rewriteRequestURL:withMethod:headers:">&ndash;&nbsp;rewriteRequestURL:withMethod:headers:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/preflightRequest:">&ndash;&nbsp;preflightRequest:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/processRequest:completion:">&ndash;&nbsp;processRequest:completion:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/overrideResponse:forRequest:">&ndash;&nbsp;overrideResponse:forRequest:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/abortRequest:withStatusCode:">&ndash;&nbsp;abortRequest:withStatusCode:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/close">&ndash;&nbsp;close</a></code>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+						
+						<a title="Write Methods" name="task_Write Methods"></a>
+						<h3 class="subsubtitle task-title">Write Methods</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/_writeData:withCompletionBlock:">&ndash;&nbsp;_writeData:withCompletionBlock:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/_writeHeadersWithCompletionBlock:">&ndash;&nbsp;_writeHeadersWithCompletionBlock:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/_writeBodyWithCompletionBlock:">&ndash;&nbsp;_writeBodyWithCompletionBlock:</a></code>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+						
+						<a title="Read Methods" name="task_Read Methods"></a>
+						<h3 class="subsubtitle task-title">Read Methods</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/_readData:withLength:completionBlock:">&ndash;&nbsp;_readData:withLength:completionBlock:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/_readHeaders:withCompletionBlock:">&ndash;&nbsp;_readHeaders:withCompletionBlock:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/_readBodyWithRemainingLength:completionBlock:">&ndash;&nbsp;_readBodyWithRemainingLength:completionBlock:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/_readNextBodyChunk:completionBlock:">&ndash;&nbsp;_readNextBodyChunk:completionBlock:</a></code>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+					</div>
+					
+					
+					
+					
+					
+					<div class="section section-methods">
+						<a title="Properties" name="properties"></a>
+						<h2 class="subtitle subtitle-methods">Properties</h2>
+						
+						<div class="section-method">
+	<a name="//api/name/localAddressData" title="localAddressData"></a>
+	<h3 class="subsubtitle method-title">localAddressData</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Returns the address of the local peer (i.e. <a href="#//api/name/server">server</a>) of the connection
+as a raw &ldquo;struct sockaddr&rdquo;.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) NSData *localAddressData</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerConnection.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/localAddressString" title="localAddressString"></a>
+	<h3 class="subsubtitle method-title">localAddressString</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Returns the address of the local peer (i.e. <a href="#//api/name/server">server</a>) of the connection
+as a string.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) NSString *localAddressString</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerConnection.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/remoteAddressData" title="remoteAddressData"></a>
+	<h3 class="subsubtitle method-title">remoteAddressData</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Returns the address of the remote peer (i.e. client) of the connection
+as a raw &ldquo;struct sockaddr&rdquo;.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) NSData *remoteAddressData</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerConnection.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/remoteAddressString" title="remoteAddressString"></a>
+	<h3 class="subsubtitle method-title">remoteAddressString</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Returns the address of the remote peer (i.e. client) of the connection
+as a string.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) NSString *remoteAddressString</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerConnection.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/server" title="server"></a>
+	<h3 class="subsubtitle method-title">server</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Returns the <a href="../Classes/GCDWebServer.html">GCDWebServer</a> that owns the connection.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) GCDWebServer *server</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerConnection.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/totalBytesRead" title="totalBytesRead"></a>
+	<h3 class="subsubtitle method-title">totalBytesRead</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Returns the total number of bytes received from the remote peer (i.e. client)
+so far.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) NSUInteger totalBytesRead</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerConnection.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/totalBytesWritten" title="totalBytesWritten"></a>
+	<h3 class="subsubtitle method-title">totalBytesWritten</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Returns the total number of bytes sent to the remote peer (i.e. client) so far.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) NSUInteger totalBytesWritten</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerConnection.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/usingIPv6" title="usingIPv6"></a>
+	<h3 class="subsubtitle method-title">usingIPv6</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Returns YES if the connection is using IPv6.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly, getter=isUsingIPv6) BOOL usingIPv6</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerConnection.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+					</div>
+					
+					
+					
+					<div class="section section-methods">
+						<a title="Class Methods" name="class_methods"></a>
+						<h2 class="subtitle subtitle-methods">Class Methods</h2>
+						
+						<div class="section-method">
+	<a name="//api/name/initialize" title="initialize"></a>
+	<h3 class="subsubtitle method-title">initialize</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>+ (void)initialize</code></div>
+
+    
+</div>
+						
+					</div>
+					
+					
+					
+					<div class="section section-methods">
+						<a title="Instance Methods" name="instance_methods"></a>
+						<h2 class="subtitle subtitle-methods">Instance Methods</h2>
+						
+						<div class="section-method">
+	<a name="//api/name/_finishProcessingRequest:" title="_finishProcessingRequest:"></a>
+	<h3 class="subsubtitle method-title">_finishProcessingRequest:</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>- (void)_finishProcessingRequest:(GCDWebServerResponse *)<em>response</em></code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/_initializeResponseHeadersWithStatusCode:" title="_initializeResponseHeadersWithStatusCode:"></a>
+	<h3 class="subsubtitle method-title">_initializeResponseHeadersWithStatusCode:</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>- (void)_initializeResponseHeadersWithStatusCode:(NSInteger)<em>statusCode</em></code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/_readBodyWithLength:initialData:" title="_readBodyWithLength:initialData:"></a>
+	<h3 class="subsubtitle method-title">_readBodyWithLength:initialData:</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>- (void)_readBodyWithLength:(NSUInteger)<em>length</em> initialData:(NSData *)<em>initialData</em></code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/_readBodyWithRemainingLength:completionBlock:" title="_readBodyWithRemainingLength:completionBlock:"></a>
+	<h3 class="subsubtitle method-title">_readBodyWithRemainingLength:completionBlock:</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>- (void)_readBodyWithRemainingLength:(NSUInteger)<em>length</em> completionBlock:(ReadBodyCompletionBlock)<em>block</em></code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/_readChunkedBodyWithInitialData:" title="_readChunkedBodyWithInitialData:"></a>
+	<h3 class="subsubtitle method-title">_readChunkedBodyWithInitialData:</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>- (void)_readChunkedBodyWithInitialData:(NSData *)<em>initialData</em></code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/_readData:withLength:completionBlock:" title="_readData:withLength:completionBlock:"></a>
+	<h3 class="subsubtitle method-title">_readData:withLength:completionBlock:</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>- (void)_readData:(NSMutableData *)<em>data</em> withLength:(NSUInteger)<em>length</em> completionBlock:(ReadDataCompletionBlock)<em>block</em></code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/_readHeaders:withCompletionBlock:" title="_readHeaders:withCompletionBlock:"></a>
+	<h3 class="subsubtitle method-title">_readHeaders:withCompletionBlock:</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>- (void)_readHeaders:(NSMutableData *)<em>headersData</em> withCompletionBlock:(ReadHeadersCompletionBlock)<em>block</em></code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/_readNextBodyChunk:completionBlock:" title="_readNextBodyChunk:completionBlock:"></a>
+	<h3 class="subsubtitle method-title">_readNextBodyChunk:completionBlock:</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>- (void)_readNextBodyChunk:(NSMutableData *)<em>chunkData</em> completionBlock:(ReadBodyCompletionBlock)<em>block</em></code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/_readRequestHeaders" title="_readRequestHeaders"></a>
+	<h3 class="subsubtitle method-title">_readRequestHeaders</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>- (void)_readRequestHeaders</code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/_startProcessingRequest" title="_startProcessingRequest"></a>
+	<h3 class="subsubtitle method-title">_startProcessingRequest</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>- (void)_startProcessingRequest</code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/_writeBodyWithCompletionBlock:" title="_writeBodyWithCompletionBlock:"></a>
+	<h3 class="subsubtitle method-title">_writeBodyWithCompletionBlock:</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>- (void)_writeBodyWithCompletionBlock:(WriteBodyCompletionBlock)<em>block</em></code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/_writeData:withCompletionBlock:" title="_writeData:withCompletionBlock:"></a>
+	<h3 class="subsubtitle method-title">_writeData:withCompletionBlock:</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>- (void)_writeData:(NSData *)<em>data</em> withCompletionBlock:(WriteDataCompletionBlock)<em>block</em></code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/_writeHeadersWithCompletionBlock:" title="_writeHeadersWithCompletionBlock:"></a>
+	<h3 class="subsubtitle method-title">_writeHeadersWithCompletionBlock:</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>- (void)_writeHeadersWithCompletionBlock:(WriteHeadersCompletionBlock)<em>block</em></code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/abortRequest:withStatusCode:" title="abortRequest:withStatusCode:"></a>
+	<h3 class="subsubtitle method-title">abortRequest:withStatusCode:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>This method is called if any error happens while validing or processing
+the request or if no <a href="../Classes/GCDWebServerResponse.html">GCDWebServerResponse</a> was generated during processing.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (void)abortRequest:(GCDWebServerRequest *)<em>request</em> withStatusCode:(NSInteger)<em>statusCode</em></code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<div class="warning"><p><strong>Warning:</strong> If the request was invalid (e.g. the HTTP headers were malformed),
+the &ldquo;request&rdquo; argument will be nil.</p></div>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerConnection.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/close" title="close"></a>
+	<h3 class="subsubtitle method-title">close</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Called when the connection is closed.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (void)close</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerConnection.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/dealloc" title="dealloc"></a>
+	<h3 class="subsubtitle method-title">dealloc</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>- (void)dealloc</code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/didReadBytes:length:" title="didReadBytes:length:"></a>
+	<h3 class="subsubtitle method-title">didReadBytes:length:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>This method is called whenever data has been received
+from the remote peer (i.e. client).</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (void)didReadBytes:(const void *)<em>bytes</em> length:(NSUInteger)<em>length</em></code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<div class="warning"><p><strong>Warning:</strong> Do not attempt to modify this data.</p></div>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerConnection.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/didWriteBytes:length:" title="didWriteBytes:length:"></a>
+	<h3 class="subsubtitle method-title">didWriteBytes:length:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>This method is called whenever data has been sent
+to the remote peer (i.e. client).</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (void)didWriteBytes:(const void *)<em>bytes</em> length:(NSUInteger)<em>length</em></code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<div class="warning"><p><strong>Warning:</strong> Do not attempt to modify this data.</p></div>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerConnection.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/initWithServer:localAddress:remoteAddress:socket:" title="initWithServer:localAddress:remoteAddress:socket:"></a>
+	<h3 class="subsubtitle method-title">initWithServer:localAddress:remoteAddress:socket:</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>- (id)initWithServer:(GCDWebServer *)<em>server</em> localAddress:(NSData *)<em>localAddress</em> remoteAddress:(NSData *)<em>remoteAddress</em> socket:(CFSocketNativeHandle)<em>socket</em></code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/open" title="open"></a>
+	<h3 class="subsubtitle method-title">open</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>This method is called when the connection is opened.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (BOOL)open</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Return NO to reject the connection e.g. after validating the local
+or remote address.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerConnection.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/overrideResponse:forRequest:" title="overrideResponse:forRequest:"></a>
+	<h3 class="subsubtitle method-title">overrideResponse:forRequest:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Assuming a valid HTTP request was received and either <a href="#//api/name/preflightRequest:">preflightRequest:</a>
+or <a href="#//api/name/processRequest:completion:">processRequest:completion:</a> returned a non-nil <a href="../Classes/GCDWebServerResponse.html">GCDWebServerResponse</a>,
+this method is called to override the response.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (GCDWebServerResponse *)overrideResponse:(GCDWebServerResponse *)<em>response</em> forRequest:(GCDWebServerRequest *)<em>request</em></code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>You can either modify the current response and return it, or return a
+completely new one.</p>
+
+<p>The default implementation replaces any response matching the &ldquo;ETag&rdquo; or
+&ldquo;Last-Modified-Date&rdquo; header of the request by a barebone &ldquo;Not-Modified&rdquo; (304)
+one.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerConnection.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/preflightRequest:" title="preflightRequest:"></a>
+	<h3 class="subsubtitle method-title">preflightRequest:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Assuming a valid HTTP request was received, this method is called before
+the request is processed.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (GCDWebServerResponse *)preflightRequest:(GCDWebServerRequest *)<em>request</em></code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Return a non-nil <a href="../Classes/GCDWebServerResponse.html">GCDWebServerResponse</a> to bypass the request processing entirely.</p>
+
+<p>The default implementation checks for HTTP authentication if applicable
+and returns a barebone 401 status code response if authentication failed.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerConnection.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/processRequest:completion:" title="processRequest:completion:"></a>
+	<h3 class="subsubtitle method-title">processRequest:completion:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Assuming a valid HTTP request was received and <a href="#//api/name/preflightRequest:">preflightRequest:</a> returned nil,
+this method is called to process the request by executing the handler&rsquo;s
+process block.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (void)processRequest:(GCDWebServerRequest *)<em>request</em> completion:(GCDWebServerCompletionBlock)<em>completion</em></code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerConnection.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/rewriteRequestURL:withMethod:headers:" title="rewriteRequestURL:withMethod:headers:"></a>
+	<h3 class="subsubtitle method-title">rewriteRequestURL:withMethod:headers:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>This method is called after the HTTP headers have been received to
+allow replacing the request URL by another one.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (NSURL *)rewriteRequestURL:(NSURL *)<em>url</em> withMethod:(NSString *)<em>method</em> headers:(NSDictionary *)<em>headers</em></code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>The default implementation returns the original URL.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerConnection.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+					</div>
+					
+					
+                    
+                    
+				</div>
+				<div class="main-navigation navigation-bottom">
+					<ul>
+	<li><a href="../index.html">Index</a></li>
+	<li><a href="../hierarchy.html">Hierarchy</a></li>
+</ul>
+				</div>
+				<div id="footer">
+					<hr />
+					<div class="footer-copyright">
+						<p><span class="copyright">&copy; 2015 Mario Schreiner. All rights reserved. (Last updated: 2015-03-13)</span><br />
+						
+						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2 (build 963)</a>.</span></p>
+						
+					</div>
+				</div>
+			</div>
+		</article>
+		<script type="text/javascript">
+			function jumpToChange()
+			{
+				window.location.hash = this.options[this.selectedIndex].value;
+			}
+			
+			function toggleTOC()
+			{
+				var contents = document.getElementById('contents');
+				var tocContainer = document.getElementById('tocContainer');
+				
+				if (this.getAttribute('class') == 'open')
+				{
+					this.setAttribute('class', '');
+					contents.setAttribute('class', '');
+					tocContainer.setAttribute('class', '');
+					
+					window.name = "hideTOC";
+				}
+				else
+				{
+					this.setAttribute('class', 'open');
+					contents.setAttribute('class', 'isShowingTOC');
+					tocContainer.setAttribute('class', 'isShowingTOC');
+					
+					window.name = "";
+				}
+				return false;
+			}
+			
+			function toggleTOCEntryChildren(e)
+			{
+				e.stopPropagation();
+				var currentClass = this.getAttribute('class');
+				if (currentClass == 'children') {
+					this.setAttribute('class', 'children open');
+				}
+				else if (currentClass == 'children open') {
+					this.setAttribute('class', 'children');
+				}
+				return false;
+			}
+			
+			function tocEntryClick(e)
+			{
+				e.stopPropagation();
+				return true;
+			}
+			
+			function init()
+			{
+				var selectElement = document.getElementById('jumpTo');
+				selectElement.addEventListener('change', jumpToChange, false);
+				
+				var tocButton = document.getElementById('table_of_contents');
+				tocButton.addEventListener('click', toggleTOC, false);
+				
+				var taskTreeItem = document.getElementById('task_treeitem');
+				if (taskTreeItem.getElementsByTagName('li').length > 0)
+				{
+					taskTreeItem.setAttribute('class', 'children');
+					taskTreeItem.firstChild.setAttribute('class', 'disclosure');
+				}
+				
+				var tocList = document.getElementById('toc');
+				
+				var tocEntries = tocList.getElementsByTagName('li');
+				for (var i = 0; i < tocEntries.length; i++) {
+					tocEntries[i].addEventListener('click', toggleTOCEntryChildren, false);
+				}
+				
+				var tocLinks = tocList.getElementsByTagName('a');
+				for (var i = 0; i < tocLinks.length; i++) {
+					tocLinks[i].addEventListener('click', tocEntryClick, false);
+				}
+				
+				if (window.name == "hideTOC") {
+					toggleTOC.call(tocButton);
+				}
+			}
+			
+			window.onload = init;
+			
+			// If showing in Xcode, hide the TOC and Header
+			if (navigator.userAgent.match(/xcode/i)) {
+				document.getElementById("contents").className = "hideInXcode"
+				document.getElementById("tocContainer").className = "hideInXcode"
+				document.getElementById("top_header").className = "hideInXcode"
+			}
+			
+		</script>
+	</body>
+</html>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Protocols/CWBluetoothTransferManagerDelegate.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intf/CWBluetoothTransferManagerDelegate</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothTransferManagerDelegate.h</DeclaredIn>
+            
+			
+			<NodeRef refid="38"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/CWBluetoothTransferManagerDelegate/didReceiveMessage:fromPeripheral:withCharacteristic:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothTransferManagerDelegate.h</DeclaredIn>
+			
+			<Declaration>- (void)didReceiveMessage:(NSData *)data fromPeripheral:(CBPeripheral *)peripheral withCharacteristic:(CBCharacteristic *)characteristic</Declaration>
+			
+			
+			<Anchor>//api/name/didReceiveMessage:fromPeripheral:withCharacteristic:</Anchor>
+            <NodeRef refid="38"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/CWBluetoothTransferManagerDelegate/didReceiveMessage:fromCentral:withCharacteristic:lastWriteRequest:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothTransferManagerDelegate.h</DeclaredIn>
+			
+			<Declaration>- (void)didReceiveMessage:(NSData *)data fromCentral:(CBCentral *)central withCharacteristic:(CBCharacteristic *)characteristic lastWriteRequest:(CBATTRequest *)request</Declaration>
+			
+			
+			<Anchor>//api/name/didReceiveMessage:fromCentral:withCharacteristic:lastWriteRequest:</Anchor>
+            <NodeRef refid="38"/>
+		</Token>
+		
+        
+	</File>
+</Tokens>

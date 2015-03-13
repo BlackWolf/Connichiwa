@@ -1,0 +1,631 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Classes/GCDWebServerConnection.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/cl/GCDWebServerConnection</TokenIdentifier>
+			<Abstract type="html">The GCDWebServerConnection class is instantiated by GCDWebServer to handle
+each new HTTP connection. Each instance stays alive until the connection is
+closed.</Abstract>
+			<DeclaredIn>GCDWebServerConnection.h</DeclaredIn>
+            
+			
+			<NodeRef refid="19"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerConnection/setServer:</TokenIdentifier>
+			<Abstract type="html">Returns the GCDWebServer that owns the connection.</Abstract>
+			<DeclaredIn>GCDWebServerConnection.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly) GCDWebServer *server</Declaration>
+			
+			
+			<Anchor>//api/name/server</Anchor>
+            <NodeRef refid="19"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerConnection/server</TokenIdentifier>
+			<Abstract type="html">Returns the GCDWebServer that owns the connection.</Abstract>
+			<DeclaredIn>GCDWebServerConnection.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly) GCDWebServer *server</Declaration>
+			
+			
+			<Anchor>//api/name/server</Anchor>
+            <NodeRef refid="19"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/GCDWebServerConnection/server</TokenIdentifier>
+			<Abstract type="html">Returns the GCDWebServer that owns the connection.</Abstract>
+			<DeclaredIn>GCDWebServerConnection.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly) GCDWebServer *server</Declaration>
+			
+			
+			<Anchor>//api/name/server</Anchor>
+            <NodeRef refid="19"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerConnection/setUsingIPv6:</TokenIdentifier>
+			<Abstract type="html">Returns YES if the connection is using IPv6.</Abstract>
+			<DeclaredIn>GCDWebServerConnection.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly, getter=isUsingIPv6) BOOL usingIPv6</Declaration>
+			
+			
+			<Anchor>//api/name/usingIPv6</Anchor>
+            <NodeRef refid="19"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerConnection/isUsingIPv6</TokenIdentifier>
+			<Abstract type="html">Returns YES if the connection is using IPv6.</Abstract>
+			<DeclaredIn>GCDWebServerConnection.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly, getter=isUsingIPv6) BOOL usingIPv6</Declaration>
+			
+			
+			<Anchor>//api/name/usingIPv6</Anchor>
+            <NodeRef refid="19"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/GCDWebServerConnection/usingIPv6</TokenIdentifier>
+			<Abstract type="html">Returns YES if the connection is using IPv6.</Abstract>
+			<DeclaredIn>GCDWebServerConnection.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly, getter=isUsingIPv6) BOOL usingIPv6</Declaration>
+			
+			
+			<Anchor>//api/name/usingIPv6</Anchor>
+            <NodeRef refid="19"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerConnection/setLocalAddressData:</TokenIdentifier>
+			<Abstract type="html">Returns the address of the local peer (i.e. server of the connection
+as a raw &quot;struct sockaddr&quot;.</Abstract>
+			<DeclaredIn>GCDWebServerConnection.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly) NSData *localAddressData</Declaration>
+			
+			
+			<Anchor>//api/name/localAddressData</Anchor>
+            <NodeRef refid="19"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerConnection/localAddressData</TokenIdentifier>
+			<Abstract type="html">Returns the address of the local peer (i.e. server of the connection
+as a raw &quot;struct sockaddr&quot;.</Abstract>
+			<DeclaredIn>GCDWebServerConnection.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly) NSData *localAddressData</Declaration>
+			
+			
+			<Anchor>//api/name/localAddressData</Anchor>
+            <NodeRef refid="19"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/GCDWebServerConnection/localAddressData</TokenIdentifier>
+			<Abstract type="html">Returns the address of the local peer (i.e. server of the connection
+as a raw &quot;struct sockaddr&quot;.</Abstract>
+			<DeclaredIn>GCDWebServerConnection.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly) NSData *localAddressData</Declaration>
+			
+			
+			<Anchor>//api/name/localAddressData</Anchor>
+            <NodeRef refid="19"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerConnection/setLocalAddressString:</TokenIdentifier>
+			<Abstract type="html">Returns the address of the local peer (i.e. server of the connection
+as a string.</Abstract>
+			<DeclaredIn>GCDWebServerConnection.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly) NSString *localAddressString</Declaration>
+			
+			
+			<Anchor>//api/name/localAddressString</Anchor>
+            <NodeRef refid="19"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerConnection/localAddressString</TokenIdentifier>
+			<Abstract type="html">Returns the address of the local peer (i.e. server of the connection
+as a string.</Abstract>
+			<DeclaredIn>GCDWebServerConnection.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly) NSString *localAddressString</Declaration>
+			
+			
+			<Anchor>//api/name/localAddressString</Anchor>
+            <NodeRef refid="19"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/GCDWebServerConnection/localAddressString</TokenIdentifier>
+			<Abstract type="html">Returns the address of the local peer (i.e. server of the connection
+as a string.</Abstract>
+			<DeclaredIn>GCDWebServerConnection.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly) NSString *localAddressString</Declaration>
+			
+			
+			<Anchor>//api/name/localAddressString</Anchor>
+            <NodeRef refid="19"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerConnection/setRemoteAddressData:</TokenIdentifier>
+			<Abstract type="html">Returns the address of the remote peer (i.e. client) of the connection
+as a raw &quot;struct sockaddr&quot;.</Abstract>
+			<DeclaredIn>GCDWebServerConnection.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly) NSData *remoteAddressData</Declaration>
+			
+			
+			<Anchor>//api/name/remoteAddressData</Anchor>
+            <NodeRef refid="19"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerConnection/remoteAddressData</TokenIdentifier>
+			<Abstract type="html">Returns the address of the remote peer (i.e. client) of the connection
+as a raw &quot;struct sockaddr&quot;.</Abstract>
+			<DeclaredIn>GCDWebServerConnection.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly) NSData *remoteAddressData</Declaration>
+			
+			
+			<Anchor>//api/name/remoteAddressData</Anchor>
+            <NodeRef refid="19"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/GCDWebServerConnection/remoteAddressData</TokenIdentifier>
+			<Abstract type="html">Returns the address of the remote peer (i.e. client) of the connection
+as a raw &quot;struct sockaddr&quot;.</Abstract>
+			<DeclaredIn>GCDWebServerConnection.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly) NSData *remoteAddressData</Declaration>
+			
+			
+			<Anchor>//api/name/remoteAddressData</Anchor>
+            <NodeRef refid="19"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerConnection/setRemoteAddressString:</TokenIdentifier>
+			<Abstract type="html">Returns the address of the remote peer (i.e. client) of the connection
+as a string.</Abstract>
+			<DeclaredIn>GCDWebServerConnection.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly) NSString *remoteAddressString</Declaration>
+			
+			
+			<Anchor>//api/name/remoteAddressString</Anchor>
+            <NodeRef refid="19"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerConnection/remoteAddressString</TokenIdentifier>
+			<Abstract type="html">Returns the address of the remote peer (i.e. client) of the connection
+as a string.</Abstract>
+			<DeclaredIn>GCDWebServerConnection.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly) NSString *remoteAddressString</Declaration>
+			
+			
+			<Anchor>//api/name/remoteAddressString</Anchor>
+            <NodeRef refid="19"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/GCDWebServerConnection/remoteAddressString</TokenIdentifier>
+			<Abstract type="html">Returns the address of the remote peer (i.e. client) of the connection
+as a string.</Abstract>
+			<DeclaredIn>GCDWebServerConnection.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly) NSString *remoteAddressString</Declaration>
+			
+			
+			<Anchor>//api/name/remoteAddressString</Anchor>
+            <NodeRef refid="19"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerConnection/setTotalBytesRead:</TokenIdentifier>
+			<Abstract type="html">Returns the total number of bytes received from the remote peer (i.e. client)
+so far.</Abstract>
+			<DeclaredIn>GCDWebServerConnection.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly) NSUInteger totalBytesRead</Declaration>
+			
+			
+			<Anchor>//api/name/totalBytesRead</Anchor>
+            <NodeRef refid="19"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerConnection/totalBytesRead</TokenIdentifier>
+			<Abstract type="html">Returns the total number of bytes received from the remote peer (i.e. client)
+so far.</Abstract>
+			<DeclaredIn>GCDWebServerConnection.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly) NSUInteger totalBytesRead</Declaration>
+			
+			
+			<Anchor>//api/name/totalBytesRead</Anchor>
+            <NodeRef refid="19"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/GCDWebServerConnection/totalBytesRead</TokenIdentifier>
+			<Abstract type="html">Returns the total number of bytes received from the remote peer (i.e. client)
+so far.</Abstract>
+			<DeclaredIn>GCDWebServerConnection.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly) NSUInteger totalBytesRead</Declaration>
+			
+			
+			<Anchor>//api/name/totalBytesRead</Anchor>
+            <NodeRef refid="19"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerConnection/setTotalBytesWritten:</TokenIdentifier>
+			<Abstract type="html">Returns the total number of bytes sent to the remote peer (i.e. client) so far.</Abstract>
+			<DeclaredIn>GCDWebServerConnection.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly) NSUInteger totalBytesWritten</Declaration>
+			
+			
+			<Anchor>//api/name/totalBytesWritten</Anchor>
+            <NodeRef refid="19"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerConnection/totalBytesWritten</TokenIdentifier>
+			<Abstract type="html">Returns the total number of bytes sent to the remote peer (i.e. client) so far.</Abstract>
+			<DeclaredIn>GCDWebServerConnection.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly) NSUInteger totalBytesWritten</Declaration>
+			
+			
+			<Anchor>//api/name/totalBytesWritten</Anchor>
+            <NodeRef refid="19"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/GCDWebServerConnection/totalBytesWritten</TokenIdentifier>
+			<Abstract type="html">Returns the total number of bytes sent to the remote peer (i.e. client) so far.</Abstract>
+			<DeclaredIn>GCDWebServerConnection.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly) NSUInteger totalBytesWritten</Declaration>
+			
+			
+			<Anchor>//api/name/totalBytesWritten</Anchor>
+            <NodeRef refid="19"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/GCDWebServerConnection/initialize</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerConnection.m</DeclaredIn>
+			
+			<Declaration>+ (void)initialize</Declaration>
+			
+			
+			<Anchor>//api/name/initialize</Anchor>
+            <NodeRef refid="19"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerConnection/_initializeResponseHeadersWithStatusCode:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerConnection.m</DeclaredIn>
+			
+			<Declaration>- (void)_initializeResponseHeadersWithStatusCode:(NSInteger)statusCode</Declaration>
+			
+			
+			<Anchor>//api/name/_initializeResponseHeadersWithStatusCode:</Anchor>
+            <NodeRef refid="19"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerConnection/_startProcessingRequest</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerConnection.m</DeclaredIn>
+			
+			<Declaration>- (void)_startProcessingRequest</Declaration>
+			
+			
+			<Anchor>//api/name/_startProcessingRequest</Anchor>
+            <NodeRef refid="19"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerConnection/_finishProcessingRequest:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerConnection.m</DeclaredIn>
+			
+			<Declaration>- (void)_finishProcessingRequest:(GCDWebServerResponse *)response</Declaration>
+			
+			
+			<Anchor>//api/name/_finishProcessingRequest:</Anchor>
+            <NodeRef refid="19"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerConnection/_readBodyWithLength:initialData:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerConnection.m</DeclaredIn>
+			
+			<Declaration>- (void)_readBodyWithLength:(NSUInteger)length initialData:(NSData *)initialData</Declaration>
+			
+			
+			<Anchor>//api/name/_readBodyWithLength:initialData:</Anchor>
+            <NodeRef refid="19"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerConnection/_readChunkedBodyWithInitialData:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerConnection.m</DeclaredIn>
+			
+			<Declaration>- (void)_readChunkedBodyWithInitialData:(NSData *)initialData</Declaration>
+			
+			
+			<Anchor>//api/name/_readChunkedBodyWithInitialData:</Anchor>
+            <NodeRef refid="19"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerConnection/_readRequestHeaders</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerConnection.m</DeclaredIn>
+			
+			<Declaration>- (void)_readRequestHeaders</Declaration>
+			
+			
+			<Anchor>//api/name/_readRequestHeaders</Anchor>
+            <NodeRef refid="19"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerConnection/initWithServer:localAddress:remoteAddress:socket:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerConnection.m</DeclaredIn>
+			
+			<Declaration>- (id)initWithServer:(GCDWebServer *)server localAddress:(NSData *)localAddress remoteAddress:(NSData *)remoteAddress socket:(CFSocketNativeHandle)socket</Declaration>
+			
+			
+			<Anchor>//api/name/initWithServer:localAddress:remoteAddress:socket:</Anchor>
+            <NodeRef refid="19"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerConnection/dealloc</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerConnection.m</DeclaredIn>
+			
+			<Declaration>- (void)dealloc</Declaration>
+			
+			
+			<Anchor>//api/name/dealloc</Anchor>
+            <NodeRef refid="19"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerConnection/open</TokenIdentifier>
+			<Abstract type="html">This method is called when the connection is opened.</Abstract>
+			<DeclaredIn>GCDWebServerConnection.h</DeclaredIn>
+			
+			<Declaration>- (BOOL)open</Declaration>
+			
+			
+			<Anchor>//api/name/open</Anchor>
+            <NodeRef refid="19"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerConnection/didReadBytes:length:</TokenIdentifier>
+			<Abstract type="html">This method is called whenever data has been received
+from the remote peer (i.e. client).</Abstract>
+			<DeclaredIn>GCDWebServerConnection.h</DeclaredIn>
+			
+			<Declaration>- (void)didReadBytes:(const void *)bytes length:(NSUInteger)length</Declaration>
+			
+			
+			<Anchor>//api/name/didReadBytes:length:</Anchor>
+            <NodeRef refid="19"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerConnection/didWriteBytes:length:</TokenIdentifier>
+			<Abstract type="html">This method is called whenever data has been sent
+to the remote peer (i.e. client).</Abstract>
+			<DeclaredIn>GCDWebServerConnection.h</DeclaredIn>
+			
+			<Declaration>- (void)didWriteBytes:(const void *)bytes length:(NSUInteger)length</Declaration>
+			
+			
+			<Anchor>//api/name/didWriteBytes:length:</Anchor>
+            <NodeRef refid="19"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerConnection/rewriteRequestURL:withMethod:headers:</TokenIdentifier>
+			<Abstract type="html">This method is called after the HTTP headers have been received to
+allow replacing the request URL by another one.</Abstract>
+			<DeclaredIn>GCDWebServerConnection.h</DeclaredIn>
+			
+			<Declaration>- (NSURL *)rewriteRequestURL:(NSURL *)url withMethod:(NSString *)method headers:(NSDictionary *)headers</Declaration>
+			
+			
+			<Anchor>//api/name/rewriteRequestURL:withMethod:headers:</Anchor>
+            <NodeRef refid="19"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerConnection/preflightRequest:</TokenIdentifier>
+			<Abstract type="html">Assuming a valid HTTP request was received, this method is called before
+the request is processed.</Abstract>
+			<DeclaredIn>GCDWebServerConnection.h</DeclaredIn>
+			
+			<Declaration>- (GCDWebServerResponse *)preflightRequest:(GCDWebServerRequest *)request</Declaration>
+			
+			
+			<Anchor>//api/name/preflightRequest:</Anchor>
+            <NodeRef refid="19"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerConnection/processRequest:completion:</TokenIdentifier>
+			<Abstract type="html">Assuming a valid HTTP request was received and preflightRequest: returned nil,
+this method is called to process the request by executing the handler&apos;s
+process block.</Abstract>
+			<DeclaredIn>GCDWebServerConnection.h</DeclaredIn>
+			
+			<Declaration>- (void)processRequest:(GCDWebServerRequest *)request completion:(GCDWebServerCompletionBlock)completion</Declaration>
+			
+			
+			<Anchor>//api/name/processRequest:completion:</Anchor>
+            <NodeRef refid="19"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerConnection/overrideResponse:forRequest:</TokenIdentifier>
+			<Abstract type="html">Assuming a valid HTTP request was received and either preflightRequest:
+or processRequest:completion: returned a non-nil GCDWebServerResponse,
+this method is called to override the response.</Abstract>
+			<DeclaredIn>GCDWebServerConnection.h</DeclaredIn>
+			
+			<Declaration>- (GCDWebServerResponse *)overrideResponse:(GCDWebServerResponse *)response forRequest:(GCDWebServerRequest *)request</Declaration>
+			
+			
+			<Anchor>//api/name/overrideResponse:forRequest:</Anchor>
+            <NodeRef refid="19"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerConnection/abortRequest:withStatusCode:</TokenIdentifier>
+			<Abstract type="html">This method is called if any error happens while validing or processing
+the request or if no GCDWebServerResponse was generated during processing.</Abstract>
+			<DeclaredIn>GCDWebServerConnection.h</DeclaredIn>
+			
+			<Declaration>- (void)abortRequest:(GCDWebServerRequest *)request withStatusCode:(NSInteger)statusCode</Declaration>
+			
+			
+			<Anchor>//api/name/abortRequest:withStatusCode:</Anchor>
+            <NodeRef refid="19"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerConnection/close</TokenIdentifier>
+			<Abstract type="html">Called when the connection is closed.</Abstract>
+			<DeclaredIn>GCDWebServerConnection.h</DeclaredIn>
+			
+			<Declaration>- (void)close</Declaration>
+			
+			
+			<Anchor>//api/name/close</Anchor>
+            <NodeRef refid="19"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerConnection/_writeData:withCompletionBlock:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerConnection.m</DeclaredIn>
+			
+			<Declaration>- (void)_writeData:(NSData *)data withCompletionBlock:(WriteDataCompletionBlock)block</Declaration>
+			
+			
+			<Anchor>//api/name/_writeData:withCompletionBlock:</Anchor>
+            <NodeRef refid="19"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerConnection/_writeHeadersWithCompletionBlock:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerConnection.m</DeclaredIn>
+			
+			<Declaration>- (void)_writeHeadersWithCompletionBlock:(WriteHeadersCompletionBlock)block</Declaration>
+			
+			
+			<Anchor>//api/name/_writeHeadersWithCompletionBlock:</Anchor>
+            <NodeRef refid="19"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerConnection/_writeBodyWithCompletionBlock:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerConnection.m</DeclaredIn>
+			
+			<Declaration>- (void)_writeBodyWithCompletionBlock:(WriteBodyCompletionBlock)block</Declaration>
+			
+			
+			<Anchor>//api/name/_writeBodyWithCompletionBlock:</Anchor>
+            <NodeRef refid="19"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerConnection/_readData:withLength:completionBlock:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerConnection.m</DeclaredIn>
+			
+			<Declaration>- (void)_readData:(NSMutableData *)data withLength:(NSUInteger)length completionBlock:(ReadDataCompletionBlock)block</Declaration>
+			
+			
+			<Anchor>//api/name/_readData:withLength:completionBlock:</Anchor>
+            <NodeRef refid="19"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerConnection/_readHeaders:withCompletionBlock:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerConnection.m</DeclaredIn>
+			
+			<Declaration>- (void)_readHeaders:(NSMutableData *)headersData withCompletionBlock:(ReadHeadersCompletionBlock)block</Declaration>
+			
+			
+			<Anchor>//api/name/_readHeaders:withCompletionBlock:</Anchor>
+            <NodeRef refid="19"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerConnection/_readBodyWithRemainingLength:completionBlock:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerConnection.m</DeclaredIn>
+			
+			<Declaration>- (void)_readBodyWithRemainingLength:(NSUInteger)length completionBlock:(ReadBodyCompletionBlock)block</Declaration>
+			
+			
+			<Anchor>//api/name/_readBodyWithRemainingLength:completionBlock:</Anchor>
+            <NodeRef refid="19"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerConnection/_readNextBodyChunk:completionBlock:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerConnection.m</DeclaredIn>
+			
+			<Declaration>- (void)_readNextBodyChunk:(NSMutableData *)chunkData completionBlock:(ReadBodyCompletionBlock)block</Declaration>
+			
+			
+			<Anchor>//api/name/_readNextBodyChunk:completionBlock:</Anchor>
+            <NodeRef refid="19"/>
+		</Token>
+		
+        
+	</File>
+</Tokens>

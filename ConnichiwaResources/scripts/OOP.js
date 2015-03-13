@@ -37,6 +37,7 @@ var OOP = (function() {
     var thePackage = packages[packageName];
     thePackage[className] = theClass.package;
     theClass.private.package = thePackage;
+    theClass.public.package = thePackage;
 
     //Save all scopes of the class OOP-internally
     //We need those if we want to extend the class later
@@ -88,6 +89,7 @@ var OOP = (function() {
         } else if (propertyName.indexOf("private ") === 0) {
           propertyName = propertyName.substr(8);
         }
+        visibility = "public";
 
         //
         // METHODS
@@ -163,6 +165,8 @@ var OOP = (function() {
               });
 
               Object.defineProperty(theClass.public, propertyName, {
+                // get : getter(theClass.package, propertyName),
+                // set : setter(theClass.package, propertyName)
                 get : errorGetter,
                 set : errorSetter
               });

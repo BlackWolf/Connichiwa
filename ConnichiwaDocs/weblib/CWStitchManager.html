@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Namespace: CWStitchManager</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Namespace: CWStitchManager</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2>
+        CWStitchManager
+        </h2>
+        
+    
+
+    
+        <div class="description"><p>This manager handles everything stitch-related. It detects stitch gestures,
+   calculates the stitched device's device transformation in the global
+   coordinate system and is also responsible for handling stitch-related
+   events and detecting unstitches. It also provides methods for accessing
+   stitch-related information, such as if the device is stitched and the
+   current device transformation</p></div>
+    
+
+    
+
+    <b>Members</b><br />
+    <ul>
+    
+        <li><a href="CWStitchManager.html#.ignoreMoveAxis">ignoreMoveAxis</a></li>
+    
+        <li><a href="CWStitchManager.html#.unstitchOnMove">unstitchOnMove</a></li>
+    
+    </ul>
+    
+    
+    <b>Methods</b><br />
+    <ul>
+    
+        <li><a href="CWStitchManager.html#.getDeviceTransformation">getDeviceTransformation</a></li>
+    
+        <li><a href="CWStitchManager.html#.getLocalDeviceTransformation">getLocalDeviceTransformation</a></li>
+    
+        <li><a href="CWStitchManager.html#.isStitched">isStitched</a></li>
+    
+        <li><a href="CWStitchManager.html#.unstitch">unstitch</a></li>
+    
+    </ul>
+    
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+            <!-- <div class="description"><p>This manager handles everything stitch-related. It detects stitch gestures,
+   calculates the stitched device's device transformation in the global
+   coordinate system and is also responsible for handling stitch-related
+   events and detecting unstitches. It also provides methods for accessing
+   stitch-related information, such as if the device is stitched and the
+   current device transformation</p></div> -->
+        
+
+        
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="common_CWStitchManager.js.html">common/CWStitchManager.js</a>, <a href="common_CWStitchManager.js.html#line31">line 31</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+
+<hr>
+
+<h4 class="name" id=".ignoreMoveAxis"><span class="type-signature">(static) </span>ignoreMoveAxis<span class="type-signature"> :Array</span></h4>
+
+
+
+
+<div class="description">
+    <p>If <a href="CWStitchManager.html#.unstitchOnMove">CWStitchManager.unstitchOnMove</a> is set to true, this property
+   determines axis that do <strong>not</strong> cause an unstitch of the device. It is
+   an array that is either empty (all axis can cause an unstitch) or can
+   contain one or multiple of the string values &quot;x&quot;, &quot;y&quot;, &quot;z&quot; (to ignore
+   accelerometer axis) or &quot;alpha&quot;, &quot;beta&quot;, &quot;gamma&quot; (to ignore gyroscope
+   axis)</p>
+</div>
+
+
+
+    <!-- <h5>Type:</h5> -->
+    <!-- <ul> -->
+        <!-- <li> -->
+        <b>Type</b>
+            
+<span class="param-type">Array</span>
+
+
+        <!-- </li> -->
+    <!-- </ul> -->
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy">
+            <li>[ ]</li>
+        </ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="common_CWStitchManager.js.html">common/CWStitchManager.js</a>, <a href="common_CWStitchManager.js.html#line88">line 88</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+
+<hr>
+
+<h4 class="name" id=".unstitchOnMove"><span class="type-signature">(static) </span>unstitchOnMove<span class="type-signature"> :Boolean</span></h4>
+
+
+
+
+<div class="description">
+    <p>Determines if Connichiwa will automatically unstitch this device if it is
+   moved</p>
+</div>
+
+
+
+    <!-- <h5>Type:</h5> -->
+    <!-- <ul> -->
+        <!-- <li> -->
+        <b>Type</b>
+            
+<span class="param-type">Boolean</span>
+
+
+        <!-- </li> -->
+    <!-- </ul> -->
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy">
+            <li>true</li>
+        </ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="common_CWStitchManager.js.html">common/CWStitchManager.js</a>, <a href="common_CWStitchManager.js.html#line75">line 75</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <hr>
+
+    <h4 class="name" id=".getDeviceTransformation"><span class="type-signature">(static) </span>getDeviceTransformation<span class="signature">(device)</span><span class="type-signature"> &rarr; {<a href="CWStitchManager.html#.DeviceTransformation">CWStitchManager.DeviceTransformation</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>(Available on master device only)</p>
+<p>Returns the transformation of the given device</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>device</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="CWDevice.html">CWDevice</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The device to get the transformation of</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>The device transformation of
+   the device</p>
+</div>
+
+
+
+<!-- <dl> -->
+    <!-- <dt> -->
+        <b>Type</b>
+    <!-- </dt> -->
+    <!-- <dd> -->
+        
+<span class="param-type"><a href="CWStitchManager.html#.DeviceTransformation">CWStitchManager.DeviceTransformation</a></span>
+
+
+    <!-- </dd> -->
+<!-- </dl> -->
+
+    
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="master_CWStitchManager.js.html">master/CWStitchManager.js</a>, <a href="master_CWStitchManager.js.html#line40">line 40</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+        
+            
+
+    
+
+    <hr>
+
+    <h4 class="name" id=".getLocalDeviceTransformation"><span class="type-signature">(static) </span>getLocalDeviceTransformation<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="CWStitchManager.html#.DeviceTransformation">CWStitchManager.DeviceTransformation</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Returns this device's current device transformation, which is this device's
+   position, rotation and size in the global coordinate system</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>The current device
+   transformation</p>
+</div>
+
+
+
+<!-- <dl> -->
+    <!-- <dt> -->
+        <b>Type</b>
+    <!-- </dt> -->
+    <!-- <dd> -->
+        
+<span class="param-type"><a href="CWStitchManager.html#.DeviceTransformation">CWStitchManager.DeviceTransformation</a></span>
+
+
+    <!-- </dd> -->
+<!-- </dl> -->
+
+    
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="common_CWStitchManager.js.html">common/CWStitchManager.js</a>, <a href="common_CWStitchManager.js.html#line258">line 258</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+        
+            
+
+    
+
+    <hr>
+
+    <h4 class="name" id=".isStitched"><span class="type-signature">(static) </span>isStitched<span class="signature">()</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Determines if the device is currently stitched</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>true if the device is currently stitched, otherwise false</p>
+</div>
+
+
+
+<!-- <dl> -->
+    <!-- <dt> -->
+        <b>Type</b>
+    <!-- </dt> -->
+    <!-- <dd> -->
+        
+<span class="param-type">Boolean</span>
+
+
+    <!-- </dd> -->
+<!-- </dl> -->
+
+    
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="common_CWStitchManager.js.html">common/CWStitchManager.js</a>, <a href="common_CWStitchManager.js.html#line246">line 246</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+        
+            
+
+    
+
+    <hr>
+
+    <h4 class="name" id=".unstitch"><span class="type-signature">(static) </span>unstitch<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Unstitches this device or does nothing if the device is not stitched. Note
+   that the unstitch is done asynchronously. If you rely on the device
+   being unstitched, wait for the event:wasunstitched event to be
+   fired.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="common_CWStitchManager.js.html">common/CWStitchManager.js</a>, <a href="common_CWStitchManager.js.html#line236">line 236</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+        
+    
+
+    
+        <h3 class="subsection-title">Type Definitions</h3>
+
+        
+                
+
+<hr>
+
+<h4 class="name" id=".DeviceTransformation">DeviceTransformation</h4>
+
+
+
+
+
+
+    <!-- <h5>Type:</h5> -->
+    <!-- <ul> -->
+        <!-- <li> -->
+        <b>Type</b>
+            
+<span class="param-type">Object</span>
+
+
+        <!-- </li> -->
+    <!-- </ul> -->
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>x</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The x offset of this device in the global coordinate
+   system</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>y</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The y offset of this device in the global coordinate
+   system</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>width</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The device's viewport width in the global
+   coordinate system, which can differ from the device's actual viewport
+   width due to PPI differences between the devices</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>height</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The device's viewport height in the global
+   coordinate system, which can differ from the device's actual viewport
+   height due to PPI differences between the devices</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>rotation</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The device's rotation relative to the global
+   coordinate system axis. Connichiwa can only detect 90º rotiations, so
+   this property is either 0, 90, 180 or 270</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>scale</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The scale of this device's content. Connichiwa
+   adjusts the scale of stitched device's to compensate for display PPI
+   differences. If content is scaled with this scale on every device, it
+   will appear the same physicial size on all stitched devices</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="common_CWStitchManager.js.html">common/CWStitchManager.js</a>, <a href="common_CWStitchManager.js.html#line6">line 6</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+            
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="CWDevice.html">CWDevice</a></li><li><a href="CWLocation.html">CWLocation</a></li><li><a href="CWVector.html">CWVector</a></li></ul><h3>Namespaces</h3><ul><li><a href="Connichiwa.html">Connichiwa</a></li><li><a href="CWDebug.html">CWDebug</a></li><li><a href="CWDeviceManager.html">CWDeviceManager</a></li><li><a href="CWGyroscope.html">CWGyroscope</a></li><li><a href="CWStitchManager.html">CWStitchManager</a></li><li><a href="CWSystemInfo.html">CWSystemInfo</a></li><li><a href="CWUtil.html">CWUtil</a></li></ul><h3>Events</h3><ul><li><a href="Connichiwa.html#.event:onLoad">onLoad</a></li><li><a href="global.html#event:accelerometerUpdate">accelerometerUpdate</a></li><li><a href="global.html#event:connectfailed">connectfailed</a></li><li><a href="global.html#event:deviceconnected">deviceconnected</a></li><li><a href="global.html#event:devicedetected">devicedetected</a></li><li><a href="global.html#event:devicedisconnected">devicedisconnected</a></li><li><a href="global.html#event:devicedistancechanged">devicedistancechanged</a></li><li><a href="global.html#event:devicelost">devicelost</a></li><li><a href="global.html#event:gotstitchneighbor">gotstitchneighbor</a></li><li><a href="global.html#event:gyroscopeUpdate">gyroscopeUpdate</a></li><li><a href="global.html#event:ready">ready</a></li><li><a href="global.html#event:wasStitched">wasStitched</a></li><li><a href="global.html#event:wasUnstitched">wasUnstitched</a></li></ul><h3><a href="global.html">Global</a></h3>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta2</a> on Fri Mar 13 2015 16:04:19 GMT+0100 (CET)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

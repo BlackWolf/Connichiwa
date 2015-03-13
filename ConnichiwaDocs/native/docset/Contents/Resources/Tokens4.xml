@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Classes/CWDebug.html">
+	<File path="Classes/CWBluetoothManager.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/cl/CWDebug</TokenIdentifier>
-			<Abstract type="html">Class that holds everything we need to nicely debug</Abstract>
-			<DeclaredIn>CWDebug.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/cl/CWBluetoothManager</TokenIdentifier>
+			<Abstract type="html">The CWBluetoothManager represents this device as a BT device. It can advertise this device to other devices and monitor for other devices. Furthermore, the delegate
+is notified of important events, for example detected devices, changes in device distance or established connections.</Abstract>
+			<DeclaredIn>CWBluetoothManager.h</DeclaredIn>
             
 			
 			<NodeRef refid="4"/>
@@ -13,19 +14,1488 @@
 		
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/clm/CWDebug/executeInDebug:</TokenIdentifier>
-			<Abstract type="html">Executes the given code only when we are in debug mode</Abstract>
-			<DeclaredIn>CWDebug.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/setDelegate:</TokenIdentifier>
+			<Abstract type="html">The delegate that receives events by this class</Abstract>
+			<DeclaredIn>CWBluetoothManager.h</DeclaredIn>
 			
-			<Declaration>+ (void)executeInDebug:(void ( ^ ) ( void ))block</Declaration>
+			<Declaration>@property (readwrite) id&lt;CWBluetoothManagerDelegate&gt; delegate</Declaration>
+			
+			
+			<Anchor>//api/name/delegate</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/delegate</TokenIdentifier>
+			<Abstract type="html">The delegate that receives events by this class</Abstract>
+			<DeclaredIn>CWBluetoothManager.h</DeclaredIn>
+			
+			<Declaration>@property (readwrite) id&lt;CWBluetoothManagerDelegate&gt; delegate</Declaration>
+			
+			
+			<Anchor>//api/name/delegate</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CWBluetoothManager/delegate</TokenIdentifier>
+			<Abstract type="html">The delegate that receives events by this class</Abstract>
+			<DeclaredIn>CWBluetoothManager.h</DeclaredIn>
+			
+			<Declaration>@property (readwrite) id&lt;CWBluetoothManagerDelegate&gt; delegate</Declaration>
+			
+			
+			<Anchor>//api/name/delegate</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/setIsScanning:</TokenIdentifier>
+			<Abstract type="html">Determines if the device is currently scanning for other BT devices</Abstract>
+			<DeclaredIn>CWBluetoothManager.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) BOOL isScanning</Declaration>
+			
+			
+			<Anchor>//api/name/isScanning</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/isScanning</TokenIdentifier>
+			<Abstract type="html">Determines if the device is currently scanning for other BT devices</Abstract>
+			<DeclaredIn>CWBluetoothManager.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) BOOL isScanning</Declaration>
+			
+			
+			<Anchor>//api/name/isScanning</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CWBluetoothManager/isScanning</TokenIdentifier>
+			<Abstract type="html">Determines if the device is currently scanning for other BT devices</Abstract>
+			<DeclaredIn>CWBluetoothManager.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) BOOL isScanning</Declaration>
+			
+			
+			<Anchor>//api/name/isScanning</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/initWithApplicationState:</TokenIdentifier>
+			<Abstract type="html">Intializes a new CWBluetoothManager</Abstract>
+			<DeclaredIn>CWBluetoothManager.h</DeclaredIn>
+			
+			<Declaration>- (instancetype)initWithApplicationState:(id&lt;CWWebApplicationState&gt;)appState</Declaration>
 			<Parameters>
 				<Parameter>
-					<Name>block</Name>
-					<Abstract type="html">The code to execute in debug</Abstract>
+					<Name>appState</Name>
+					<Abstract type="html">A CWWebApplicationState implementation that allows the BT Manager to access the global state</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">A new instance of CWBluetoothManager</Abstract></ReturnValue>
+			<Anchor>//api/name/initWithApplicationState:</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/startScanning</TokenIdentifier>
+			<Abstract type="html">Starts scanning for other, nearby devices</Abstract>
+			<DeclaredIn>CWBluetoothManager.h</DeclaredIn>
+			
+			<Declaration>- (void)startScanning</Declaration>
+			
+			
+			<Anchor>//api/name/startScanning</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/startAdvertising</TokenIdentifier>
+			<Abstract type="html">Starts advertising this device with the unique identifier stored in the application state. Will make this device detectable by other BT devices.</Abstract>
+			<DeclaredIn>CWBluetoothManager.h</DeclaredIn>
+			
+			<Declaration>- (void)startAdvertising</Declaration>
+			
+			
+			<Anchor>//api/name/startAdvertising</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/stopScanning</TokenIdentifier>
+			<Abstract type="html">Stops scanning for other devices</Abstract>
+			<DeclaredIn>CWBluetoothManager.h</DeclaredIn>
+			
+			<Declaration>- (void)stopScanning</Declaration>
+			
+			
+			<Anchor>//api/name/stopScanning</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/stopAdvertising</TokenIdentifier>
+			<Abstract type="html">Stops advertising this device</Abstract>
+			<DeclaredIn>CWBluetoothManager.h</DeclaredIn>
+			
+			<Declaration>- (void)stopAdvertising</Declaration>
+			
+			
+			<Anchor>//api/name/stopAdvertising</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/isAdvertising</TokenIdentifier>
+			<Abstract type="html">Determines if the device is currently advertising itself to other BT devices</Abstract>
+			<DeclaredIn>CWBluetoothManager.h</DeclaredIn>
+			
+			<Declaration>- (BOOL)isAdvertising</Declaration>
+			
+			<ReturnValue><Abstract type="html">true if the device is currently advertising over BT, otherwise false</Abstract></ReturnValue>
+			<Anchor>//api/name/isAdvertising</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/sendNetworkAddressesToDevice:</TokenIdentifier>
+			<Abstract type="html">Tells the BTManager to send our network interface addresses to the device with the given identifier. The manager will then try to establish a BT connection to that device and transfer the network addresses. This is effectively a request to use the given device as a remote device.</Abstract>
+			<DeclaredIn>CWBluetoothManager.h</DeclaredIn>
+			
+			<Declaration>- (void)sendNetworkAddressesToDevice:(NSString *)deviceIdentifier</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>deviceIdentifier</Name>
+					<Abstract type="html">The identifier of the other device</Abstract>
 				</Parameter>
 			</Parameters>
 			
-			<Anchor>//api/name/executeInDebug:</Anchor>
+			<Anchor>//api/name/sendNetworkAddressesToDevice:</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/_doStartScanning</TokenIdentifier>
+			<Abstract type="html">Actually starts scanning for other BT devices. The public startScanning will wait for the CBCentralManager to power on before calling this method.</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>- (void)_doStartScanning</Declaration>
+			
+			
+			<Anchor>//api/name/_doStartScanning</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/_doStartAdvertising</TokenIdentifier>
+			<Abstract type="html">Actually starts advertising this device to other BT devices. The public startAdvertising will wait for the CBPeripheralManager to power on before calling this method.</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>- (void)_doStartAdvertising</Declaration>
+			
+			
+			<Anchor>//api/name/_doStartAdvertising</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/_stopScanningTemporarily</TokenIdentifier>
+			<Abstract type="html">Calls stopScanning but marks this stop as a temporary stop so BT devices will be not be reported as lost. It is the responsibility of the manager to resume scanning at some point, however, this method does not control the length of the scan stop.</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>- (void)_stopScanningTemporarily</Declaration>
+			
+			
+			<Anchor>//api/name/_stopScanningTemporarily</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/startLostConnectionTimer</TokenIdentifier>
+			<Abstract type="html">Starts the lostConnectionsTimer, enabling a periodic check for lost BT devices</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>- (void)startLostConnectionTimer</Declaration>
+			
+			
+			<Anchor>//api/name/startLostConnectionTimer</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/stopLostConnectionTimer</TokenIdentifier>
+			<Abstract type="html">Stops the lostConnectionsTimer, disabling checking for lost BT device</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>- (void)stopLostConnectionTimer</Declaration>
+			
+			
+			<Anchor>//api/name/stopLostConnectionTimer</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/_connectPeripheral:</TokenIdentifier>
+			<Abstract type="html">Will ask the CBCentralManager to connect to the given CBPeripheral. This method will temporarily stop scanning for other BT devices, because scanning and connecting simultanously can lead to problems. Scanning will be resumed either in centralManager:didConnectPeripheral: or centralManager:didFailToConnectPeripheral:error:</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>- (void)_connectPeripheral:(CBPeripheral *)peripheral</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>peripheral</Name>
+					<Abstract type="html">The CBPeripheral to connect to</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/_connectPeripheral:</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/_disconnectPeripheral:</TokenIdentifier>
+			<Abstract type="html">Will ask the CBCentralManager to disconnect the given CBPeripheral.</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>- (void)_disconnectPeripheral:(CBPeripheral *)peripheral</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>peripheral</Name>
+					<Abstract type="html">The CBPeripheral to disconnect</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/_disconnectPeripheral:</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/_maybeRetryConnect:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>- (BOOL)_maybeRetryConnect:(CWBluetoothConnection *)connection</Declaration>
+			
+			
+			<Anchor>//api/name/_maybeRetryConnect:</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/_addRSSIMeasure:toConnection:</TokenIdentifier>
+			<Abstract type="html">This method adds a new RSSI measure to the given CWBluetoothConnection. CWBluetoothConnection will use advanced algorithms to determine an average RSSI that is robust to outliers. Furthermore, it determines if a &quot;distance changed&quot; event should be sent to the delegate based on time since the last event and the RSSI change since then.</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>- (void)_addRSSIMeasure:(double)RSSI toConnection:(CWBluetoothConnection *)connection</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>RSSI</Name>
+					<Abstract type="html">The new RSSI measure</Abstract>
+				</Parameter><Parameter>
+					<Name>connection</Name>
+					<Abstract type="html">The connection which contains the CBPeripheral that the RSSI was measured for</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/_addRSSIMeasure:toConnection:</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/_removeLostConnections:</TokenIdentifier>
+			<Abstract type="html">Called when the lostConnectionsTimer fires. This method checks if any BT devices have timed out and if so marks them as lost and sends an appropiate message to our delegate.</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>- (void)_removeLostConnections:(NSTimer *)timer</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>timer</Name>
+					<Abstract type="html">The timer that caused the method to fire</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/_removeLostConnections:</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/_sendInitialDataToCentral:</TokenIdentifier>
+			<Abstract type="html">Sends our initial device data to the given CBCentral via the initial characteristic. This method should be triggered after a central subscribed to our initial characteristic.</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>- (void)_sendInitialDataToCentral:(CBCentral *)central</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>central</Name>
+					<Abstract type="html">The CBCentral that subscribed to the initial characteristic and should receive the data</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/_sendInitialDataToCentral:</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/_receivedInitialData:forPeripheral:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>- (void)_receivedInitialData:(NSData *)data forPeripheral:(CBPeripheral *)peripheral</Declaration>
+			
+			
+			<Anchor>//api/name/_receivedInitialData:forPeripheral:</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/iptest:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>- (void)iptest:(NSArray *)thedata</Declaration>
+			
+			
+			<Anchor>//api/name/iptest:</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/_sendIPsToPeripheral:onCharacteristic:</TokenIdentifier>
+			<Abstract type="html">Sends our network interface addresses to the given peripheral via the given writeable characteristic, which should be the other devices IP characteristic.</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>- (void)_sendIPsToPeripheral:(CBPeripheral *)peripheral onCharacteristic:(CBCharacteristic *)characteristic</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>peripheral</Name>
+					<Abstract type="html">The CBPeripheral to send the addresses to</Abstract>
+				</Parameter><Parameter>
+					<Name>characteristic</Name>
+					<Abstract type="html">The writeable characteristic to write the IPs into</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/_sendIPsToPeripheral:onCharacteristic:</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/_receivedIPData:forCentral:lastWriteRequest:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>- (void)_receivedIPData:(NSData *)data forCentral:(CBCentral *)central lastWriteRequest:(CBATTRequest *)writeRequest</Declaration>
+			
+			
+			<Anchor>//api/name/_receivedIPData:forCentral:lastWriteRequest:</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/_didReceiveIPWriteResponse:fromPeripheral:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>- (void)_didReceiveIPWriteResponse:(NSError *)error fromPeripheral:(CBPeripheral *)peripheral</Declaration>
+			
+			
+			<Anchor>//api/name/_didReceiveIPWriteResponse:fromPeripheral:</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/resetMC</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>- (void)resetMC</Declaration>
+			
+			
+			<Anchor>//api/name/resetMC</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/_mcConnect:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>- (void)_mcConnect:(CWBluetoothConnection *)connection</Declaration>
+			
+			
+			<Anchor>//api/name/_mcConnect:</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/_mcDisconnect:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>- (void)_mcDisconnect:(CWBluetoothConnection *)connection</Declaration>
+			
+			
+			<Anchor>//api/name/_mcDisconnect:</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/_connectionForIdentifier:</TokenIdentifier>
+			<Abstract type="html">Retrieves the CWBluetoothConnection that belongs to the device with the given identifier from the connections array</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>- (CWBluetoothConnection *)_connectionForIdentifier:(NSString *)identifier</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>identifier</Name>
+					<Abstract type="html">The identifier of the device</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">The CWBluetoothConnection that belongs to identifier. nil if no connection is stored (=the device has not been detected yet) or the identifier is invalid.</Abstract></ReturnValue>
+			<Anchor>//api/name/_connectionForIdentifier:</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/_connectionForPeripheral:</TokenIdentifier>
+			<Abstract type="html">Retrieves the CWBluetoothConnection that belongs to the device with the given CBPeripheral from the connections array. Can therefore be used to retrieve the CWBluetoothConnection for a given bluetooth device.</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>- (CWBluetoothConnection *)_connectionForPeripheral:(CBPeripheral *)peripheral</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>peripheral</Name>
+					<Abstract type="html">The CBPeripheral of the device</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">The CWBluetoothConnection that belongs to peripheral. nil if no connection is stored (=the device has not been detected yet) or the peripheral is invalid.</Abstract></ReturnValue>
+			<Anchor>//api/name/_connectionForPeripheral:</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/didReceiveMessage:fromPeripheral:withCharacteristic:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>- (void)didReceiveMessage:(NSData *)data fromPeripheral:(CBPeripheral *)peripheral withCharacteristic:(CBCharacteristic *)characteristic</Declaration>
+			
+			
+			<Anchor>//api/name/didReceiveMessage:fromPeripheral:withCharacteristic:</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/didReceiveMessage:fromCentral:withCharacteristic:lastWriteRequest:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>- (void)didReceiveMessage:(NSData *)data fromCentral:(CBCentral *)central withCharacteristic:(CBCharacteristic *)characteristic lastWriteRequest:(CBATTRequest *)request</Declaration>
+			
+			
+			<Anchor>//api/name/didReceiveMessage:fromCentral:withCharacteristic:lastWriteRequest:</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/centralManagerDidUpdateState:</TokenIdentifier>
+			<Abstract type="html">Called when the state of the CBCentralManager is updated. Mainly used to detect when the CentralManager is powered on and ready to be used</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>- (void)centralManagerDidUpdateState:(CBCentralManager *)central</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>central</Name>
+					<Abstract type="html">The CBCentralManager instance that changed its state</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/centralManagerDidUpdateState:</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/centralManager:didDiscoverPeripheral:advertisementData:RSSI:</TokenIdentifier>
+			<Abstract type="html">Called when the CBCentralManager discoverd a peripheral nearby. Since we scan for other devices with duplicates enabled this will also be called for devices we have previously discovered or even connected to. This will NOT be called for our own device, though. Since this method is called about ten times per second for each device nearby, this method shouldn&apos;t do anything heavy.</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>- (void)centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>central</Name>
+					<Abstract type="html">The CBCentralManager that discovered the peripheral</Abstract>
+				</Parameter><Parameter>
+					<Name>peripheral</Name>
+					<Abstract type="html">The detected peripheral</Abstract>
+				</Parameter><Parameter>
+					<Name>advertisementData</Name>
+					<Abstract type="html">The advertisement data sent by the peripheral (should always be nil for Connichiwa devices)</Abstract>
+				</Parameter><Parameter>
+					<Name>RSSI</Name>
+					<Abstract type="html">The RSSI (signal strength) of the other device</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/centralManager:didDiscoverPeripheral:advertisementData:RSSI:</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/centralManager:didConnectPeripheral:</TokenIdentifier>
+			<Abstract type="html">Called when a connection was established to another peripheral. This does not mean that we can transfer from or to the device yet, information transfer is done via characteristics that reside inside of services, so we need to detect the connichiwa service and the characteristic we need before we can transfer data. When the services where discovered, CBPeripheral&apos;s peripheral:didDiscoverServices: is called</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>- (void)centralManager:(CBCentralManager *)central didConnectPeripheral:(CBPeripheral *)peripheral</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>central</Name>
+					<Abstract type="html">The CBCentralManager that connected to the peripheral</Abstract>
+				</Parameter><Parameter>
+					<Name>peripheral</Name>
+					<Abstract type="html">The peripheral connected to</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/centralManager:didConnectPeripheral:</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/centralManager:didFailToConnectPeripheral:error:</TokenIdentifier>
+			<Abstract type="html">Called when a connection to a peripheral failed. This shouldn&apos;t happen too often, but can happen with BT, so we need to take care of things here.</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>- (void)centralManager:(CBCentralManager *)central didFailToConnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>central</Name>
+					<Abstract type="html">The CBCentralManager that failed to connect</Abstract>
+				</Parameter><Parameter>
+					<Name>peripheral</Name>
+					<Abstract type="html">The peripheral that was not successfully connected to</Abstract>
+				</Parameter><Parameter>
+					<Name>error</Name>
+					<Abstract type="html">The error message describing the reason for the failure</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/centralManager:didFailToConnectPeripheral:error:</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/centralManager:didDisconnectPeripheral:error:</TokenIdentifier>
+			<Abstract type="html">Called when a peripheral disconnected. This might be because the Connichiwa application was shut down on the other device, because it moved out of range, because of a BT error or because of other reasons. We need to be able to handle a disconnect at ANY time and clean up accordingly.</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>- (void)centralManager:(CBCentralManager *)central didDisconnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>central</Name>
+					<Abstract type="html">The CBCentralManager that was connected to the peripheral</Abstract>
+				</Parameter><Parameter>
+					<Name>peripheral</Name>
+					<Abstract type="html">The peripheral that disconnected</Abstract>
+				</Parameter><Parameter>
+					<Name>error</Name>
+					<Abstract type="html">An error describing the reason for the disconnect</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/centralManager:didDisconnectPeripheral:error:</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/peripheral:didDiscoverServices:</TokenIdentifier>
+			<Abstract type="html">Called when we discovered the Connichiwa service for a peripheral or the discovery failed. Before we can transfer data, we still need to discover the correct characteristic - depending on the data we want to transfer. When the characteristic was discovered, CBPeripheral&apos;s peripheral:didDiscoverCharacteristicsForService:error: will be called.</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>- (void)peripheral:(CBPeripheral *)peripheral didDiscoverServices:(NSError *)error</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>peripheral</Name>
+					<Abstract type="html">The CBPeripheral that contains the discovered Connichiwa service</Abstract>
+				</Parameter><Parameter>
+					<Name>error</Name>
+					<Abstract type="html">An error describing the reason of a discovery failure, or nil if the discovery was successful</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/peripheral:didDiscoverServices:</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/peripheral:didDiscoverCharacteristicsForService:error:</TokenIdentifier>
+			<Abstract type="html">Called when we discovered a characteristic for a peripheral or the discovery failed. When successful, we can either send or receive data, depending on the type of characteristic that was discovered:
+1) Notifyable characteristics (e.g. the initial characteristic) are used to receive data from the peripheral. Once we called CBPeripheral&apos;s setNotifyValue:forCharacteristic we will be notified when the other device writes to the characteristic via peripheral:didUpdateValueForCharacteristic:error:
+2) Writeable characteristics (e.g. the IP characteristic) are used to send data to a peripheral. Calling the CBPeripheral&apos;s writeValue:forCharacteristic:type: method will trigger CBPeripheralManager&apos;s peripheralManager:didReceiveWriteRequests: on the other device. Also, we will be notified if the write succeeded. For every write, peripheral didWriteValueForCharacteristic:error: will be called with the response code of the write.</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>- (void)peripheral:(CBPeripheral *)peripheral didDiscoverCharacteristicsForService:(CBService *)service error:(NSError *)error</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>peripheral</Name>
+					<Abstract type="html">The peripheral that offers the characteristic</Abstract>
+				</Parameter><Parameter>
+					<Name>service</Name>
+					<Abstract type="html">The service the characteristic belongs to</Abstract>
+				</Parameter><Parameter>
+					<Name>error</Name>
+					<Abstract type="html">An error giving a description of the discovery failure, or nil if no failure occured</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/peripheral:didDiscoverCharacteristicsForService:error:</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/peripheral:didUpdateValueForCharacteristic:error:</TokenIdentifier>
+			<Abstract type="html">Called when a remote device updated the value of a notifyable characteristic for which we activated notifications. Effectively, this means the remote device transfered data to us via this characteristic. The transferred data is stored in characteristic.value</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>- (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>peripheral</Name>
+					<Abstract type="html">The CBPeripheral that the characteristic belongs to</Abstract>
+				</Parameter><Parameter>
+					<Name>characteristic</Name>
+					<Abstract type="html">The characteristic whose value was updated</Abstract>
+				</Parameter><Parameter>
+					<Name>error</Name>
+					<Abstract type="html">An error detailing a reason for failure if one occured, nil if no failure occured</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/peripheral:didUpdateValueForCharacteristic:error:</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/peripheral:didWriteValueForCharacteristic:error:</TokenIdentifier>
+			<Abstract type="html">Called when we transferred data to a remote device via a writable characteristic. After the data was received by the other device, the other device can report either a success (resulting in a nil error), or an error (resulting in an NSError object describing the error).</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>- (void)peripheral:(CBPeripheral *)peripheral didWriteValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>peripheral</Name>
+					<Abstract type="html">The peripheral the characteristic belongs to</Abstract>
+				</Parameter><Parameter>
+					<Name>characteristic</Name>
+					<Abstract type="html">The writable characteristic that was written to</Abstract>
+				</Parameter><Parameter>
+					<Name>error</Name>
+					<Abstract type="html">An error if the other device reported back one, nil on success</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/peripheral:didWriteValueForCharacteristic:error:</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/peripheralManagerDidUpdateState:</TokenIdentifier>
+			<Abstract type="html">Called when the state of the CBPeripheralManager was updated. Mainly used to to detect when the PeripheralManager was powered on and is ready to be used.</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>- (void)peripheralManagerDidUpdateState:(CBPeripheralManager *)peripheralManager</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>peripheralManager</Name>
+					<Abstract type="html">The CBPeripheralManager whose state changed</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/peripheralManagerDidUpdateState:</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/peripheralManager:didAddService:error:</TokenIdentifier>
+			<Abstract type="html">Called after the peripheral manager&apos;s addService: was called and the service was added to the peripheral and is now published. If startAdvertising was called before this callback arrives, we will repeat the call.</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>- (void)peripheralManager:(CBPeripheralManager *)peripheral didAddService:(CBService *)service error:(NSError *)error</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>peripheral</Name>
+					<Abstract type="html">The PeripheralManager the service was added to</Abstract>
+				</Parameter><Parameter>
+					<Name>service</Name>
+					<Abstract type="html">The service that was added</Abstract>
+				</Parameter><Parameter>
+					<Name>error</Name>
+					<Abstract type="html">An error if something went wrong or nil if the service was added successfully</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/peripheralManager:didAddService:error:</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/peripheralManagerIsReadyToUpdateSubscribers:</TokenIdentifier>
+			<Abstract type="html">Called when sending data to a central via a notifyable characteristic failed because the transmission queue was full. The call to this method indicates that the characteristic can hold data again.</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>- (void)peripheralManagerIsReadyToUpdateSubscribers:(CBPeripheralManager *)peripheral</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>peripheral</Name>
+					<Abstract type="html">The CBPeripheralManager that triggered this message</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/peripheralManagerIsReadyToUpdateSubscribers:</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/peripheralManager:didReceiveWriteRequests:</TokenIdentifier>
+			<Abstract type="html">Called whenever we received a write request for a characteristic. This is called when a central sends us data via a writable characteristic. The sent data is stored in a request&apos;s value property. A call to this method can contain multiple write requests, but we should only send a single response. Responding will trigger the CBPeripheral&apos;s peripheral:didWriteValueForCharacteristic:error: method on the sending device.</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>- (void)peripheralManager:(CBPeripheralManager *)peripheral didReceiveWriteRequests:(NSArray *)requests</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>peripheral</Name>
+					<Abstract type="html">The CBPeripheralManager that received the request</Abstract>
+				</Parameter><Parameter>
+					<Name>requests</Name>
+					<Abstract type="html">An array of one or more write requests</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/peripheralManager:didReceiveWriteRequests:</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/peripheralManager:central:didSubscribeToCharacteristic:</TokenIdentifier>
+			<Abstract type="html">Called when a remote central subscribed to one of our notifyable characteristics via setNotify:forCharacteristic:</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>- (void)peripheralManager:(CBPeripheralManager *)peripheral central:(CBCentral *)central didSubscribeToCharacteristic:(CBCharacteristic *)characteristic</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>peripheral</Name>
+					<Abstract type="html">The CBPeripheralManager that is responsible for the characteristic</Abstract>
+				</Parameter><Parameter>
+					<Name>central</Name>
+					<Abstract type="html">The CBCentral that subscribed to the characteristic</Abstract>
+				</Parameter><Parameter>
+					<Name>characteristic</Name>
+					<Abstract type="html">The characteristic that was subscribed to</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/peripheralManager:central:didSubscribeToCharacteristic:</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/peripheralManager:central:didUnsubscribeFromCharacteristic:</TokenIdentifier>
+			<Abstract type="html">Called when a remote central cancelled the subscription to a notifyable characteristic of ours. Can be called because of a manual unsubscribe, but will also be called if the device unsubscribed because it disconnected.</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>- (void)peripheralManager:(CBPeripheralManager *)peripheral central:(CBCentral *)central didUnsubscribeFromCharacteristic:(CBCharacteristic *)characteristic</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>peripheral</Name>
+					<Abstract type="html">The CBPeripheralManager</Abstract>
+				</Parameter><Parameter>
+					<Name>central</Name>
+					<Abstract type="html">The CBCentral that unsubscribed</Abstract>
+				</Parameter><Parameter>
+					<Name>characteristic</Name>
+					<Abstract type="html">The characteristic that was unsubscribed</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/peripheralManager:central:didUnsubscribeFromCharacteristic:</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/peripheralManagerDidStartAdvertising:error:</TokenIdentifier>
+			<Abstract type="html">Called after _doStartAdvertising was called and the advertising was started</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>- (void)peripheralManagerDidStartAdvertising:(CBPeripheralManager *)peripheral error:(NSError *)error</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>peripheral</Name>
+					<Abstract type="html">The PeripheralManager advertising</Abstract>
+				</Parameter><Parameter>
+					<Name>error</Name>
+					<Abstract type="html">An error describing the reason for failure, or nil if no error occured and advertisement started</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/peripheralManagerDidStartAdvertising:error:</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/browser:foundPeer:withDiscoveryInfo:</TokenIdentifier>
+			<Abstract type="html">Called when the MCNearbyServiceBrowser detects a nearby peer</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>- (void)browser:(MCNearbyServiceBrowser *)browser foundPeer:(MCPeerID *)peerID withDiscoveryInfo:(NSDictionary *)info</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>browser</Name>
+					<Abstract type="html">the browser that detected the peer</Abstract>
+				</Parameter><Parameter>
+					<Name>peerID</Name>
+					<Abstract type="html">the detected peer&apos;s ID</Abstract>
+				</Parameter><Parameter>
+					<Name>info</Name>
+					<Abstract type="html">the discovery info dictionary sent by the peer</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/browser:foundPeer:withDiscoveryInfo:</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/browser:lostPeer:</TokenIdentifier>
+			<Abstract type="html">Called when the MCNearbyServiceBrowser lost a previously detected peer</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>- (void)browser:(MCNearbyServiceBrowser *)browser lostPeer:(MCPeerID *)peerID</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>browser</Name>
+					<Abstract type="html">the browser that detected the loss</Abstract>
+				</Parameter><Parameter>
+					<Name>peerID</Name>
+					<Abstract type="html">the lost peer&apos;s ID</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/browser:lostPeer:</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/browser:didNotStartBrowsingForPeers:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>- (void)browser:(MCNearbyServiceBrowser *)browser didNotStartBrowsingForPeers:(NSError *)error</Declaration>
+			
+			
+			<Anchor>//api/name/browser:didNotStartBrowsingForPeers:</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/advertiser:didReceiveInvitationFromPeer:withContext:invitationHandler:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>- (void)advertiser:(MCNearbyServiceAdvertiser *)advertiser didReceiveInvitationFromPeer:(MCPeerID *)peerID withContext:(NSData *)context invitationHandler:(void ( ^ ) ( BOOL accept , MCSession *session ))invitationHandler</Declaration>
+			
+			
+			<Anchor>//api/name/advertiser:didReceiveInvitationFromPeer:withContext:invitationHandler:</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/session:peer:didChangeState:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>- (void)session:(MCSession *)session peer:(MCPeerID *)peerID didChangeState:(MCSessionState)state</Declaration>
+			
+			
+			<Anchor>//api/name/session:peer:didChangeState:</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/setAppState:</TokenIdentifier>
+			<Abstract type="html">A CWWebApplicationState implementation that allows the BT Manager to access the global state. This is important because the BT Manager needs to know about our unique identifier and if it should accept IPs via it&apos;s BT characteristic.</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, weak) id&lt;CWWebApplicationState&gt; appState</Declaration>
+			
+			
+			<Anchor>//api/name/appState</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/appState</TokenIdentifier>
+			<Abstract type="html">A CWWebApplicationState implementation that allows the BT Manager to access the global state. This is important because the BT Manager needs to know about our unique identifier and if it should accept IPs via it&apos;s BT characteristic.</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, weak) id&lt;CWWebApplicationState&gt; appState</Declaration>
+			
+			
+			<Anchor>//api/name/appState</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CWBluetoothManager/appState</TokenIdentifier>
+			<Abstract type="html">A CWWebApplicationState implementation that allows the BT Manager to access the global state. This is important because the BT Manager needs to know about our unique identifier and if it should accept IPs via it&apos;s BT characteristic.</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, weak) id&lt;CWWebApplicationState&gt; appState</Declaration>
+			
+			
+			<Anchor>//api/name/appState</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/setTransferManager:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) CWBluetoothTransferManager *transferManager</Declaration>
+			
+			
+			<Anchor>//api/name/transferManager</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/transferManager</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) CWBluetoothTransferManager *transferManager</Declaration>
+			
+			
+			<Anchor>//api/name/transferManager</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CWBluetoothManager/transferManager</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) CWBluetoothTransferManager *transferManager</Declaration>
+			
+			
+			<Anchor>//api/name/transferManager</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/setTestMcRun:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite) BOOL testMcRun</Declaration>
+			
+			
+			<Anchor>//api/name/testMcRun</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/testMcRun</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite) BOOL testMcRun</Declaration>
+			
+			
+			<Anchor>//api/name/testMcRun</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CWBluetoothManager/testMcRun</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite) BOOL testMcRun</Declaration>
+			
+			
+			<Anchor>//api/name/testMcRun</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/setCentralManager:</TokenIdentifier>
+			<Abstract type="html">The CBCentralManager instance used by the manager to make this device a BTLE Central</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) CBCentralManager *centralManager</Declaration>
+			
+			
+			<Anchor>//api/name/centralManager</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/centralManager</TokenIdentifier>
+			<Abstract type="html">The CBCentralManager instance used by the manager to make this device a BTLE Central</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) CBCentralManager *centralManager</Declaration>
+			
+			
+			<Anchor>//api/name/centralManager</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CWBluetoothManager/centralManager</TokenIdentifier>
+			<Abstract type="html">The CBCentralManager instance used by the manager to make this device a BTLE Central</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) CBCentralManager *centralManager</Declaration>
+			
+			
+			<Anchor>//api/name/centralManager</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/setPeripheralManager:</TokenIdentifier>
+			<Abstract type="html">The CBPeripheralManager instance used by this manager to make this device a BTLE Peripheral</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) CBPeripheralManager *peripheralManager</Declaration>
+			
+			
+			<Anchor>//api/name/peripheralManager</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/peripheralManager</TokenIdentifier>
+			<Abstract type="html">The CBPeripheralManager instance used by this manager to make this device a BTLE Peripheral</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) CBPeripheralManager *peripheralManager</Declaration>
+			
+			
+			<Anchor>//api/name/peripheralManager</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CWBluetoothManager/peripheralManager</TokenIdentifier>
+			<Abstract type="html">The CBPeripheralManager instance used by this manager to make this device a BTLE Peripheral</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) CBPeripheralManager *peripheralManager</Declaration>
+			
+			
+			<Anchor>//api/name/peripheralManager</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/setAdvertisedService:</TokenIdentifier>
+			<Abstract type="html">The Connichiwa service advertised by this device</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) CBMutableService *advertisedService</Declaration>
+			
+			
+			<Anchor>//api/name/advertisedService</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/advertisedService</TokenIdentifier>
+			<Abstract type="html">The Connichiwa service advertised by this device</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) CBMutableService *advertisedService</Declaration>
+			
+			
+			<Anchor>//api/name/advertisedService</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CWBluetoothManager/advertisedService</TokenIdentifier>
+			<Abstract type="html">The Connichiwa service advertised by this device</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) CBMutableService *advertisedService</Declaration>
+			
+			
+			<Anchor>//api/name/advertisedService</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/setAdvertisedInitialCharacteristic:</TokenIdentifier>
+			<Abstract type="html">The initial characteristic advertised by this device. Subscribing to this characteristic will trigger this device to send its initial device data to the other device.</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) CBMutableCharacteristic *advertisedInitialCharacteristic</Declaration>
+			
+			
+			<Anchor>//api/name/advertisedInitialCharacteristic</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/advertisedInitialCharacteristic</TokenIdentifier>
+			<Abstract type="html">The initial characteristic advertised by this device. Subscribing to this characteristic will trigger this device to send its initial device data to the other device.</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) CBMutableCharacteristic *advertisedInitialCharacteristic</Declaration>
+			
+			
+			<Anchor>//api/name/advertisedInitialCharacteristic</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CWBluetoothManager/advertisedInitialCharacteristic</TokenIdentifier>
+			<Abstract type="html">The initial characteristic advertised by this device. Subscribing to this characteristic will trigger this device to send its initial device data to the other device.</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) CBMutableCharacteristic *advertisedInitialCharacteristic</Declaration>
+			
+			
+			<Anchor>//api/name/advertisedInitialCharacteristic</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/setAdvertisedIPCharacteristic:</TokenIdentifier>
+			<Abstract type="html">The IP characteristic advertised by this device. This is a writable characteristic that other devices can write data to, but only valid IPs will be accepted. Writing IPs to this characteristic will trigger this device to test if that IP leads to a valid Connichiwa web server. If so, this device will connect to it and effecitvely become a remote device.</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) CBMutableCharacteristic *advertisedIPCharacteristic</Declaration>
+			
+			
+			<Anchor>//api/name/advertisedIPCharacteristic</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/advertisedIPCharacteristic</TokenIdentifier>
+			<Abstract type="html">The IP characteristic advertised by this device. This is a writable characteristic that other devices can write data to, but only valid IPs will be accepted. Writing IPs to this characteristic will trigger this device to test if that IP leads to a valid Connichiwa web server. If so, this device will connect to it and effecitvely become a remote device.</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) CBMutableCharacteristic *advertisedIPCharacteristic</Declaration>
+			
+			
+			<Anchor>//api/name/advertisedIPCharacteristic</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CWBluetoothManager/advertisedIPCharacteristic</TokenIdentifier>
+			<Abstract type="html">The IP characteristic advertised by this device. This is a writable characteristic that other devices can write data to, but only valid IPs will be accepted. Writing IPs to this characteristic will trigger this device to test if that IP leads to a valid Connichiwa web server. If so, this device will connect to it and effecitvely become a remote device.</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) CBMutableCharacteristic *advertisedIPCharacteristic</Declaration>
+			
+			
+			<Anchor>//api/name/advertisedIPCharacteristic</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/setMcID:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) MCPeerID *mcID</Declaration>
+			
+			
+			<Anchor>//api/name/mcID</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/mcID</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) MCPeerID *mcID</Declaration>
+			
+			
+			<Anchor>//api/name/mcID</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CWBluetoothManager/mcID</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) MCPeerID *mcID</Declaration>
+			
+			
+			<Anchor>//api/name/mcID</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/setMcBrowser:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) MCNearbyServiceBrowser *mcBrowser</Declaration>
+			
+			
+			<Anchor>//api/name/mcBrowser</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/mcBrowser</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) MCNearbyServiceBrowser *mcBrowser</Declaration>
+			
+			
+			<Anchor>//api/name/mcBrowser</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CWBluetoothManager/mcBrowser</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) MCNearbyServiceBrowser *mcBrowser</Declaration>
+			
+			
+			<Anchor>//api/name/mcBrowser</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/setMcAdvertiser:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) MCNearbyServiceAdvertiser *mcAdvertiser</Declaration>
+			
+			
+			<Anchor>//api/name/mcAdvertiser</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/mcAdvertiser</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) MCNearbyServiceAdvertiser *mcAdvertiser</Declaration>
+			
+			
+			<Anchor>//api/name/mcAdvertiser</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CWBluetoothManager/mcAdvertiser</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) MCNearbyServiceAdvertiser *mcAdvertiser</Declaration>
+			
+			
+			<Anchor>//api/name/mcAdvertiser</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/setDidAddService:</TokenIdentifier>
+			<Abstract type="html">Determines if the Connichiwa service was already added to the CBPeripheralManager and is advertised to other devices</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite) BOOL didAddService</Declaration>
+			
+			
+			<Anchor>//api/name/didAddService</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/didAddService</TokenIdentifier>
+			<Abstract type="html">Determines if the Connichiwa service was already added to the CBPeripheralManager and is advertised to other devices</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite) BOOL didAddService</Declaration>
+			
+			
+			<Anchor>//api/name/didAddService</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CWBluetoothManager/didAddService</TokenIdentifier>
+			<Abstract type="html">Determines if the Connichiwa service was already added to the CBPeripheralManager and is advertised to other devices</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite) BOOL didAddService</Declaration>
+			
+			
+			<Anchor>//api/name/didAddService</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/setLostConnectionsTimer:</TokenIdentifier>
+			<Abstract type="html">A timer after which the manager will check if any BT devices have disappeared</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite) NSTimer *lostConnectionsTimer</Declaration>
+			
+			
+			<Anchor>//api/name/lostConnectionsTimer</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/lostConnectionsTimer</TokenIdentifier>
+			<Abstract type="html">A timer after which the manager will check if any BT devices have disappeared</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite) NSTimer *lostConnectionsTimer</Declaration>
+			
+			
+			<Anchor>//api/name/lostConnectionsTimer</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CWBluetoothManager/lostConnectionsTimer</TokenIdentifier>
+			<Abstract type="html">A timer after which the manager will check if any BT devices have disappeared</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite) NSTimer *lostConnectionsTimer</Declaration>
+			
+			
+			<Anchor>//api/name/lostConnectionsTimer</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/setWantsToStartScanning:</TokenIdentifier>
+			<Abstract type="html">Determines if startScanning was called by we didn&apos;t start scanning yet</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite) BOOL wantsToStartScanning</Declaration>
+			
+			
+			<Anchor>//api/name/wantsToStartScanning</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/wantsToStartScanning</TokenIdentifier>
+			<Abstract type="html">Determines if startScanning was called by we didn&apos;t start scanning yet</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite) BOOL wantsToStartScanning</Declaration>
+			
+			
+			<Anchor>//api/name/wantsToStartScanning</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CWBluetoothManager/wantsToStartScanning</TokenIdentifier>
+			<Abstract type="html">Determines if startScanning was called by we didn&apos;t start scanning yet</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite) BOOL wantsToStartScanning</Declaration>
+			
+			
+			<Anchor>//api/name/wantsToStartScanning</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/setWantsToStartAdvertising:</TokenIdentifier>
+			<Abstract type="html">Determines if startAdvertising was called but we didn&apos;t start advertising yet</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite) BOOL wantsToStartAdvertising</Declaration>
+			
+			
+			<Anchor>//api/name/wantsToStartAdvertising</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/wantsToStartAdvertising</TokenIdentifier>
+			<Abstract type="html">Determines if startAdvertising was called but we didn&apos;t start advertising yet</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite) BOOL wantsToStartAdvertising</Declaration>
+			
+			
+			<Anchor>//api/name/wantsToStartAdvertising</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CWBluetoothManager/wantsToStartAdvertising</TokenIdentifier>
+			<Abstract type="html">Determines if startAdvertising was called but we didn&apos;t start advertising yet</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite) BOOL wantsToStartAdvertising</Declaration>
+			
+			
+			<Anchor>//api/name/wantsToStartAdvertising</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/setConnections:</TokenIdentifier>
+			<Abstract type="html">An array of CWBluetoothConnection object, each representing a device that is currently nearby, connected to or was detected somewhen earlier.</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) NSMutableArray *connections</Declaration>
+			
+			
+			<Anchor>//api/name/connections</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/connections</TokenIdentifier>
+			<Abstract type="html">An array of CWBluetoothConnection object, each representing a device that is currently nearby, connected to or was detected somewhen earlier.</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) NSMutableArray *connections</Declaration>
+			
+			
+			<Anchor>//api/name/connections</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CWBluetoothManager/connections</TokenIdentifier>
+			<Abstract type="html">An array of CWBluetoothConnection object, each representing a device that is currently nearby, connected to or was detected somewhen earlier.</Abstract>
+			<DeclaredIn>CWBluetoothManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) NSMutableArray *connections</Declaration>
+			
+			
+			<Anchor>//api/name/connections</Anchor>
             <NodeRef refid="4"/>
 		</Token>
 		

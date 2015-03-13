@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Protocols/GCDWebServerBodyWriter.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intf/GCDWebServerBodyWriter</TokenIdentifier>
+			<Abstract type="html">This protocol is used by the GCDWebServerConnection to communicate with
+the GCDWebServerRequest and write the received HTTP body data.</Abstract>
+			<DeclaredIn>GCDWebServerRequest.h</DeclaredIn>
+            
+			
+			<NodeRef refid="43"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/GCDWebServerBodyWriter/open:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerRequest.h</DeclaredIn>
+			
+			<Declaration>- (BOOL)open:(NSError **)error</Declaration>
+			
+			
+			<Anchor>//api/name/open:</Anchor>
+            <NodeRef refid="43"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/GCDWebServerBodyWriter/writeData:error:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerRequest.h</DeclaredIn>
+			
+			<Declaration>- (BOOL)writeData:(NSData *)data error:(NSError **)error</Declaration>
+			
+			
+			<Anchor>//api/name/writeData:error:</Anchor>
+            <NodeRef refid="43"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/GCDWebServerBodyWriter/close:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerRequest.h</DeclaredIn>
+			
+			<Declaration>- (BOOL)close:(NSError **)error</Declaration>
+			
+			
+			<Anchor>//api/name/close:</Anchor>
+            <NodeRef refid="43"/>
+		</Token>
+		
+        
+	</File>
+</Tokens>

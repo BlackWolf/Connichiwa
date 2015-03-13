@@ -20,3 +20,5 @@ Connichiwa is based on a number of open source projects and tools. A particularl
 * The documentation in `ConnichiwaDocs/native` is based on [appledoc](https://github.com/tomaz/appledoc) and supported by [VVDocumenter-Xcode](https://github.com/onevcat/VVDocumenter-Xcode) and  [Objective-Clean](http://objclean.com/index.php)
 * The documentation in `ConnichiwaDocs/weblib` is based on [jsdoc](https://github.com/jsdoc3/jsdoc) and supported by [jshint](http://www.jshint.com) and [jscs](https://www.npmjs.org/package/jscs).
 * JavaScript code minification and sourcemap creation was done with [uglifyjs](https://github.com/mishoo/UglifyJS2).
+* Gyroscope and accelerometer data is grabbed using [gyro.js](http://tomg.co/gyrojs)
+* What web-project would be complete without recognizing the awesome [jQuery](http://jquery.com)

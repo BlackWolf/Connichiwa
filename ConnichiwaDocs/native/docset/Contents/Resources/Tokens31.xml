@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Classes/GCDWebServerMultiPartFile.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/cl/GCDWebServerMultiPartFile</TokenIdentifier>
+			<Abstract type="html">The GCDWebServerMultiPartFile subclass of GCDWebServerMultiPart wraps
+the content of a part as a file on disk.</Abstract>
+			<DeclaredIn>GCDWebServerMultiPartFormRequest.h</DeclaredIn>
+            
+			
+			<NodeRef refid="31"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerMultiPartFile/setFileName:</TokenIdentifier>
+			<Abstract type="html">Returns the file name retrieved from the part headers.</Abstract>
+			<DeclaredIn>GCDWebServerMultiPartFormRequest.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly) NSString *fileName</Declaration>
+			
+			
+			<Anchor>//api/name/fileName</Anchor>
+            <NodeRef refid="31"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerMultiPartFile/fileName</TokenIdentifier>
+			<Abstract type="html">Returns the file name retrieved from the part headers.</Abstract>
+			<DeclaredIn>GCDWebServerMultiPartFormRequest.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly) NSString *fileName</Declaration>
+			
+			
+			<Anchor>//api/name/fileName</Anchor>
+            <NodeRef refid="31"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/GCDWebServerMultiPartFile/fileName</TokenIdentifier>
+			<Abstract type="html">Returns the file name retrieved from the part headers.</Abstract>
+			<DeclaredIn>GCDWebServerMultiPartFormRequest.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly) NSString *fileName</Declaration>
+			
+			
+			<Anchor>//api/name/fileName</Anchor>
+            <NodeRef refid="31"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerMultiPartFile/setTemporaryPath:</TokenIdentifier>
+			<Abstract type="html">Returns the path to the temporary file containing the part data.</Abstract>
+			<DeclaredIn>GCDWebServerMultiPartFormRequest.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly) NSString *temporaryPath</Declaration>
+			
+			
+			<Anchor>//api/name/temporaryPath</Anchor>
+            <NodeRef refid="31"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerMultiPartFile/temporaryPath</TokenIdentifier>
+			<Abstract type="html">Returns the path to the temporary file containing the part data.</Abstract>
+			<DeclaredIn>GCDWebServerMultiPartFormRequest.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly) NSString *temporaryPath</Declaration>
+			
+			
+			<Anchor>//api/name/temporaryPath</Anchor>
+            <NodeRef refid="31"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/GCDWebServerMultiPartFile/temporaryPath</TokenIdentifier>
+			<Abstract type="html">Returns the path to the temporary file containing the part data.</Abstract>
+			<DeclaredIn>GCDWebServerMultiPartFormRequest.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly) NSString *temporaryPath</Declaration>
+			
+			
+			<Anchor>//api/name/temporaryPath</Anchor>
+            <NodeRef refid="31"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerMultiPartFile/initWithControlName:contentType:fileName:temporaryPath:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerMultiPartFormRequest.m</DeclaredIn>
+			
+			<Declaration>- (id)initWithControlName:(NSString *)name contentType:(NSString *)type fileName:(NSString *)fileName temporaryPath:(NSString *)temporaryPath</Declaration>
+			
+			
+			<Anchor>//api/name/initWithControlName:contentType:fileName:temporaryPath:</Anchor>
+            <NodeRef refid="31"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerMultiPartFile/dealloc</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerMultiPartFormRequest.m</DeclaredIn>
+			
+			<Declaration>- (void)dealloc</Declaration>
+			
+			
+			<Anchor>//api/name/dealloc</Anchor>
+            <NodeRef refid="31"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerMultiPartFile/description</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerMultiPartFormRequest.m</DeclaredIn>
+			
+			<Declaration>- (NSString *)description</Declaration>
+			
+			
+			<Anchor>//api/name/description</Anchor>
+            <NodeRef refid="31"/>
+		</Token>
+		
+        
+	</File>
+</Tokens>

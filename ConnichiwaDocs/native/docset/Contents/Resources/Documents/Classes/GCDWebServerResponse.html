@@ -1,0 +1,1382 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="html/html; charset=utf-8" />
+		<title>GCDWebServerResponse Class Reference</title>
+		<meta id="xcode-display" name="xcode-display" content="render"/>
+		<link rel="stylesheet" type="text/css" href="../css/styles.css" media="all" />
+		<link rel="stylesheet" type="text/css" media="print" href="../css/stylesPrint.css" />
+		<meta name="generator" content="appledoc 2.2 (build 963)" />
+	</head>
+	<body>
+		<header id="top_header">
+			<div id="library" class="hideInXcode">
+				<h1><a id="libraryTitle" href="../index.html">Connichiwa </a></h1>
+				<a id="developerHome" href="../index.html">Mario Schreiner</a>
+			</div>
+			
+			<div id="title" role="banner">
+				<h1 class="hideInXcode">GCDWebServerResponse Class Reference</h1>
+			</div>
+			<ul id="headerButtons" role="toolbar">
+				<li id="toc_button">
+					<button aria-label="Show Table of Contents" role="checkbox" class="open" id="table_of_contents"><span class="disclosure"></span>Table of Contents</button>
+				</li>
+				<li id="jumpto_button" role="navigation">
+					<select id="jumpTo">
+	<option value="top">Jump To&#133;</option>
+	
+	<option value="overview">Overview</option>
+	
+	
+	
+	
+	<option value="tasks">Tasks</option>
+	
+	
+	
+	
+	
+	<option value="properties">Properties</option>
+	
+	<option value="//api/name/additionalHeaders">&nbsp;&nbsp;&nbsp;&nbsp;additionalHeaders</option>
+	
+	<option value="//api/name/cacheControlMaxAge">&nbsp;&nbsp;&nbsp;&nbsp;cacheControlMaxAge</option>
+	
+	<option value="//api/name/contentLength">&nbsp;&nbsp;&nbsp;&nbsp;contentLength</option>
+	
+	<option value="//api/name/contentType">&nbsp;&nbsp;&nbsp;&nbsp;contentType</option>
+	
+	<option value="//api/name/eTag">&nbsp;&nbsp;&nbsp;&nbsp;eTag</option>
+	
+	<option value="//api/name/gzipContentEncodingEnabled">&nbsp;&nbsp;&nbsp;&nbsp;gzipContentEncodingEnabled</option>
+	
+	<option value="//api/name/lastModifiedDate">&nbsp;&nbsp;&nbsp;&nbsp;lastModifiedDate</option>
+	
+	<option value="//api/name/statusCode">&nbsp;&nbsp;&nbsp;&nbsp;statusCode</option>
+	
+	<option value="//api/name/usesChunkedTransferEncoding">&nbsp;&nbsp;&nbsp;&nbsp;usesChunkedTransferEncoding</option>
+	
+	
+	
+	
+	<option value="class_methods">Class Methods</option>
+	
+	<option value="//api/name/response">&nbsp;&nbsp;&nbsp;&nbsp;+ response</option>
+	
+	<option value="//api/name/responseWithRedirect:permanent:">&nbsp;&nbsp;&nbsp;&nbsp;+ responseWithRedirect:permanent:</option>
+	
+	<option value="//api/name/responseWithStatusCode:">&nbsp;&nbsp;&nbsp;&nbsp;+ responseWithStatusCode:</option>
+	
+	
+	
+	
+	<option value="instance_methods">Instance Methods</option>
+	
+	<option value="//api/name/close">&nbsp;&nbsp;&nbsp;&nbsp;- close</option>
+	
+	<option value="//api/name/description">&nbsp;&nbsp;&nbsp;&nbsp;- description</option>
+	
+	<option value="//api/name/hasBody">&nbsp;&nbsp;&nbsp;&nbsp;- hasBody</option>
+	
+	<option value="//api/name/init">&nbsp;&nbsp;&nbsp;&nbsp;- init</option>
+	
+	<option value="//api/name/initWithRedirect:permanent:">&nbsp;&nbsp;&nbsp;&nbsp;- initWithRedirect:permanent:</option>
+	
+	<option value="//api/name/initWithStatusCode:">&nbsp;&nbsp;&nbsp;&nbsp;- initWithStatusCode:</option>
+	
+	<option value="//api/name/open:">&nbsp;&nbsp;&nbsp;&nbsp;- open:</option>
+	
+	<option value="//api/name/performClose">&nbsp;&nbsp;&nbsp;&nbsp;- performClose</option>
+	
+	<option value="//api/name/performOpen:">&nbsp;&nbsp;&nbsp;&nbsp;- performOpen:</option>
+	
+	<option value="//api/name/performReadDataWithCompletion:">&nbsp;&nbsp;&nbsp;&nbsp;- performReadDataWithCompletion:</option>
+	
+	<option value="//api/name/prepareForReading">&nbsp;&nbsp;&nbsp;&nbsp;- prepareForReading</option>
+	
+	<option value="//api/name/readData:">&nbsp;&nbsp;&nbsp;&nbsp;- readData:</option>
+	
+	<option value="//api/name/setValue:forAdditionalHeader:">&nbsp;&nbsp;&nbsp;&nbsp;- setValue:forAdditionalHeader:</option>
+	
+	<option value="//api/name/usesChunkedTransferEncoding">&nbsp;&nbsp;&nbsp;&nbsp;- usesChunkedTransferEncoding</option>
+	
+	
+	
+</select>
+				</li>
+			</ul>
+		</header>
+		<nav id="tocContainer" class="isShowingTOC">
+			<ul id="toc" role="tree">
+				
+<li role="treeitem"><span class="nodisclosure"></span><span class="sectionName"><a href="#overview">Overview</a></span></li>
+
+
+
+
+<li role="treeitem" id="task_treeitem"><span class="nodisclosure"></span><span class="sectionName"><a href="#tasks">Tasks</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Extension Methods">Extension Methods</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Extensions Methods">Extensions Methods</a></span></li>
+	
+</ul></li>
+
+
+
+
+
+<li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#properties">Properties</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/additionalHeaders">additionalHeaders</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/cacheControlMaxAge">cacheControlMaxAge</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/contentLength">contentLength</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/contentType">contentType</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/eTag">eTag</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/gzipContentEncodingEnabled">gzipContentEncodingEnabled</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/lastModifiedDate">lastModifiedDate</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/statusCode">statusCode</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/usesChunkedTransferEncoding">usesChunkedTransferEncoding</a></span></li>
+	
+</ul></li>
+
+
+
+<li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#class_methods">Class Methods</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/response">response</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/responseWithRedirect:permanent:">responseWithRedirect:permanent:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/responseWithStatusCode:">responseWithStatusCode:</a></span></li>
+	
+</ul></li>
+
+
+
+<li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#instance_methods">Instance Methods</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/close">close</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/description">description</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/hasBody">hasBody</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/init">init</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/initWithRedirect:permanent:">initWithRedirect:permanent:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/initWithStatusCode:">initWithStatusCode:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/open:">open:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/performClose">performClose</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/performOpen:">performOpen:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/performReadDataWithCompletion:">performReadDataWithCompletion:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/prepareForReading">prepareForReading</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/readData:">readData:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/setValue:forAdditionalHeader:">setValue:forAdditionalHeader:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/usesChunkedTransferEncoding">usesChunkedTransferEncoding</a></span></li>
+	
+</ul></li>
+
+
+			</ul>
+		</nav>
+		<article>
+			<div id="contents" class="isShowingTOC" role="main">
+				<a title="GCDWebServerResponse Class Reference" name="top"></a>
+				<div class="main-navigation navigation-top">
+					<ul>
+	<li><a href="../index.html">Index</a></li>
+	<li><a href="../hierarchy.html">Hierarchy</a></li>
+</ul>
+				</div>
+				<div id="header">
+					<div class="section-header">
+						<h1 class="title title-header">GCDWebServerResponse Class Reference</h1>
+					</div>		
+				</div>
+				<div id="container">	
+					
+					<div class="section section-specification"><table cellspacing="0"><tbody>
+						<tr>
+	<td class="specification-title">Inherits from</td>
+	<td class="specification-value">NSObject</td>
+</tr><tr>
+	<td class="specification-title">Conforms to</td>
+	<td class="specification-value"><a href="../Protocols/GCDWebServerBodyReader.html">GCDWebServerBodyReader</a></td>
+</tr><tr>
+	<td class="specification-title">Declared in</td>
+	<td class="specification-value">GCDWebServerResponse.h<br />GCDWebServerResponse.m</td>
+</tr>
+						</tbody></table></div>
+					
+                    
+                    
+					
+					<div class="section section-overview">
+						<a title="Overview" name="overview"></a>
+						<h2 class="subtitle subtitle-overview">Overview</h2>
+						<p>The GCDWebServerResponse class is used to wrap a single HTTP <a href="#//api/name/response">response</a>.
+It is instantiated by the handler of the <a href="../Classes/GCDWebServer.html">GCDWebServer</a> that handled the request.
+If a body is present, the methods from the <a href="../Protocols/GCDWebServerBodyReader.html">GCDWebServerBodyReader</a> protocol
+will be called by the <a href="../Classes/GCDWebServerConnection.html">GCDWebServerConnection</a> to send it.</p>
+
+<p>The default implementation of the <a href="../Protocols/GCDWebServerBodyReader.html">GCDWebServerBodyReader</a> protocol
+on the class simply returns an empty body.</p><div class="warning"><p><strong>Warning:</strong> GCDWebServerResponse instances can be created and used on any GCD thread.</p></div>
+					</div>
+					
+					
+					
+					
+					
+					<div class="section section-tasks">
+						<a title="Tasks" name="tasks"></a>
+						<h2 class="subtitle subtitle-tasks">Tasks</h2>
+						
+						
+						
+						<h3 class="subsubtitle task-title">Other Methods</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/contentType">&nbsp;&nbsp;contentType</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/contentLength">&nbsp;&nbsp;contentLength</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/statusCode">&nbsp;&nbsp;statusCode</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/cacheControlMaxAge">&nbsp;&nbsp;cacheControlMaxAge</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/lastModifiedDate">&nbsp;&nbsp;lastModifiedDate</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/eTag">&nbsp;&nbsp;eTag</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/gzipContentEncodingEnabled">&nbsp;&nbsp;gzipContentEncodingEnabled</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/response">+&nbsp;response</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/init">&ndash;&nbsp;init</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/setValue:forAdditionalHeader:">&ndash;&nbsp;setValue:forAdditionalHeader:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/hasBody">&ndash;&nbsp;hasBody</a></code>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+						
+						
+						<h3 class="subsubtitle task-title">Other Methods</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/usesChunkedTransferEncoding">&ndash;&nbsp;usesChunkedTransferEncoding</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/open:">&ndash;&nbsp;open:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/readData:">&ndash;&nbsp;readData:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/close">&ndash;&nbsp;close</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/prepareForReading">&ndash;&nbsp;prepareForReading</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/performOpen:">&ndash;&nbsp;performOpen:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/performReadDataWithCompletion:">&ndash;&nbsp;performReadDataWithCompletion:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/performClose">&ndash;&nbsp;performClose</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/description">&ndash;&nbsp;description</a></code>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+						
+						<a title="Extension Methods" name="task_Extension Methods"></a>
+						<h3 class="subsubtitle task-title">Extension Methods</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/additionalHeaders">&nbsp;&nbsp;additionalHeaders</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/usesChunkedTransferEncoding">&nbsp;&nbsp;usesChunkedTransferEncoding</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li>
+						</ul>
+						
+						
+						<a title="Extensions Methods" name="task_Extensions Methods"></a>
+						<h3 class="subsubtitle task-title">Extensions Methods</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/responseWithStatusCode:">+&nbsp;responseWithStatusCode:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/responseWithRedirect:permanent:">+&nbsp;responseWithRedirect:permanent:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/initWithStatusCode:">&ndash;&nbsp;initWithStatusCode:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/initWithRedirect:permanent:">&ndash;&nbsp;initWithRedirect:permanent:</a></code>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+					</div>
+					
+					
+					
+					
+					
+					<div class="section section-methods">
+						<a title="Properties" name="properties"></a>
+						<h2 class="subtitle subtitle-methods">Properties</h2>
+						
+						<div class="section-method">
+	<a name="//api/name/additionalHeaders" title="additionalHeaders"></a>
+	<h3 class="subsubtitle method-title">additionalHeaders</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) NSDictionary *additionalHeaders</code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/cacheControlMaxAge" title="cacheControlMaxAge"></a>
+	<h3 class="subsubtitle method-title">cacheControlMaxAge</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Sets the caching hint for the <a href="#//api/name/response">response</a> using the &ldquo;Cache-Control&rdquo; header.
+This value is expressed in seconds.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic) NSUInteger cacheControlMaxAge</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>The default value is 0 i.e. &ldquo;no-cache&rdquo;.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerResponse.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/contentLength" title="contentLength"></a>
+	<h3 class="subsubtitle method-title">contentLength</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Sets the content length for the body of the <a href="#//api/name/response">response</a>. If a body is present
+but this property is set to &ldquo;NSUIntegerMax&rdquo;, this means the length of the body
+cannot be known ahead of time. Chunked transfer encoding will be
+automatically enabled by the <a href="../Classes/GCDWebServerConnection.html">GCDWebServerConnection</a> to comply with HTTP/1.1
+specifications.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic) NSUInteger contentLength</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>The default value is &ldquo;NSUIntegerMax&rdquo; i.e. the <a href="#//api/name/response">response</a> has no body or its length
+is undefined.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerResponse.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/contentType" title="contentType"></a>
+	<h3 class="subsubtitle method-title">contentType</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Sets the content type for the body of the <a href="#//api/name/response">response</a>.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, copy) NSString *contentType</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>The default value is nil i.e. the <a href="#//api/name/response">response</a> has no body.</p><div class="warning"><p><strong>Warning:</strong> This property must be set if a body is present.</p></div>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerResponse.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/eTag" title="eTag"></a>
+	<h3 class="subsubtitle method-title">eTag</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Sets the ETag for the <a href="#//api/name/response">response</a> using the &ldquo;ETag&rdquo; header.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, copy) NSString *eTag</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>The default value is nil.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerResponse.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/gzipContentEncodingEnabled" title="gzipContentEncodingEnabled"></a>
+	<h3 class="subsubtitle method-title">gzipContentEncodingEnabled</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Enables gzip encoding for the <a href="#//api/name/response">response</a> body.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, getter=isGZipContentEncodingEnabled) BOOL gzipContentEncodingEnabled</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>The default value is NO.</p><div class="warning"><p><strong>Warning:</strong> Enabling gzip encoding will remove any &ldquo;Content-Length&rdquo; header
+since the length of the body is not known anymore. The client will still
+be able to determine the body length when connection is closed per
+HTTP/1.1 specifications.</p></div>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerResponse.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/lastModifiedDate" title="lastModifiedDate"></a>
+	<h3 class="subsubtitle method-title">lastModifiedDate</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Sets the last modified date for the <a href="#//api/name/response">response</a> using the &ldquo;Last-Modified&rdquo; header.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, retain) NSDate *lastModifiedDate</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>The default value is nil.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerResponse.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/statusCode" title="statusCode"></a>
+	<h3 class="subsubtitle method-title">statusCode</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Sets the HTTP status code for the <a href="#//api/name/response">response</a>.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic) NSInteger statusCode</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>The default value is 200 i.e. &ldquo;OK&rdquo;.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerResponse.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/usesChunkedTransferEncoding" title="usesChunkedTransferEncoding"></a>
+	<h3 class="subsubtitle method-title">usesChunkedTransferEncoding</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) BOOL usesChunkedTransferEncoding</code></div>
+
+    
+</div>
+						
+					</div>
+					
+					
+					
+					<div class="section section-methods">
+						<a title="Class Methods" name="class_methods"></a>
+						<h2 class="subtitle subtitle-methods">Class Methods</h2>
+						
+						<div class="section-method">
+	<a name="//api/name/response" title="response"></a>
+	<h3 class="subsubtitle method-title">response</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Creates an empty response.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>+ (instancetype)response</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerResponse.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/responseWithRedirect:permanent:" title="responseWithRedirect:permanent:"></a>
+	<h3 class="subsubtitle method-title">responseWithRedirect:permanent:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Creates an HTTP redirect <a href="#//api/name/response">response</a> to a new URL.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>+ (instancetype)responseWithRedirect:(NSURL *)<em>location</em> permanent:(BOOL)<em>permanent</em></code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerResponse.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/responseWithStatusCode:" title="responseWithStatusCode:"></a>
+	<h3 class="subsubtitle method-title">responseWithStatusCode:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Creates a empty <a href="#//api/name/response">response</a> with a specific HTTP status code.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>+ (instancetype)responseWithStatusCode:(NSInteger)<em>statusCode</em></code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerResponse.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+					</div>
+					
+					
+					
+					<div class="section section-methods">
+						<a title="Instance Methods" name="instance_methods"></a>
+						<h2 class="subtitle subtitle-methods">Instance Methods</h2>
+						
+						<div class="section-method">
+	<a name="//api/name/close" title="close"></a>
+	<h3 class="subsubtitle method-title">close</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>This method is called after all body data has been sent.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (void)close</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerResponse.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/description" title="description"></a>
+	<h3 class="subsubtitle method-title">description</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>- (NSString *)description</code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/hasBody" title="hasBody"></a>
+	<h3 class="subsubtitle method-title">hasBody</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Convenience method that checks if the <a href="#//api/name/contentType">contentType</a> property is defined.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (BOOL)hasBody</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerResponse.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/init" title="init"></a>
+	<h3 class="subsubtitle method-title">init</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>This method is the designated initializer for the class.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (instancetype)init</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerResponse.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/initWithRedirect:permanent:" title="initWithRedirect:permanent:"></a>
+	<h3 class="subsubtitle method-title">initWithRedirect:permanent:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Initializes an HTTP redirect <a href="#//api/name/response">response</a> to a new URL.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (instancetype)initWithRedirect:(NSURL *)<em>location</em> permanent:(BOOL)<em>permanent</em></code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerResponse.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/initWithStatusCode:" title="initWithStatusCode:"></a>
+	<h3 class="subsubtitle method-title">initWithStatusCode:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Initializes an empty <a href="#//api/name/response">response</a> with a specific HTTP status code.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (instancetype)initWithStatusCode:(NSInteger)<em>statusCode</em></code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerResponse.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/open:" title="open:"></a>
+	<h3 class="subsubtitle method-title">open:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>This method is called before any body data is sent.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (BOOL)open:(NSError **)<em>error</em></code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>It should return YES on success or NO on failure and set the &ldquo;error&rdquo; argument
+which is guaranteed to be non-NULL.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerResponse.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/performClose" title="performClose"></a>
+	<h3 class="subsubtitle method-title">performClose</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>- (void)performClose</code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/performOpen:" title="performOpen:"></a>
+	<h3 class="subsubtitle method-title">performOpen:</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>- (BOOL)performOpen:(NSError **)<em>error</em></code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/performReadDataWithCompletion:" title="performReadDataWithCompletion:"></a>
+	<h3 class="subsubtitle method-title">performReadDataWithCompletion:</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>- (void)performReadDataWithCompletion:(GCDWebServerBodyReaderCompletionBlock)<em>block</em></code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/prepareForReading" title="prepareForReading"></a>
+	<h3 class="subsubtitle method-title">prepareForReading</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>- (void)prepareForReading</code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/readData:" title="readData:"></a>
+	<h3 class="subsubtitle method-title">readData:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>This method is called whenever body data is sent.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (NSData *)readData:(NSError **)<em>error</em></code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>It should return a non-empty NSData if there is body data available,
+or an empty NSData there is no more body data, or nil on error and set
+the &ldquo;error&rdquo; argument which is guaranteed to be non-NULL.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerResponse.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/setValue:forAdditionalHeader:" title="setValue:forAdditionalHeader:"></a>
+	<h3 class="subsubtitle method-title">setValue:forAdditionalHeader:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Sets an additional HTTP header on the <a href="#//api/name/response">response</a>.
+Pass a nil value to remove an additional header.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (void)setValue:(NSString *)<em>value</em> forAdditionalHeader:(NSString *)<em>header</em></code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<div class="warning"><p><strong>Warning:</strong> Do not attempt to override the primary headers used
+by GCDWebServerResponse like &ldquo;Content-Type&rdquo;, &ldquo;ETag&rdquo;, etc&hellip;</p></div>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerResponse.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/usesChunkedTransferEncoding" title="usesChunkedTransferEncoding"></a>
+	<h3 class="subsubtitle method-title">usesChunkedTransferEncoding</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>- (BOOL)usesChunkedTransferEncoding</code></div>
+
+    
+</div>
+						
+					</div>
+					
+					
+                    
+                    
+				</div>
+				<div class="main-navigation navigation-bottom">
+					<ul>
+	<li><a href="../index.html">Index</a></li>
+	<li><a href="../hierarchy.html">Hierarchy</a></li>
+</ul>
+				</div>
+				<div id="footer">
+					<hr />
+					<div class="footer-copyright">
+						<p><span class="copyright">&copy; 2015 Mario Schreiner. All rights reserved. (Last updated: 2015-03-13)</span><br />
+						
+						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2 (build 963)</a>.</span></p>
+						
+					</div>
+				</div>
+			</div>
+		</article>
+		<script type="text/javascript">
+			function jumpToChange()
+			{
+				window.location.hash = this.options[this.selectedIndex].value;
+			}
+			
+			function toggleTOC()
+			{
+				var contents = document.getElementById('contents');
+				var tocContainer = document.getElementById('tocContainer');
+				
+				if (this.getAttribute('class') == 'open')
+				{
+					this.setAttribute('class', '');
+					contents.setAttribute('class', '');
+					tocContainer.setAttribute('class', '');
+					
+					window.name = "hideTOC";
+				}
+				else
+				{
+					this.setAttribute('class', 'open');
+					contents.setAttribute('class', 'isShowingTOC');
+					tocContainer.setAttribute('class', 'isShowingTOC');
+					
+					window.name = "";
+				}
+				return false;
+			}
+			
+			function toggleTOCEntryChildren(e)
+			{
+				e.stopPropagation();
+				var currentClass = this.getAttribute('class');
+				if (currentClass == 'children') {
+					this.setAttribute('class', 'children open');
+				}
+				else if (currentClass == 'children open') {
+					this.setAttribute('class', 'children');
+				}
+				return false;
+			}
+			
+			function tocEntryClick(e)
+			{
+				e.stopPropagation();
+				return true;
+			}
+			
+			function init()
+			{
+				var selectElement = document.getElementById('jumpTo');
+				selectElement.addEventListener('change', jumpToChange, false);
+				
+				var tocButton = document.getElementById('table_of_contents');
+				tocButton.addEventListener('click', toggleTOC, false);
+				
+				var taskTreeItem = document.getElementById('task_treeitem');
+				if (taskTreeItem.getElementsByTagName('li').length > 0)
+				{
+					taskTreeItem.setAttribute('class', 'children');
+					taskTreeItem.firstChild.setAttribute('class', 'disclosure');
+				}
+				
+				var tocList = document.getElementById('toc');
+				
+				var tocEntries = tocList.getElementsByTagName('li');
+				for (var i = 0; i < tocEntries.length; i++) {
+					tocEntries[i].addEventListener('click', toggleTOCEntryChildren, false);
+				}
+				
+				var tocLinks = tocList.getElementsByTagName('a');
+				for (var i = 0; i < tocLinks.length; i++) {
+					tocLinks[i].addEventListener('click', tocEntryClick, false);
+				}
+				
+				if (window.name == "hideTOC") {
+					toggleTOC.call(tocButton);
+				}
+			}
+			
+			window.onload = init;
+			
+			// If showing in Xcode, hide the TOC and Header
+			if (navigator.userAgent.match(/xcode/i)) {
+				document.getElementById("contents").className = "hideInXcode"
+				document.getElementById("tocContainer").className = "hideInXcode"
+				document.getElementById("top_header").className = "hideInXcode"
+			}
+			
+		</script>
+	</body>
+</html>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Classes/CWiDevice.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/cl/CWiDevice</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWiDevice.h</DeclaredIn>
+            
+			
+			<NodeRef refid="15"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/CWiDevice/model</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWiDevice.h</DeclaredIn>
+			
+			<Declaration>+ (CWiDeviceModel)model</Declaration>
+			
+			
+			<Anchor>//api/name/model</Anchor>
+            <NodeRef refid="15"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/CWiDevice/isRetina</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWiDevice.h</DeclaredIn>
+			
+			<Declaration>+ (BOOL)isRetina</Declaration>
+			
+			
+			<Anchor>//api/name/isRetina</Anchor>
+            <NodeRef refid="15"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/CWiDevice/isiPhone</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWiDevice.h</DeclaredIn>
+			
+			<Declaration>+ (BOOL)isiPhone</Declaration>
+			
+			
+			<Anchor>//api/name/isiPhone</Anchor>
+            <NodeRef refid="15"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/CWiDevice/isiPad</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWiDevice.h</DeclaredIn>
+			
+			<Declaration>+ (BOOL)isiPad</Declaration>
+			
+			
+			<Anchor>//api/name/isiPad</Anchor>
+            <NodeRef refid="15"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/CWiDevice/isiPod</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWiDevice.h</DeclaredIn>
+			
+			<Declaration>+ (BOOL)isiPod</Declaration>
+			
+			
+			<Anchor>//api/name/isiPod</Anchor>
+            <NodeRef refid="15"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/CWiDevice/platform</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWiDevice.m</DeclaredIn>
+			
+			<Declaration>+ (NSString *)platform</Declaration>
+			
+			
+			<Anchor>//api/name/platform</Anchor>
+            <NodeRef refid="15"/>
+		</Token>
+		
+        
+	</File>
+</Tokens>

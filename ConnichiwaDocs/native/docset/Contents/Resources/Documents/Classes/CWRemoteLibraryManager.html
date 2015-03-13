@@ -1,0 +1,1123 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="html/html; charset=utf-8" />
+		<title>CWRemoteLibraryManager Class Reference</title>
+		<meta id="xcode-display" name="xcode-display" content="render"/>
+		<link rel="stylesheet" type="text/css" href="../css/styles.css" media="all" />
+		<link rel="stylesheet" type="text/css" media="print" href="../css/stylesPrint.css" />
+		<meta name="generator" content="appledoc 2.2 (build 963)" />
+	</head>
+	<body>
+		<header id="top_header">
+			<div id="library" class="hideInXcode">
+				<h1><a id="libraryTitle" href="../index.html">Connichiwa </a></h1>
+				<a id="developerHome" href="../index.html">Mario Schreiner</a>
+			</div>
+			
+			<div id="title" role="banner">
+				<h1 class="hideInXcode">CWRemoteLibraryManager Class Reference</h1>
+			</div>
+			<ul id="headerButtons" role="toolbar">
+				<li id="toc_button">
+					<button aria-label="Show Table of Contents" role="checkbox" class="open" id="table_of_contents"><span class="disclosure"></span>Table of Contents</button>
+				</li>
+				<li id="jumpto_button" role="navigation">
+					<select id="jumpTo">
+	<option value="top">Jump To&#133;</option>
+	
+	<option value="overview">Overview</option>
+	
+	
+	
+	
+	<option value="tasks">Tasks</option>
+	
+	
+	
+	
+	
+	<option value="properties">Properties</option>
+	
+	<option value="//api/name/appState">&nbsp;&nbsp;&nbsp;&nbsp;appState</option>
+	
+	<option value="//api/name/state">&nbsp;&nbsp;&nbsp;&nbsp;state</option>
+	
+	<option value="//api/name/webView">&nbsp;&nbsp;&nbsp;&nbsp;webView</option>
+	
+	<option value="//api/name/webViewContext">&nbsp;&nbsp;&nbsp;&nbsp;webViewContext</option>
+	
+	
+	
+	
+	
+	
+	<option value="instance_methods">Instance Methods</option>
+	
+	<option value="//api/name/_receivedfromView_softDisconnect">&nbsp;&nbsp;&nbsp;&nbsp;- _receivedfromView_softDisconnect</option>
+	
+	<option value="//api/name/_receivedfromView_websocketDidClose">&nbsp;&nbsp;&nbsp;&nbsp;- _receivedfromView_websocketDidClose</option>
+	
+	<option value="//api/name/_receivedfromView_websocketDidOpen">&nbsp;&nbsp;&nbsp;&nbsp;- _receivedfromView_websocketDidOpen</option>
+	
+	<option value="//api/name/_registerJSCallbacks">&nbsp;&nbsp;&nbsp;&nbsp;- _registerJSCallbacks</option>
+	
+	<option value="//api/name/_sendToView:">&nbsp;&nbsp;&nbsp;&nbsp;- _sendToView:</option>
+	
+	<option value="//api/name/_sendToView_connectWebsocket">&nbsp;&nbsp;&nbsp;&nbsp;- _sendToView_connectWebsocket</option>
+	
+	<option value="//api/name/_sendToView_dictionary:">&nbsp;&nbsp;&nbsp;&nbsp;- _sendToView_dictionary:</option>
+	
+	<option value="//api/name/_sendToView_disconnectWebsocket">&nbsp;&nbsp;&nbsp;&nbsp;- _sendToView_disconnectWebsocket</option>
+	
+	<option value="//api/name/_sendToView_localInfo">&nbsp;&nbsp;&nbsp;&nbsp;- _sendToView_localInfo</option>
+	
+	<option value="//api/name/connectToServer:">&nbsp;&nbsp;&nbsp;&nbsp;- connectToServer:</option>
+	
+	<option value="//api/name/disconnect">&nbsp;&nbsp;&nbsp;&nbsp;- disconnect</option>
+	
+	<option value="//api/name/initWithApplicationState:">&nbsp;&nbsp;&nbsp;&nbsp;- initWithApplicationState:</option>
+	
+	<option value="//api/name/isActive">&nbsp;&nbsp;&nbsp;&nbsp;- isActive</option>
+	
+	
+	
+</select>
+				</li>
+			</ul>
+		</header>
+		<nav id="tocContainer" class="isShowingTOC">
+			<ul id="toc" role="tree">
+				
+<li role="treeitem"><span class="nodisclosure"></span><span class="sectionName"><a href="#overview">Overview</a></span></li>
+
+
+
+
+<li role="treeitem" id="task_treeitem"><span class="nodisclosure"></span><span class="sectionName"><a href="#tasks">Tasks</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Extension Methods">Extension Methods</a></span></li>
+	
+</ul></li>
+
+
+
+
+
+<li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#properties">Properties</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/appState">appState</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/state">state</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/webView">webView</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/webViewContext">webViewContext</a></span></li>
+	
+</ul></li>
+
+
+
+
+
+<li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#instance_methods">Instance Methods</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/_receivedfromView_softDisconnect">_receivedfromView_softDisconnect</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/_receivedfromView_websocketDidClose">_receivedfromView_websocketDidClose</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/_receivedfromView_websocketDidOpen">_receivedfromView_websocketDidOpen</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/_registerJSCallbacks">_registerJSCallbacks</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/_sendToView:">_sendToView:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/_sendToView_connectWebsocket">_sendToView_connectWebsocket</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/_sendToView_dictionary:">_sendToView_dictionary:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/_sendToView_disconnectWebsocket">_sendToView_disconnectWebsocket</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/_sendToView_localInfo">_sendToView_localInfo</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/connectToServer:">connectToServer:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/disconnect">disconnect</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/initWithApplicationState:">initWithApplicationState:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/isActive">isActive</a></span></li>
+	
+</ul></li>
+
+
+			</ul>
+		</nav>
+		<article>
+			<div id="contents" class="isShowingTOC" role="main">
+				<a title="CWRemoteLibraryManager Class Reference" name="top"></a>
+				<div class="main-navigation navigation-top">
+					<ul>
+	<li><a href="../index.html">Index</a></li>
+	<li><a href="../hierarchy.html">Hierarchy</a></li>
+</ul>
+				</div>
+				<div id="header">
+					<div class="section-header">
+						<h1 class="title title-header">CWRemoteLibraryManager Class Reference</h1>
+					</div>		
+				</div>
+				<div id="container">	
+					
+					<div class="section section-specification"><table cellspacing="0"><tbody>
+						<tr>
+	<td class="specification-title">Inherits from</td>
+	<td class="specification-value">NSObject</td>
+</tr><tr>
+	<td class="specification-title">Declared in</td>
+	<td class="specification-value">CWRemoteLibraryManager.h<br />CWRemoteLibraryManager.m</td>
+</tr>
+						</tbody></table></div>
+					
+                    
+                    
+					
+					<div class="section section-overview">
+						<a title="Overview" name="overview"></a>
+						<h2 class="subtitle subtitle-overview">Overview</h2>
+						<p>The RemoteLibraryManager manages this device as a remote device. It is responsible for making sure that we connect to another device as a remote if the device requested it - it manages the remote webview, receives (and delegates) messages from the remote web library and also sends messages to the remote web library.
+In order to do all that, the manager needs a dedicated UIWebView where it will connect to a Connichiwa master device and retrieve the remote web library when requested. This will allow the master device to send messages to this device.</p>
+					</div>
+					
+					
+					
+					
+					
+					<div class="section section-tasks">
+						<a title="Tasks" name="tasks"></a>
+						<h2 class="subtitle subtitle-tasks">Tasks</h2>
+						
+						
+						
+						<h3 class="subsubtitle task-title">Other Methods</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/webView">&nbsp;&nbsp;webView</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/initWithApplicationState:">&ndash;&nbsp;initWithApplicationState:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/isActive">&ndash;&nbsp;isActive</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/connectToServer:">&ndash;&nbsp;connectToServer:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/disconnect">&ndash;&nbsp;disconnect</a></code>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+						
+						
+						<h3 class="subsubtitle task-title">Other Methods</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/_registerJSCallbacks">&ndash;&nbsp;_registerJSCallbacks</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/_receivedfromView_websocketDidOpen">&ndash;&nbsp;_receivedfromView_websocketDidOpen</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/_receivedfromView_websocketDidClose">&ndash;&nbsp;_receivedfromView_websocketDidClose</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/_receivedfromView_softDisconnect">&ndash;&nbsp;_receivedfromView_softDisconnect</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/_sendToView_connectWebsocket">&ndash;&nbsp;_sendToView_connectWebsocket</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/_sendToView_disconnectWebsocket">&ndash;&nbsp;_sendToView_disconnectWebsocket</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/_sendToView_localInfo">&ndash;&nbsp;_sendToView_localInfo</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/_sendToView_dictionary:">&ndash;&nbsp;_sendToView_dictionary:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/_sendToView:">&ndash;&nbsp;_sendToView:</a></code>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+						
+						<a title="Extension Methods" name="task_Extension Methods"></a>
+						<h3 class="subsubtitle task-title">Extension Methods</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/appState">&nbsp;&nbsp;appState</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/state">&nbsp;&nbsp;state</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/webViewContext">&nbsp;&nbsp;webViewContext</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li>
+						</ul>
+						
+					</div>
+					
+					
+					
+					
+					
+					<div class="section section-methods">
+						<a title="Properties" name="properties"></a>
+						<h2 class="subtitle subtitle-methods">Properties</h2>
+						
+						<div class="section-method">
+	<a name="//api/name/appState" title="appState"></a>
+	<h3 class="subsubtitle method-title">appState</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>The application <a href="#//api/name/state">state</a> of this connichiwa application</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (readwrite, weak) id&lt;CWWebApplicationState&gt; appState</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">CWRemoteLibraryManager.m</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/state" title="state"></a>
+	<h3 class="subsubtitle method-title">state</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>The current state of this manager</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (readwrite) CWRemoteLibraryManagerState state</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">CWRemoteLibraryManager.m</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/webView" title="webView"></a>
+	<h3 class="subsubtitle method-title">webView</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>The remote webview where the connection to remote devices will be established. Must be set to a UIWebView that is not used for any other purposes. This class will become the delegate of that UIWebView. Also, the UIWebView will automatically be hidden/unhidden depending on the remote <a href="#//api/name/state">state</a> of this devie.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (readwrite, strong) UIWebView *webView</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">CWRemoteLibraryManager.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/webViewContext" title="webViewContext"></a>
+	<h3 class="subsubtitle method-title">webViewContext</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>The JSContext of the web view. nil if the device is not currently connected as a remote device.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (readwrite, strong) JSContext *webViewContext</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">CWRemoteLibraryManager.m</code><br />
+	</div>				
+	
+	
+</div>
+						
+					</div>
+					
+					
+					
+					
+					
+					<div class="section section-methods">
+						<a title="Instance Methods" name="instance_methods"></a>
+						<h2 class="subtitle subtitle-methods">Instance Methods</h2>
+						
+						<div class="section-method">
+	<a name="//api/name/_receivedfromView_softDisconnect" title="_receivedfromView_softDisconnect"></a>
+	<h3 class="subsubtitle method-title">_receivedfromView_softDisconnect</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Called by the remote library if we should soft<a href="#//api/name/disconnect">disconnect</a> from the master</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (void)_receivedfromView_softDisconnect</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">CWRemoteLibraryManager.m</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/_receivedfromView_websocketDidClose" title="_receivedfromView_websocketDidClose"></a>
+	<h3 class="subsubtitle method-title">_receivedfromView_websocketDidClose</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Called by the remote library when the websocket to the master device was closed (the master disconnected)</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (void)_receivedfromView_websocketDidClose</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">CWRemoteLibraryManager.m</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/_receivedfromView_websocketDidOpen" title="_receivedfromView_websocketDidOpen"></a>
+	<h3 class="subsubtitle method-title">_receivedfromView_websocketDidOpen</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Called by the remote library once the websocket to the master device was established</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (void)_receivedfromView_websocketDidOpen</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">CWRemoteLibraryManager.m</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/_registerJSCallbacks" title="_registerJSCallbacks"></a>
+	<h3 class="subsubtitle method-title">_registerJSCallbacks</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Registers callback functions that the remote library can call to execute native methods</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (void)_registerJSCallbacks</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">CWRemoteLibraryManager.m</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/_sendToView:" title="_sendToView:"></a>
+	<h3 class="subsubtitle method-title">_sendToView:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Sends the given string to the remote library</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (void)_sendToView:(NSString *)<em>message</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>message</em></dt>
+			<dd><p>The message string to send</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">CWRemoteLibraryManager.m</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/_sendToView_connectWebsocket" title="_sendToView_connectWebsocket"></a>
+	<h3 class="subsubtitle method-title">_sendToView_connectWebsocket</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Asks the remote library to connect its websocket to the master</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (void)_sendToView_connectWebsocket</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">CWRemoteLibraryManager.m</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/_sendToView_dictionary:" title="_sendToView_dictionary:"></a>
+	<h3 class="subsubtitle method-title">_sendToView_dictionary:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Sends the given dictionary to the remote library as a JSON string</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (void)_sendToView_dictionary:(NSDictionary *)<em>dictionary</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>dictionary</em></dt>
+			<dd><p>The dictionary to send. Every entry of the dictionary must be convertable by <a href="../Classes/CWUtil.html#//api/name/escapedJSONStringFromDictionary:">[CWUtil escapedJSONStringFromDictionary:]</a></p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">CWRemoteLibraryManager.m</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/_sendToView_disconnectWebsocket" title="_sendToView_disconnectWebsocket"></a>
+	<h3 class="subsubtitle method-title">_sendToView_disconnectWebsocket</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Asks the remote library to <a href="#//api/name/disconnect">disconnect</a> its websocket from the master</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (void)_sendToView_disconnectWebsocket</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">CWRemoteLibraryManager.m</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/_sendToView_localInfo" title="_sendToView_localInfo"></a>
+	<h3 class="subsubtitle method-title">_sendToView_localInfo</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Tells the remote library the unique connichiwa identifier we are known under</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (void)_sendToView_localInfo</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">CWRemoteLibraryManager.m</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/connectToServer:" title="connectToServer:"></a>
+	<h3 class="subsubtitle method-title">connectToServer:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Connects us as a remote device to the connichiwa webserver at the given URL</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (void)connectToServer:(NSURL *)<em>URL</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>URL</em></dt>
+			<dd><p>The URL of a connichiwa webserver</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">CWRemoteLibraryManager.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/disconnect" title="disconnect"></a>
+	<h3 class="subsubtitle method-title">disconnect</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Disconnects this device from its currently connected master device if it is connected</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (void)disconnect</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">CWRemoteLibraryManager.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/initWithApplicationState:" title="initWithApplicationState:"></a>
+	<h3 class="subsubtitle method-title">initWithApplicationState:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Initializes a new manager with the given application <a href="#//api/name/state">state</a></p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (instancetype)initWithApplicationState:(id&lt;CWWebApplicationState&gt;)<em>appState</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>appState</em></dt>
+			<dd><p>The application <a href="#//api/name/state">state</a> object of this application</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>a new manager instance</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">CWRemoteLibraryManager.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/isActive" title="isActive"></a>
+	<h3 class="subsubtitle method-title">isActive</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Determines if this device is currently active as a remote</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (BOOL)isActive</code></div>
+
+    
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>true if we are currently connected as a remote device, otherwise false</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">CWRemoteLibraryManager.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+					</div>
+					
+					
+                    
+                    
+				</div>
+				<div class="main-navigation navigation-bottom">
+					<ul>
+	<li><a href="../index.html">Index</a></li>
+	<li><a href="../hierarchy.html">Hierarchy</a></li>
+</ul>
+				</div>
+				<div id="footer">
+					<hr />
+					<div class="footer-copyright">
+						<p><span class="copyright">&copy; 2015 Mario Schreiner. All rights reserved. (Last updated: 2015-03-13)</span><br />
+						
+						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2 (build 963)</a>.</span></p>
+						
+					</div>
+				</div>
+			</div>
+		</article>
+		<script type="text/javascript">
+			function jumpToChange()
+			{
+				window.location.hash = this.options[this.selectedIndex].value;
+			}
+			
+			function toggleTOC()
+			{
+				var contents = document.getElementById('contents');
+				var tocContainer = document.getElementById('tocContainer');
+				
+				if (this.getAttribute('class') == 'open')
+				{
+					this.setAttribute('class', '');
+					contents.setAttribute('class', '');
+					tocContainer.setAttribute('class', '');
+					
+					window.name = "hideTOC";
+				}
+				else
+				{
+					this.setAttribute('class', 'open');
+					contents.setAttribute('class', 'isShowingTOC');
+					tocContainer.setAttribute('class', 'isShowingTOC');
+					
+					window.name = "";
+				}
+				return false;
+			}
+			
+			function toggleTOCEntryChildren(e)
+			{
+				e.stopPropagation();
+				var currentClass = this.getAttribute('class');
+				if (currentClass == 'children') {
+					this.setAttribute('class', 'children open');
+				}
+				else if (currentClass == 'children open') {
+					this.setAttribute('class', 'children');
+				}
+				return false;
+			}
+			
+			function tocEntryClick(e)
+			{
+				e.stopPropagation();
+				return true;
+			}
+			
+			function init()
+			{
+				var selectElement = document.getElementById('jumpTo');
+				selectElement.addEventListener('change', jumpToChange, false);
+				
+				var tocButton = document.getElementById('table_of_contents');
+				tocButton.addEventListener('click', toggleTOC, false);
+				
+				var taskTreeItem = document.getElementById('task_treeitem');
+				if (taskTreeItem.getElementsByTagName('li').length > 0)
+				{
+					taskTreeItem.setAttribute('class', 'children');
+					taskTreeItem.firstChild.setAttribute('class', 'disclosure');
+				}
+				
+				var tocList = document.getElementById('toc');
+				
+				var tocEntries = tocList.getElementsByTagName('li');
+				for (var i = 0; i < tocEntries.length; i++) {
+					tocEntries[i].addEventListener('click', toggleTOCEntryChildren, false);
+				}
+				
+				var tocLinks = tocList.getElementsByTagName('a');
+				for (var i = 0; i < tocLinks.length; i++) {
+					tocLinks[i].addEventListener('click', tocEntryClick, false);
+				}
+				
+				if (window.name == "hideTOC") {
+					toggleTOC.call(tocButton);
+				}
+			}
+			
+			window.onload = init;
+			
+			// If showing in Xcode, hide the TOC and Header
+			if (navigator.userAgent.match(/xcode/i)) {
+				document.getElementById("contents").className = "hideInXcode"
+				document.getElementById("tocContainer").className = "hideInXcode"
+				document.getElementById("top_header").className = "hideInXcode"
+			}
+			
+		</script>
+	</body>
+</html>

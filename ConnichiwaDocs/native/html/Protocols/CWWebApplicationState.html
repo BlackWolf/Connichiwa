@@ -39,7 +39,15 @@
 	
 	<option value="properties">Properties</option>
 	
+	<option value="//api/name/deviceInfo">&nbsp;&nbsp;&nbsp;&nbsp;deviceInfo</option>
+	
+	<option value="//api/name/deviceName">&nbsp;&nbsp;&nbsp;&nbsp;deviceName</option>
+	
 	<option value="//api/name/identifier">&nbsp;&nbsp;&nbsp;&nbsp;identifier</option>
+	
+	<option value="//api/name/launchDate">&nbsp;&nbsp;&nbsp;&nbsp;launchDate</option>
+	
+	<option value="//api/name/ppi">&nbsp;&nbsp;&nbsp;&nbsp;ppi</option>
 	
 	<option value="//api/name/webserverPort">&nbsp;&nbsp;&nbsp;&nbsp;webserverPort</option>
 	
@@ -53,6 +61,8 @@
 	<option value="//api/name/canBecomeRemote">&nbsp;&nbsp;&nbsp;&nbsp;- canBecomeRemote</option>
 	
 	<option value="//api/name/isRemote">&nbsp;&nbsp;&nbsp;&nbsp;- isRemote</option>
+	
+	<option value="//api/name/isWebserverRunning">&nbsp;&nbsp;&nbsp;&nbsp;- isWebserverRunning</option>
 	
 	
 	
@@ -78,7 +88,15 @@
 
 <li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#properties">Properties</a></span><ul>
 	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/deviceInfo">deviceInfo</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/deviceName">deviceName</a></span></li>
+	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/identifier">identifier</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/launchDate">launchDate</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/ppi">ppi</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/webserverPort">webserverPort</a></span></li>
 	
@@ -93,6 +111,8 @@
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/canBecomeRemote">canBecomeRemote</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/isRemote">isRemote</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/isWebserverRunning">isWebserverRunning</a></span></li>
 	
 </ul></li>
 
@@ -155,9 +175,39 @@
 	<span class="task-item-suffix">required method</span>
 </li><li>
 	<span class="tooltip">
+		<code><a href="#//api/name/launchDate">&nbsp;&nbsp;launchDate</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	<span class="task-item-suffix">required method</span>
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/deviceName">&nbsp;&nbsp;deviceName</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	<span class="task-item-suffix">required method</span>
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/ppi">&nbsp;&nbsp;ppi</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	<span class="task-item-suffix">required method</span>
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/deviceInfo">&nbsp;&nbsp;deviceInfo</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	<span class="task-item-suffix">required method</span>
+</li><li>
+	<span class="tooltip">
 		<code><a href="#//api/name/webserverPort">&nbsp;&nbsp;webserverPort</a></code>
 	</span>
 	<span class="task-item-suffix">property</span>
+	<span class="task-item-suffix">required method</span>
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/isWebserverRunning">&ndash;&nbsp;isWebserverRunning</a></code>
+	</span>
+	
 	<span class="task-item-suffix">required method</span>
 </li><li>
 	<span class="tooltip">
@@ -185,6 +235,28 @@
 						<h2 class="subtitle subtitle-methods">Properties</h2>
 						
 						<div class="section-method">
+	<a name="//api/name/deviceInfo" title="deviceInfo"></a>
+	<h3 class="subsubtitle method-title">deviceInfo</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>@property (readonly) NSDictionary *deviceInfo</code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/deviceName" title="deviceName"></a>
+	<h3 class="subsubtitle method-title">deviceName</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>@property (readonly) NSString *deviceName</code></div>
+
+    
+</div>
+						
+						<div class="section-method">
 	<a name="//api/name/identifier" title="identifier"></a>
 	<h3 class="subsubtitle method-title">identifier</h3>
 	
@@ -196,7 +268,7 @@
 	
     
 
-	<div class="method-subsection method-declaration"><code>@property (readonly, strong) NSString *identifier</code></div>
+	<div class="method-subsection method-declaration"><code>@property (readonly) NSString *identifier</code></div>
 
     
 	
@@ -218,6 +290,28 @@
 	</div>				
 	
 	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/launchDate" title="launchDate"></a>
+	<h3 class="subsubtitle method-title">launchDate</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>@property (readonly) NSDate *launchDate</code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/ppi" title="ppi"></a>
+	<h3 class="subsubtitle method-title">ppi</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>@property (readonly) int ppi</code></div>
+
+    
 </div>
 						
 						<div class="section-method">
@@ -348,6 +442,47 @@
 	
 </div>
 						
+						<div class="section-method">
+	<a name="//api/name/isWebserverRunning" title="isWebserverRunning"></a>
+	<h3 class="subsubtitle method-title">isWebserverRunning</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Determines if the webserver is currently running and accepting remote connections</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (BOOL)isWebserverRunning</code></div>
+
+    
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>true if the webserver is connectable, otherwise false</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">CWWebApplicationState.h</code><br />
+	</div>				
+	
+	
+</div>
+						
 					</div>
 					
 					
@@ -363,7 +498,7 @@
 				<div id="footer">
 					<hr />
 					<div class="footer-copyright">
-						<p><span class="copyright">&copy; 2014 Mario Schreiner. All rights reserved. (Last updated: 2014-06-25)</span><br />
+						<p><span class="copyright">&copy; 2015 Mario Schreiner. All rights reserved. (Last updated: 2015-03-13)</span><br />
 						
 						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2 (build 963)</a>.</span></p>
 						

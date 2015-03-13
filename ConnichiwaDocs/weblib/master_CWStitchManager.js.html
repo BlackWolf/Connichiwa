@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: master/CWStitchManager.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: master/CWStitchManager.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/* global Connichiwa, CWDevice, CWDeviceManager, CWEventManager, CWDebug */
+'use strict';
+
+
+
+var CWStitchManager = CWStitchManager || {};
+
+
+/**
+ * (Available on master device only)
+ * 
+ * An object that contains all stitchswipes from all the devices
+ * @type {Object}
+ * @private
+ */
+CWStitchManager._swipes = {};
+
+
+/**
+ * (Available on master device only)
+ * 
+ * An object that contains all the device transformation of all stitched
+ * devices
+ * @type {Object}
+ * @private
+ */
+CWStitchManager._devices = {};
+
+
+
+/**
+ * (Available on master device only)
+ *
+ * Returns the transformation of the given device
+ * @param  {CWDevice} device The device to get the transformation of
+ * @return {CWStitchManager.DeviceTransformation} The device transformation of
+ *    the device
+ * @function
+ */
+CWStitchManager.getDeviceTransformation = function(device) {
+  return this._getDeviceTransformation(device, false);
+}.bind(CWStitchManager);
+
+
+/**
+ * (Available on master device only)
+ *
+ * Same as {@link CWStitchManager.getDeviceTransformation}. The forceRecent
+ *    parameter can be used to avoid the return of cached information.
+ *    Usually, the transformation for the local device in {@link
+ *    CWStitchManager._devices} is updated earlier and {@link
+ *    CWStitchManager.getDeviceTransformation} then returns cached information
+ *    so the device transformation for the application does not change until
+ *    the {@link event:wasStitched} event arrived. Only after the event was
+ *    fired the cached information is updated as well.
+ * @param  {CWDevice} device The device to return the transformation of
+ * @param  {Boolean} [forceRecent=false] Set to true to ensure that no cached
+ *    transformation are returned
+ * @return {CWStitchManager.DeviceTransformation} The device transformation of
+ *    the device
+ * @function
+ * @private
+ */
+CWStitchManager._getDeviceTransformation = function(device, forceRecent) {
+  if (device === undefined) device = Connichiwa.getIdentifier();
+  if (CWDevice.prototype.isPrototypeOf(device)) device = device.getIdentifier();
+
+  if (forceRecent === undefined) forceRecent = false;
+
+  //If the local device is requested and forceRecent is not true, we return
+  //getLocalDeviceTransformation, which could be cached
+  if (device === Connichiwa.getIdentifier() &amp;&amp; forceRecent !== true) {
+    return this.getLocalDeviceTransformation();
+  }
+
+  var data = this._getStitchData(device);
+  if (data === undefined) return this.getDefaultDeviceTransformation();
+
+  return { 
+    width    : data.width,
+    height   : data.height, 
+    x        : data.transformX, 
+    y        : data.transformY,
+    rotation : data.rotation,
+    scale    : data.scale
+  };
+}.bind(CWStitchManager);
+
+
+/**
+ * (Available on master device only)
+ * 
+ * Called whenever a stitchswipe was performed on a device (either local or
+ *    remote). The method checks the new swipe against all other swipes. If
+ *    two swipes match (e.g. by direction and time), they are considered a
+ *    stitch and the devices will be stitched
+ * @param  {Object} data The stitchswipe's data
+ * @function
+ * @protected
+ */
+CWStitchManager.detectedSwipe = function(data) {
+  var swipe = {
+    date         : new Date(),
+    device       : data.device,
+    edge         : data.edge,
+    width        : data.width,
+    height       : data.height,
+    x            : data.x,
+    y            : data.y
+  };
+
+  var device = CWDeviceManager.getDeviceWithIdentifier(swipe.device);
+  if (device === null || device.isConnected() === false) return;
+
+  CWDebug.log(3, 'Detected swipe on ' + swipe.device + ' on edge ' + swipe.edge );
+
+  //Check if the swipe combines with another swipe to a stitch
+  for (var key in this._swipes) {
+    var savedSwipe = this._swipes[key];
+
+    CWDebug.log(4, 'Checking existing swipe: '+key);
+
+    //We can't create a stitch on a single device
+    if (savedSwipe.device === swipe.device) continue;
+
+    CWDebug.log(4, 'Checking time constraint');
+
+    //If the existing swipe is too old, it is invalid
+    if ((swipe.date.getTime() - savedSwipe.date.getTime()) > 1000) continue;
+
+    CWDebug.log(4, 'Checking connection constraint');
+
+    //Check if the other device is still connected
+    var savedDevice = CWDeviceManager.getDeviceWithIdentifier(savedSwipe.device);
+    if (savedDevice === null || savedDevice.isConnected() === false) continue;
+
+    this._detectedStitch(savedSwipe, swipe);
+    return;
+
+    //TODO remove the swipes?
+  }
+
+  //If the swipe does not seem to be part of a stitch, remember it for later
+  this._swipes[swipe.device] = swipe;
+}.bind(CWStitchManager);
+
+
+/**
+ * (Available on master device only)
+ * 
+ * Will unstitch the device with the given identifier and send a message to
+ *    the device to let it know that it was unstitched. The device is then
+ *    responsible for resettings its device transformation
+ * @param  {String} identifier The identifier string of the device that should
+ *    be unstitched
+ * @function
+ * @protected
+ */
+CWStitchManager.unstitchDevice = function(identifier) {
+  if (identifier in this._devices) {
+    var unstitchMessage = { 
+      deviceTransformation : this.getDeviceTransformation(identifier)
+    };
+    Connichiwa.send(identifier, '_wasunstitched', unstitchMessage);
+
+    delete this._devices[identifier];
+    CWDebug.log(3, 'Device was unstitched: ' + identifier);
+
+    //We do not unstitch the last device because once a global coordiante
+    //system is established, it should be kept
+  }
+}.bind(CWStitchManager);
+
+
+
+/**
+ * (Available on master device only)
+ *
+ * Should be called whenever two stitchswipes match and form a stitch. The
+ *    swipe data of the two swipes that matched must be passed to this
+ *    function.
+ * @param  {Object} firstSwipe  First swipe data
+ * @param  {Object} secondSwipe Second swipe data
+ * @function
+ * @private
+ */
+CWStitchManager._detectedStitch = function(firstSwipe, secondSwipe) {     
+  //If no device is stitched yet, we automatically stitch the first device
+  //This device will then become the reference and its origin and axis will be the origin
+  //and axis of the global coordinate system
+  if (Object.keys(this._devices).length === 0) {
+    //If one of the devices is the master, make sure we stitch it first
+    //Some applications might rely on that, and those that don't are not harmed
+    if (secondSwipe.device === Connichiwa.getIdentifier()) {
+      var tempSwipe = firstSwipe;
+      firstSwipe = secondSwipe;
+      secondSwipe = tempSwipe;
+    }
+    var stitchData = this._createStitchData(firstSwipe.device);
+    stitchData.width  = firstSwipe.width;
+    stitchData.height = firstSwipe.height;
+    this._devices[firstSwipe.device] = stitchData;
+
+    //Send out messages to the stitched device and the master
+    CWDebug.log(3, 'First device was auto-stitched: '+JSON.stringify(stitchData));
+    CWEventManager.trigger('stitch', secondSwipe.device, firstSwipe.device);
+
+    var wasstitchMessage = {
+      otherDevice          : secondSwipe.device,
+      edge                 : firstSwipe.edge, //TODO should this be in here? and if so, should it be relative?
+      deviceTransformation : this._getDeviceTransformation(firstSwipe.device, true)
+    };
+    Connichiwa.send(firstSwipe.device, '_wasstitched', wasstitchMessage);
+  }
+
+  //
+  // PREPARATION
+  // 
+  
+  //Exactly one of the two swiped devices need to be stitched already
+  //We use that device as a reference to calculate the position of the new device
+  var firstStitchData  = this._getStitchData(firstSwipe.device);
+  var secondStitchData = this._getStitchData(secondSwipe.device);
+  if (firstStitchData === undefined &amp;&amp; secondStitchData === undefined) return;
+  if (firstStitchData !== undefined &amp;&amp; secondStitchData !== undefined) return;
+
+  //Determine which device is already stitched
+  //From now on, everything prefixed with "stitched" will describe that device,
+  //everthing prefixed with "new" describes the device that should be added
+  var stitchedSwipe, newSwipe;
+  if (firstStitchData !== undefined) {
+    stitchedSwipe = firstSwipe;
+    newSwipe      = secondSwipe;
+  } else {
+    stitchedSwipe = secondSwipe;
+    newSwipe      = firstSwipe;
+  }
+
+  //Grab the CWDevice objects
+  var stitchedDevice = CWDeviceManager.getDeviceWithIdentifier(stitchedSwipe.device);
+  var newDevice      = CWDeviceManager.getDeviceWithIdentifier(newSwipe.device);
+
+  var stitchedStitchData = this._getStitchData(stitchedSwipe.device);
+  var newStitchData      = this._createStitchData(newSwipe.device);
+
+  // CWDebug.log(3, "Stitched Swipe: "+JSON.stringify(stitchedSwipe));
+  // CWDebug.log(3, "New Swipe: "+JSON.stringify(newSwipe));
+  // CWDebug.log(3, "Stitched Device: "+JSON.stringify(stitchedDevice));
+
+  //Calculate the scaling of the new device relative to the master
+  //This compensates for different PPIs on devices - content should appear the
+  //same size on all of them
+  newStitchData.scale = newDevice.getPPI() / stitchedDevice.getPPI() * stitchedStitchData.scale;
+
+  //Calculate the rotation of the device relative to the master
+  //If a device is rotated and the OS detects an orientation change (portrait/landscape)
+  //the OS will take care of rotating the webview. But if the orientation
+  //is not changed, for example when the device is rotated on the table, we need
+  //to take care of translating and rotating ourselves, so the stitched devices
+  //get homogenous content
+  var rotation = 0;
+  var rotationIndex = this._indexForEdge(stitchedSwipe.edge) - this._indexForEdge(newSwipe.edge);
+  if (rotationIndex &lt; 0) rotationIndex += 4;
+  if (rotationIndex === 2) rotation = 0;
+  if (rotationIndex === 3) rotation = 90;
+  if (rotationIndex === 1) rotation = 270;
+  if (rotationIndex === 0) rotation = 180;
+  newStitchData.rotation = (rotation + stitchedStitchData.rotation) % 360; //make relative to master
+  // CWDebug.log(3, "Devices edges: "+this._indexForEdge(stitchedSwipe.edge)+", "+this._indexForEdge(newSwipe.edge));
+
+  //
+  // RELATIVE SWIPE DATA
+  // 
+  // Here is where it gets interesting: We need to translate both device's swipes
+  // to compensate for their rotation. This way, the x/y and width/height is adjusted
+  // as if both devices had a 0º rotation - and only then can we actually calculate
+  // with their values in order to determine their relative position.
+  // 
+  // The calculations are rather straightforward if you think about it, let's
+  // take 90º as an example: The y value of a 90º device is the x-axis of a 0º 
+  // device. The x value is the y-axis, but swapped: An x value of 0 becomes a large
+  // y value, because its at the top of the device (and therefore a bigger y). An
+  // x value of "width" therefore becomes a y value of 0.
+  // 
+  // Note that we also adjust the relative values by the device's scale - this way,
+  // both relative swipes are scaled to the master device and are fully comparable.
+  // 
+  // Also, we rotate the edges: If a device is rotated 90º and the "top" edge is
+  // swiped, this physically is the "left" edge (from a user perspective).
+  // 
+  
+  function rotateSwipe(swipe, rotation) {
+    var result = {};
+    if (rotation === 0) {
+      result.y      = swipe.y;
+      result.x      = swipe.x;
+      result.width  = swipe.width;
+      result.height = swipe.height;
+    }
+    if (rotation === 90) {
+      result.y      = swipe.width - swipe.x;
+      result.x      = swipe.y;
+      result.width  = swipe.height;
+      result.height = swipe.width;
+    }
+    if (rotation === 180) {
+      result.y      = swipe.height - swipe.y;
+      result.x      = swipe.width  - swipe.x;
+      result.width  = swipe.width;
+      result.height = swipe.height;
+    }
+    if (rotation === 270) {
+      result.y      = swipe.x;
+      result.x      = swipe.height - swipe.y;
+      result.width  = swipe.height;
+      result.height = swipe.width;
+    }
+
+    return result;
+  } 
+  
+  
+  var newRelativeSwipe = rotateSwipe(newSwipe, newStitchData.rotation);
+  newRelativeSwipe.edge = (this._indexForEdge(newSwipe.edge) + (newStitchData.rotation / 90)) % 4;
+
+  newRelativeSwipe.y      /= newStitchData.scale;
+  newRelativeSwipe.x      /= newStitchData.scale;
+  newRelativeSwipe.width  /= newStitchData.scale;
+  newRelativeSwipe.height /= newStitchData.scale;
+
+  //
+  // And the same thing for the stitched device
+  //
+  
+  var stitchedRelativeSwipe = rotateSwipe(stitchedSwipe, stitchedStitchData.rotation);
+  stitchedRelativeSwipe.edge = (this._indexForEdge(stitchedSwipe.edge) + (stitchedStitchData.rotation / 90)) % 4;
+
+  stitchedRelativeSwipe.y      /= stitchedStitchData.scale;
+  stitchedRelativeSwipe.x      /= stitchedStitchData.scale;
+  stitchedRelativeSwipe.width  /= stitchedStitchData.scale;
+  stitchedRelativeSwipe.height /= stitchedStitchData.scale;
+
+  //
+  // DETERMINE THE NEW STITCH DATA
+  // 
+  // Now we have everything we need and can actually determine the stitch data
+  // of the new device: This means we can calculate its translation relative to
+  // the origin of the master and its adjusted (relative and scaled) width and height
+  // This is the data that will be sent to the device and that the device can use
+  // to transform its content
+  // 
+
+  //Make sure the stitch data contains original and relative width/height
+  newStitchData.width        = newRelativeSwipe.width;
+  newStitchData.height       = newRelativeSwipe.height;
+  newStitchData.deviceWidth  = newSwipe.width;
+  newStitchData.deviceHeight = newSwipe.height;
+
+  //Finally, what we actually wanted all along: The translation now becomes a
+  //simple matter of calculating the relative position between the "stitched"
+  //and the "new" device. It should, we worked goddamn hard for that!
+  newStitchData.transformX = stitchedStitchData.transformX + stitchedRelativeSwipe.x - newRelativeSwipe.x;
+  newStitchData.transformY = stitchedStitchData.transformY + stitchedRelativeSwipe.y - newRelativeSwipe.y;
+
+  // CWDebug.log(3, "Stitched Data: "+JSON.stringify(stitchedStitchData));
+  // CWDebug.log(3, "New Data: "+JSON.stringify(newStitchData));
+  // CWDebug.log(3, "Stitched Relative Swipe: "+JSON.stringify(stitchedRelativeSwipe));
+  // CWDebug.log(3, "New Relative Swipe: "+JSON.stringify(newRelativeSwipe));
+  
+  //Finish it up: Add the device to the stitched data array and send messages
+  //to the master ("stitch"), the new device ("wasstitched") and the 
+  //other device ("gotstitchneighbor")
+  this._devices[newSwipe.device] = newStitchData;
+
+  CWDebug.log(3, 'Device was stitched: '+JSON.stringify(newStitchData));
+  CWEventManager.trigger('stitch', stitchedSwipe.device, newSwipe.device);
+
+  var wasstitchMessage = {
+    otherDevice          : stitchedSwipe.device,
+    edge                 : newSwipe.edge, //TODO should this be in here? and if so, should it be relative?
+    deviceTransformation : this._getDeviceTransformation(newSwipe.device, true)
+  };
+  newDevice.send('_wasstitched', wasstitchMessage);
+
+  var gotneighborMessage = {
+    otherDevice          : newSwipe.device,
+    edge                 : stitchedSwipe.edge, //TODO should this be in here? and if so, should it be relative?
+  };
+  stitchedDevice.send('_gotstitchneighbor', gotneighborMessage);
+}.bind(CWStitchManager);
+
+
+/**
+ * (Available on master device only)
+ * 
+ * Creates and returns a new stitch data object with default values
+ * @param  {String} device The device's identifier of the device where the
+ *    stitch occured on
+ * @return {Object} Stitch data object, contains the keys "device", "width",
+ *    "height", "transformX", "transformY", "rotation", "scale"       
+ * @function
+ * @private
+ */
+CWStitchManager._createStitchData = function(device) {
+  return {
+    device     : device,
+    width      : 0,
+    height     : 0,
+    transformX : 0,
+    transformY : 0,
+    rotation   : 0,
+    scale      : 1.0,
+  };
+}.bind(CWStitchManager);
+
+
+/**
+ * (Available on master device only)
+ * 
+ * Returns the stitch data for the given device, which is similar to the
+ *    device transformation but with additional information
+ * @param  {CWDevice|String} device The device or device identifier of the
+ *    device to get the stitch data of
+ * @return {Object} The stitch of the given device or undefined if no stitch
+ *    data is available
+ * @function
+ * @private
+ */
+CWStitchManager._getStitchData = function(device) {
+  if (CWDevice.prototype.isPrototypeOf(device)) device = device.getIdentifier();
+  return this._devices[device];
+}.bind(CWStitchManager);
+
+
+/**
+ * (Available on master device only)
+ * 
+ * Returns a numeric index for an edge
+ * @param  {String} edge An edge-string, either "top", "left", "bottom" or
+ *    "right"
+ * @return {Number} A numeric index that belongs to the edge, so either 0, 1,
+ *    2 or 3. If the given edge-string was invalid, returns -1      
+ * @function
+ * @private
+ */
+CWStitchManager._indexForEdge = function(edge) {
+  switch (edge) {
+    case 'top':    return 0;
+    case 'bottom': return 2;
+    case 'left':   return 1;
+    case 'right':  return 3;
+  }
+
+  return -1;
+}.bind(CWStitchManager);
+
+
+/**
+ * (Available on master device only)
+ * 
+ * Returns an index string for a numeric index
+ * @param  {Number} index The index of an edge, either 0, 1, 2 or 3
+ * @return {String} The edge-string that belongs to the given index, either
+ *    "top", "left", "bottom" or "right". If the given index was invalid,
+ *    returns the string "invalid"
+ * @function
+ * @private
+ */
+CWStitchManager._edgeForIndex = function(index) {
+  switch (index) {
+    case 0: return 'top';
+    case 2: return 'bottom';
+    case 3: return 'right';
+    case 1: return 'left';
+  }
+
+  return 'invalid';
+}.bind(CWStitchManager);
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="CWDevice.html">CWDevice</a></li><li><a href="CWLocation.html">CWLocation</a></li><li><a href="CWVector.html">CWVector</a></li></ul><h3>Namespaces</h3><ul><li><a href="Connichiwa.html">Connichiwa</a></li><li><a href="CWDebug.html">CWDebug</a></li><li><a href="CWDeviceManager.html">CWDeviceManager</a></li><li><a href="CWGyroscope.html">CWGyroscope</a></li><li><a href="CWStitchManager.html">CWStitchManager</a></li><li><a href="CWSystemInfo.html">CWSystemInfo</a></li><li><a href="CWUtil.html">CWUtil</a></li></ul><h3>Events</h3><ul><li><a href="Connichiwa.html#.event:onLoad">onLoad</a></li><li><a href="global.html#event:accelerometerUpdate">accelerometerUpdate</a></li><li><a href="global.html#event:connectfailed">connectfailed</a></li><li><a href="global.html#event:deviceconnected">deviceconnected</a></li><li><a href="global.html#event:devicedetected">devicedetected</a></li><li><a href="global.html#event:devicedisconnected">devicedisconnected</a></li><li><a href="global.html#event:devicedistancechanged">devicedistancechanged</a></li><li><a href="global.html#event:devicelost">devicelost</a></li><li><a href="global.html#event:gotstitchneighbor">gotstitchneighbor</a></li><li><a href="global.html#event:gyroscopeUpdate">gyroscopeUpdate</a></li><li><a href="global.html#event:ready">ready</a></li><li><a href="global.html#event:wasStitched">wasStitched</a></li><li><a href="global.html#event:wasUnstitched">wasUnstitched</a></li></ul><h3><a href="global.html">Global</a></h3>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta2</a> on Fri Mar 13 2015 16:04:19 GMT+0100 (CET)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

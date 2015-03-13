@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.marioschreiner.Connichiwa</string>
+	<string>de.marioschreiner.Connichiwa</string>
 	<key>CFBundleName</key>
 	<string>Connichiwa Documentation</string>
 	<key>CFBundleShortVersionString</key>
@@ -25,10 +25,10 @@
 	<key>DashDocSetFamily</key>
 	<string>appledoc</string>
 	<key>DocSetPublisherIdentifier</key>
-	<string>com.marioschreiner.documentation</string>
+	<string>de.marioschreiner.documentation</string>
 	<key>DocSetPublisherName</key>
 	<string>Mario Schreiner</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright © 2014 Mario Schreiner. All rights reserved.</string>
+	<string>Copyright © 2015 Mario Schreiner. All rights reserved.</string>
 </dict>
 </plist>

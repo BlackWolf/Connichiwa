@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Protocols/CWServerManagerDelegate.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intf/CWServerManagerDelegate</TokenIdentifier>
+			<Abstract type="html">A delegate protocol that receives different events from the CWWebserverManager instance</Abstract>
+			<DeclaredIn>CWServerManagerDelegate.h</DeclaredIn>
+            
+			
+			<NodeRef refid="39"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/CWServerManagerDelegate/didStartWebserver</TokenIdentifier>
+			<Abstract type="html">Called when the webserver was started and is ready to accept requests from web clients</Abstract>
+			<DeclaredIn>CWServerManagerDelegate.h</DeclaredIn>
+			
+			<Declaration>- (void)didStartWebserver</Declaration>
+			
+			
+			<Anchor>//api/name/didStartWebserver</Anchor>
+            <NodeRef refid="39"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/CWServerManagerDelegate/remoteDidDisconnect:</TokenIdentifier>
+			<Abstract type="html">Called when a remote device disconnected from the webserver</Abstract>
+			<DeclaredIn>CWServerManagerDelegate.h</DeclaredIn>
+			
+			<Declaration>- (void)remoteDidDisconnect:(NSString *)identifier</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>identifier</Name>
+					<Abstract type="html">The identifier of the disconnected device</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/remoteDidDisconnect:</Anchor>
+            <NodeRef refid="39"/>
+		</Token>
+		
+        
+	</File>
+</Tokens>

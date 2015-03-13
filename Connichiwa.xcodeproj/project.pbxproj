@@ -38,8 +38,6 @@
 		3317C6FB1A714BCB008BD104 /* extension-deflate-stream.c in Sources */ = {isa = PBXBuildFile; fileRef = 3317C6E21A714BCB008BD104 /* extension-deflate-stream.c */; settings = {COMPILER_FLAGS = "-w"; }; };
 		3317C6FC1A714BCB008BD104 /* extension-deflate-stream.h in Headers */ = {isa = PBXBuildFile; fileRef = 3317C6E31A714BCB008BD104 /* extension-deflate-stream.h */; };
 		3317C6FD1A714BCB008BD104 /* extension.c in Sources */ = {isa = PBXBuildFile; fileRef = 3317C6E41A714BCB008BD104 /* extension.c */; settings = {COMPILER_FLAGS = "-w"; }; };
-		3317C6FE1A714BCB008BD104 /* getifaddrs.c in Sources */ = {isa = PBXBuildFile; fileRef = 3317C6E51A714BCB008BD104 /* getifaddrs.c */; settings = {COMPILER_FLAGS = "-w"; }; };
-		3317C6FF1A714BCB008BD104 /* getifaddrs.h in Headers */ = {isa = PBXBuildFile; fileRef = 3317C6E61A714BCB008BD104 /* getifaddrs.h */; };
 		3317C7001A714BCB008BD104 /* handshake.c in Sources */ = {isa = PBXBuildFile; fileRef = 3317C6E71A714BCB008BD104 /* handshake.c */; settings = {COMPILER_FLAGS = "-w"; }; };
 		3317C7011A714BCB008BD104 /* libwebsockets.c in Sources */ = {isa = PBXBuildFile; fileRef = 3317C6E81A714BCB008BD104 /* libwebsockets.c */; settings = {COMPILER_FLAGS = "-w"; }; };
 		3317C7021A714BCB008BD104 /* libwebsockets.h in Headers */ = {isa = PBXBuildFile; fileRef = 3317C6E91A714BCB008BD104 /* libwebsockets.h */; };
@@ -105,6 +103,7 @@
 		33A05166193E61CC00FED071 /* ConnichiwaTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 33A05165193E61CC00FED071 /* ConnichiwaTests.m */; };
 		33A87DF71951037A001BDC09 /* CWBluetoothConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 33A87DF51951037A001BDC09 /* CWBluetoothConnection.h */; };
 		33A87DF81951037A001BDC09 /* CWBluetoothConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 33A87DF61951037A001BDC09 /* CWBluetoothConnection.m */; };
+		33E9AF7B1A8CF88300DB268F /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33E9AF7A1A8CF88300DB268F /* CFNetwork.framework */; };
 		33EE7EFA1955BC1500EFDE17 /* CWUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = 33EE7EF81955BC1500EFDE17 /* CWUtil.h */; };
 		33EE7EFB1955BC1500EFDE17 /* CWUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 33EE7EF91955BC1500EFDE17 /* CWUtil.m */; };
 /* End PBXBuildFile section */
@@ -227,6 +226,7 @@
 		33A05165193E61CC00FED071 /* ConnichiwaTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ConnichiwaTests.m; sourceTree = "<group>"; };
 		33A87DF51951037A001BDC09 /* CWBluetoothConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWBluetoothConnection.h; sourceTree = "<group>"; };
 		33A87DF61951037A001BDC09 /* CWBluetoothConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWBluetoothConnection.m; sourceTree = "<group>"; };
+		33E9AF7A1A8CF88300DB268F /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		33EE7EF81955BC1500EFDE17 /* CWUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWUtil.h; sourceTree = "<group>"; };
 		33EE7EF91955BC1500EFDE17 /* CWUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWUtil.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -243,6 +243,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				33E9AF7B1A8CF88300DB268F /* CFNetwork.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -432,6 +433,7 @@
 		33A05148193E61CC00FED071 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				33E9AF7A1A8CF88300DB268F /* CFNetwork.framework */,
 				33A05157193E61CC00FED071 /* XCTest.framework */,
 			);
 			name = Frameworks;
@@ -512,7 +514,6 @@
 				334AB747193FDADC00A15999 /* CWWebApplication.h in Headers */,
 				3362DB801A72C8BE0038985E /* BLWebSocketConnection.h in Headers */,
 				3338A7BC1A71204300898D4E /* GCDWebServerStreamedResponse.h in Headers */,
-				3317C6FF1A714BCB008BD104 /* getifaddrs.h in Headers */,
 				3338A7A61A71204300898D4E /* GCDWebServerFunctions.h in Headers */,
 				3338A7A81A71204300898D4E /* GCDWebServerHTTPStatusCodes.h in Headers */,
 				3317C6F01A714BCB008BD104 /* BLWebSocketsServer.h in Headers */,
@@ -686,7 +687,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "PATH=$(bash -l -c 'echo $PATH')\n\nROOT_PATH=\"${PROJECT_DIR}/${PRODUCT_NAME}\"\nCONCAT_FILE=\"${ROOT_PATH}/weblib/remote.js\"\nCONCAT_FILE_MIN=\"${ROOT_PATH}/weblib/remote.min.js\"\nCONCAT_FILE_MAP=\"${CONCAT_FILE_MIN}.map\"\n\nrm -f ${CONCAT_FILE}\nrm -f ${CONCAT_FILE_MIN}\nrm -f ${CONCAT_FILE_MAP}\n\n# CONCATENATE\n# Concatenates everything in the weblib folder\ncat \"${ROOT_PATH}/scripts/OOP.js\" >> ${CONCAT_FILE};\nfor file in \"${ROOT_PATH}/weblib_source/common/*.js\"; do cat $file >> ${CONCAT_FILE}; done\nfor file in \"${ROOT_PATH}/weblib_source/remote/*.js\"; do cat $file >> ${CONCAT_FILE}; done\n\n# MINIFY\n# Minifyjs needs to be installed (npm install -g minifyjs)\n#MINIFYJS_PATH=\"/usr/local/bin/minifyjs\"\n#if [ -x $MINIFYJS_PATH ]; then\n#if [ -f $CONCAT_FILE ]; then\n\n#${MINIFYJS_PATH} -m -i ${CONCAT_FILE} -o ${CONCAT_FILE_MIN}\n#fi\n#else\n#echo \"install minifyjs globally via npm to minify the remote library\"\n#fi;\n\n#UGLIFYJS\n# uglifyjs needs to be installed (npm install -g uglifyjs)\n# minifies the source file and creates a source map\nUGLIFYJS_PATH=\"uglifyjs\"\n#if [ -x $UGLIFYJS_PATH ]; then\nif [ -f $CONCAT_FILE ]; then\n\n${UGLIFYJS_PATH} ${CONCAT_FILE} -o ${CONCAT_FILE_MIN} --source-map ${CONCAT_FILE_MAP} --screw-ie8 --compress --mangle --prefix relative\n\nfi\n#else\n#echo \"install uglifyjs globally via npm to create minified JS library versions\"\n#fi;";
+			shellScript = "PATH=$(bash -l -c 'echo $PATH')\n\nROOT_PATH=\"${PROJECT_DIR}/${PRODUCT_NAME}\"\nCONCAT_FILE=\"${ROOT_PATH}/weblib/remote.js\"\nCONCAT_FILE_MIN=\"${ROOT_PATH}/weblib/remote.min.js\"\nCONCAT_FILE_MAP=\"${CONCAT_FILE_MIN}.map\"\n\nrm -f ${CONCAT_FILE}\nrm -f ${CONCAT_FILE_MIN}\nrm -f ${CONCAT_FILE_MAP}\n\n# CONCATENATE\n# Concatenates everything in the weblib folder\n#cat \"${ROOT_PATH}/scripts/OOP.js\" >> ${CONCAT_FILE};\nfor file in \"${ROOT_PATH}/weblib_source/common/*.js\"; do cat $file >> ${CONCAT_FILE}; done\nfor file in \"${ROOT_PATH}/weblib_source/remote/*.js\"; do cat $file >> ${CONCAT_FILE}; done\n\n# MINIFY\n# Minifyjs needs to be installed (npm install -g minifyjs)\n#MINIFYJS_PATH=\"/usr/local/bin/minifyjs\"\n#if [ -x $MINIFYJS_PATH ]; then\n#if [ -f $CONCAT_FILE ]; then\n\n#${MINIFYJS_PATH} -m -i ${CONCAT_FILE} -o ${CONCAT_FILE_MIN}\n#fi\n#else\n#echo \"install minifyjs globally via npm to minify the remote library\"\n#fi;\n\n#UGLIFYJS\n# uglifyjs needs to be installed (npm install -g uglifyjs)\n# minifies the source file and creates a source map\nUGLIFYJS_PATH=\"uglifyjs\"\n#if [ -x $UGLIFYJS_PATH ]; then\nif [ -f $CONCAT_FILE ]; then\n\n${UGLIFYJS_PATH} ${CONCAT_FILE} -o ${CONCAT_FILE_MIN} --source-map ${CONCAT_FILE_MAP} --screw-ie8 --compress --mangle --prefix relative\n\nfi\n#else\n#echo \"install uglifyjs globally via npm to create minified JS library versions\"\n#fi;";
 		};
 		33163302193F722300EED43E /* Objective-Clean Run Script */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -714,7 +715,8 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Appledoc must be installed (from https://github.com/tomaz/appledoc)\n\n# Runs appledoc command is on release build and it is installed\n# On Release builds, we actually create the documentation\n# On Debug builds we don't run appledoc because it just takes too long. Unfortunately this means we won't get any warnings about missing documentation in debug.\n\n# Look at appledoc --help for all the parameters\n\nAPPLEDOC_PATH=\"/usr/local/bin/appledoc\"\nif [ -x $APPLEDOC_PATH ]; then\n\nif [ ${CONFIGURATION} == \"Release\" ]; then\n$APPLEDOC_PATH \\\n--project-name ${PRODUCT_NAME} \\\n--project-company \"Mario Schreiner\" \\\n--company-id \"com.marioschreiner\" \\\n--output ${PRODUCT_NAME}Docs/native \\\n#--ignore \"*.m\" \\\n--create-html \\\n--create-docset \\\n--install-docset \\\n--keep-undocumented-objects \\\n--keep-undocumented-members \\\n--keep-intermediate-files \\\n--no-repeat-first-par \\\n--warn-undocumented-object \\\n--warn-undocumented-member \\\n--warn-empty-description \\\n--warn-unknown-directive  \\\n--warn-missing-arg \\\n--warn-invalid-crossref \\\n--logformat xcode \\\n--exit-threshold 2 \\\n${PROJECT_DIR}/${PRODUCT_NAME}\nfi;\n\n#if [ ${CONFIGURATION} == \"Debug\" ]; then\n#$APPLEDOC_PATH \\\n#--project-name ${PRODUCT_NAME} \\\n#--project-company \"Mario Schreiner\" \\\n#--company-id \"com.marioschreiner\" \\\n#--output ${PRODUCT_NAME}Docs \\\n#--no-create-html \\\n#--no-create-docset \\\n#--no-install-docset \\\n#--keep-undocumented-objects \\\n#--keep-undocumented-members \\\n#--no-keep-intermediate-files \\\n#--no-repeat-first-par \\\n#--warn-undocumented-object \\\n#--warn-undocumented-member \\\n#--warn-empty-description \\\n#--warn-unknown-directive  \\\n#--warn-missing-arg \\\n#--warn-invalid-crossref \\\n#--logformat xcode \\\n#--exit-threshold 2 \\\n#${PROJECT_DIR}/${PRODUCT_NAME}\n#fi;\n\nelse\necho \"install appledoc to create the native documentation\"\nfi;";
+			shellScript = "# Appledoc must be installed (from https://github.com/tomaz/appledoc)\n\n# Runs appledoc command is on release build and it is installed\n# On Release builds, we actually create the documentation\n# On Debug builds we don't run appledoc because it just takes too long. Unfortunately this means we won't get any warnings about missing documentation in debug.\n\n# Look at appledoc --help for all the parameters\n\nAPPLEDOC_PATH=\"/usr/local/bin/appledoc\"\nif [ -x $APPLEDOC_PATH ]; then\n\nif [ ${CONFIGURATION} == \"Release\" ]; then\n$APPLEDOC_PATH \\\n--project-name ${PRODUCT_NAME} \\\n--project-company \"Mario Schreiner\" \\\n--company-id \"de.marioschreiner\" \\\n--output ${PRODUCT_NAME}Docs/native \\\n--create-html \\\n--create-docset \\\n--install-docset \\\n--keep-undocumented-objects \\\n--keep-undocumented-members \\\n--keep-intermediate-files \\\n--no-repeat-first-par \\\n--warn-undocumented-object \\\n--warn-undocumented-member \\\n--warn-empty-description \\\n--warn-unknown-directive  \\\n--warn-missing-arg \\\n--warn-invalid-crossref \\\n--logformat xcode \\\n--exit-threshold 2 \\\n${PROJECT_DIR}/${PRODUCT_NAME}\nfi;\n\n#if [ ${CONFIGURATION} == \"Debug\" ]; then\n#$APPLEDOC_PATH \\\n#--project-name ${PRODUCT_NAME} \\\n#--project-company \"Mario Schreiner\" \\\n#--company-id \"com.marioschreiner\" \\\n#--output ${PRODUCT_NAME}Docs \\\n#--no-create-html \\\n#--no-create-docset \\\n#--no-install-docset \\\n#--keep-undocumented-objects \\\n#--keep-undocumented-members \\\n#--no-keep-intermediate-files \\\n#--no-repeat-first-par \\\n#--warn-undocumented-object \\\n#--warn-undocumented-member \\\n#--warn-empty-description \\\n#--warn-unknown-directive  \\\n#--warn-missing-arg \\\n#--warn-invalid-crossref \\\n#--logformat xcode \\\n#--exit-threshold 2 \\\n#${PROJECT_DIR}/${PRODUCT_NAME}\n#fi;\n\nelse\necho \"install appledoc to create the native documentation\"\nfi;";
+			showEnvVarsInLog = 0;
 		};
 		3367186D19489121000A7164 /* Create JSDoc Script */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -728,7 +730,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# CREATE JSDOC\n# Jsdoc needs to be installed (npm install -g jsdoc@\"<=3.3.0\")\n# On Release builds we will create the JSDoc\n# On Debug builds we will do nothing to save time\n\nPATH=$(bash -l -c 'echo $PATH')\nJSDOC_PATH=\"/usr/local/bin/jsdoc\"\nif [ -x $JSDOC_PATH ]; then\n\nif [ ${CONFIGURATION} == \"Release\" ]; then\nrm -r ${PROJECT_DIR}/${PRODUCT_NAME}Docs/weblib # Needed because jsdoc only overwrites, but doesnt delete old files\n$JSDOC_PATH ${PROJECT_DIR}/${PRODUCT_NAME}Resources/weblib/connichiwa.js -c ${PROJECT_DIR}/${PRODUCT_NAME}Docs/jsdoc_conf.json -d ${PROJECT_DIR}/${PRODUCT_NAME}Docs/weblib\nfi;\n\nelse\necho \"install jsdoc globally via npm to create a web library documentation\"\nfi;";
+			shellScript = "# CREATE JSDOC\n# Jsdoc needs to be installed (npm install -g jsdoc@\"<=3.3.0\")\n# On Release builds we will create the JSDoc\n# On Debug builds we will do nothing to save time\n\nPATH=$(bash -l -c 'echo $PATH')\nJSDOC_PATH=\"/usr/local/bin/jsdoc\"\nif [ -x $JSDOC_PATH ]; then\n\nif [ ${CONFIGURATION} == \"Release\" ]; then\ncd ${PROJECT_DIR}/${PRODUCT_NAME}Docs # Needed so relative paths are resolved correctly\nrm -r ${PROJECT_DIR}/${PRODUCT_NAME}Docs/weblib # Needed because jsdoc only overwrites, but doesnt delete old files\n$JSDOC_PATH ${PROJECT_DIR}/${PRODUCT_NAME}Resources/weblib_source/* -r -a undefined -a public -c ./jsdoc/conf.json -d ./weblib -t ./jsdoc/theme\nfi;\n\nelse\necho \"install jsdoc globally via npm to create a web library documentation\"\nfi;";
 		};
 		33CC8C2D194B1CD800D99851 /* Concatenate & Minify Web Library Script */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -742,7 +744,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "PATH=$(bash -l -c 'echo $PATH')\n\nROOT_PATH=\"${PROJECT_DIR}/${PRODUCT_NAME}\"\nCONCAT_FILE=\"${ROOT_PATH}/weblib/connichiwa.js\"\nCONCAT_FILE_MIN=\"${ROOT_PATH}/weblib/connichiwa.min.js\"\nCONCAT_FILE_MAP=\"${CONCAT_FILE_MIN}.map\"\n\nrm -f ${CONCAT_FILE}\nrm -f ${CONCAT_FILE_MIN}\nrm -f ${CONCAT_FILE_MAP}\n\n# CONCATENATE\n# Concatenates everything in the weblib folder\ncat \"${ROOT_PATH}/scripts/OOP.js\" >> ${CONCAT_FILE};\nfor file in \"${ROOT_PATH}/weblib_source/common/*.js\"; do cat $file >> ${CONCAT_FILE}; done\nfor file in \"${ROOT_PATH}/weblib_source/master/*.js\"; do cat $file >> ${CONCAT_FILE}; done\n\n#UGLIFYJS\n# uglifyjs needs to be installed (npm install -g uglifyjs)\n# minifies the source file and creates a source map\nUGLIFYJS_PATH=\"uglifyjs\"\n#if [ -x $UGLIFYJS_PATH ]; then\nif [ -f $CONCAT_FILE ]; then\n\n${UGLIFYJS_PATH} ${CONCAT_FILE} -o ${CONCAT_FILE_MIN} --source-map ${CONCAT_FILE_MAP} --screw-ie8 --compress --mangle --prefix relative\n\nfi\n#else\n#echo \"install uglifyjs globally via npm to create minified JS library versions\"\n#fi;";
+			shellScript = "PATH=$(bash -l -c 'echo $PATH')\n\nROOT_PATH=\"${PROJECT_DIR}/${PRODUCT_NAME}\"\nCONCAT_FILE=\"${ROOT_PATH}/weblib/connichiwa.js\"\nCONCAT_FILE_MIN=\"${ROOT_PATH}/weblib/connichiwa.min.js\"\nCONCAT_FILE_MAP=\"${CONCAT_FILE_MIN}.map\"\n\nrm -f ${CONCAT_FILE}\nrm -f ${CONCAT_FILE_MIN}\nrm -f ${CONCAT_FILE_MAP}\n\n# CONCATENATE\n# Concatenates everything in the weblib folder\n#cat \"${ROOT_PATH}/scripts/OOP.js\" >> ${CONCAT_FILE};\nfor file in \"${ROOT_PATH}/weblib_source/common/*.js\"; do cat $file >> ${CONCAT_FILE}; done\nfor file in \"${ROOT_PATH}/weblib_source/master/*.js\"; do cat $file >> ${CONCAT_FILE}; done\n\n#UGLIFYJS\n# uglifyjs needs to be installed (npm install -g uglifyjs)\n# minifies the source file and creates a source map\nUGLIFYJS_PATH=\"uglifyjs\"\n#if [ -x $UGLIFYJS_PATH ]; then\nif [ -f $CONCAT_FILE ]; then\n\n${UGLIFYJS_PATH} ${CONCAT_FILE} -o ${CONCAT_FILE_MIN} --source-map ${CONCAT_FILE_MAP} --screw-ie8 --compress --mangle --prefix relative\n\nfi\n#else\n#echo \"install uglifyjs globally via npm to create minified JS library versions\"\n#fi;";
 		};
 		33D197D9194B3D2100AE1E1D /* Touch Folder References Script */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -792,7 +794,6 @@
 				3317C7071A714BCB008BD104 /* server.c in Sources */,
 				33618AC1195DAD37006FA51B /* CWRemoteLibraryManager.m in Sources */,
 				3338A7AF1A71204300898D4E /* GCDWebServerDataRequest.m in Sources */,
-				3317C6FE1A714BCB008BD104 /* getifaddrs.c in Sources */,
 				3338A7A31A71204300898D4E /* GCDWebServer.m in Sources */,
 				3338A7B11A71204300898D4E /* GCDWebServerFileRequest.m in Sources */,
 				3317C6F21A714BCB008BD104 /* base64-decode.c in Sources */,
@@ -990,11 +991,7 @@
 				DSTROOT = /tmp/Connichiwa.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Connichiwa/Connichiwa-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					"DEBUG=1",
-					"CWDEBUG=1",
-				);
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";

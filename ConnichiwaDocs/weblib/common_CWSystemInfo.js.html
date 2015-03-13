@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: common/CWSystemInfo.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: common/CWSystemInfo.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>'use strict';
+
+
+
+/**
+ * CWSystemInfo encapsulates some system-related information as far as they
+ *    are available. It can be used, for example, to access the display's PPI,
+ *    the browser window resolution or the orientation
+ * @namespace CWSystemInfo
+ */
+var CWSystemInfo = CWSystemInfo || {};
+
+
+/**
+ * The PPI value that will be used when other PPI information are not available
+ * @type {Number}
+ * @const
+ */
+CWSystemInfo.DEFAULT_PPI = 100; //HD on a 22'' monitor
+
+
+/**
+ * This device's display PPI, approximated. JavaScript does not have direct
+ *    access to the display size and therefore cannot retrieve the PPI value.
+ *    Depending on the available information, such as the devicePixelRatio or
+ *    navigator information, this method tries to approximate the display's
+ *    PPI as close as possible
+ * @return {Number} The device's approximated display PPI
+ * @function
+ */
+CWSystemInfo.PPI = function() {
+  var ppi = this.DEFAULT_PPI;
+
+  //For high density screens we simply assume 142 DPI
+  //This, luckily, is correct for a lot of android devices
+  if (window.devicePixelRatio > 1.0) {
+    ppi = 142; 
+  }
+   
+  //For iPhone and iPad, we can figure out the DPI pretty well
+  if (navigator.platform === 'iPad') {
+    //usually we would distinguish iPad Mini's (163dpi) but we can't, so we 
+    //return normal iPad DPI
+    ppi = 132;
+  }
+  if (navigator.platform === 'iPhone' || navigator.platform === 'iPod') {
+    //Newer iPhones (for now iPhone 6+) have a different resolution, luckily 
+    //they also return a new devicePixelRatio
+    if (window.devicePixelRatio === 3) {
+      ppi = 153;
+    } else {
+      ppi = 163;
+    }
+  }
+
+  return ppi;
+}.bind(CWSystemInfo);
+
+
+/**
+ * Determines if the device is in landscape orientation
+ * @return {Boolean} true if the device is in landscape orientation, otherwise
+ *    false
+ * @function
+ */
+CWSystemInfo.isLandscape = function() {
+  return (window.innerHeight &lt; window.innerWidth);
+}.bind(CWSystemInfo);
+
+
+/**
+ * Returns the current viewport width of the browser or web view
+ * @return {Number} The current viewport width
+ * @function
+ */
+CWSystemInfo.viewportWidth = function() {
+  return $(window).width();
+}.bind(CWSystemInfo);
+
+
+/**
+ * Returns the current viewport height of the browser or web view. This method
+ *    should not be used when using the meta-tag viewport with the
+ *    height-device-height attribute
+ * @return {Number} The current viewport height
+ * @function
+ */
+CWSystemInfo.viewportHeight = function() {
+  //This seems to break in landscape when using meta-viewport 
+  //height-device-height so basically for now: don't use that
+  return $(window).height();
+}.bind(CWSystemInfo);
+
+//Initalize module. Delayed call to make sure all modules are ready
+if (CWSystemInfo.__constructor) window.setTimeout(CWSystemInfo.__constructor, 0);
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="CWDevice.html">CWDevice</a></li><li><a href="CWLocation.html">CWLocation</a></li><li><a href="CWVector.html">CWVector</a></li></ul><h3>Namespaces</h3><ul><li><a href="Connichiwa.html">Connichiwa</a></li><li><a href="CWDebug.html">CWDebug</a></li><li><a href="CWDeviceManager.html">CWDeviceManager</a></li><li><a href="CWGyroscope.html">CWGyroscope</a></li><li><a href="CWStitchManager.html">CWStitchManager</a></li><li><a href="CWSystemInfo.html">CWSystemInfo</a></li><li><a href="CWUtil.html">CWUtil</a></li></ul><h3>Events</h3><ul><li><a href="Connichiwa.html#.event:onLoad">onLoad</a></li><li><a href="global.html#event:accelerometerUpdate">accelerometerUpdate</a></li><li><a href="global.html#event:connectfailed">connectfailed</a></li><li><a href="global.html#event:deviceconnected">deviceconnected</a></li><li><a href="global.html#event:devicedetected">devicedetected</a></li><li><a href="global.html#event:devicedisconnected">devicedisconnected</a></li><li><a href="global.html#event:devicedistancechanged">devicedistancechanged</a></li><li><a href="global.html#event:devicelost">devicelost</a></li><li><a href="global.html#event:gotstitchneighbor">gotstitchneighbor</a></li><li><a href="global.html#event:gyroscopeUpdate">gyroscopeUpdate</a></li><li><a href="global.html#event:ready">ready</a></li><li><a href="global.html#event:wasStitched">wasStitched</a></li><li><a href="global.html#event:wasUnstitched">wasUnstitched</a></li></ul><h3><a href="global.html">Global</a></h3>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta2</a> on Fri Mar 13 2015 16:04:19 GMT+0100 (CET)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

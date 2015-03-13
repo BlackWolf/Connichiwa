@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Classes/GCDWebServerURLEncodedFormRequest.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/cl/GCDWebServerURLEncodedFormRequest</TokenIdentifier>
+			<Abstract type="html">The GCDWebServerURLEncodedFormRequest subclass of GCDWebServerRequest
+parses the body of the HTTP request as a URL encoded form using
+GCDWebServerParseURLEncodedForm().</Abstract>
+			<DeclaredIn>GCDWebServerURLEncodedFormRequest.h</DeclaredIn>
+            
+			
+			<NodeRef refid="36"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerURLEncodedFormRequest/setArguments:</TokenIdentifier>
+			<Abstract type="html">Returns the unescaped control names and values for the URL encoded form.</Abstract>
+			<DeclaredIn>GCDWebServerURLEncodedFormRequest.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly) NSDictionary *arguments</Declaration>
+			
+			
+			<Anchor>//api/name/arguments</Anchor>
+            <NodeRef refid="36"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerURLEncodedFormRequest/arguments</TokenIdentifier>
+			<Abstract type="html">Returns the unescaped control names and values for the URL encoded form.</Abstract>
+			<DeclaredIn>GCDWebServerURLEncodedFormRequest.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly) NSDictionary *arguments</Declaration>
+			
+			
+			<Anchor>//api/name/arguments</Anchor>
+            <NodeRef refid="36"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/GCDWebServerURLEncodedFormRequest/arguments</TokenIdentifier>
+			<Abstract type="html">Returns the unescaped control names and values for the URL encoded form.</Abstract>
+			<DeclaredIn>GCDWebServerURLEncodedFormRequest.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly) NSDictionary *arguments</Declaration>
+			
+			
+			<Anchor>//api/name/arguments</Anchor>
+            <NodeRef refid="36"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/GCDWebServerURLEncodedFormRequest/mimeType</TokenIdentifier>
+			<Abstract type="html">Returns the MIME type for URL encoded forms
+i.e. &quot;application/x-www-form-urlencoded&quot;.</Abstract>
+			<DeclaredIn>GCDWebServerURLEncodedFormRequest.h</DeclaredIn>
+			
+			<Declaration>+ (NSString *)mimeType</Declaration>
+			
+			
+			<Anchor>//api/name/mimeType</Anchor>
+            <NodeRef refid="36"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerURLEncodedFormRequest/close:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerURLEncodedFormRequest.m</DeclaredIn>
+			
+			<Declaration>- (BOOL)close:(NSError **)error</Declaration>
+			
+			
+			<Anchor>//api/name/close:</Anchor>
+            <NodeRef refid="36"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerURLEncodedFormRequest/description</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerURLEncodedFormRequest.m</DeclaredIn>
+			
+			<Declaration>- (NSString *)description</Declaration>
+			
+			
+			<Anchor>//api/name/description</Anchor>
+            <NodeRef refid="36"/>
+		</Token>
+		
+        
+	</File>
+</Tokens>

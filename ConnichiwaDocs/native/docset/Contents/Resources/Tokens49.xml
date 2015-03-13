@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Constants/CWServerManagerState.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/c/tdef/CWServerManagerState</TokenIdentifier>
+			<Abstract type="html">Represents the state of the webserver controlled by this manager</Abstract>
+			<DeclaredIn>CWServerManager.h</DeclaredIn>
+            
+			
+			<NodeRef refid="49"/>
+		</Token>
+		
+		
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/CWServerManagerStateStopped</TokenIdentifier>
+            <Abstract type="html">The webserver is stopped
+     </Abstract>
+            <Declaration>CWServerManagerStateStopped</Declaration>
+            
+            <DeclaredIn>CWServerManager.h</DeclaredIn>
+            
+            <NodeRef refid="49"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/CWServerManagerStateStarting</TokenIdentifier>
+            <Abstract type="html">The webserver is starting
+     </Abstract>
+            <Declaration>CWServerManagerStateStarting</Declaration>
+            
+            <DeclaredIn>CWServerManager.h</DeclaredIn>
+            
+            <NodeRef refid="49"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/CWServerManagerStateStarted</TokenIdentifier>
+            <Abstract type="html">The webserver has started and accepts connections
+     </Abstract>
+            <Declaration>CWServerManagerStateStarted</Declaration>
+            
+            <DeclaredIn>CWServerManager.h</DeclaredIn>
+            
+            <NodeRef refid="49"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/CWServerManagerStateSuspended</TokenIdentifier>
+            <Abstract type="html">The webserver is currently suspended - it is still running but does not accept connections
+     </Abstract>
+            <Declaration>CWServerManagerStateSuspended</Declaration>
+            
+            <DeclaredIn>CWServerManager.h</DeclaredIn>
+            
+            <NodeRef refid="49"/>
+        </Token>
+        
+	</File>
+</Tokens>

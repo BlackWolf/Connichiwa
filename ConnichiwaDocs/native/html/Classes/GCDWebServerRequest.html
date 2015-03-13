@@ -1,0 +1,1291 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="html/html; charset=utf-8" />
+		<title>GCDWebServerRequest Class Reference</title>
+		<meta id="xcode-display" name="xcode-display" content="render"/>
+		<link rel="stylesheet" type="text/css" href="../css/styles.css" media="all" />
+		<link rel="stylesheet" type="text/css" media="print" href="../css/stylesPrint.css" />
+		<meta name="generator" content="appledoc 2.2 (build 963)" />
+	</head>
+	<body>
+		<header id="top_header">
+			<div id="library" class="hideInXcode">
+				<h1><a id="libraryTitle" href="../index.html">Connichiwa </a></h1>
+				<a id="developerHome" href="../index.html">Mario Schreiner</a>
+			</div>
+			
+			<div id="title" role="banner">
+				<h1 class="hideInXcode">GCDWebServerRequest Class Reference</h1>
+			</div>
+			<ul id="headerButtons" role="toolbar">
+				<li id="toc_button">
+					<button aria-label="Show Table of Contents" role="checkbox" class="open" id="table_of_contents"><span class="disclosure"></span>Table of Contents</button>
+				</li>
+				<li id="jumpto_button" role="navigation">
+					<select id="jumpTo">
+	<option value="top">Jump To&#133;</option>
+	
+	<option value="overview">Overview</option>
+	
+	
+	
+	
+	<option value="tasks">Tasks</option>
+	
+	
+	
+	
+	
+	<option value="properties">Properties</option>
+	
+	<option value="//api/name/URL">&nbsp;&nbsp;&nbsp;&nbsp;URL</option>
+	
+	<option value="//api/name/acceptsGzipContentEncoding">&nbsp;&nbsp;&nbsp;&nbsp;acceptsGzipContentEncoding</option>
+	
+	<option value="//api/name/byteRange">&nbsp;&nbsp;&nbsp;&nbsp;byteRange</option>
+	
+	<option value="//api/name/contentLength">&nbsp;&nbsp;&nbsp;&nbsp;contentLength</option>
+	
+	<option value="//api/name/contentType">&nbsp;&nbsp;&nbsp;&nbsp;contentType</option>
+	
+	<option value="//api/name/headers">&nbsp;&nbsp;&nbsp;&nbsp;headers</option>
+	
+	<option value="//api/name/ifModifiedSince">&nbsp;&nbsp;&nbsp;&nbsp;ifModifiedSince</option>
+	
+	<option value="//api/name/ifNoneMatch">&nbsp;&nbsp;&nbsp;&nbsp;ifNoneMatch</option>
+	
+	<option value="//api/name/method">&nbsp;&nbsp;&nbsp;&nbsp;method</option>
+	
+	<option value="//api/name/path">&nbsp;&nbsp;&nbsp;&nbsp;path</option>
+	
+	<option value="//api/name/query">&nbsp;&nbsp;&nbsp;&nbsp;query</option>
+	
+	<option value="//api/name/usesChunkedTransferEncoding">&nbsp;&nbsp;&nbsp;&nbsp;usesChunkedTransferEncoding</option>
+	
+	
+	
+	
+	
+	
+	<option value="instance_methods">Instance Methods</option>
+	
+	<option value="//api/name/attributeForKey:">&nbsp;&nbsp;&nbsp;&nbsp;- attributeForKey:</option>
+	
+	<option value="//api/name/close:">&nbsp;&nbsp;&nbsp;&nbsp;- close:</option>
+	
+	<option value="//api/name/description">&nbsp;&nbsp;&nbsp;&nbsp;- description</option>
+	
+	<option value="//api/name/hasBody">&nbsp;&nbsp;&nbsp;&nbsp;- hasBody</option>
+	
+	<option value="//api/name/hasByteRange">&nbsp;&nbsp;&nbsp;&nbsp;- hasByteRange</option>
+	
+	<option value="//api/name/initWithMethod:url:headers:path:query:">&nbsp;&nbsp;&nbsp;&nbsp;- initWithMethod:url:headers:path:query:</option>
+	
+	<option value="//api/name/open:">&nbsp;&nbsp;&nbsp;&nbsp;- open:</option>
+	
+	<option value="//api/name/performClose:">&nbsp;&nbsp;&nbsp;&nbsp;- performClose:</option>
+	
+	<option value="//api/name/performOpen:">&nbsp;&nbsp;&nbsp;&nbsp;- performOpen:</option>
+	
+	<option value="//api/name/performWriteData:error:">&nbsp;&nbsp;&nbsp;&nbsp;- performWriteData:error:</option>
+	
+	<option value="//api/name/prepareForWriting">&nbsp;&nbsp;&nbsp;&nbsp;- prepareForWriting</option>
+	
+	<option value="//api/name/setAttribute:forKey:">&nbsp;&nbsp;&nbsp;&nbsp;- setAttribute:forKey:</option>
+	
+	<option value="//api/name/writeData:error:">&nbsp;&nbsp;&nbsp;&nbsp;- writeData:error:</option>
+	
+	
+	
+</select>
+				</li>
+			</ul>
+		</header>
+		<nav id="tocContainer" class="isShowingTOC">
+			<ul id="toc" role="tree">
+				
+<li role="treeitem"><span class="nodisclosure"></span><span class="sectionName"><a href="#overview">Overview</a></span></li>
+
+
+
+
+<li role="treeitem" id="task_treeitem"><span class="nodisclosure"></span><span class="sectionName"><a href="#tasks">Tasks</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Extension Methods">Extension Methods</a></span></li>
+	
+</ul></li>
+
+
+
+
+
+<li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#properties">Properties</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/URL">URL</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/acceptsGzipContentEncoding">acceptsGzipContentEncoding</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/byteRange">byteRange</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/contentLength">contentLength</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/contentType">contentType</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/headers">headers</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/ifModifiedSince">ifModifiedSince</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/ifNoneMatch">ifNoneMatch</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/method">method</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/path">path</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/query">query</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/usesChunkedTransferEncoding">usesChunkedTransferEncoding</a></span></li>
+	
+</ul></li>
+
+
+
+
+
+<li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#instance_methods">Instance Methods</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/attributeForKey:">attributeForKey:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/close:">close:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/description">description</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/hasBody">hasBody</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/hasByteRange">hasByteRange</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/initWithMethod:url:headers:path:query:">initWithMethod:url:headers:path:query:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/open:">open:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/performClose:">performClose:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/performOpen:">performOpen:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/performWriteData:error:">performWriteData:error:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/prepareForWriting">prepareForWriting</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/setAttribute:forKey:">setAttribute:forKey:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/writeData:error:">writeData:error:</a></span></li>
+	
+</ul></li>
+
+
+			</ul>
+		</nav>
+		<article>
+			<div id="contents" class="isShowingTOC" role="main">
+				<a title="GCDWebServerRequest Class Reference" name="top"></a>
+				<div class="main-navigation navigation-top">
+					<ul>
+	<li><a href="../index.html">Index</a></li>
+	<li><a href="../hierarchy.html">Hierarchy</a></li>
+</ul>
+				</div>
+				<div id="header">
+					<div class="section-header">
+						<h1 class="title title-header">GCDWebServerRequest Class Reference</h1>
+					</div>		
+				</div>
+				<div id="container">	
+					
+					<div class="section section-specification"><table cellspacing="0"><tbody>
+						<tr>
+	<td class="specification-title">Inherits from</td>
+	<td class="specification-value">NSObject</td>
+</tr><tr>
+	<td class="specification-title">Conforms to</td>
+	<td class="specification-value"><a href="../Protocols/GCDWebServerBodyWriter.html">GCDWebServerBodyWriter</a></td>
+</tr><tr>
+	<td class="specification-title">Declared in</td>
+	<td class="specification-value">GCDWebServerRequest.h<br />GCDWebServerRequest.m</td>
+</tr>
+						</tbody></table></div>
+					
+                    
+                    
+					
+					<div class="section section-overview">
+						<a title="Overview" name="overview"></a>
+						<h2 class="subtitle subtitle-overview">Overview</h2>
+						<p>The GCDWebServerRequest class is instantiated by the <a href="../Classes/GCDWebServerConnection.html">GCDWebServerConnection</a>
+after the HTTP <a href="#//api/name/headers">headers</a> have been received. Each instance wraps a single HTTP
+request. If a body is present, the methods from the <a href="../Protocols/GCDWebServerBodyWriter.html">GCDWebServerBodyWriter</a>
+protocol will be called by the <a href="../Classes/GCDWebServerConnection.html">GCDWebServerConnection</a> to receive it.</p>
+
+<p>The default implementation of the <a href="../Protocols/GCDWebServerBodyWriter.html">GCDWebServerBodyWriter</a> protocol on the class
+simply ignores the body data.</p><div class="warning"><p><strong>Warning:</strong> GCDWebServerRequest instances can be created and used on any GCD thread.</p></div>
+					</div>
+					
+					
+					
+					
+					
+					<div class="section section-tasks">
+						<a title="Tasks" name="tasks"></a>
+						<h2 class="subtitle subtitle-tasks">Tasks</h2>
+						
+						
+						
+						<h3 class="subsubtitle task-title">Other Methods</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/method">&nbsp;&nbsp;method</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/URL">&nbsp;&nbsp;URL</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/headers">&nbsp;&nbsp;headers</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/path">&nbsp;&nbsp;path</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/query">&nbsp;&nbsp;query</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/contentType">&nbsp;&nbsp;contentType</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/contentLength">&nbsp;&nbsp;contentLength</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/ifModifiedSince">&nbsp;&nbsp;ifModifiedSince</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/ifNoneMatch">&nbsp;&nbsp;ifNoneMatch</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/byteRange">&nbsp;&nbsp;byteRange</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/acceptsGzipContentEncoding">&nbsp;&nbsp;acceptsGzipContentEncoding</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/initWithMethod:url:headers:path:query:">&ndash;&nbsp;initWithMethod:url:headers:path:query:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/hasBody">&ndash;&nbsp;hasBody</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/hasByteRange">&ndash;&nbsp;hasByteRange</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/attributeForKey:">&ndash;&nbsp;attributeForKey:</a></code>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+						
+						
+						<h3 class="subsubtitle task-title">Other Methods</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/open:">&ndash;&nbsp;open:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/writeData:error:">&ndash;&nbsp;writeData:error:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/close:">&ndash;&nbsp;close:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/prepareForWriting">&ndash;&nbsp;prepareForWriting</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/performOpen:">&ndash;&nbsp;performOpen:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/performWriteData:error:">&ndash;&nbsp;performWriteData:error:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/performClose:">&ndash;&nbsp;performClose:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/setAttribute:forKey:">&ndash;&nbsp;setAttribute:forKey:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/description">&ndash;&nbsp;description</a></code>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+						
+						<a title="Extension Methods" name="task_Extension Methods"></a>
+						<h3 class="subsubtitle task-title">Extension Methods</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/usesChunkedTransferEncoding">&nbsp;&nbsp;usesChunkedTransferEncoding</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li>
+						</ul>
+						
+					</div>
+					
+					
+					
+					
+					
+					<div class="section section-methods">
+						<a title="Properties" name="properties"></a>
+						<h2 class="subtitle subtitle-methods">Properties</h2>
+						
+						<div class="section-method">
+	<a name="//api/name/URL" title="URL"></a>
+	<h3 class="subsubtitle method-title">URL</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Returns the URL for the request.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) NSURL *URL</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerRequest.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/acceptsGzipContentEncoding" title="acceptsGzipContentEncoding"></a>
+	<h3 class="subsubtitle method-title">acceptsGzipContentEncoding</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Returns YES if the client supports gzip content encoding according to the
+&ldquo;Accept-Encoding&rdquo; header.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) BOOL acceptsGzipContentEncoding</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerRequest.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/byteRange" title="byteRange"></a>
+	<h3 class="subsubtitle method-title">byteRange</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Returns the parsed &ldquo;Range&rdquo; header or (NSUIntegerMax, 0) if absent or malformed.
+The range will be set to (offset, length) if expressed from the beginning
+of the entity body, or (NSUIntegerMax, length) if expressed from its end.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) NSRange byteRange</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerRequest.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/contentLength" title="contentLength"></a>
+	<h3 class="subsubtitle method-title">contentLength</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Returns the content length for the body of the request parsed from the
+&ldquo;Content-Length&rdquo; header.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) NSUInteger contentLength</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>This property will be set to &ldquo;NSUIntegerMax&rdquo; if the request has no body or
+if there is a body but no &ldquo;Content-Length&rdquo; header, typically because
+chunked transfer encoding is used.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerRequest.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/contentType" title="contentType"></a>
+	<h3 class="subsubtitle method-title">contentType</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Returns the content type for the body of the request parsed from the
+&ldquo;Content-Type&rdquo; header.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) NSString *contentType</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>This property will be nil if the request has no body or set to
+&ldquo;application/octet-stream&rdquo; if a body is present but there was no
+&ldquo;Content-Type&rdquo; header.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerRequest.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/headers" title="headers"></a>
+	<h3 class="subsubtitle method-title">headers</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Returns the HTTP headers for the request.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) NSDictionary *headers</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerRequest.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/ifModifiedSince" title="ifModifiedSince"></a>
+	<h3 class="subsubtitle method-title">ifModifiedSince</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Returns the parsed &ldquo;If-Modified-Since&rdquo; header or nil if absent or malformed.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) NSDate *ifModifiedSince</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerRequest.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/ifNoneMatch" title="ifNoneMatch"></a>
+	<h3 class="subsubtitle method-title">ifNoneMatch</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Returns the parsed &ldquo;If-None-Match&rdquo; header or nil if absent or malformed.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) NSString *ifNoneMatch</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerRequest.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/method" title="method"></a>
+	<h3 class="subsubtitle method-title">method</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Returns the HTTP method for the request.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) NSString *method</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerRequest.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/path" title="path"></a>
+	<h3 class="subsubtitle method-title">path</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Returns the path component of the <a href="#//api/name/URL">URL</a> for the request.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) NSString *path</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerRequest.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/query" title="query"></a>
+	<h3 class="subsubtitle method-title">query</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Returns the parsed and unescaped query component of the <a href="#//api/name/URL">URL</a> for the request.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) NSDictionary *query</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<div class="warning"><p><strong>Warning:</strong> This property will be nil if there is no query in the <a href="#//api/name/URL">URL</a>.</p></div>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerRequest.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/usesChunkedTransferEncoding" title="usesChunkedTransferEncoding"></a>
+	<h3 class="subsubtitle method-title">usesChunkedTransferEncoding</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) BOOL usesChunkedTransferEncoding</code></div>
+
+    
+</div>
+						
+					</div>
+					
+					
+					
+					
+					
+					<div class="section section-methods">
+						<a title="Instance Methods" name="instance_methods"></a>
+						<h2 class="subtitle subtitle-methods">Instance Methods</h2>
+						
+						<div class="section-method">
+	<a name="//api/name/attributeForKey:" title="attributeForKey:"></a>
+	<h3 class="subsubtitle method-title">attributeForKey:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Retrieves an attribute associated with this request using the given key.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (id)attributeForKey:(NSString *)<em>key</em></code></div>
+
+    
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>The attribute value for the key.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerRequest.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/close:" title="close:"></a>
+	<h3 class="subsubtitle method-title">close:</h3>
+	
+	
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (BOOL)close:(NSError **)<em>error</em></code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerRequest.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/description" title="description"></a>
+	<h3 class="subsubtitle method-title">description</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>- (NSString *)description</code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/hasBody" title="hasBody"></a>
+	<h3 class="subsubtitle method-title">hasBody</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Convenience <a href="#//api/name/method">method</a> that checks if the <a href="#//api/name/contentType">contentType</a> property is defined.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (BOOL)hasBody</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerRequest.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/hasByteRange" title="hasByteRange"></a>
+	<h3 class="subsubtitle method-title">hasByteRange</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Convenience <a href="#//api/name/method">method</a> that checks if the <a href="#//api/name/byteRange">byteRange</a> property is defined.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (BOOL)hasByteRange</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerRequest.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/initWithMethod:url:headers:path:query:" title="initWithMethod:url:headers:path:query:"></a>
+	<h3 class="subsubtitle method-title">initWithMethod:url:headers:path:query:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>This <a href="#//api/name/method">method</a> is the designated initializer for the class.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (instancetype)initWithMethod:(NSString *)<em>method</em> url:(NSURL *)<em>url</em> headers:(NSDictionary *)<em>headers</em> path:(NSString *)<em>path</em> query:(NSDictionary *)<em>query</em></code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerRequest.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/open:" title="open:"></a>
+	<h3 class="subsubtitle method-title">open:</h3>
+	
+	
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (BOOL)open:(NSError **)<em>error</em></code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerRequest.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/performClose:" title="performClose:"></a>
+	<h3 class="subsubtitle method-title">performClose:</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>- (BOOL)performClose:(NSError **)<em>error</em></code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/performOpen:" title="performOpen:"></a>
+	<h3 class="subsubtitle method-title">performOpen:</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>- (BOOL)performOpen:(NSError **)<em>error</em></code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/performWriteData:error:" title="performWriteData:error:"></a>
+	<h3 class="subsubtitle method-title">performWriteData:error:</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>- (BOOL)performWriteData:(NSData *)<em>data</em> error:(NSError **)<em>error</em></code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/prepareForWriting" title="prepareForWriting"></a>
+	<h3 class="subsubtitle method-title">prepareForWriting</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>- (void)prepareForWriting</code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/setAttribute:forKey:" title="setAttribute:forKey:"></a>
+	<h3 class="subsubtitle method-title">setAttribute:forKey:</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>- (void)setAttribute:(id)<em>attribute</em> forKey:(NSString *)<em>key</em></code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/writeData:error:" title="writeData:error:"></a>
+	<h3 class="subsubtitle method-title">writeData:error:</h3>
+	
+	
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (BOOL)writeData:(NSData *)<em>data</em> error:(NSError **)<em>error</em></code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerRequest.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+					</div>
+					
+					
+                    
+                    
+				</div>
+				<div class="main-navigation navigation-bottom">
+					<ul>
+	<li><a href="../index.html">Index</a></li>
+	<li><a href="../hierarchy.html">Hierarchy</a></li>
+</ul>
+				</div>
+				<div id="footer">
+					<hr />
+					<div class="footer-copyright">
+						<p><span class="copyright">&copy; 2015 Mario Schreiner. All rights reserved. (Last updated: 2015-03-13)</span><br />
+						
+						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2 (build 963)</a>.</span></p>
+						
+					</div>
+				</div>
+			</div>
+		</article>
+		<script type="text/javascript">
+			function jumpToChange()
+			{
+				window.location.hash = this.options[this.selectedIndex].value;
+			}
+			
+			function toggleTOC()
+			{
+				var contents = document.getElementById('contents');
+				var tocContainer = document.getElementById('tocContainer');
+				
+				if (this.getAttribute('class') == 'open')
+				{
+					this.setAttribute('class', '');
+					contents.setAttribute('class', '');
+					tocContainer.setAttribute('class', '');
+					
+					window.name = "hideTOC";
+				}
+				else
+				{
+					this.setAttribute('class', 'open');
+					contents.setAttribute('class', 'isShowingTOC');
+					tocContainer.setAttribute('class', 'isShowingTOC');
+					
+					window.name = "";
+				}
+				return false;
+			}
+			
+			function toggleTOCEntryChildren(e)
+			{
+				e.stopPropagation();
+				var currentClass = this.getAttribute('class');
+				if (currentClass == 'children') {
+					this.setAttribute('class', 'children open');
+				}
+				else if (currentClass == 'children open') {
+					this.setAttribute('class', 'children');
+				}
+				return false;
+			}
+			
+			function tocEntryClick(e)
+			{
+				e.stopPropagation();
+				return true;
+			}
+			
+			function init()
+			{
+				var selectElement = document.getElementById('jumpTo');
+				selectElement.addEventListener('change', jumpToChange, false);
+				
+				var tocButton = document.getElementById('table_of_contents');
+				tocButton.addEventListener('click', toggleTOC, false);
+				
+				var taskTreeItem = document.getElementById('task_treeitem');
+				if (taskTreeItem.getElementsByTagName('li').length > 0)
+				{
+					taskTreeItem.setAttribute('class', 'children');
+					taskTreeItem.firstChild.setAttribute('class', 'disclosure');
+				}
+				
+				var tocList = document.getElementById('toc');
+				
+				var tocEntries = tocList.getElementsByTagName('li');
+				for (var i = 0; i < tocEntries.length; i++) {
+					tocEntries[i].addEventListener('click', toggleTOCEntryChildren, false);
+				}
+				
+				var tocLinks = tocList.getElementsByTagName('a');
+				for (var i = 0; i < tocLinks.length; i++) {
+					tocLinks[i].addEventListener('click', tocEntryClick, false);
+				}
+				
+				if (window.name == "hideTOC") {
+					toggleTOC.call(tocButton);
+				}
+			}
+			
+			window.onload = init;
+			
+			// If showing in Xcode, hide the TOC and Header
+			if (navigator.userAgent.match(/xcode/i)) {
+				document.getElementById("contents").className = "hideInXcode"
+				document.getElementById("tocContainer").className = "hideInXcode"
+				document.getElementById("top_header").className = "hideInXcode"
+			}
+			
+		</script>
+	</body>
+</html>

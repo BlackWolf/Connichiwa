@@ -60,11 +60,6 @@
 - (void)_sendToView_disconnectWebsocket;
 
 /**
- *  Tells the remote library if we are running in debug mode or not
- */
-- (void)_sendToView_cwdebug;
-
-/**
  *  Tells the remote library the unique connichiwa identifier we are known under
  */
 - (void)_sendToView_localInfo;
@@ -238,16 +233,6 @@
 }
 
 
-- (void)_sendToView_cwdebug
-{
-    NSDictionary *data = @{
-                           @"_name": @"cwdebug",
-                           @"cwdebug": @([CWDebug isDebugging])
-                           };
-    [self _sendToView_dictionary:data];
-}
-
-
 - (void)_sendToView_localInfo
 {
     NSMutableDictionary *data = [[self.appState deviceInfo] mutableCopy];
@@ -271,7 +256,7 @@
     //stringByEvaluatingJavaScriptFromString: must be called on the main thread, but it seems buggy with dispatch_async, so we use performSelectorOnMainThread:
     //Also see http://stackoverflow.com/questions/11593900/uiwebview-stringbyevaluatingjavascriptfromstring-hangs-on-ios5-0-5-1-when-called
     CWLog(4, @"Sending message to remote library: %@", message);
-    NSString *js = [NSString stringWithFormat:@"CWNativeRemoteCommunication.parse('%@')", message];
+    NSString *js = [NSString stringWithFormat:@"CWNativeBridge.parse('%@')", message];
     [self.webView performSelectorOnMainThread:@selector(stringByEvaluatingJavaScriptFromString:) withObject:js waitUntilDone:NO];
 }
 

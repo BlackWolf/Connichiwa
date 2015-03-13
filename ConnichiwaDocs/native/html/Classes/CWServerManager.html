@@ -1,0 +1,1006 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="html/html; charset=utf-8" />
+		<title>CWServerManager Class Reference</title>
+		<meta id="xcode-display" name="xcode-display" content="render"/>
+		<link rel="stylesheet" type="text/css" href="../css/styles.css" media="all" />
+		<link rel="stylesheet" type="text/css" media="print" href="../css/stylesPrint.css" />
+		<meta name="generator" content="appledoc 2.2 (build 963)" />
+	</head>
+	<body>
+		<header id="top_header">
+			<div id="library" class="hideInXcode">
+				<h1><a id="libraryTitle" href="../index.html">Connichiwa </a></h1>
+				<a id="developerHome" href="../index.html">Mario Schreiner</a>
+			</div>
+			
+			<div id="title" role="banner">
+				<h1 class="hideInXcode">CWServerManager Class Reference</h1>
+			</div>
+			<ul id="headerButtons" role="toolbar">
+				<li id="toc_button">
+					<button aria-label="Show Table of Contents" role="checkbox" class="open" id="table_of_contents"><span class="disclosure"></span>Table of Contents</button>
+				</li>
+				<li id="jumpto_button" role="navigation">
+					<select id="jumpTo">
+	<option value="top">Jump To&#133;</option>
+	
+	<option value="overview">Overview</option>
+	
+	
+	
+	
+	<option value="tasks">Tasks</option>
+	
+	
+	
+	
+	
+	<option value="properties">Properties</option>
+	
+	<option value="//api/name/delegate">&nbsp;&nbsp;&nbsp;&nbsp;delegate</option>
+	
+	<option value="//api/name/documentRoot">&nbsp;&nbsp;&nbsp;&nbsp;documentRoot</option>
+	
+	<option value="//api/name/localWebsocketID">&nbsp;&nbsp;&nbsp;&nbsp;localWebsocketID</option>
+	
+	<option value="//api/name/state">&nbsp;&nbsp;&nbsp;&nbsp;state</option>
+	
+	<option value="//api/name/webServer">&nbsp;&nbsp;&nbsp;&nbsp;webServer</option>
+	
+	<option value="//api/name/websocketIdentifiers">&nbsp;&nbsp;&nbsp;&nbsp;websocketIdentifiers</option>
+	
+	<option value="//api/name/websocketServer">&nbsp;&nbsp;&nbsp;&nbsp;websocketServer</option>
+	
+	
+	
+	
+	
+	
+	<option value="instance_methods">Instance Methods</option>
+	
+	<option value="//api/name/_receivedFromServer_remoteWebsocketDidClose:">&nbsp;&nbsp;&nbsp;&nbsp;- _receivedFromServer_remoteWebsocketDidClose:</option>
+	
+	<option value="//api/name/_receivedFromServer_serverDidStart">&nbsp;&nbsp;&nbsp;&nbsp;- _receivedFromServer_serverDidStart</option>
+	
+	<option value="//api/name/_registerJSCallbacks">&nbsp;&nbsp;&nbsp;&nbsp;- _registerJSCallbacks</option>
+	
+	<option value="//api/name/connectionIDForIdentifier:">&nbsp;&nbsp;&nbsp;&nbsp;- connectionIDForIdentifier:</option>
+	
+	<option value="//api/name/identifierForConnectionID:">&nbsp;&nbsp;&nbsp;&nbsp;- identifierForConnectionID:</option>
+	
+	<option value="//api/name/initWithDocumentRoot:">&nbsp;&nbsp;&nbsp;&nbsp;- initWithDocumentRoot:</option>
+	
+	<option value="//api/name/onIdentifiedWebsocketClosed">&nbsp;&nbsp;&nbsp;&nbsp;- onIdentifiedWebsocketClosed</option>
+	
+	<option value="//api/name/onIdentifiedWebsocketMessage">&nbsp;&nbsp;&nbsp;&nbsp;- onIdentifiedWebsocketMessage</option>
+	
+	<option value="//api/name/onUnidentifiedWebsocketMessage">&nbsp;&nbsp;&nbsp;&nbsp;- onUnidentifiedWebsocketMessage</option>
+	
+	<option value="//api/name/resumeWebserver">&nbsp;&nbsp;&nbsp;&nbsp;- resumeWebserver</option>
+	
+	<option value="//api/name/startWebserverWithDocumentRoot:onPort:">&nbsp;&nbsp;&nbsp;&nbsp;- startWebserverWithDocumentRoot:onPort:</option>
+	
+	<option value="//api/name/suspendWebserver">&nbsp;&nbsp;&nbsp;&nbsp;- suspendWebserver</option>
+	
+	
+	
+</select>
+				</li>
+			</ul>
+		</header>
+		<nav id="tocContainer" class="isShowingTOC">
+			<ul id="toc" role="tree">
+				
+<li role="treeitem"><span class="nodisclosure"></span><span class="sectionName"><a href="#overview">Overview</a></span></li>
+
+
+
+
+<li role="treeitem" id="task_treeitem"><span class="nodisclosure"></span><span class="sectionName"><a href="#tasks">Tasks</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Extension Methods">Extension Methods</a></span></li>
+	
+</ul></li>
+
+
+
+
+
+<li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#properties">Properties</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/delegate">delegate</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/documentRoot">documentRoot</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/localWebsocketID">localWebsocketID</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/state">state</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/webServer">webServer</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/websocketIdentifiers">websocketIdentifiers</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/websocketServer">websocketServer</a></span></li>
+	
+</ul></li>
+
+
+
+
+
+<li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#instance_methods">Instance Methods</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/_receivedFromServer_remoteWebsocketDidClose:">_receivedFromServer_remoteWebsocketDidClose:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/_receivedFromServer_serverDidStart">_receivedFromServer_serverDidStart</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/_registerJSCallbacks">_registerJSCallbacks</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/connectionIDForIdentifier:">connectionIDForIdentifier:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/identifierForConnectionID:">identifierForConnectionID:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/initWithDocumentRoot:">initWithDocumentRoot:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/onIdentifiedWebsocketClosed">onIdentifiedWebsocketClosed</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/onIdentifiedWebsocketMessage">onIdentifiedWebsocketMessage</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/onUnidentifiedWebsocketMessage">onUnidentifiedWebsocketMessage</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/resumeWebserver">resumeWebserver</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/startWebserverWithDocumentRoot:onPort:">startWebserverWithDocumentRoot:onPort:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/suspendWebserver">suspendWebserver</a></span></li>
+	
+</ul></li>
+
+
+			</ul>
+		</nav>
+		<article>
+			<div id="contents" class="isShowingTOC" role="main">
+				<a title="CWServerManager Class Reference" name="top"></a>
+				<div class="main-navigation navigation-top">
+					<ul>
+	<li><a href="../index.html">Index</a></li>
+	<li><a href="../hierarchy.html">Hierarchy</a></li>
+</ul>
+				</div>
+				<div id="header">
+					<div class="section-header">
+						<h1 class="title title-header">CWServerManager Class Reference</h1>
+					</div>		
+				</div>
+				<div id="container">	
+					
+					<div class="section section-specification"><table cellspacing="0"><tbody>
+						<tr>
+	<td class="specification-title">Inherits from</td>
+	<td class="specification-value">NSObject</td>
+</tr><tr>
+	<td class="specification-title">Declared in</td>
+	<td class="specification-value">CWServerManager.h<br />CWServerManager.m</td>
+</tr>
+						</tbody></table></div>
+					
+                    
+                    
+					
+					<div class="section section-overview">
+						<a title="Overview" name="overview"></a>
+						<h2 class="subtitle subtitle-overview">Overview</h2>
+						<p>The CWWebserverManager class represents the local webserver run by Connichiwa in order to run local web applications.
+It is responsible for launching and managing the webserver that offers an HTTP and Websocket server. The manager also receives information about established or closed websocket connections.
+Only one instance of the webserver should be running on a device.</p>
+					</div>
+					
+					
+					
+					
+					
+					<div class="section section-tasks">
+						<a title="Tasks" name="tasks"></a>
+						<h2 class="subtitle subtitle-tasks">Tasks</h2>
+						
+						
+						
+						<h3 class="subsubtitle task-title">Other Methods</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/delegate">&nbsp;&nbsp;delegate</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/state">&nbsp;&nbsp;state</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/documentRoot">&nbsp;&nbsp;documentRoot</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/initWithDocumentRoot:">&ndash;&nbsp;initWithDocumentRoot:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/startWebserverWithDocumentRoot:onPort:">&ndash;&nbsp;startWebserverWithDocumentRoot:onPort:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/suspendWebserver">&ndash;&nbsp;suspendWebserver</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/resumeWebserver">&ndash;&nbsp;resumeWebserver</a></code>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+						
+						
+						<h3 class="subsubtitle task-title">Other Methods</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/onUnidentifiedWebsocketMessage">&ndash;&nbsp;onUnidentifiedWebsocketMessage</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/onIdentifiedWebsocketMessage">&ndash;&nbsp;onIdentifiedWebsocketMessage</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/onIdentifiedWebsocketClosed">&ndash;&nbsp;onIdentifiedWebsocketClosed</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/connectionIDForIdentifier:">&ndash;&nbsp;connectionIDForIdentifier:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/identifierForConnectionID:">&ndash;&nbsp;identifierForConnectionID:</a></code>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+						
+						<a title="Extension Methods" name="task_Extension Methods"></a>
+						<h3 class="subsubtitle task-title">Extension Methods</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/webServer">&nbsp;&nbsp;webServer</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/websocketServer">&nbsp;&nbsp;websocketServer</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/localWebsocketID">&nbsp;&nbsp;localWebsocketID</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/websocketIdentifiers">&nbsp;&nbsp;websocketIdentifiers</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/_registerJSCallbacks">&ndash;&nbsp;_registerJSCallbacks</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/_receivedFromServer_serverDidStart">&ndash;&nbsp;_receivedFromServer_serverDidStart</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/_receivedFromServer_remoteWebsocketDidClose:">&ndash;&nbsp;_receivedFromServer_remoteWebsocketDidClose:</a></code>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+					</div>
+					
+					
+					
+					
+					
+					<div class="section section-methods">
+						<a title="Properties" name="properties"></a>
+						<h2 class="subtitle subtitle-methods">Properties</h2>
+						
+						<div class="section-method">
+	<a name="//api/name/delegate" title="delegate"></a>
+	<h3 class="subsubtitle method-title">delegate</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>The delegate to receive events by this class</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (readwrite, strong) id&lt;CWServerManagerDelegate&gt; delegate</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">CWServerManager.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/documentRoot" title="documentRoot"></a>
+	<h3 class="subsubtitle method-title">documentRoot</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Path to the folder acting as the root of the web server. &lsquo;/&rsquo; on the web server will be mapped to this path.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (readonly) NSString *documentRoot</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">CWServerManager.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/localWebsocketID" title="localWebsocketID"></a>
+	<h3 class="subsubtitle method-title">localWebsocketID</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>@property (readwrite) int localWebsocketID</code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/state" title="state"></a>
+	<h3 class="subsubtitle method-title">state</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>The current state of this manager</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (readonly) CWServerManagerState state</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">CWServerManager.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/webServer" title="webServer"></a>
+	<h3 class="subsubtitle method-title">webServer</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>A Nodelike-specific subclass of JSContext that is used to execute code and for communication between Objective-C and the Nodelike server</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (strong, readwrite) GCDWebServer *webServer</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">CWServerManager.m</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/websocketIdentifiers" title="websocketIdentifiers"></a>
+	<h3 class="subsubtitle method-title">websocketIdentifiers</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>@property (strong, readwrite) NSMutableDictionary *websocketIdentifiers</code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/websocketServer" title="websocketServer"></a>
+	<h3 class="subsubtitle method-title">websocketServer</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>@property (strong, readwrite) BLWebSocketsServer *websocketServer</code></div>
+
+    
+</div>
+						
+					</div>
+					
+					
+					
+					
+					
+					<div class="section section-methods">
+						<a title="Instance Methods" name="instance_methods"></a>
+						<h2 class="subtitle subtitle-methods">Instance Methods</h2>
+						
+						<div class="section-method">
+	<a name="//api/name/_receivedFromServer_remoteWebsocketDidClose:" title="_receivedFromServer_remoteWebsocketDidClose:"></a>
+	<h3 class="subsubtitle method-title">_receivedFromServer_remoteWebsocketDidClose:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Called by the webserver script if the websocket connection of a remote device was closed (the remote disconnected)</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (void)_receivedFromServer_remoteWebsocketDidClose:(NSString *)<em>identifier</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>identifier</em></dt>
+			<dd><p>The device identifier of the device to which the connection was closed</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">CWServerManager.m</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/_receivedFromServer_serverDidStart" title="_receivedFromServer_serverDidStart"></a>
+	<h3 class="subsubtitle method-title">_receivedFromServer_serverDidStart</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Called by the webserver script if the server finished starting up and is ready to accept HTTP and Websocket connections</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (void)_receivedFromServer_serverDidStart</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">CWServerManager.m</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/_registerJSCallbacks" title="_registerJSCallbacks"></a>
+	<h3 class="subsubtitle method-title">_registerJSCallbacks</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Registers callback functions that the webserver script can call to execute native methods</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (void)_registerJSCallbacks</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">CWServerManager.m</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/connectionIDForIdentifier:" title="connectionIDForIdentifier:"></a>
+	<h3 class="subsubtitle method-title">connectionIDForIdentifier:</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>- (int)connectionIDForIdentifier:(NSString *)<em>targetIdentifier</em></code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/identifierForConnectionID:" title="identifierForConnectionID:"></a>
+	<h3 class="subsubtitle method-title">identifierForConnectionID:</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>- (NSString *)identifierForConnectionID:(int)<em>targetID</em></code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/initWithDocumentRoot:" title="initWithDocumentRoot:"></a>
+	<h3 class="subsubtitle method-title">initWithDocumentRoot:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Initialize a new CWWebserverManager instance with the given document root (should point to the path where the web application resides). Calling this does not actually start the webserver, use startWebserver to do so.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (instancetype)initWithDocumentRoot:(NSString *)<em>documentRoot</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>documentRoot</em></dt>
+			<dd><p>The document root of the webserver, usually pointing to the path of the web application. &lsquo;/&rsquo; on the web server will be mapped to this path.</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>A new CWWebserverManager instance</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">CWServerManager.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/onIdentifiedWebsocketClosed" title="onIdentifiedWebsocketClosed"></a>
+	<h3 class="subsubtitle method-title">onIdentifiedWebsocketClosed</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>- (BLWebSocketOnCloseHandler)onIdentifiedWebsocketClosed</code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/onIdentifiedWebsocketMessage" title="onIdentifiedWebsocketMessage"></a>
+	<h3 class="subsubtitle method-title">onIdentifiedWebsocketMessage</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>- (BLWebSocketOnMessageHandler)onIdentifiedWebsocketMessage</code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/onUnidentifiedWebsocketMessage" title="onUnidentifiedWebsocketMessage"></a>
+	<h3 class="subsubtitle method-title">onUnidentifiedWebsocketMessage</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>- (BLWebSocketOnMessageHandler)onUnidentifiedWebsocketMessage</code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/resumeWebserver" title="resumeWebserver"></a>
+	<h3 class="subsubtitle method-title">resumeWebserver</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Resumes the webserver if it is in suspended <a href="#//api/name/state">state</a>, making it possible to establish remote connections again</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (void)resumeWebserver</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">CWServerManager.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/startWebserverWithDocumentRoot:onPort:" title="startWebserverWithDocumentRoot:onPort:"></a>
+	<h3 class="subsubtitle method-title">startWebserverWithDocumentRoot:onPort:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Calling this method actually launches the webserver and initializes the HTTP and Websocket servers. The root of the webserver will be mapped to the given document root, the HTTP server will run on the given port and the websocket server will run on the given port + 1</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (void)startWebserverWithDocumentRoot:(NSString *)<em>documentRoot</em> onPort:(int)<em>port</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>documentRoot</em></dt>
+			<dd><p>The document root that contains the files that the webserver is supposed to serve</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>port</em></dt>
+			<dd><p>The port the HTTP server will run</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">CWServerManager.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/suspendWebserver" title="suspendWebserver"></a>
+	<h3 class="subsubtitle method-title">suspendWebserver</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Puts the webserver in a suspended <a href="#//api/name/state">state</a> where it closes all remote connections and does not accept new ones</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (void)suspendWebserver</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">CWServerManager.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+					</div>
+					
+					
+                    
+                    
+				</div>
+				<div class="main-navigation navigation-bottom">
+					<ul>
+	<li><a href="../index.html">Index</a></li>
+	<li><a href="../hierarchy.html">Hierarchy</a></li>
+</ul>
+				</div>
+				<div id="footer">
+					<hr />
+					<div class="footer-copyright">
+						<p><span class="copyright">&copy; 2015 Mario Schreiner. All rights reserved. (Last updated: 2015-03-13)</span><br />
+						
+						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2 (build 963)</a>.</span></p>
+						
+					</div>
+				</div>
+			</div>
+		</article>
+		<script type="text/javascript">
+			function jumpToChange()
+			{
+				window.location.hash = this.options[this.selectedIndex].value;
+			}
+			
+			function toggleTOC()
+			{
+				var contents = document.getElementById('contents');
+				var tocContainer = document.getElementById('tocContainer');
+				
+				if (this.getAttribute('class') == 'open')
+				{
+					this.setAttribute('class', '');
+					contents.setAttribute('class', '');
+					tocContainer.setAttribute('class', '');
+					
+					window.name = "hideTOC";
+				}
+				else
+				{
+					this.setAttribute('class', 'open');
+					contents.setAttribute('class', 'isShowingTOC');
+					tocContainer.setAttribute('class', 'isShowingTOC');
+					
+					window.name = "";
+				}
+				return false;
+			}
+			
+			function toggleTOCEntryChildren(e)
+			{
+				e.stopPropagation();
+				var currentClass = this.getAttribute('class');
+				if (currentClass == 'children') {
+					this.setAttribute('class', 'children open');
+				}
+				else if (currentClass == 'children open') {
+					this.setAttribute('class', 'children');
+				}
+				return false;
+			}
+			
+			function tocEntryClick(e)
+			{
+				e.stopPropagation();
+				return true;
+			}
+			
+			function init()
+			{
+				var selectElement = document.getElementById('jumpTo');
+				selectElement.addEventListener('change', jumpToChange, false);
+				
+				var tocButton = document.getElementById('table_of_contents');
+				tocButton.addEventListener('click', toggleTOC, false);
+				
+				var taskTreeItem = document.getElementById('task_treeitem');
+				if (taskTreeItem.getElementsByTagName('li').length > 0)
+				{
+					taskTreeItem.setAttribute('class', 'children');
+					taskTreeItem.firstChild.setAttribute('class', 'disclosure');
+				}
+				
+				var tocList = document.getElementById('toc');
+				
+				var tocEntries = tocList.getElementsByTagName('li');
+				for (var i = 0; i < tocEntries.length; i++) {
+					tocEntries[i].addEventListener('click', toggleTOCEntryChildren, false);
+				}
+				
+				var tocLinks = tocList.getElementsByTagName('a');
+				for (var i = 0; i < tocLinks.length; i++) {
+					tocLinks[i].addEventListener('click', tocEntryClick, false);
+				}
+				
+				if (window.name == "hideTOC") {
+					toggleTOC.call(tocButton);
+				}
+			}
+			
+			window.onload = init;
+			
+			// If showing in Xcode, hide the TOC and Header
+			if (navigator.userAgent.match(/xcode/i)) {
+				document.getElementById("contents").className = "hideInXcode"
+				document.getElementById("tocContainer").className = "hideInXcode"
+				document.getElementById("top_header").className = "hideInXcode"
+			}
+			
+		</script>
+	</body>
+</html>

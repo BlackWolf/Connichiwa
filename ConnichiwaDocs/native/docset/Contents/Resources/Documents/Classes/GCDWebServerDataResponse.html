@@ -1,0 +1,896 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="html/html; charset=utf-8" />
+		<title>GCDWebServerDataResponse Class Reference</title>
+		<meta id="xcode-display" name="xcode-display" content="render"/>
+		<link rel="stylesheet" type="text/css" href="../css/styles.css" media="all" />
+		<link rel="stylesheet" type="text/css" media="print" href="../css/stylesPrint.css" />
+		<meta name="generator" content="appledoc 2.2 (build 963)" />
+	</head>
+	<body>
+		<header id="top_header">
+			<div id="library" class="hideInXcode">
+				<h1><a id="libraryTitle" href="../index.html">Connichiwa </a></h1>
+				<a id="developerHome" href="../index.html">Mario Schreiner</a>
+			</div>
+			
+			<div id="title" role="banner">
+				<h1 class="hideInXcode">GCDWebServerDataResponse Class Reference</h1>
+			</div>
+			<ul id="headerButtons" role="toolbar">
+				<li id="toc_button">
+					<button aria-label="Show Table of Contents" role="checkbox" class="open" id="table_of_contents"><span class="disclosure"></span>Table of Contents</button>
+				</li>
+				<li id="jumpto_button" role="navigation">
+					<select id="jumpTo">
+	<option value="top">Jump To&#133;</option>
+	
+	<option value="overview">Overview</option>
+	
+	
+	
+	
+	<option value="tasks">Tasks</option>
+	
+	
+	
+	
+	
+	
+	
+	<option value="class_methods">Class Methods</option>
+	
+	<option value="//api/name/responseWithData:contentType:">&nbsp;&nbsp;&nbsp;&nbsp;+ responseWithData:contentType:</option>
+	
+	<option value="//api/name/responseWithHTML:">&nbsp;&nbsp;&nbsp;&nbsp;+ responseWithHTML:</option>
+	
+	<option value="//api/name/responseWithHTMLTemplate:variables:">&nbsp;&nbsp;&nbsp;&nbsp;+ responseWithHTMLTemplate:variables:</option>
+	
+	<option value="//api/name/responseWithJSONObject:">&nbsp;&nbsp;&nbsp;&nbsp;+ responseWithJSONObject:</option>
+	
+	<option value="//api/name/responseWithJSONObject:contentType:">&nbsp;&nbsp;&nbsp;&nbsp;+ responseWithJSONObject:contentType:</option>
+	
+	<option value="//api/name/responseWithText:">&nbsp;&nbsp;&nbsp;&nbsp;+ responseWithText:</option>
+	
+	
+	
+	
+	<option value="instance_methods">Instance Methods</option>
+	
+	<option value="//api/name/description">&nbsp;&nbsp;&nbsp;&nbsp;- description</option>
+	
+	<option value="//api/name/initWithData:contentType:">&nbsp;&nbsp;&nbsp;&nbsp;- initWithData:contentType:</option>
+	
+	<option value="//api/name/initWithHTML:">&nbsp;&nbsp;&nbsp;&nbsp;- initWithHTML:</option>
+	
+	<option value="//api/name/initWithHTMLTemplate:variables:">&nbsp;&nbsp;&nbsp;&nbsp;- initWithHTMLTemplate:variables:</option>
+	
+	<option value="//api/name/initWithJSONObject:">&nbsp;&nbsp;&nbsp;&nbsp;- initWithJSONObject:</option>
+	
+	<option value="//api/name/initWithJSONObject:contentType:">&nbsp;&nbsp;&nbsp;&nbsp;- initWithJSONObject:contentType:</option>
+	
+	<option value="//api/name/initWithText:">&nbsp;&nbsp;&nbsp;&nbsp;- initWithText:</option>
+	
+	<option value="//api/name/readData:">&nbsp;&nbsp;&nbsp;&nbsp;- readData:</option>
+	
+	
+	
+</select>
+				</li>
+			</ul>
+		</header>
+		<nav id="tocContainer" class="isShowingTOC">
+			<ul id="toc" role="tree">
+				
+<li role="treeitem"><span class="nodisclosure"></span><span class="sectionName"><a href="#overview">Overview</a></span></li>
+
+
+
+
+<li role="treeitem" id="task_treeitem"><span class="nodisclosure"></span><span class="sectionName"><a href="#tasks">Tasks</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Extensions Methods">Extensions Methods</a></span></li>
+	
+</ul></li>
+
+
+
+
+
+
+
+<li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#class_methods">Class Methods</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/responseWithData:contentType:">responseWithData:contentType:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/responseWithHTML:">responseWithHTML:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/responseWithHTMLTemplate:variables:">responseWithHTMLTemplate:variables:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/responseWithJSONObject:">responseWithJSONObject:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/responseWithJSONObject:contentType:">responseWithJSONObject:contentType:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/responseWithText:">responseWithText:</a></span></li>
+	
+</ul></li>
+
+
+
+<li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#instance_methods">Instance Methods</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/description">description</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/initWithData:contentType:">initWithData:contentType:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/initWithHTML:">initWithHTML:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/initWithHTMLTemplate:variables:">initWithHTMLTemplate:variables:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/initWithJSONObject:">initWithJSONObject:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/initWithJSONObject:contentType:">initWithJSONObject:contentType:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/initWithText:">initWithText:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/readData:">readData:</a></span></li>
+	
+</ul></li>
+
+
+			</ul>
+		</nav>
+		<article>
+			<div id="contents" class="isShowingTOC" role="main">
+				<a title="GCDWebServerDataResponse Class Reference" name="top"></a>
+				<div class="main-navigation navigation-top">
+					<ul>
+	<li><a href="../index.html">Index</a></li>
+	<li><a href="../hierarchy.html">Hierarchy</a></li>
+</ul>
+				</div>
+				<div id="header">
+					<div class="section-header">
+						<h1 class="title title-header">GCDWebServerDataResponse Class Reference</h1>
+					</div>		
+				</div>
+				<div id="container">	
+					
+					<div class="section section-specification"><table cellspacing="0"><tbody>
+						<tr>
+	<td class="specification-title">Inherits from</td>
+	<td class="specification-value"><a href="../Classes/GCDWebServerResponse.html">GCDWebServerResponse</a> : NSObject</td>
+</tr><tr>
+	<td class="specification-title">Declared in</td>
+	<td class="specification-value">GCDWebServerDataResponse.h<br />GCDWebServerDataResponse.m</td>
+</tr>
+						</tbody></table></div>
+					
+                    
+                    
+					
+					<div class="section section-overview">
+						<a title="Overview" name="overview"></a>
+						<h2 class="subtitle subtitle-overview">Overview</h2>
+						<p>The GCDWebServerDataResponse subclass of <a href="../Classes/GCDWebServerResponse.html">GCDWebServerResponse</a> reads the body
+of the HTTP response from memory.</p>
+					</div>
+					
+					
+					
+					
+					
+					<div class="section section-tasks">
+						<a title="Tasks" name="tasks"></a>
+						<h2 class="subtitle subtitle-tasks">Tasks</h2>
+						
+						
+						
+						<h3 class="subsubtitle task-title">Other Methods</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/responseWithData:contentType:">+&nbsp;responseWithData:contentType:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/initWithData:contentType:">&ndash;&nbsp;initWithData:contentType:</a></code>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+						
+						
+						<h3 class="subsubtitle task-title">Other Methods</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/readData:">&ndash;&nbsp;readData:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/description">&ndash;&nbsp;description</a></code>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+						
+						<a title="Extensions Methods" name="task_Extensions Methods"></a>
+						<h3 class="subsubtitle task-title">Extensions Methods</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/responseWithText:">+&nbsp;responseWithText:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/responseWithHTML:">+&nbsp;responseWithHTML:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/responseWithHTMLTemplate:variables:">+&nbsp;responseWithHTMLTemplate:variables:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/responseWithJSONObject:">+&nbsp;responseWithJSONObject:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/responseWithJSONObject:contentType:">+&nbsp;responseWithJSONObject:contentType:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/initWithText:">&ndash;&nbsp;initWithText:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/initWithHTML:">&ndash;&nbsp;initWithHTML:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/initWithHTMLTemplate:variables:">&ndash;&nbsp;initWithHTMLTemplate:variables:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/initWithJSONObject:">&ndash;&nbsp;initWithJSONObject:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/initWithJSONObject:contentType:">&ndash;&nbsp;initWithJSONObject:contentType:</a></code>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+					</div>
+					
+					
+					
+					
+					
+					
+					
+					<div class="section section-methods">
+						<a title="Class Methods" name="class_methods"></a>
+						<h2 class="subtitle subtitle-methods">Class Methods</h2>
+						
+						<div class="section-method">
+	<a name="//api/name/responseWithData:contentType:" title="responseWithData:contentType:"></a>
+	<h3 class="subsubtitle method-title">responseWithData:contentType:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Creates a response with data in memory and a given content type.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>+ (instancetype)responseWithData:(NSData *)<em>data</em> contentType:(NSString *)<em>type</em></code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerDataResponse.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/responseWithHTML:" title="responseWithHTML:"></a>
+	<h3 class="subsubtitle method-title">responseWithHTML:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Creates a data response from HTML encoded using UTF-8.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>+ (instancetype)responseWithHTML:(NSString *)<em>html</em></code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerDataResponse.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/responseWithHTMLTemplate:variables:" title="responseWithHTMLTemplate:variables:"></a>
+	<h3 class="subsubtitle method-title">responseWithHTMLTemplate:variables:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Creates a data response from an HTML template encoded using UTF-8.
+See <a href="#//api/name/initWithHTMLTemplate:variables:">initWithHTMLTemplate:variables:</a> for details.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>+ (instancetype)responseWithHTMLTemplate:(NSString *)<em>path</em> variables:(NSDictionary *)<em>variables</em></code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerDataResponse.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/responseWithJSONObject:" title="responseWithJSONObject:"></a>
+	<h3 class="subsubtitle method-title">responseWithJSONObject:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Creates a data response from a serialized JSON object and the default
+&ldquo;application/json&rdquo; content type.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>+ (instancetype)responseWithJSONObject:(id)<em>object</em></code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerDataResponse.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/responseWithJSONObject:contentType:" title="responseWithJSONObject:contentType:"></a>
+	<h3 class="subsubtitle method-title">responseWithJSONObject:contentType:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Creates a data response from a serialized JSON object and a custom
+content type.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>+ (instancetype)responseWithJSONObject:(id)<em>object</em> contentType:(NSString *)<em>type</em></code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerDataResponse.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/responseWithText:" title="responseWithText:"></a>
+	<h3 class="subsubtitle method-title">responseWithText:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Creates a data response from text encoded using UTF-8.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>+ (instancetype)responseWithText:(NSString *)<em>text</em></code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerDataResponse.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+					</div>
+					
+					
+					
+					<div class="section section-methods">
+						<a title="Instance Methods" name="instance_methods"></a>
+						<h2 class="subtitle subtitle-methods">Instance Methods</h2>
+						
+						<div class="section-method">
+	<a name="//api/name/description" title="description"></a>
+	<h3 class="subsubtitle method-title">description</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>- (NSString *)description</code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/initWithData:contentType:" title="initWithData:contentType:"></a>
+	<h3 class="subsubtitle method-title">initWithData:contentType:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>This method is the designated initializer for the class.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (instancetype)initWithData:(NSData *)<em>data</em> contentType:(NSString *)<em>type</em></code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerDataResponse.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/initWithHTML:" title="initWithHTML:"></a>
+	<h3 class="subsubtitle method-title">initWithHTML:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Initializes a data response from HTML encoded using UTF-8.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (instancetype)initWithHTML:(NSString *)<em>html</em></code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerDataResponse.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/initWithHTMLTemplate:variables:" title="initWithHTMLTemplate:variables:"></a>
+	<h3 class="subsubtitle method-title">initWithHTMLTemplate:variables:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Initializes a data response from an HTML template encoded using UTF-8.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (instancetype)initWithHTMLTemplate:(NSString *)<em>path</em> variables:(NSDictionary *)<em>variables</em></code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>All occurences of &ldquo;%variable%&rdquo; within the HTML template are replaced with
+their corresponding values.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerDataResponse.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/initWithJSONObject:" title="initWithJSONObject:"></a>
+	<h3 class="subsubtitle method-title">initWithJSONObject:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Initializes a data response from a serialized JSON object and the default
+&ldquo;application/json&rdquo; content type.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (instancetype)initWithJSONObject:(id)<em>object</em></code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerDataResponse.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/initWithJSONObject:contentType:" title="initWithJSONObject:contentType:"></a>
+	<h3 class="subsubtitle method-title">initWithJSONObject:contentType:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Initializes a data response from a serialized JSON object and a custom
+content type.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (instancetype)initWithJSONObject:(id)<em>object</em> contentType:(NSString *)<em>type</em></code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerDataResponse.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/initWithText:" title="initWithText:"></a>
+	<h3 class="subsubtitle method-title">initWithText:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Initializes a data response from text encoded using UTF-8.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (instancetype)initWithText:(NSString *)<em>text</em></code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GCDWebServerDataResponse.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/readData:" title="readData:"></a>
+	<h3 class="subsubtitle method-title">readData:</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>- (NSData *)readData:(NSError **)<em>error</em></code></div>
+
+    
+</div>
+						
+					</div>
+					
+					
+                    
+                    
+				</div>
+				<div class="main-navigation navigation-bottom">
+					<ul>
+	<li><a href="../index.html">Index</a></li>
+	<li><a href="../hierarchy.html">Hierarchy</a></li>
+</ul>
+				</div>
+				<div id="footer">
+					<hr />
+					<div class="footer-copyright">
+						<p><span class="copyright">&copy; 2015 Mario Schreiner. All rights reserved. (Last updated: 2015-03-13)</span><br />
+						
+						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2 (build 963)</a>.</span></p>
+						
+					</div>
+				</div>
+			</div>
+		</article>
+		<script type="text/javascript">
+			function jumpToChange()
+			{
+				window.location.hash = this.options[this.selectedIndex].value;
+			}
+			
+			function toggleTOC()
+			{
+				var contents = document.getElementById('contents');
+				var tocContainer = document.getElementById('tocContainer');
+				
+				if (this.getAttribute('class') == 'open')
+				{
+					this.setAttribute('class', '');
+					contents.setAttribute('class', '');
+					tocContainer.setAttribute('class', '');
+					
+					window.name = "hideTOC";
+				}
+				else
+				{
+					this.setAttribute('class', 'open');
+					contents.setAttribute('class', 'isShowingTOC');
+					tocContainer.setAttribute('class', 'isShowingTOC');
+					
+					window.name = "";
+				}
+				return false;
+			}
+			
+			function toggleTOCEntryChildren(e)
+			{
+				e.stopPropagation();
+				var currentClass = this.getAttribute('class');
+				if (currentClass == 'children') {
+					this.setAttribute('class', 'children open');
+				}
+				else if (currentClass == 'children open') {
+					this.setAttribute('class', 'children');
+				}
+				return false;
+			}
+			
+			function tocEntryClick(e)
+			{
+				e.stopPropagation();
+				return true;
+			}
+			
+			function init()
+			{
+				var selectElement = document.getElementById('jumpTo');
+				selectElement.addEventListener('change', jumpToChange, false);
+				
+				var tocButton = document.getElementById('table_of_contents');
+				tocButton.addEventListener('click', toggleTOC, false);
+				
+				var taskTreeItem = document.getElementById('task_treeitem');
+				if (taskTreeItem.getElementsByTagName('li').length > 0)
+				{
+					taskTreeItem.setAttribute('class', 'children');
+					taskTreeItem.firstChild.setAttribute('class', 'disclosure');
+				}
+				
+				var tocList = document.getElementById('toc');
+				
+				var tocEntries = tocList.getElementsByTagName('li');
+				for (var i = 0; i < tocEntries.length; i++) {
+					tocEntries[i].addEventListener('click', toggleTOCEntryChildren, false);
+				}
+				
+				var tocLinks = tocList.getElementsByTagName('a');
+				for (var i = 0; i < tocLinks.length; i++) {
+					tocLinks[i].addEventListener('click', tocEntryClick, false);
+				}
+				
+				if (window.name == "hideTOC") {
+					toggleTOC.call(tocButton);
+				}
+			}
+			
+			window.onload = init;
+			
+			// If showing in Xcode, hide the TOC and Header
+			if (navigator.userAgent.match(/xcode/i)) {
+				document.getElementById("contents").className = "hideInXcode"
+				document.getElementById("tocContainer").className = "hideInXcode"
+				document.getElementById("top_header").className = "hideInXcode"
+			}
+			
+		</script>
+	</body>
+</html>

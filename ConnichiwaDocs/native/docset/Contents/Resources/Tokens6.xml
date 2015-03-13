@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Classes/CWWebApplication.html">
+	<File path="Classes/CWBluetoothTransferManager.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/cl/CWWebApplication</TokenIdentifier>
-			<Abstract type="html">Represents the web application in Objective-C. This is the central class, mainly responsible for coordinating the different parts of the native layer. It sets up the webserver and BT and receives callbacks from all the classes and initiates appropriate actions. For example, it forwards BT events about device discovery to the web library, or on the other hands forwards connection requests from the web application to BT.</Abstract>
-			<DeclaredIn>CWWebApplication.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/cl/CWBluetoothTransferManager</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothTransferManager.h</DeclaredIn>
             
 			
 			<NodeRef refid="6"/>
@@ -13,84 +13,350 @@
 		
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWWebApplication/setRemoteWebView:</TokenIdentifier>
-			<Abstract type="html">The webview where the remote lib will be loaded on. Should be set to a valid webview if this device should be used as a remote device.
-TODO: dirty, we should find some other implementation for this.</Abstract>
-			<DeclaredIn>CWWebApplication.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothTransferManager/setDelegate:</TokenIdentifier>
+			<Abstract type="html">The delegate that receives events by this class</Abstract>
+			<DeclaredIn>CWBluetoothTransferManager.h</DeclaredIn>
 			
-			<Declaration>@property (readwrite, strong) UIWebView *remoteWebView</Declaration>
+			<Declaration>@property (readwrite) id&lt;CWBluetoothTransferManagerDelegate&gt; delegate</Declaration>
 			
 			
-			<Anchor>//api/name/remoteWebView</Anchor>
+			<Anchor>//api/name/delegate</Anchor>
             <NodeRef refid="6"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWWebApplication/remoteWebView</TokenIdentifier>
-			<Abstract type="html">The webview where the remote lib will be loaded on. Should be set to a valid webview if this device should be used as a remote device.
-TODO: dirty, we should find some other implementation for this.</Abstract>
-			<DeclaredIn>CWWebApplication.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothTransferManager/delegate</TokenIdentifier>
+			<Abstract type="html">The delegate that receives events by this class</Abstract>
+			<DeclaredIn>CWBluetoothTransferManager.h</DeclaredIn>
 			
-			<Declaration>@property (readwrite, strong) UIWebView *remoteWebView</Declaration>
+			<Declaration>@property (readwrite) id&lt;CWBluetoothTransferManagerDelegate&gt; delegate</Declaration>
 			
 			
-			<Anchor>//api/name/remoteWebView</Anchor>
+			<Anchor>//api/name/delegate</Anchor>
             <NodeRef refid="6"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/CWWebApplication/remoteWebView</TokenIdentifier>
-			<Abstract type="html">The webview where the remote lib will be loaded on. Should be set to a valid webview if this device should be used as a remote device.
-TODO: dirty, we should find some other implementation for this.</Abstract>
-			<DeclaredIn>CWWebApplication.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instp/CWBluetoothTransferManager/delegate</TokenIdentifier>
+			<Abstract type="html">The delegate that receives events by this class</Abstract>
+			<DeclaredIn>CWBluetoothTransferManager.h</DeclaredIn>
 			
-			<Declaration>@property (readwrite, strong) UIWebView *remoteWebView</Declaration>
+			<Declaration>@property (readwrite) id&lt;CWBluetoothTransferManagerDelegate&gt; delegate</Declaration>
 			
 			
-			<Anchor>//api/name/remoteWebView</Anchor>
+			<Anchor>//api/name/delegate</Anchor>
             <NodeRef refid="6"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWWebApplication/launchWithDocumentRoot:onWebview:port:</TokenIdentifier>
-			<Abstract type="html">Starts the web application on the given webview. This will fire up the webserver, which will serve the given document root and listen on the specified port.</Abstract>
-			<DeclaredIn>CWWebApplication.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothTransferManager/initWithPeripheralManager:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothTransferManager.h</DeclaredIn>
 			
-			<Declaration>- (void)launchWithDocumentRoot:(NSString *)documentRoot onWebview:(UIWebView *)webView port:(int)port</Declaration>
-			<Parameters>
-				<Parameter>
-					<Name>documentRoot</Name>
-					<Abstract type="html">The full path where the web application files are stored. This will be served as the root of the webserver. For security reasons, it is advised to use a dictionary where ONLY the files of the web application are stored, otherwise access to the other files in the directory can not be precluded.</Abstract>
-				</Parameter><Parameter>
-					<Name>webView</Name>
-					<Abstract type="html">The webview on which the local content of the web application is displayed</Abstract>
-				</Parameter><Parameter>
-					<Name>port</Name>
-					<Abstract type="html">The port on which the webserver will listen on. Note that the webserver will also act as a websocket server, the websocket port will be this + 1</Abstract>
-				</Parameter>
-			</Parameters>
+			<Declaration>- (instancetype)initWithPeripheralManager:(CBPeripheralManager *)peripheralManager</Declaration>
 			
-			<Anchor>//api/name/launchWithDocumentRoot:onWebview:port:</Anchor>
+			
+			<Anchor>//api/name/initWithPeripheralManager:</Anchor>
             <NodeRef refid="6"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWWebApplication/launchWithDocumentRoot:onWebview:</TokenIdentifier>
-			<Abstract type="html">The same as launchWithDocumentRoot:onWebview:port: but will use the default port (8000)</Abstract>
-			<DeclaredIn>CWWebApplication.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothTransferManager/sendData:toCentral:withCharacteristic:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothTransferManager.h</DeclaredIn>
 			
-			<Declaration>- (void)launchWithDocumentRoot:(NSString *)documentRoot onWebview:(UIWebView *)webView</Declaration>
-			<Parameters>
-				<Parameter>
-					<Name>documentRoot</Name>
-					<Abstract type="html">See launchWithDocumentRoot:onWebview:port:</Abstract>
-				</Parameter><Parameter>
-					<Name>webView</Name>
-					<Abstract type="html">See launchWithDocumentRoot:onWebview:port:</Abstract>
-				</Parameter>
-			</Parameters>
+			<Declaration>- (void)sendData:(NSData *)data toCentral:(CBCentral *)central withCharacteristic:(CBMutableCharacteristic *)characteristic</Declaration>
 			
-			<Anchor>//api/name/launchWithDocumentRoot:onWebview:</Anchor>
+			
+			<Anchor>//api/name/sendData:toCentral:withCharacteristic:</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothTransferManager/sendData:toPeripheral:withCharacteristic:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothTransferManager.h</DeclaredIn>
+			
+			<Declaration>- (void)sendData:(NSData *)data toPeripheral:(CBPeripheral *)peripheral withCharacteristic:(CBCharacteristic *)characteristic</Declaration>
+			
+			
+			<Anchor>//api/name/sendData:toPeripheral:withCharacteristic:</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothTransferManager/receivedData:fromPeripheral:withCharacteristic:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothTransferManager.h</DeclaredIn>
+			
+			<Declaration>- (void)receivedData:(NSData *)chunk fromPeripheral:(CBPeripheral *)peripheral withCharacteristic:(CBCharacteristic *)characteristic</Declaration>
+			
+			
+			<Anchor>//api/name/receivedData:fromPeripheral:withCharacteristic:</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothTransferManager/receivedDataFromCentral:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothTransferManager.h</DeclaredIn>
+			
+			<Declaration>- (void)receivedDataFromCentral:(CBATTRequest *)writeRequest</Declaration>
+			
+			
+			<Anchor>//api/name/receivedDataFromCentral:</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothTransferManager/canContinueSendingToCentrals</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothTransferManager.h</DeclaredIn>
+			
+			<Declaration>- (void)canContinueSendingToCentrals</Declaration>
+			
+			
+			<Anchor>//api/name/canContinueSendingToCentrals</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothTransferManager/_sendNextChunkToCentral:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothTransferManager.m</DeclaredIn>
+			
+			<Declaration>- (void)_sendNextChunkToCentral:(CWBluetoothTransferCentralKey *)key</Declaration>
+			
+			
+			<Anchor>//api/name/_sendNextChunkToCentral:</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothTransferManager/_sendEOMToCentral:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothTransferManager.m</DeclaredIn>
+			
+			<Declaration>- (void)_sendEOMToCentral:(CWBluetoothTransferCentralKey *)key</Declaration>
+			
+			
+			<Anchor>//api/name/_sendEOMToCentral:</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothTransferManager/setPeripheralManager:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothTransferManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) CBPeripheralManager *peripheralManager</Declaration>
+			
+			
+			<Anchor>//api/name/peripheralManager</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothTransferManager/peripheralManager</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothTransferManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) CBPeripheralManager *peripheralManager</Declaration>
+			
+			
+			<Anchor>//api/name/peripheralManager</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CWBluetoothTransferManager/peripheralManager</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothTransferManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) CBPeripheralManager *peripheralManager</Declaration>
+			
+			
+			<Anchor>//api/name/peripheralManager</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothTransferManager/setPeripheralSends:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothTransferManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) NSMutableDictionary *peripheralSends</Declaration>
+			
+			
+			<Anchor>//api/name/peripheralSends</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothTransferManager/peripheralSends</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothTransferManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) NSMutableDictionary *peripheralSends</Declaration>
+			
+			
+			<Anchor>//api/name/peripheralSends</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CWBluetoothTransferManager/peripheralSends</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothTransferManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) NSMutableDictionary *peripheralSends</Declaration>
+			
+			
+			<Anchor>//api/name/peripheralSends</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothTransferManager/setCentralSends:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothTransferManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) NSMutableDictionary *centralSends</Declaration>
+			
+			
+			<Anchor>//api/name/centralSends</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothTransferManager/centralSends</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothTransferManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) NSMutableDictionary *centralSends</Declaration>
+			
+			
+			<Anchor>//api/name/centralSends</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CWBluetoothTransferManager/centralSends</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothTransferManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) NSMutableDictionary *centralSends</Declaration>
+			
+			
+			<Anchor>//api/name/centralSends</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothTransferManager/setCentralEOMSends:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothTransferManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) NSMutableArray *centralEOMSends</Declaration>
+			
+			
+			<Anchor>//api/name/centralEOMSends</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothTransferManager/centralEOMSends</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothTransferManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) NSMutableArray *centralEOMSends</Declaration>
+			
+			
+			<Anchor>//api/name/centralEOMSends</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CWBluetoothTransferManager/centralEOMSends</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothTransferManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) NSMutableArray *centralEOMSends</Declaration>
+			
+			
+			<Anchor>//api/name/centralEOMSends</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothTransferManager/setPeripheralReceives:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothTransferManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) NSMutableDictionary *peripheralReceives</Declaration>
+			
+			
+			<Anchor>//api/name/peripheralReceives</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothTransferManager/peripheralReceives</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothTransferManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) NSMutableDictionary *peripheralReceives</Declaration>
+			
+			
+			<Anchor>//api/name/peripheralReceives</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CWBluetoothTransferManager/peripheralReceives</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothTransferManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) NSMutableDictionary *peripheralReceives</Declaration>
+			
+			
+			<Anchor>//api/name/peripheralReceives</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothTransferManager/setCentralReceives:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothTransferManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) NSMutableDictionary *centralReceives</Declaration>
+			
+			
+			<Anchor>//api/name/centralReceives</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothTransferManager/centralReceives</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothTransferManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) NSMutableDictionary *centralReceives</Declaration>
+			
+			
+			<Anchor>//api/name/centralReceives</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CWBluetoothTransferManager/centralReceives</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothTransferManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite, strong) NSMutableDictionary *centralReceives</Declaration>
+			
+			
+			<Anchor>//api/name/centralReceives</Anchor>
             <NodeRef refid="6"/>
 		</Token>
 		

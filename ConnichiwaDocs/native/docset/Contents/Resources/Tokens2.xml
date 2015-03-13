@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Classes/CWBluetoothManager.html">
+	<File path="Classes/BLWebSocketsServer.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/cl/CWBluetoothManager</TokenIdentifier>
-			<Abstract type="html">The CWBluetoothManager represents this device as a BT device. It can advertise this device to other devices and monitor for other devices. Furthermore, the delegate
-is notified of important events, for example detected devices, changes in device distance or established connections.</Abstract>
-			<DeclaredIn>CWBluetoothManager.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/cl/BLWebSocketsServer</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketsServer.h</DeclaredIn>
             
 			
 			<NodeRef refid="2"/>
@@ -14,120 +13,554 @@ is notified of important events, for example detected devices, changes in device
 		
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/setDelegate:</TokenIdentifier>
-			<Abstract type="html">The delegate that receives events by this class</Abstract>
-			<DeclaredIn>CWBluetoothManager.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/BLWebSocketsServer/setIsRunning:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketsServer.h</DeclaredIn>
 			
-			<Declaration>@property (readwrite) id&lt;CWBluetoothManagerDelegate&gt; delegate</Declaration>
+			<Declaration>@property (atomic, assign, readonly) BOOL isRunning</Declaration>
 			
 			
-			<Anchor>//api/name/delegate</Anchor>
+			<Anchor>//api/name/isRunning</Anchor>
             <NodeRef refid="2"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/delegate</TokenIdentifier>
-			<Abstract type="html">The delegate that receives events by this class</Abstract>
-			<DeclaredIn>CWBluetoothManager.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/BLWebSocketsServer/isRunning</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketsServer.h</DeclaredIn>
 			
-			<Declaration>@property (readwrite) id&lt;CWBluetoothManagerDelegate&gt; delegate</Declaration>
+			<Declaration>@property (atomic, assign, readonly) BOOL isRunning</Declaration>
 			
 			
-			<Anchor>//api/name/delegate</Anchor>
+			<Anchor>//api/name/isRunning</Anchor>
             <NodeRef refid="2"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/CWBluetoothManager/delegate</TokenIdentifier>
-			<Abstract type="html">The delegate that receives events by this class</Abstract>
-			<DeclaredIn>CWBluetoothManager.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instp/BLWebSocketsServer/isRunning</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketsServer.h</DeclaredIn>
 			
-			<Declaration>@property (readwrite) id&lt;CWBluetoothManagerDelegate&gt; delegate</Declaration>
+			<Declaration>@property (atomic, assign, readonly) BOOL isRunning</Declaration>
 			
 			
-			<Anchor>//api/name/delegate</Anchor>
+			<Anchor>//api/name/isRunning</Anchor>
             <NodeRef refid="2"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/initWithApplicationState:</TokenIdentifier>
-			<Abstract type="html">Intializes a new CWBluetoothManager</Abstract>
-			<DeclaredIn>CWBluetoothManager.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/clm/BLWebSocketsServer/sharedInstance</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketsServer.h</DeclaredIn>
 			
-			<Declaration>- (instancetype)initWithApplicationState:(id&lt;CWWebApplicationState&gt;)appState</Declaration>
-			<Parameters>
-				<Parameter>
-					<Name>appState</Name>
-					<Abstract type="html">A CWWebApplicationState implementation that allows the BT Manager to access the global state</Abstract>
-				</Parameter>
-			</Parameters>
-			<ReturnValue><Abstract type="html">A new instance of CWBluetoothManager</Abstract></ReturnValue>
-			<Anchor>//api/name/initWithApplicationState:</Anchor>
+			<Declaration>+ (BLWebSocketsServer *)sharedInstance</Declaration>
+			
+			
+			<Anchor>//api/name/sharedInstance</Anchor>
             <NodeRef refid="2"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/startScanning</TokenIdentifier>
-			<Abstract type="html">Starts scanning for other, nearby devices</Abstract>
-			<DeclaredIn>CWBluetoothManager.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/BLWebSocketsServer/startListeningOnPort:withProtocolName:andCompletionBlock:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketsServer.h</DeclaredIn>
 			
-			<Declaration>- (void)startScanning</Declaration>
+			<Declaration>- (void)startListeningOnPort:(int)port withProtocolName:(NSString *)protocolName andCompletionBlock:(void ( ^ ) ( NSError *error ))completionBlock</Declaration>
 			
 			
-			<Anchor>//api/name/startScanning</Anchor>
+			<Anchor>//api/name/startListeningOnPort:withProtocolName:andCompletionBlock:</Anchor>
             <NodeRef refid="2"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/startAdvertising</TokenIdentifier>
-			<Abstract type="html">Starts advertising this device with the unique identifier stored in the application state. Will make this device detectable by other BT devices.</Abstract>
-			<DeclaredIn>CWBluetoothManager.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/BLWebSocketsServer/stopWithCompletionBlock:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketsServer.h</DeclaredIn>
 			
-			<Declaration>- (void)startAdvertising</Declaration>
+			<Declaration>- (void)stopWithCompletionBlock:(void ( ^ ) ( ))completionBlock</Declaration>
 			
 			
-			<Anchor>//api/name/startAdvertising</Anchor>
+			<Anchor>//api/name/stopWithCompletionBlock:</Anchor>
             <NodeRef refid="2"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/stopScanning</TokenIdentifier>
-			<Abstract type="html">Stops scanning for other devices</Abstract>
-			<DeclaredIn>CWBluetoothManager.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/BLWebSocketsServer/setDefaultOnMessageHandler:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketsServer.h</DeclaredIn>
 			
-			<Declaration>- (void)stopScanning</Declaration>
+			<Declaration>- (void)setDefaultOnMessageHandler:(BLWebSocketOnMessageHandler)handler</Declaration>
 			
 			
-			<Anchor>//api/name/stopScanning</Anchor>
+			<Anchor>//api/name/setDefaultOnMessageHandler:</Anchor>
             <NodeRef refid="2"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/stopAdvertising</TokenIdentifier>
-			<Abstract type="html">Stops advertising this device</Abstract>
-			<DeclaredIn>CWBluetoothManager.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/BLWebSocketsServer/setOnMessageHandler:forConnection:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketsServer.h</DeclaredIn>
 			
-			<Declaration>- (void)stopAdvertising</Declaration>
+			<Declaration>- (void)setOnMessageHandler:(BLWebSocketOnMessageHandler)handler forConnection:(int)user</Declaration>
 			
 			
-			<Anchor>//api/name/stopAdvertising</Anchor>
+			<Anchor>//api/name/setOnMessageHandler:forConnection:</Anchor>
             <NodeRef refid="2"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWBluetoothManager/sendNetworkAddressesToDevice:</TokenIdentifier>
-			<Abstract type="html">Tells the BTManager to send our network interface addresses to the device with the given identifier. The manager will then try to establish a BT connection to that device and transfer the network addresses. This is effectively a request to use the given device as a remote device.</Abstract>
-			<DeclaredIn>CWBluetoothManager.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/BLWebSocketsServer/setOnCloseHandler:forConnection:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketsServer.h</DeclaredIn>
 			
-			<Declaration>- (void)sendNetworkAddressesToDevice:(NSString *)deviceIdentifier</Declaration>
-			<Parameters>
-				<Parameter>
-					<Name>deviceIdentifier</Name>
-					<Abstract type="html">The identifier of the other device</Abstract>
-				</Parameter>
-			</Parameters>
+			<Declaration>- (void)setOnCloseHandler:(BLWebSocketOnCloseHandler)handler forConnection:(int)connectionID</Declaration>
 			
-			<Anchor>//api/name/sendNetworkAddressesToDevice:</Anchor>
+			
+			<Anchor>//api/name/setOnCloseHandler:forConnection:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/BLWebSocketsServer/pushMessage:toConnection:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketsServer.h</DeclaredIn>
+			
+			<Declaration>- (void)pushMessage:(NSData *)message toConnection:(int)connectionID</Declaration>
+			
+			
+			<Anchor>//api/name/pushMessage:toConnection:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/BLWebSocketsServer/pushMessageToAll:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketsServer.h</DeclaredIn>
+			
+			<Declaration>- (void)pushMessageToAll:(NSData *)message</Declaration>
+			
+			
+			<Anchor>//api/name/pushMessageToAll:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/BLWebSocketsServer/init</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketsServer.m</DeclaredIn>
+			
+			<Declaration>- (id)init</Declaration>
+			
+			
+			<Anchor>//api/name/init</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/BLWebSocketsServer/createContextWithProtocolName:callbackFunction:andPort:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketsServer.m</DeclaredIn>
+			
+			<Declaration>- (struct libwebsocket_context *)createContextWithProtocolName:(NSString *)protocolName callbackFunction:(callback_function)callback andPort:(int)port</Declaration>
+			
+			
+			<Anchor>//api/name/createContextWithProtocolName:callbackFunction:andPort:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/BLWebSocketsServer/createProtocol:withName:callback:andSessionDataSize:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketsServer.m</DeclaredIn>
+			
+			<Declaration>- (void)createProtocol:(struct libwebsocket_protocols *)protocol withName:(NSString *)name callback:(callback_function)callback andSessionDataSize:(int)sessionDataSize</Declaration>
+			
+			
+			<Anchor>//api/name/createProtocol:withName:callback:andSessionDataSize:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/BLWebSocketsServer/destroyProtocol:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketsServer.m</DeclaredIn>
+			
+			<Declaration>- (void)destroyProtocol:(struct libwebsocket_protocols *)protocol</Declaration>
+			
+			
+			<Anchor>//api/name/destroyProtocol:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/BLWebSocketsServer/destroyContext:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketsServer.m</DeclaredIn>
+			
+			<Declaration>- (void)destroyContext:(struct libwebsocket_context *)context</Declaration>
+			
+			
+			<Anchor>//api/name/destroyContext:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/BLWebSocketsServer/cleanup</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketsServer.m</DeclaredIn>
+			
+			<Declaration>- (void)cleanup</Declaration>
+			
+			
+			<Anchor>//api/name/cleanup</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/BLWebSocketsServer/connectionForID:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketsServer.m</DeclaredIn>
+			
+			<Declaration>+ (BLWebSocketConnection *)connectionForID:(int)connectionID</Declaration>
+			
+			
+			<Anchor>//api/name/connectionForID:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/BLWebSocketsServer/keyForConnectionID:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketsServer.m</DeclaredIn>
+			
+			<Declaration>+ (id)keyForConnectionID:(int)connectionID</Declaration>
+			
+			
+			<Anchor>//api/name/keyForConnectionID:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/BLWebSocketsServer/setTimer:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketsServer.m</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, retain) dispatch_source_t timer</Declaration>
+			
+			
+			<Anchor>//api/name/timer</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/BLWebSocketsServer/timer</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketsServer.m</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, retain) dispatch_source_t timer</Declaration>
+			
+			
+			<Anchor>//api/name/timer</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/BLWebSocketsServer/timer</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketsServer.m</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, retain) dispatch_source_t timer</Declaration>
+			
+			
+			<Anchor>//api/name/timer</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/BLWebSocketsServer/setNetworkQueue:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketsServer.m</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, retain) dispatch_queue_t networkQueue</Declaration>
+			
+			
+			<Anchor>//api/name/networkQueue</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/BLWebSocketsServer/networkQueue</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketsServer.m</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, retain) dispatch_queue_t networkQueue</Declaration>
+			
+			
+			<Anchor>//api/name/networkQueue</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/BLWebSocketsServer/networkQueue</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketsServer.m</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, retain) dispatch_queue_t networkQueue</Declaration>
+			
+			
+			<Anchor>//api/name/networkQueue</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/BLWebSocketsServer/setContext:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketsServer.m</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, assign) struct libwebsocket_context *context</Declaration>
+			
+			
+			<Anchor>//api/name/context</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/BLWebSocketsServer/context</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketsServer.m</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, assign) struct libwebsocket_context *context</Declaration>
+			
+			
+			<Anchor>//api/name/context</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/BLWebSocketsServer/context</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketsServer.m</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, assign) struct libwebsocket_context *context</Declaration>
+			
+			
+			<Anchor>//api/name/context</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/BLWebSocketsServer/setDefaultOnMessageHandler:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketsServer.m</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong, readwrite) BLWebSocketOnMessageHandler defaultOnMessageHandler</Declaration>
+			
+			
+			<Anchor>//api/name/defaultOnMessageHandler</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/BLWebSocketsServer/defaultOnMessageHandler</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketsServer.m</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong, readwrite) BLWebSocketOnMessageHandler defaultOnMessageHandler</Declaration>
+			
+			
+			<Anchor>//api/name/defaultOnMessageHandler</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/BLWebSocketsServer/defaultOnMessageHandler</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketsServer.m</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong, readwrite) BLWebSocketOnMessageHandler defaultOnMessageHandler</Declaration>
+			
+			
+			<Anchor>//api/name/defaultOnMessageHandler</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/BLWebSocketsServer/setDefaultOnCloseHandler:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketsServer.m</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong, readwrite) BLWebSocketOnCloseHandler defaultOnCloseHandler</Declaration>
+			
+			
+			<Anchor>//api/name/defaultOnCloseHandler</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/BLWebSocketsServer/defaultOnCloseHandler</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketsServer.m</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong, readwrite) BLWebSocketOnCloseHandler defaultOnCloseHandler</Declaration>
+			
+			
+			<Anchor>//api/name/defaultOnCloseHandler</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/BLWebSocketsServer/defaultOnCloseHandler</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketsServer.m</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong, readwrite) BLWebSocketOnCloseHandler defaultOnCloseHandler</Declaration>
+			
+			
+			<Anchor>//api/name/defaultOnCloseHandler</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/BLWebSocketsServer/setConnections:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketsServer.m</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong, readwrite) NSMutableDictionary *connections</Declaration>
+			
+			
+			<Anchor>//api/name/connections</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/BLWebSocketsServer/connections</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketsServer.m</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong, readwrite) NSMutableDictionary *connections</Declaration>
+			
+			
+			<Anchor>//api/name/connections</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/BLWebSocketsServer/connections</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketsServer.m</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong, readwrite) NSMutableDictionary *connections</Declaration>
+			
+			
+			<Anchor>//api/name/connections</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/BLWebSocketsServer/setStopFastPollingTimer:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketsServer.m</DeclaredIn>
+			
+			<Declaration>@property (strong, readwrite) NSTimer *stopFastPollingTimer</Declaration>
+			
+			
+			<Anchor>//api/name/stopFastPollingTimer</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/BLWebSocketsServer/stopFastPollingTimer</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketsServer.m</DeclaredIn>
+			
+			<Declaration>@property (strong, readwrite) NSTimer *stopFastPollingTimer</Declaration>
+			
+			
+			<Anchor>//api/name/stopFastPollingTimer</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/BLWebSocketsServer/stopFastPollingTimer</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketsServer.m</DeclaredIn>
+			
+			<Declaration>@property (strong, readwrite) NSTimer *stopFastPollingTimer</Declaration>
+			
+			
+			<Anchor>//api/name/stopFastPollingTimer</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/BLWebSocketsServer/setServerStoppedCompletionBlock:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketsServer.m</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong) void ( ^ ) ( ) serverStoppedCompletionBlock</Declaration>
+			
+			
+			<Anchor>//api/name/serverStoppedCompletionBlock</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/BLWebSocketsServer/serverStoppedCompletionBlock</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketsServer.m</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong) void ( ^ ) ( ) serverStoppedCompletionBlock</Declaration>
+			
+			
+			<Anchor>//api/name/serverStoppedCompletionBlock</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/BLWebSocketsServer/serverStoppedCompletionBlock</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketsServer.m</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong) void ( ^ ) ( ) serverStoppedCompletionBlock</Declaration>
+			
+			
+			<Anchor>//api/name/serverStoppedCompletionBlock</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/BLWebSocketsServer/setSessionIdIncrementalCount:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketsServer.m</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, assign) int sessionIdIncrementalCount</Declaration>
+			
+			
+			<Anchor>//api/name/sessionIdIncrementalCount</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/BLWebSocketsServer/sessionIdIncrementalCount</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketsServer.m</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, assign) int sessionIdIncrementalCount</Declaration>
+			
+			
+			<Anchor>//api/name/sessionIdIncrementalCount</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/BLWebSocketsServer/sessionIdIncrementalCount</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketsServer.m</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, assign) int sessionIdIncrementalCount</Declaration>
+			
+			
+			<Anchor>//api/name/sessionIdIncrementalCount</Anchor>
             <NodeRef refid="2"/>
 		</Token>
 		
