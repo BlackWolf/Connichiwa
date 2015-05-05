@@ -241,7 +241,7 @@ handshake_0405(struct libwebsocket_context *context, struct libwebsocket *wsi)
 
 		lwsl_parser("issuing response packet %d len\n", (int)(p - response));
 	#ifdef DEBUG
-		fwrite(response, 1,  p - response, stderr);
+//		fwrite(response, 1,  p - response, stderr);
 	#endif
 		n = libwebsocket_write(wsi, (unsigned char *)response,
 						  p - response, LWS_WRITE_HTTP);

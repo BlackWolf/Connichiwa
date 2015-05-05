@@ -487,4 +487,19 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
     //Called when the application terminates and is closed. Caused, for example, when the user flicks the application out of the task manager or if iOS needs to free resources.
 }
 
+
+#pragma mark Log Level Static Functions
+
+
+static int _logLevel = 0;
+
++ (int)logLevel {
+    return _logLevel;
+}
+
+
++ (void)setLogLevel:(int)v {
+    _logLevel = v;
+}
+
 @end

@@ -41,10 +41,6 @@ void _cwLogNew(int priority, NSString *source, NSString *file, int line, NSStrin
 //ErrLog is a higher-level logging macro to be used to log errors
 #define ErrLog(format, ...) _CWLog(1, @"ERROR", @((strrchr(__FILE__, '/') ? : __FILE__ - 1) + 1), __LINE__, format, ##__VA_ARGS__)
 
-//ResolveUnused can be used to make a variable "used" and therefore prevent a debugger warning
-//This should only be used on variables that are only used in debug mode, as the compiler will warn in release mode for those vars
-#define ResolveUnused(x) ((void)x)
-
 
 
 /**
@@ -53,12 +49,6 @@ void _cwLogNew(int priority, NSString *source, NSString *file, int line, NSStrin
 @interface CWDebug : NSObject
 
 + (BOOL)isDebugging;
-/**
- *  Executes the given code only when we are in debug mode
- *
- *  @param block The code to execute in debug
- */
-+ (void)executeInDebug:(void (^)(void))block;
 
 + (int)logLevel;
 

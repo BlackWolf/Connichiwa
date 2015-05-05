@@ -46,7 +46,7 @@ libwebsocket_0405_frame_mask_generate(struct libwebsocket *wsi)
 	return 0;
 }
 
-#ifdef _DEBUG
+#ifdef DEBUG
 
 void lwsl_hexdump(void *vbuf, size_t len)
 {

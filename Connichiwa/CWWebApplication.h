@@ -67,4 +67,10 @@
  */
 - (void)applicationWillTerminate;
 
+
++(int)logLevel;
+
++(void)setLogLevel:(int)v;
+
 @end
+

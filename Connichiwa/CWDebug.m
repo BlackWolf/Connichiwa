@@ -7,8 +7,7 @@
 //
 
 #import "CWDebug.h"
-
-int const MAX_LOG_LEVEL = 4;
+#import "CWWebApplication.h"
 
 
 
@@ -24,16 +23,8 @@ int const MAX_LOG_LEVEL = 4;
     #endif
 }
 
-
-+ (void)executeInDebug:(void (^)(void))block
-{
-    #ifdef DEBUG
-        block();
-    #endif
-}
-
 + (int)logLevel {
-    return MAX_LOG_LEVEL;
+    return [CWWebApplication logLevel];
 }
 
 
@@ -58,10 +49,11 @@ static long longestSourceLength = 10;
  */
 void _cwLogNew(int level, NSString *source, NSString *file, int line, NSString *format, ...)
 {
-    NSArray *activeDebugSources = nil; //TODO is defined every time, lame, but static NSArray is not possible
+//    NSArray *activeDebugSources = nil; //TODO is defined every time, lame, but static NSArray is not possible
+    NSArray *activeDebugSources = @[ @"BLUETOOTH", @"WEBLIB", @"NATIVE" ];
  
     source = [source uppercaseString];
-    if ([CWDebug isDebugging] && level <= MAX_LOG_LEVEL && ([source isEqualToString:@"ERROR"] || activeDebugSources == nil || [activeDebugSources containsObject:source]))
+    if ([CWDebug isDebugging] && level <= [CWDebug logLevel] && ([source isEqualToString:@"ERROR"] || activeDebugSources == nil || [activeDebugSources containsObject:source]))
     {
         static dispatch_once_t token;
         static NSDateFormatter *dateFormatter;

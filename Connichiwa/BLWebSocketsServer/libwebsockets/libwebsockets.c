@@ -49,7 +49,8 @@ int openssl_websocket_private_data_index;
 #endif
 
 
-static int log_level = LLL_ERR | LLL_WARN | LLL_NOTICE;
+//static int log_level = LLL_ERR | LLL_WARN | LLL_NOTICE | LLL_DEBUG | LLL_CLIENT | LLL_INFO | LLL_EXT;
+static int log_level = 0;
 static void lwsl_emit_stderr(int level, const char *line);
 static void (*lwsl_emit)(int level, const char *line) = lwsl_emit_stderr;
 
@@ -2268,18 +2269,18 @@ void lwsl_emit_syslog(int level, const char *line)
 
 void _lws_log(int filter, const char *format, ...)
 {
-//	char buf[256];
-//	va_list ap;
-//
-//	if (!(log_level & filter))
-//		return;
-//
-//	va_start(ap, format);
-//	vsnprintf(buf, (sizeof buf), format, ap);
-//	buf[(sizeof buf) - 1] = '\0';
-//	va_end(ap);
-//
-//	lwsl_emit(filter, buf);
+	char buf[256];
+	va_list ap;
+
+	if (!(log_level & filter))
+		return;
+
+	va_start(ap, format);
+	vsnprintf(buf, (sizeof buf), format, ap);
+	buf[(sizeof buf) - 1] = '\0';
+	va_end(ap);
+
+	lwsl_emit(filter, buf);
 }
 
 /**

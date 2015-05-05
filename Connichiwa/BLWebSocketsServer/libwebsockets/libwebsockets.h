@@ -92,7 +92,7 @@ extern void _lws_log(int filter, const char *format, ...);
  *  that gets rid of the overhead of checking while keeping _warn and _err
  *  active
  */
-#ifdef _DEBUG
+#ifdef DEBUG
 #define lwsl_info(...) _lws_log(LLL_INFO, __VA_ARGS__)
 #define lwsl_debug(...) _lws_log(LLL_DEBUG, __VA_ARGS__)
 #define lwsl_parser(...) _lws_log(LLL_PARSER, __VA_ARGS__)
