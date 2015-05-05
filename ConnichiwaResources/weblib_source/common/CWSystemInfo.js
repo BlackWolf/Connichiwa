@@ -1,3 +1,4 @@
+/* global CWModules */
 'use strict';
 
 
@@ -91,5 +92,4 @@ CWSystemInfo.viewportHeight = function() {
   return $(window).height();
 }.bind(CWSystemInfo);
 
-//Initalize module. Delayed call to make sure all modules are ready
-if (CWSystemInfo.__constructor) window.setTimeout(CWSystemInfo.__constructor, 0);
+CWModules.add('CWSystemInfo');

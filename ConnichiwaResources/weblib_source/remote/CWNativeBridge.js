@@ -1,4 +1,4 @@
-/* global Connichiwa, CWDeviceManager, CWEventManager, CWDevice, CWDebug */
+/* global Connichiwa, CWDeviceManager, CWEventManager, CWDevice, CWDebug, CWModules */
 'use strict';
 
 
@@ -72,3 +72,5 @@ CWNativeBridge._parseLocalInfo = function(message)  {
 CWNativeBridge._parseDisconnectWebsocket = function(message) {
   Connichiwa._disconnectWebsocket();  
 }.bind(CWNativeBridge);
+
+CWModules.add('CWNativeBridge');

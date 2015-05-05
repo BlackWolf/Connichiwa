@@ -1,3 +1,36 @@
+/* global CWNativeBridge */
+'use strict';
+
+var CWModules = {};
+
+CWModules._modules = [];
+CWModules._didInit = false;
+
+CWModules.add = function(module) {
+  // if (module in this._modules) return;
+  if (this._modules.indexOf(module) !== -1) return;
+
+  this._modules.push(module);
+}.bind(CWModules);
+
+CWModules.init = function() {
+  if (this._didInit) throw 'Cannot initialize modules twice';
+
+  var that = this;
+  window.setTimeout(function() {
+    for (var i = 0; i < that._modules.length; i++) {
+      var module = that._modules[i];
+      console.log('Initializing module ' + module + '...');
+      if (window[module].__constructor) window[module].__constructor();
+    }  
+
+    //SEND DIDINIT TO NATIVE
+    CWNativeBridge.callOnNative("nativeCallLibraryDidLoad");
+  }, 0);
+
+  this._didInit = true;
+}.bind(CWModules);
+/* global CWModules */
 'use strict';
 
 
@@ -126,9 +159,8 @@ CWDebug.setLogLevel = function(v) {
   this._logLevel = v;
 }.bind(CWDebug);
 
-//Initalize module. Delayed call to make sure all modules are ready
-if (CWDebug.__constructor) window.setTimeout(CWDebug.__constructor, 0);
-/* global Connichiwa, CWSystemInfo */
+CWModules.add('CWDebug');
+/* global Connichiwa, CWSystemInfo, CWUtil */
 'use strict';
 
 
@@ -289,7 +321,7 @@ CWDevice.prototype.isLocal = function() {
  *    false
  */
 CWDevice.prototype.isNearby = function() {
-  return (this.discoveryState === CWDevice.DiscoveryState.DISCOVERED);
+  return (this._discoveryState === CWDevice.DiscoveryState.DISCOVERED);
 };
 
 
@@ -301,8 +333,10 @@ CWDevice.prototype.isNearby = function() {
  * @private
  */
 CWDevice.prototype._canBeConnected = function() { 
-  return (this.connectionState === CWDevice.ConnectionState.DISCONNECTED && 
-    this.discoveryState === CWDevice.DiscoveryState.DISCOVERED);
+  CWDebug.log(1, "CAN BE CONNECTED: "+(this._connectionState === CWDevice.ConnectionState.DISCONNECTED)+" && "+(this._discoveryState === CWDevice.DiscoveryState.DISCOVERED));
+  CWDebug.log(1, this._discoveryState);
+  return (this._connectionState === CWDevice.ConnectionState.DISCONNECTED && 
+    this._discoveryState === CWDevice.DiscoveryState.DISCOVERED);
 };
 
 
@@ -314,7 +348,7 @@ CWDevice.prototype._canBeConnected = function() {
  * @return {Boolean} true if the device is fully connected, otherwise false
  */
 CWDevice.prototype.isConnected = function() {
-  return (this.connectionState === CWDevice.ConnectionState.CONNECTED);
+  return (this._connectionState === CWDevice.ConnectionState.CONNECTED);
 };
 
 
@@ -337,7 +371,34 @@ CWDevice.prototype.isConnected = function() {
  *    other device.
  */
 CWDevice.prototype.insert = function(target, html) {
-  Connichiwa.insert(this.getIdentifier(), target, html);
+  //With two args, we handle them as identifier and html
+  //target is then assumed as the body
+  if (html === undefined) {
+    html = target;
+    target = 'body';
+  }
+
+  //target should be a selector but can also be a DOM or jQuery element
+  //If so, we try to get it by its ID on the other side
+  if (CWUtil.isObject(target)) {
+    target = $(target);
+    target = '#' + target.attr('id');
+  }
+  
+  //html can be a DOM or jQuery element - if so, send the outerHTML including 
+  //all styles
+  if (CWUtil.isObject(html) === true) {
+    var el = $(html);
+    var clone = el.clone();
+    clone[0].style.cssText = el[0].style.cssText; //TODO really needed?
+    html = clone[0].outerHTML;
+  }
+
+  var message = {
+    selector : target,
+    html     : html
+  };
+  this.send('_insert', message);
 };
 
 
@@ -357,7 +418,7 @@ CWDevice.prototype.insert = function(target, html) {
  *    send to the other device.
  */
 CWDevice.prototype.replace = function(target, html) {
-  Connichiwa.replace(this.getIdentifier(), target, html);
+  this._replace(target, html, false);
 };
 
 
@@ -378,8 +439,57 @@ CWDevice.prototype.replace = function(target, html) {
  *    cloned and send to the other device.
  */
 CWDevice.prototype.replaceContent = function(target, html) {
-  Connichiwa.replaceContent(this.getIdentifier(), target, html);
+  this._replace(target, html, true);
 };
+
+
+/**
+ * Internal replace method, both {@link CWDevice#replace} and {@link
+ *    CWDevice#replaceContent} forward to this method which does the actual
+ *    replacement
+ * @param  {String|HTMLElement|jQuery} target The target element(s) on the
+ *    remote device whos content will be replaced. This can be either a CSS
+ *    selector or a DOM or jQuery element. If it is one of the latter two,
+ *    this method will search for an element with the same ID on the remote
+ *    device.
+ * @param  {String|HTMLElement|jQuery} html The HTML that will replace the
+ *    target node's content in the device's DOM. Can be either plain HTML as a
+ *    string or a DOM or jQuery element, in which case the element will be
+ *    cloned and send to the other device.
+ * @param  {Boolean} contentOnly If set to false, the entire target node(s)
+ *    will be replaced, otherwise only the node's contents will be replaced
+ * @private
+ */
+CWDevice.prototype._replace = function(target, html, contentOnly) {
+  //With two args, we handle them as identifier and html
+  //target is assumed as the body
+  if (html === undefined) {
+    html = target;
+    target = 'body';
+  }
+
+  //target should be a selector but can also be a DOM or jQuery element
+  //If so, we try to get it by its ID on the other side
+  if (CWUtil.isObject(target)) {
+    target = '#' + $(target).attr('id');
+  }
+  
+  //html can be a DOM or jQuery element - if so, send the outerHTML including 
+  //all styles
+  if (CWUtil.isObject(html) === true) {
+    var el = $(html);
+    var clone = el.clone();
+    clone[0].style.cssText = el[0].style.cssText; //TODO really needed?
+    html = clone[0].outerHTML;
+  }
+
+  var message = {
+    selector    : target,
+    html        : html,
+    contentOnly : contentOnly,
+  };
+  this.send('_replace', message);
+}.bind(Connichiwa);
 
 
 /**
@@ -391,7 +501,12 @@ CWDevice.prototype.replaceContent = function(target, html) {
  *    the JavaScript file was loaded and executed on the remote device
  */
 CWDevice.prototype.loadScript = function(url, callback) {
-  Connichiwa.loadScript(this.getIdentifier(), url, callback);
+  var message = { url : url };
+  var messageID = this.send('_loadscript', message);
+
+  if (callback !== undefined) {
+    Connichiwa.on('__ack_message' + messageID, callback);
+  }
 };
 
 
@@ -401,7 +516,8 @@ CWDevice.prototype.loadScript = function(url, callback) {
  * @param  {String}   url An URL to a valid CSS file
  */
 CWDevice.prototype.loadCSS = function(url) {
-  Connichiwa.loadCSS(this.getIdentifier(), url);
+  var message = { url  : url };
+  var messageID = this.send('_loadcss', message);
 };
 
 
@@ -421,7 +537,10 @@ CWDevice.prototype.loadCSS = function(url) {
  *    remote device.
  */
 CWDevice.prototype.send = function(name, message) {
-  Connichiwa.send(this.getIdentifier(), name, message);
+  message._name = name;
+  message._source = Connichiwa.getIdentifier();
+  message._target = this.getIdentifier();
+  return Connichiwa._sendObject(message);
 };
 
 
@@ -564,7 +683,7 @@ CWDevice.ConnectionState = {
    */
   CONNECTED: 'connected'
 };
-/* global CWUtil, CWDebug */
+/* global CWUtil, CWDebug, CWModules */
 'use strict';
 
 
@@ -665,9 +784,8 @@ CWEventManager.trigger = function(logPrio, event, var_args) {
   }
 }.bind(CWEventManager);
 
-//Initalize module. Delayed call to make sure all modules are ready
-if (CWEventManager.__constructor) window.setTimeout(CWEventManager.__constructor, 0);
-/* global CWEventManager, CWVector, CWUtil, CWDebug */
+CWModules.add('CWEventManager');
+/* global CWEventManager, CWVector, CWUtil, CWDebug, CWModules */
 'use strict';
 
 
@@ -954,7 +1072,9 @@ CWGestures._captureOn = function(el) {
 
 //Initalize module. Delayed call to make sure all modules are ready
 if (CWGestures.__constructor) window.setTimeout(CWGestures.__constructor, 0);
-/* global gyro, CWEventManager */
+
+CWModules.add('CWGestures');
+/* global gyro, CWEventManager, CWModules */
 'use strict';
 
 
@@ -1134,8 +1254,7 @@ CWGyroscope.getLastAccelerometerMeasure = function() {
   };
 }.bind(CWGyroscope);
 
-//Initalize module. Delayed call to make sure all modules are ready
-if (CWGyroscope.__constructor) window.setTimeout(CWGyroscope.__constructor, 0);
+CWModules.add('CWGyroscope');
 /* global CWEventManager, CWStitchManager */
 'use strict';
 
@@ -1800,7 +1919,7 @@ CWLocation.fromPoint = function(x, y, isLocal) {
 CWLocation.fromSize = function(width, height, isLocal) {
   return new CWLocation(undefined, undefined, width, height, isLocal);
 };
-/* global Connichiwa, CWDebug */
+/* global Connichiwa, CWDebug, CWModules */
 'use strict';
 
 
@@ -1834,13 +1953,14 @@ CWNativeBridge._runsNative = false;
  * @private
  */
 CWNativeBridge.__constructor = function() {
-  if (Connichiwa.isMaster()) {
-    this._runsNative = true;
-  } else {
+  // if (Connichiwa.isMaster()) {
+    // console.log("runsNative true")
+    // this._runsNative = true;
+  // } else {
     if (window.RUN_BY_CONNICHIWA_NATIVE === true) {
       this._runsNative = true;
-    }
-  }
+    } 
+  // }
 }.bind(CWNativeBridge);
 
 
@@ -1894,10 +2014,8 @@ CWNativeBridge.callOnNative = function(methodName) {
 CWNativeBridge.parse = function(message) { /* ABSTRACT */ };
 
 
-//Initalize module. Delayed call to make sure all modules are ready
-if (CWNativeBridge.__constructor) window.setTimeout(CWNativeBridge.__constructor, 0);
-
-/* global Connichiwa, CWGyroscope, CWSystemInfo, CWUtil */
+CWModules.add('CWNativeBridge');
+/* global Connichiwa, CWGyroscope, CWSystemInfo, CWUtil, CWModules */
 'use strict';
 
 
@@ -2183,8 +2301,8 @@ CWStitchManager.getDefaultDeviceTransformation = function() {
 }.bind(CWStitchManager);
 
 
-//Initalize module. Delayed call to make sure all modules are ready
-if (CWStitchManager.__constructor) window.setTimeout(CWStitchManager.__constructor, 0);
+CWModules.add('CWStitchManager');
+/* global CWModules */
 'use strict';
 
 
@@ -2278,8 +2396,8 @@ CWSystemInfo.viewportHeight = function() {
   return $(window).height();
 }.bind(CWSystemInfo);
 
-//Initalize module. Delayed call to make sure all modules are ready
-if (CWSystemInfo.__constructor) window.setTimeout(CWSystemInfo.__constructor, 0);
+CWModules.add('CWSystemInfo');
+/*global CWModules */
 'use strict';
 
 
@@ -2418,8 +2536,7 @@ CWUtil.createUUID = function(a) {
   return a?(a ^ Math.random() * 16 >> a / 4).toString(16):([ 1e7 ] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g,CWUtil.createUUID);
 }.bind(CWUtil);
 
-//Initalize module. Delayed call to make sure all modules are ready
-if (CWUtil.__constructor) window.setTimeout(CWUtil.__constructor, 0);
+CWModules.add('CWUtil');
 'use strict';
 
 /**
@@ -2518,7 +2635,7 @@ CWVector.prototype.getP1 = function() {
 CWVector.prototype.getP2 = function() {
   return this._p2;
 };
-/* global CWEventManager, CWDebug */
+/* global CWEventManager, CWDebug, CWModules */
 "use strict";
 
 
@@ -2613,7 +2730,7 @@ CWWebsocketMessageParser._parseReplace = function(message) {
 CWWebsocketMessageParser._parseLoadScript = function(message) {
   var that = this;
   $.getScript(message.url).done(function() {
-    Connichiwa.package.Connichiwa._sendAck(message);
+    Connichiwa._sendAck(message);
   }).fail(function(f, s, t) {
     CWDebug.err(1, "There was an error loading '" + message.url + "': " + t);
   });
@@ -2634,7 +2751,7 @@ CWWebsocketMessageParser._parseLoadCSS = function(message) {
   cssEntry.setAttribute("type", "text/css");
   cssEntry.setAttribute("href", message.url);
   $("head").append(cssEntry);
-  Connichiwa.package.Connichiwa._sendAck(message);
+  Connichiwa._sendAck(message);
 }.bind(CWWebsocketMessageParser);
 
 
@@ -2677,9 +2794,8 @@ CWWebsocketMessageParser._parseGotStitchNeighbor = function(message) {
   CWEventManager.trigger("gotstitchneighbor", message);
 }.bind(CWWebsocketMessageParser);
 
-//Initalize module. Delayed call to make sure all modules are ready
-if (CWWebsocketMessageParser.__constructor) window.setTimeout(CWWebsocketMessageParser.__constructor, 0);
-/* global CWEventManager, CWDevice, CWNativeBridge, CWUtil, CWDebug */
+CWModules.add('CWWebsocketMessageParser');
+/* global CWEventManager, CWDevice, CWNativeBridge, CWUtil, CWDebug, CWModules */
 'use strict';
 
 
@@ -2775,6 +2891,13 @@ Connichiwa._onWebsocketError = function() { /* ABSTRACT */ };
  * @private
  */
 Connichiwa.__constructor = function() {
+  //We cannot have a non-native master, redirect to the remote page
+  if (CWNativeBridge.isRunningNative() !== true && Connichiwa.isMaster()) {
+    var parsedURL = new CWUtil.parseURL(document.URL);
+    window.location = 'http://' + parsedURL.hostname + ':' + parsedURL.port + '/remote';
+    return;
+  }
+
   //If no native layer runs in the background, we have to take care of 
   //establishing a connection ourselves
   if (CWNativeBridge.isRunningNative() !== true) {
@@ -2836,140 +2959,22 @@ Connichiwa.onMessage = function(name, callback) {
  * @function
  */
 Connichiwa.onLoad = function(callback) {
+  CWDebug.log(1, "Attaching callback to onLoad");
   if (document.readyState === 'complete') {
+    CWDebug.log(1, "Fire immediately");
     //Timeout so the callback is always called asynchronously
     window.setTimeout(callback, 0);
   } else {
-    Connichiwa.on('ready', callback);
+    CWDebug.log(1, "Fire delayed");
+    this.on('ready', callback);
   }
 }.bind(Connichiwa);
 
 
-// DEVICE COMMUNICATION API
-
-
-Connichiwa.insert = function(identifier, target, html) {
-  //With two args, we handle them as identifier and html
-  //target is assumed as the body
-  if (html === undefined) {
-    html = target;
-    target = 'body';
-  }
-
-  //target should be a selector but can also be a DOM or jQuery element
-  //If so, we try to get it by its ID on the other side
-  if (CWUtil.isObject(target)) {
-    target = $(target);
-    target = '#' + target.attr('id');
-  }
-  
-  //html can be a DOM or jQuery element - if so, send the outerHTML including 
-  //all styles
-  if (CWUtil.isObject(html) === true) {
-    var el = $(html);
-    var clone = el.clone();
-    clone[0].style.cssText = el[0].style.cssText; //TODO really needed?
-    html = clone[0].outerHTML;
-  }
-
-  //identifier can also be a CWDevice
-  if (CWDevice.prototype.isPrototypeOf(identifier)) {
-    identifier = identifier.getIdentifier();
-  }
-
-  var message = {
-    selector : target,
-    html     : html
-  };
-  this.send(identifier, '_insert', message);
-}.bind(Connichiwa);
-
-Connichiwa.replace = function(identifier, target, html) {
-  //With two args, we handle them as identifier and html
-  //target is assumed as the body
-  if (html === undefined) {
-    html = target;
-    target = 'body';
-  }
-
-  this._replace(identifier, target, html, false);
-}.bind(Connichiwa);
-
-Connichiwa.replaceContent = function(identifier, target, html) {
-  //With two args, we handle them as identifier and html
-  //target is assumed as the body
-  if (html === undefined) {
-    html = target;
-    target = 'body';
-  }
-
-  this._replace(identifier, target, html, true);
-}.bind(Connichiwa);
-
-Connichiwa._replace = function(identifier, target, html, contentOnly) {
-  //With two args, we handle them as identifier and html
-  //target is assumed as the body
-  if (html === undefined) {
-    html = target;
-    target = 'body';
-  }
-
-  //target should be a selector but can also be a DOM or jQuery element
-  //If so, we try to get it by its ID on the other side
-  if (CWUtil.isObject(target)) {
-    target = '#' + $(target).attr('id');
-  }
-  
-  //html can be a DOM or jQuery element - if so, send the outerHTML including 
-  //all styles
-  if (CWUtil.isObject(html) === true) {
-    var el = $(html);
-    var clone = el.clone();
-    clone[0].style.cssText = el[0].style.cssText; //TODO really needed?
-    html = clone[0].outerHTML;
-  }
-
-  //identifier can also be a CWDevice
-  if (CWDevice.prototype.isPrototypeOf(identifier)) {
-    identifier = identifier.getIdentifier();
-  }
-
-  var message = {
-    selector    : target,
-    html        : html,
-    contentOnly : contentOnly,
-  };
-  this.send(identifier, '_replace', message);
-}.bind(Connichiwa);
-
-
-Connichiwa.loadScript = function(identifier, url, callback) {
-  var message = { url  : url }.bind(Connichiwa);
-  var messageID = this.send(identifier, '_loadscript', message);
-
-  if (callback !== undefined) {
-    this.on('__ack_message' + messageID, callback);
-  }
-}.bind(Connichiwa);
-
-Connichiwa.loadCSS = function(identifier, url) {
-  var message = { url  : url };
-  var messageID = this.send(identifier, '_loadcss', message);
-}.bind(Connichiwa);
-
-
+//TODO remove, find an easy way to send a message to the master
 Connichiwa.send = function(target, name, message) {
-  if (message === undefined) {
-    message = target;
-    target = 'master';
-  }
-
-  if (CWDevice.prototype.isPrototypeOf(target)) {
-    target = target.getIdentifier();
-  }
-
   message._name = name;
-  message._source = this.getIdentifier();
+  message._source = Connichiwa.getIdentifier();
   message._target = target;
   return this._sendObject(message);
 }.bind(Connichiwa);
@@ -3118,6 +3123,8 @@ Connichiwa._cleanupWebsocket = function() {
     this._websocket           = undefined;
   }
 }.bind(Connichiwa);
+
+CWModules.add('Connichiwa');
 /**
  * Represents a two-dimensional points
  * @typedef Point
@@ -3269,7 +3276,7 @@ Connichiwa._cleanupWebsocket = function() {
  *    will continue to send events such as {@link event:devicedistancechanged}
  * @event devicedisconnected
  * @param {CWDevice} device The device that disconnected
- *//* global Connichiwa, CWDeviceManager, CWEventManager, CWDevice, CWDebug */
+ *//* global Connichiwa, CWDeviceManager, CWEventManager, CWDevice, CWDebug, CWModules */
 'use strict';
 
 
@@ -3343,7 +3350,9 @@ CWNativeBridge._parseLocalInfo = function(message)  {
 CWNativeBridge._parseDisconnectWebsocket = function(message) {
   Connichiwa._disconnectWebsocket();  
 }.bind(CWNativeBridge);
-/* global CWEventManager, CWDebug */
+
+CWModules.add('CWNativeBridge');
+/* global Connichiwa, CWEventManager, CWDebug, CWModules */
 'use strict';
 
 
@@ -3362,8 +3371,8 @@ var CWWebsocketMessageParser = CWWebsocketMessageParser || {};
  */
 CWWebsocketMessageParser.parseOnRemote = function(message) {
   switch (message._name) {
-    case "_debuginfo"      : this._parseDebugInfo(message); break;
-    case "_softdisconnect" : this._parseSoftDisconnect(message); break;
+    case '_debuginfo'      : this._parseDebugInfo(message); break;
+    case '_softdisconnect' : this._parseSoftDisconnect(message); break;
   }
 }.bind(CWWebsocketMessageParser);
 
@@ -3374,9 +3383,11 @@ CWWebsocketMessageParser._parseDebugInfo = function(message) {
 
 
 CWWebsocketMessageParser._parseSoftDisconnect = function(message) {
-  Connichiwa.package.Connichiwa._softDisconnectWebsocket();
+  Connichiwa._softDisconnectWebsocket();
 }.bind(CWWebsocketMessageParser);
-/* global CWEventManager, CWWebsocketMessageParser, CWDevice, CWNativeBridge, CWSystemInfo, CWUtil, CWDebug */
+
+CWModules.add('CWWebsocketMessageParser');
+/* global CWEventManager, CWWebsocketMessageParser, CWDevice, CWNativeBridge, CWSystemInfo, CWUtil, CWDebug, CWModules */
 'use strict';
 
 
@@ -3592,7 +3603,7 @@ Connichiwa._tryWebsocketReconnect = function() {
   }
 
   if (this._websocket !== undefined && this._websocket.readyState === WebSocket.CONNECTING) {
-    window.setTimeout(this._tryWebsocketReconnect(), 1000);
+    window.setTimeout(this._tryWebsocketReconnect, 1000);
     return;
   }
 
@@ -3602,3 +3613,6 @@ Connichiwa._tryWebsocketReconnect = function() {
   this._connectWebsocket();
   window.setTimeout(this._tryWebsocketReconnect, 5000);
 }.bind(Connichiwa);
+
+CWModules.add('Connichiwa');
+CWModules.init();

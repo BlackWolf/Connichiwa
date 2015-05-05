@@ -1,4 +1,4 @@
-/* global Connichiwa, CWEventManager, CWStitchManager, CWDeviceManager, CWDevice, CWDeviceConnectionState, CWDebug */
+/* global Connichiwa, CWEventManager, CWStitchManager, CWDeviceManager, CWDevice, CWDeviceConnectionState, CWDebug, CWModules */
 /* global nativeCallRemoteDidConnect */
 'use strict';
 
@@ -45,7 +45,7 @@ CWWebsocketMessageParser._parseRemoteInfo = function(message)
     CWDebug.log(1, 'TODO');
   }
   
-  device.connectionState = CWDevice.ConnectionState.CONNECTED;
+  device._connectionState = CWDevice.ConnectionState.CONNECTED;
   nativeCallRemoteDidConnect(device.getIdentifier());
 
   //Make sure the remote uses the same logging settings as we do
@@ -107,3 +107,5 @@ CWWebsocketMessageParser._parseStitchSwipe = function(message) {
 CWWebsocketMessageParser._parseQuitStitch = function(message) {
   CWStitchManager.unstitchDevice(message.device);
 }.bind(CWWebsocketMessageParser);
+
+CWModules.add('CWWebsocketMessageParser');

@@ -388,6 +388,42 @@ Only one instance of the webserver should be running on a device.</Abstract>
 		</Token>
 		
 		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWServerManager/setMasterBacklog:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWServerManager.m</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong, readwrite) NSMutableArray *masterBacklog</Declaration>
+			
+			
+			<Anchor>//api/name/masterBacklog</Anchor>
+            <NodeRef refid="11"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWServerManager/masterBacklog</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWServerManager.m</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong, readwrite) NSMutableArray *masterBacklog</Declaration>
+			
+			
+			<Anchor>//api/name/masterBacklog</Anchor>
+            <NodeRef refid="11"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CWServerManager/masterBacklog</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWServerManager.m</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong, readwrite) NSMutableArray *masterBacklog</Declaration>
+			
+			
+			<Anchor>//api/name/masterBacklog</Anchor>
+            <NodeRef refid="11"/>
+		</Token>
+		
+		<Token>
 			<TokenIdentifier>//apple_ref/occ/instm/CWServerManager/_registerJSCallbacks</TokenIdentifier>
 			<Abstract type="html">Registers callback functions that the webserver script can call to execute native methods</Abstract>
 			<DeclaredIn>CWServerManager.m</DeclaredIn>

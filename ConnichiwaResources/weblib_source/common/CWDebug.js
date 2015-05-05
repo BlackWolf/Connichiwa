@@ -1,3 +1,4 @@
+/* global CWModules */
 'use strict';
 
 
@@ -126,5 +127,4 @@ CWDebug.setLogLevel = function(v) {
   this._logLevel = v;
 }.bind(CWDebug);
 
-//Initalize module. Delayed call to make sure all modules are ready
-if (CWDebug.__constructor) window.setTimeout(CWDebug.__constructor, 0);
+CWModules.add('CWDebug');

@@ -29,6 +29,7 @@
 @property (strong, readwrite) BLWebSocketsServer *websocketServer;
 @property (readwrite) int localWebsocketID;
 @property (strong, readwrite) NSMutableDictionary *websocketIdentifiers;
+@property (nonatomic, strong, readwrite) NSMutableArray *masterBacklog;
 
 /**
  *  Registers callback functions that the webserver script can call to execute native methods
@@ -60,6 +61,8 @@
     
     self.state = CWServerManagerStateStopped;
     self.documentRoot = documentRoot;
+    self.localWebsocketID = -1;
+    self.masterBacklog = [NSMutableArray array];
     
     return self;
 }
@@ -79,7 +82,7 @@
     //
     
     self.webServer = [[GCDWebServer alloc] init];
-    [GCDWebServer setLogLevel:1];
+    [GCDWebServer setLogLevel:1]; 
     
     //Set up all the path handlers of the webserver that will deliver our files
     //Note that they are hand3560led in LIFO order, so the last handler will be checked first,
@@ -178,10 +181,12 @@
     __weak typeof(self) weakSelf = self;
     
     return ^void (int connectionID, NSData *messageData) {
+//            @synchronized(weakSelf) {
         NSDictionary *message = [CWUtil dictionaryFromJSONData:messageData];
-        
+//        NSLog(@"GOT MESSAGE %@", [[NSString alloc] initWithData:messageData encoding:NSUTF8StringEncoding]);
         //If the message identifies the local weblib's websocket, save its ID
         if ([[message objectForKey:@"_name"] isEqualToString:@"localinfo"]) {
+//            NSLog(@"SET LOCAL ID");
             weakSelf.localWebsocketID = connectionID;
         }
         
@@ -193,10 +198,27 @@
             [weakSelf.websocketServer setOnMessageHandler:[weakSelf onIdentifiedWebsocketMessage] forConnection:connectionID];
             [weakSelf.websocketServer setOnCloseHandler:[weakSelf onIdentifiedWebsocketClosed] forConnection:connectionID];
             
-            //Forward the message to the local weblibrary ., so it knows about the device
-            [weakSelf.websocketServer pushMessage:messageData toConnection:weakSelf.localWebsocketID];
-            
+            //Forward the message to the local weblibrary so it knows about the device
+            //It might happen that we receive remoteinfo messages before localinfo messages
+            //(if they arrive between the websocket server starting and the localinfo message
+            //arriving). If this happens, backlog the messages and send them later
+//            NSLog(@"ID %d", weakSelf.localWebsocketID);
+            if (weakSelf.localWebsocketID != -1) {
+                [weakSelf.websocketServer pushMessage:messageData toConnection:weakSelf.localWebsocketID];
+            } else {
+                [self.masterBacklog addObject:messageData];
+            }
         }
+        
+        if ([[message objectForKey:@"_name"] isEqualToString:@"localinfo"]) {
+            //If we backlogged messages that arrived for the master before this
+            //point, send them now that the master has connected
+            for (NSData *backlogMessage in self.masterBacklog) {
+//                NSLog(@"SENDING BACKLOGGED MESSAGE %@", [[NSString alloc] initWithData:backlogMessage encoding:NSUTF8StringEncoding]);
+                [weakSelf.websocketServer pushMessage:backlogMessage toConnection:weakSelf.localWebsocketID];
+            }
+        }
+//            }
     };
 }
 
@@ -225,6 +247,7 @@
     
     return ^void (int connectionID) {
         if (connectionID == self.localWebsocketID) {
+            ErrLog(@"ERROR! LOCAL WEBSOCKET CLOSED!");
             //TODO: What to do here? This shouldn't happen!
         } else {
             //Find the remote websocket that was closed and report the close to our delegate
@@ -244,6 +267,9 @@
 
 
 - (int)connectionIDForIdentifier:(NSString *)targetIdentifier {
+    if ([targetIdentifier isEqualToString:@"master"]) {
+        return self.localWebsocketID;
+    }
     return [[self.websocketIdentifiers objectForKey:targetIdentifier] intValue];
 }
 

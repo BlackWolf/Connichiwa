@@ -26,7 +26,7 @@
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerBodyDecoder/open:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
+			<Abstract type="html">This method is called before any body data is received.</Abstract>
 			<DeclaredIn>GCDWebServerRequest.m</DeclaredIn>
 			
 			<Declaration>- (BOOL)open:(NSError **)error</Declaration>
@@ -38,7 +38,7 @@
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerBodyDecoder/writeData:error:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
+			<Abstract type="html">This method is called whenever body data has been received.</Abstract>
 			<DeclaredIn>GCDWebServerRequest.m</DeclaredIn>
 			
 			<Declaration>- (BOOL)writeData:(NSData *)data error:(NSError **)error</Declaration>
@@ -50,7 +50,7 @@
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerBodyDecoder/close:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
+			<Abstract type="html">This method is called after all body data has been received.</Abstract>
 			<DeclaredIn>GCDWebServerRequest.m</DeclaredIn>
 			
 			<Declaration>- (BOOL)close:(NSError **)error</Declaration>

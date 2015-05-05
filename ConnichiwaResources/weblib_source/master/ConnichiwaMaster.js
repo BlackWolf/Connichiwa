@@ -1,4 +1,4 @@
-/* global CWDeviceManager, CWNativeBridge, CWWebsocketMessageParser, CWEventManager, CWDebug */
+/* global CWDeviceManager, CWNativeBridge, CWWebsocketMessageParser, CWEventManager, CWDebug, CWModules */
 /* global nativeCallWebsocketDidOpen */
 /* global CONNECTING, OPEN */
 'use strict';
@@ -208,3 +208,5 @@ Connichiwa._onWebsocketClose = function(e) {
 Connichiwa._onWebsocketError = function() {
   this._onWebsocketClose();
 }.bind(Connichiwa);
+
+CWModules.add('Connichiwa');

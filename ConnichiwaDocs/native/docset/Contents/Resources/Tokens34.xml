@@ -345,7 +345,7 @@ Pass a nil value to remove an additional header.</Abstract>
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerResponse/open:</TokenIdentifier>
-			<Abstract type="html">This method is called before any body data is sent.</Abstract>
+			<Abstract type="html"></Abstract>
 			<DeclaredIn>GCDWebServerResponse.m</DeclaredIn>
 			
 			<Declaration>- (BOOL)open:(NSError **)error</Declaration>
@@ -357,7 +357,7 @@ Pass a nil value to remove an additional header.</Abstract>
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerResponse/readData:</TokenIdentifier>
-			<Abstract type="html">This method is called whenever body data is sent.</Abstract>
+			<Abstract type="html"></Abstract>
 			<DeclaredIn>GCDWebServerResponse.m</DeclaredIn>
 			
 			<Declaration>- (NSData *)readData:(NSError **)error</Declaration>
@@ -369,7 +369,7 @@ Pass a nil value to remove an additional header.</Abstract>
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerResponse/close</TokenIdentifier>
-			<Abstract type="html">This method is called after all body data has been sent.</Abstract>
+			<Abstract type="html"></Abstract>
 			<DeclaredIn>GCDWebServerResponse.m</DeclaredIn>
 			
 			<Declaration>- (void)close</Declaration>

@@ -1,4 +1,4 @@
-/* global Connichiwa, CWDebug */
+/* global Connichiwa, CWDebug, CWModules */
 'use strict';
 
 
@@ -32,13 +32,14 @@ CWNativeBridge._runsNative = false;
  * @private
  */
 CWNativeBridge.__constructor = function() {
-  if (Connichiwa.isMaster()) {
-    this._runsNative = true;
-  } else {
+  // if (Connichiwa.isMaster()) {
+    // console.log("runsNative true")
+    // this._runsNative = true;
+  // } else {
     if (window.RUN_BY_CONNICHIWA_NATIVE === true) {
       this._runsNative = true;
-    }
-  }
+    } 
+  // }
 }.bind(CWNativeBridge);
 
 
@@ -92,6 +93,4 @@ CWNativeBridge.callOnNative = function(methodName) {
 CWNativeBridge.parse = function(message) { /* ABSTRACT */ };
 
 
-//Initalize module. Delayed call to make sure all modules are ready
-if (CWNativeBridge.__constructor) window.setTimeout(CWNativeBridge.__constructor, 0);
-
+CWModules.add('CWNativeBridge');

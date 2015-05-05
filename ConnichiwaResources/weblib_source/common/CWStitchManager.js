@@ -1,4 +1,4 @@
-/* global Connichiwa, CWGyroscope, CWSystemInfo, CWUtil */
+/* global Connichiwa, CWGyroscope, CWSystemInfo, CWUtil, CWModules */
 'use strict';
 
 
@@ -284,5 +284,4 @@ CWStitchManager.getDefaultDeviceTransformation = function() {
 }.bind(CWStitchManager);
 
 
-//Initalize module. Delayed call to make sure all modules are ready
-if (CWStitchManager.__constructor) window.setTimeout(CWStitchManager.__constructor, 0);
+CWModules.add('CWStitchManager');

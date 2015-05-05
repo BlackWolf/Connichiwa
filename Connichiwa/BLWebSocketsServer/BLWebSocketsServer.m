@@ -34,19 +34,21 @@ static int callback_http(struct libwebsocket_context *context,
 
 static BLWebSocketsServer *sharedInstance = nil;
 
-static dispatch_source_t timer;
-static dispatch_queue_t networkQueue;
+//static dispatch_source_t timer;
+//static dispatch_queue_t networkQueue;
 
 @interface BLWebSocketsServer()
 
 @property (nonatomic, assign, readwrite) BOOL isRunning;
+@property (nonatomic, retain) dispatch_source_t timer;
+@property (nonatomic, retain) dispatch_queue_t networkQueue;
 
 /* Context representing the server */
 @property (nonatomic, assign) struct libwebsocket_context *context;
 @property (nonatomic, strong, readwrite) BLWebSocketOnMessageHandler defaultOnMessageHandler;
 @property (nonatomic, strong, readwrite) BLWebSocketOnCloseHandler defaultOnCloseHandler;
 @property (nonatomic, strong, readwrite) NSMutableDictionary *connections;
-@property (strong, readwrite) NSTimer *stopFastPollingTimer;
+//@property (strong, readwrite) NSTimer *stopFastPollingTimer;
 
 /* Temporary storage for the server stopped completion block */
 @property (nonatomic, strong) void(^serverStoppedCompletionBlock)();
@@ -75,7 +77,7 @@ static dispatch_queue_t networkQueue;
 - (id)init {
     self = [super init];
     if (self) {
-        networkQueue = dispatch_queue_create(QUEUE_IDENTIFIER, DISPATCH_QUEUE_SERIAL);
+        self.networkQueue = dispatch_queue_create(QUEUE_IDENTIFIER, DISPATCH_QUEUE_SERIAL);
     }
     return self;
 }
@@ -134,17 +136,17 @@ static dispatch_queue_t networkQueue;
         error = [NSError errorWithDomain:errorDomain code:0 userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"Couldn't create the libwebsockets context.", @"")}];
     }
     
-    timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, networkQueue);
+    self.timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, self.networkQueue);
     
-    dispatch_source_set_timer(timer, DISPATCH_TIME_NOW, 1, 1);
+    dispatch_source_set_timer(self.timer, DISPATCH_TIME_NOW, 1, 1);
     
-    dispatch_source_set_event_handler(timer, ^{
+    dispatch_source_set_event_handler(self.timer, ^{
         @autoreleasepool {
             libwebsocket_service(self.context, DEFAULT_POLLING_INTERVAL);
         }
     });
     
-    dispatch_source_set_cancel_handler(timer, ^{
+    dispatch_source_set_cancel_handler(self.timer, ^{
         dispatch_async(dispatch_get_main_queue(), ^{
             self.isRunning = NO;
             [self cleanup];
@@ -156,7 +158,7 @@ static dispatch_queue_t networkQueue;
         completionBlock(error);
     });
     
-    dispatch_resume(timer);
+    dispatch_resume(self.timer);
 }
 
 - (void)stopWithCompletionBlock:(void (^)())completionBlock {
@@ -168,7 +170,7 @@ static dispatch_queue_t networkQueue;
         return;
     }
     else {
-        dispatch_source_cancel(timer);
+        dispatch_source_cancel(self.timer);
     }
 }
 
@@ -197,13 +199,13 @@ static dispatch_queue_t networkQueue;
 - (void)pushMessage:(NSData *)message toConnection:(int)connectionID {
     BLWebSocketConnection *connection = [BLWebSocketsServer connectionForID:connectionID];
     if (connection == nil) {
-        NSLog(@"LOST MESSAGE %@", [[NSString alloc] initWithData:message encoding:NSUTF8StringEncoding]);
+//        NSLog(@"LOST MESSAGE %@", [[NSString alloc] initWithData:message encoding:NSUTF8StringEncoding]);
         return;
     }
     [connection enqueueOutgoingMessage:message];
     
     //Make sure the new message is sent as soon as the socket is writable
-    dispatch_async(networkQueue, ^{
+    dispatch_async(self.networkQueue, ^{
         libwebsocket_callback_on_writable(self.context, connection.socket);
     });
 }
@@ -214,7 +216,7 @@ static dispatch_queue_t networkQueue;
     }
     
     //Make sure all connections call the writable callback when they are ready
-    dispatch_async(networkQueue, ^{
+    dispatch_async(self.networkQueue, ^{
         libwebsocket_callback_on_writable_all_protocol(&(self.context->protocols[1]));
     });
 }
@@ -257,6 +259,8 @@ static int callback_websockets(struct libwebsocket_context * this,
             case LWS_CALLBACK_ESTABLISHED: {
                 *connectionID = sharedInstance.sessionIdIncrementalCount++;
                 
+//                NSLog(@"CREATING CONNECTION %d", *connectionID);
+                
                 id connectionKey = [BLWebSocketsServer keyForConnectionID:*connectionID];
                 BLWebSocketConnection *connection = [[BLWebSocketConnection alloc] initWithID:*connectionID socket:wsi];
                 [sharedInstance.connections setObject:connection forKey:connectionKey];
@@ -288,6 +292,7 @@ static int callback_websockets(struct libwebsocket_context * this,
                 BLWebSocketConnection *connection = [BLWebSocketsServer connectionForID:*connectionID];
                 NSData *message = [connection dequeueOutgoingMessage];
                 if (message != nil) {
+//                    NSLog(@"SENDING MESSAGE %@", [[NSString alloc] initWithData:message encoding:NSUTF8StringEncoding]);
                     write_data_websockets(message, wsi);
                     
                     //Make sure the rest of the message queue is processed
@@ -298,6 +303,7 @@ static int callback_websockets(struct libwebsocket_context * this,
             case LWS_CALLBACK_CLOSED: {
                 //Call the onClose handler
                 BLWebSocketConnection *connection = [BLWebSocketsServer connectionForID:*connectionID];
+//                NSLog(@"CLOSED CONNECTION %d", *connectionID);
                 BLWebSocketOnCloseHandler callback = connection.onCloseHandler;
                 if (!callback) callback = sharedInstance.defaultOnCloseHandler;
                 if (callback) callback(*connectionID);

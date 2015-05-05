@@ -1,4 +1,4 @@
-/* global CWEventManager, CWDebug */
+/* global CWEventManager, CWDebug, CWModules */
 "use strict";
 
 
@@ -93,7 +93,7 @@ CWWebsocketMessageParser._parseReplace = function(message) {
 CWWebsocketMessageParser._parseLoadScript = function(message) {
   var that = this;
   $.getScript(message.url).done(function() {
-    Connichiwa.package.Connichiwa._sendAck(message);
+    Connichiwa._sendAck(message);
   }).fail(function(f, s, t) {
     CWDebug.err(1, "There was an error loading '" + message.url + "': " + t);
   });
@@ -114,7 +114,7 @@ CWWebsocketMessageParser._parseLoadCSS = function(message) {
   cssEntry.setAttribute("type", "text/css");
   cssEntry.setAttribute("href", message.url);
   $("head").append(cssEntry);
-  Connichiwa.package.Connichiwa._sendAck(message);
+  Connichiwa._sendAck(message);
 }.bind(CWWebsocketMessageParser);
 
 
@@ -157,5 +157,4 @@ CWWebsocketMessageParser._parseGotStitchNeighbor = function(message) {
   CWEventManager.trigger("gotstitchneighbor", message);
 }.bind(CWWebsocketMessageParser);
 
-//Initalize module. Delayed call to make sure all modules are ready
-if (CWWebsocketMessageParser.__constructor) window.setTimeout(CWWebsocketMessageParser.__constructor, 0);
+CWModules.add('CWWebsocketMessageParser');

@@ -1,4 +1,4 @@
-/* global CWUtil, CWDebug */
+/* global CWUtil, CWDebug, CWModules */
 'use strict';
 
 
@@ -99,5 +99,4 @@ CWEventManager.trigger = function(logPrio, event, var_args) {
   }
 }.bind(CWEventManager);
 
-//Initalize module. Delayed call to make sure all modules are ready
-if (CWEventManager.__constructor) window.setTimeout(CWEventManager.__constructor, 0);
+CWModules.add('CWEventManager');

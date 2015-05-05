@@ -26,7 +26,7 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/* global Connichiwa, CWSystemInfo */
+            <pre class="prettyprint source linenums"><code>/* global Connichiwa, CWSystemInfo, CWUtil */
 'use strict';
 
 
@@ -187,7 +187,7 @@ CWDevice.prototype.isLocal = function() {
  *    false
  */
 CWDevice.prototype.isNearby = function() {
-  return (this.discoveryState === CWDevice.DiscoveryState.DISCOVERED);
+  return (this._discoveryState === CWDevice.DiscoveryState.DISCOVERED);
 };
 
 
@@ -199,8 +199,10 @@ CWDevice.prototype.isNearby = function() {
  * @private
  */
 CWDevice.prototype._canBeConnected = function() { 
-  return (this.connectionState === CWDevice.ConnectionState.DISCONNECTED &amp;&amp; 
-    this.discoveryState === CWDevice.DiscoveryState.DISCOVERED);
+  CWDebug.log(1, "CAN BE CONNECTED: "+(this._connectionState === CWDevice.ConnectionState.DISCONNECTED)+" &amp;&amp; "+(this._discoveryState === CWDevice.DiscoveryState.DISCOVERED));
+  CWDebug.log(1, this._discoveryState);
+  return (this._connectionState === CWDevice.ConnectionState.DISCONNECTED &amp;&amp; 
+    this._discoveryState === CWDevice.DiscoveryState.DISCOVERED);
 };
 
 
@@ -212,7 +214,7 @@ CWDevice.prototype._canBeConnected = function() {
  * @return {Boolean} true if the device is fully connected, otherwise false
  */
 CWDevice.prototype.isConnected = function() {
-  return (this.connectionState === CWDevice.ConnectionState.CONNECTED);
+  return (this._connectionState === CWDevice.ConnectionState.CONNECTED);
 };
 
 
@@ -235,7 +237,34 @@ CWDevice.prototype.isConnected = function() {
  *    other device.
  */
 CWDevice.prototype.insert = function(target, html) {
-  Connichiwa.insert(this.getIdentifier(), target, html);
+  //With two args, we handle them as identifier and html
+  //target is then assumed as the body
+  if (html === undefined) {
+    html = target;
+    target = 'body';
+  }
+
+  //target should be a selector but can also be a DOM or jQuery element
+  //If so, we try to get it by its ID on the other side
+  if (CWUtil.isObject(target)) {
+    target = $(target);
+    target = '#' + target.attr('id');
+  }
+  
+  //html can be a DOM or jQuery element - if so, send the outerHTML including 
+  //all styles
+  if (CWUtil.isObject(html) === true) {
+    var el = $(html);
+    var clone = el.clone();
+    clone[0].style.cssText = el[0].style.cssText; //TODO really needed?
+    html = clone[0].outerHTML;
+  }
+
+  var message = {
+    selector : target,
+    html     : html
+  };
+  this.send('_insert', message);
 };
 
 
@@ -255,7 +284,7 @@ CWDevice.prototype.insert = function(target, html) {
  *    send to the other device.
  */
 CWDevice.prototype.replace = function(target, html) {
-  Connichiwa.replace(this.getIdentifier(), target, html);
+  this._replace(target, html, false);
 };
 
 
@@ -276,8 +305,57 @@ CWDevice.prototype.replace = function(target, html) {
  *    cloned and send to the other device.
  */
 CWDevice.prototype.replaceContent = function(target, html) {
-  Connichiwa.replaceContent(this.getIdentifier(), target, html);
+  this._replace(target, html, true);
 };
+
+
+/**
+ * Internal replace method, both {@link CWDevice#replace} and {@link
+ *    CWDevice#replaceContent} forward to this method which does the actual
+ *    replacement
+ * @param  {String|HTMLElement|jQuery} target The target element(s) on the
+ *    remote device whos content will be replaced. This can be either a CSS
+ *    selector or a DOM or jQuery element. If it is one of the latter two,
+ *    this method will search for an element with the same ID on the remote
+ *    device.
+ * @param  {String|HTMLElement|jQuery} html The HTML that will replace the
+ *    target node's content in the device's DOM. Can be either plain HTML as a
+ *    string or a DOM or jQuery element, in which case the element will be
+ *    cloned and send to the other device.
+ * @param  {Boolean} contentOnly If set to false, the entire target node(s)
+ *    will be replaced, otherwise only the node's contents will be replaced
+ * @private
+ */
+CWDevice.prototype._replace = function(target, html, contentOnly) {
+  //With two args, we handle them as identifier and html
+  //target is assumed as the body
+  if (html === undefined) {
+    html = target;
+    target = 'body';
+  }
+
+  //target should be a selector but can also be a DOM or jQuery element
+  //If so, we try to get it by its ID on the other side
+  if (CWUtil.isObject(target)) {
+    target = '#' + $(target).attr('id');
+  }
+  
+  //html can be a DOM or jQuery element - if so, send the outerHTML including 
+  //all styles
+  if (CWUtil.isObject(html) === true) {
+    var el = $(html);
+    var clone = el.clone();
+    clone[0].style.cssText = el[0].style.cssText; //TODO really needed?
+    html = clone[0].outerHTML;
+  }
+
+  var message = {
+    selector    : target,
+    html        : html,
+    contentOnly : contentOnly,
+  };
+  this.send('_replace', message);
+}.bind(Connichiwa);
 
 
 /**
@@ -289,7 +367,12 @@ CWDevice.prototype.replaceContent = function(target, html) {
  *    the JavaScript file was loaded and executed on the remote device
  */
 CWDevice.prototype.loadScript = function(url, callback) {
-  Connichiwa.loadScript(this.getIdentifier(), url, callback);
+  var message = { url : url };
+  var messageID = this.send('_loadscript', message);
+
+  if (callback !== undefined) {
+    Connichiwa.on('__ack_message' + messageID, callback);
+  }
 };
 
 
@@ -299,7 +382,8 @@ CWDevice.prototype.loadScript = function(url, callback) {
  * @param  {String}   url An URL to a valid CSS file
  */
 CWDevice.prototype.loadCSS = function(url) {
-  Connichiwa.loadCSS(this.getIdentifier(), url);
+  var message = { url  : url };
+  var messageID = this.send('_loadcss', message);
 };
 
 
@@ -319,7 +403,10 @@ CWDevice.prototype.loadCSS = function(url) {
  *    remote device.
  */
 CWDevice.prototype.send = function(name, message) {
-  Connichiwa.send(this.getIdentifier(), name, message);
+  message._name = name;
+  message._source = Connichiwa.getIdentifier();
+  message._target = this.getIdentifier();
+  return Connichiwa._sendObject(message);
 };
 
 
@@ -478,7 +565,7 @@ CWDevice.ConnectionState = {
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta2</a> on Fri Mar 13 2015 16:04:19 GMT+0100 (CET)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta2</a> on Tue May 05 2015 10:55:48 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

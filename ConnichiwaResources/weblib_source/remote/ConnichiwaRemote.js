@@ -1,4 +1,4 @@
-/* global CWEventManager, CWWebsocketMessageParser, CWDevice, CWNativeBridge, CWSystemInfo, CWUtil, CWDebug */
+/* global CWEventManager, CWWebsocketMessageParser, CWDevice, CWNativeBridge, CWSystemInfo, CWUtil, CWDebug, CWModules */
 'use strict';
 
 
@@ -214,7 +214,7 @@ Connichiwa._tryWebsocketReconnect = function() {
   }
 
   if (this._websocket !== undefined && this._websocket.readyState === WebSocket.CONNECTING) {
-    window.setTimeout(this._tryWebsocketReconnect(), 1000);
+    window.setTimeout(this._tryWebsocketReconnect, 1000);
     return;
   }
 
@@ -224,3 +224,5 @@ Connichiwa._tryWebsocketReconnect = function() {
   this._connectWebsocket();
   window.setTimeout(this._tryWebsocketReconnect, 5000);
 }.bind(Connichiwa);
+
+CWModules.add('Connichiwa');

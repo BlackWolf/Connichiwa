@@ -15,7 +15,7 @@ the GCDWebServerRequest and write the received HTTP body data.</Abstract>
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/intfm/GCDWebServerBodyWriter/open:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
+			<Abstract type="html">This method is called before any body data is received.</Abstract>
 			<DeclaredIn>GCDWebServerRequest.h</DeclaredIn>
 			
 			<Declaration>- (BOOL)open:(NSError **)error</Declaration>
@@ -27,7 +27,7 @@ the GCDWebServerRequest and write the received HTTP body data.</Abstract>
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/intfm/GCDWebServerBodyWriter/writeData:error:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
+			<Abstract type="html">This method is called whenever body data has been received.</Abstract>
 			<DeclaredIn>GCDWebServerRequest.h</DeclaredIn>
 			
 			<Declaration>- (BOOL)writeData:(NSData *)data error:(NSError **)error</Declaration>
@@ -39,7 +39,7 @@ the GCDWebServerRequest and write the received HTTP body data.</Abstract>
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/intfm/GCDWebServerBodyWriter/close:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
+			<Abstract type="html">This method is called after all body data has been received.</Abstract>
 			<DeclaredIn>GCDWebServerRequest.h</DeclaredIn>
 			
 			<Declaration>- (BOOL)close:(NSError **)error</Declaration>

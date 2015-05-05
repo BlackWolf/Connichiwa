@@ -1,4 +1,4 @@
-/* global Connichiwa, CWDeviceManager, CWEventManager, CWDevice, CWDebug */
+/* global Connichiwa, CWDeviceManager, CWEventManager, CWDevice, CWDebug, CWModules */
 'use strict';
 
 
@@ -102,7 +102,7 @@ CWNativeBridge._parseDeviceDetected = function(message) {
     device = new CWDevice(message);
     CWDeviceManager.addDevice(device);
   }
-  device.discoveryState = CWDevice.DiscoveryState.DISCOVERED;
+  device._discoveryState = CWDevice.DiscoveryState.DISCOVERED;
 
   CWDebug.log(2, 'Detected device: ' + device.getIdentifier());
   CWEventManager.trigger('deviceDetected', device);
@@ -154,7 +154,7 @@ CWNativeBridge._parseDeviceDistanceChanged = function(message) {
  */
 CWNativeBridge._parseDeviceLost = function(message) {
   var device = CWDeviceManager.getDeviceWithIdentifier(message.identifier);
-  device.discoveryState = CWDevice.DiscoveryState.LOST;
+  device._discoveryState = CWDevice.DiscoveryState.LOST;
 
   CWDebug.log(2, 'Lost device: ' + device.getIdentifier());
   CWEventManager.trigger('deviceLost', device);
@@ -176,7 +176,7 @@ CWNativeBridge._parseDeviceLost = function(message) {
  */
 CWNativeBridge._parseRemoteConnectFailed = function(message) {
   var device = CWDeviceManager.getDeviceWithIdentifier(message.identifier);
-  device.connectionState = CWDevice.ConnectionState.DISCONNECTED;
+  device._connectionState = CWDevice.ConnectionState.DISCONNECTED;
 
   CWDebug.log(2, 'Connection to remote device failed: ' + device.getIdentifier());
   CWEventManager.trigger('connectFailed', device);
@@ -201,7 +201,7 @@ CWNativeBridge._parseRemoteDisconnected = function(message) {
   var device = CWDeviceManager.getDeviceWithIdentifier(message.identifier);
   if (device === null) return;
     
-  device.connectionState = CWDevice.ConnectionState.DISCONNECTED;
+  device._connectionState = CWDevice.ConnectionState.DISCONNECTED;
 
   CWDebug.log(2, 'Device disconnected: ' + device.getIdentifier());
   CWEventManager.trigger('deviceDisconnected', device);
@@ -223,3 +223,5 @@ CWNativeBridge._parseRemoteDisconnected = function(message) {
 CWNativeBridge._parseDisconnectWebsocket = function(message) {
   Connichiwa._disconnectWebsocket();  
 }.bind(CWNativeBridge);
+
+CWModules.add('CWNativeBridge');

@@ -426,6 +426,90 @@ so far.</Abstract>
 		</Token>
 		
 		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerConnection/_writeData:withCompletionBlock:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerConnection.m</DeclaredIn>
+			
+			<Declaration>- (void)_writeData:(NSData *)data withCompletionBlock:(WriteDataCompletionBlock)block</Declaration>
+			
+			
+			<Anchor>//api/name/_writeData:withCompletionBlock:</Anchor>
+            <NodeRef refid="19"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerConnection/_writeHeadersWithCompletionBlock:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerConnection.m</DeclaredIn>
+			
+			<Declaration>- (void)_writeHeadersWithCompletionBlock:(WriteHeadersCompletionBlock)block</Declaration>
+			
+			
+			<Anchor>//api/name/_writeHeadersWithCompletionBlock:</Anchor>
+            <NodeRef refid="19"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerConnection/_writeBodyWithCompletionBlock:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerConnection.m</DeclaredIn>
+			
+			<Declaration>- (void)_writeBodyWithCompletionBlock:(WriteBodyCompletionBlock)block</Declaration>
+			
+			
+			<Anchor>//api/name/_writeBodyWithCompletionBlock:</Anchor>
+            <NodeRef refid="19"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerConnection/_readData:withLength:completionBlock:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerConnection.m</DeclaredIn>
+			
+			<Declaration>- (void)_readData:(NSMutableData *)data withLength:(NSUInteger)length completionBlock:(ReadDataCompletionBlock)block</Declaration>
+			
+			
+			<Anchor>//api/name/_readData:withLength:completionBlock:</Anchor>
+            <NodeRef refid="19"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerConnection/_readHeaders:withCompletionBlock:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerConnection.m</DeclaredIn>
+			
+			<Declaration>- (void)_readHeaders:(NSMutableData *)headersData withCompletionBlock:(ReadHeadersCompletionBlock)block</Declaration>
+			
+			
+			<Anchor>//api/name/_readHeaders:withCompletionBlock:</Anchor>
+            <NodeRef refid="19"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerConnection/_readBodyWithRemainingLength:completionBlock:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerConnection.m</DeclaredIn>
+			
+			<Declaration>- (void)_readBodyWithRemainingLength:(NSUInteger)length completionBlock:(ReadBodyCompletionBlock)block</Declaration>
+			
+			
+			<Anchor>//api/name/_readBodyWithRemainingLength:completionBlock:</Anchor>
+            <NodeRef refid="19"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerConnection/_readNextBodyChunk:completionBlock:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerConnection.m</DeclaredIn>
+			
+			<Declaration>- (void)_readNextBodyChunk:(NSMutableData *)chunkData completionBlock:(ReadBodyCompletionBlock)block</Declaration>
+			
+			
+			<Anchor>//api/name/_readNextBodyChunk:completionBlock:</Anchor>
+            <NodeRef refid="19"/>
+		</Token>
+		
+		<Token>
 			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerConnection/open</TokenIdentifier>
 			<Abstract type="html">This method is called when the connection is opened.</Abstract>
 			<DeclaredIn>GCDWebServerConnection.h</DeclaredIn>
@@ -539,90 +623,6 @@ the request or if no GCDWebServerResponse was generated during processing.</Abst
 			
 			
 			<Anchor>//api/name/close</Anchor>
-            <NodeRef refid="19"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerConnection/_writeData:withCompletionBlock:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>GCDWebServerConnection.m</DeclaredIn>
-			
-			<Declaration>- (void)_writeData:(NSData *)data withCompletionBlock:(WriteDataCompletionBlock)block</Declaration>
-			
-			
-			<Anchor>//api/name/_writeData:withCompletionBlock:</Anchor>
-            <NodeRef refid="19"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerConnection/_writeHeadersWithCompletionBlock:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>GCDWebServerConnection.m</DeclaredIn>
-			
-			<Declaration>- (void)_writeHeadersWithCompletionBlock:(WriteHeadersCompletionBlock)block</Declaration>
-			
-			
-			<Anchor>//api/name/_writeHeadersWithCompletionBlock:</Anchor>
-            <NodeRef refid="19"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerConnection/_writeBodyWithCompletionBlock:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>GCDWebServerConnection.m</DeclaredIn>
-			
-			<Declaration>- (void)_writeBodyWithCompletionBlock:(WriteBodyCompletionBlock)block</Declaration>
-			
-			
-			<Anchor>//api/name/_writeBodyWithCompletionBlock:</Anchor>
-            <NodeRef refid="19"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerConnection/_readData:withLength:completionBlock:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>GCDWebServerConnection.m</DeclaredIn>
-			
-			<Declaration>- (void)_readData:(NSMutableData *)data withLength:(NSUInteger)length completionBlock:(ReadDataCompletionBlock)block</Declaration>
-			
-			
-			<Anchor>//api/name/_readData:withLength:completionBlock:</Anchor>
-            <NodeRef refid="19"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerConnection/_readHeaders:withCompletionBlock:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>GCDWebServerConnection.m</DeclaredIn>
-			
-			<Declaration>- (void)_readHeaders:(NSMutableData *)headersData withCompletionBlock:(ReadHeadersCompletionBlock)block</Declaration>
-			
-			
-			<Anchor>//api/name/_readHeaders:withCompletionBlock:</Anchor>
-            <NodeRef refid="19"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerConnection/_readBodyWithRemainingLength:completionBlock:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>GCDWebServerConnection.m</DeclaredIn>
-			
-			<Declaration>- (void)_readBodyWithRemainingLength:(NSUInteger)length completionBlock:(ReadBodyCompletionBlock)block</Declaration>
-			
-			
-			<Anchor>//api/name/_readBodyWithRemainingLength:completionBlock:</Anchor>
-            <NodeRef refid="19"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerConnection/_readNextBodyChunk:completionBlock:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>GCDWebServerConnection.m</DeclaredIn>
-			
-			<Declaration>- (void)_readNextBodyChunk:(NSMutableData *)chunkData completionBlock:(ReadBodyCompletionBlock)block</Declaration>
-			
-			
-			<Anchor>//api/name/_readNextBodyChunk:completionBlock:</Anchor>
             <NodeRef refid="19"/>
 		</Token>
 		

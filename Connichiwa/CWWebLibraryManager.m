@@ -167,7 +167,7 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.webView setDelegate:self];
         [self.webView loadRequest:localhostURLRequest];
-        [self createWebViewContext];
+//        [self createWebViewContext];
     });
 }
 
@@ -217,6 +217,10 @@
     
     __weak typeof(self) weakSelf = self;
     
+    self.webViewContext[@"nativeCallLibraryDidLoad"] = ^{
+        [weakSelf _receivedFromView_libraryDidLoad];
+    };
+    
     self.webViewContext[@"nativeCallWebsocketDidOpen"] = ^{
         [weakSelf _receivedfromView_websocketDidOpen];
     };
@@ -235,9 +239,16 @@
 }
 
 
+-(void)_receivedFromView_libraryDidLoad {
+    CWLog(3, @"Weblibrary did fully load, opening websocket...");
+    [self _sendToView_debuginfo];
+    [self _sendToView_connectWebsocket];
+}
+
+
 - (void)_receivedfromView_websocketDidOpen
 {
-    CWLog(3, @"Remote weblibrary websocket did open, sending initial data");
+    CWLog(3, @"Weblibrary websocket did open, sending initial data");
     
     self.state = CWWebLibraryManagerStateConnected;
     
@@ -390,21 +401,29 @@
 #pragma mark UIWebViewDelegate
 
 
+- (void)webViewDidStartLoad:(UIWebView *)webView
+{
+    //We need to tell the web library it is run by a native application. This needs to be done ASAP (before the library loads).
+    //Therefore, we simply execute a script that sets a global variable to true. When the web library is loaded, it can check
+    //this variable and by that know that a native layer is running in the background.
+//    self.webViewContext = [self.webView valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
+    [self createWebViewContext];
+    NSString *js = [NSString stringWithFormat:@"var RUN_BY_CONNICHIWA_NATIVE = true;"];
+    [self.webView performSelectorOnMainThread:@selector(stringByEvaluatingJavaScriptFromString:) withObject:js waitUntilDone:NO];
+}
+
+
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
-    if (self.state == CWWebLibraryManagerStateConnecting)
-    {
-        CWLog(3, @"Web library webview did load, setting things up and connecting websocket");
-        
-        [self _registerJSCallbacks];
-        [self _sendToView_debuginfo];
-        [self _sendToView_connectWebsocket];
-        
+//    if (self.state == CWWebLibraryManagerStateConnecting)
+//    {
+//        CWLog(3, @"Web library webview did load, setting things up and connecting websocket");
         //WebView's are a strange little thing - the JS context might or might not change between our load request and
         //this point. Therefore, create the context again even though we already did so in connect:
-        [self createWebViewContext];
-    }
-    else if (self.state == CWWebLibraryManagerStateDisconnecting)
+//        [self createWebViewContext];
+//    }
+//    else if (self.state == CWWebLibraryManagerStateDi rsconnecting)
+    if (self.state == CWWebLibraryManagerStateDisconnecting)
     {
         CWLog(3, @"Web library webview did blank, we are fully disconnected... why would we want that?");
         
@@ -417,6 +436,8 @@
 - (void)createWebViewContext {
     //Find the context
     self.webViewContext = [self.webView valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
+    
+    [self _registerJSCallbacks];
     
     //Register JS error handler
     self.webViewContext.exceptionHandler = ^(JSContext *c, JSValue *e) {

@@ -227,6 +227,18 @@ In order to do that, the manager needs a dedicated UIWebView on which the local 
 		</Token>
 		
 		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWWebLibraryManager/_receivedFromView_libraryDidLoad</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWWebLibraryManager.m</DeclaredIn>
+			
+			<Declaration>- (void)_receivedFromView_libraryDidLoad</Declaration>
+			
+			
+			<Anchor>//api/name/_receivedFromView_libraryDidLoad</Anchor>
+            <NodeRef refid="14"/>
+		</Token>
+		
+		<Token>
 			<TokenIdentifier>//apple_ref/occ/instm/CWWebLibraryManager/_receivedfromView_websocketDidOpen</TokenIdentifier>
 			<Abstract type="html">Called by the web library once the websocket to the local webserver was established</Abstract>
 			<DeclaredIn>CWWebLibraryManager.m</DeclaredIn>

@@ -1,5 +1,4 @@
-/* global CWDevice */
-/* global nativeCallConnectRemote */
+/* global CWDevice, CWNativeBridge */
 'use strict';
 
 
@@ -12,10 +11,9 @@
  *    CWDevice#isNearby} returns `true`). If the device is already connected,
  *    calling this method will have no effect.
  */
-CWDevice.prototype.connect = function()
-{
+CWDevice.prototype.connect = function() {
   if (this._canBeConnected() === false) return;
 
-  this.connectionState = CWDevice.ConnectionState.CONNECTING;
-  nativeCallConnectRemote(this.getIdentifier());
+  this._connectionState = CWDevice.ConnectionState.CONNECTING;
+  CWNativeBridge.callOnNative('nativeCallConnectRemote', this.getIdentifier());
 };

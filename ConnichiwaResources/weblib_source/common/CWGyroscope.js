@@ -1,4 +1,4 @@
-/* global gyro, CWEventManager */
+/* global gyro, CWEventManager, CWModules */
 'use strict';
 
 
@@ -178,5 +178,4 @@ CWGyroscope.getLastAccelerometerMeasure = function() {
   };
 }.bind(CWGyroscope);
 
-//Initalize module. Delayed call to make sure all modules are ready
-if (CWGyroscope.__constructor) window.setTimeout(CWGyroscope.__constructor, 0);
+CWModules.add('CWGyroscope');

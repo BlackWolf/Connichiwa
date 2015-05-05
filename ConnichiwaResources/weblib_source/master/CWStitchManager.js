@@ -1,4 +1,4 @@
-/* global Connichiwa, CWDevice, CWDeviceManager, CWEventManager, CWDebug */
+/* global Connichiwa, CWDevice, CWDeviceManager, CWEventManager, CWDebug, CWModules */
 'use strict';
 
 
@@ -476,3 +476,5 @@ CWStitchManager._edgeForIndex = function(index) {
 
   return 'invalid';
 }.bind(CWStitchManager);
+
+CWModules.add('CWStitchManager');

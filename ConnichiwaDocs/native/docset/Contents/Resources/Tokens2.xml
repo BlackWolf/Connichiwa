@@ -457,42 +457,6 @@
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/BLWebSocketsServer/setStopFastPollingTimer:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>BLWebSocketsServer.m</DeclaredIn>
-			
-			<Declaration>@property (strong, readwrite) NSTimer *stopFastPollingTimer</Declaration>
-			
-			
-			<Anchor>//api/name/stopFastPollingTimer</Anchor>
-            <NodeRef refid="2"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/BLWebSocketsServer/stopFastPollingTimer</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>BLWebSocketsServer.m</DeclaredIn>
-			
-			<Declaration>@property (strong, readwrite) NSTimer *stopFastPollingTimer</Declaration>
-			
-			
-			<Anchor>//api/name/stopFastPollingTimer</Anchor>
-            <NodeRef refid="2"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/BLWebSocketsServer/stopFastPollingTimer</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>BLWebSocketsServer.m</DeclaredIn>
-			
-			<Declaration>@property (strong, readwrite) NSTimer *stopFastPollingTimer</Declaration>
-			
-			
-			<Anchor>//api/name/stopFastPollingTimer</Anchor>
-            <NodeRef refid="2"/>
-		</Token>
-		
-		<Token>
 			<TokenIdentifier>//apple_ref/occ/instm/BLWebSocketsServer/setServerStoppedCompletionBlock:</TokenIdentifier>
 			<Abstract type="html"></Abstract>
 			<DeclaredIn>BLWebSocketsServer.m</DeclaredIn>

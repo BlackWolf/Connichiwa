@@ -1,4 +1,4 @@
-/* global CWEventManager, CWVector, CWUtil, CWDebug */
+/* global CWEventManager, CWVector, CWUtil, CWDebug, CWModules */
 'use strict';
 
 
@@ -285,3 +285,5 @@ CWGestures._captureOn = function(el) {
 
 //Initalize module. Delayed call to make sure all modules are ready
 if (CWGestures.__constructor) window.setTimeout(CWGestures.__constructor, 0);
+
+CWModules.add('CWGestures');

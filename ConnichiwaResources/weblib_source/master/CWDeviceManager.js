@@ -1,4 +1,4 @@
-/* global CWDevice, CWDebug */
+/* global CWDevice, CWDebug, CWModules */
 'use strict';
 
 
@@ -148,8 +148,8 @@ CWDeviceManager.createLocalDevice = function(properties) {
   properties.isLocal = true;
 
   this._localDevice = new CWDevice(properties);
-  this._localDevice.discoveryState = CWDevice.DiscoveryState.LOST;
-  this._localDevice.connectionState = CWDevice.ConnectionState.CONNECTED;
+  this._localDevice._discoveryState = CWDevice.DiscoveryState.LOST;
+  this._localDevice._connectionState = CWDevice.ConnectionState.CONNECTED;
 
   CWDebug.log(3, 'Created local device: ' + JSON.stringify(properties));
 
@@ -165,6 +165,4 @@ CWDeviceManager.getLocalDevice = function() {
   return this._localDevice;
 }.bind(CWDeviceManager);
 
-//Initalize module. Delayed call to make sure all modules are ready
-if (CWDeviceManager.__constructor) window.setTimeout(CWDeviceManager.__constructor, 0);
-
+CWModules.add('CWDeviceManager');

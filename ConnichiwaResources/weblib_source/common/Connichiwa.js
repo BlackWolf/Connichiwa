@@ -1,4 +1,4 @@
-/* global CWEventManager, CWDevice, CWNativeBridge, CWUtil, CWDebug */
+/* global CWEventManager, CWDevice, CWNativeBridge, CWUtil, CWDebug, CWModules */
 'use strict';
 
 
@@ -94,6 +94,13 @@ Connichiwa._onWebsocketError = function() { /* ABSTRACT */ };
  * @private
  */
 Connichiwa.__constructor = function() {
+  //We cannot have a non-native master, redirect to the remote page
+  if (CWNativeBridge.isRunningNative() !== true && Connichiwa.isMaster()) {
+    var parsedURL = new CWUtil.parseURL(document.URL);
+    window.location = 'http://' + parsedURL.hostname + ':' + parsedURL.port + '/remote';
+    return;
+  }
+
   //If no native layer runs in the background, we have to take care of 
   //establishing a connection ourselves
   if (CWNativeBridge.isRunningNative() !== true) {
@@ -155,140 +162,22 @@ Connichiwa.onMessage = function(name, callback) {
  * @function
  */
 Connichiwa.onLoad = function(callback) {
+  CWDebug.log(1, "Attaching callback to onLoad");
   if (document.readyState === 'complete') {
+    CWDebug.log(1, "Fire immediately");
     //Timeout so the callback is always called asynchronously
     window.setTimeout(callback, 0);
   } else {
-    Connichiwa.on('ready', callback);
+    CWDebug.log(1, "Fire delayed");
+    this.on('ready', callback);
   }
 }.bind(Connichiwa);
 
 
-// DEVICE COMMUNICATION API
-
-
-Connichiwa.insert = function(identifier, target, html) {
-  //With two args, we handle them as identifier and html
-  //target is assumed as the body
-  if (html === undefined) {
-    html = target;
-    target = 'body';
-  }
-
-  //target should be a selector but can also be a DOM or jQuery element
-  //If so, we try to get it by its ID on the other side
-  if (CWUtil.isObject(target)) {
-    target = $(target);
-    target = '#' + target.attr('id');
-  }
-  
-  //html can be a DOM or jQuery element - if so, send the outerHTML including 
-  //all styles
-  if (CWUtil.isObject(html) === true) {
-    var el = $(html);
-    var clone = el.clone();
-    clone[0].style.cssText = el[0].style.cssText; //TODO really needed?
-    html = clone[0].outerHTML;
-  }
-
-  //identifier can also be a CWDevice
-  if (CWDevice.prototype.isPrototypeOf(identifier)) {
-    identifier = identifier.getIdentifier();
-  }
-
-  var message = {
-    selector : target,
-    html     : html
-  };
-  this.send(identifier, '_insert', message);
-}.bind(Connichiwa);
-
-Connichiwa.replace = function(identifier, target, html) {
-  //With two args, we handle them as identifier and html
-  //target is assumed as the body
-  if (html === undefined) {
-    html = target;
-    target = 'body';
-  }
-
-  this._replace(identifier, target, html, false);
-}.bind(Connichiwa);
-
-Connichiwa.replaceContent = function(identifier, target, html) {
-  //With two args, we handle them as identifier and html
-  //target is assumed as the body
-  if (html === undefined) {
-    html = target;
-    target = 'body';
-  }
-
-  this._replace(identifier, target, html, true);
-}.bind(Connichiwa);
-
-Connichiwa._replace = function(identifier, target, html, contentOnly) {
-  //With two args, we handle them as identifier and html
-  //target is assumed as the body
-  if (html === undefined) {
-    html = target;
-    target = 'body';
-  }
-
-  //target should be a selector but can also be a DOM or jQuery element
-  //If so, we try to get it by its ID on the other side
-  if (CWUtil.isObject(target)) {
-    target = '#' + $(target).attr('id');
-  }
-  
-  //html can be a DOM or jQuery element - if so, send the outerHTML including 
-  //all styles
-  if (CWUtil.isObject(html) === true) {
-    var el = $(html);
-    var clone = el.clone();
-    clone[0].style.cssText = el[0].style.cssText; //TODO really needed?
-    html = clone[0].outerHTML;
-  }
-
-  //identifier can also be a CWDevice
-  if (CWDevice.prototype.isPrototypeOf(identifier)) {
-    identifier = identifier.getIdentifier();
-  }
-
-  var message = {
-    selector    : target,
-    html        : html,
-    contentOnly : contentOnly,
-  };
-  this.send(identifier, '_replace', message);
-}.bind(Connichiwa);
-
-
-Connichiwa.loadScript = function(identifier, url, callback) {
-  var message = { url  : url }.bind(Connichiwa);
-  var messageID = this.send(identifier, '_loadscript', message);
-
-  if (callback !== undefined) {
-    this.on('__ack_message' + messageID, callback);
-  }
-}.bind(Connichiwa);
-
-Connichiwa.loadCSS = function(identifier, url) {
-  var message = { url  : url };
-  var messageID = this.send(identifier, '_loadcss', message);
-}.bind(Connichiwa);
-
-
+//TODO remove, find an easy way to send a message to the master
 Connichiwa.send = function(target, name, message) {
-  if (message === undefined) {
-    message = target;
-    target = 'master';
-  }
-
-  if (CWDevice.prototype.isPrototypeOf(target)) {
-    target = target.getIdentifier();
-  }
-
   message._name = name;
-  message._source = this.getIdentifier();
+  message._source = Connichiwa.getIdentifier();
   message._target = target;
   return this._sendObject(message);
 }.bind(Connichiwa);
@@ -437,3 +326,5 @@ Connichiwa._cleanupWebsocket = function() {
     this._websocket           = undefined;
   }
 }.bind(Connichiwa);
+
+CWModules.add('Connichiwa');

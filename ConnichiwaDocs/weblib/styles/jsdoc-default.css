@@ -63,7 +63,7 @@ tt, code, kbd, samp {
 }
 
 p:first-child {
-    margin-top: 0;
+    margin-top: 0 !important;
 }
 
 .class-description {
@@ -168,14 +168,21 @@ h2, h3
     font-weight: 700;
     letter-spacing: -1px;
     /*margin-bottom: 12px;*/
-    margin-top: 32px;
-    margin-bottom: 52px;
+    /*margin-top: 32px;*/
+    /*margin-bottom: 52px;*/
+    margin-top: 52px;
+    margin-bottom: 32px;
+}
+
+h3 {
+    border-bottom: 1px solid #DDD;
 }
 
 nav h3 {
     margin-top: 12px;
     margin-bottom: 12px;
     font-size: 21px;
+    border-bottom: 0;
 }
 
 h4
@@ -183,8 +190,10 @@ h4
     /*font-size: 18px;*/
     font-size: 21px;
     letter-spacing: -0.33px;
-    margin-bottom: 12px;
+    margin-bottom: 6px;
+    /*margin-left: -4px;*/
     color: #4d4e53;
+    margin-top: 42px;
 }
 
 h5, .container-overview .subsection-title
@@ -192,7 +201,11 @@ h5, .container-overview .subsection-title
     font-size: 120%;
     font-weight: bold;
     letter-spacing: -0.01em;
-    margin: 22px 0 3px 0;
+    margin: 0px 0 3px 0;
+}
+
+h5 {
+    margin-top: 1em;
 }
 
 h6
@@ -259,8 +272,17 @@ h1 + hr, h2 + hr, h3 + hr {
 .details .object-value { padding-top: 0; }
 
 .description {
-    margin-bottom: 1em;
-    margin-top: 1em;
+    /*margin-bottom: 1em;*/
+    /*margin-top: 1em;*/
+}
+
+.description p {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+.description p:last-child {
+    margin-bottom: 0;
 }
 
 .code-caption
@@ -341,6 +363,11 @@ h1 + hr, h2 + hr, h3 + hr {
     color: #4D4E53;
     font-family: Consolas, Monaco, 'Andale Mono', monospace;
     font-size: 100%;
+    padding-top: 7px;
+}
+
+.params th {
+    background-color: #eee;
 }
 
 .params td, .params th, .props td, .props th
