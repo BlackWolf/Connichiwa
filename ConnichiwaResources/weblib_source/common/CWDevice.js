@@ -355,9 +355,55 @@ CWDevice.prototype.loadScript = function(url, callback) {
  */
 CWDevice.prototype.loadCSS = function(url) {
   var message = { url  : url };
-  var messageID = this.send('_loadcss', message);
+  this.send('_loadcss', message);
 };
 
+
+/**
+ * Loads the template files at the given URL on the remote device. The
+ *    templates contained in these files can then be used using {@link
+ *    CWDevice#insertTemplate}
+ * @param  {String|Array} urls An URL to a valid template file or an array of
+ *    template file URLs
+ */
+CWDevice.prototype.loadTemplates = function(urls) {
+  var message = { urls: urls };
+  this.send('_loadtemplate', message);
+};
+
+
+/**
+ * Inserts the template with the given name into the remote device's DOM. The
+ *    template will be inserted into the DOM object(s) with the given target
+ *    selector and the template's data will be set to the given data object.
+ *    An optional callback will be called after the template was inserted.
+ *
+ * Before a template can be inserted on a remote device, the file that
+ *    contains the template **must** be loaded using {@link
+ *    CWDevice#loadTemplates}.
+ * @param  {String}   templateName The name of the template to load. The file
+ *    that contains a template with this name must be loaded using {@link
+ *    CWDevice#loadTemplates} before calling this method.
+ * @param  {String}   target       A jQuery selector that points to a valid
+ *    DOM object on the remote device (e.g. 'body'). The template will be
+ *    inserted into this DOM element.
+ * @param  {Object}   data         An arbitrary object of key-value pairs that
+ *    will be handed to the template as the template's data. E.g. if the
+ *    template contains an expression {{title}}, this expression will be
+ *    replaced with the value of the 'title' entry in this object.
+ * @param  {Function} callback     An optional callback function. This
+ *    callback will be called after the template was inserted into the remote
+ *    DOM. This means that within this callback, you can be sure the content
+ *    of the template exists in the remote DOM.
+ */
+CWDevice.prototype.insertTemplate = function(templateName, target, data, callback) {
+  var message = { templateName: templateName, target: target, data: data };
+  var messageID = this.send('_inserttemplate', message);
+
+  if (callback !== undefined) {
+    Connichiwa.on('__ack_message' + messageID, callback);
+  }
+};
 
 /**
  * Sends a custom message with the given name to the device. The message

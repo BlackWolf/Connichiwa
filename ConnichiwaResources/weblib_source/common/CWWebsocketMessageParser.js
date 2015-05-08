@@ -1,4 +1,4 @@
-/* global CWEventManager, CWDebug, CWModules */
+/* global Connichiwa, CWEventManager, CWTemplates, CWDebug, CWModules */
 "use strict";
 
 
@@ -30,6 +30,8 @@ CWWebsocketMessageParser.parse = function(message) {
     case "_replace"           : this._parseReplace(message);           break;
     case "_loadscript"        : this._parseLoadScript(message);        break;
     case "_loadcss"           : this._parseLoadCSS(message);           break;
+    case "_loadtemplate"      : this._parseLoadTemplate(message);      break;
+    case "_inserttemplate"    : this._parseInsertTemplate(message);    break;
     case "_wasstitched"       : this._parseWasStitched(message);       break;
     case "_wasunstitched"     : this._parseWasUnstitched(message);     break;
     case "_gotstitchneighbor" : this._parseGotStitchNeighbor(message); break;
@@ -116,6 +118,18 @@ CWWebsocketMessageParser._parseLoadCSS = function(message) {
   $("head").append(cssEntry);
   Connichiwa._sendAck(message);
 }.bind(CWWebsocketMessageParser);
+
+
+CWWebsocketMessageParser._parseLoadTemplate = function(message) {
+  CWTemplates.load(message.urls);
+};
+
+
+CWWebsocketMessageParser._parseInsertTemplate = function(message) {
+  CWTemplates.insert(message.templateName, message.target, message.data, function() {
+    Connichiwa._sendAck(message);
+  });
+};
 
 
 /**

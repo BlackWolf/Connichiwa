@@ -26,6 +26,21 @@ CWUtil.parseURL = function(url) {
 
 
 /**
+ * Returns the given string, replacing HTML entities with their HTML
+ *    counterparts (e.g. `&lt` with `<`)
+ * @param  {String} escaped A safe HTML string
+ * @return {String} The input string with unescaped HTML entities        
+ */
+CWUtil.unescape = function(escaped) {
+  return escaped.replace(/&amp;/g, '&')
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .replace(/&quot;/g, '"')
+      .replace(/&#039;/g, "'");
+}.bind(CWUtil);
+
+
+/**
  * Returns the coordinate of a given mouse event or the first touch in a touch
  *    event
  * @param  {TouchEvent|MouseEvent|jQuery.Event} e     A valid mouse or touch
@@ -101,6 +116,16 @@ CWUtil.isInt = function(value) {
  */
 CWUtil.isString = function(value) {
   return (typeof(value) === 'string');
+}.bind(CWUtil);
+
+
+/**
+ * Checks if the given object is a function
+ * @param  {Object}  value The object to check
+ * @return {Boolean} true if the given value is a function, otherwise false
+ */
+CWUtil.isFunction = function(value) {
+  return (typeof(value) === 'function');
 }.bind(CWUtil);
 
 

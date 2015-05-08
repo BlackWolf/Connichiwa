@@ -509,6 +509,12 @@
                 </Node>
                 
                 
+                <Node type="section">
+                    <Path>Classes/CWWebApplication.html</Path>
+                    <Name>Class Methods</Name>
+                    <Anchor>class_methods</Anchor>
+                </Node>
+                
                 
                 <Node type="section">
                     <Path>Classes/CWWebApplication.html</Path>

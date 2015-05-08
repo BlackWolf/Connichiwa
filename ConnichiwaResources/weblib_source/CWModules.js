@@ -7,7 +7,6 @@ CWModules._modules = [];
 CWModules._didInit = false;
 
 CWModules.add = function(module) {
-  // if (module in this._modules) return;
   if (this._modules.indexOf(module) !== -1) return;
 
   this._modules.push(module);
@@ -16,6 +15,8 @@ CWModules.add = function(module) {
 CWModules.init = function() {
   if (this._didInit) throw 'Cannot initialize modules twice';
 
+  //We need to setTimeout the initialization to make sure that everything
+  //is set up
   var that = this;
   window.setTimeout(function() {
     for (var i = 0; i < that._modules.length; i++) {
@@ -24,7 +25,6 @@ CWModules.init = function() {
       if (window[module].__constructor) window[module].__constructor();
     }  
 
-    //SEND DIDINIT TO NATIVE
     CWNativeBridge.callOnNative("nativeCallLibraryDidLoad");
   }, 0);
 

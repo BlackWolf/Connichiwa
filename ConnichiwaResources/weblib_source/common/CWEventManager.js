@@ -34,8 +34,8 @@ CWEventManager._callbacks = {};
  * @protected
  */
 CWEventManager.register = function(event, callback) {
-  if (typeof(event) !== 'string') throw 'Event name must be a string';
-  if (typeof(callback) !== 'function') throw 'Event callback must be a function';
+  if (CWUtil.isString(event) === false) throw 'Event name must be a string';
+  if (CWUtil.isFunction(callback) === false) throw 'Event callback must be a function';
 
   event = event.toLowerCase();
 

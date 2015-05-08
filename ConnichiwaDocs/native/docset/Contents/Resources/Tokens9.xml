@@ -25,23 +25,6 @@
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/clm/CWDebug/executeInDebug:</TokenIdentifier>
-			<Abstract type="html">Executes the given code only when we are in debug mode</Abstract>
-			<DeclaredIn>CWDebug.h</DeclaredIn>
-			
-			<Declaration>+ (void)executeInDebug:(void ( ^ ) ( void ))block</Declaration>
-			<Parameters>
-				<Parameter>
-					<Name>block</Name>
-					<Abstract type="html">The code to execute in debug</Abstract>
-				</Parameter>
-			</Parameters>
-			
-			<Anchor>//api/name/executeInDebug:</Anchor>
-            <NodeRef refid="9"/>
-		</Token>
-		
-		<Token>
 			<TokenIdentifier>//apple_ref/occ/clm/CWDebug/logLevel</TokenIdentifier>
 			<Abstract type="html"></Abstract>
 			<DeclaredIn>CWDebug.h</DeclaredIn>

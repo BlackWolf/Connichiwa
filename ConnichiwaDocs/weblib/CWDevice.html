@@ -88,6 +88,8 @@
     
         <li><a href="CWDevice.html#insert">insert</a></li>
     
+        <li><a href="CWDevice.html#insertTemplate">insertTemplate</a></li>
+    
         <li><a href="CWDevice.html#isConnected">isConnected</a></li>
     
         <li><a href="CWDevice.html#isLocal">isLocal</a></li>
@@ -97,6 +99,8 @@
         <li><a href="CWDevice.html#loadCSS">loadCSS</a></li>
     
         <li><a href="CWDevice.html#loadScript">loadScript</a></li>
+    
+        <li><a href="CWDevice.html#loadTemplates">loadTemplates</a></li>
     
         <li><a href="CWDevice.html#replace">replace</a></li>
     
@@ -500,7 +504,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="common_CWDevice.js.html">common/CWDevice.js</a>, <a href="common_CWDevice.js.html#line392">line 392</a>
+        <a href="common_CWDevice.js.html">common/CWDevice.js</a>, <a href="common_CWDevice.js.html#line438">line 438</a>
     </li></ul></dd>
     
 
@@ -606,7 +610,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="common_CWDevice.js.html">common/CWDevice.js</a>, <a href="common_CWDevice.js.html#line420">line 420</a>
+        <a href="common_CWDevice.js.html">common/CWDevice.js</a>, <a href="common_CWDevice.js.html#line466">line 466</a>
     </li></ul></dd>
     
 
@@ -711,7 +715,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="common_CWDevice.js.html">common/CWDevice.js</a>, <a href="common_CWDevice.js.html#line410">line 410</a>
+        <a href="common_CWDevice.js.html">common/CWDevice.js</a>, <a href="common_CWDevice.js.html#line456">line 456</a>
     </li></ul></dd>
     
 
@@ -817,7 +821,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="common_CWDevice.js.html">common/CWDevice.js</a>, <a href="common_CWDevice.js.html#line463">line 463</a>
+        <a href="common_CWDevice.js.html">common/CWDevice.js</a>, <a href="common_CWDevice.js.html#line509">line 509</a>
     </li></ul></dd>
     
 
@@ -924,7 +928,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="common_CWDevice.js.html">common/CWDevice.js</a>, <a href="common_CWDevice.js.html#line474">line 474</a>
+        <a href="common_CWDevice.js.html">common/CWDevice.js</a>, <a href="common_CWDevice.js.html#line520">line 520</a>
     </li></ul></dd>
     
 
@@ -1100,6 +1104,221 @@
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="common_CWDevice.js.html">common/CWDevice.js</a>, <a href="common_CWDevice.js.html#line211">line 211</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+        
+            
+
+    
+
+    <!-- <hr> -->
+
+    <h4 class="name" id="insertTemplate"><span class="type-signature"></span>insertTemplate<span class="signature">(templateName, target, data, callback)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Inserts the template with the given name into the remote device's DOM. The
+   template will be inserted into the DOM object(s) with the given target
+   selector and the template's data will be set to the given data object.
+   An optional callback will be called after the template was inserted.</p>
+<p>Before a template can be inserted on a remote device, the file that
+   contains the template <strong>must</strong> be loaded using <a href="CWDevice.html#loadTemplates">CWDevice#loadTemplates</a>.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>templateName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The name of the template to load. The file
+   that contains a template with this name must be loaded using <a href="CWDevice.html#loadTemplates">CWDevice#loadTemplates</a> before calling this method.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>target</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>A jQuery selector that points to a valid
+   DOM object on the remote device (e.g. 'body'). The template will be
+   inserted into this DOM element.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>An arbitrary object of key-value pairs that
+   will be handed to the template as the template's data. E.g. if the
+   template contains an expression {{title}}, this expression will be
+   replaced with the value of the 'title' entry in this object.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>An optional callback function. This
+   callback will be called after the template was inserted into the remote
+   DOM. This means that within this callback, you can be sure the content
+   of the template exists in the remote DOM.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="common_CWDevice.js.html">common/CWDevice.js</a>, <a href="common_CWDevice.js.html#line399">line 399</a>
     </li></ul></dd>
     
 
@@ -1748,6 +1967,143 @@
 
     <!-- <hr> -->
 
+    <h4 class="name" id="loadTemplates"><span class="type-signature"></span>loadTemplates<span class="signature">(urls)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Loads the template files at the given URL on the remote device. The
+   templates contained in these files can then be used using <a href="CWDevice.html#insertTemplate">CWDevice#insertTemplate</a></p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>urls</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+|
+
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>An URL to a valid template file or an array of
+   template file URLs</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="common_CWDevice.js.html">common/CWDevice.js</a>, <a href="common_CWDevice.js.html#line369">line 369</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+        
+            
+
+    
+
+    <!-- <hr> -->
+
     <h4 class="name" id="replace"><span class="type-signature"></span>replace<span class="signature">(target, html)</span><span class="type-signature"></span></h4>
 
     
@@ -2249,7 +2605,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="common_CWDevice.js.html">common/CWDevice.js</a>, <a href="common_CWDevice.js.html#line377">line 377</a>
+        <a href="common_CWDevice.js.html">common/CWDevice.js</a>, <a href="common_CWDevice.js.html#line423">line 423</a>
     </li></ul></dd>
     
 
@@ -2354,7 +2710,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="common_CWDevice.js.html">common/CWDevice.js</a>, <a href="common_CWDevice.js.html#line402">line 402</a>
+        <a href="common_CWDevice.js.html">common/CWDevice.js</a>, <a href="common_CWDevice.js.html#line448">line 448</a>
     </li></ul></dd>
     
 
@@ -2381,13 +2737,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="CWDevice.html">CWDevice</a></li><li><a href="CWLocation.html">CWLocation</a></li><li><a href="CWVector.html">CWVector</a></li></ul><h3>Namespaces</h3><ul><li><a href="Connichiwa.html">Connichiwa</a></li><li><a href="CWDebug.html">CWDebug</a></li><li><a href="CWDeviceManager.html">CWDeviceManager</a></li><li><a href="CWGyroscope.html">CWGyroscope</a></li><li><a href="CWStitchManager.html">CWStitchManager</a></li><li><a href="CWSystemInfo.html">CWSystemInfo</a></li><li><a href="CWUtil.html">CWUtil</a></li></ul><h3>Events</h3><ul><li><a href="Connichiwa.html#.event:onLoad">onLoad</a></li><li><a href="global.html#event:accelerometerUpdate">accelerometerUpdate</a></li><li><a href="global.html#event:connectfailed">connectfailed</a></li><li><a href="global.html#event:deviceconnected">deviceconnected</a></li><li><a href="global.html#event:devicedetected">devicedetected</a></li><li><a href="global.html#event:devicedisconnected">devicedisconnected</a></li><li><a href="global.html#event:devicedistancechanged">devicedistancechanged</a></li><li><a href="global.html#event:devicelost">devicelost</a></li><li><a href="global.html#event:gotstitchneighbor">gotstitchneighbor</a></li><li><a href="global.html#event:gyroscopeUpdate">gyroscopeUpdate</a></li><li><a href="global.html#event:ready">ready</a></li><li><a href="global.html#event:wasStitched">wasStitched</a></li><li><a href="global.html#event:wasUnstitched">wasUnstitched</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="CWDevice.html">CWDevice</a></li><li><a href="CWLocation.html">CWLocation</a></li><li><a href="CWVector.html">CWVector</a></li></ul><h3>Namespaces</h3><ul><li><a href="Connichiwa.html">Connichiwa</a></li><li><a href="CWDebug.html">CWDebug</a></li><li><a href="CWDeviceManager.html">CWDeviceManager</a></li><li><a href="CWGyroscope.html">CWGyroscope</a></li><li><a href="CWStitchManager.html">CWStitchManager</a></li><li><a href="CWSystemInfo.html">CWSystemInfo</a></li><li><a href="CWTemplates.html">CWTemplates</a></li><li><a href="CWUtil.html">CWUtil</a></li></ul><h3>Events</h3><ul><li><a href="Connichiwa.html#.event:onLoad">onLoad</a></li><li><a href="global.html#event:accelerometerUpdate">accelerometerUpdate</a></li><li><a href="global.html#event:connectfailed">connectfailed</a></li><li><a href="global.html#event:deviceconnected">deviceconnected</a></li><li><a href="global.html#event:devicedetected">devicedetected</a></li><li><a href="global.html#event:devicedisconnected">devicedisconnected</a></li><li><a href="global.html#event:devicedistancechanged">devicedistancechanged</a></li><li><a href="global.html#event:devicelost">devicelost</a></li><li><a href="global.html#event:gotstitchneighbor">gotstitchneighbor</a></li><li><a href="global.html#event:gyroscopeUpdate">gyroscopeUpdate</a></li><li><a href="global.html#event:ready">ready</a></li><li><a href="global.html#event:wasStitched">wasStitched</a></li><li><a href="global.html#event:wasUnstitched">wasUnstitched</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta2</a> on Tue May 05 2015 10:55:48 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta2</a> on Fri May 08 2015 13:19:28 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -476,7 +476,7 @@ of the entity body, or (NSUIntegerMax, length) if expressed from its end.</Abstr
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerRequest/open:</TokenIdentifier>
-			<Abstract type="html">This method is called before any body data is received.</Abstract>
+			<Abstract type="html"></Abstract>
 			<DeclaredIn>GCDWebServerRequest.m</DeclaredIn>
 			
 			<Declaration>- (BOOL)open:(NSError **)error</Declaration>
@@ -488,7 +488,7 @@ of the entity body, or (NSUIntegerMax, length) if expressed from its end.</Abstr
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerRequest/writeData:error:</TokenIdentifier>
-			<Abstract type="html">This method is called whenever body data has been received.</Abstract>
+			<Abstract type="html"></Abstract>
 			<DeclaredIn>GCDWebServerRequest.m</DeclaredIn>
 			
 			<Declaration>- (BOOL)writeData:(NSData *)data error:(NSError **)error</Declaration>
@@ -500,7 +500,7 @@ of the entity body, or (NSUIntegerMax, length) if expressed from its end.</Abstr
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerRequest/close:</TokenIdentifier>
-			<Abstract type="html">This method is called after all body data has been received.</Abstract>
+			<Abstract type="html"></Abstract>
 			<DeclaredIn>GCDWebServerRequest.m</DeclaredIn>
 			
 			<Declaration>- (BOOL)close:(NSError **)error</Declaration>

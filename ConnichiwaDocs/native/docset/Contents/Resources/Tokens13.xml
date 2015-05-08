@@ -169,6 +169,30 @@
 		</Token>
 		
 		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/CWWebApplication/logLevel</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWWebApplication.h</DeclaredIn>
+			
+			<Declaration>+ (int)logLevel</Declaration>
+			
+			
+			<Anchor>//api/name/logLevel</Anchor>
+            <NodeRef refid="13"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/CWWebApplication/setLogLevel:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWWebApplication.h</DeclaredIn>
+			
+			<Declaration>+ (void)setLogLevel:(int)v</Declaration>
+			
+			
+			<Anchor>//api/name/setLogLevel:</Anchor>
+            <NodeRef refid="13"/>
+		</Token>
+		
+		<Token>
 			<TokenIdentifier>//apple_ref/occ/instm/CWWebApplication/init</TokenIdentifier>
 			<Abstract type="html">Initializes a new CWWebApplication instance. It is not advised to have multiple CWWebApplication instances at the same time</Abstract>
 			<DeclaredIn>CWWebApplication.m</DeclaredIn>

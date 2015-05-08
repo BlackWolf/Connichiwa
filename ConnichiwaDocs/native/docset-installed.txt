@@ -1,4 +1,4 @@
 Documentation set was installed to Xcode!
 
 Path: /Users/BlackWolf/Library/Developer/Shared/Documentation/DocSets/de.marioschreiner.Connichiwa.docset
-Time: 2015-05-05 08:55:47 +0000
+Time: 2015-05-08 11:19:25 +0000

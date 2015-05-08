@@ -142,7 +142,7 @@ i.e. &quot;multipart/form-data&quot;.</Abstract>
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerMultiPartFormRequest/open:</TokenIdentifier>
-			<Abstract type="html">This method is called before any body data is received.</Abstract>
+			<Abstract type="html"></Abstract>
 			<DeclaredIn>GCDWebServerMultiPartFormRequest.m</DeclaredIn>
 			
 			<Declaration>- (BOOL)open:(NSError **)error</Declaration>
@@ -154,7 +154,7 @@ i.e. &quot;multipart/form-data&quot;.</Abstract>
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerMultiPartFormRequest/writeData:error:</TokenIdentifier>
-			<Abstract type="html">This method is called whenever body data has been received.</Abstract>
+			<Abstract type="html"></Abstract>
 			<DeclaredIn>GCDWebServerMultiPartFormRequest.m</DeclaredIn>
 			
 			<Declaration>- (BOOL)writeData:(NSData *)data error:(NSError **)error</Declaration>
@@ -166,7 +166,7 @@ i.e. &quot;multipart/form-data&quot;.</Abstract>
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerMultiPartFormRequest/close:</TokenIdentifier>
-			<Abstract type="html">This method is called after all body data has been received.</Abstract>
+			<Abstract type="html"></Abstract>
 			<DeclaredIn>GCDWebServerMultiPartFormRequest.m</DeclaredIn>
 			
 			<Declaration>- (BOOL)close:(NSError **)error</Declaration>
