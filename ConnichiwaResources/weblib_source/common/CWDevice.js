@@ -74,14 +74,14 @@ function CWDevice(properties)
   /**
    * The current Bluetooth discovery state of the device
    * @type {CWDevice.DiscoveryState}
-   * @private
+   * @protected
    */
   this._discoveryState = CWDevice.DiscoveryState.LOST;
 
   /**
    * The current HTTP connection state of the device
    * @type {CWDevice.ConnectionState}
-   * @private
+   * @protected
    */
   this._connectionState = CWDevice.ConnectionState.DISCONNECTED;
 
@@ -90,7 +90,7 @@ function CWDevice(properties)
    *    device. For devices without Bluetooth or devices where the distance
    *    can not be approximated, this returns -1
    * @type {Number}
-   * @private
+   * @protected
    */
   this._distance = -1;
 
@@ -171,8 +171,6 @@ CWDevice.prototype.isNearby = function() {
  * @private
  */
 CWDevice.prototype._canBeConnected = function() { 
-  CWDebug.log(1, "CAN BE CONNECTED: "+(this._connectionState === CWDevice.ConnectionState.DISCONNECTED)+" && "+(this._discoveryState === CWDevice.DiscoveryState.DISCOVERED));
-  CWDebug.log(1, this._discoveryState);
   return (this._connectionState === CWDevice.ConnectionState.DISCONNECTED && 
     this._discoveryState === CWDevice.DiscoveryState.DISCOVERED);
 };
@@ -327,7 +325,7 @@ CWDevice.prototype._replace = function(target, html, contentOnly) {
     contentOnly : contentOnly,
   };
   this.send('_replace', message);
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -360,14 +358,16 @@ CWDevice.prototype.loadCSS = function(url) {
 
 
 /**
- * Loads the template files at the given URL on the remote device. The
- *    templates contained in these files can then be used using {@link
- *    CWDevice#insertTemplate}
- * @param  {String|Array} urls An URL to a valid template file or an array of
- *    template file URLs
+ * Loads one or more files containing templates. Templates that have been
+ *    loaded can then be inserted into the devices DOM using {@link
+ *    CWDevice#insertTemplate}.
+ * @param  {String|Array} paths The path to a template file or an array of
+ *    paths. If one or more paths are invalid, that particular load will fail,
+ *    but all other paths will still be loaded.
+ * @function
  */
-CWDevice.prototype.loadTemplates = function(urls) {
-  var message = { urls: urls };
+CWDevice.prototype.loadTemplates = function(paths) {
+  var message = { paths: paths };
   this.send('_loadtemplate', message);
 };
 

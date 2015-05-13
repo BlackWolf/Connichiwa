@@ -151,8 +151,6 @@
 		3317C6E21A714BCB008BD104 /* extension-deflate-stream.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "extension-deflate-stream.c"; sourceTree = "<group>"; };
 		3317C6E31A714BCB008BD104 /* extension-deflate-stream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "extension-deflate-stream.h"; sourceTree = "<group>"; };
 		3317C6E41A714BCB008BD104 /* extension.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = extension.c; sourceTree = "<group>"; };
-		3317C6E51A714BCB008BD104 /* getifaddrs.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = getifaddrs.c; sourceTree = "<group>"; };
-		3317C6E61A714BCB008BD104 /* getifaddrs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = getifaddrs.h; sourceTree = "<group>"; };
 		3317C6E71A714BCB008BD104 /* handshake.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = handshake.c; sourceTree = "<group>"; };
 		3317C6E81A714BCB008BD104 /* libwebsockets.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = libwebsockets.c; sourceTree = "<group>"; };
 		3317C6E91A714BCB008BD104 /* libwebsockets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = libwebsockets.h; sourceTree = "<group>"; };
@@ -320,8 +318,6 @@
 				3317C6E21A714BCB008BD104 /* extension-deflate-stream.c */,
 				3317C6E31A714BCB008BD104 /* extension-deflate-stream.h */,
 				3317C6E41A714BCB008BD104 /* extension.c */,
-				3317C6E51A714BCB008BD104 /* getifaddrs.c */,
-				3317C6E61A714BCB008BD104 /* getifaddrs.h */,
 				3317C6E71A714BCB008BD104 /* handshake.c */,
 				3317C6E81A714BCB008BD104 /* libwebsockets.c */,
 				3317C6E91A714BCB008BD104 /* libwebsockets.h */,

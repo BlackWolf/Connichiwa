@@ -39,7 +39,7 @@ static long longestSourceLength = 10;
  *   1 -- very rudimentary application flow (bt advertising starts, webserver was launched, ...)
  *   2 -- more detailed application flow (remote did connect/disconnect, getting intial data, ...)
  *   3 -- log message on most method calls, giving a detailed overview of the application flow
- *   4 -- communication and other messages which are likely to spam the log
+ *   4 -- communication and other messages which are likely to spam the log]
  *   5 -- even more spammy messages
  *  @param source   The source component of the log message, for example NATIVE or WEBLIB. Sources can be activated and deactivated by altering the activeDebugSources array
  *  @param file     The file where the message occured
@@ -53,7 +53,8 @@ void _cwLogNew(int level, NSString *source, NSString *file, int line, NSString *
 //    NSArray *activeDebugSources = @[ @"BLUETOOTH", @"WEBLIB", @"NATIVE" ];
  
     source = [source uppercaseString];
-    if ([CWDebug isDebugging] && level <= [CWDebug logLevel] && ([source isEqualToString:@"ERROR"] || activeDebugSources == nil || [activeDebugSources containsObject:source]))
+    BOOL isError = [source isEqualToString:@"ERROR"];
+    if ([CWDebug isDebugging] && level <= [CWDebug logLevel] && (isError || activeDebugSources == nil || [activeDebugSources containsObject:source]))
     {
         static dispatch_once_t token;
         static NSDateFormatter *dateFormatter;
@@ -79,6 +80,10 @@ void _cwLogNew(int level, NSString *source, NSString *file, int line, NSString *
         }
         
         NSString *finalString = [NSString stringWithFormat:@"%@ %@ -- %@\n", source, dateString, formattedString];
+        //Frame error messages to they can be easily spotted
+        if (isError) {
+            finalString = [NSString stringWithFormat:@"📛📛📛📛📛📛📛📛📛📛📛📛📛📛📛📛📛📛📛📛\n%@📛📛📛📛📛📛📛📛📛📛📛📛📛📛📛📛📛📛📛📛\n", finalString];
+        }
         [[NSFileHandle fileHandleWithStandardOutput] writeData:[finalString dataUsingEncoding:NSUTF8StringEncoding]];
     }
 }

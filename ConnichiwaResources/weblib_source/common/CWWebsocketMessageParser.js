@@ -1,4 +1,4 @@
-/* global Connichiwa, CWEventManager, CWTemplates, CWDebug, CWModules */
+/* global Connichiwa, CWEventManager, CWTemplates, CWDatastore, CWDebug, CWModules */
 "use strict";
 
 
@@ -35,6 +35,7 @@ CWWebsocketMessageParser.parse = function(message) {
     case "_wasstitched"       : this._parseWasStitched(message);       break;
     case "_wasunstitched"     : this._parseWasUnstitched(message);     break;
     case "_gotstitchneighbor" : this._parseGotStitchNeighbor(message); break;
+    case "_updatedatastore"   : this._parseUpdateDatastore(message);   break;
   }
 
   return true;
@@ -121,7 +122,7 @@ CWWebsocketMessageParser._parseLoadCSS = function(message) {
 
 
 CWWebsocketMessageParser._parseLoadTemplate = function(message) {
-  CWTemplates.load(message.urls);
+  CWTemplates.load(message.paths);
 };
 
 
@@ -169,6 +170,29 @@ CWWebsocketMessageParser._parseWasUnstitched = function(message) {
  */
 CWWebsocketMessageParser._parseGotStitchNeighbor = function(message) {
   CWEventManager.trigger("gotstitchneighbor", message);
+}.bind(CWWebsocketMessageParser);
+
+
+/**
+ * Parses `_updateDatastore` messages. Such messages are sent when another
+ *    device sends us datastore content that needs to be synced to this device
+ * @param  {Object} message The message from the websocket
+ * @function
+ * @private
+ */
+CWWebsocketMessageParser._parseUpdateDatastore = function(message) {
+  //message.data contains datastore collections
+  //Walk over every collection
+  $.each(message.data, function(collection, collectionContent) {
+    CWDatastore._set(collection, collectionContent, undefined, false);
+    //Walk over every entry of the collection
+    //
+    // $.each(collectionContent, function(key, value) {
+      //TODO this triggers an update event for every single key
+      //maybe we can find a nice bulk update way of doing this?
+      // CWDatastore._set(collection, key, value, false);
+    // });
+  });
 }.bind(CWWebsocketMessageParser);
 
 CWModules.add('CWWebsocketMessageParser');

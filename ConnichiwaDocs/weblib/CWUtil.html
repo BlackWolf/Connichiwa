@@ -42,16 +42,6 @@
     
 
     
-
-    <b>Members</b><br />
-    <ul>
-    
-        <li><a href="CWUtil.html#.isFunction">isFunction</a></li>
-    
-        <li><a href="CWUtil.html#.unescape">unescape</a></li>
-    
-    </ul>
-    
     
     <b>Methods</b><br />
     <ul>
@@ -59,6 +49,10 @@
         <li><a href="CWUtil.html#.getEventLocation">getEventLocation</a></li>
     
         <li><a href="CWUtil.html#.inArray">inArray</a></li>
+    
+        <li><a href="CWUtil.html#.isArray">isArray</a></li>
+    
+        <li><a href="CWUtil.html#.isFunction">isFunction</a></li>
     
         <li><a href="CWUtil.html#.isInt">isInt</a></li>
     
@@ -69,6 +63,8 @@
         <li><a href="CWUtil.html#.parseURL">parseURL</a></li>
     
         <li><a href="CWUtil.html#.randomInt">randomInt</a></li>
+    
+        <li><a href="CWUtil.html#.unescape">unescape</a></li>
     
     </ul>
     
@@ -142,141 +138,6 @@
 
     
 
-    
-        <h3 class="subsection-title">Members</h3>
-
-        
-            
-
-<!-- <hr> -->
-
-<h4 class="name" id=".isFunction"><span class="type-signature">(static) </span>isFunction<span class="type-signature"></span></h4>
-
-
-
-
-<div class="description">
-    <p>Checks if the given object is a function</p>
-</div>
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="common_CWUtil.js.html">common/CWUtil.js</a>, <a href="common_CWUtil.js.html#line127">line 127</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-
-<!-- <hr> -->
-
-<h4 class="name" id=".unescape"><span class="type-signature">(static) </span>unescape<span class="type-signature"></span></h4>
-
-
-
-
-<div class="description">
-    <p>Returns the given string, replacing HTML entities with their HTML
-   counterparts (e.g. <code>&amp;lt</code> with <code>&lt;</code>)</p>
-</div>
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="common_CWUtil.js.html">common/CWUtil.js</a>, <a href="common_CWUtil.js.html#line34">line 34</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
     
 
     
@@ -493,7 +354,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="common_CWUtil.js.html">common/CWUtil.js</a>, <a href="common_CWUtil.js.html#line59">line 59</a>
+        <a href="common_CWUtil.js.html">common/CWUtil.js</a>, <a href="common_CWUtil.js.html#line60">line 60</a>
     </li></ul></dd>
     
 
@@ -670,7 +531,315 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="common_CWUtil.js.html">common/CWUtil.js</a>, <a href="common_CWUtil.js.html#line150">line 150</a>
+        <a href="common_CWUtil.js.html">common/CWUtil.js</a>, <a href="common_CWUtil.js.html#line163">line 163</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+        
+            
+
+    
+
+    <!-- <hr> -->
+
+    <h4 class="name" id=".isArray"><span class="type-signature">(static) </span>isArray<span class="signature">(value)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Checks if the given object is an array</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The object to checl</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>true if the given object is an array, otherwise false</p>
+</div>
+
+
+
+<!-- <dl> -->
+    <!-- <dt> -->
+        <!-- <b>Type</b> -->
+    <!-- </dt> -->
+    <!-- <dd> -->
+        <!-- 
+<span class="param-type">Boolean</span>
+
+ -->
+    <!-- </dd> -->
+<!-- </dl> -->
+
+    
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="common_CWUtil.js.html">common/CWUtil.js</a>, <a href="common_CWUtil.js.html#line152">line 152</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+        
+            
+
+    
+
+    <!-- <hr> -->
+
+    <h4 class="name" id=".isFunction"><span class="type-signature">(static) </span>isFunction<span class="signature">(value)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Checks if the given object is a function</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The object to check</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>true if the given value is a function, otherwise false</p>
+</div>
+
+
+
+<!-- <dl> -->
+    <!-- <dt> -->
+        <!-- <b>Type</b> -->
+    <!-- </dt> -->
+    <!-- <dd> -->
+        <!-- 
+<span class="param-type">Boolean</span>
+
+ -->
+    <!-- </dd> -->
+<!-- </dl> -->
+
+    
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="common_CWUtil.js.html">common/CWUtil.js</a>, <a href="common_CWUtil.js.html#line129">line 129</a>
     </li></ul></dd>
     
 
@@ -824,7 +993,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="common_CWUtil.js.html">common/CWUtil.js</a>, <a href="common_CWUtil.js.html#line106">line 106</a>
+        <a href="common_CWUtil.js.html">common/CWUtil.js</a>, <a href="common_CWUtil.js.html#line107">line 107</a>
     </li></ul></dd>
     
 
@@ -842,7 +1011,7 @@
 
     <!-- <hr> -->
 
-    <h4 class="name" id=".isObject"><span class="type-signature">(static) </span>isObject<span class="signature">(value)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    <h4 class="name" id=".isObject"><span class="type-signature">(static) </span>isObject<span class="signature">(value)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
 
     
 
@@ -937,7 +1106,7 @@
     <!-- </dt> -->
     <!-- <dd> -->
         <!-- 
-<span class="param-type">boolean</span>
+<span class="param-type">Boolean</span>
 
  -->
     <!-- </dd> -->
@@ -979,7 +1148,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="common_CWUtil.js.html">common/CWUtil.js</a>, <a href="common_CWUtil.js.html#line139">line 139</a>
+        <a href="common_CWUtil.js.html">common/CWUtil.js</a>, <a href="common_CWUtil.js.html#line141">line 141</a>
     </li></ul></dd>
     
 
@@ -1133,7 +1302,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="common_CWUtil.js.html">common/CWUtil.js</a>, <a href="common_CWUtil.js.html#line117">line 117</a>
+        <a href="common_CWUtil.js.html">common/CWUtil.js</a>, <a href="common_CWUtil.js.html#line118">line 118</a>
     </li></ul></dd>
     
 
@@ -1505,7 +1674,162 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="common_CWUtil.js.html">common/CWUtil.js</a>, <a href="common_CWUtil.js.html#line85">line 85</a>
+        <a href="common_CWUtil.js.html">common/CWUtil.js</a>, <a href="common_CWUtil.js.html#line86">line 86</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+        
+            
+
+    
+
+    <!-- <hr> -->
+
+    <h4 class="name" id=".unescape"><span class="type-signature">(static) </span>unescape<span class="signature">(escaped)</span><span class="type-signature"> &rarr; {String}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Returns the given string, replacing HTML entities with their HTML
+   counterparts (e.g. <code>&amp;lt</code> with <code>&lt;</code>)</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>escaped</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>A safe HTML string</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>The input string with unescaped HTML entities</p>
+</div>
+
+
+
+<!-- <dl> -->
+    <!-- <dt> -->
+        <!-- <b>Type</b> -->
+    <!-- </dt> -->
+    <!-- <dd> -->
+        <!-- 
+<span class="param-type">String</span>
+
+ -->
+    <!-- </dd> -->
+<!-- </dl> -->
+
+    
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="common_CWUtil.js.html">common/CWUtil.js</a>, <a href="common_CWUtil.js.html#line35">line 35</a>
     </li></ul></dd>
     
 
@@ -1532,13 +1856,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="CWDevice.html">CWDevice</a></li><li><a href="CWLocation.html">CWLocation</a></li><li><a href="CWVector.html">CWVector</a></li></ul><h3>Namespaces</h3><ul><li><a href="Connichiwa.html">Connichiwa</a></li><li><a href="CWDebug.html">CWDebug</a></li><li><a href="CWDeviceManager.html">CWDeviceManager</a></li><li><a href="CWGyroscope.html">CWGyroscope</a></li><li><a href="CWStitchManager.html">CWStitchManager</a></li><li><a href="CWSystemInfo.html">CWSystemInfo</a></li><li><a href="CWTemplates.html">CWTemplates</a></li><li><a href="CWUtil.html">CWUtil</a></li></ul><h3>Events</h3><ul><li><a href="Connichiwa.html#.event:onLoad">onLoad</a></li><li><a href="global.html#event:accelerometerUpdate">accelerometerUpdate</a></li><li><a href="global.html#event:connectfailed">connectfailed</a></li><li><a href="global.html#event:deviceconnected">deviceconnected</a></li><li><a href="global.html#event:devicedetected">devicedetected</a></li><li><a href="global.html#event:devicedisconnected">devicedisconnected</a></li><li><a href="global.html#event:devicedistancechanged">devicedistancechanged</a></li><li><a href="global.html#event:devicelost">devicelost</a></li><li><a href="global.html#event:gotstitchneighbor">gotstitchneighbor</a></li><li><a href="global.html#event:gyroscopeUpdate">gyroscopeUpdate</a></li><li><a href="global.html#event:ready">ready</a></li><li><a href="global.html#event:wasStitched">wasStitched</a></li><li><a href="global.html#event:wasUnstitched">wasUnstitched</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="CWDevice.html">CWDevice</a></li><li><a href="CWLocation.html">CWLocation</a></li><li><a href="CWVector.html">CWVector</a></li></ul><h3>Namespaces</h3><ul><li><a href="Connichiwa.html">Connichiwa</a></li><li><a href="CWDatastore.html">CWDatastore</a></li><li><a href="CWDebug.html">CWDebug</a></li><li><a href="CWDeviceManager.html">CWDeviceManager</a></li><li><a href="CWGyroscope.html">CWGyroscope</a></li><li><a href="CWStitchManager.html">CWStitchManager</a></li><li><a href="CWSystemInfo.html">CWSystemInfo</a></li><li><a href="CWTemplates.html">CWTemplates</a></li><li><a href="CWUtil.html">CWUtil</a></li></ul><h3>Events</h3><ul><li><a href="Connichiwa.html#.event:onLoad">onLoad</a></li><li><a href="global.html#event:accelerometerUpdate">accelerometerUpdate</a></li><li><a href="global.html#event:connectfailed">connectfailed</a></li><li><a href="global.html#event:deviceconnected">deviceconnected</a></li><li><a href="global.html#event:devicedetected">devicedetected</a></li><li><a href="global.html#event:devicedisconnected">devicedisconnected</a></li><li><a href="global.html#event:devicedistancechanged">devicedistancechanged</a></li><li><a href="global.html#event:devicelost">devicelost</a></li><li><a href="global.html#event:gotstitchneighbor">gotstitchneighbor</a></li><li><a href="global.html#event:gyroscopeUpdate">gyroscopeUpdate</a></li><li><a href="global.html#event:ready">ready</a></li><li><a href="global.html#event:wasStitched">wasStitched</a></li><li><a href="global.html#event:wasUnstitched">wasUnstitched</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta2</a> on Fri May 08 2015 13:19:28 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta2</a> on Wed May 13 2015 14:08:08 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

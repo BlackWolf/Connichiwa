@@ -29,7 +29,8 @@ CWUtil.parseURL = function(url) {
  * Returns the given string, replacing HTML entities with their HTML
  *    counterparts (e.g. `&lt` with `<`)
  * @param  {String} escaped A safe HTML string
- * @return {String} The input string with unescaped HTML entities        
+ * @return {String} The input string with unescaped HTML entities 
+ * @function       
  */
 CWUtil.unescape = function(escaped) {
   return escaped.replace(/&amp;/g, '&')
@@ -123,6 +124,7 @@ CWUtil.isString = function(value) {
  * Checks if the given object is a function
  * @param  {Object}  value The object to check
  * @return {Boolean} true if the given value is a function, otherwise false
+ * @function
  */
 CWUtil.isFunction = function(value) {
   return (typeof(value) === 'function');
@@ -132,12 +134,23 @@ CWUtil.isFunction = function(value) {
 /**
  * Checks if the given object is an object and not null.
  * @param {Object} value  The object to check
- * @returns {boolean}   true if the given object is an object, false otherwise
+ * @returns {Boolean}   true if the given object is an object, false otherwise
  *    (e.g. for null, undefined or a primitive type).
  * @function
  */
 CWUtil.isObject = function(value) {
   return (typeof(value) === 'object' && value !== null);
+}.bind(CWUtil);
+
+
+/**
+ * Checks if the given object is an array
+ * @param  {Object}  value The object to checl
+ * @return {Boolean} true if the given object is an array, otherwise false
+ * @function
+ */
+CWUtil.isArray = function(value) {
+  return Array.isArray(value);
 }.bind(CWUtil);
 
 /**

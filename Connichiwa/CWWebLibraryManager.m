@@ -439,36 +439,47 @@
     
     [self _registerJSCallbacks];
     
-    //Register JS error handler
-    self.webViewContext.exceptionHandler = ^(JSContext *c, JSValue *e) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            ErrLog(@"JAVASCRIPT ERROR: %@. Stack: %@", e, [e valueForProperty:@"stack"]);
-        });
+    //Create JS loggers
+    id logger = ^(NSString *logMessage) {
+        NSArray *components = [logMessage componentsSeparatedByString:@"|"]; //array should contain: prio, message
+        if ([components count] != 2) {
+            WLLog(1, logMessage);
+        } else {
+            WLLog([[components objectAtIndex:0] intValue], [components objectAtIndex:1]);
+        }
+    };
+    
+    id errorLogger = ^(NSString *logMessage, NSString *url, NSNumber *line, NSNumber *column, JSValue *err) {
+        NSString *firstLine = logMessage;
+        
+        NSString *secondLine = @"";
+        if (url && [url length] > 0 && line) {
+            secondLine = [NSString stringWithFormat:@"\n%@:%@", url, [line stringValue]];
+        }
+        
+        NSString *thirdLine = @"";
+        if (err != [JSValue valueWithUndefinedInContext:self.webViewContext]) {
+            secondLine = @"";
+            thirdLine = [NSString stringWithFormat:@"\n%@", [err valueForProperty:@"stack"]];
+        }
+        ErrLog(@"JAVASCRIPT ERROR: %@%@%@", firstLine, secondLine, thirdLine);
+    };
+    
+    id exceptionLogger = ^(JSContext *context, JSValue *err) {
+        ErrLog(@"JAVASCRIPT EXCEPTION: %@: %@\n%@:%@\n%@", [err valueForProperty:@"name"], [err valueForProperty:@"message"], [err valueForProperty:@"fileName"], [err valueForProperty:@"lineNumber"], [err valueForProperty:@"stack"]);
     };
     
     //Attach logger
-    id logger = ^(NSString *logMessage)
-    {
-        NSArray *components = [logMessage componentsSeparatedByString:@"|"]; //array should contain: prio, message
-        if ([components count] != 2)
-        {
-            WLLog(1, logMessage);
-        }
-        else
-        {
-            //First component should be a priority or can be "ERROR" for logging an error
-            if ([[components objectAtIndex:0] isEqualToString:@"ERROR"]) {
-                ErrLog([components objectAtIndex:1]);
-            } else {
-                WLLog([[components objectAtIndex:0] intValue], [components objectAtIndex:1]);
-            }
-        }
-    };
     self.webViewContext[@"console"][@"log"]   = logger;
     self.webViewContext[@"console"][@"info"]  = logger;
-    self.webViewContext[@"console"][@"error"] = logger;
+    self.webViewContext[@"console"][@"err"]   = errorLogger;
     self.webViewContext[@"console"][@"warn"]  = logger;
-    //TODO it seems that everything besides "log" is not working as of now
+    
+    //The JS interpreter uses window.onerror - redirect that to console.err
+    [self.webViewContext evaluateScript:@"window.onerror = function(msg, url, line, column, err) { try { throw new Error('test'); } catch (e) { console.err(e.stack); } console.err(msg, url, line, column, err); }"];
+    
+    //Exceptions wind up in the exception handler
+    [self.webViewContext setExceptionHandler:exceptionLogger];
 }
 
 @end

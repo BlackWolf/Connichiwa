@@ -38,18 +38,43 @@
     <div class="description">
 
     
-        <p>Used for Handlebars templating in Connichiwa. This provides you with the
-   ability to load Handelbars templates (<a href="http://handlebarsjs.com">http://handlebarsjs.com</a>)
-   and insert them into the DOM. To do so, you must first load the files
-   that contain your Handlebars templates (and - if your template uses
-   partials - all files that contain those) using <a href="CWTemplates.html#.load">CWTemplates.load</a>.
-   After that, you can insert these templates into the DOM by using <a href="CWTemplates.html#.insert">CWTemplates.insert</a>. This will grab the template of your choice, fill it
-   with the data you provide and insert it at the given position into the
-   DOM.</p>
-<p>Note that in order to load and insert templates into another device's DOMs,
-   you must use <a href="CWDevice.html#loadTemplates">CWDevice#loadTemplates</a> and <a href="CWDevice.html#insertTemplate">CWDevice#insertTemplate</a>.</p>
-<p>This class further provides the Handlebars helper <code>isMaster</code> and
-   <code>ifIsMaster</code></p>
+        <p>Provides cross-device templating in Connichiwa.</p>
+<p>CWTemplates allows you to write Mustache (<a href="https://mustache.github.io">https://mustache.github.io</a>) templates and insert them into the DOM of a
+   local or remote device. Mustache templates support <em>expressions</em> that
+   can be replaced with content at runtime.</p>
+<h4>Data-driven templates</h4><p>For example, if a template contains the line <code>Hello, {{name}}!</code> the
+   expression is <code>{{name}}</code> You can replace it at runtime using <a href="CWTemplates.html#.set">CWTemplates.set</a> - e.g. <code>CWTemplates.set('name', 'Paul')</code> will change
+   the DOM to <code>Hello, Paul!</code>. At some point later you can call
+   <code>CWTemplates.set('name', 'John')</code> and the DOM will be automatically
+   reflect the change and display <code>Hello, John!</code></p>
+<p>As you can see, Connichiwas templates are <em>data-driven</em> - you do not
+   directly manipulate the DOM, but rather manipulate the data which will
+   be automatically reflected in your UI. Connichiwa even sweetens that
+   further by syncing your data across devices. So if a template on one
+   device contains the expression <code>{{name}}</code>, and the same or another
+   template on another device contains that expression as well, using
+   <code>CWTemplates.set('name', 'Paul')</code> will change that expression on <strong>all</strong>
+   your devices.</p>
+<p>What if you have a template that contains the <code>{{name}}</code> expression and
+   want it to show a different name? Here is where data collections come
+   into play: When inserting the template into the DOM, you can define the
+   name of a data collection that will be used for that template. So your
+   template could do something like:</p>
+<p><code>CWTemplates.insert('myTemplate', 'body', 'customCollection')</code></p>
+<p>Now, if some device calls <code>CWTemplates.set('name', 'Paul')</code> the new
+   template will not be affected! Instead, you can set the name of that
+   template using <code>CWTemplates.set('customCollection', 'name', 'Michael')</code>.
+   So you can have multiple templates with the same expression, but use
+   different data!</p>
+<h4>How to insert a template?</h4><p>Templates are stored in external files with arbitrary extension
+   (preferrably <code>.html</code>, as this enables syntax highlighting). A template
+   consists of a template tag and needs a name:</p>
+<p><code>&lt;template name=&quot;myTemplate&quot;&gt; ... &lt;/template&gt;</code></p>
+<p>A file can contain multiple templates. To use one or more templates, you
+   must first load the file that contains them using <a href="CWTemplates.html#.load">CWTemplates.load</a>. You can then start to insert templates into your DOM
+   using <a href="CWTemplates.html#.insert">CWTemplates.insert</a>. To replace your template expressions
+   (such as <code>{{name}}</code>) with actual data, use <a href="CWTemplates.html#.set">CWTemplates.set</a>.
+   That's all there is to it.</p>
     
 
     
@@ -57,9 +82,15 @@
     <b>Methods</b><br />
     <ul>
     
+        <li><a href="CWTemplates.html#.get">get</a></li>
+    
         <li><a href="CWTemplates.html#.insert">insert</a></li>
     
         <li><a href="CWTemplates.html#.load">load</a></li>
+    
+        <li><a href="CWTemplates.html#.set">set</a></li>
+    
+        <li><a href="CWTemplates.html#.set">set</a></li>
     
     </ul>
     
@@ -72,18 +103,43 @@
     <div class="container-overview">
     
         
-            <!-- <div class="description"><p>Used for Handlebars templating in Connichiwa. This provides you with the
-   ability to load Handelbars templates (<a href="http://handlebarsjs.com">http://handlebarsjs.com</a>)
-   and insert them into the DOM. To do so, you must first load the files
-   that contain your Handlebars templates (and - if your template uses
-   partials - all files that contain those) using <a href="CWTemplates.html#.load">CWTemplates.load</a>.
-   After that, you can insert these templates into the DOM by using <a href="CWTemplates.html#.insert">CWTemplates.insert</a>. This will grab the template of your choice, fill it
-   with the data you provide and insert it at the given position into the
-   DOM.</p>
-<p>Note that in order to load and insert templates into another device's DOMs,
-   you must use <a href="CWDevice.html#loadTemplates">CWDevice#loadTemplates</a> and <a href="CWDevice.html#insertTemplate">CWDevice#insertTemplate</a>.</p>
-<p>This class further provides the Handlebars helper <code>isMaster</code> and
-   <code>ifIsMaster</code></p></div> -->
+            <!-- <div class="description"><p>Provides cross-device templating in Connichiwa.</p>
+<p>CWTemplates allows you to write Mustache (<a href="https://mustache.github.io">https://mustache.github.io</a>) templates and insert them into the DOM of a
+   local or remote device. Mustache templates support <em>expressions</em> that
+   can be replaced with content at runtime.</p>
+<h4>Data-driven templates</h4><p>For example, if a template contains the line <code>Hello, {{name}}!</code> the
+   expression is <code>{{name}}</code> You can replace it at runtime using <a href="CWTemplates.html#.set">CWTemplates.set</a> - e.g. <code>CWTemplates.set('name', 'Paul')</code> will change
+   the DOM to <code>Hello, Paul!</code>. At some point later you can call
+   <code>CWTemplates.set('name', 'John')</code> and the DOM will be automatically
+   reflect the change and display <code>Hello, John!</code></p>
+<p>As you can see, Connichiwas templates are <em>data-driven</em> - you do not
+   directly manipulate the DOM, but rather manipulate the data which will
+   be automatically reflected in your UI. Connichiwa even sweetens that
+   further by syncing your data across devices. So if a template on one
+   device contains the expression <code>{{name}}</code>, and the same or another
+   template on another device contains that expression as well, using
+   <code>CWTemplates.set('name', 'Paul')</code> will change that expression on <strong>all</strong>
+   your devices.</p>
+<p>What if you have a template that contains the <code>{{name}}</code> expression and
+   want it to show a different name? Here is where data collections come
+   into play: When inserting the template into the DOM, you can define the
+   name of a data collection that will be used for that template. So your
+   template could do something like:</p>
+<p><code>CWTemplates.insert('myTemplate', 'body', 'customCollection')</code></p>
+<p>Now, if some device calls <code>CWTemplates.set('name', 'Paul')</code> the new
+   template will not be affected! Instead, you can set the name of that
+   template using <code>CWTemplates.set('customCollection', 'name', 'Michael')</code>.
+   So you can have multiple templates with the same expression, but use
+   different data!</p>
+<h4>How to insert a template?</h4><p>Templates are stored in external files with arbitrary extension
+   (preferrably <code>.html</code>, as this enables syntax highlighting). A template
+   consists of a template tag and needs a name:</p>
+<p><code>&lt;template name=&quot;myTemplate&quot;&gt; ... &lt;/template&gt;</code></p>
+<p>A file can contain multiple templates. To use one or more templates, you
+   must first load the file that contains them using <a href="CWTemplates.html#.load">CWTemplates.load</a>. You can then start to insert templates into your DOM
+   using <a href="CWTemplates.html#.insert">CWTemplates.insert</a>. To replace your template expressions
+   (such as <code>{{name}}</code>) with actual data, use <a href="CWTemplates.html#.set">CWTemplates.set</a>.
+   That's all there is to it.</p></div> -->
         
 
         
@@ -160,21 +216,14 @@
 
     <!-- <hr> -->
 
-    <h4 class="name" id=".insert"><span class="type-signature">(static) </span>insert<span class="signature">(templateName, target, data, callback)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".get"><span class="type-signature">(static) </span>get<span class="signature">(collection<span class="signature-attributes">opt</span>, key)</span><span class="type-signature"> &rarr; {Object}</span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Inserts the template with the given name into the local DOM. The template
-   will be inserted into the DOM object(s) with the given target selector
-   and the template's data will be set to the given data object. As
-   inserting a template is an asynchronous operation that first waits for
-   all <a href="CWTemplates.html#.load">CWTemplates.load</a> calls to finish, an optional callback can
-   be supplied that will be called after the template was inserted.</p>
-<p>Note that before you can insert a template, you must load the file that
-   contains this template using <a href="CWTemplates.html#.load">CWTemplates.load</a>.</p>
+    <p>Retrieves the current value for the given key in the given collection.</p>
 </div>
 
 
@@ -197,6 +246,237 @@
 
         <th>Type</th>
 
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>collection</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The collection to retrieve the data from. If
+   omitted, the main collection is used.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>key</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The key under which the data was stored</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>The current value of the given key in the given collection
+   or undefined if the collection or the key in that collection does not
+   exist</p>
+</div>
+
+
+
+<!-- <dl> -->
+    <!-- <dt> -->
+        <!-- <b>Type</b> -->
+    <!-- </dt> -->
+    <!-- <dd> -->
+        <!-- 
+<span class="param-type">Object</span>
+
+ -->
+    <!-- </dd> -->
+<!-- </dl> -->
+
+    
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="common_CWTemplates.js.html">common/CWTemplates.js</a>, <a href="common_CWTemplates.js.html#line315">line 315</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+        
+            
+
+    
+
+    <!-- <hr> -->
+
+    <h4 class="name" id=".insert"><span class="type-signature">(static) </span>insert<span class="signature">(templateName, target, data, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Inserts the template with the given name into the local DOM. The template
+   will be inserted into the DOM object(s) with the given target selector.</p>
+<p>The expressions in your templates (such as <code>{{name}}</code>) will be replaced
+   with data from the <em>template data store</em>. The template data store is
+   the data source that provides data to your UI, and you can insert data
+   using <a href="CWTemplates.html#.set">CWTemplates.set</a>. For example, <code>{{name}}</code> will be replaced
+   by whatever value was set using <code>CWTemplates.set('name', ...)</code>.</p>
+<p>Connichiwa synchronizes your template data store across all your devices,
+   so all your devices access the same underlying data - this ensures that
+   your UI is consistent across multiple devices. So, if you insert a
+   template on a remote device that contains the <code>{{name}}</code> expression,
+   using <code>CWTemplates.set('name', ...)</code> on <strong>any</strong> device will update your
+   UI.</p>
+<p>If you have the same expression in multiple templates, but want to feed
+   different data to the templates, you can provide a collection name
+   using the <code>data</code> attribute. By default, all templates take their data
+   from the main collection. If you specify the name of a collection in
+   the <code>data</code> attribute, your template will react only to changes in that
+   particular collection. For example, if you insert a template using
+   <code>CWTemplates.insert('myTemplate', 'body', 'myCollection')</code>, calling
+   <code>CWTemplates.set('name', 'Paul')</code> will not affect the template.
+   Instead, you must call <code>CWTemplates.set('myCollection', 'name',
+   'Paul')</code> to update your template UI. This way, you can have the same
+   expression multiple times but use different data.</p>
+<p>Note that insertion is an asynchronous operation, an optional callback
+   can be provided and will be called when the insertion finished.</p>
+<p>Note that before you can insert a template, you must load the file that
+   contains this template using <a href="CWTemplates.html#.load">CWTemplates.load</a>. If your template
+   contains subtemplates (using the <code>{{&gt; subtemplate}}</code> notation), the
+   files containing the subtemplate must have been loaded as well.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
         
 
         
@@ -223,6 +503,14 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -246,6 +534,14 @@
             
             </td>
 
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -272,13 +568,24 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
-            <td class="description last"><p>An arbitrary object of key-value pairs
-   that will be handed to the template as the template's data. E.g. if the
-   template contains an expression {{title}}, this expression will be
-   replaced with the value of the 'title' entry in this object.</p></td>
+            <td class="description last"><p>If undefined, the default template data
+   store (that can be written using <code>CWTemplate.set(key, value)</code>) is fed
+   to the template. If set to a string, the template data store of that
+   name is fed to the template (which can be written using
+   <code>CWTemplates.set('storeName', key, value)</code>). If set to an object
+   literal, the static data from the object is fed to the template - the
+   template is then rendered static.</p></td>
         </tr>
 
     
@@ -298,13 +605,21 @@
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
 
             
 
             <td class="description last"><p>An optional callback function. This
-   callback will be called after the template was inserted into the DOM.
-   This means that within this callback, you can be sure the content of
-   the template exists in the DOM.</p></td>
+   callback will be called after the template was inserted into the DOM.</p></td>
         </tr>
 
     
@@ -359,7 +674,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="common_CWTemplates.js.html">common/CWTemplates.js</a>, <a href="common_CWTemplates.js.html#line115">line 115</a>
+        <a href="common_CWTemplates.js.html">common/CWTemplates.js</a>, <a href="common_CWTemplates.js.html#line210">line 210</a>
     </li></ul></dd>
     
 
@@ -384,8 +699,8 @@
 
 
 <div class="description">
-    <p>Loads one or more files containing Handlebars templates, so they can be
-   used afterwards using <a href="CWTemplates.html#.insert">CWTemplates.insert</a>.</p>
+    <p>Loads one or more files containing templates. Templates that have been
+   loaded can then be inserted into the DOM using <a href="CWTemplates.html#.insert">CWTemplates.insert</a>.</p>
 </div>
 
 
@@ -441,8 +756,7 @@
             
 
             <td class="description last"><p>The path to a template file or an array of
-   paths. If one or more paths are invalid, the load will fail silently,
-   but all other paths will still be loaded.</p></td>
+   paths. If one or more paths are invalid, that particular load will fail, but all other paths will still be loaded.</p></td>
         </tr>
 
     
@@ -497,7 +811,416 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="common_CWTemplates.js.html">common/CWTemplates.js</a>, <a href="common_CWTemplates.js.html#line69">line 69</a>
+        <a href="common_CWTemplates.js.html">common/CWTemplates.js</a>, <a href="common_CWTemplates.js.html#line132">line 132</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+        
+            
+
+    
+
+    <!-- <hr> -->
+
+    <h4 class="name" id=".set"><span class="type-signature">(static) </span>set<span class="signature">(collection<span class="signature-attributes">opt</span>, key, value)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Writes the given data to the template data store. This method is the main
+   mechanism to change the underlying data of templates. For example, if a
+   template contains the expression <code>{{title}}</code>, this expression will
+   always be replaced with the current value of the title key in the
+   template data store.</p>
+<p>Be aware that data set using this method is synchronized across all your
+   devices. Therefore, you can update the DOM on multiple devices with a
+   single call to this method.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>collection</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>An optional collection name. Collections can
+   be thought of as &quot;sub data stores&quot;. Using collections, you can insert
+   multiple templates with the same expression, but have them display
+   different data (also see <a href="CWTemplates.html#.insert">CWTemplates.insert</a>). If omitted, writes
+   to the main collection. Collection names may not start with an
+   underscore.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>key</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The storage key. This must be equal to the expression
+   in your template - e.g. setting a value for the <code>title</code> key will affect
+   the <code>{{title}}</code> expression in your templates. Cannot be <code>undefined</code>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The new value for the given key. Must be an object
+   that can be converted to JSON. May not be a function or <code>undefined</code>.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="common_CWTemplates.js.html">common/CWTemplates.js</a>, <a href="common_CWTemplates.js.html#line285">line 285</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+        
+            
+
+    
+
+    <!-- <hr> -->
+
+    <h4 class="name" id=".set"><span class="type-signature">(static) </span>set<span class="signature">(collection<span class="signature-attributes">opt</span>, dict)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Writes the given data to the template data store. This method is the main
+   mechanism to change the underlying data of templates. For example, if a
+   template contains the expression <code>{{title}}</code>, this expression will
+   always be replaced with the current value of the title key in the
+   template data store.</p>
+<p>Be aware that data set using this method is synchronized across all your
+   devices. Therefore, you can update the DOM on multiple devices with a
+   single call to this method.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>collection</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>An optional collection name. Collections can
+   be thought of as &quot;sub data stores&quot;. Using collections, you can insert
+   multiple templates with the same expression, but have them display
+   different data (also see <a href="CWTemplates.html#.insert">CWTemplates.insert</a>). If omitted, writes
+   to the main collection. Collection names may not start with an
+   underscore.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>dict</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>A dictionary of key/value pairs. Every pair will be
+   inserted into the given collection. Existing keys will be overwritten.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="common_CWTemplates.js.html">common/CWTemplates.js</a>, <a href="common_CWTemplates.js.html#line285">line 285</a>
     </li></ul></dd>
     
 
@@ -524,13 +1247,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="CWDevice.html">CWDevice</a></li><li><a href="CWLocation.html">CWLocation</a></li><li><a href="CWVector.html">CWVector</a></li></ul><h3>Namespaces</h3><ul><li><a href="Connichiwa.html">Connichiwa</a></li><li><a href="CWDebug.html">CWDebug</a></li><li><a href="CWDeviceManager.html">CWDeviceManager</a></li><li><a href="CWGyroscope.html">CWGyroscope</a></li><li><a href="CWStitchManager.html">CWStitchManager</a></li><li><a href="CWSystemInfo.html">CWSystemInfo</a></li><li><a href="CWTemplates.html">CWTemplates</a></li><li><a href="CWUtil.html">CWUtil</a></li></ul><h3>Events</h3><ul><li><a href="Connichiwa.html#.event:onLoad">onLoad</a></li><li><a href="global.html#event:accelerometerUpdate">accelerometerUpdate</a></li><li><a href="global.html#event:connectfailed">connectfailed</a></li><li><a href="global.html#event:deviceconnected">deviceconnected</a></li><li><a href="global.html#event:devicedetected">devicedetected</a></li><li><a href="global.html#event:devicedisconnected">devicedisconnected</a></li><li><a href="global.html#event:devicedistancechanged">devicedistancechanged</a></li><li><a href="global.html#event:devicelost">devicelost</a></li><li><a href="global.html#event:gotstitchneighbor">gotstitchneighbor</a></li><li><a href="global.html#event:gyroscopeUpdate">gyroscopeUpdate</a></li><li><a href="global.html#event:ready">ready</a></li><li><a href="global.html#event:wasStitched">wasStitched</a></li><li><a href="global.html#event:wasUnstitched">wasUnstitched</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="CWDevice.html">CWDevice</a></li><li><a href="CWLocation.html">CWLocation</a></li><li><a href="CWVector.html">CWVector</a></li></ul><h3>Namespaces</h3><ul><li><a href="Connichiwa.html">Connichiwa</a></li><li><a href="CWDatastore.html">CWDatastore</a></li><li><a href="CWDebug.html">CWDebug</a></li><li><a href="CWDeviceManager.html">CWDeviceManager</a></li><li><a href="CWGyroscope.html">CWGyroscope</a></li><li><a href="CWStitchManager.html">CWStitchManager</a></li><li><a href="CWSystemInfo.html">CWSystemInfo</a></li><li><a href="CWTemplates.html">CWTemplates</a></li><li><a href="CWUtil.html">CWUtil</a></li></ul><h3>Events</h3><ul><li><a href="Connichiwa.html#.event:onLoad">onLoad</a></li><li><a href="global.html#event:accelerometerUpdate">accelerometerUpdate</a></li><li><a href="global.html#event:connectfailed">connectfailed</a></li><li><a href="global.html#event:deviceconnected">deviceconnected</a></li><li><a href="global.html#event:devicedetected">devicedetected</a></li><li><a href="global.html#event:devicedisconnected">devicedisconnected</a></li><li><a href="global.html#event:devicedistancechanged">devicedistancechanged</a></li><li><a href="global.html#event:devicelost">devicelost</a></li><li><a href="global.html#event:gotstitchneighbor">gotstitchneighbor</a></li><li><a href="global.html#event:gyroscopeUpdate">gyroscopeUpdate</a></li><li><a href="global.html#event:ready">ready</a></li><li><a href="global.html#event:wasStitched">wasStitched</a></li><li><a href="global.html#event:wasUnstitched">wasUnstitched</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta2</a> on Fri May 08 2015 13:19:28 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta2</a> on Wed May 13 2015 14:08:08 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

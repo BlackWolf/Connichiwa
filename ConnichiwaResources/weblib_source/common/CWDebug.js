@@ -51,6 +51,19 @@ CWDebug._logLevel = 0;
 
 
 /**
+ * Initializes CWDebug
+ * @function
+ * @private
+ */
+CWDebug.__constructor = function() {
+  //We don't want to run Ractive in debug mode
+  //TODO: We might want to think about if Ractive.DEBUG should be set to
+  //CWDebug._debug
+  Ractive.DEBUG = false;
+}.bind(CWDebug);
+
+
+/**
  * Sets the current debug settings with a single object
  * @param {CWDebug.DebugInfo} info The object containing the new debug
  *    information
@@ -101,7 +114,7 @@ CWDebug.log = function(level, msg) {
  */
 CWDebug.err = function(msg) {
   if (this._debug) {
-    console.log('ERROR' + '|' + msg);
+    console.err(msg);
   }
 }.bind(CWDebug);
 

@@ -30,6 +30,292 @@ CWModules.init = function() {
 
   this._didInit = true;
 }.bind(CWModules);
+/* global Connichiwa, CWEventManager, CWUtil, CWDebug */
+'use strict';
+
+
+/**
+ * Cross-device data store in Connichiwa
+ *
+ * CWDatastore allows you to create *collections* of data and store arbitrary
+ *    key-value pairs in these collections. Data stored in the CWDatastore is
+ *    synchronized across all your devices. This provides you with a quick way
+ *    of sharing data between all your devices.
+ *
+ * Storing data is simply done through {@link CWDatastore.set}, which will
+ *    trigger a sync of the newly stored data to all your devices. The data
+ *    can then be retrieved on any device using {@link CWDatastore.get}.
+ *
+ * CWDatastore also takes care of synchronizing the datastore to newly
+ *    connected devices.
+ *
+ * Please note that data is sent to other devices using `JSON.stringify()`.
+ *    Therefore you should only store data that can be serialized by this
+ *    method. For example, you can **not** store functions in the data store.
+ * @namespace CWDatastore
+ */
+var CWDatastore = CWDatastore || {};
+
+/**
+ * The datastores stored data :-)
+ * @type {Object}
+ * @private
+ */
+CWDatastore._data = {};
+
+
+/**
+ * Initializes CWDatastore, such as registering for events
+ * @function
+ * @private
+ */
+CWDatastore.__constructor = function() {
+  //When a new device connects, we sync the entire data store to it so it
+  //has all the latest data. 
+  Connichiwa.on('deviceconnected', function(device) {
+    CWDebug.log(3, 'Syncing entire datastore to connected device');
+    CWDatastore._syncStoreToDevice(device.getIdentifier());
+  });
+}.bind(CWDatastore);
+
+
+/**
+ * Stores or updates the given key/value pairs in the given collection
+ * @param {String} [collection] The collection to write to. If no collection
+ *    is provided, a default collection will be used. Collection names may not
+ *    start with an underscore.
+ * @param {Object} dict An object containing key/value pairs. All of these
+ *    will be stored in the given collection. Existing entries will be
+ *    overwritten.
+ * @function
+ *//**
+ * Stores or updates the given key/value pair in the given collection
+ * @param {String} [collection] The collection to write to. If no collection
+ *    is provided, a default collection will be used. Collection names may not
+ *    start with an underscore.
+ * @param {String} key The key under which the value will be stored in
+ *    the collection
+ * @param {Object} value The value to store. Must be an object or value
+ *    that can be converted to JSON. May not be a function or `undefined`.
+ * @function
+ */
+CWDatastore.set = function(collection, key, value) {
+  //2 args: collection was omitted
+  //exception: (collection, dictionary) - here, value was omitted
+  if (value === undefined && CWUtil.isObject(key) === false) {
+    value = key;
+    key = collection;
+    collection = undefined;
+  }
+
+  this._set(collection, key, value, true);
+}.bind(CWDatastore);
+
+
+
+/**
+ * Stores or updates the given key/value pair in the given collection. The
+ *    `sync` parameter allows to suppress syncing to other devices.
+ * @param {String} [collection] The collection to write to. If no collection
+ *    is provided, a default collection will be used. Collection names may not
+ *    start with an underscore.
+ * @param {Object} dict An object containing key/value pairs. All of these
+ *    will be stored in the given collection. Existing entries will be
+ *    overwritten.
+ * @param {Boolean} sync=true Determines whether the newly stored value is
+ *    synced to other devices. Should almost always be `true`, the only
+ *    exception is if we store a value that we received from another device
+ *    (to prevent a sync loop)
+ * @function
+ * @private
+ *//**
+ * Stores or updates the given key/value pair in the given collection. The
+ *    `sync` parameter allows to suppress syncing to other devices.
+ * @param {String} [collection] The collection to write to. If no collection
+ *    is provided, a default collection will be used. Collection names may not
+ *    start with an underscore.
+ * @param {String} key The key under which the value will be stored in the
+ *    collection
+ * @param {Object} value The value to store. Must be an object or value that
+ *    can be converted to JSON. May not be a function or `undefined`.
+ * @param {Boolean} sync Determines whether the newly stored value is
+ *    synced to other devices. Should almost always be `true`, the only
+ *    exception is if we store a value that we received from another device
+ *    (to prevent a sync loop)
+ * @function
+ * @private
+ */
+CWDatastore._set = function(collection, key, value, sync) {  
+  //3 args: collection was omitted
+  if (sync === undefined) {
+    sync = value;
+    value = key;
+    key = collection;
+    collection = undefined;
+  }
+
+  if (collection === undefined) collection = '_default';
+
+  //Create collection if it doesn't exist
+  if ((collection in this._data) === false) {
+    this._data[collection] = {};
+  }
+
+  //Create a dictionary of the changes we need to make to the datastore
+  var keyValues;
+  if (CWUtil.isObject(key)) {
+    //User already provided such a dictionary
+    keyValues = key;
+  } else {
+    //User provided key and new value
+    keyValues = {};
+    keyValues[key] = value;    
+  }
+
+  var that = this;
+  var reportedChanges = {};
+  $.each(keyValues, function(keyToSet, valueToSet) {
+    if (CWUtil.isFunction(valueToSet)) {
+      CWDebug.err('Attempted to store function in CWDatastore (collection: ' + collection + ', key: ' + key + '). This is invalid and will be ignored.');
+      return true;
+    }
+    var oldValue = that._data[collection][keyToSet];
+    that._data[collection][keyToSet] = valueToSet;
+    reportedChanges[keyToSet] = {old: oldValue, new: valueToSet};
+  });
+
+  //Synchronize all changes between devices
+  //The only reason to surpress this is when we received an update from another
+  //device (to prevent an update loop)
+  if (sync) {
+    this._syncEntrys(collection, Object.keys(reportedChanges));
+  }
+
+  var reportedCollection = (collection === '_default') ? undefined : collection;
+  CWEventManager.trigger('_datastorechanged', reportedCollection, reportedChanges);
+}.bind(CWDatastore);
+
+
+/**
+ * Retrieves the current value of the given key in the given collection
+ * @param  {String} [collection] The collection to retrieve from. If omitted,
+ *    will retrieve from the default collection.
+ * @param  {String} key The key to retrieve
+ * @return {Object} The current value of the given key in the given
+ *    collection. If the collection does not exist or the key does not exist
+ *    in that collection, returns `undefined`.
+ * @function 
+ */
+CWDatastore.get = function(collection, key) {
+  //If only 1 argument was given, colletion was omitted and defaults to _default
+  if (key === undefined) {
+    key = collection;
+    collection = '_default';
+  }
+
+  if (collection in this._data === false || 
+    key in this._data[collection] === false) {
+    return undefined;
+  }
+
+  return this._data[collection][key];
+}.bind(CWDatastore);
+
+
+/**
+ * Retrieves a copy of a collection
+ * @param  {String} [collection] The collection to retrieve. If omitted,
+ *    returns the default collection.
+ * @return {Object} An object of key/value pairs, each representing one entry
+ *    in the collection. This is a copy of the original data.
+ * @function
+ */
+CWDatastore.getCollection = function(collection) {
+  return this._getCollection(collection, true);
+}.bind(CWDatastore);
+
+
+/**
+ * Retrieves a collection from the store. The optional `returnCopy` parameter
+ *    determines if a copy is returned.
+ * @param  {String} collection The collection to retrieve. If omitted, returns
+ *    the default collection.
+ * @param  {Boolean} [returnCopy=true] Determines if a copy of the collection
+ *    is returned. Usually, only copies should be returned, as returning the
+ *    original collection allows code to write directly to the collection
+ *    without using {@link CWDatastore.set}. Only set this to `false` if you
+ *    are absolutely sure that you use the collection read-only.
+ * @return {Object} An object of key/value pairs, each representing one entry
+ *    in the collection. 
+ * @function
+ * @private
+ */
+CWDatastore._getCollection = function(collection, returnCopy) {
+  if (collection === undefined) collection = '_default';
+  if (returnCopy === undefined) returnCopy = true;
+
+  //Create collection if it doesn't exist
+  if ((collection in this._data) === false) {
+    this._data[collection] = {};
+  }
+
+  if (returnCopy === false) return this._data[collection]
+  return $.extend(true, {}, this._data[collection]);
+}.bind(CWDatastore);
+
+
+/**
+ * Syncs the entries represented by the given keys in the given collection to
+ *    all other currently connected devices.
+ * @param  {String} [collection] The collection where the entry is stored. If
+ *    omitted, will use the default collection.
+ * @param  {Array} keys An array of keys. Each key will be retrieved from the
+ *    given collection and synchronized. If a key cannot be found in the given
+ *    collection, it is ignored.
+ * @function
+ * @private
+ *//**
+ * Syncs the entry represented by the given key in the given collection to all
+ *    other currently connected devices.
+ * @param  {String} [collection] The collection where the entry is stored. If
+ *    omitted, will use the default collection.
+ * @param  {String} key They key to retrieve from the collection. If the key
+ *    does not exist in the collection, this method will do nothing.
+ * @function
+ * @private
+ */
+CWDatastore._syncEntrys = function(collection, keys) {
+  var syncData = {};
+  syncData[collection] = {};
+
+  //keys can be an array of keys. If it isnt, make it an array of one key
+  if (CWUtil.isArray(keys) === false) keys = [ keys ];
+  
+  //Walk over the keys to sync, get their current value and write it to the
+  //data that will be sent to other devices
+  var that = this;
+  $.each(keys, function(index, key) {
+    var value = that.get(collection, key);
+    if (value !== undefined) {
+      syncData[collection][key] = value;
+    }
+  }); 
+
+  Connichiwa.broadcast('_updatedatastore', { data: syncData });
+}.bind(CWDatastore);
+
+/**
+ * Syncs the entire data store (all collections) to another device. This
+ *    method potentially produces a large websocket message **and should be
+ *    used with CAUTION!**
+ * @param  {String} target A unique device identifies as returned by {@link
+ *    CWDevice#getIdentifier}
+ * @function
+ * @protected
+ */
+CWDatastore._syncStoreToDevice = function(target) {
+  Connichiwa.send(target, '_updatedatastore', { data: this._data });
+}.bind(CWDatastore);
 /* global CWModules */
 'use strict';
 
@@ -83,6 +369,19 @@ CWDebug._logLevel = 0;
 
 
 /**
+ * Initializes CWDebug
+ * @function
+ * @private
+ */
+CWDebug.__constructor = function() {
+  //We don't want to run Ractive in debug mode
+  //TODO: We might want to think about if Ractive.DEBUG should be set to
+  //CWDebug._debug
+  Ractive.DEBUG = false;
+}.bind(CWDebug);
+
+
+/**
  * Sets the current debug settings with a single object
  * @param {CWDebug.DebugInfo} info The object containing the new debug
  *    information
@@ -133,7 +432,7 @@ CWDebug.log = function(level, msg) {
  */
 CWDebug.err = function(msg) {
   if (this._debug) {
-    console.log('ERROR' + '|' + msg);
+    console.err(msg);
   }
 }.bind(CWDebug);
 
@@ -236,14 +535,14 @@ function CWDevice(properties)
   /**
    * The current Bluetooth discovery state of the device
    * @type {CWDevice.DiscoveryState}
-   * @private
+   * @protected
    */
   this._discoveryState = CWDevice.DiscoveryState.LOST;
 
   /**
    * The current HTTP connection state of the device
    * @type {CWDevice.ConnectionState}
-   * @private
+   * @protected
    */
   this._connectionState = CWDevice.ConnectionState.DISCONNECTED;
 
@@ -252,7 +551,7 @@ function CWDevice(properties)
    *    device. For devices without Bluetooth or devices where the distance
    *    can not be approximated, this returns -1
    * @type {Number}
-   * @private
+   * @protected
    */
   this._distance = -1;
 
@@ -333,8 +632,6 @@ CWDevice.prototype.isNearby = function() {
  * @private
  */
 CWDevice.prototype._canBeConnected = function() { 
-  CWDebug.log(1, "CAN BE CONNECTED: "+(this._connectionState === CWDevice.ConnectionState.DISCONNECTED)+" && "+(this._discoveryState === CWDevice.DiscoveryState.DISCOVERED));
-  CWDebug.log(1, this._discoveryState);
   return (this._connectionState === CWDevice.ConnectionState.DISCONNECTED && 
     this._discoveryState === CWDevice.DiscoveryState.DISCOVERED);
 };
@@ -489,7 +786,7 @@ CWDevice.prototype._replace = function(target, html, contentOnly) {
     contentOnly : contentOnly,
   };
   this.send('_replace', message);
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -522,14 +819,16 @@ CWDevice.prototype.loadCSS = function(url) {
 
 
 /**
- * Loads the template files at the given URL on the remote device. The
- *    templates contained in these files can then be used using {@link
- *    CWDevice#insertTemplate}
- * @param  {String|Array} urls An URL to a valid template file or an array of
- *    template file URLs
+ * Loads one or more files containing templates. Templates that have been
+ *    loaded can then be inserted into the devices DOM using {@link
+ *    CWDevice#insertTemplate}.
+ * @param  {String|Array} paths The path to a template file or an array of
+ *    paths. If one or more paths are invalid, that particular load will fail,
+ *    but all other paths will still be loaded.
+ * @function
  */
-CWDevice.prototype.loadTemplates = function(urls) {
-  var message = { urls: urls };
+CWDevice.prototype.loadTemplates = function(paths) {
+  var message = { paths: paths };
   this.send('_loadtemplate', message);
 };
 
@@ -2443,26 +2742,63 @@ CWSystemInfo.viewportHeight = function() {
 }.bind(CWSystemInfo);
 
 CWModules.add('CWSystemInfo');
-/* global Connichiwa, Handlebars, CWUtil, CWDebug, CWModules */
+/* global Connichiwa, Ractive, CWDatastore, CWUtil, CWDebug, CWModules */
 'use strict';
 
 /**
- * Used for Handlebars templating in Connichiwa. This provides you with the
- *    ability to load Handelbars templates ({@link http://handlebarsjs.com})
- *    and insert them into the DOM. To do so, you must first load the files
- *    that contain your Handlebars templates (and - if your template uses
- *    partials - all files that contain those) using {@link CWTemplates.load}.
- *    After that, you can insert these templates into the DOM by using {@link
- *    CWTemplates.insert}. This will grab the template of your choice, fill it
- *    with the data you provide and insert it at the given position into the
- *    DOM.
+ * Provides cross-device templating in Connichiwa.
  *
- * Note that in order to load and insert templates into another device's DOMs,
- *    you must use {@link CWDevice#loadTemplates} and {@link
- *    CWDevice#insertTemplate}.
+ * CWTemplates allows you to write Mustache ({@link
+ *    https://mustache.github.io}) templates and insert them into the DOM of a
+ *    local or remote device. Mustache templates support *expressions* that
+ *    can be replaced with content at runtime.
  *
- * This class further provides the Handlebars helper `isMaster` and
- *    `ifIsMaster`
+ * #### Data-driven templates
+ *
+ * For example, if a template contains the line `Hello, {{name}}!` the
+ *    expression is `{{name}}` You can replace it at runtime using {@link
+ *    CWTemplates.set} - e.g. `CWTemplates.set('name', 'Paul')` will change
+ *    the DOM to `Hello, Paul!`. At some point later you can call
+ *    `CWTemplates.set('name', 'John')` and the DOM will be automatically
+ *    reflect the change and display `Hello, John!`
+ *
+ * As you can see, Connichiwas templates are *data-driven* - you do not
+ *    directly manipulate the DOM, but rather manipulate the data which will
+ *    be automatically reflected in your UI. Connichiwa even sweetens that
+ *    further by syncing your data across devices. So if a template on one
+ *    device contains the expression `{{name}}`, and the same or another
+ *    template on another device contains that expression as well, using
+ *    `CWTemplates.set('name', 'Paul')` will change that expression on **all**
+ *    your devices.
+ *
+ * What if you have a template that contains the `{{name}}` expression and
+ *    want it to show a different name? Here is where data collections come
+ *    into play: When inserting the template into the DOM, you can define the
+ *    name of a data collection that will be used for that template. So your
+ *    template could do something like:
+ *
+ * `CWTemplates.insert('myTemplate', 'body', 'customCollection')`
+ *
+ * Now, if some device calls `CWTemplates.set('name', 'Paul')` the new
+ *    template will not be affected! Instead, you can set the name of that
+ *    template using `CWTemplates.set('customCollection', 'name', 'Michael')`.
+ *    So you can have multiple templates with the same expression, but use
+ *    different data!
+ *
+ * #### How to insert a template?
+ *
+ * Templates are stored in external files with arbitrary extension
+ *    (preferrably `.html`, as this enables syntax highlighting). A template
+ *    consists of a template tag and needs a name:
+ *
+ * `<template name="myTemplate"> ... </template>`
+ *
+ * A file can contain multiple templates. To use one or more templates, you
+ *    must first load the file that contains them using {@link
+ *    CWTemplates.load}. You can then start to insert templates into your DOM
+ *    using {@link CWTemplates.insert}. To replace your template expressions
+ *    (such as `{{name}}`) with actual data, use {@link CWTemplates.set}.
+ *    That's all there is to it.
  * @copyright This class and the whole idea behind CWTemplates is based on
  *    Roman Rädle's work (roman.raedle@uni-konstanz.de).
  * @namespace  CWTemplates
@@ -2470,45 +2806,71 @@ CWModules.add('CWSystemInfo');
 var CWTemplates = CWTemplates || {};
 
 /**
- * An array of Deferred objects, each representing the AJAX request and
- *    compilation of a single template file. If a Deferred in this array is
- *    resolved, the template file is ready for use
- * @type {Array}
+ * An array where every entry represents one template-file loading attempt.
+ *    Each entry is a jQuery Promise of the ajax request to a template file.
+ *    The Promise can have 3 possible states:
+ *
+ * * If the request is ongoing, the Promise is unresolved
+ *
+ * * If the request was successful and the template file was compiled, the
+ *    Promise is resolved
+ *
+ * * If the request failed or the template file could not be compiled, the
+ *    Promise is rejected
+ * @type {Object}
  * @private
  */
-CWTemplates._loadedPaths = [];
-
+CWTemplates._files = [];
 
 /**
- * Constructor initializing the CWTemplates object and registering some
- *    Connichiwa-related Handlebars helper that can be used in templates
+ * An object containing the individual templates. It has two keys:
+ *
+ * * 'raw' is an object with one entry per loaded template. Each entry has the
+ *    template name as the key, and the templates raw HTML (as it occurs in
+ *    the file) as the value
+ *
+ * * 'compiled' is an array where each entry is one template that was inserted
+ *    into the DOM. This means that, if the same template is inserted multiple
+ *    times, it will produce multiple entries in this array. Each entry is a
+ *    Ractive object that represents the compiled template. Ractive methods
+ *    can be called on it, such as `set()` or `update()`
+ * @type {Object}
+ * @private
+ */
+CWTemplates._templates = { raw: {}, compiled: [] };
+
+/**
+ * Initializes CWTemplates, for example registers necessary event handlers
  * @function
  * @private
  */
 CWTemplates.__constructor = function() {
-  //Register Connichiwa helper for handlebars
-  Handlebars.registerHelper({
-    'isMaster': function() {
-      return Connichiwa.isMaster();
-    },
+  var that = this;
 
-    'ifIsMaster': function(options) {
-      if (Connichiwa.isMaster()) {
-        return options.fn(this);
-      } else {
-        return options.inverse(this);
-      }
+  //People call CWTemplates.set to change template data, which in turn calls 
+  //CWDatastore.set, which in turn fires _datastorechanged - we need to make
+  //sure that the Ractive templates also know that the data changed
+  Connichiwa.on("_datastorechanged", function(collection, changes) {
+    //All template-related collections must start with _CWTemplates. Since we 
+    //don't know which expressions are used in which templates, we just call 
+    //update on ALL Ractives if a key changes
+    if (collection && collection.indexOf('_CWTemplates') === 0) {
+      $.each(changes, function(key, entry) {
+        $.each(that._templates.compiled, function(index, ractive) {
+          ractive.update(key);
+        });
+      });
     }
   });
-};
+}.bind(CWTemplates);
 
 
 /**
- * Loads one or more files containing Handlebars templates, so they can be
- *    used afterwards using {@link CWTemplates.insert}.
+ * Loads one or more files containing templates. Templates that have been
+ *    loaded can then be inserted into the DOM using {@link
+ *    CWTemplates.insert}.
  * @param  {String|Array} paths The path to a template file or an array of
- *    paths. If one or more paths are invalid, the load will fail silently,
- *    but all other paths will still be loaded.
+ *    paths. If one or more paths are invalid, that particular load will fail, but all other paths will still be loaded.
  * @function
  */
 CWTemplates.load = function(paths) {
@@ -2516,15 +2878,20 @@ CWTemplates.load = function(paths) {
 
   var that = this;
   $.each(paths, function(i, path) {
-    CWDebug.log(1, "Getting "+path);
+    //Don't load files twice
+    if (path in that._files) return true;
+
+    //We need to create our own Promise because we want the Promise to resolve 
+    //after the file was COMPILED, not after it was loaded
     var deferred = new $.Deferred();
-    that._loadedPaths.push(deferred);
+    that._files.push(deferred);
     $.get(path).done(function(data) {
-      CWDebug.log(1, "Compiling "+path);
-      that._compile(data);
-      deferred.resolve();
+      CWDebug.log(3, "Compiling template file "+path);
+      var success = that._compile(data);
+      if (success) deferred.resolve();
+      else deferred.reject();
     }).fail(function() {
-      CWDebug.log(1, path +" does not exist");
+      CWDebug.err("Template file " + path +" does not exist");
       deferred.reject();
     });
   });
@@ -2533,48 +2900,180 @@ CWTemplates.load = function(paths) {
 
  /**
   * Inserts the template with the given name into the local DOM. The template
-  *    will be inserted into the DOM object(s) with the given target selector
-  *    and the template's data will be set to the given data object. As
-  *    inserting a template is an asynchronous operation that first waits for
-  *    all {@link CWTemplates.load} calls to finish, an optional callback can
-  *    be supplied that will be called after the template was inserted.
+  *    will be inserted into the DOM object(s) with the given target selector.
+  *
+  * The expressions in your templates (such as `{{name}}`) will be replaced
+  *    with data from the *template data store*. The template data store is
+  *    the data source that provides data to your UI, and you can insert data
+  *    using {@link CWTemplates.set}. For example, `{{name}}` will be replaced
+  *    by whatever value was set using `CWTemplates.set('name', ...)`.
+  *
+  * Connichiwa synchronizes your template data store across all your devices,
+  *    so all your devices access the same underlying data - this ensures that
+  *    your UI is consistent across multiple devices. So, if you insert a
+  *    template on a remote device that contains the `{{name}}` expression,
+  *    using `CWTemplates.set('name', ...)` on **any** device will update your
+  *    UI.
+  *
+  * If you have the same expression in multiple templates, but want to feed
+  *    different data to the templates, you can provide a collection name
+  *    using the `data` attribute. By default, all templates take their data
+  *    from the main collection. If you specify the name of a collection in
+  *    the `data` attribute, your template will react only to changes in that
+  *    particular collection. For example, if you insert a template using
+  *    `CWTemplates.insert('myTemplate', 'body', 'myCollection')`, calling
+  *    `CWTemplates.set('name', 'Paul')` will not affect the template.
+  *    Instead, you must call `CWTemplates.set('myCollection', 'name',
+  *    'Paul')` to update your template UI. This way, you can have the same
+  *    expression multiple times but use different data.
+  *
+  * Note that insertion is an asynchronous operation, an optional callback
+  *    can be provided and will be called when the insertion finished.
   *
   * Note that before you can insert a template, you must load the file that
-  *    contains this template using {@link CWTemplates.load}.
+  *    contains this template using {@link CWTemplates.load}. If your template
+  *    contains subtemplates (using the `{{> subtemplate}}` notation), the
+  *    files containing the subtemplate must have been loaded as well.
   * @param  {String}   templateName The name of the template to load. The file
   *    that contains a template with this name must be loaded using {@link
   *    CWTemplates.load} before calling this method.
   * @param  {String}   target       A jQuery selector that points to a valid
   *    DOM object (e.g. 'body'). The template will be inserted into this DOM
   *    element.
-  * @param  {Object}   data         An arbitrary object of key-value pairs
-  *    that will be handed to the template as the template's data. E.g. if the
-  *    template contains an expression {{title}}, this expression will be
-  *    replaced with the value of the 'title' entry in this object.
-  * @param  {Function} callback     An optional callback function. This
+  * @param  {Object}   data         If undefined, the default template data
+  *    store (that can be written using `CWTemplate.set(key, value)`) is fed
+  *    to the template. If set to a string, the template data store of that
+  *    name is fed to the template (which can be written using
+  *    `CWTemplates.set('storeName', key, value)`). If set to an object
+  *    literal, the static data from the object is fed to the template - the
+  *    template is then rendered static.
+  * @param  {Function} [callback]     An optional callback function. This
   *    callback will be called after the template was inserted into the DOM.
-  *    This means that within this callback, you can be sure the content of
-  *    the template exists in the DOM. 
   * @function
  */
 CWTemplates.insert = function(templateName, target, data, callback) {
-  $.when.all(this._loadedPaths).always(function() {
-    CWDebug.log(3, "Inserting template " + templateName);
-    var template = Handlebars.compile("{{> "+templateName+" }}");
-    var html = template(data);
+  var that = this;
+  $.when.all(this._files).always(function() {
+    CWDebug.log(3, "Inserting template " + templateName + " into DOM");
 
-    $(target).append(html);
+    //Grab the template data:
+    //* By default, we use the default CWTemplates data store
+    //* If data is a string, we define an alternative data store using that name
+    //* If data is an object literal, we use its content as static data and do
+    //  not use the data store at all (=not reactive)
+    var ractiveData;
+    if (data === undefined) {
+      ractiveData = CWDatastore._getCollection('_CWTemplates.', false);
+    } else if (CWUtil.isString(data)) {
+      ractiveData = CWDatastore._getCollection('_CWTemplates.'+data, false);
+    } else if (CWUtil.isObject(data)) {
+      ractiveData = data;
+    }
+
+    var ractive = new Ractive({ 
+      template: that._templates.raw[templateName], 
+      data: ractiveData,
+      el: $(target),
+      append: true,
+      partials: that._templates.raw
+    });
+    that._templates.compiled.push(ractive); 
+
     if (callback !== undefined) callback();
   });
 }.bind(CWTemplates);
 
 
 /**
+ * Writes the given data to the template data store. This method is the main
+ *    mechanism to change the underlying data of templates. For example, if a
+ *    template contains the expression `{{title}}`, this expression will
+ *    always be replaced with the current value of the title key in the
+ *    template data store.
+ *
+ * Be aware that data set using this method is synchronized across all your
+ *    devices. Therefore, you can update the DOM on multiple devices with a
+ *    single call to this method.
+ * @param {String} [collection] An optional collection name. Collections can
+ *    be thought of as "sub data stores". Using collections, you can insert
+ *    multiple templates with the same expression, but have them display
+ *    different data (also see {@link CWTemplates.insert}). If omitted, writes
+ *    to the main collection. Collection names may not start with an
+ *    underscore.
+ * @param {Object} dict A dictionary of key/value pairs. Every pair will be
+ *    inserted into the given collection. Existing keys will be overwritten.
+ * @function
+ *//**
+ * Writes the given data to the template data store. This method is the main
+ *    mechanism to change the underlying data of templates. For example, if a
+ *    template contains the expression `{{title}}`, this expression will
+ *    always be replaced with the current value of the title key in the
+ *    template data store.
+ *
+ * Be aware that data set using this method is synchronized across all your
+ *    devices. Therefore, you can update the DOM on multiple devices with a
+ *    single call to this method.
+ * @param {String} [collection] An optional collection name. Collections can
+ *    be thought of as "sub data stores". Using collections, you can insert
+ *    multiple templates with the same expression, but have them display
+ *    different data (also see {@link CWTemplates.insert}). If omitted, writes
+ *    to the main collection. Collection names may not start with an
+ *    underscore.
+ * @param {String} key The storage key. This must be equal to the expression
+ *    in your template - e.g. setting a value for the `title` key will affect
+ *    the `{{title}}` expression in your templates. Cannot be `undefined`.
+ * @param {Object} value The new value for the given key. Must be an object
+ *    that can be converted to JSON. May not be a function or `undefined`.
+ * @function
+ */
+CWTemplates.set = function(collection, key, value) {  
+  if (value === undefined) {
+    if (CWUtil.isObject(key) === false) {
+      if (CWUtil.isObject(collection)) {
+        //Args: (dict)
+        key = collection;
+        collection = '';
+      } else {
+        //Args: (collection, key, value)
+        value = key;
+        key = collection;
+        collection = '';
+      }
+    }
+  }
+
+  CWDatastore.set('_CWTemplates.'+collection, key, value);
+}.bind(CWTemplates);
+
+
+/**
+ * Retrieves the current value for the given key in the given collection.
+ * @param  {String} [collection] The collection to retrieve the data from. If
+ *    omitted, the main collection is used.
+ * @param  {String} key The key under which the data was stored
+ * @return {Object} The current value of the given key in the given collection
+ *    or undefined if the collection or the key in that collection does not
+ *    exist
+ * @function
+ */
+CWTemplates.get = function(collection, key) {
+  //If only one arg was given, collection was omitted and defaults to ''
+  if (key === undefined) {
+    key = collection;
+    collection = '';
+  }
+
+  return CWDatastore.get('_CWTemplates.'+collection, key);
+}.bind(CWTemplates);
+
+/**
  * Compiles the given piece of template code. All <template> tags that contain
- *    a name attribute within that code will be registered as templates with
- *    Handlebars. After this step, the templates can be inserted using {@link
+ *    a name attribute within that code will be registered as templates. After
+ *    this step, the templates can be inserted using {@link
  *    CWTemplates.insert}.
- * @param  {String} templateData Handlebars template code
+ * @param  {String} templateData Ractive template code
+ * @returns {Boolean} true if the template data contained at least one valid
+ *    template, otherwise false
  * @function
  * @private
  */
@@ -2582,7 +3081,10 @@ CWTemplates._compile = function(templateData) {
   var content = $('<wrapper>');
   content.html(templateData);
 
+  var that = this;
+
   var templates = content.find('template');
+  var addedTemplates = 0;
   templates.each(function(index, template) {
     template = $(template);
 
@@ -2594,9 +3096,13 @@ CWTemplates._compile = function(templateData) {
       return true;
     }
 
-    CWDebug.log(3, "Registering template: "+template.attr('name'));
-    Handlebars.registerPartial(name, content);
+    CWDebug.log(3, "Registering template: "+name);
+    that._templates.raw[name] = content;
+    addedTemplates++;
   });
+
+  if (addedTemplates < 1) return false;
+  return true;
 }.bind(CWTemplates);
 
 CWModules.add('CWTemplates');
@@ -2631,7 +3137,8 @@ CWUtil.parseURL = function(url) {
  * Returns the given string, replacing HTML entities with their HTML
  *    counterparts (e.g. `&lt` with `<`)
  * @param  {String} escaped A safe HTML string
- * @return {String} The input string with unescaped HTML entities        
+ * @return {String} The input string with unescaped HTML entities 
+ * @function       
  */
 CWUtil.unescape = function(escaped) {
   return escaped.replace(/&amp;/g, '&')
@@ -2725,6 +3232,7 @@ CWUtil.isString = function(value) {
  * Checks if the given object is a function
  * @param  {Object}  value The object to check
  * @return {Boolean} true if the given value is a function, otherwise false
+ * @function
  */
 CWUtil.isFunction = function(value) {
   return (typeof(value) === 'function');
@@ -2734,12 +3242,23 @@ CWUtil.isFunction = function(value) {
 /**
  * Checks if the given object is an object and not null.
  * @param {Object} value  The object to check
- * @returns {boolean}   true if the given object is an object, false otherwise
+ * @returns {Boolean}   true if the given object is an object, false otherwise
  *    (e.g. for null, undefined or a primitive type).
  * @function
  */
 CWUtil.isObject = function(value) {
   return (typeof(value) === 'object' && value !== null);
+}.bind(CWUtil);
+
+
+/**
+ * Checks if the given object is an array
+ * @param  {Object}  value The object to checl
+ * @return {Boolean} true if the given object is an array, otherwise false
+ * @function
+ */
+CWUtil.isArray = function(value) {
+  return Array.isArray(value);
 }.bind(CWUtil);
 
 /**
@@ -2863,7 +3382,7 @@ CWVector.prototype.getP1 = function() {
 CWVector.prototype.getP2 = function() {
   return this._p2;
 };
-/* global Connichiwa, CWEventManager, CWTemplates, CWDebug, CWModules */
+/* global Connichiwa, CWEventManager, CWTemplates, CWDatastore, CWDebug, CWModules */
 "use strict";
 
 
@@ -2900,6 +3419,7 @@ CWWebsocketMessageParser.parse = function(message) {
     case "_wasstitched"       : this._parseWasStitched(message);       break;
     case "_wasunstitched"     : this._parseWasUnstitched(message);     break;
     case "_gotstitchneighbor" : this._parseGotStitchNeighbor(message); break;
+    case "_updatedatastore"   : this._parseUpdateDatastore(message);   break;
   }
 
   return true;
@@ -2986,7 +3506,7 @@ CWWebsocketMessageParser._parseLoadCSS = function(message) {
 
 
 CWWebsocketMessageParser._parseLoadTemplate = function(message) {
-  CWTemplates.load(message.urls);
+  CWTemplates.load(message.paths);
 };
 
 
@@ -3034,6 +3554,29 @@ CWWebsocketMessageParser._parseWasUnstitched = function(message) {
  */
 CWWebsocketMessageParser._parseGotStitchNeighbor = function(message) {
   CWEventManager.trigger("gotstitchneighbor", message);
+}.bind(CWWebsocketMessageParser);
+
+
+/**
+ * Parses `_updateDatastore` messages. Such messages are sent when another
+ *    device sends us datastore content that needs to be synced to this device
+ * @param  {Object} message The message from the websocket
+ * @function
+ * @private
+ */
+CWWebsocketMessageParser._parseUpdateDatastore = function(message) {
+  //message.data contains datastore collections
+  //Walk over every collection
+  $.each(message.data, function(collection, collectionContent) {
+    CWDatastore._set(collection, collectionContent, undefined, false);
+    //Walk over every entry of the collection
+    //
+    // $.each(collectionContent, function(key, value) {
+      //TODO this triggers an update event for every single key
+      //maybe we can find a nice bulk update way of doing this?
+      // CWDatastore._set(collection, key, value, false);
+    // });
+  });
 }.bind(CWWebsocketMessageParser);
 
 CWModules.add('CWWebsocketMessageParser');
@@ -3201,13 +3744,12 @@ Connichiwa.onMessage = function(name, callback) {
  * @function
  */
 Connichiwa.onLoad = function(callback) {
-  CWDebug.log(1, "Attaching callback to onLoad");
   if (document.readyState === 'complete') {
-    CWDebug.log(1, "Fire immediately");
+    CWDebug.log(1, 'Fire immediately');
     //Timeout so the callback is always called asynchronously
     window.setTimeout(callback, 0);
   } else {
-    CWDebug.log(1, "Fire delayed");
+    CWDebug.log(1, 'Fire delayed');
     this.on('ready', callback);
   }
 }.bind(Connichiwa);

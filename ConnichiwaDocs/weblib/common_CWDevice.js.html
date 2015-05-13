@@ -102,14 +102,14 @@ function CWDevice(properties)
   /**
    * The current Bluetooth discovery state of the device
    * @type {CWDevice.DiscoveryState}
-   * @private
+   * @protected
    */
   this._discoveryState = CWDevice.DiscoveryState.LOST;
 
   /**
    * The current HTTP connection state of the device
    * @type {CWDevice.ConnectionState}
-   * @private
+   * @protected
    */
   this._connectionState = CWDevice.ConnectionState.DISCONNECTED;
 
@@ -118,7 +118,7 @@ function CWDevice(properties)
    *    device. For devices without Bluetooth or devices where the distance
    *    can not be approximated, this returns -1
    * @type {Number}
-   * @private
+   * @protected
    */
   this._distance = -1;
 
@@ -199,8 +199,6 @@ CWDevice.prototype.isNearby = function() {
  * @private
  */
 CWDevice.prototype._canBeConnected = function() { 
-  CWDebug.log(1, "CAN BE CONNECTED: "+(this._connectionState === CWDevice.ConnectionState.DISCONNECTED)+" &amp;&amp; "+(this._discoveryState === CWDevice.DiscoveryState.DISCOVERED));
-  CWDebug.log(1, this._discoveryState);
   return (this._connectionState === CWDevice.ConnectionState.DISCONNECTED &amp;&amp; 
     this._discoveryState === CWDevice.DiscoveryState.DISCOVERED);
 };
@@ -355,7 +353,7 @@ CWDevice.prototype._replace = function(target, html, contentOnly) {
     contentOnly : contentOnly,
   };
   this.send('_replace', message);
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -388,14 +386,16 @@ CWDevice.prototype.loadCSS = function(url) {
 
 
 /**
- * Loads the template files at the given URL on the remote device. The
- *    templates contained in these files can then be used using {@link
- *    CWDevice#insertTemplate}
- * @param  {String|Array} urls An URL to a valid template file or an array of
- *    template file URLs
+ * Loads one or more files containing templates. Templates that have been
+ *    loaded can then be inserted into the devices DOM using {@link
+ *    CWDevice#insertTemplate}.
+ * @param  {String|Array} paths The path to a template file or an array of
+ *    paths. If one or more paths are invalid, that particular load will fail,
+ *    but all other paths will still be loaded.
+ * @function
  */
-CWDevice.prototype.loadTemplates = function(urls) {
-  var message = { urls: urls };
+CWDevice.prototype.loadTemplates = function(paths) {
+  var message = { paths: paths };
   this.send('_loadtemplate', message);
 };
 
@@ -605,13 +605,13 @@ CWDevice.ConnectionState = {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="CWDevice.html">CWDevice</a></li><li><a href="CWLocation.html">CWLocation</a></li><li><a href="CWVector.html">CWVector</a></li></ul><h3>Namespaces</h3><ul><li><a href="Connichiwa.html">Connichiwa</a></li><li><a href="CWDebug.html">CWDebug</a></li><li><a href="CWDeviceManager.html">CWDeviceManager</a></li><li><a href="CWGyroscope.html">CWGyroscope</a></li><li><a href="CWStitchManager.html">CWStitchManager</a></li><li><a href="CWSystemInfo.html">CWSystemInfo</a></li><li><a href="CWTemplates.html">CWTemplates</a></li><li><a href="CWUtil.html">CWUtil</a></li></ul><h3>Events</h3><ul><li><a href="Connichiwa.html#.event:onLoad">onLoad</a></li><li><a href="global.html#event:accelerometerUpdate">accelerometerUpdate</a></li><li><a href="global.html#event:connectfailed">connectfailed</a></li><li><a href="global.html#event:deviceconnected">deviceconnected</a></li><li><a href="global.html#event:devicedetected">devicedetected</a></li><li><a href="global.html#event:devicedisconnected">devicedisconnected</a></li><li><a href="global.html#event:devicedistancechanged">devicedistancechanged</a></li><li><a href="global.html#event:devicelost">devicelost</a></li><li><a href="global.html#event:gotstitchneighbor">gotstitchneighbor</a></li><li><a href="global.html#event:gyroscopeUpdate">gyroscopeUpdate</a></li><li><a href="global.html#event:ready">ready</a></li><li><a href="global.html#event:wasStitched">wasStitched</a></li><li><a href="global.html#event:wasUnstitched">wasUnstitched</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="CWDevice.html">CWDevice</a></li><li><a href="CWLocation.html">CWLocation</a></li><li><a href="CWVector.html">CWVector</a></li></ul><h3>Namespaces</h3><ul><li><a href="Connichiwa.html">Connichiwa</a></li><li><a href="CWDatastore.html">CWDatastore</a></li><li><a href="CWDebug.html">CWDebug</a></li><li><a href="CWDeviceManager.html">CWDeviceManager</a></li><li><a href="CWGyroscope.html">CWGyroscope</a></li><li><a href="CWStitchManager.html">CWStitchManager</a></li><li><a href="CWSystemInfo.html">CWSystemInfo</a></li><li><a href="CWTemplates.html">CWTemplates</a></li><li><a href="CWUtil.html">CWUtil</a></li></ul><h3>Events</h3><ul><li><a href="Connichiwa.html#.event:onLoad">onLoad</a></li><li><a href="global.html#event:accelerometerUpdate">accelerometerUpdate</a></li><li><a href="global.html#event:connectfailed">connectfailed</a></li><li><a href="global.html#event:deviceconnected">deviceconnected</a></li><li><a href="global.html#event:devicedetected">devicedetected</a></li><li><a href="global.html#event:devicedisconnected">devicedisconnected</a></li><li><a href="global.html#event:devicedistancechanged">devicedistancechanged</a></li><li><a href="global.html#event:devicelost">devicelost</a></li><li><a href="global.html#event:gotstitchneighbor">gotstitchneighbor</a></li><li><a href="global.html#event:gyroscopeUpdate">gyroscopeUpdate</a></li><li><a href="global.html#event:ready">ready</a></li><li><a href="global.html#event:wasStitched">wasStitched</a></li><li><a href="global.html#event:wasUnstitched">wasUnstitched</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta2</a> on Fri May 08 2015 13:19:28 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta2</a> on Wed May 13 2015 14:08:08 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>
