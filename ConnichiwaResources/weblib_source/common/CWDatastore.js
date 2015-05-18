@@ -70,15 +70,31 @@ CWDatastore.__constructor = function() {
 CWDatastore.set = function(collection, key, value) {
   //2 args: collection was omitted
   //exception: (collection, dictionary) - here, value was omitted
-  if (value === undefined && CWUtil.isObject(key) === false) {
+  // if (value === undefined && CWUtil.isObject(key) === false) {
+  //   value = key;
+  //   key = collection;
+  //   collection = undefined;
+  // }
+  // 
+  if (value === undefined) {
     value = key;
     key = collection;
-    collection = undefined;
+    collection = '_default';
   }
 
-  this._set(collection, key, value, true);
+  this._set(collection, key, value, true, false);
 }.bind(CWDatastore);
 
+
+CWDatastore.setMultiple = function(collection, dict) {
+  if (dict === undefined) {
+    //Args: dict
+    dict = collection;
+    collection = '_default';
+  }
+
+  CWDatastore._set(collection, dict, undefined, true, true);
+}.bind(CWDatastore);
 
 
 /**
@@ -111,19 +127,9 @@ CWDatastore.set = function(collection, key, value) {
  *    exception is if we store a value that we received from another device
  *    (to prevent a sync loop)
  * @function
- * @private
+ * @protected
  */
-CWDatastore._set = function(collection, key, value, sync) {  
-  //3 args: collection was omitted
-  if (sync === undefined) {
-    sync = value;
-    value = key;
-    key = collection;
-    collection = undefined;
-  }
-
-  if (collection === undefined) collection = '_default';
-
+CWDatastore._set = function(collection, key, value, sync, isDict) {  
   //Create collection if it doesn't exist
   if ((collection in this._data) === false) {
     this._data[collection] = {};
@@ -131,13 +137,12 @@ CWDatastore._set = function(collection, key, value, sync) {
 
   //Create a dictionary of the changes we need to make to the datastore
   var keyValues;
-  if (CWUtil.isObject(key)) {
-    //User already provided such a dictionary
+  if (isDict) {
     keyValues = key;
   } else {
     //User provided key and new value
     keyValues = {};
-    keyValues[key] = value;    
+    keyValues[key] = value; 
   }
 
   var that = this;

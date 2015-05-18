@@ -162,13 +162,12 @@ Connichiwa.onMessage = function(name, callback) {
  * @function
  */
 Connichiwa.onLoad = function(callback) {
-  CWDebug.log(1, "Attaching callback to onLoad");
   if (document.readyState === 'complete') {
-    CWDebug.log(1, "Fire immediately");
+    CWDebug.log(1, 'Fire immediately');
     //Timeout so the callback is always called asynchronously
     window.setTimeout(callback, 0);
   } else {
-    CWDebug.log(1, "Fire delayed");
+    CWDebug.log(1, 'Fire delayed');
     this.on('ready', callback);
   }
 }.bind(Connichiwa);

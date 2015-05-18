@@ -134,8 +134,8 @@ CWNativeBridge._parseDeviceDistanceChanged = function(message) {
   var device = CWDeviceManager.getDeviceWithIdentifier(message.identifier);
   if (device === null) return;
   
-  device.distance = message.distance;
-  CWDebug.log(5, 'Updated distance of device ' + device.getIdentifier() + ' to ' + device.distance);
+  device._distance = parseFloat(message.distance);
+  CWDebug.log(5, 'Updated distance of device ' + device.getIdentifier() + ' to ' + device.getDistance());
   CWEventManager.trigger('deviceDistanceChanged', device);
 }.bind(CWNativeBridge);
 

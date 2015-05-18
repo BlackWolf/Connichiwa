@@ -284,21 +284,24 @@ CWTemplates.insert = function(templateName, target, data, callback) {
  */
 CWTemplates.set = function(collection, key, value) {  
   if (value === undefined) {
-    if (CWUtil.isObject(key) === false) {
-      if (CWUtil.isObject(collection)) {
-        //Args: (dict)
-        key = collection;
-        collection = '';
-      } else {
-        //Args: (collection, key, value)
-        value = key;
-        key = collection;
-        collection = '';
-      }
-    }
+    //Args: key, value
+    value = key;
+    key = collection;
+    collection = '';
   }
 
   CWDatastore.set('_CWTemplates.'+collection, key, value);
+}.bind(CWTemplates);
+
+
+CWTemplates.setMultiple = function(collection, dict) {
+  if (dict === undefined) {
+    //Args: dict
+    dict = collection;
+    collection = '';
+  }
+
+  CWDatastore.setMultiple('_CWTemplates.'+collection, dict);
 }.bind(CWTemplates);
 
 
