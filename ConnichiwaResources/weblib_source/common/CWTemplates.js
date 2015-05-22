@@ -256,25 +256,6 @@ CWTemplates.insert = function(templateName, target, data, callback) {
  *    different data (also see {@link CWTemplates.insert}). If omitted, writes
  *    to the main collection. Collection names may not start with an
  *    underscore.
- * @param {Object} dict A dictionary of key/value pairs. Every pair will be
- *    inserted into the given collection. Existing keys will be overwritten.
- * @function
- *//**
- * Writes the given data to the template data store. This method is the main
- *    mechanism to change the underlying data of templates. For example, if a
- *    template contains the expression `{{title}}`, this expression will
- *    always be replaced with the current value of the title key in the
- *    template data store.
- *
- * Be aware that data set using this method is synchronized across all your
- *    devices. Therefore, you can update the DOM on multiple devices with a
- *    single call to this method.
- * @param {String} [collection] An optional collection name. Collections can
- *    be thought of as "sub data stores". Using collections, you can insert
- *    multiple templates with the same expression, but have them display
- *    different data (also see {@link CWTemplates.insert}). If omitted, writes
- *    to the main collection. Collection names may not start with an
- *    underscore.
  * @param {String} key The storage key. This must be equal to the expression
  *    in your template - e.g. setting a value for the `title` key will affect
  *    the `{{title}}` expression in your templates. Cannot be `undefined`.
@@ -294,6 +275,26 @@ CWTemplates.set = function(collection, key, value) {
 }.bind(CWTemplates);
 
 
+/**
+ * Writes the given data to the template data store. This method is the main
+ *    mechanism to change the underlying data of templates. For example, if a
+ *    template contains the expression `{{title}}`, this expression will
+ *    always be replaced with the current value of the title key in the
+ *    template data store.
+ *
+ * Be aware that data set using this method is synchronized across all your
+ *    devices. Therefore, you can update the DOM on multiple devices with a
+ *    single call to this method.
+ * @param {String} [collection] An optional collection name. Collections can
+ *    be thought of as "sub data stores". Using collections, you can insert
+ *    multiple templates with the same expression, but have them display
+ *    different data (also see {@link CWTemplates.insert}). If omitted, writes
+ *    to the main collection. Collection names may not start with an
+ *    underscore.
+ * @param {Object} dict A dictionary of key/value pairs. Every pair will be
+ *    inserted into the given collection. Existing keys will be overwritten.
+ * @function
+ */
 CWTemplates.setMultiple = function(collection, dict) {
   if (dict === undefined) {
     //Args: dict

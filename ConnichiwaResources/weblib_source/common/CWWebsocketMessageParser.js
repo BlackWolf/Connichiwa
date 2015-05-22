@@ -184,7 +184,7 @@ CWWebsocketMessageParser._parseUpdateDatastore = function(message) {
   //message.data contains datastore collections
   //Walk over every collection
   $.each(message.data, function(collection, collectionContent) {
-    CWDatastore._set(collection, collectionContent, undefined, false, true);
+    CWDatastore._set(collection, collectionContent, false);
     //Walk over every entry of the collection
     //
     // $.each(collectionContent, function(key, value) {

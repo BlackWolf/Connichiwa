@@ -80,15 +80,6 @@ CWDatastore.__constructor = function() {
 
 
 /**
- * Stores or updates the given key/value pairs in the given collection
- * @param {String} [collection] The collection to write to. If no collection
- *    is provided, a default collection will be used. Collection names may not
- *    start with an underscore.
- * @param {Object} dict An object containing key/value pairs. All of these
- *    will be stored in the given collection. Existing entries will be
- *    overwritten.
- * @function
- *//**
  * Stores or updates the given key/value pair in the given collection
  * @param {String} [collection] The collection to write to. If no collection
  *    is provided, a default collection will be used. Collection names may not
@@ -100,88 +91,77 @@ CWDatastore.__constructor = function() {
  * @function
  */
 CWDatastore.set = function(collection, key, value) {
-  //2 args: collection was omitted
-  //exception: (collection, dictionary) - here, value was omitted
-  // if (value === undefined && CWUtil.isObject(key) === false) {
+  // if (value === undefined) {
   //   value = key;
   //   key = collection;
-  //   collection = undefined;
+  //   collection = '_default';
   // }
-  // 
-  if (value === undefined) {
-    value = key;
-    key = collection;
-    collection = '_default';
-  }
-
-  this._set(collection, key, value, true, false);
-}.bind(CWDatastore);
 
 
-CWDatastore.setMultiple = function(collection, dict) {
-  if (dict === undefined) {
-    //Args: dict
-    dict = collection;
-    collection = '_default';
-  }
-
-  CWDatastore._set(collection, dict, undefined, true, true);
+  // this._set(collection, { key: value }, true);
+  var data = {};
+  data[key] = value;
+  // this._set()
+  this.setMultiple(collection, data);
 }.bind(CWDatastore);
 
 
 /**
- * Stores or updates the given key/value pair in the given collection. The
- *    `sync` parameter allows to suppress syncing to other devices.
+ * Stores or updates the given key/value pairs in the given collection
  * @param {String} [collection] The collection to write to. If no collection
  *    is provided, a default collection will be used. Collection names may not
  *    start with an underscore.
  * @param {Object} dict An object containing key/value pairs. All of these
  *    will be stored in the given collection. Existing entries will be
  *    overwritten.
- * @param {Boolean} sync=true Determines whether the newly stored value is
- *    synced to other devices. Should almost always be `true`, the only
- *    exception is if we store a value that we received from another device
- *    (to prevent a sync loop)
  * @function
- * @private
- *//**
- * Stores or updates the given key/value pair in the given collection. The
+ */
+CWDatastore.setMultiple = function(collection, dict) {
+  if (dict === undefined) {
+    //Args: dict
+    dict = collection;
+    collection = undefined;
+  }
+
+  if (collection === undefined) collection = '_default';
+
+  this._set(collection, dict, true);
+}.bind(CWDatastore);
+
+
+/**
+ * Stores or updates one or more key/value pairs in the given collection. The
  *    `sync` parameter allows to suppress syncing to other devices.
- * @param {String} [collection] The collection to write to. If no collection
- *    is provided, a default collection will be used. Collection names may not
- *    start with an underscore.
- * @param {String} key The key under which the value will be stored in the
- *    collection
+ * @param {String} collection The collection to write to.
+ * @param {String} key Can be one of two things:
+ * * A string, representing a key. In this case, the value parameter must be
+ *    the value to store under the given key and the `isDict` parameter must
+ *    be `false`. * A dictionary of key/value pairs. All of these will be
+ *    stored in the given collection. In this case, the value parameter is
+ *    ignored and the `isDict` parameter must be `true`.
  * @param {Object} value The value to store. Must be an object or value that
- *    can be converted to JSON. May not be a function or `undefined`.
- * @param {Boolean} sync Determines whether the newly stored value is
- *    synced to other devices. Should almost always be `true`, the only
- *    exception is if we store a value that we received from another device
- *    (to prevent a sync loop)
+ *    can be converted to JSON. May not be a function or `undefined`. If a
+ *    dictionary is stored, this is not used.
+ * @param {Boolean} sync Determines whether the newly stored value is synced
+ *    to other devices. Should almost always be `true`, the only exception is
+ *    if we store a value that we received from another device (to prevent a
+ *    sync loop)
+ * @param {Boolean} isDict Determines if a single key/value pair or an entire 
  * @function
  * @protected
  */
-CWDatastore._set = function(collection, key, value, sync, isDict) {  
+// CWDatastore._set = function(collection, key, value, sync, isDict) {  
+CWDatastore._set = function(collection, data, sync) {  
   //Create collection if it doesn't exist
   if ((collection in this._data) === false) {
     this._data[collection] = {};
   }
 
-  //Create a dictionary of the changes we need to make to the datastore
-  var keyValues;
-  if (isDict) {
-    keyValues = key;
-  } else {
-    //User provided key and new value
-    keyValues = {};
-    keyValues[key] = value; 
-  }
-
   var that = this;
   var reportedChanges = {};
-  $.each(keyValues, function(keyToSet, valueToSet) {
+  $.each(data, function(keyToSet, valueToSet) {
     if (CWUtil.isFunction(valueToSet)) {
-      CWDebug.err('Attempted to store function in CWDatastore (collection: ' + collection + ', key: ' + key + '). This is invalid and will be ignored.');
+      CWDebug.err('Attempted to store function in CWDatastore (collection: ' + collection + ', key: ' + keyToSet + '). This is invalid and will be ignored.');
       return true;
     }
     var oldValue = that._data[collection][keyToSet];
@@ -264,28 +244,18 @@ CWDatastore._getCollection = function(collection, returnCopy) {
     this._data[collection] = {};
   }
 
-  if (returnCopy === false) return this._data[collection]
+  if (returnCopy === false) return this._data[collection];
   return $.extend(true, {}, this._data[collection]);
 }.bind(CWDatastore);
 
 
 /**
- * Syncs the entries represented by the given keys in the given collection to
- *    all other currently connected devices.
- * @param  {String} [collection] The collection where the entry is stored. If
- *    omitted, will use the default collection.
- * @param  {Array} keys An array of keys. Each key will be retrieved from the
- *    given collection and synchronized. If a key cannot be found in the given
- *    collection, it is ignored.
- * @function
- * @private
- *//**
  * Syncs the entry represented by the given key in the given collection to all
  *    other currently connected devices.
  * @param  {String} [collection] The collection where the entry is stored. If
  *    omitted, will use the default collection.
- * @param  {String} key They key to retrieve from the collection. If the key
- *    does not exist in the collection, this method will do nothing.
+ * @param  {String} key They keys from the collection to synchronize or an
+ *    array of keys. Keys that do not exist will be ignored.
  * @function
  * @private
  */
@@ -3005,25 +2975,6 @@ CWTemplates.insert = function(templateName, target, data, callback) {
  *    different data (also see {@link CWTemplates.insert}). If omitted, writes
  *    to the main collection. Collection names may not start with an
  *    underscore.
- * @param {Object} dict A dictionary of key/value pairs. Every pair will be
- *    inserted into the given collection. Existing keys will be overwritten.
- * @function
- *//**
- * Writes the given data to the template data store. This method is the main
- *    mechanism to change the underlying data of templates. For example, if a
- *    template contains the expression `{{title}}`, this expression will
- *    always be replaced with the current value of the title key in the
- *    template data store.
- *
- * Be aware that data set using this method is synchronized across all your
- *    devices. Therefore, you can update the DOM on multiple devices with a
- *    single call to this method.
- * @param {String} [collection] An optional collection name. Collections can
- *    be thought of as "sub data stores". Using collections, you can insert
- *    multiple templates with the same expression, but have them display
- *    different data (also see {@link CWTemplates.insert}). If omitted, writes
- *    to the main collection. Collection names may not start with an
- *    underscore.
  * @param {String} key The storage key. This must be equal to the expression
  *    in your template - e.g. setting a value for the `title` key will affect
  *    the `{{title}}` expression in your templates. Cannot be `undefined`.
@@ -3043,6 +2994,26 @@ CWTemplates.set = function(collection, key, value) {
 }.bind(CWTemplates);
 
 
+/**
+ * Writes the given data to the template data store. This method is the main
+ *    mechanism to change the underlying data of templates. For example, if a
+ *    template contains the expression `{{title}}`, this expression will
+ *    always be replaced with the current value of the title key in the
+ *    template data store.
+ *
+ * Be aware that data set using this method is synchronized across all your
+ *    devices. Therefore, you can update the DOM on multiple devices with a
+ *    single call to this method.
+ * @param {String} [collection] An optional collection name. Collections can
+ *    be thought of as "sub data stores". Using collections, you can insert
+ *    multiple templates with the same expression, but have them display
+ *    different data (also see {@link CWTemplates.insert}). If omitted, writes
+ *    to the main collection. Collection names may not start with an
+ *    underscore.
+ * @param {Object} dict A dictionary of key/value pairs. Every pair will be
+ *    inserted into the given collection. Existing keys will be overwritten.
+ * @function
+ */
 CWTemplates.setMultiple = function(collection, dict) {
   if (dict === undefined) {
     //Args: dict
@@ -3576,7 +3547,7 @@ CWWebsocketMessageParser._parseUpdateDatastore = function(message) {
   //message.data contains datastore collections
   //Walk over every collection
   $.each(message.data, function(collection, collectionContent) {
-    CWDatastore._set(collection, collectionContent, undefined, false, true);
+    CWDatastore._set(collection, collectionContent, false);
     //Walk over every entry of the collection
     //
     // $.each(collectionContent, function(key, value) {

@@ -563,107 +563,84 @@ be used by command line tools.</Abstract>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/setRecordingEnabled:</TokenIdentifier>
-			<Abstract type="html">Activates recording of HTTP requests and responses which create files in the
-current directory containing the raw data for all requests and responses.</Abstract>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/addDefaultHandlerForMethod:requestClass:processBlock:</TokenIdentifier>
+			<Abstract type="html">Adds a default handler to the server to handle all incoming HTTP requests
+with a given HTTP method and generate responses synchronously.</Abstract>
 			<DeclaredIn>GCDWebServer.h</DeclaredIn>
 			
-			<Declaration>@property (nonatomic, getter=isRecordingEnabled) BOOL recordingEnabled</Declaration>
+			<Declaration>- (void)addDefaultHandlerForMethod:(NSString *)method requestClass:(Class)aClass processBlock:(GCDWebServerProcessBlock)block</Declaration>
 			
 			
-			<Anchor>//api/name/recordingEnabled</Anchor>
+			<Anchor>//api/name/addDefaultHandlerForMethod:requestClass:processBlock:</Anchor>
             <NodeRef refid="16"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/isRecordingEnabled</TokenIdentifier>
-			<Abstract type="html">Activates recording of HTTP requests and responses which create files in the
-current directory containing the raw data for all requests and responses.</Abstract>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/addDefaultHandlerForMethod:requestClass:asyncProcessBlock:</TokenIdentifier>
+			<Abstract type="html">Adds a default handler to the server to handle all incoming HTTP requests
+with a given HTTP method and generate responses asynchronously.</Abstract>
 			<DeclaredIn>GCDWebServer.h</DeclaredIn>
 			
-			<Declaration>@property (nonatomic, getter=isRecordingEnabled) BOOL recordingEnabled</Declaration>
+			<Declaration>- (void)addDefaultHandlerForMethod:(NSString *)method requestClass:(Class)aClass asyncProcessBlock:(GCDWebServerAsyncProcessBlock)block</Declaration>
 			
 			
-			<Anchor>//api/name/recordingEnabled</Anchor>
+			<Anchor>//api/name/addDefaultHandlerForMethod:requestClass:asyncProcessBlock:</Anchor>
             <NodeRef refid="16"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/GCDWebServer/recordingEnabled</TokenIdentifier>
-			<Abstract type="html">Activates recording of HTTP requests and responses which create files in the
-current directory containing the raw data for all requests and responses.</Abstract>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/addHandlerForMethod:path:requestClass:processBlock:</TokenIdentifier>
+			<Abstract type="html">Adds a handler to the server to handle incoming HTTP requests with a given
+HTTP method and a specific case-insensitive path  and generate responses
+synchronously.</Abstract>
 			<DeclaredIn>GCDWebServer.h</DeclaredIn>
 			
-			<Declaration>@property (nonatomic, getter=isRecordingEnabled) BOOL recordingEnabled</Declaration>
+			<Declaration>- (void)addHandlerForMethod:(NSString *)method path:(NSString *)path requestClass:(Class)aClass processBlock:(GCDWebServerProcessBlock)block</Declaration>
 			
 			
-			<Anchor>//api/name/recordingEnabled</Anchor>
+			<Anchor>//api/name/addHandlerForMethod:path:requestClass:processBlock:</Anchor>
             <NodeRef refid="16"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/runTestsWithOptions:inDirectory:</TokenIdentifier>
-			<Abstract type="html">Runs tests by playing back pre-recorded HTTP requests in the given directory
-and comparing the generated responses with the pre-recorded ones.</Abstract>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/addHandlerForMethod:path:requestClass:asyncProcessBlock:</TokenIdentifier>
+			<Abstract type="html">Adds a handler to the server to handle incoming HTTP requests with a given
+HTTP method and a specific case-insensitive path and generate responses
+asynchronously.</Abstract>
 			<DeclaredIn>GCDWebServer.h</DeclaredIn>
 			
-			<Declaration>- (NSInteger)runTestsWithOptions:(NSDictionary *)options inDirectory:(NSString *)path</Declaration>
+			<Declaration>- (void)addHandlerForMethod:(NSString *)method path:(NSString *)path requestClass:(Class)aClass asyncProcessBlock:(GCDWebServerAsyncProcessBlock)block</Declaration>
 			
 			
-			<Anchor>//api/name/runTestsWithOptions:inDirectory:</Anchor>
+			<Anchor>//api/name/addHandlerForMethod:path:requestClass:asyncProcessBlock:</Anchor>
             <NodeRef refid="16"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/addGETHandlerForPath:staticData:contentType:cacheAge:</TokenIdentifier>
-			<Abstract type="html">Adds a handler to the server to respond to incoming &quot;GET&quot; HTTP requests
-with a specific case-insensitive path with in-memory data.</Abstract>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/addHandlerForMethod:pathRegex:requestClass:processBlock:</TokenIdentifier>
+			<Abstract type="html">Adds a handler to the server to handle incoming HTTP requests with a given
+HTTP method and a path matching a case-insensitive regular expression and
+generate responses synchronously.</Abstract>
 			<DeclaredIn>GCDWebServer.h</DeclaredIn>
 			
-			<Declaration>- (void)addGETHandlerForPath:(NSString *)path staticData:(NSData *)staticData contentType:(NSString *)contentType cacheAge:(NSUInteger)cacheAge</Declaration>
+			<Declaration>- (void)addHandlerForMethod:(NSString *)method pathRegex:(NSString *)regex requestClass:(Class)aClass processBlock:(GCDWebServerProcessBlock)block</Declaration>
 			
 			
-			<Anchor>//api/name/addGETHandlerForPath:staticData:contentType:cacheAge:</Anchor>
+			<Anchor>//api/name/addHandlerForMethod:pathRegex:requestClass:processBlock:</Anchor>
             <NodeRef refid="16"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/addGETHandlerForPath:filePath:isAttachment:cacheAge:allowRangeRequests:</TokenIdentifier>
-			<Abstract type="html">Adds a handler to the server to respond to incoming &quot;GET&quot; HTTP requests
-with a specific case-insensitive path with a file.</Abstract>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/addHandlerForMethod:pathRegex:requestClass:asyncProcessBlock:</TokenIdentifier>
+			<Abstract type="html">Adds a handler to the server to handle incoming HTTP requests with a given
+HTTP method and a path matching a case-insensitive regular expression and
+generate responses asynchronously.</Abstract>
 			<DeclaredIn>GCDWebServer.h</DeclaredIn>
 			
-			<Declaration>- (void)addGETHandlerForPath:(NSString *)path filePath:(NSString *)filePath isAttachment:(BOOL)isAttachment cacheAge:(NSUInteger)cacheAge allowRangeRequests:(BOOL)allowRangeRequests</Declaration>
+			<Declaration>- (void)addHandlerForMethod:(NSString *)method pathRegex:(NSString *)regex requestClass:(Class)aClass asyncProcessBlock:(GCDWebServerAsyncProcessBlock)block</Declaration>
 			
 			
-			<Anchor>//api/name/addGETHandlerForPath:filePath:isAttachment:cacheAge:allowRangeRequests:</Anchor>
-            <NodeRef refid="16"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/addGETHandlerForBasePath:directoryPath:indexFilename:cacheAge:allowRangeRequests:</TokenIdentifier>
-			<Abstract type="html">Adds a handler to the server to respond to incoming &quot;GET&quot; HTTP requests
-with a case-insensitive path inside a base path with the corresponding file
-inside a local directory. If no local file matches the request path, a 401
-HTTP status code is returned to the client.</Abstract>
-			<DeclaredIn>GCDWebServer.h</DeclaredIn>
-			
-			<Declaration>- (void)addGETHandlerForBasePath:(NSString *)basePath directoryPath:(NSString *)directoryPath indexFilename:(NSString *)indexFilename cacheAge:(NSUInteger)cacheAge allowRangeRequests:(BOOL)allowRangeRequests</Declaration>
-			
-			
-			<Anchor>//api/name/addGETHandlerForBasePath:directoryPath:indexFilename:cacheAge:allowRangeRequests:</Anchor>
-            <NodeRef refid="16"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/_responseWithContentsOfDirectory:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>GCDWebServer.m</DeclaredIn>
-			
-			<Declaration>- (GCDWebServerResponse *)_responseWithContentsOfDirectory:(NSString *)path</Declaration>
-			
-			
-			<Anchor>//api/name/_responseWithContentsOfDirectory:</Anchor>
+			<Anchor>//api/name/addHandlerForMethod:pathRegex:requestClass:asyncProcessBlock:</Anchor>
             <NodeRef refid="16"/>
 		</Token>
 		
@@ -884,84 +861,107 @@ HTTP status code is returned to the client.</Abstract>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/addDefaultHandlerForMethod:requestClass:processBlock:</TokenIdentifier>
-			<Abstract type="html">Adds a default handler to the server to handle all incoming HTTP requests
-with a given HTTP method and generate responses synchronously.</Abstract>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/setRecordingEnabled:</TokenIdentifier>
+			<Abstract type="html">Activates recording of HTTP requests and responses which create files in the
+current directory containing the raw data for all requests and responses.</Abstract>
 			<DeclaredIn>GCDWebServer.h</DeclaredIn>
 			
-			<Declaration>- (void)addDefaultHandlerForMethod:(NSString *)method requestClass:(Class)aClass processBlock:(GCDWebServerProcessBlock)block</Declaration>
+			<Declaration>@property (nonatomic, getter=isRecordingEnabled) BOOL recordingEnabled</Declaration>
 			
 			
-			<Anchor>//api/name/addDefaultHandlerForMethod:requestClass:processBlock:</Anchor>
+			<Anchor>//api/name/recordingEnabled</Anchor>
             <NodeRef refid="16"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/addDefaultHandlerForMethod:requestClass:asyncProcessBlock:</TokenIdentifier>
-			<Abstract type="html">Adds a default handler to the server to handle all incoming HTTP requests
-with a given HTTP method and generate responses asynchronously.</Abstract>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/isRecordingEnabled</TokenIdentifier>
+			<Abstract type="html">Activates recording of HTTP requests and responses which create files in the
+current directory containing the raw data for all requests and responses.</Abstract>
 			<DeclaredIn>GCDWebServer.h</DeclaredIn>
 			
-			<Declaration>- (void)addDefaultHandlerForMethod:(NSString *)method requestClass:(Class)aClass asyncProcessBlock:(GCDWebServerAsyncProcessBlock)block</Declaration>
+			<Declaration>@property (nonatomic, getter=isRecordingEnabled) BOOL recordingEnabled</Declaration>
 			
 			
-			<Anchor>//api/name/addDefaultHandlerForMethod:requestClass:asyncProcessBlock:</Anchor>
+			<Anchor>//api/name/recordingEnabled</Anchor>
             <NodeRef refid="16"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/addHandlerForMethod:path:requestClass:processBlock:</TokenIdentifier>
-			<Abstract type="html">Adds a handler to the server to handle incoming HTTP requests with a given
-HTTP method and a specific case-insensitive path  and generate responses
-synchronously.</Abstract>
+			<TokenIdentifier>//apple_ref/occ/instp/GCDWebServer/recordingEnabled</TokenIdentifier>
+			<Abstract type="html">Activates recording of HTTP requests and responses which create files in the
+current directory containing the raw data for all requests and responses.</Abstract>
 			<DeclaredIn>GCDWebServer.h</DeclaredIn>
 			
-			<Declaration>- (void)addHandlerForMethod:(NSString *)method path:(NSString *)path requestClass:(Class)aClass processBlock:(GCDWebServerProcessBlock)block</Declaration>
+			<Declaration>@property (nonatomic, getter=isRecordingEnabled) BOOL recordingEnabled</Declaration>
 			
 			
-			<Anchor>//api/name/addHandlerForMethod:path:requestClass:processBlock:</Anchor>
+			<Anchor>//api/name/recordingEnabled</Anchor>
             <NodeRef refid="16"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/addHandlerForMethod:path:requestClass:asyncProcessBlock:</TokenIdentifier>
-			<Abstract type="html">Adds a handler to the server to handle incoming HTTP requests with a given
-HTTP method and a specific case-insensitive path and generate responses
-asynchronously.</Abstract>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/runTestsWithOptions:inDirectory:</TokenIdentifier>
+			<Abstract type="html">Runs tests by playing back pre-recorded HTTP requests in the given directory
+and comparing the generated responses with the pre-recorded ones.</Abstract>
 			<DeclaredIn>GCDWebServer.h</DeclaredIn>
 			
-			<Declaration>- (void)addHandlerForMethod:(NSString *)method path:(NSString *)path requestClass:(Class)aClass asyncProcessBlock:(GCDWebServerAsyncProcessBlock)block</Declaration>
+			<Declaration>- (NSInteger)runTestsWithOptions:(NSDictionary *)options inDirectory:(NSString *)path</Declaration>
 			
 			
-			<Anchor>//api/name/addHandlerForMethod:path:requestClass:asyncProcessBlock:</Anchor>
+			<Anchor>//api/name/runTestsWithOptions:inDirectory:</Anchor>
             <NodeRef refid="16"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/addHandlerForMethod:pathRegex:requestClass:processBlock:</TokenIdentifier>
-			<Abstract type="html">Adds a handler to the server to handle incoming HTTP requests with a given
-HTTP method and a path matching a case-insensitive regular expression and
-generate responses synchronously.</Abstract>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/addGETHandlerForPath:staticData:contentType:cacheAge:</TokenIdentifier>
+			<Abstract type="html">Adds a handler to the server to respond to incoming &quot;GET&quot; HTTP requests
+with a specific case-insensitive path with in-memory data.</Abstract>
 			<DeclaredIn>GCDWebServer.h</DeclaredIn>
 			
-			<Declaration>- (void)addHandlerForMethod:(NSString *)method pathRegex:(NSString *)regex requestClass:(Class)aClass processBlock:(GCDWebServerProcessBlock)block</Declaration>
+			<Declaration>- (void)addGETHandlerForPath:(NSString *)path staticData:(NSData *)staticData contentType:(NSString *)contentType cacheAge:(NSUInteger)cacheAge</Declaration>
 			
 			
-			<Anchor>//api/name/addHandlerForMethod:pathRegex:requestClass:processBlock:</Anchor>
+			<Anchor>//api/name/addGETHandlerForPath:staticData:contentType:cacheAge:</Anchor>
             <NodeRef refid="16"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/addHandlerForMethod:pathRegex:requestClass:asyncProcessBlock:</TokenIdentifier>
-			<Abstract type="html">Adds a handler to the server to handle incoming HTTP requests with a given
-HTTP method and a path matching a case-insensitive regular expression and
-generate responses asynchronously.</Abstract>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/addGETHandlerForPath:filePath:isAttachment:cacheAge:allowRangeRequests:</TokenIdentifier>
+			<Abstract type="html">Adds a handler to the server to respond to incoming &quot;GET&quot; HTTP requests
+with a specific case-insensitive path with a file.</Abstract>
 			<DeclaredIn>GCDWebServer.h</DeclaredIn>
 			
-			<Declaration>- (void)addHandlerForMethod:(NSString *)method pathRegex:(NSString *)regex requestClass:(Class)aClass asyncProcessBlock:(GCDWebServerAsyncProcessBlock)block</Declaration>
+			<Declaration>- (void)addGETHandlerForPath:(NSString *)path filePath:(NSString *)filePath isAttachment:(BOOL)isAttachment cacheAge:(NSUInteger)cacheAge allowRangeRequests:(BOOL)allowRangeRequests</Declaration>
 			
 			
-			<Anchor>//api/name/addHandlerForMethod:pathRegex:requestClass:asyncProcessBlock:</Anchor>
+			<Anchor>//api/name/addGETHandlerForPath:filePath:isAttachment:cacheAge:allowRangeRequests:</Anchor>
+            <NodeRef refid="16"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/addGETHandlerForBasePath:directoryPath:indexFilename:cacheAge:allowRangeRequests:</TokenIdentifier>
+			<Abstract type="html">Adds a handler to the server to respond to incoming &quot;GET&quot; HTTP requests
+with a case-insensitive path inside a base path with the corresponding file
+inside a local directory. If no local file matches the request path, a 401
+HTTP status code is returned to the client.</Abstract>
+			<DeclaredIn>GCDWebServer.h</DeclaredIn>
+			
+			<Declaration>- (void)addGETHandlerForBasePath:(NSString *)basePath directoryPath:(NSString *)directoryPath indexFilename:(NSString *)indexFilename cacheAge:(NSUInteger)cacheAge allowRangeRequests:(BOOL)allowRangeRequests</Declaration>
+			
+			
+			<Anchor>//api/name/addGETHandlerForBasePath:directoryPath:indexFilename:cacheAge:allowRangeRequests:</Anchor>
+            <NodeRef refid="16"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/_responseWithContentsOfDirectory:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServer.m</DeclaredIn>
+			
+			<Declaration>- (GCDWebServerResponse *)_responseWithContentsOfDirectory:(NSString *)path</Declaration>
+			
+			
+			<Anchor>//api/name/_responseWithContentsOfDirectory:</Anchor>
             <NodeRef refid="16"/>
 		</Token>
 		

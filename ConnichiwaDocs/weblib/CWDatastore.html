@@ -64,7 +64,7 @@
     
         <li><a href="CWDatastore.html#.set">set</a></li>
     
-        <li><a href="CWDatastore.html#.set">set</a></li>
+        <li><a href="CWDatastore.html#.setMultiple">setMultiple</a></li>
     
     </ul>
     
@@ -344,7 +344,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="common_CWDatastore.js.html">common/CWDatastore.js</a>, <a href="common_CWDatastore.js.html#line177">line 177</a>
+        <a href="common_CWDatastore.js.html">common/CWDatastore.js</a>, <a href="common_CWDatastore.js.html#line162">line 162</a>
     </li></ul></dd>
     
 
@@ -512,186 +512,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="common_CWDatastore.js.html">common/CWDatastore.js</a>, <a href="common_CWDatastore.js.html#line201">line 201</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-        
-            
-
-    
-
-    <!-- <hr> -->
-
-    <h4 class="name" id=".set"><span class="type-signature">(static) </span>set<span class="signature">(collection<span class="signature-attributes">opt</span>, dict)</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-<div class="description">
-    <p>Stores or updates the given key/value pairs in the given collection</p>
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>collection</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last"><p>The collection to write to. If no collection
-   is provided, a default collection will be used. Collection names may not
-   start with an underscore.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>dict</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last"><p>An object containing key/value pairs. All of these
-   will be stored in the given collection. Existing entries will be
-   overwritten.</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="common_CWDatastore.js.html">common/CWDatastore.js</a>, <a href="common_CWDatastore.js.html#line70">line 70</a>
+        <a href="common_CWDatastore.js.html">common/CWDatastore.js</a>, <a href="common_CWDatastore.js.html#line186">line 186</a>
     </li></ul></dd>
     
 
@@ -901,7 +722,186 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="common_CWDatastore.js.html">common/CWDatastore.js</a>, <a href="common_CWDatastore.js.html#line70">line 70</a>
+        <a href="common_CWDatastore.js.html">common/CWDatastore.js</a>, <a href="common_CWDatastore.js.html#line61">line 61</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+        
+            
+
+    
+
+    <!-- <hr> -->
+
+    <h4 class="name" id=".setMultiple"><span class="type-signature">(static) </span>setMultiple<span class="signature">(collection<span class="signature-attributes">opt</span>, dict)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Stores or updates the given key/value pairs in the given collection</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>collection</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The collection to write to. If no collection
+   is provided, a default collection will be used. Collection names may not
+   start with an underscore.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>dict</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>An object containing key/value pairs. All of these
+   will be stored in the given collection. Existing entries will be
+   overwritten.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="common_CWDatastore.js.html">common/CWDatastore.js</a>, <a href="common_CWDatastore.js.html#line87">line 87</a>
     </li></ul></dd>
     
 
@@ -934,7 +934,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta2</a> on Wed May 13 2015 14:08:08 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta2</a> on Fri May 22 2015 11:16:47 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>
