@@ -440,54 +440,6 @@ Pass a nil value to remove an additional header.</Abstract>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/clm/GCDWebServerResponse/responseWithStatusCode:</TokenIdentifier>
-			<Abstract type="html">Creates a empty response with a specific HTTP status code.</Abstract>
-			<DeclaredIn>GCDWebServerResponse.h</DeclaredIn>
-			
-			<Declaration>+ (instancetype)responseWithStatusCode:(NSInteger)statusCode</Declaration>
-			
-			
-			<Anchor>//api/name/responseWithStatusCode:</Anchor>
-            <NodeRef refid="34"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/clm/GCDWebServerResponse/responseWithRedirect:permanent:</TokenIdentifier>
-			<Abstract type="html">Creates an HTTP redirect response to a new URL.</Abstract>
-			<DeclaredIn>GCDWebServerResponse.h</DeclaredIn>
-			
-			<Declaration>+ (instancetype)responseWithRedirect:(NSURL *)location permanent:(BOOL)permanent</Declaration>
-			
-			
-			<Anchor>//api/name/responseWithRedirect:permanent:</Anchor>
-            <NodeRef refid="34"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerResponse/initWithStatusCode:</TokenIdentifier>
-			<Abstract type="html">Initializes an empty response with a specific HTTP status code.</Abstract>
-			<DeclaredIn>GCDWebServerResponse.h</DeclaredIn>
-			
-			<Declaration>- (instancetype)initWithStatusCode:(NSInteger)statusCode</Declaration>
-			
-			
-			<Anchor>//api/name/initWithStatusCode:</Anchor>
-            <NodeRef refid="34"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerResponse/initWithRedirect:permanent:</TokenIdentifier>
-			<Abstract type="html">Initializes an HTTP redirect response to a new URL.</Abstract>
-			<DeclaredIn>GCDWebServerResponse.h</DeclaredIn>
-			
-			<Declaration>- (instancetype)initWithRedirect:(NSURL *)location permanent:(BOOL)permanent</Declaration>
-			
-			
-			<Anchor>//api/name/initWithRedirect:permanent:</Anchor>
-            <NodeRef refid="34"/>
-		</Token>
-		
-		<Token>
 			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerResponse/setAdditionalHeaders:</TokenIdentifier>
 			<Abstract type="html"></Abstract>
 			<DeclaredIn>GCDWebServerPrivate.h</DeclaredIn>
@@ -556,6 +508,54 @@ Pass a nil value to remove an additional header.</Abstract>
 			
 			
 			<Anchor>//api/name/usesChunkedTransferEncoding</Anchor>
+            <NodeRef refid="34"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/GCDWebServerResponse/responseWithStatusCode:</TokenIdentifier>
+			<Abstract type="html">Creates a empty response with a specific HTTP status code.</Abstract>
+			<DeclaredIn>GCDWebServerResponse.h</DeclaredIn>
+			
+			<Declaration>+ (instancetype)responseWithStatusCode:(NSInteger)statusCode</Declaration>
+			
+			
+			<Anchor>//api/name/responseWithStatusCode:</Anchor>
+            <NodeRef refid="34"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/GCDWebServerResponse/responseWithRedirect:permanent:</TokenIdentifier>
+			<Abstract type="html">Creates an HTTP redirect response to a new URL.</Abstract>
+			<DeclaredIn>GCDWebServerResponse.h</DeclaredIn>
+			
+			<Declaration>+ (instancetype)responseWithRedirect:(NSURL *)location permanent:(BOOL)permanent</Declaration>
+			
+			
+			<Anchor>//api/name/responseWithRedirect:permanent:</Anchor>
+            <NodeRef refid="34"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerResponse/initWithStatusCode:</TokenIdentifier>
+			<Abstract type="html">Initializes an empty response with a specific HTTP status code.</Abstract>
+			<DeclaredIn>GCDWebServerResponse.h</DeclaredIn>
+			
+			<Declaration>- (instancetype)initWithStatusCode:(NSInteger)statusCode</Declaration>
+			
+			
+			<Anchor>//api/name/initWithStatusCode:</Anchor>
+            <NodeRef refid="34"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerResponse/initWithRedirect:permanent:</TokenIdentifier>
+			<Abstract type="html">Initializes an HTTP redirect response to a new URL.</Abstract>
+			<DeclaredIn>GCDWebServerResponse.h</DeclaredIn>
+			
+			<Declaration>- (instancetype)initWithRedirect:(NSURL *)location permanent:(BOOL)permanent</Declaration>
+			
+			
+			<Anchor>//api/name/initWithRedirect:permanent:</Anchor>
             <NodeRef refid="34"/>
 		</Token>
 		

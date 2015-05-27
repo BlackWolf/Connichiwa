@@ -131,11 +131,11 @@
 
 <li role="treeitem" id="task_treeitem"><span class="nodisclosure"></span><span class="sectionName"><a href="#tasks">Tasks</a></span><ul>
 	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Write Methods">Write Methods</a></span></li>
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Read Methods">Read Methods</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Subclassing Methods">Subclassing Methods</a></span></li>
 	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Read Methods">Read Methods</a></span></li>
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Write Methods">Write Methods</a></span></li>
 	
 </ul></li>
 
@@ -269,10 +269,10 @@ subclass it to override some hooks. Use the GCDWebServerOption_ConnectionClass
 option for <a href="../Classes/GCDWebServer.html">GCDWebServer</a> to install your custom subclass.</p><div class="warning"><p><strong>Warning:</strong> The GCDWebServerConnection retains the <a href="../Classes/GCDWebServer.html">GCDWebServer</a> until the
 connection is closed.</p>
 
-<p>Hooks to customize the behavior of <a href="../Classes/GCDWebServer.html">GCDWebServer</a> HTTP connections.</p></div><div class="warning"><p><strong>Warning:</strong> These methods can be called on any GCD thread.
-Be sure to also call &ldquo;super&rdquo; when overriding them.</p>
+<p><a href="../Classes/GCDWebServer.html">GCDWebServer</a> internal constants and APIs.</p>
 
-<p><a href="../Classes/GCDWebServer.html">GCDWebServer</a> internal constants and APIs.</p></div>
+<p>Hooks to customize the behavior of <a href="../Classes/GCDWebServer.html">GCDWebServer</a> HTTP connections.</p></div><div class="warning"><p><strong>Warning:</strong> These methods can be called on any GCD thread.
+Be sure to also call &ldquo;super&rdquo; when overriding them.</p></div>
 					</div>
 					
 					
@@ -402,25 +402,31 @@ Be sure to also call &ldquo;super&rdquo; when overriding them.</p>
 						</ul>
 						
 						
-						<a title="Write Methods" name="task_Write Methods"></a>
-						<h3 class="subsubtitle task-title">Write Methods</h3>
+						<a title="Read Methods" name="task_Read Methods"></a>
+						<h3 class="subsubtitle task-title">Read Methods</h3>
 
 						<ul class="task-list">
 							<li>
 	<span class="tooltip">
-		<code><a href="#//api/name/_writeData:withCompletionBlock:">&ndash;&nbsp;_writeData:withCompletionBlock:</a></code>
+		<code><a href="#//api/name/_readData:withLength:completionBlock:">&ndash;&nbsp;_readData:withLength:completionBlock:</a></code>
 	</span>
 	
 	
 </li><li>
 	<span class="tooltip">
-		<code><a href="#//api/name/_writeHeadersWithCompletionBlock:">&ndash;&nbsp;_writeHeadersWithCompletionBlock:</a></code>
+		<code><a href="#//api/name/_readHeaders:withCompletionBlock:">&ndash;&nbsp;_readHeaders:withCompletionBlock:</a></code>
 	</span>
 	
 	
 </li><li>
 	<span class="tooltip">
-		<code><a href="#//api/name/_writeBodyWithCompletionBlock:">&ndash;&nbsp;_writeBodyWithCompletionBlock:</a></code>
+		<code><a href="#//api/name/_readBodyWithRemainingLength:completionBlock:">&ndash;&nbsp;_readBodyWithRemainingLength:completionBlock:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/_readNextBodyChunk:completionBlock:">&ndash;&nbsp;_readNextBodyChunk:completionBlock:</a></code>
 	</span>
 	
 	
@@ -490,31 +496,25 @@ Be sure to also call &ldquo;super&rdquo; when overriding them.</p>
 						</ul>
 						
 						
-						<a title="Read Methods" name="task_Read Methods"></a>
-						<h3 class="subsubtitle task-title">Read Methods</h3>
+						<a title="Write Methods" name="task_Write Methods"></a>
+						<h3 class="subsubtitle task-title">Write Methods</h3>
 
 						<ul class="task-list">
 							<li>
 	<span class="tooltip">
-		<code><a href="#//api/name/_readData:withLength:completionBlock:">&ndash;&nbsp;_readData:withLength:completionBlock:</a></code>
+		<code><a href="#//api/name/_writeData:withCompletionBlock:">&ndash;&nbsp;_writeData:withCompletionBlock:</a></code>
 	</span>
 	
 	
 </li><li>
 	<span class="tooltip">
-		<code><a href="#//api/name/_readHeaders:withCompletionBlock:">&ndash;&nbsp;_readHeaders:withCompletionBlock:</a></code>
+		<code><a href="#//api/name/_writeHeadersWithCompletionBlock:">&ndash;&nbsp;_writeHeadersWithCompletionBlock:</a></code>
 	</span>
 	
 	
 </li><li>
 	<span class="tooltip">
-		<code><a href="#//api/name/_readBodyWithRemainingLength:completionBlock:">&ndash;&nbsp;_readBodyWithRemainingLength:completionBlock:</a></code>
-	</span>
-	
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/_readNextBodyChunk:completionBlock:">&ndash;&nbsp;_readNextBodyChunk:completionBlock:</a></code>
+		<code><a href="#//api/name/_writeBodyWithCompletionBlock:">&ndash;&nbsp;_writeBodyWithCompletionBlock:</a></code>
 	</span>
 	
 	
@@ -1409,7 +1409,7 @@ allow replacing the request URL by another one.</p>
 				<div id="footer">
 					<hr />
 					<div class="footer-copyright">
-						<p><span class="copyright">&copy; 2015 Mario Schreiner. All rights reserved. (Last updated: 2015-05-22)</span><br />
+						<p><span class="copyright">&copy; 2015 Mario Schreiner. All rights reserved. (Last updated: 2015-05-27)</span><br />
 						
 						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2 (build 963)</a>.</span></p>
 						
