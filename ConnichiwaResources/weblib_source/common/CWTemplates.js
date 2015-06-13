@@ -1,60 +1,125 @@
-/* global Connichiwa, Ractive, CWDatastore, CWUtil, CWDebug, CWModules */
+/* global Connichiwa, CWDevice, CWDeviceManager, Ractive, CWDatastore, CWUtil, CWDebug, CWModules */
 'use strict';
 
 /**
  * Provides cross-device templating in Connichiwa.
  *
- * CWTemplates allows you to write Mustache ({@link
- *    https://mustache.github.io}) templates and insert them into the DOM of a
+ * CWTemplates allows you to write Ractive.js ({@link
+ *    http://www.ractivejs.org}) templates and insert them into the DOM of a
  *    local or remote device. Mustache templates support *expressions* that
- *    can be replaced with content at runtime.
+ *    can be dynamically replaced with content at runtime.
+ *
+ * #### Creating a template
+ *
+ * Templates are stored in external files. Technically, any extension is
+ *    exceptable, but `.html` is preferred. One file can contain one or more
+ *    templates. Each template must be surrounded by a `<template>` tag that
+ *    must have a name attribute with a unique name:
+ *
+ * ```html
+ * <template name="myTemplate">
+ * 
+ * <!-- template content goes here --&gt;
+ *
+ * </template>
+ * ```
+ *
+ * Templates can contain any kind of ordinary HTML but can further contain
+ *    *expressions*. Expressions can be if-else constructs, loops but most
+ *    commonly are used as variables - placeholders where dynamic content is
+ *    inserted using JavaScript. To learn about all the possibilities of
+ *    Ractive.js templates, have a look at {@link
+ *    http://docs.ractivejs.org/latest/}.
+ *
+ * #### Using a template
+ *
+ * Once you created a file that contains one or multiple templates, there are
+ *    two steps required to make use of the template:
+ *
+ * 1. **Load the template**: This will download the template file from the
+ *    server and parse it. This step makes all containing templates known to
+ *    the system. Loading a template is done using {@link CWTemplates.load}:  
+ *      
+ *    ```js
+ *    CWTemplates.load('templates.html');
+ *    ```
+ *
+ * 2. **Insert the template**: After loading a template file, you can insert
+ *    any template it contains into the DOM using {@link CWTemplates.insert}:  
+ *      
+ *    ```js
+ *    CWTemplates.insert('myTemplate');
+ *    ```
+ *
+ * By default, templates are appended to the body of your device. You can
+ *    specify an alternative target and further configure the insertion. Have
+ *    a look at {@link CWTemplates.insert} for possible options.
+ *
+ * To **insert a template on another device** the same procedure is used. Just
+ *    pass a device identifier or a {@link CWDevice} object as the first
+ *    parameter to **both** {@link CWTemplates.load} and {@link
+ *    CWTemplates.insert}.
+ *
+ * #### Expressions
+ *
+ * Besides ordinary HTML, templates in Connichiwa can contain *expressions*.
+ *    Expressions always start with two opening curly brackets and end with
+ *    two closing curly brackets. Most commonly, expressions are used as
+ *    placeholders for dynamic content. For example:
+ *
+ * ```html
+ * <h2>Hello, {{name}}!</h2>
+ * ```
+ *
+ * The expression in this example is `{{name}}`. In your JavaScript, you can
+ *    use {@link CWTemplates.set} to replace such expressions with content:
+ *
+ * ```js
+ * CWTemplates.set('name', 'Paul');
+ * ```
+ *
+ * The template will notice that the expression `{{name}}` changed and
+ *    automatically update the UI to reflect the change, displaying `Hello,
+ *    Paul!` in the heading.
+ *
+ * Expressions can be redefined at any time. Calling `CWTemplates.set('name',
+ *    'John')` at a later point will automatically replace "Paul" with "John"
+ *    in your UI.
  *
  * #### Data-driven templates
  *
- * For example, if a template contains the line `Hello, {{name}}!` the
- *    expression is `{{name}}` You can replace it at runtime using {@link
- *    CWTemplates.set} - e.g. `CWTemplates.set('name', 'Paul')` will change
- *    the DOM to `Hello, Paul!`. At some point later you can call
- *    `CWTemplates.set('name', 'John')` and the DOM will be automatically
- *    reflect the change and display `Hello, John!`
- *
  * As you can see, Connichiwas templates are *data-driven* - you do not
- *    directly manipulate the DOM, but rather manipulate the data which will
- *    be automatically reflected in your UI. Connichiwa even sweetens that
- *    further by syncing your data across devices. So if a template on one
- *    device contains the expression `{{name}}`, and the same or another
- *    template on another device contains that expression as well, using
- *    `CWTemplates.set('name', 'Paul')` will change that expression on **all**
- *    your devices.
+ *    directly manipulate the DOM, but rather manipulate the data behind your
+ *    templates. Connichiwa even sweetens that further by syncing your data
+ *    across devices. So if a template on one device contains the expression
+ *    `{{name}}`, and a template on another device contains that expression as
+ *    well, using {@link CWTemplates.set} will affect your UI on **all** your
+ *    devices.
  *
- * What if you have a template that contains the `{{name}}` expression and
- *    want it to show a different name? Here is where data collections come
- *    into play: When inserting the template into the DOM, you can define the
- *    name of a data collection that will be used for that template. So your
- *    template could do something like:
+ * There are cases, though, where this behaviour is unwanted - for example, if
+ *    you want to reuse a template on multiple devices, but fill it with
+ *    different data. To achieve this, you can provide the name of a
+ *    sub-datastore when inserting the template. In the same manner, you can
+ *    set data of a sub-datastore by passing the `collection` parameter to
+ *    {@link CWTemplates.set}. By default, all templates take their data from
+ *    the main template collection. If you provide the name of a sub
+ *    collection, your template will react only to data changes in that
+ *    collection. For example, you can insert a template as such:
  *
- * `CWTemplates.insert('myTemplate', 'body', 'customCollection')`
+ * ```js
+ * CWTemplates.insert('greeting', { dataSource: 'myCollection'});
+ * ```
  *
- * Now, if some device calls `CWTemplates.set('name', 'Paul')` the new
- *    template will not be affected! Instead, you can set the name of that
- *    template using `CWTemplates.set('customCollection', 'name', 'Michael')`.
- *    So you can have multiple templates with the same expression, but use
- *    different data!
+ * This template will not be affected when you use `CWTemplates.set('name',
+ *    'Paul')`. Instead, you must call the following to set the name for this
+ *    template:
  *
- * #### How to insert a template?
+ * ```js
+ * CWTemplates.set('myCollection', 'name', 'Paul');
+ * ```
  *
- * Templates are stored in external files with arbitrary extension
- *    (preferrably `.html`, as this enables syntax highlighting). A template
- *    consists of a template tag and needs a name:
- *
- * `<template name="myTemplate"> ... </template>`
- *
- * A file can contain multiple templates. To use one or more templates, you
- *    must first load the file that contains them using {@link
- *    CWTemplates.load}. You can then start to insert templates into your DOM
- *    using {@link CWTemplates.insert}. To replace your template expressions
- *    (such as `{{name}}`) with actual data, use {@link CWTemplates.set}.
- *    That's all there is to it.
+ * As you can see, you defined a collection name when inserting the template,
+ *    and you have to set data for the same collection to affect the template.
  * @copyright This class and the whole idea behind CWTemplates is based on
  *    Roman Rädle's work (roman.raedle@uni-konstanz.de).
  * @namespace  CWTemplates
@@ -125,13 +190,41 @@ CWTemplates.__constructor = function() {
  * Loads one or more files containing templates. Templates that have been
  *    loaded can then be inserted into the DOM using {@link
  *    CWTemplates.insert}.
+ * @param {CWDevice|String} [device] The device where to load the template,
+ *    either represented by a CWDevice or by a device's unique identifier
+ *    string. If omitted, the template is loaded on the local device.
  * @param  {String|Array} paths The path to a template file or an array of
- *    paths. If one or more paths are invalid, that particular load will fail, but all other paths will still be loaded.
+ *    paths. If one or more paths are invalid, that particular load will fail,
+ *    but all other paths will still be loaded.
  * @function
  */
-CWTemplates.load = function(paths) {
+CWTemplates.load = function(device, paths) {
+  if (paths === undefined) {
+    //Args: paths
+    paths = device;
+    device = undefined;
+  }
+
+  // if (CWDevice.prototype.isPrototypeOf(device) === true) {
+    // device = device.getIdentifier();
+  // }
+  // 
+  //TODO
+  if (CWUtil.isString(device)) {
+    device = CWDeviceManager.getDeviceWithIdentifier(device);
+  }
+  //TODO
+
   if (CWUtil.isString(paths)) paths = [ paths ];
 
+  //If a device was given, use device.loadTemplates()
+  if (device !== undefined) {
+    device.loadTemplates(paths);
+    return;
+  } 
+
+  //If we want to load something on this device, let's do that now
+  //Download the file & compile it
   var that = this;
   $.each(paths, function(i, path) {
     //Don't load files twice
@@ -155,59 +248,78 @@ CWTemplates.load = function(paths) {
 
 
  /**
-  * Inserts the template with the given name into the local DOM. The template
-  *    will be inserted into the DOM object(s) with the given target selector.
+  * Inserts the template with the given name into the given device's DOM.
   *
-  * The expressions in your templates (such as `{{name}}`) will be replaced
-  *    with data from the *template data store*. The template data store is
-  *    the data source that provides data to your UI, and you can insert data
-  *    using {@link CWTemplates.set}. For example, `{{name}}` will be replaced
-  *    by whatever value was set using `CWTemplates.set('name', ...)`.
-  *
-  * Connichiwa synchronizes your template data store across all your devices,
-  *    so all your devices access the same underlying data - this ensures that
-  *    your UI is consistent across multiple devices. So, if you insert a
-  *    template on a remote device that contains the `{{name}}` expression,
-  *    using `CWTemplates.set('name', ...)` on **any** device will update your
-  *    UI.
-  *
-  * If you have the same expression in multiple templates, but want to feed
-  *    different data to the templates, you can provide a collection name
-  *    using the `data` attribute. By default, all templates take their data
-  *    from the main collection. If you specify the name of a collection in
-  *    the `data` attribute, your template will react only to changes in that
-  *    particular collection. For example, if you insert a template using
-  *    `CWTemplates.insert('myTemplate', 'body', 'myCollection')`, calling
-  *    `CWTemplates.set('name', 'Paul')` will not affect the template.
-  *    Instead, you must call `CWTemplates.set('myCollection', 'name',
-  *    'Paul')` to update your template UI. This way, you can have the same
-  *    expression multiple times but use different data.
-  *
-  * Note that insertion is an asynchronous operation, an optional callback
-  *    can be provided and will be called when the insertion finished.
+  * Note that insertion is an asynchronous operation. If you want to execute
+  *    code after the template has inserted, use the `onComplete` option to
+  *    provide a callback.
   *
   * Note that before you can insert a template, you must load the file that
   *    contains this template using {@link CWTemplates.load}. If your template
   *    contains subtemplates (using the `{{> subtemplate}}` notation), the
   *    files containing the subtemplate must have been loaded as well.
+  * @param {CWDevice|String} [device] The device where to insert the template,
+  *    either represented by a CWDevice or by a device's unique identifier
+  *    string. If omitted, the template is inserted on the local device's DOM.
   * @param  {String}   templateName The name of the template to load. The file
   *    that contains a template with this name must be loaded using {@link
   *    CWTemplates.load} before calling this method.
-  * @param  {String}   target       A jQuery selector that points to a valid
-  *    DOM object (e.g. 'body'). The template will be inserted into this DOM
-  *    element.
-  * @param  {Object}   data         If undefined, the default template data
-  *    store (that can be written using `CWTemplate.set(key, value)`) is fed
-  *    to the template. If set to a string, the template data store of that
-  *    name is fed to the template (which can be written using
-  *    `CWTemplates.set('storeName', key, value)`). If set to an object
-  *    literal, the static data from the object is fed to the template - the
-  *    template is then rendered static.
-  * @param  {Function} [callback]     An optional callback function. This
-  *    callback will be called after the template was inserted into the DOM.
+  * @param  {Object}   options Options that configures the insertion. All
+  *    settings are optional. The following options are available:
+  *
+  * * **target** (default: `'body'`)  
+  *     
+  *   A jQuery selector that represents a DOM element on the target device. The
+  *    template is inserted into the DOM element(s) represented by this
+  *    selector.
+  *
+  * * **dataSource**
+  *     
+  *   By default, the template data comes from the default template data store
+  *    (see {@link CWTemplates.set}). If `dataSource` is set to a String, a
+  *    sub-datastore with the given name will be used. So if you set this to
+  *    `'foo'`, the template will react only to changes in the foo template
+  *    data store (set using `CWTemplates.set('foo', key, value)`). If this is
+  *    set to an object, the template will use the data from the object.
+  *    Therefore, the template will be static and not react to changes in the
+  *    datastore.
+  *
+  * * **onComplete**
+  *     
+  *   A callback function that is executed if the template has been inserted.
   * @function
  */
-CWTemplates.insert = function(templateName, target, data, callback) {
+CWTemplates.insert = function(device, templateName, options) {
+  if (templateName === undefined) {
+    //Args: templateName
+    templateName = device;
+    device = undefined;
+  } else if (CWUtil.isObject(templateName) && options === undefined) {
+    //Args: templateName, options
+    options = templateName;
+    templateName = device;
+    device = undefined;
+  }
+
+  if (options === undefined) options = {};
+
+  //TODO
+  if (CWUtil.isString(device)) {
+    device = CWDeviceManager.getDeviceWithIdentifier(device);
+  }
+  //TODO
+
+  //Inserting into remote DOM - relay method call to CWDevice
+  if (device !== undefined) {
+    device.insertTemplate(templateName, options);
+    return;
+  }
+
+  var target     = options.target || 'body';
+  var dataSource = options.dataSource;
+  var onComplete = options.onComplete;
+
+  //Inserting into local DOM
   var that = this;
   $.when.all(this._files).always(function() {
     CWDebug.log(3, "Inserting template " + templateName + " into DOM");
@@ -218,12 +330,12 @@ CWTemplates.insert = function(templateName, target, data, callback) {
     //* If data is an object literal, we use its content as static data and do
     //  not use the data store at all (=not reactive)
     var ractiveData;
-    if (data === undefined) {
+    if (dataSource === undefined) {
       ractiveData = CWDatastore._getCollection('_CWTemplates.', false);
-    } else if (CWUtil.isString(data)) {
-      ractiveData = CWDatastore._getCollection('_CWTemplates.'+data, false);
-    } else if (CWUtil.isObject(data)) {
-      ractiveData = data;
+    } else if (CWUtil.isString(dataSource)) {
+      ractiveData = CWDatastore._getCollection('_CWTemplates.' + dataSource, false);
+    } else if (CWUtil.isObject(dataSource)) {
+      ractiveData = dataSource;
     }
 
     var ractive = new Ractive({ 
@@ -235,21 +347,53 @@ CWTemplates.insert = function(templateName, target, data, callback) {
     });
     that._templates.compiled.push(ractive); 
 
-    if (callback !== undefined) callback();
+    if (onComplete !== undefined) onComplete();
   });
 }.bind(CWTemplates);
 
 
 /**
  * Writes the given data to the template data store. This method is the main
- *    mechanism to change the underlying data of templates. For example, if a
- *    template contains the expression `{{title}}`, this expression will
- *    always be replaced with the current value of the title key in the
- *    template data store.
+ *    mechanism to change the underlying data of templates.
  *
- * Be aware that data set using this method is synchronized across all your
- *    devices. Therefore, you can update the DOM on multiple devices with a
- *    single call to this method.
+ * The expressions in your templates will be replaced by values with the same
+ *    key in the template data store. For example, the expression `{{name}}` will be replaced by
+ *    whatever value was set using:
+ *    
+ *    ```js
+ *    CWTemplates.set('name', value);
+ *    ```
+ *
+ * Connichiwa synchronizes your template data store across all your devices,
+ *    this ensures that your UI is consistent across all devices. So, if you
+ *    insert a template on a remote device that contains the `{{name}}`
+ *    expression, using `CWTemplates.set('name', ...)` on **any** device will
+ *    update your UI on **all** devices.
+ *
+ * There are cases, though, where this behaviour is not wanted - for example,
+ *    if you want to reuse a template on multiple devices, but fill it with
+ *    different data. To achieve this, you can provide the name of a
+ *    sub-datastore when inserting the template. In the same manner, you can
+ *    set the data in a sub-datastore by passing the `collection` parameter to
+ *    this method. By default, all templates take their data from the main
+ *    template collection. If you provide the name of a sub collection, your
+ *    template will react only to data changes in that collection. For
+ *    example, if you insert a template using
+ *    
+ *    ```js
+ *    CWTemplates.insert('myTemplate', { dataSource: 'myCollection'} );
+ *    ```
+ *    
+ *    calling `CWTemplates.set('name', 'Paul')` will not affect that template. 
+ *    Instead, you must call 
+ *    
+ *    ```js
+ *    CWTemplates.set('myCollection', 'name', 'Paul');
+ *    ``` 
+ *    
+ *    to update that particular template.
+ *
+ * Use {@link CWTemplates.setMultiple} to set multiple values at once.
  * @param {String} [collection] An optional collection name. Collections can
  *    be thought of as "sub data stores". Using collections, you can insert
  *    multiple templates with the same expression, but have them display
@@ -276,15 +420,9 @@ CWTemplates.set = function(collection, key, value) {
 
 
 /**
- * Writes the given data to the template data store. This method is the main
- *    mechanism to change the underlying data of templates. For example, if a
- *    template contains the expression `{{title}}`, this expression will
- *    always be replaced with the current value of the title key in the
- *    template data store.
- *
- * Be aware that data set using this method is synchronized across all your
- *    devices. Therefore, you can update the DOM on multiple devices with a
- *    single call to this method.
+ * Writes the given data to the template data store. This method takes a
+ *    key/value dictionary and will set each of them in the given template
+ *    collection. See {@link CWTemplates.set} for more information.
  * @param {String} [collection] An optional collection name. Collections can
  *    be thought of as "sub data stores". Using collections, you can insert
  *    multiple templates with the same expression, but have them display
@@ -331,13 +469,14 @@ CWTemplates.get = function(collection, key) {
  *    a name attribute within that code will be registered as templates. After
  *    this step, the templates can be inserted using {@link
  *    CWTemplates.insert}.
- * @param  {String} templateData Ractive template code
+ * @param  {String} templateData Ractive/Mustache template code
  * @returns {Boolean} true if the template data contained at least one valid
  *    template, otherwise false
  * @function
  * @private
  */
 CWTemplates._compile = function(templateData) {
+  //Wrap templateData in a tag, so we can use .find() to search through it
   var content = $('<wrapper>');
   content.html(templateData);
 

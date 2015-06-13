@@ -126,3 +126,18 @@
  * @event devicedisconnected
  * @param {CWDevice} device The device that disconnected
  */
+
+/**
+ * This event is fired whenever the datastore on the local device changed. For
+ *    example, this is the result of {@link CWDatastore.set} or {@link
+ *    CWDatastore.setMultiple}. Note that for {@link CWDatastore.setMultiple},
+ *    only a single event with a collection of changes is triggered.
+ * @event _datastorechanged
+ * @param {String} collection The collection that changed, or `undefined` if
+ *    the default collection has changed
+ * @param {Object} changes Key-value pairs, each representing a change to the
+ *    reported collection. The key is of each entry is the key in the
+ *    collection that changed, and the value is the new value stored for that
+ *    key
+ * @protected
+ */

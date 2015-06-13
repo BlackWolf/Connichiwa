@@ -233,7 +233,7 @@
     NSData *chunk = [NSData dataWithBytes:[remainingData bytes] length:bytesToSend];
     BOOL didSend = [self.peripheralManager updateValue:chunk forCharacteristic:(CBMutableCharacteristic *)key.characteristic onSubscribedCentrals:@[key.central]];
     
-    //If there was still room in the queue (didSend==YES), we can go on sending
+    //If there is still room in the sendqueue (didSend==YES), we can go on sending
     //If the queue is full we wait for the peripheralManagerIsReadyToSend callback, which will call this method again
     if (didSend)
     {

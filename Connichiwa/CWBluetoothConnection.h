@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreBluetooth/CoreBluetooth.h>
+#import <MultipeerConnectivity/MultipeerConnectivity.h>
 @class CBPeripheral, CWDeviceID;
 
 
@@ -28,6 +29,14 @@ typedef NS_ENUM(NSInteger, CWBluetoothConnectionIPWriteState)
     CWBluetoothConnectionIPWriteStateSent
 };
 
+typedef NS_ENUM(NSInteger, CWBluetoothConnectionMCState)
+{
+    CWBluetoothConnectionMCStateDisconnected,
+    CWBluetoothConnectionMCStateSearching,
+//    CWBluetoothConnectionMCStateFound,
+    CWBluetoothConnectionMCStateConnected
+};
+
 
 
 /**
@@ -38,6 +47,8 @@ typedef NS_ENUM(NSInteger, CWBluetoothConnectionIPWriteState)
 @property (readwrite) CWBluetoothConnectionInitialDataState initialDataState;
 
 @property (readwrite) CWBluetoothConnectionIPWriteState IPWriteState;
+
+@property (readwrite) CWBluetoothConnectionMCState mcState;
 
 @property (readwrite) BOOL didError;
 
@@ -52,6 +63,8 @@ typedef NS_ENUM(NSInteger, CWBluetoothConnectionIPWriteState)
  *  The measured power of the other device's BT transmitter, used to calculate the distance to the other device
  */
 @property (readwrite) int measuredPower;
+
+@property (readwrite) BOOL supportsMC;
 
 /**
  *  The CBPeripheral instance associated with the device represented by this connection
@@ -74,6 +87,10 @@ typedef NS_ENUM(NSInteger, CWBluetoothConnectionIPWriteState)
 @property (readonly) double lastSentRSSI;
 
 @property (readwrite) int connectionTries;
+
+@property (readwrite, strong) MCSession *mcSession;
+
+@property (readwrite) int mcConnectionTries;
 
 /**
  *  Initializes a new CWBluetoothConnection for the given CBPeripheral. For each CBPeripheral, and therefore for each discovered device, only one CWBluetoothConnection should be created

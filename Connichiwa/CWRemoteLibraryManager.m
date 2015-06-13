@@ -50,11 +50,6 @@
 - (void)_receivedfromView_softDisconnect;
 
 /**
- *  Asks the remote library to connect its websocket to the master
- */
-- (void)_sendToView_connectWebsocket;
-
-/**
  *  Asks the remote library to disconnect its websocket from the master
  */
 - (void)_sendToView_disconnectWebsocket;
@@ -119,7 +114,6 @@
         [self.webView setDelegate:self];
         [self.webView setHidden:NO];
         [self.webView loadRequest:URLRequest];
-//        [self createWebViewContext];
     });
 }
 
@@ -215,15 +209,6 @@
 }
 
 
-- (void)_sendToView_connectWebsocket
-{
-    NSDictionary *data = @{
-                           @"_name": @"connectwebsocket"
-                           };
-    [self _sendToView_dictionary:data];
-}
-
-
 - (void)_sendToView_disconnectWebsocket
 {
     NSDictionary *data = @{
@@ -284,18 +269,7 @@
  */
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
-    if (self.state == CWRemoteLibraryManagerStateConnecting)
-    {
-        CWLog(3, @"Remote webview did load, setting things up and connecting websocket");
-        
-        //WebView's are a strange little thing - the JS context might or might not change between our load request and
-        //this point. Therefore, create the context again even though we already did so in connect:
-//        [self createWebViewContext];
-        
-        
-        [self _sendToView_connectWebsocket];
-    }
-    else if (self.state == CWRemoteLibraryManagerStateDisconnecting)
+    if (self.state == CWRemoteLibraryManagerStateDisconnecting)
     {
         CWLog(3, @"Remote webview did blank, we are fully disconnected");
         

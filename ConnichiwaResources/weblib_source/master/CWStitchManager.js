@@ -3,7 +3,7 @@
 
 
 
-var CWStitchManager = CWStitchManager || {};
+var CWStitchManager = CWModules.retrieve('CWStitchManager');
 
 
 /**

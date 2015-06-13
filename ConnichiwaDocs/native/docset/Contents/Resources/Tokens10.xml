@@ -156,18 +156,6 @@ In order to do all that, the manager needs a dedicated UIWebView where it will c
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWRemoteLibraryManager/_sendToView_connectWebsocket</TokenIdentifier>
-			<Abstract type="html">Asks the remote library to connect its websocket to the master</Abstract>
-			<DeclaredIn>CWRemoteLibraryManager.m</DeclaredIn>
-			
-			<Declaration>- (void)_sendToView_connectWebsocket</Declaration>
-			
-			
-			<Anchor>//api/name/_sendToView_connectWebsocket</Anchor>
-            <NodeRef refid="10"/>
-		</Token>
-		
-		<Token>
 			<TokenIdentifier>//apple_ref/occ/instm/CWRemoteLibraryManager/_sendToView_disconnectWebsocket</TokenIdentifier>
 			<Abstract type="html">Asks the remote library to disconnect its websocket from the master</Abstract>
 			<DeclaredIn>CWRemoteLibraryManager.m</DeclaredIn>

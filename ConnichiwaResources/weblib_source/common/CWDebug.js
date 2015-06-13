@@ -35,19 +35,21 @@ var CWDebug = CWDebug || {};
 /**
  * Enables or disables debug logging
  * @type {Boolean}
- * @default [taken from native application]
+ * @default false
  * @private
  */
-CWDebug._debug = false;
+// CWDebug._debug = false;
+CWDebug._debug = true;
 
 
 /**
  * The current log level, see {@link CWDebug.setLogLevel}
  * @type {Number}
- * @default [taken from native application]
+ * @default 0
  * @private
  */
-CWDebug._logLevel = 0;
+// CWDebug._logLevel = 0;
+CWDebug._logLevel = 4;
 
 
 /**

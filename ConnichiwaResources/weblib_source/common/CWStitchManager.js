@@ -37,7 +37,7 @@
  *    current device transformation
  * @namespace CWStitchManager
  */
-var CWStitchManager = CWStitchManager || {};
+var CWStitchManager = CWModules.retrieve('CWStitchManager');
 
 
 /**

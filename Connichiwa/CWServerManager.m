@@ -19,34 +19,11 @@
 @interface CWServerManager ()
 
 @property (readwrite) CWServerManagerState state;
-
 @property (readwrite, strong) NSString *documentRoot;
-
-/**
- *  A Nodelike-specific subclass of JSContext that is used to execute code and for communication between Objective-C and the Nodelike server
- */
 @property (strong, readwrite) GCDWebServer *webServer;
 @property (strong, readwrite) BLWebSocketsServer *websocketServer;
 @property (readwrite) int localWebsocketID;
 @property (strong, readwrite) NSMutableDictionary *websocketIdentifiers;
-@property (nonatomic, strong, readwrite) NSMutableArray *masterBacklog;
-
-/**
- *  Registers callback functions that the webserver script can call to execute native methods
- */
-- (void)_registerJSCallbacks;
-
-/**
- *  Called by the webserver script if the server finished starting up and is ready to accept HTTP and Websocket connections
- */
-- (void)_receivedFromServer_serverDidStart;
-
-/**
- *  Called by the webserver script if the websocket connection of a remote device was closed (the remote disconnected)
- *
- *  @param identifier The device identifier of the device to which the connection was closed
- */
-- (void)_receivedFromServer_remoteWebsocketDidClose:(NSString *)identifier;
 
 @end
 
@@ -62,7 +39,6 @@
     self.state = CWServerManagerStateStopped;
     self.documentRoot = documentRoot;
     self.localWebsocketID = -1;
-    self.masterBacklog = [NSMutableArray array];
     
     return self;
 }
@@ -181,44 +157,26 @@
     __weak typeof(self) weakSelf = self;
     
     return ^void (int connectionID, NSData *messageData) {
-//            @synchronized(weakSelf) {
         NSDictionary *message = [CWUtil dictionaryFromJSONData:messageData];
 //        NSLog(@"GOT MESSAGE %@", [[NSString alloc] initWithData:messageData encoding:NSUTF8StringEncoding]);
+        
         //If the message identifies the local weblib's websocket, save its ID
-        if ([[message objectForKey:@"_name"] isEqualToString:@"localinfo"]) {
-//            NSLog(@"SET LOCAL ID");
+        if ([[message objectForKey:@"_name"] isEqualToString:@"_master_identification"]) {
+//            NSLog(@"SET LOCAL ID TO %d", connectionID);
             weakSelf.localWebsocketID = connectionID;
         }
         
-        if ([[message objectForKey:@"_name"] isEqualToString:@"localinfo"] || [[message objectForKey:@"_name"] isEqualToString:@"remoteinfo"]) {
+        //In any case, if this message identifies any websocket, write the
+        //ID and connection into out lookup dictionary
+        if ([[message objectForKey:@"_name"] isEqualToString:@"_master_identification"] ||
+            [[message objectForKey:@"_name"] isEqualToString:@"_remote_identification"]) {
             //Save the Connichiwa identifier that belongs to the websocket connection
             [weakSelf.websocketIdentifiers setObject:[NSNumber numberWithInt:connectionID] forKey:[message objectForKey:@"identifier"]];
             
             //Make sure events from this websocket are handled by the appropiate handler from now on
             [weakSelf.websocketServer setOnMessageHandler:[weakSelf onIdentifiedWebsocketMessage] forConnection:connectionID];
             [weakSelf.websocketServer setOnCloseHandler:[weakSelf onIdentifiedWebsocketClosed] forConnection:connectionID];
-            
-            //Forward the message to the local weblibrary so it knows about the device
-            //It might happen that we receive remoteinfo messages before localinfo messages
-            //(if they arrive between the websocket server starting and the localinfo message
-            //arriving). If this happens, backlog the messages and send them later
-//            NSLog(@"ID %d", weakSelf.localWebsocketID);
-            if (weakSelf.localWebsocketID != -1) {
-                [weakSelf.websocketServer pushMessage:messageData toConnection:weakSelf.localWebsocketID];
-            } else {
-                [self.masterBacklog addObject:messageData];
-            }
         }
-        
-        if ([[message objectForKey:@"_name"] isEqualToString:@"localinfo"]) {
-            //If we backlogged messages that arrived for the master before this
-            //point, send them now that the master has connected
-            for (NSData *backlogMessage in self.masterBacklog) {
-//                NSLog(@"SENDING BACKLOGGED MESSAGE %@", [[NSString alloc] initWithData:backlogMessage encoding:NSUTF8StringEncoding]);
-                [weakSelf.websocketServer pushMessage:backlogMessage toConnection:weakSelf.localWebsocketID];
-            }
-        }
-//            }
     };
 }
 
@@ -234,11 +192,23 @@
         //For identified websocket messages, the server basically acts as a message relay
         //Check where the message is supposed to be sent to and deliver it
         NSString *target = [message objectForKey:@"_target"];
+        
+        //Messages with target broadcast are sent to everyone
+        //the _broadcastToSource key decides if the messages is sent back to
+        //its source
         if ([target isEqualToString:@"broadcast"]) {
-            [weakSelf.websocketServer pushMessageToAll:messageData];
-        } else {
-            [weakSelf.websocketServer pushMessage:messageData toConnection:[weakSelf connectionIDForIdentifier:target]];
+            BOOL backToSource = [[message objectForKey:@"_broadcastToSource"] boolValue];
+            if (backToSource) {
+                [weakSelf.websocketServer pushMessageToAll:messageData];
+            } else {
+                [weakSelf.websocketServer pushMessageToAll:messageData except:@[ @(connectionID) ]];
+            }
+            
+            return;
         }
+        
+        //For all other targets, just try to deliver to the right websocket
+        [weakSelf.websocketServer pushMessage:messageData toConnection:[weakSelf connectionIDForIdentifier:target]];
     };
 }
 
@@ -270,7 +240,11 @@
     if ([targetIdentifier isEqualToString:@"master"]) {
         return self.localWebsocketID;
     }
-    return [[self.websocketIdentifiers objectForKey:targetIdentifier] intValue];
+    NSNumber *connectionID = [self.websocketIdentifiers objectForKey:targetIdentifier];
+    if (connectionID == nil) {
+        return -1;
+    }
+    return [connectionID intValue];
 }
 
 

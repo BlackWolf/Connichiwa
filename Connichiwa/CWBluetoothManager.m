@@ -6,6 +6,24 @@
 //  Copyright (c) 2014 Mario Schreiner. All rights reserved.
 //
 
+
+/**
+ *
+ * TODO
+ *
+ * rewrite BT Connection so that MC is part of the IP sent state
+ * I think this is a better way to do it, since they have a direct correlatio - if IP sending fails, we go into MC, establish a connection, then retry IP sending.
+ * Then, we can also establish a retry mechanism for this that will also retry establishing an MC connection
+ *
+ * Next, it might be necessary to "reset" MC every time we start browsing for another peer
+ * Next, it seems that we shouldnt sent (or receive) BT data while an MC connection is established. This sucks a lot!
+ *
+ * We should check exactly what works and what doesnt: Does simultanously connecting via WiFi work? Do sequential MC connections work?
+ * If it really is a problem only with parallel MC connections, then we can probably fix this by creating a queue for MC connections.
+ * If its a general problem with parallel BT stuff, we need to shutdown scanning and advertising while establishing a connection, which sucks
+ * In any case, this sucks
+ */
+
 #import "CWBluetoothManager.h"
 #import "CWBluetoothTransferManager.h"
 #import "CWBluetoothTransferManagerDelegate.h"
@@ -20,7 +38,7 @@ int const MAX_CONNECTION_RETRIES = 4;
 
 
 
-@interface CWBluetoothManager () <CBCentralManagerDelegate, CBPeripheralManagerDelegate, CBPeripheralDelegate, CWBluetoothTransferManagerDelegate>
+@interface CWBluetoothManager () <CBCentralManagerDelegate, CBPeripheralManagerDelegate, CBPeripheralDelegate, MCNearbyServiceBrowserDelegate, MCNearbyServiceAdvertiserDelegate, MCSessionDelegate, CWBluetoothTransferManagerDelegate>
 
 /**
  *  A CWWebApplicationState implementation that allows the BT Manager to access the global state. This is important because the BT Manager needs to know about our unique identifier and if it should accept IPs via it's BT characteristic.
@@ -30,6 +48,8 @@ int const MAX_CONNECTION_RETRIES = 4;
 @property (readwrite, strong) CWBluetoothTransferManager *transferManager;
 
 @property (readwrite) BOOL isScanning;
+
+@property (readwrite) BOOL testMcRun;
 
 /**
  *  The CBCentralManager instance used by the manager to make this device a BTLE Central
@@ -55,6 +75,10 @@ int const MAX_CONNECTION_RETRIES = 4;
  *  The IP characteristic advertised by this device. This is a writable characteristic that other devices can write data to, but only valid IPs will be accepted. Writing IPs to this characteristic will trigger this device to test if that IP leads to a valid Connichiwa web server. If so, this device will connect to it and effecitvely become a remote device.
  */
 @property (readwrite, strong) CBMutableCharacteristic *advertisedIPCharacteristic;
+
+@property (readwrite, strong) MCPeerID *mcID;
+@property (readwrite, strong) MCNearbyServiceBrowser *mcBrowser;
+@property (readwrite, strong) MCNearbyServiceAdvertiser *mcAdvertiser;
 
 /**
  *  Determines if the Connichiwa service was already added to the CBPeripheralManager and is advertised to other devices
@@ -191,6 +215,8 @@ NSString *const BLUETOOTH_INITIAL_CHARACTERISTIC_UUID = @"22F445BE-F162-4F9B-804
  */
 NSString *const BLUETOOTH_IP_CHARACTERISTIC_UUID = @"8F627B80-B760-440C-880D-EFE99CFB6436";
 
+NSString *const MC_SERVICE_NAME = @"mc-connichiwa";
+
 /**
  *  When checking a URL for a Connichiwa webserver, this is the amount of seconds after which we consider the request failed
  */
@@ -214,14 +240,14 @@ double const URL_CHECK_TIMEOUT = 2.0;
     self.transferManager = [[CWBluetoothTransferManager alloc] initWithPeripheralManager:self.peripheralManager];
     [self.transferManager setDelegate:self];
     
-    //When a central subscribes to the initial characteristic, we will sent it our initial device data, including our unique identifier
+    //A central can subscribe to the initial characteristic when it wants to receive our initial device info, including our unique identifier
     self.advertisedInitialCharacteristic = [[CBMutableCharacteristic alloc] initWithType:[CBUUID UUIDWithString:BLUETOOTH_INITIAL_CHARACTERISTIC_UUID]
                                                                        properties:CBCharacteristicPropertyNotify
                                                                             value:nil
                                                                       permissions:CBAttributePermissionsReadable];
     
     //A central can subscribe to the IP characteristic when it wants to use our device as a remote device
-    //The characteristic is writeable and allows the central to send us its
+    //The characteristic is writeable and allows the central to send us its IPs
     self.advertisedIPCharacteristic = [[CBMutableCharacteristic alloc] initWithType:[CBUUID UUIDWithString:BLUETOOTH_IP_CHARACTERISTIC_UUID]
                                                                               properties:(CBCharacteristicPropertyWriteWithoutResponse | CBCharacteristicPropertyWrite)
                                                                                    value:nil
@@ -229,6 +255,30 @@ double const URL_CHECK_TIMEOUT = 2.0;
     
     self.advertisedService = [[CBMutableService alloc] initWithType:[CBUUID UUIDWithString:BLUETOOTH_SERVICE_UUID] primary:YES];
     self.advertisedService.characteristics = @[ self.advertisedInitialCharacteristic, self.advertisedIPCharacteristic ];
+
+    self.testMcRun = NO;
+    [self resetMC];
+
+    
+//    self.mcID = [[MCPeerID alloc] initWithDisplayName:self.appState.identifier];
+//    
+//    //When a connection attempt failed we will use the Multipeer Connectivity Browser to establish an ad-hoc BT connection (only iOS<->iOS)
+//    self.mcBrowser = [[MCNearbyServiceBrowser alloc] initWithPeer:self.mcID
+//                                                      serviceType:MC_SERVICE_NAME];
+//    [self.mcBrowser setDelegate:self];
+////    [self.mcBrowser startBrowsingForPeers]; //we start browsing now - every found peer that we do not explicitly seek is ignored anyway
+//    
+//    //Multipeer Browsers will detect us through the Multipeer Advertiser
+//    self.mcAdvertiser = [[MCNearbyServiceAdvertiser alloc] initWithPeer:self.mcID
+//                                                          discoveryInfo:Nil
+//                                                            serviceType:MC_SERVICE_NAME];
+//    [self.mcAdvertiser setDelegate:self];
+    
+    //Multipeer Session that holds our connected MC devices. Note that the device limit is currently 8, according to MCSession's docs
+    //I'm not entirely sure if a device can create multiple parallel MC sessions, but I think we won't need that for now
+//    self.mcSession = [[MCSession alloc] initWithPeer:self.mcID securityIdentity:nil encryptionPreference:MCEncryptionNone];
+//    [self.mcSession setDelegate:self];
+//    self.mcSessions = [NSMutableDictionary dictionary];
     
     self.connections = [NSMutableArray array];
     self.isScanning = NO;
@@ -317,9 +367,10 @@ double const URL_CHECK_TIMEOUT = 2.0;
 {
     if ([self isAdvertising]) return;
     
-    BTLog(1, @"Starting to advertise to other BT devices with identifier %@", self.appState.identifier);
+    BTLog(1, @"Starting to advertise to other BT devices using identifier %@", self.appState.identifier);
     
     [self.peripheralManager startAdvertising:@{ CBAdvertisementDataServiceUUIDsKey : @[[CBUUID UUIDWithString:BLUETOOTH_SERVICE_UUID]] }];
+    [self.mcAdvertiser startAdvertisingPeer];
 }
 
 
@@ -376,7 +427,7 @@ double const URL_CHECK_TIMEOUT = 2.0;
         return;
     }
     
-    BTLog(2, @"Connecting BT device %@", peripheral.name);
+    BTLog(2, @"Connecting BT device %@", connection.identifier);
     
     //It is rumored that scanning while connecting can lead to problems, therefore stop temporarily
     connection.connectionTries++;
@@ -387,7 +438,8 @@ double const URL_CHECK_TIMEOUT = 2.0;
 
 - (void)_disconnectPeripheral:(CBPeripheral *)peripheral
 {
-    BTLog(2, @"Disconnecting BT device %@", peripheral.name);
+    CWBluetoothConnection *connection = [self _connectionForPeripheral:peripheral];
+    BTLog(2, @"Disconnecting BT device %@", connection.identifier);
     
     if (peripheral.state == CBPeripheralStateDisconnected || peripheral.state == CBPeripheralStateConnecting) return;
     
@@ -470,8 +522,6 @@ double const URL_CHECK_TIMEOUT = 2.0;
         {
             [self.delegate deviceLost:lostConnection.identifier];
         }
-        
-        
     }
 }
 
@@ -480,7 +530,12 @@ double const URL_CHECK_TIMEOUT = 2.0;
 
 
 - (void)_sendInitialDataToCentral:(CBCentral *)central
-{    
+{
+    if (self.testMcRun) {
+        MCLog(3, @"Delaying sending initial data because MC is running");
+        [self performSelector:@selector(_sendInitialDataToCentral:) withObject:central afterDelay:30.0];
+        return;
+    }
     NSData *initialData = [NSJSONSerialization dataWithJSONObject:self.appState.deviceInfo options:NSJSONWritingPrettyPrinted error:nil];
     [self.transferManager sendData:initialData toCentral:central withCharacteristic:self.advertisedInitialCharacteristic];
 }
@@ -511,8 +566,9 @@ double const URL_CHECK_TIMEOUT = 2.0;
     }
     
     [connection setIdentifier:initialData[@"identifier"]];
-    if (initialData[@"name"] != nil) [connection setName:initialData[@"name"]];
+    if (initialData[@"name"]          != nil) [connection setName:initialData[@"name"]];
     if (initialData[@"measuredPower"] != nil) [connection setMeasuredPower:[(NSNumber *)initialData[@"measuredPower"] intValue]];
+    if (initialData[@"supportsMC"]    != nil) [connection setSupportsMC:[initialData[@"supportsMC"] boolValue]];
     
     
     [connection setInitialDataState:CWBluetoothConnectionInitialDataStateReceived];
@@ -531,6 +587,12 @@ double const URL_CHECK_TIMEOUT = 2.0;
 
 - (void)sendNetworkAddressesToDevice:(NSString *)deviceIdentifier
 {
+    if (self.testMcRun) {
+        MCLog(3, @"Delaying connecting device because MC is running");
+        [self performSelector:@selector(sendNetworkAddressesToDevice:) withObject:deviceIdentifier afterDelay:30.0];
+        return;
+    }
+    
     CWBluetoothConnection *connection = [self _connectionForIdentifier:deviceIdentifier];
     
     if (connection == nil)
@@ -547,9 +609,18 @@ double const URL_CHECK_TIMEOUT = 2.0;
     [self _connectPeripheral:connection.peripheral];
 }
 
+- (void)iptest:(NSArray *)thedata {
+    [self _sendIPsToPeripheral:[thedata objectAtIndex:0] onCharacteristic:[thedata objectAtIndex:1]];
+}
 
 - (void)_sendIPsToPeripheral:(CBPeripheral *)peripheral onCharacteristic:(CBCharacteristic *)characteristic
 {
+    if (self.testMcRun) {
+        MCLog(3, @"Delaying sending IPs because MC is running");
+        [self performSelector:@selector(iptest:) withObject:@[peripheral, characteristic] afterDelay:30.0];
+        return;
+    }
+    
     CWBluetoothConnection *connection = [self _connectionForPeripheral:peripheral];
     if (connection == nil) return;
     
@@ -618,8 +689,6 @@ double const URL_CHECK_TIMEOUT = 2.0;
 
 - (void)_didReceiveIPWriteResponse:(NSError *)error fromPeripheral:(CBPeripheral *)peripheral
 {
-    BTLog(4, @"Device %@ answered to send IPs. Response: %@", peripheral.name, error);
-    
     CWBluetoothConnection *connection = [self _connectionForPeripheral:peripheral];
     if (connection == nil)
     {
@@ -633,16 +702,79 @@ double const URL_CHECK_TIMEOUT = 2.0;
         return;
     }
     
+    BTLog(4, @"Device %@ answered to sent IPs. Response: %@", connection.identifier, error);
+    
     connection.IPWriteState = CWBluetoothConnectionIPWriteStateDisconnected; //back to initial state
     [self _disconnectPeripheral:peripheral];
     
     //We exploit the BT write error mechanism to report if the other device was able to connect to one of the IPs we sent
     //When one of the IPs worked, the other device reports back a CBATTErrorSuccess, otherwise a CBATTErrorAttributeNotFound
     BOOL success = (error.code == CBATTErrorSuccess);
-    BTLog(3, @"Device %@ %@ connect to one of the IPs we send", peripheral.name, (success ? @"did" : @"was unable to"));
-    if ([self.delegate respondsToSelector:@selector(didSendNetworkAddresses:success:)])
-    {
+    BTLog(3, @"Device %@ %@ connect to one of the IPs we send", connection.identifier, (success ? @"did" : @"was unable to"));
+    
+    //Check if the device claims to support Multipeer Connectivity
+    //If so, establish a MC connection, which will trigger another IP transfer afterwards. If not the connection failed, report back
+//    if (success == NO && connection.supportsMC == YES && connection.mcState == CWBluetoothConnectionMCStateDisconnected) {
+//        [self _mcConnect:connection];
+//    } else if ([self.delegate respondsToSelector:@selector(didSendNetworkAddresses:success:)]) {
+//        [self.delegate didSendNetworkAddresses:connection.identifier success:success];
+//    }
+    if ([self.delegate respondsToSelector:@selector(didSendNetworkAddresses:success:)]) {
         [self.delegate didSendNetworkAddresses:connection.identifier success:success];
+    }
+}
+
+
+#pragma mark Multipeer Connectivity
+
+
+- (void)resetMC {
+//    MCLog(3, @"RESETTING MC");
+//    
+//    self.mcID = [[MCPeerID alloc] initWithDisplayName:self.appState.identifier];
+//    
+//    //When a connection attempt failed we will use the Multipeer Connectivity Browser to establish an ad-hoc BT connection (only iOS<->iOS)
+//    self.mcBrowser = [[MCNearbyServiceBrowser alloc] initWithPeer:self.mcID
+//                                                      serviceType:MC_SERVICE_NAME];
+//    [self.mcBrowser setDelegate:self];
+//    //    [self.mcBrowser startBrowsingForPeers]; //we start browsing now - every found peer that we do not explicitly seek is ignored anyway
+//    
+//    if (self.isScanning) [self.mcBrowser startBrowsingForPeers];
+//    
+//    //Multipeer Browsers will detect us through the Multipeer Advertiser
+//    self.mcAdvertiser = [[MCNearbyServiceAdvertiser alloc] initWithPeer:self.mcID
+//                                                          discoveryInfo:Nil
+//                                                            serviceType:MC_SERVICE_NAME];
+//    [self.mcAdvertiser setDelegate:self];
+//    
+//    if (self.isAdvertising) [self.mcAdvertiser startAdvertisingPeer];
+}
+
+- (void)_mcConnect:(CWBluetoothConnection *)connection {
+    //TODO we should install a timeout here in case the peer cannot be found
+    MCLog(3, @"Establishing a Multipeer Connectivity connection to device %@", connection.identifier);
+    self.testMcRun = YES;
+    [self resetMC];
+    [connection setMcState:CWBluetoothConnectionMCStateSearching]; //this will cause browser:foundPeer:withDiscoveryInfo: to connect the peer
+}
+
+- (void)_mcDisconnect:(CWBluetoothConnection *)connection {
+    MCLog(3, @"Disconnecting Multipeer Connectivity connection to device %@", connection.identifier);
+
+    if (connection.mcSession != nil) [connection.mcSession disconnect];
+    connection.mcSession = nil;
+    connection.mcState = CWBluetoothConnectionMCStateDisconnected;
+    
+    BOOL noMCAnymore = YES;
+    for (CWBluetoothConnection *aConnection in self.connections) {
+        if (aConnection.mcState != CWBluetoothConnectionMCStateDisconnected) {
+            noMCAnymore = NO;
+        }
+    }
+    
+    if (noMCAnymore) {
+        self.testMcRun = NO;
+        MCLog(3, @"No MC runs anymore, we can send and receive stuff!");
     }
 }
 
@@ -709,19 +841,17 @@ double const URL_CHECK_TIMEOUT = 2.0;
         [self startScanning];
     }
     
-    [CWDebug executeInDebug:^{
-        NSString *stateString;
-        switch (central.state)
-        {
-            case CBCentralManagerStatePoweredOn: stateString = @"PoweredOn"; break;
-            case CBCentralManagerStateResetting: stateString = @"Resetting"; break;
-            case CBCentralManagerStateUnsupported: stateString = @"Unsupported"; break;
-            case CBCentralManagerStateUnauthorized: stateString = @"Unauthorized"; break;
-            case CBCentralManagerStatePoweredOff: stateString = @"PoweredOff"; break;
-            default: stateString = @"Unknown"; break;
-        }
-        BTLog(1, @"Central Manager state changed to %@", stateString);
-    }];
+    NSString *stateString;
+    switch (central.state)
+    {
+        case CBCentralManagerStatePoweredOn: stateString = @"PoweredOn"; break;
+        case CBCentralManagerStateResetting: stateString = @"Resetting"; break;
+        case CBCentralManagerStateUnsupported: stateString = @"Unsupported"; break;
+        case CBCentralManagerStateUnauthorized: stateString = @"Unauthorized"; break;
+        case CBCentralManagerStatePoweredOff: stateString = @"PoweredOff"; break;
+        default: stateString = @"Unknown"; break;
+    }
+    BTLog(1, @"Central Manager state changed to %@", stateString);
 }
 
 
@@ -735,14 +865,12 @@ double const URL_CHECK_TIMEOUT = 2.0;
  */
 - (void)centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI
 {
-    BTLog(5, @"Triggered didDiscoverPeriphal for %@", peripheral.name);
-    
     //If a new peripheral is detected, we need to connect to its initial characteristic and retrieve its identifier before reporting it to the delegate
     //For previously detected devices, we use the measures RSSI to update their distance measure
     CWBluetoothConnection *existingConnection = [self _connectionForPeripheral:peripheral];
     if (existingConnection == nil)
     {
-        BTLog(3, @"New peripheral '%@'", peripheral.name);
+        BTLog(3, @"Discovered new peripheral '%@'", peripheral.name);
         
         CWBluetoothConnection *newConnection = [[CWBluetoothConnection alloc] initWithPeripheral:peripheral];
         [newConnection setInitialDataState:CWBluetoothConnectionInitialDataStateConnecting];
@@ -754,6 +882,7 @@ double const URL_CHECK_TIMEOUT = 2.0;
     }
     else
     {
+        BTLog(5, @"Re-discovered existing device %@", existingConnection.identifier);
         [existingConnection updateLastSeen];
         [self _addRSSIMeasure:[RSSI doubleValue] toConnection:existingConnection];
     }
@@ -768,7 +897,7 @@ double const URL_CHECK_TIMEOUT = 2.0;
  */
 - (void)centralManager:(CBCentralManager *)central didConnectPeripheral:(CBPeripheral *)peripheral
 {
-    BTLog(3, @"Connected periphal '%@'", peripheral.name);
+    BTLog(3, @"Connected peripheral '%@'", peripheral.name);
     
     CWBluetoothConnection *connection = [self _connectionForPeripheral:peripheral];
     connection.connectionTries = 0;
@@ -835,7 +964,7 @@ double const URL_CHECK_TIMEOUT = 2.0;
  */
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverServices:(NSError *)error
 {
-    BTLog(3, @"Discovered services for %@. Error: %@", peripheral.name, error);
+    BTLog(3, @"Discovered services for '%@'. Error: %@", peripheral.name, error);
     
     //Depending on the connection state, discover either the initial or the IP characteristic
     CWBluetoothConnection *connection = [self _connectionForPeripheral:peripheral];
@@ -860,7 +989,7 @@ double const URL_CHECK_TIMEOUT = 2.0;
     
     if (foundValidService == NO)
     {
-        BTLog(3, @"No valid services found for %@, device is ignored...", peripheral.name);
+        BTLog(3, @"No valid services found for '%@', device is ignored...", peripheral.name);
         connection.didError = YES;
         [self _disconnectPeripheral:peripheral];
     }
@@ -878,7 +1007,7 @@ double const URL_CHECK_TIMEOUT = 2.0;
  */
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverCharacteristicsForService:(CBService *)service error:(NSError *)error
 {
-    BTLog(3, @"Discovered Characteristics for %@. Error: %@", peripheral.name, error);
+    BTLog(3, @"Discovered Characteristics for '%@'. Error: %@", peripheral.name, error);
     
     CWBluetoothConnection *connection = [self _connectionForPeripheral:peripheral];
     BOOL foundValidCharacteristic = NO;
@@ -894,7 +1023,7 @@ double const URL_CHECK_TIMEOUT = 2.0;
         }
         
         //The IP characteristic supports writing to it
-        //If we discovered it, we write our network interface addresses to it to transfer them to the other device\
+        //If we discovered it, we write our network interface addresses to it to transfer them to the other device
         //After sending, peripheral:didWriteValueForCharacteristic:error: will be called
         if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:BLUETOOTH_IP_CHARACTERISTIC_UUID]])
         {
@@ -906,7 +1035,7 @@ double const URL_CHECK_TIMEOUT = 2.0;
     
     if (foundValidCharacteristic == NO)
     {
-        BTLog(3, @"No valid characteristics found for %@, device is ignored...", peripheral.name);
+        BTLog(3, @"No valid characteristics found for '%@', device is ignored...", peripheral.name);
         connection.didError = YES;
         [self _disconnectPeripheral:peripheral];
     }
@@ -928,7 +1057,7 @@ double const URL_CHECK_TIMEOUT = 2.0;
     }
     else
     {
-        ErrLog(@"Received data from %@. Data: %@. Error: %@", peripheral.name, [[NSString alloc] initWithData:characteristic.value encoding:NSUTF8StringEncoding], error);
+        ErrLog(@"Received data from '%@'. Data: %@. Error: %@", peripheral.name, [[NSString alloc] initWithData:characteristic.value encoding:NSUTF8StringEncoding], error);
         
         [self _disconnectPeripheral:peripheral];
     }
@@ -963,7 +1092,7 @@ double const URL_CHECK_TIMEOUT = 2.0;
 {
     if (peripheralManager.state == CBCentralManagerStatePoweredOn)
     {
-        //Add the Connichiwa service to the peripheral. When the service was added, XXX will be called
+        //Add the Connichiwa service to the peripheral. When the service was added, peripheralManager:didAddService:error: will be called
         if (self.didAddService == NO)
         {
             self.didAddService = YES;
@@ -971,19 +1100,17 @@ double const URL_CHECK_TIMEOUT = 2.0;
         }
     }
     
-    [CWDebug executeInDebug:^{
-        NSString *stateString;
-        switch (peripheralManager.state)
-        {
-            case CBPeripheralManagerStatePoweredOn: stateString = @"PoweredOn"; break;
-            case CBPeripheralManagerStateResetting: stateString = @"Resetting"; break;
-            case CBPeripheralManagerStateUnsupported: stateString = @"Unsupported"; break;
-            case CBPeripheralManagerStateUnauthorized: stateString = @"Unauthorized"; break;
-            case CBPeripheralManagerStatePoweredOff: stateString = @"PoweredOff"; break;
-            default: stateString = @"Unknown"; break;
-        }
-        BTLog(1, @"Peripheral Manager state changed to %@", stateString);
-    }];
+    NSString *stateString;
+    switch (peripheralManager.state)
+    {
+        case CBPeripheralManagerStatePoweredOn: stateString = @"PoweredOn"; break;
+        case CBPeripheralManagerStateResetting: stateString = @"Resetting"; break;
+        case CBPeripheralManagerStateUnsupported: stateString = @"Unsupported"; break;
+        case CBPeripheralManagerStateUnauthorized: stateString = @"Unauthorized"; break;
+        case CBPeripheralManagerStatePoweredOff: stateString = @"PoweredOff"; break;
+        default: stateString = @"Unknown"; break;
+    }
+    BTLog(1, @"Peripheral Manager state changed to %@", stateString);
 }
 
 
@@ -1086,6 +1213,100 @@ double const URL_CHECK_TIMEOUT = 2.0;
         {
             [self.delegate didStartAdvertisingWithIdentifier:self.appState.identifier];
         }
+    }
+}
+
+
+#pragma mark MCNearbyServiceBrowser
+
+/**
+ *  Called when the MCNearbyServiceBrowser detects a nearby peer
+ *
+ *  @param browser the browser that detected the peer
+ *  @param peerID  the detected peer's ID
+ *  @param info    the discovery info dictionary sent by the peer
+ */
+- (void)browser:(MCNearbyServiceBrowser *)browser foundPeer:(MCPeerID *)peerID withDiscoveryInfo:(NSDictionary *)info {
+    CWBluetoothConnection *connection = [self _connectionForIdentifier:[peerID displayName]];
+    if (connection == nil) return;
+    if (connection.mcState != CWBluetoothConnectionMCStateSearching) return;
+    
+    MCLog(3, @"Found device %@ as MC peer. Inviting...", connection.identifier);
+    
+//    connection.mcState = CWBluetoothConnectionMCStateConnected;
+    
+    //We need to invite the found peer to our session. This will call MCSession's
+//    [self.mcBrowser invitePeer:peerID toSession:self.mcSession withContext:nil timeout:-1]; //TODO change timeout
+    MCSession *session = [[MCSession alloc] initWithPeer:self.mcID securityIdentity:nil encryptionPreference:MCEncryptionNone];
+    [session setDelegate:self];
+    [connection setMcSession:session];
+//    [self.mcSessions setObject:session forKey:peerID];
+    [self.mcBrowser invitePeer:peerID toSession:session withContext:nil timeout:-1];
+}
+
+/**
+ *  Called when the MCNearbyServiceBrowser lost a previously detected peer
+ *
+ *  @param browser the browser that detected the loss
+ *  @param peerID  the lost peer's ID
+ */
+- (void)browser:(MCNearbyServiceBrowser *)browser lostPeer:(MCPeerID *)peerID {
+    CWBluetoothConnection *connection = [self _connectionForIdentifier:[peerID displayName]];
+    if (connection == nil) return;
+    
+    MCLog(3, @"Lost device %@ as MC peer.", connection.identifier);
+    
+    [self _mcDisconnect:connection]; //cleanup
+}
+
+- (void)browser:(MCNearbyServiceBrowser *)browser didNotStartBrowsingForPeers:(NSError *)error {
+    //TODO we should trigger an immediate failure
+}
+
+#pragma mark MCNearbyServiceAdvertiser
+
+- (void)advertiser:(MCNearbyServiceAdvertiser *)advertiser didReceiveInvitationFromPeer:(MCPeerID *)peerID withContext:(NSData *)context invitationHandler:(void (^)(BOOL accept, MCSession *session))invitationHandler {
+    MCLog(3, @"Received MC invitiation from device %@. Accepting...", [peerID displayName]);
+    
+    MCSession *session = [[MCSession alloc] initWithPeer:self.mcID securityIdentity:nil encryptionPreference:MCEncryptionNone];
+//    [session setDelegate:self];
+//    [self.mcSessions setObject:session forKey:peerID]; //TODO do we need this?
+    invitationHandler(YES, session);
+}
+
+#pragma mark MCSession
+
+- (void)session:(MCSession *)session peer:(MCPeerID *)peerID didChangeState:(MCSessionState)state {
+    CWBluetoothConnection *connection = [self _connectionForIdentifier:[peerID displayName]];
+    if (connection == nil) return;
+    if (connection.mcState != CWBluetoothConnectionMCStateSearching) return;
+    
+    NSString *stateString = @"unknown";
+    if (state == MCSessionStateConnecting) stateString = @"connecting";
+    if (state == MCSessionStateConnected) stateString = @"connected!";
+    if (state == MCSessionStateNotConnected) stateString = @"not connected";
+    MCLog(3, @"MC Peer State of device %@ changed to %@", connection.identifier, stateString);
+    
+    switch (state) {
+        case MCSessionStateConnecting:
+            //We don't need to do anything here, still waiting
+            break;
+        case MCSessionStateConnected:
+            connection.mcState = CWBluetoothConnectionMCStateConnected;
+            
+            //A short connection is enough to establish the ad hoc network. We can now disconnect MC and the ad hoc connection is kept
+            //With the new ad hoc network, let's try that IP send one more
+            [self _mcDisconnect:connection];
+            [self sendNetworkAddressesToDevice:connection.identifier];
+            
+            break;
+        case MCSessionStateNotConnected:
+            //This usually happens when the connection failed for some reason
+            [self _mcDisconnect:connection]; //cleanup
+            
+            //TODO we should probably try another MC connect here ?
+            
+            break;
     }
 }
 

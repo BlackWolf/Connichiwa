@@ -17,7 +17,7 @@ var CWSystemInfo = CWSystemInfo || {};
  * @type {Number}
  * @const
  */
-CWSystemInfo.DEFAULT_PPI = 100; //HD on a 22'' monitor
+CWSystemInfo.DEFAULT_PPI = 100; //1080p on a 22'' monitor
 
 
 /**

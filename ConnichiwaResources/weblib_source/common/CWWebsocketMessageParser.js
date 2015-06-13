@@ -10,7 +10,7 @@
  * @namespace  CWWebsocketMessageParser
  * @protected
  */
-var CWWebsocketMessageParser = CWWebsocketMessageParser || {};
+var CWWebsocketMessageParser = CWModules.retrieve('CWWebsocketMessageParser');
 
 
 /**
@@ -23,22 +23,43 @@ var CWWebsocketMessageParser = CWWebsocketMessageParser || {};
  * @protected
  */
 CWWebsocketMessageParser.parse = function(message) {
+  var promise;
   switch (message._name) {
-    case "_chunk"             : this._parseChunk(message);             break;
-    case "_ack"               : this._parseAck(message);               break;
-    case "_insert"            : this._parseInsert(message);            break;
-    case "_replace"           : this._parseReplace(message);           break;
-    case "_loadscript"        : this._parseLoadScript(message);        break;
-    case "_loadcss"           : this._parseLoadCSS(message);           break;
-    case "_loadtemplate"      : this._parseLoadTemplate(message);      break;
-    case "_inserttemplate"    : this._parseInsertTemplate(message);    break;
-    case "_wasstitched"       : this._parseWasStitched(message);       break;
-    case "_wasunstitched"     : this._parseWasUnstitched(message);     break;
-    case "_gotstitchneighbor" : this._parseGotStitchNeighbor(message); break;
-    case "_updatedatastore"   : this._parseUpdateDatastore(message);   break;
+    case "_chunk"             : promise = this._parseChunk(message);             break;
+    case "_ack"               : promise = this._parseAck(message);               break;
+    case "_insert"            : promise = this._parseInsert(message);            break;
+    case "_replace"           : promise = this._parseReplace(message);           break;
+    case "_loadscript"        : promise = this._parseLoadScript(message);        break;
+    case "_loadcss"           : promise = this._parseLoadCSS(message);           break;
+    case "_loadtemplate"      : promise = this._parseLoadTemplate(message);      break;
+    case "_inserttemplate"    : promise = this._parseInsertTemplate(message);    break;
+    case "_wasstitched"       : promise = this._parseWasStitched(message);       break;
+    case "_wasunstitched"     : promise = this._parseWasUnstitched(message);     break;
+    case "_gotstitchneighbor" : promise = this._parseGotStitchNeighbor(message); break;
+    case "_updatedatastore"   : promise = this._parseUpdateDatastore(message);   break;
   }
 
-  return true;
+  return promise;
+}.bind(CWWebsocketMessageParser);
+
+
+var chunks = {};
+CWWebsocketMessageParser._parseChunk = function(message) {
+  if (message.originalID in chunks === false) {
+    chunks[message.originalID] = "";
+  }
+
+  chunks[message.originalID] += message.payload;
+
+  if (!!(message.isFinal) === true) {
+    var event = {};
+    event.data = chunks[message.originalID];
+    Connichiwa._onWebsocketMessage(event);
+
+    chunks[message.originalID] = undefined;
+  }
+
+  return false; //we don't ack chunks
 }.bind(CWWebsocketMessageParser);
 
 
@@ -52,6 +73,7 @@ CWWebsocketMessageParser.parse = function(message) {
  */
 CWWebsocketMessageParser._parseAck = function(message) {
   CWEventManager.trigger("__ack_message" + message.original._id);
+  return false; //IMPORTANT: otherwise we sent an ack for an ack
 }.bind(CWWebsocketMessageParser);
 
 
@@ -65,6 +87,7 @@ CWWebsocketMessageParser._parseAck = function(message) {
  */
 CWWebsocketMessageParser._parseInsert = function(message) {
   $(message.selector).append(message.html);
+  return new $.Deferred().resolve();
 }.bind(CWWebsocketMessageParser);
 
 
@@ -82,6 +105,7 @@ CWWebsocketMessageParser._parseReplace = function(message) {
   } else {
     $(message.selector).replaceWith(message.html);
   }
+  return new $.Deferred().resolve();
 }.bind(CWWebsocketMessageParser);
 
 
@@ -94,12 +118,15 @@ CWWebsocketMessageParser._parseReplace = function(message) {
  * @private
  */
 CWWebsocketMessageParser._parseLoadScript = function(message) {
+  var deferred = new $.Deferred();
   var that = this;
   $.getScript(message.url).done(function() {
-    Connichiwa._sendAck(message);
+    deferred.resolve();
   }).fail(function(f, s, t) {
     CWDebug.err(1, "There was an error loading '" + message.url + "': " + t);
+    deferred.reject();
   });
+  return deferred;
 }.bind(CWWebsocketMessageParser);
 
 
@@ -117,19 +144,21 @@ CWWebsocketMessageParser._parseLoadCSS = function(message) {
   cssEntry.setAttribute("type", "text/css");
   cssEntry.setAttribute("href", message.url);
   $("head").append(cssEntry);
-  Connichiwa._sendAck(message);
+  return new $.Deferred().resolve();
 }.bind(CWWebsocketMessageParser);
 
 
 CWWebsocketMessageParser._parseLoadTemplate = function(message) {
   CWTemplates.load(message.paths);
+  return new $.Deferred().resolve();
 };
 
 
 CWWebsocketMessageParser._parseInsertTemplate = function(message) {
-  CWTemplates.insert(message.templateName, message.target, message.data, function() {
-    Connichiwa._sendAck(message);
-  });
+  var deferred = new $.Deferred();
+  message.options.onComplete = function() { deferred.resolve(); };
+  CWTemplates.insert(message.templateName, message.options);
+  return deferred;
 };
 
 
@@ -143,6 +172,7 @@ CWWebsocketMessageParser._parseInsertTemplate = function(message) {
  */
 CWWebsocketMessageParser._parseWasStitched = function(message) {
   CWEventManager.trigger("wasStitched", message);
+  return new $.Deferred().resolve();
 }.bind(CWWebsocketMessageParser);
 
 
@@ -156,6 +186,7 @@ CWWebsocketMessageParser._parseWasStitched = function(message) {
  */
 CWWebsocketMessageParser._parseWasUnstitched = function(message) {
   CWEventManager.trigger("wasUnstitched", message);
+  return new $.Deferred().resolve();
 }.bind(CWWebsocketMessageParser);
 
 
@@ -170,6 +201,7 @@ CWWebsocketMessageParser._parseWasUnstitched = function(message) {
  */
 CWWebsocketMessageParser._parseGotStitchNeighbor = function(message) {
   CWEventManager.trigger("gotstitchneighbor", message);
+  return new $.Deferred().resolve();
 }.bind(CWWebsocketMessageParser);
 
 
@@ -193,6 +225,7 @@ CWWebsocketMessageParser._parseUpdateDatastore = function(message) {
       // CWDatastore._set(collection, key, value, false);
     // });
   });
+  return new $.Deferred().resolve();
 }.bind(CWWebsocketMessageParser);
 
 CWModules.add('CWWebsocketMessageParser');

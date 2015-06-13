@@ -436,137 +436,201 @@ to start the server.</Abstract>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/addGETHandlerForPath:staticData:contentType:cacheAge:</TokenIdentifier>
-			<Abstract type="html">Adds a handler to the server to respond to incoming &quot;GET&quot; HTTP requests
-with a specific case-insensitive path with in-memory data.</Abstract>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/setServerURL:</TokenIdentifier>
+			<Abstract type="html">Returns the server&apos;s URL.</Abstract>
 			<DeclaredIn>GCDWebServer.h</DeclaredIn>
 			
-			<Declaration>- (void)addGETHandlerForPath:(NSString *)path staticData:(NSData *)staticData contentType:(NSString *)contentType cacheAge:(NSUInteger)cacheAge</Declaration>
+			<Declaration>@property (nonatomic, readonly) NSURL *serverURL</Declaration>
 			
 			
-			<Anchor>//api/name/addGETHandlerForPath:staticData:contentType:cacheAge:</Anchor>
+			<Anchor>//api/name/serverURL</Anchor>
             <NodeRef refid="16"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/addGETHandlerForPath:filePath:isAttachment:cacheAge:allowRangeRequests:</TokenIdentifier>
-			<Abstract type="html">Adds a handler to the server to respond to incoming &quot;GET&quot; HTTP requests
-with a specific case-insensitive path with a file.</Abstract>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/serverURL</TokenIdentifier>
+			<Abstract type="html">Returns the server&apos;s URL.</Abstract>
 			<DeclaredIn>GCDWebServer.h</DeclaredIn>
 			
-			<Declaration>- (void)addGETHandlerForPath:(NSString *)path filePath:(NSString *)filePath isAttachment:(BOOL)isAttachment cacheAge:(NSUInteger)cacheAge allowRangeRequests:(BOOL)allowRangeRequests</Declaration>
+			<Declaration>@property (nonatomic, readonly) NSURL *serverURL</Declaration>
 			
 			
-			<Anchor>//api/name/addGETHandlerForPath:filePath:isAttachment:cacheAge:allowRangeRequests:</Anchor>
+			<Anchor>//api/name/serverURL</Anchor>
             <NodeRef refid="16"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/addGETHandlerForBasePath:directoryPath:indexFilename:cacheAge:allowRangeRequests:</TokenIdentifier>
-			<Abstract type="html">Adds a handler to the server to respond to incoming &quot;GET&quot; HTTP requests
-with a case-insensitive path inside a base path with the corresponding file
-inside a local directory. If no local file matches the request path, a 401
-HTTP status code is returned to the client.</Abstract>
+			<TokenIdentifier>//apple_ref/occ/instp/GCDWebServer/serverURL</TokenIdentifier>
+			<Abstract type="html">Returns the server&apos;s URL.</Abstract>
 			<DeclaredIn>GCDWebServer.h</DeclaredIn>
 			
-			<Declaration>- (void)addGETHandlerForBasePath:(NSString *)basePath directoryPath:(NSString *)directoryPath indexFilename:(NSString *)indexFilename cacheAge:(NSUInteger)cacheAge allowRangeRequests:(BOOL)allowRangeRequests</Declaration>
+			<Declaration>@property (nonatomic, readonly) NSURL *serverURL</Declaration>
 			
 			
-			<Anchor>//api/name/addGETHandlerForBasePath:directoryPath:indexFilename:cacheAge:allowRangeRequests:</Anchor>
+			<Anchor>//api/name/serverURL</Anchor>
             <NodeRef refid="16"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/_responseWithContentsOfDirectory:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>GCDWebServer.m</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/setBonjourServerURL:</TokenIdentifier>
+			<Abstract type="html">Returns the server&apos;s Bonjour URL.</Abstract>
+			<DeclaredIn>GCDWebServer.h</DeclaredIn>
 			
-			<Declaration>- (GCDWebServerResponse *)_responseWithContentsOfDirectory:(NSString *)path</Declaration>
+			<Declaration>@property (nonatomic, readonly) NSURL *bonjourServerURL</Declaration>
 			
 			
-			<Anchor>//api/name/_responseWithContentsOfDirectory:</Anchor>
+			<Anchor>//api/name/bonjourServerURL</Anchor>
             <NodeRef refid="16"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/addDefaultHandlerForMethod:requestClass:processBlock:</TokenIdentifier>
-			<Abstract type="html">Adds a default handler to the server to handle all incoming HTTP requests
-with a given HTTP method and generate responses synchronously.</Abstract>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/bonjourServerURL</TokenIdentifier>
+			<Abstract type="html">Returns the server&apos;s Bonjour URL.</Abstract>
 			<DeclaredIn>GCDWebServer.h</DeclaredIn>
 			
-			<Declaration>- (void)addDefaultHandlerForMethod:(NSString *)method requestClass:(Class)aClass processBlock:(GCDWebServerProcessBlock)block</Declaration>
+			<Declaration>@property (nonatomic, readonly) NSURL *bonjourServerURL</Declaration>
 			
 			
-			<Anchor>//api/name/addDefaultHandlerForMethod:requestClass:processBlock:</Anchor>
+			<Anchor>//api/name/bonjourServerURL</Anchor>
             <NodeRef refid="16"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/addDefaultHandlerForMethod:requestClass:asyncProcessBlock:</TokenIdentifier>
-			<Abstract type="html">Adds a default handler to the server to handle all incoming HTTP requests
-with a given HTTP method and generate responses asynchronously.</Abstract>
+			<TokenIdentifier>//apple_ref/occ/instp/GCDWebServer/bonjourServerURL</TokenIdentifier>
+			<Abstract type="html">Returns the server&apos;s Bonjour URL.</Abstract>
 			<DeclaredIn>GCDWebServer.h</DeclaredIn>
 			
-			<Declaration>- (void)addDefaultHandlerForMethod:(NSString *)method requestClass:(Class)aClass asyncProcessBlock:(GCDWebServerAsyncProcessBlock)block</Declaration>
+			<Declaration>@property (nonatomic, readonly) NSURL *bonjourServerURL</Declaration>
 			
 			
-			<Anchor>//api/name/addDefaultHandlerForMethod:requestClass:asyncProcessBlock:</Anchor>
+			<Anchor>//api/name/bonjourServerURL</Anchor>
             <NodeRef refid="16"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/addHandlerForMethod:path:requestClass:processBlock:</TokenIdentifier>
-			<Abstract type="html">Adds a handler to the server to handle incoming HTTP requests with a given
-HTTP method and a specific case-insensitive path  and generate responses
-synchronously.</Abstract>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/start</TokenIdentifier>
+			<Abstract type="html">Starts the server on port 8080 (OS X &amp;amp; iOS Simulator) or port 80 (iOS)
+using the default Bonjour name.</Abstract>
 			<DeclaredIn>GCDWebServer.h</DeclaredIn>
 			
-			<Declaration>- (void)addHandlerForMethod:(NSString *)method path:(NSString *)path requestClass:(Class)aClass processBlock:(GCDWebServerProcessBlock)block</Declaration>
+			<Declaration>- (BOOL)start</Declaration>
 			
 			
-			<Anchor>//api/name/addHandlerForMethod:path:requestClass:processBlock:</Anchor>
+			<Anchor>//api/name/start</Anchor>
             <NodeRef refid="16"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/addHandlerForMethod:path:requestClass:asyncProcessBlock:</TokenIdentifier>
-			<Abstract type="html">Adds a handler to the server to handle incoming HTTP requests with a given
-HTTP method and a specific case-insensitive path and generate responses
-asynchronously.</Abstract>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/startWithPort:bonjourName:</TokenIdentifier>
+			<Abstract type="html">Starts the server on a given port and with a specific Bonjour name.
+Pass a nil Bonjour name to disable Bonjour entirely or an empty string to
+use the default name.</Abstract>
 			<DeclaredIn>GCDWebServer.h</DeclaredIn>
 			
-			<Declaration>- (void)addHandlerForMethod:(NSString *)method path:(NSString *)path requestClass:(Class)aClass asyncProcessBlock:(GCDWebServerAsyncProcessBlock)block</Declaration>
+			<Declaration>- (BOOL)startWithPort:(NSUInteger)port bonjourName:(NSString *)name</Declaration>
 			
 			
-			<Anchor>//api/name/addHandlerForMethod:path:requestClass:asyncProcessBlock:</Anchor>
+			<Anchor>//api/name/startWithPort:bonjourName:</Anchor>
             <NodeRef refid="16"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/addHandlerForMethod:pathRegex:requestClass:processBlock:</TokenIdentifier>
-			<Abstract type="html">Adds a handler to the server to handle incoming HTTP requests with a given
-HTTP method and a path matching a case-insensitive regular expression and
-generate responses synchronously.</Abstract>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/runWithPort:bonjourName:</TokenIdentifier>
+			<Abstract type="html">Runs the server synchronously using startWithPort:bonjourName: until a
+SIGINT signal is received i.e. Ctrl-C. This method is intended to be used
+by command line tools.</Abstract>
 			<DeclaredIn>GCDWebServer.h</DeclaredIn>
 			
-			<Declaration>- (void)addHandlerForMethod:(NSString *)method pathRegex:(NSString *)regex requestClass:(Class)aClass processBlock:(GCDWebServerProcessBlock)block</Declaration>
+			<Declaration>- (BOOL)runWithPort:(NSUInteger)port bonjourName:(NSString *)name</Declaration>
 			
 			
-			<Anchor>//api/name/addHandlerForMethod:pathRegex:requestClass:processBlock:</Anchor>
+			<Anchor>//api/name/runWithPort:bonjourName:</Anchor>
             <NodeRef refid="16"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/addHandlerForMethod:pathRegex:requestClass:asyncProcessBlock:</TokenIdentifier>
-			<Abstract type="html">Adds a handler to the server to handle incoming HTTP requests with a given
-HTTP method and a path matching a case-insensitive regular expression and
-generate responses asynchronously.</Abstract>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/runWithOptions:error:</TokenIdentifier>
+			<Abstract type="html">Runs the server synchronously using -startWithOptions: until a SIGTERM or
+SIGINT signal is received i.e. Ctrl-C in Terminal. This method is intended to
+be used by command line tools.</Abstract>
 			<DeclaredIn>GCDWebServer.h</DeclaredIn>
 			
-			<Declaration>- (void)addHandlerForMethod:(NSString *)method pathRegex:(NSString *)regex requestClass:(Class)aClass asyncProcessBlock:(GCDWebServerAsyncProcessBlock)block</Declaration>
+			<Declaration>- (BOOL)runWithOptions:(NSDictionary *)options error:(NSError **)error</Declaration>
 			
 			
-			<Anchor>//api/name/addHandlerForMethod:pathRegex:requestClass:asyncProcessBlock:</Anchor>
+			<Anchor>//api/name/runWithOptions:error:</Anchor>
+            <NodeRef refid="16"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/GCDWebServer/setLogLevel:</TokenIdentifier>
+			<Abstract type="html">Sets the log level of the logging facility below which log messages are discarded.</Abstract>
+			<DeclaredIn>GCDWebServer.h</DeclaredIn>
+			
+			<Declaration>+ (void)setLogLevel:(int)level</Declaration>
+			
+			
+			<Anchor>//api/name/setLogLevel:</Anchor>
+            <NodeRef refid="16"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/logVerbose:</TokenIdentifier>
+			<Abstract type="html">Logs a message to the logging facility at the VERBOSE level.</Abstract>
+			<DeclaredIn>GCDWebServer.h</DeclaredIn>
+			
+			<Declaration>- (void)logVerbose:(NSString *)format, ...</Declaration>
+			
+			
+			<Anchor>//api/name/logVerbose:</Anchor>
+            <NodeRef refid="16"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/logInfo:</TokenIdentifier>
+			<Abstract type="html">Logs a message to the logging facility at the INFO level.</Abstract>
+			<DeclaredIn>GCDWebServer.h</DeclaredIn>
+			
+			<Declaration>- (void)logInfo:(NSString *)format, ...</Declaration>
+			
+			
+			<Anchor>//api/name/logInfo:</Anchor>
+            <NodeRef refid="16"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/logWarning:</TokenIdentifier>
+			<Abstract type="html">Logs a message to the logging facility at the WARNING level.</Abstract>
+			<DeclaredIn>GCDWebServer.h</DeclaredIn>
+			
+			<Declaration>- (void)logWarning:(NSString *)format, ...</Declaration>
+			
+			
+			<Anchor>//api/name/logWarning:</Anchor>
+            <NodeRef refid="16"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/logError:</TokenIdentifier>
+			<Abstract type="html">Logs a message to the logging facility at the ERROR level.</Abstract>
+			<DeclaredIn>GCDWebServer.h</DeclaredIn>
+			
+			<Declaration>- (void)logError:(NSString *)format, ...</Declaration>
+			
+			
+			<Anchor>//api/name/logError:</Anchor>
+            <NodeRef refid="16"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/logException:</TokenIdentifier>
+			<Abstract type="html">Logs an exception to the logging facility at the EXCEPTION level.</Abstract>
+			<DeclaredIn>GCDWebServer.h</DeclaredIn>
+			
+			<Declaration>- (void)logException:(NSException *)exception</Declaration>
+			
+			
+			<Anchor>//api/name/logException:</Anchor>
             <NodeRef refid="16"/>
 		</Token>
 		
@@ -787,129 +851,137 @@ generate responses asynchronously.</Abstract>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/setServerURL:</TokenIdentifier>
-			<Abstract type="html">Returns the server&apos;s URL.</Abstract>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/addDefaultHandlerForMethod:requestClass:processBlock:</TokenIdentifier>
+			<Abstract type="html">Adds a default handler to the server to handle all incoming HTTP requests
+with a given HTTP method and generate responses synchronously.</Abstract>
 			<DeclaredIn>GCDWebServer.h</DeclaredIn>
 			
-			<Declaration>@property (nonatomic, readonly) NSURL *serverURL</Declaration>
+			<Declaration>- (void)addDefaultHandlerForMethod:(NSString *)method requestClass:(Class)aClass processBlock:(GCDWebServerProcessBlock)block</Declaration>
 			
 			
-			<Anchor>//api/name/serverURL</Anchor>
+			<Anchor>//api/name/addDefaultHandlerForMethod:requestClass:processBlock:</Anchor>
             <NodeRef refid="16"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/serverURL</TokenIdentifier>
-			<Abstract type="html">Returns the server&apos;s URL.</Abstract>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/addDefaultHandlerForMethod:requestClass:asyncProcessBlock:</TokenIdentifier>
+			<Abstract type="html">Adds a default handler to the server to handle all incoming HTTP requests
+with a given HTTP method and generate responses asynchronously.</Abstract>
 			<DeclaredIn>GCDWebServer.h</DeclaredIn>
 			
-			<Declaration>@property (nonatomic, readonly) NSURL *serverURL</Declaration>
+			<Declaration>- (void)addDefaultHandlerForMethod:(NSString *)method requestClass:(Class)aClass asyncProcessBlock:(GCDWebServerAsyncProcessBlock)block</Declaration>
 			
 			
-			<Anchor>//api/name/serverURL</Anchor>
+			<Anchor>//api/name/addDefaultHandlerForMethod:requestClass:asyncProcessBlock:</Anchor>
             <NodeRef refid="16"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/GCDWebServer/serverURL</TokenIdentifier>
-			<Abstract type="html">Returns the server&apos;s URL.</Abstract>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/addHandlerForMethod:path:requestClass:processBlock:</TokenIdentifier>
+			<Abstract type="html">Adds a handler to the server to handle incoming HTTP requests with a given
+HTTP method and a specific case-insensitive path  and generate responses
+synchronously.</Abstract>
 			<DeclaredIn>GCDWebServer.h</DeclaredIn>
 			
-			<Declaration>@property (nonatomic, readonly) NSURL *serverURL</Declaration>
+			<Declaration>- (void)addHandlerForMethod:(NSString *)method path:(NSString *)path requestClass:(Class)aClass processBlock:(GCDWebServerProcessBlock)block</Declaration>
 			
 			
-			<Anchor>//api/name/serverURL</Anchor>
+			<Anchor>//api/name/addHandlerForMethod:path:requestClass:processBlock:</Anchor>
             <NodeRef refid="16"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/setBonjourServerURL:</TokenIdentifier>
-			<Abstract type="html">Returns the server&apos;s Bonjour URL.</Abstract>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/addHandlerForMethod:path:requestClass:asyncProcessBlock:</TokenIdentifier>
+			<Abstract type="html">Adds a handler to the server to handle incoming HTTP requests with a given
+HTTP method and a specific case-insensitive path and generate responses
+asynchronously.</Abstract>
 			<DeclaredIn>GCDWebServer.h</DeclaredIn>
 			
-			<Declaration>@property (nonatomic, readonly) NSURL *bonjourServerURL</Declaration>
+			<Declaration>- (void)addHandlerForMethod:(NSString *)method path:(NSString *)path requestClass:(Class)aClass asyncProcessBlock:(GCDWebServerAsyncProcessBlock)block</Declaration>
 			
 			
-			<Anchor>//api/name/bonjourServerURL</Anchor>
+			<Anchor>//api/name/addHandlerForMethod:path:requestClass:asyncProcessBlock:</Anchor>
             <NodeRef refid="16"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/bonjourServerURL</TokenIdentifier>
-			<Abstract type="html">Returns the server&apos;s Bonjour URL.</Abstract>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/addHandlerForMethod:pathRegex:requestClass:processBlock:</TokenIdentifier>
+			<Abstract type="html">Adds a handler to the server to handle incoming HTTP requests with a given
+HTTP method and a path matching a case-insensitive regular expression and
+generate responses synchronously.</Abstract>
 			<DeclaredIn>GCDWebServer.h</DeclaredIn>
 			
-			<Declaration>@property (nonatomic, readonly) NSURL *bonjourServerURL</Declaration>
+			<Declaration>- (void)addHandlerForMethod:(NSString *)method pathRegex:(NSString *)regex requestClass:(Class)aClass processBlock:(GCDWebServerProcessBlock)block</Declaration>
 			
 			
-			<Anchor>//api/name/bonjourServerURL</Anchor>
+			<Anchor>//api/name/addHandlerForMethod:pathRegex:requestClass:processBlock:</Anchor>
             <NodeRef refid="16"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/GCDWebServer/bonjourServerURL</TokenIdentifier>
-			<Abstract type="html">Returns the server&apos;s Bonjour URL.</Abstract>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/addHandlerForMethod:pathRegex:requestClass:asyncProcessBlock:</TokenIdentifier>
+			<Abstract type="html">Adds a handler to the server to handle incoming HTTP requests with a given
+HTTP method and a path matching a case-insensitive regular expression and
+generate responses asynchronously.</Abstract>
 			<DeclaredIn>GCDWebServer.h</DeclaredIn>
 			
-			<Declaration>@property (nonatomic, readonly) NSURL *bonjourServerURL</Declaration>
+			<Declaration>- (void)addHandlerForMethod:(NSString *)method pathRegex:(NSString *)regex requestClass:(Class)aClass asyncProcessBlock:(GCDWebServerAsyncProcessBlock)block</Declaration>
 			
 			
-			<Anchor>//api/name/bonjourServerURL</Anchor>
+			<Anchor>//api/name/addHandlerForMethod:pathRegex:requestClass:asyncProcessBlock:</Anchor>
             <NodeRef refid="16"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/start</TokenIdentifier>
-			<Abstract type="html">Starts the server on port 8080 (OS X &amp;amp; iOS Simulator) or port 80 (iOS)
-using the default Bonjour name.</Abstract>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/addGETHandlerForPath:staticData:contentType:cacheAge:</TokenIdentifier>
+			<Abstract type="html">Adds a handler to the server to respond to incoming &quot;GET&quot; HTTP requests
+with a specific case-insensitive path with in-memory data.</Abstract>
 			<DeclaredIn>GCDWebServer.h</DeclaredIn>
 			
-			<Declaration>- (BOOL)start</Declaration>
+			<Declaration>- (void)addGETHandlerForPath:(NSString *)path staticData:(NSData *)staticData contentType:(NSString *)contentType cacheAge:(NSUInteger)cacheAge</Declaration>
 			
 			
-			<Anchor>//api/name/start</Anchor>
+			<Anchor>//api/name/addGETHandlerForPath:staticData:contentType:cacheAge:</Anchor>
             <NodeRef refid="16"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/startWithPort:bonjourName:</TokenIdentifier>
-			<Abstract type="html">Starts the server on a given port and with a specific Bonjour name.
-Pass a nil Bonjour name to disable Bonjour entirely or an empty string to
-use the default name.</Abstract>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/addGETHandlerForPath:filePath:isAttachment:cacheAge:allowRangeRequests:</TokenIdentifier>
+			<Abstract type="html">Adds a handler to the server to respond to incoming &quot;GET&quot; HTTP requests
+with a specific case-insensitive path with a file.</Abstract>
 			<DeclaredIn>GCDWebServer.h</DeclaredIn>
 			
-			<Declaration>- (BOOL)startWithPort:(NSUInteger)port bonjourName:(NSString *)name</Declaration>
+			<Declaration>- (void)addGETHandlerForPath:(NSString *)path filePath:(NSString *)filePath isAttachment:(BOOL)isAttachment cacheAge:(NSUInteger)cacheAge allowRangeRequests:(BOOL)allowRangeRequests</Declaration>
 			
 			
-			<Anchor>//api/name/startWithPort:bonjourName:</Anchor>
+			<Anchor>//api/name/addGETHandlerForPath:filePath:isAttachment:cacheAge:allowRangeRequests:</Anchor>
             <NodeRef refid="16"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/runWithPort:bonjourName:</TokenIdentifier>
-			<Abstract type="html">Runs the server synchronously using startWithPort:bonjourName: until a
-SIGINT signal is received i.e. Ctrl-C. This method is intended to be used
-by command line tools.</Abstract>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/addGETHandlerForBasePath:directoryPath:indexFilename:cacheAge:allowRangeRequests:</TokenIdentifier>
+			<Abstract type="html">Adds a handler to the server to respond to incoming &quot;GET&quot; HTTP requests
+with a case-insensitive path inside a base path with the corresponding file
+inside a local directory. If no local file matches the request path, a 401
+HTTP status code is returned to the client.</Abstract>
 			<DeclaredIn>GCDWebServer.h</DeclaredIn>
 			
-			<Declaration>- (BOOL)runWithPort:(NSUInteger)port bonjourName:(NSString *)name</Declaration>
+			<Declaration>- (void)addGETHandlerForBasePath:(NSString *)basePath directoryPath:(NSString *)directoryPath indexFilename:(NSString *)indexFilename cacheAge:(NSUInteger)cacheAge allowRangeRequests:(BOOL)allowRangeRequests</Declaration>
 			
 			
-			<Anchor>//api/name/runWithPort:bonjourName:</Anchor>
+			<Anchor>//api/name/addGETHandlerForBasePath:directoryPath:indexFilename:cacheAge:allowRangeRequests:</Anchor>
             <NodeRef refid="16"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/runWithOptions:error:</TokenIdentifier>
-			<Abstract type="html">Runs the server synchronously using -startWithOptions: until a SIGTERM or
-SIGINT signal is received i.e. Ctrl-C in Terminal. This method is intended to
-be used by command line tools.</Abstract>
-			<DeclaredIn>GCDWebServer.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/_responseWithContentsOfDirectory:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServer.m</DeclaredIn>
 			
-			<Declaration>- (BOOL)runWithOptions:(NSDictionary *)options error:(NSError **)error</Declaration>
+			<Declaration>- (GCDWebServerResponse *)_responseWithContentsOfDirectory:(NSString *)path</Declaration>
 			
 			
-			<Anchor>//api/name/runWithOptions:error:</Anchor>
+			<Anchor>//api/name/_responseWithContentsOfDirectory:</Anchor>
             <NodeRef refid="16"/>
 		</Token>
 		
@@ -962,78 +1034,6 @@ and comparing the generated responses with the pre-recorded ones.</Abstract>
 			
 			
 			<Anchor>//api/name/runTestsWithOptions:inDirectory:</Anchor>
-            <NodeRef refid="16"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/clm/GCDWebServer/setLogLevel:</TokenIdentifier>
-			<Abstract type="html">Sets the log level of the logging facility below which log messages are discarded.</Abstract>
-			<DeclaredIn>GCDWebServer.h</DeclaredIn>
-			
-			<Declaration>+ (void)setLogLevel:(int)level</Declaration>
-			
-			
-			<Anchor>//api/name/setLogLevel:</Anchor>
-            <NodeRef refid="16"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/logVerbose:</TokenIdentifier>
-			<Abstract type="html">Logs a message to the logging facility at the VERBOSE level.</Abstract>
-			<DeclaredIn>GCDWebServer.h</DeclaredIn>
-			
-			<Declaration>- (void)logVerbose:(NSString *)format, ...</Declaration>
-			
-			
-			<Anchor>//api/name/logVerbose:</Anchor>
-            <NodeRef refid="16"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/logInfo:</TokenIdentifier>
-			<Abstract type="html">Logs a message to the logging facility at the INFO level.</Abstract>
-			<DeclaredIn>GCDWebServer.h</DeclaredIn>
-			
-			<Declaration>- (void)logInfo:(NSString *)format, ...</Declaration>
-			
-			
-			<Anchor>//api/name/logInfo:</Anchor>
-            <NodeRef refid="16"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/logWarning:</TokenIdentifier>
-			<Abstract type="html">Logs a message to the logging facility at the WARNING level.</Abstract>
-			<DeclaredIn>GCDWebServer.h</DeclaredIn>
-			
-			<Declaration>- (void)logWarning:(NSString *)format, ...</Declaration>
-			
-			
-			<Anchor>//api/name/logWarning:</Anchor>
-            <NodeRef refid="16"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/logError:</TokenIdentifier>
-			<Abstract type="html">Logs a message to the logging facility at the ERROR level.</Abstract>
-			<DeclaredIn>GCDWebServer.h</DeclaredIn>
-			
-			<Declaration>- (void)logError:(NSString *)format, ...</Declaration>
-			
-			
-			<Anchor>//api/name/logError:</Anchor>
-            <NodeRef refid="16"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServer/logException:</TokenIdentifier>
-			<Abstract type="html">Logs an exception to the logging facility at the EXCEPTION level.</Abstract>
-			<DeclaredIn>GCDWebServer.h</DeclaredIn>
-			
-			<Declaration>- (void)logException:(NSException *)exception</Declaration>
-			
-			
-			<Anchor>//api/name/logException:</Anchor>
             <NodeRef refid="16"/>
 		</Token>
 		

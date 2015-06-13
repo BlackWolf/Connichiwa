@@ -4,7 +4,18 @@
 var CWModules = {};
 
 CWModules._modules = [];
+CWModules._actualModules = {};
 CWModules._didInit = false;
+
+CWModules.retrieve = function(module) {
+  this.add(module);
+
+  if (module in this._actualModules === false) {
+    this._actualModules[module] = {};
+  }
+
+  return this._actualModules[module];
+}.bind(CWModules);
 
 CWModules.add = function(module) {
   if (this._modules.indexOf(module) !== -1) return;
@@ -22,6 +33,17 @@ CWModules.init = function() {
     for (var i = 0; i < that._modules.length; i++) {
       var module = that._modules[i];
       console.log('Initializing module ' + module + '...');
+
+      var theMod = that._actualModules[module];
+      for (var key in theMod) {
+        // console.log("Checking "+key);
+        if (theMod.hasOwnProperty(key) && typeof(theMod[key]) === 'function') {
+          // console.log("Binding "+key);
+          // window[module][key] = window[module][key].bind(window[module]);
+          theMod[key] = theMod[key].bind(theMod);
+        }
+      }
+
       if (window[module].__constructor) window[module].__constructor();
     }  
 
@@ -312,19 +334,21 @@ var CWDebug = CWDebug || {};
 /**
  * Enables or disables debug logging
  * @type {Boolean}
- * @default [taken from native application]
+ * @default false
  * @private
  */
-CWDebug._debug = false;
+// CWDebug._debug = false;
+CWDebug._debug = true;
 
 
 /**
  * The current log level, see {@link CWDebug.setLogLevel}
  * @type {Number}
- * @default [taken from native application]
+ * @default 0
  * @private
  */
-CWDebug._logLevel = 0;
+// CWDebug._logLevel = 0;
+CWDebug._logLevel = 4;
 
 
 /**
@@ -551,12 +575,26 @@ function CWDevice(properties)
    */
   this._ppi = CWSystemInfo.DEFAULT_PPI;
 
-  if (properties.launchDate) this._launchDate = properties.launchDate;
-  if (properties.ips) this._ips = properties.ips;
-  if (properties.port) this._port = properties.port;
-  if (properties.name) this._name = properties.name;
-  if (properties.ppi && properties.ppi > 0) this._ppi = properties.ppi;
+  this._setProperties(properties);
 }
+
+
+/**
+ * Sets the device properties given in the properties object to the given
+ *    values. Note that the device's identifier is immutable and cannot be set
+ *    using this method.
+ * @param {Object} properties An object containing key/value pairs with
+ *    properties to set
+ * @function
+ * @protected
+ */
+CWDevice.prototype._setProperties = function(properties) {
+  if (properties.launchDate)  this._launchDate = properties.launchDate;
+  if (properties.ips)         this._ips = properties.ips;
+  if (properties.port)        this._port = properties.port;
+  if (properties.name)        this._name = properties.name;
+  if (properties.ppi && properties.ppi > 0) this._ppi = properties.ppi;
+};
 
 
 //
@@ -818,6 +856,7 @@ CWDevice.prototype.insertTemplate = function(templateName, options) {
   var onComplete = options.onComplete;
 
   //Remove onComplete from options, we don't want to send that to the device
+  //Instead, we pass onComplete as the callback to .send()
   options.onComplete = undefined;
 
   var message = { templateName: templateName, options: options };
@@ -1002,7 +1041,7 @@ CWDevice.ConnectionState = {
  * @namespace  CWEventManager
  * @protected
  */
-var CWEventManager = CWEventManager || {};
+var CWEventManager = CWModules.retrieve('CWEventManager');
 
 
 /**
@@ -2348,14 +2387,9 @@ CWNativeBridge._runsNative = false;
  * @private
  */
 CWNativeBridge.__constructor = function() {
-  // if (Connichiwa.isMaster()) {
-    // console.log("runsNative true")
-    // this._runsNative = true;
-  // } else {
-    if (window.RUN_BY_CONNICHIWA_NATIVE === true) {
-      this._runsNative = true;
-    } 
-  // }
+  if (window.RUN_BY_CONNICHIWA_NATIVE === true) {
+    this._runsNative = true;
+  } 
 }.bind(CWNativeBridge);
 
 
@@ -2449,7 +2483,7 @@ CWModules.add('CWNativeBridge');
  *    current device transformation
  * @namespace CWStitchManager
  */
-var CWStitchManager = CWStitchManager || {};
+var CWStitchManager = CWModules.retrieve('CWStitchManager');
 
 
 /**
@@ -2716,7 +2750,7 @@ var CWSystemInfo = CWSystemInfo || {};
  * @type {Number}
  * @const
  */
-CWSystemInfo.DEFAULT_PPI = 100; //HD on a 22'' monitor
+CWSystemInfo.DEFAULT_PPI = 100; //1080p on a 22'' monitor
 
 
 /**
@@ -3112,8 +3146,6 @@ CWTemplates.insert = function(device, templateName, options) {
   var target     = options.target || 'body';
   var dataSource = options.dataSource;
   var onComplete = options.onComplete;
-
-  console.log("Inserting template "+templateName+" into "+target);
 
   //Inserting into local DOM
   var that = this;
@@ -3589,7 +3621,7 @@ CWVector.prototype.getP2 = function() {
  * @namespace  CWWebsocketMessageParser
  * @protected
  */
-var CWWebsocketMessageParser = CWWebsocketMessageParser || {};
+var CWWebsocketMessageParser = CWModules.retrieve('CWWebsocketMessageParser');
 
 
 /**
@@ -3618,26 +3650,27 @@ CWWebsocketMessageParser.parse = function(message) {
     case "_updatedatastore"   : promise = this._parseUpdateDatastore(message);   break;
   }
 
-  //TODO
-  //This is a stupid system, because some of the functions want to send
-  //their own ack
-  //
-  //Find another system:
-  //* The _parse functions could return true or false indicating if they want
-  //  to do their own ack. If they return false, we just send an ack here
-  //* Maybe we can get something working with promises? So that each _parse
-  //  function returns a promise that is fulfilled whenever the function
-  //  is done. When the promise is fulfilled, we send an ack
-  // if (message._name !== "_ack") {
-    // Connichiwa._sendAck(message);
-  // }
-  if (promise !== undefined) {
-    $.when(promise).always(function() {
-      Connichiwa._sendAck(message);
-    });
+  return promise;
+}.bind(CWWebsocketMessageParser);
+
+
+var chunks = {};
+CWWebsocketMessageParser._parseChunk = function(message) {
+  if (message.originalID in chunks === false) {
+    chunks[message.originalID] = "";
   }
 
-  return true;
+  chunks[message.originalID] += message.payload;
+
+  if (!!(message.isFinal) === true) {
+    var event = {};
+    event.data = chunks[message.originalID];
+    Connichiwa._onWebsocketMessage(event);
+
+    chunks[message.originalID] = undefined;
+  }
+
+  return false; //we don't ack chunks
 }.bind(CWWebsocketMessageParser);
 
 
@@ -3651,7 +3684,7 @@ CWWebsocketMessageParser.parse = function(message) {
  */
 CWWebsocketMessageParser._parseAck = function(message) {
   CWEventManager.trigger("__ack_message" + message.original._id);
-  return undefined; //IMPORTANT: otherwise we sent an ack for an ack
+  return false; //IMPORTANT: otherwise we sent an ack for an ack
 }.bind(CWWebsocketMessageParser);
 
 
@@ -3699,7 +3732,6 @@ CWWebsocketMessageParser._parseLoadScript = function(message) {
   var deferred = new $.Deferred();
   var that = this;
   $.getScript(message.url).done(function() {
-    // Connichiwa._sendAck(message);
     deferred.resolve();
   }).fail(function(f, s, t) {
     CWDebug.err(1, "There was an error loading '" + message.url + "': " + t);
@@ -3723,7 +3755,6 @@ CWWebsocketMessageParser._parseLoadCSS = function(message) {
   cssEntry.setAttribute("type", "text/css");
   cssEntry.setAttribute("href", message.url);
   $("head").append(cssEntry);
-  // Connichiwa._sendAck(message);
   return new $.Deferred().resolve();
 }.bind(CWWebsocketMessageParser);
 
@@ -3912,11 +3943,7 @@ Connichiwa.__constructor = function() {
     return;
   }
 
-  //If no native layer runs in the background, we have to take care of 
-  //establishing a connection ourselves
-  if (CWNativeBridge.isRunningNative() !== true) {
-    this._connectWebsocket();
-  }
+  this._connectWebsocket();
 }.bind(Connichiwa);
 
 
@@ -4054,8 +4081,8 @@ Connichiwa.broadcast = function(name, message, sendToSelf) {
 
 /**
  * Sends an acknowledgement message (with name `_ack`) back to the device
- *    where the given message originated from. The given message will be
- *    attached to the acknowledgement and sent back as well.
+ *    where the given message originated from. The original message's ID will 
+ *    be attached to the acknowledgement.
  * @param  {Object} message A valid message object that was received from a
  *    device
  * @function
@@ -4091,11 +4118,20 @@ Connichiwa._sendObject = function(message, callback) {
   var messageString = JSON.stringify(message);
   CWDebug.log(4, 'Sending message: ' + messageString);
 
+  if (callback !== undefined) {
+    Connichiwa.on('__ack_message' + message._id, function() {
+      callback();
+      Connichiwa.off('__ack_message' + message._id);
+    });
+  }
+
   //If the message is too long, chunk it in pieces of 2^15 bytes
   //We need to do that because some browser (Safari *cough*) can't
   //really handle messages that are very large.
   //We chunk the messages by framing the message with another message
-  // if (messageString.length > 32700) {
+  // var SIZE = 3850;
+  // var SIZE = 16000;
+  // if (messageString.length > SIZE) {
   //   var pos = 0;
   //   while (pos < messageString.length) { 
   //     var chunkMessage = {
@@ -4107,35 +4143,26 @@ Connichiwa._sendObject = function(message, callback) {
   //       payload    : "",
   //       isFinal    : 0,
   //     };
-  //     chunkMessage.payload = messageString.substr(pos, 32700);
+  //     chunkMessage.payload = messageString.substr(pos, SIZE);
 
-  //     var length = JSON.stringify(chunkMessage).length;
+  //     // var length = JSON.stringify(chunkMessage).length;
   //     var overload = 0;
-  //     if (length > 32700) {
-  //       overload = length - 32700;
-  //       chunkMessage.payload = chunkMessage.payload.substr(0, 32700-overload);
-  //     }
-  //     chunkMessage.isFinal = (pos+(32700 - overload)>=messageString.length) ? 1 : 0;
+  //     // if (length > SIZE) {
+  //       // overload = length - SIZE;
+  //       // chunkMessage.payload = chunkMessage.payload.substr(0, SIZE-overload);
+  //     // }
+  //     chunkMessage.isFinal = (pos+(SIZE - overload) >= messageString.length) ? 1 : 0;
 
   //     CWDebug.log(1, "Sending chunk of size "+JSON.stringify(chunkMessage).length);
+  //     // CWDebug.log(1, "IS FINAL? "+chunkMessage.isFinal);
   //     //Once again, we need a setTimeout to lower the possibility of a crash on iOS
-  //     window.setTimeout(function() { this._websocket.send(JSON.stringify(message)); }.bind(this), 0);
+  //     var that = this;
+  //     this._websocket.send(JSON.stringify(chunkMessage));
 
-  //     pos += 32700 - overload;
+  //     pos += SIZE - overload;
   //     CWDebug.log(1, "Pos is now "+pos+"/"+messageString.length);
   //   }
   // } else {
-    //Once again, we need a setTimeout to lower the possibility of a crash on iOS
-    
-    //If a callback was passed, attach it to the acknowledgement message for
-    //the message we are about to send
-    if (callback !== undefined) {
-      Connichiwa.on('__ack_message' + message._id, function() {
-        callback();
-        Connichiwa.off('__ack_message' + message._id);
-      });
-    }
-
     this._websocket.send(messageString);
   // }
 
@@ -4580,19 +4607,23 @@ var CWNativeBridge = CWNativeBridge || {};
  * @ignore
  */
 CWNativeBridge.parse = function(message) {
-  CWDebug.log(4, 'Parsing native message (master): ' + message);
-  var object = JSON.parse(message);
+  var object;
+  if (CWUtil.isString(message)) {
+    CWDebug.log(4, 'Parsing native message (master): ' + message);
+    object = JSON.parse(message);
+  } else {
+    object = message;
+  }
+
   switch (object._name)
   {
     case 'debuginfo':             this._parseDebugInfo(object); break;
-    case 'connectwebsocket':      this._parseConnectWebsocket(object); break;
     case 'localinfo':             this._parseLocalInfo(object); break;
     case 'devicedetected':        this._parseDeviceDetected(object); break;
     case 'devicedistancechanged': this._parseDeviceDistanceChanged(object); break;
     case 'devicelost':            this._parseDeviceLost(object); break;
     case 'remoteconnectfailed':   this._parseRemoteConnectFailed(object); break;
     case 'remotedisconnected':    this._parseRemoteDisconnected(object); break;
-    case 'disconnectwebsocket':   this._parseDisconnectWebsocket(object); break;
   }
 }.bind(CWNativeBridge);
 
@@ -4613,40 +4644,17 @@ CWNativeBridge._parseDebugInfo = function(message) {
 
 
 /**
- * (Available on master device only) 
- * 
- * Parses `connectwebsocket` messages. Such messages are sent when the native
- *    layer is ready to receive websocket connections and we can connect to
- *    the websocket
+ * (Available on master device only)
+ *
+ * Parses `localinfo` messages. Such messages contain additional information
+ *    about the local device determined by the native layer.
  * @param  {Object} message The object that represents the JSON message that
  *    was received from the native layer
  * @function
- * @private
- */
-CWNativeBridge._parseConnectWebsocket = function(message) {
-  Connichiwa._connectWebsocket();
-}.bind(CWNativeBridge);
-
-
-/**
- * (Available on master device only) 
- * 
- * Parses `localinfo` messages. Such messages contain the information about
- *    this device as determined by the native layer. The message will create
- *    the local device after which the JS library is considered "ready"
- * @param  {Object} message The object that represents the JSON message that
- *    was received from the native layer
- * @function
- * @fires ready
  * @private
  */
 CWNativeBridge._parseLocalInfo = function(message) {
-  var success = CWDeviceManager.createLocalDevice(message);
-  if (success)
-  {
-    Connichiwa._sendObject(message); //needed so server recognizes us as local weblib
-    CWEventManager.trigger('ready');
-  }
+  CWDeviceManager.getLocalDevice()._setProperties(message);
 }.bind(CWNativeBridge);
 
 
@@ -4777,29 +4785,13 @@ CWNativeBridge._parseRemoteDisconnected = function(message) {
 }.bind(CWNativeBridge);
 
 
-/**
- * (Available on master device only) 
- * 
- * Parses `remotedisconnected` messages. Such a message is sent by the native
- *    layer whenever the websocket connection to the server should be
- *    disconnected. This can be the case, for example, when the app is
- *    suspended on the device and the server is suspended
- * @param  {Object} message The object that represents the JSON message that
- *    was received from the native layer
- * @function
- * @private
- */
-CWNativeBridge._parseDisconnectWebsocket = function(message) {
-  Connichiwa._disconnectWebsocket();  
-}.bind(CWNativeBridge);
-
 CWModules.add('CWNativeBridge');
 /* global Connichiwa, CWDevice, CWDeviceManager, CWEventManager, CWDebug, CWModules */
 'use strict';
 
 
 
-var CWStitchManager = CWStitchManager || {};
+var CWStitchManager = CWModules.retrieve('CWStitchManager');
 
 
 /**
@@ -5280,7 +5272,7 @@ CWModules.add('CWStitchManager');
 
 
 
-var CWWebsocketMessageParser = CWWebsocketMessageParser || {};
+var CWWebsocketMessageParser = CWModules.retrieve('CWWebsocketMessageParser');
 
 /**
  * (Available on master device only)
@@ -5294,6 +5286,10 @@ var CWWebsocketMessageParser = CWWebsocketMessageParser || {};
  * @protected
  */
 CWWebsocketMessageParser.parseOnMaster = function(message) {
+  //TODO
+  //just because we are currently moving from javascriptcore to websockets
+  // CWNativeBridge.parse(message);
+
   var promise;
   switch (message._name) {
     case 'remoteinfo'   :  promise = this._parseRemoteInfo(message);  break;
@@ -5301,14 +5297,8 @@ CWWebsocketMessageParser.parseOnMaster = function(message) {
     case '_quitstitch'  :  promise = this._parseQuitStitch(message);  break;
   }
 
-  if (promise !== undefined) {
-    $.when(promise).always(function() {
-      Connichiwa._sendAck(message);
-    });
-  }
-
-  return true;
-}.bind(CWWebsocketMessageParser);
+  return promise;
+};
 
 
 CWWebsocketMessageParser._parseRemoteInfo = function(message) {
@@ -5330,7 +5320,8 @@ CWWebsocketMessageParser._parseRemoteInfo = function(message) {
   }
   
   device._connectionState = CWDevice.ConnectionState.CONNECTED;
-  nativeCallRemoteDidConnect(device.getIdentifier());
+  CWNativeBridge.callOnNative('nativeCallRemoteDidConnect', device.getIdentifier());
+  // nativeCallRemoteDidConnect(device.getIdentifier());
   
   //We want to do 3 things before we trigger the 'deviceConnected' event:
   //* Load the debug info on the other device
@@ -5347,9 +5338,6 @@ CWWebsocketMessageParser._parseRemoteInfo = function(message) {
   });
 
   var tryDidConnectCallback = function() { 
-    console.log(didLoadDebug);
-    console.log(didLoadData);
-    console.log(didLoadFiles);
     if (didLoadDebug === false || didLoadData === false || didLoadFiles === false) return;
     CWEventManager.trigger('deviceConnected', device); 
     deferred.resolve();
@@ -5425,7 +5413,7 @@ CWWebsocketMessageParser._parseQuitStitch = function(message) {
 }.bind(CWWebsocketMessageParser);
 
 CWModules.add('CWWebsocketMessageParser');
-/* global CWDeviceManager, CWNativeBridge, CWWebsocketMessageParser, CWEventManager, CWDebug, CWModules */
+/* global CWDeviceManager, CWNativeBridge, CWWebsocketMessageParser, CWEventManager, CWUtil, CWSystemInfo, CWDebug, CWModules */
 /* global nativeCallWebsocketDidOpen */
 /* global CONNECTING, OPEN */
 'use strict';
@@ -5571,8 +5559,24 @@ Connichiwa._connectWebsocket = function() {
  */
 Connichiwa._onWebsocketOpen = function() {
   CWDebug.log(3, 'Websocket opened');
-  CWNativeBridge.callOnNative('nativeCallWebsocketDidOpen');
+
+  //Create our local info, such as our unique ID
+  //This info might be extended by the native layer later
+  var localInfo = {
+    identifier : CWUtil.createUUID(),
+    launchDate : Date.now() / 1000.0,
+    ppi        : CWSystemInfo.PPI()
+  };
+  CWDeviceManager.createLocalDevice(localInfo);
+
+  Connichiwa.send("server", "_master_identification", { identifier: localInfo.identifier });
+  // Connichiwa.send("master", "localinfo", localInfo);
+
   this._connectionAttempts = 0;
+
+  CWNativeBridge.callOnNative('nativeCallWebsocketDidOpen');
+
+  CWEventManager.trigger('ready');
 }.bind(Connichiwa);
 
 
@@ -5583,14 +5587,6 @@ Connichiwa._onWebsocketOpen = function() {
 Connichiwa._onWebsocketMessage = function(e) {
   var message = JSON.parse(e.data);
 
-  //Filter messages that were broadcasted by us and do not have the
-  //'_broadcastToSource' flag set
-  if (message._target === 'broadcast' && 
-    message._source === this.getLocalDevice().getIdentifier() && 
-    message._broadcastToSource !== true) {
-    return;
-  }
-
   CWDebug.log(4, 'Received message: ' + e.data);
   
   //It seems that reacting immediatly to a websocket message
@@ -5598,10 +5594,27 @@ Connichiwa._onWebsocketMessage = function(e) {
   //We use requestAnimationFrame in an attempt to prevent those crashes
   var that = this;
   window.requestAnimationFrame(function() {
-    CWWebsocketMessageParser.parse(message);
-    CWWebsocketMessageParser.parseOnMaster(message);
+    var p1 = CWWebsocketMessageParser.parse(message);
+    var p2 = CWWebsocketMessageParser.parseOnMaster(message);
 
     if (message._name) CWEventManager.trigger('message' + message._name, message);
+
+    //The parse methods can return a jQuery promise:
+    //If any of them do, we will send back an ack only once the promise resolves
+    //If both of them return undefined we immediately send back an ack
+    //If any of them explicitly returns false, we don't send back an ack
+    //All other return values are not allowed
+    if (p1 === false || p2 === false) return;
+    
+    //Prefer p2 over p1, if both are undefined we return an ack immediately by
+    //creating a resolved promise
+    var promise = p2;
+    if (promise === undefined) promise = p1;
+    if (promise === undefined) promise = new $.Deferred().resolve();
+
+    $.when(promise).always(function() {
+      Connichiwa._sendAck(message);
+    });
   });
 }.bind(Connichiwa);
 

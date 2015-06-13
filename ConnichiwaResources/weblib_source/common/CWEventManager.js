@@ -12,7 +12,7 @@
  * @namespace  CWEventManager
  * @protected
  */
-var CWEventManager = CWEventManager || {};
+var CWEventManager = CWModules.retrieve('CWEventManager');
 
 
 /**
@@ -51,6 +51,96 @@ CWEventManager.register = function(event, callback) {
   if (!this._callbacks[event]) this._callbacks[event] = [];
   this._callbacks[event].push(callback);
   CWDebug.log(3, 'Attached callback to ' + event);
+}.bind(CWEventManager);
+
+
+/**
+ * Removes all callbacks from the given event. No callbacks for that event
+ *    will be triggered anymore.
+ * @param  {String}   eventName The event name to remove events from.
+ * @function
+ * @protected
+ *//**
+ * Removes the given callback from every possible event. The callback will
+ *    not be triggered anymore.
+ * @param  {Function} callback  The callback to remove. This function will be
+ *    removed from every event it has been registered for.
+ * @function
+ * @protected
+ *//**
+ * Removes the given callback from the given event. The
+ *    callback will not be triggered for that event anymore.
+ * @param  {String}   eventName The event to remove the callback from
+ * @param  {Function} callback  The callback function to remove
+ * @function
+ * @protected
+ */
+CWEventManager.unregister = function(event, callback) {
+  //If .unregister() is called within an event callback, we would unregister
+  //an event that is currently looped over by .trigger()
+  //Therefore, move .unregister() to the next run loop
+  var that = this;
+  window.setTimeout(function() {
+    if (callback === undefined) {
+      if (CWUtil.isFunction(event)) {
+        //Only callback was given
+        callback = event;
+        event = undefined;
+      }
+    }
+
+    if (event !== undefined) {
+      event = event.toLowerCase();
+
+      //Event can be a space-seperated list of event names
+      if (event.indexOf(' ') !== -1) {
+        var events = event.split(' ');
+        for (var i = 0; i < events.length; i++) {
+          CWEventManager.unregister(events[i], callback);
+        }
+        return;
+      }
+
+      if (callback === undefined) {
+        //If only an event was given, we remove all callbacks from this event
+        if (event in that._callbacks) {
+          that._callbacks[event] = undefined;
+          CWDebug.log(3, 'Detached ALL callbacks from ' + event);
+        }
+        return;
+      } else {
+        //If an event and a callback were given, only the given callback attached to
+        //the given event will be removed
+        if (event in that._callbacks) {
+          var i = 0;
+          $.each(that._callbacks[event], function(index, value) {
+            if (value === callback) {
+              that._callbacks[event].splice(index, 1);
+              i++;
+            }
+          });
+          CWDebug.log(3, 'Detached ' + i + ' callbacks from ' + event);
+          return;
+        }
+      }
+    }
+
+    //If only a callback was given, we search through all events and remove all
+    //callbacks with the given function
+    if (event === undefined && callback !== undefined) {
+      $.each(that._callbacks, function(eventName) {
+        var i = 0;
+        $.each(that._callbacks[eventName], function(index, value) {
+          if (value === callback) {
+            that._callbacks[eventName].splice(index, 1);
+            i++;
+          }
+        });
+
+        CWDebug.log(3, 'Detached ' + i + ' callbacks from ' + eventName);
+      });
+    }
+  }, 0);
 }.bind(CWEventManager);
 
 

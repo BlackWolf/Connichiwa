@@ -12,7 +12,7 @@
 
 
 /**
- *  The default "measured power" assumes for BT transmitters. This is the RSSI of the transmitter at a distance of 1m
+ *  The default "measured power" assumed for BT transmitters. This is the RSSI of the transmitter at a distance of 1m
  */
 int const DEFAULT_MEASURED_BLUETOOTH_POWER = -62;
 
@@ -54,8 +54,7 @@ double const RSSI_MOVING_AVERAGE_ALPHA = 0.03125;
  *
  *  @return nil
  */
-- (instancetype)init
-{
+- (instancetype)init {
     [NSException raise:@"Bluetooth connection cannot be instantiated without a peripheral" format:@"Bluetooth connection cannot be instantiated without a peripheral. Use -initWithPeripheral: instead."];
     
     return nil;
@@ -73,8 +72,10 @@ double const RSSI_MOVING_AVERAGE_ALPHA = 0.03125;
     self.averageRSSI = 0;
     
     self.measuredPower = DEFAULT_MEASURED_BLUETOOTH_POWER;
+    self.supportsMC = NO;
     
     self.connectionTries = 0;
+    self.mcConnectionTries = 0;
     
     return self;
 }

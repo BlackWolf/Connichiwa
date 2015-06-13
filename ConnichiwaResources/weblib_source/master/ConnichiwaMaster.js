@@ -1,4 +1,4 @@
-/* global CWDeviceManager, CWNativeBridge, CWWebsocketMessageParser, CWEventManager, CWDebug, CWModules */
+/* global CWDeviceManager, CWNativeBridge, CWWebsocketMessageParser, CWEventManager, CWUtil, CWSystemInfo, CWDebug, CWModules */
 /* global nativeCallWebsocketDidOpen */
 /* global CONNECTING, OPEN */
 'use strict';
@@ -144,8 +144,24 @@ Connichiwa._connectWebsocket = function() {
  */
 Connichiwa._onWebsocketOpen = function() {
   CWDebug.log(3, 'Websocket opened');
-  CWNativeBridge.callOnNative('nativeCallWebsocketDidOpen');
+
+  //Create our local info, such as our unique ID
+  //This info might be extended by the native layer later
+  var localInfo = {
+    identifier : CWUtil.createUUID(),
+    launchDate : Date.now() / 1000.0,
+    ppi        : CWSystemInfo.PPI()
+  };
+  CWDeviceManager.createLocalDevice(localInfo);
+
+  Connichiwa.send("server", "_master_identification", { identifier: localInfo.identifier });
+  // Connichiwa.send("master", "localinfo", localInfo);
+
   this._connectionAttempts = 0;
+
+  CWNativeBridge.callOnNative('nativeCallWebsocketDidOpen');
+
+  CWEventManager.trigger('ready');
 }.bind(Connichiwa);
 
 
@@ -156,14 +172,6 @@ Connichiwa._onWebsocketOpen = function() {
 Connichiwa._onWebsocketMessage = function(e) {
   var message = JSON.parse(e.data);
 
-  //Filter messages that were broadcasted by us and do not have the
-  //'_broadcastToSource' flag set
-  if (message._target === 'broadcast' && 
-    message._source === this.getLocalDevice().getIdentifier() && 
-    message._broadcastToSource !== true) {
-    return;
-  }
-
   CWDebug.log(4, 'Received message: ' + e.data);
   
   //It seems that reacting immediatly to a websocket message
@@ -171,10 +179,27 @@ Connichiwa._onWebsocketMessage = function(e) {
   //We use requestAnimationFrame in an attempt to prevent those crashes
   var that = this;
   window.requestAnimationFrame(function() {
-    CWWebsocketMessageParser.parse(message);
-    CWWebsocketMessageParser.parseOnMaster(message);
+    var p1 = CWWebsocketMessageParser.parse(message);
+    var p2 = CWWebsocketMessageParser.parseOnMaster(message);
 
     if (message._name) CWEventManager.trigger('message' + message._name, message);
+
+    //The parse methods can return a jQuery promise:
+    //If any of them do, we will send back an ack only once the promise resolves
+    //If both of them return undefined we immediately send back an ack
+    //If any of them explicitly returns false, we don't send back an ack
+    //All other return values are not allowed
+    if (p1 === false || p2 === false) return;
+    
+    //Prefer p2 over p1, if both are undefined we return an ack immediately by
+    //creating a resolved promise
+    var promise = p2;
+    if (promise === undefined) promise = p1;
+    if (promise === undefined) promise = new $.Deferred().resolve();
+
+    $.when(promise).always(function() {
+      Connichiwa._sendAck(message);
+    });
   });
 }.bind(Connichiwa);
 

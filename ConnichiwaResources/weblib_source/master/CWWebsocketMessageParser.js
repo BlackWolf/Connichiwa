@@ -1,10 +1,10 @@
-/* global Connichiwa, CWEventManager, CWStitchManager, CWDeviceManager, CWDevice, CWDeviceConnectionState, CWDebug, CWModules */
+/* global Connichiwa, CWDatastore, CWEventManager, CWStitchManager, CWDeviceManager, CWDevice, CWDeviceConnectionState, CWDebug, CWModules */
 /* global nativeCallRemoteDidConnect */
 'use strict';
 
 
 
-var CWWebsocketMessageParser = CWWebsocketMessageParser || {};
+var CWWebsocketMessageParser = CWModules.retrieve('CWWebsocketMessageParser');
 
 /**
  * (Available on master device only)
@@ -18,18 +18,24 @@ var CWWebsocketMessageParser = CWWebsocketMessageParser || {};
  * @protected
  */
 CWWebsocketMessageParser.parseOnMaster = function(message) {
+  //TODO
+  //just because we are currently moving from javascriptcore to websockets
+  // CWNativeBridge.parse(message);
+
+  var promise;
   switch (message._name) {
-    case 'remoteinfo'   :  this._parseRemoteInfo(message);  break;
-    case '_stitchswipe' :  this._parseStitchSwipe(message); break;
-    case '_quitstitch'  :  this._parseQuitStitch(message);  break;
+    case 'remoteinfo'   :  promise = this._parseRemoteInfo(message);  break;
+    case '_stitchswipe' :  promise = this._parseStitchSwipe(message); break;
+    case '_quitstitch'  :  promise = this._parseQuitStitch(message);  break;
   }
 
-  return true;
-}.bind(CWWebsocketMessageParser);
+  return promise;
+};
 
 
-CWWebsocketMessageParser._parseRemoteInfo = function(message)
-{
+CWWebsocketMessageParser._parseRemoteInfo = function(message) {
+  var deferred = new $.Deferred();
+
   var device = CWDeviceManager.getDeviceWithIdentifier(message.identifier);
 
   //If we have a non-native remote no device might exist since
@@ -46,21 +52,47 @@ CWWebsocketMessageParser._parseRemoteInfo = function(message)
   }
   
   device._connectionState = CWDevice.ConnectionState.CONNECTED;
-  nativeCallRemoteDidConnect(device.getIdentifier());
-
-  //Make sure the remote uses the same logging settings as we do
-  device.send('_debuginfo', CWDebug._getDebugInfo());
+  CWNativeBridge.callOnNative('nativeCallRemoteDidConnect', device.getIdentifier());
+  // nativeCallRemoteDidConnect(device.getIdentifier());
   
-  // AutoLoad files from Connichiwa.autoLoad on the new remote device
-  var didConnectCallback = function() { 
+  //We want to do 3 things before we trigger the 'deviceConnected' event:
+  //* Load the debug info on the other device
+  //* Sync the CWDatastore to the other device
+  //* Load all files in Connichiwa.autoLoad on the other device
+  var didLoadDebug = false;
+  var didLoadData  = false;
+  var didLoadFiles = false;
+
+  //LOAD DEBUG INFO
+  device.send('_debuginfo', CWDebug._getDebugInfo(), function() {
+    didLoadDebug = true;
+    tryDidConnectCallback();
+  });
+
+  var tryDidConnectCallback = function() { 
+    if (didLoadDebug === false || didLoadData === false || didLoadFiles === false) return;
     CWEventManager.trigger('deviceConnected', device); 
+    deferred.resolve();
   };
+
+  //LOAD DATA
+  CWDebug.log(3, 'Syncing entire datastore to connected device');
+  CWDatastore._syncStoreToDevice(device.getIdentifier(), function() {
+    didLoadData = true;
+    tryDidConnectCallback();
+  });
+
+  //LOAD AUTOLOAD FILES
   var loadOtherFile = function(device, file) {
     //As of now, "other" files are only CSS
     var extension = file.split('.').pop().toLowerCase();
     if (extension === 'css') {
       device.loadCSS(file);
     } 
+  };
+  var didLoadFilesCB = function() {
+    didLoadFiles = true;
+    tryDidConnectCallback();
   };
   
   //We need to separate JS files from other filetypes in Connichiwa.autoLoad
@@ -88,24 +120,28 @@ CWWebsocketMessageParser._parseRemoteInfo = function(message)
     for (var i = 0; i < autoLoadJS.length; i++) {
       var script = autoLoadJS[i];
       if (i === (autoLoadJS.length - 1)) {
-        device.loadScript(script, didConnectCallback);
+        device.loadScript(script, didLoadFilesCB);
       } else {
         device.loadScript(script);
       }
     }
   } else {
-    didConnectCallback();
+    didLoadFilesCB();
   }
+
+  return deferred;
 }.bind(CWWebsocketMessageParser);
 
 
 CWWebsocketMessageParser._parseStitchSwipe = function(message) {
   CWStitchManager.detectedSwipe(message);
+  return new $.Deferred().resolve();
 }.bind(CWWebsocketMessageParser);
 
 
 CWWebsocketMessageParser._parseQuitStitch = function(message) {
   CWStitchManager.unstitchDevice(message.device);
+  return new $.Deferred().resolve();
 }.bind(CWWebsocketMessageParser);
 
 CWModules.add('CWWebsocketMessageParser');

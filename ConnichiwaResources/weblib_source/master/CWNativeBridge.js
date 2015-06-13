@@ -11,19 +11,23 @@ var CWNativeBridge = CWNativeBridge || {};
  * @ignore
  */
 CWNativeBridge.parse = function(message) {
-  CWDebug.log(4, 'Parsing native message (master): ' + message);
-  var object = JSON.parse(message);
+  var object;
+  if (CWUtil.isString(message)) {
+    CWDebug.log(4, 'Parsing native message (master): ' + message);
+    object = JSON.parse(message);
+  } else {
+    object = message;
+  }
+
   switch (object._name)
   {
     case 'debuginfo':             this._parseDebugInfo(object); break;
-    case 'connectwebsocket':      this._parseConnectWebsocket(object); break;
     case 'localinfo':             this._parseLocalInfo(object); break;
     case 'devicedetected':        this._parseDeviceDetected(object); break;
     case 'devicedistancechanged': this._parseDeviceDistanceChanged(object); break;
     case 'devicelost':            this._parseDeviceLost(object); break;
     case 'remoteconnectfailed':   this._parseRemoteConnectFailed(object); break;
     case 'remotedisconnected':    this._parseRemoteDisconnected(object); break;
-    case 'disconnectwebsocket':   this._parseDisconnectWebsocket(object); break;
   }
 }.bind(CWNativeBridge);
 
@@ -44,40 +48,17 @@ CWNativeBridge._parseDebugInfo = function(message) {
 
 
 /**
- * (Available on master device only) 
- * 
- * Parses `connectwebsocket` messages. Such messages are sent when the native
- *    layer is ready to receive websocket connections and we can connect to
- *    the websocket
+ * (Available on master device only)
+ *
+ * Parses `localinfo` messages. Such messages contain additional information
+ *    about the local device determined by the native layer.
  * @param  {Object} message The object that represents the JSON message that
  *    was received from the native layer
  * @function
- * @private
- */
-CWNativeBridge._parseConnectWebsocket = function(message) {
-  Connichiwa._connectWebsocket();
-}.bind(CWNativeBridge);
-
-
-/**
- * (Available on master device only) 
- * 
- * Parses `localinfo` messages. Such messages contain the information about
- *    this device as determined by the native layer. The message will create
- *    the local device after which the JS library is considered "ready"
- * @param  {Object} message The object that represents the JSON message that
- *    was received from the native layer
- * @function
- * @fires ready
  * @private
  */
 CWNativeBridge._parseLocalInfo = function(message) {
-  var success = CWDeviceManager.createLocalDevice(message);
-  if (success)
-  {
-    Connichiwa._sendObject(message); //needed so server recognizes us as local weblib
-    CWEventManager.trigger('ready');
-  }
+  CWDeviceManager.getLocalDevice()._setProperties(message);
 }.bind(CWNativeBridge);
 
 
@@ -207,21 +188,5 @@ CWNativeBridge._parseRemoteDisconnected = function(message) {
   CWEventManager.trigger('deviceDisconnected', device);
 }.bind(CWNativeBridge);
 
-
-/**
- * (Available on master device only) 
- * 
- * Parses `remotedisconnected` messages. Such a message is sent by the native
- *    layer whenever the websocket connection to the server should be
- *    disconnected. This can be the case, for example, when the app is
- *    suspended on the device and the server is suspended
- * @param  {Object} message The object that represents the JSON message that
- *    was received from the native layer
- * @function
- * @private
- */
-CWNativeBridge._parseDisconnectWebsocket = function(message) {
-  Connichiwa._disconnectWebsocket();  
-}.bind(CWNativeBridge);
 
 CWModules.add('CWNativeBridge');

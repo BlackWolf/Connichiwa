@@ -69,13 +69,13 @@ Connichiwa.isMaster = function() {
  * @private
  */
 Connichiwa._setLocalDevice = function(properties) {
-  if (this._localDevice === undefined) {
-    properties.isLocal = true;
-    this._localDevice = new CWDevice(properties);
-  }
+  properties.isLocal = true;
 
-  //Let the master know about our new device information
-  this.send("master", "remoteinfo", properties);
+  if (this._localDevice === undefined) {
+    this._localDevice = new CWDevice(properties);
+  } else {
+    this._localDevice._setProperties(properties);
+  }
 }.bind(Connichiwa);
 
 
@@ -85,6 +85,7 @@ Connichiwa._setLocalDevice = function(properties) {
  */
 Connichiwa._connectWebsocket = function() {
   CWDebug.log(3, "Connecting");
+
   //If we replace the websocket (or re-connect) we don't want to call onWebsocketClose
   //Therefore, first cleanup, then close
   var oldWebsocket = this._websocket;
@@ -111,8 +112,6 @@ Connichiwa._onWebsocketOpen = function() {
 
   var runsNative = CWNativeBridge.isRunningNative();
 
-  CWNativeBridge.callOnNative("nativeWebsocketDidOpen");
-
   if (runsNative === false) {
     //If we have no native layer and are reconnecting we now need to refresh the
     //page to reset the remote's state
@@ -120,16 +119,24 @@ Connichiwa._onWebsocketOpen = function() {
       location.reload(true);
       return;
     }
-
-    //We have no native layer that delivers us accurate local device info
-    //Therefore, we create as much info as we can ourselves
-    var localInfo = {
-      identifier : CWUtil.createUUID(),
-      launchDate : Date.now() / 1000.0,
-      ppi        : CWSystemInfo.PPI()
-    };
-    this._setLocalDevice(localInfo);
   }
+
+  //Create local device
+  //This device might be extended by the native layer in the future
+  var localInfo = {
+    identifier : CWUtil.createUUID(),
+    launchDate : Date.now() / 1000.0,
+    ppi        : CWSystemInfo.PPI()
+  };
+  this._setLocalDevice(localInfo);
+
+  Connichiwa.send("server", "_remote_identification", { identifier: localInfo.identifier });
+
+  CWNativeBridge.callOnNative("nativeWebsocketDidOpen");
+
+  //Important: This must be last, as every message before _remote_identification
+  //is lost
+  this.send("master", "remoteinfo", localInfo);
 }.bind(Connichiwa);
 
 
@@ -155,10 +162,27 @@ Connichiwa._onWebsocketMessage = function(e) {
   //We use requestAnimationFrame in an attempt to prevent those crashes
   var that = this;
   window.requestAnimationFrame(function() {
-    CWWebsocketMessageParser.parse(message);
-    CWWebsocketMessageParser.parseOnRemote(message);
+    var p1 = CWWebsocketMessageParser.parse(message);
+    var p2 = CWWebsocketMessageParser.parseOnRemote(message);
 
     if (message._name) CWEventManager.trigger("message" + message._name, message);
+
+    //The parse methods can return a jQuery promise:
+    //If any of them do, we will send back an ack only once the promise resolves
+    //If both of them return undefined we immediately send back an ack
+    //If any of them explicitly returns false, we don't send back an ack
+    //All other return values are not allowed
+    if (p1 === false || p2 === false) return;
+    
+    //Prefer p2 over p1, if both are undefined we return an ack immediately by
+    //creating a resolved promise
+    var promise = p2;
+    if (promise === undefined) promise = p1;
+    if (promise === undefined) promise = new $.Deferred().resolve();
+
+    $.when(promise).always(function() {
+      Connichiwa._sendAck(message);
+    });
   });
 }.bind(Connichiwa);
 
@@ -179,7 +203,7 @@ Connichiwa._onWebsocketClose = function() {
   //can be reestablished over Bluetooth. If we are running native-less we
   //try to reconnect to the master
   if (runsNative === false) {
-    window.setTimeout(this._tryWebsocketReconnect, 5000);
+    window.setTimeout(this._tryWebsocketReconnect, 2500);
   }
 }.bind(Connichiwa);
 
@@ -222,7 +246,7 @@ Connichiwa._tryWebsocketReconnect = function() {
 
   CWDebug.log(3, "Try reconnect");
   this._connectWebsocket();
-  window.setTimeout(this._tryWebsocketReconnect, 5000);
+  window.setTimeout(this._tryWebsocketReconnect, 2500);
 }.bind(Connichiwa);
 
 CWModules.add('Connichiwa');

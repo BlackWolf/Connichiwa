@@ -101,11 +101,7 @@ Connichiwa.__constructor = function() {
     return;
   }
 
-  //If no native layer runs in the background, we have to take care of 
-  //establishing a connection ourselves
-  if (CWNativeBridge.isRunningNative() !== true) {
-    this._connectWebsocket();
-  }
+  this._connectWebsocket();
 }.bind(Connichiwa);
 
 
@@ -132,6 +128,29 @@ Connichiwa.on = function(eventName, callback) {
   } 
   
   CWEventManager.register(eventName, callback);
+}.bind(Connichiwa);
+
+
+/**
+ * Removes all callbacks from the given Connichiwa system event. No callbacks
+ *    for that event will be triggered anymore.
+ * @param  {String}   eventName The event name to remove events from.
+ * @function
+ *//**
+ * Removes the given callback from every Connichiwa system event. The callback will
+ *    not be triggered for any system event anymore.
+ * @param  {Function} callback  The callback to remove. This function will be
+ *    removed from every event it has been registered for.
+ * @function
+ *//**
+ * Removes the given callback from the given Connichiwa system event. The
+ *    callback will not be triggered for that event anymore.
+ * @param  {String}   eventName The event to remove the callback from
+ * @param  {Function} callback  The callback function to remove
+ * @function
+ */
+Connichiwa.off = function(eventName, callback) {
+  CWEventManager.unregister(eventName, callback);
 }.bind(Connichiwa);
 
 
@@ -163,22 +182,20 @@ Connichiwa.onMessage = function(name, callback) {
  */
 Connichiwa.onLoad = function(callback) {
   if (document.readyState === 'complete') {
-    CWDebug.log(1, 'Fire immediately');
     //Timeout so the callback is always called asynchronously
     window.setTimeout(callback, 0);
   } else {
-    CWDebug.log(1, 'Fire delayed');
     this.on('ready', callback);
   }
 }.bind(Connichiwa);
 
 
 //TODO remove, find an easy way to send a message to the master
-Connichiwa.send = function(target, name, message) {
+Connichiwa.send = function(target, name, message, callback) {
   message._name = name;
   message._source = Connichiwa.getIdentifier();
   message._target = target;
-  return this._sendObject(message);
+  return this._sendObject(message, callback);
 }.bind(Connichiwa);
 
 
@@ -222,15 +239,15 @@ Connichiwa.broadcast = function(name, message, sendToSelf) {
 
 /**
  * Sends an acknowledgement message (with name `_ack`) back to the device
- *    where the given message originated from. The given message will be
- *    attached to the acknowledgement and sent back as well.
+ *    where the given message originated from. The original message's ID will 
+ *    be attached to the acknowledgement.
  * @param  {Object} message A valid message object that was received from a
  *    device
  * @function
  * @private
  */
 Connichiwa._sendAck = function(message) {
-  var ackMessage = { original : message };
+  var ackMessage = { original : { _id: message._id } };
   this.send(message._source, '_ack', ackMessage);
 }.bind(Connichiwa);
 
@@ -241,11 +258,13 @@ Connichiwa._sendAck = function(message) {
  *    send it via the websocket. The message must at least have a `_name` key,
  *    otherwise this method will log an error and not send the message
  * @param  {Object} message The message object to send
+ * @param {Function} [callback] An optional callback that will be called once
+ *    the object was acknowledged by the other device
  * @return {Number} The random ID that was assigned to the message
  * @function
  * @private
  */
-Connichiwa._sendObject = function(message) {
+Connichiwa._sendObject = function(message, callback) {
   if (('_name' in message) === false) {
     CWDebug.err('Tried to send message without _name, ignoring: ' + JSON.stringify(message));
     return;
@@ -257,11 +276,20 @@ Connichiwa._sendObject = function(message) {
   var messageString = JSON.stringify(message);
   CWDebug.log(4, 'Sending message: ' + messageString);
 
+  if (callback !== undefined) {
+    Connichiwa.on('__ack_message' + message._id, function() {
+      callback();
+      Connichiwa.off('__ack_message' + message._id);
+    });
+  }
+
   //If the message is too long, chunk it in pieces of 2^15 bytes
   //We need to do that because some browser (Safari *cough*) can't
   //really handle messages that are very large.
   //We chunk the messages by framing the message with another message
-  // if (messageString.length > 32700) {
+  // var SIZE = 3850;
+  // var SIZE = 16000;
+  // if (messageString.length > SIZE) {
   //   var pos = 0;
   //   while (pos < messageString.length) { 
   //     var chunkMessage = {
@@ -273,25 +301,26 @@ Connichiwa._sendObject = function(message) {
   //       payload    : "",
   //       isFinal    : 0,
   //     };
-  //     chunkMessage.payload = messageString.substr(pos, 32700);
+  //     chunkMessage.payload = messageString.substr(pos, SIZE);
 
-  //     var length = JSON.stringify(chunkMessage).length;
+  //     // var length = JSON.stringify(chunkMessage).length;
   //     var overload = 0;
-  //     if (length > 32700) {
-  //       overload = length - 32700;
-  //       chunkMessage.payload = chunkMessage.payload.substr(0, 32700-overload);
-  //     }
-  //     chunkMessage.isFinal = (pos+(32700 - overload)>=messageString.length) ? 1 : 0;
+  //     // if (length > SIZE) {
+  //       // overload = length - SIZE;
+  //       // chunkMessage.payload = chunkMessage.payload.substr(0, SIZE-overload);
+  //     // }
+  //     chunkMessage.isFinal = (pos+(SIZE - overload) >= messageString.length) ? 1 : 0;
 
   //     CWDebug.log(1, "Sending chunk of size "+JSON.stringify(chunkMessage).length);
+  //     // CWDebug.log(1, "IS FINAL? "+chunkMessage.isFinal);
   //     //Once again, we need a setTimeout to lower the possibility of a crash on iOS
-  //     window.setTimeout(function() { this._websocket.send(JSON.stringify(message)); }.bind(this), 0);
+  //     var that = this;
+  //     this._websocket.send(JSON.stringify(chunkMessage));
 
-  //     pos += 32700 - overload;
+  //     pos += SIZE - overload;
   //     CWDebug.log(1, "Pos is now "+pos+"/"+messageString.length);
   //   }
   // } else {
-    //Once again, we need a setTimeout to lower the possibility of a crash on iOS
     this._websocket.send(messageString);
   // }
 

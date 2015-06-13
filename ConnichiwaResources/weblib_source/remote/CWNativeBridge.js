@@ -16,27 +16,10 @@ CWNativeBridge.parse = function(message) {
   switch (object._name)
   {
     case 'runsnative':          this._parseRunsNative(object); break;
-    case 'connectwebsocket':    this._parseConnectWebsocket(object); break;
     case 'cwdebug':             this._parseDebug(object); break;
     case 'localinfo':           this._parseLocalInfo(object); break;
     case 'disconnectwebsocket': this._parseDisconnectWebsocket(object); break;
   }
-}.bind(CWNativeBridge);
-
-
-/**
- * (Available on remote devices only)
- *
- * Parses `connectwebsocket` messages. This message tells the library that the
- *    native layer is ready and that the websocket should establish a
- *    connection
- * @param  {Object} message The object that represents the JSON message that
- *    was received from the native layer
- * @function
- * @private
- */
-CWNativeBridge._parseConnectWebsocket = function(message) {
-  Connichiwa._connectWebsocket();
 }.bind(CWNativeBridge);
 
 

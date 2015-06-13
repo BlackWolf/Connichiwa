@@ -45,8 +45,6 @@
 	
 	<option value="//api/name/localWebsocketID">&nbsp;&nbsp;&nbsp;&nbsp;localWebsocketID</option>
 	
-	<option value="//api/name/masterBacklog">&nbsp;&nbsp;&nbsp;&nbsp;masterBacklog</option>
-	
 	<option value="//api/name/state">&nbsp;&nbsp;&nbsp;&nbsp;state</option>
 	
 	<option value="//api/name/webServer">&nbsp;&nbsp;&nbsp;&nbsp;webServer</option>
@@ -61,12 +59,6 @@
 	
 	
 	<option value="instance_methods">Instance Methods</option>
-	
-	<option value="//api/name/_receivedFromServer_remoteWebsocketDidClose:">&nbsp;&nbsp;&nbsp;&nbsp;- _receivedFromServer_remoteWebsocketDidClose:</option>
-	
-	<option value="//api/name/_receivedFromServer_serverDidStart">&nbsp;&nbsp;&nbsp;&nbsp;- _receivedFromServer_serverDidStart</option>
-	
-	<option value="//api/name/_registerJSCallbacks">&nbsp;&nbsp;&nbsp;&nbsp;- _registerJSCallbacks</option>
 	
 	<option value="//api/name/connectionIDForIdentifier:">&nbsp;&nbsp;&nbsp;&nbsp;- connectionIDForIdentifier:</option>
 	
@@ -118,8 +110,6 @@
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/localWebsocketID">localWebsocketID</a></span></li>
 	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/masterBacklog">masterBacklog</a></span></li>
-	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/state">state</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/webServer">webServer</a></span></li>
@@ -135,12 +125,6 @@
 
 
 <li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#instance_methods">Instance Methods</a></span><ul>
-	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/_receivedFromServer_remoteWebsocketDidClose:">_receivedFromServer_remoteWebsocketDidClose:</a></span></li>
-	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/_receivedFromServer_serverDidStart">_receivedFromServer_serverDidStart</a></span></li>
-	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/_registerJSCallbacks">_registerJSCallbacks</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/connectionIDForIdentifier:">connectionIDForIdentifier:</a></span></li>
 	
@@ -327,30 +311,6 @@ Only one instance of the webserver should be running on a device.</p>
 	</span>
 	<span class="task-item-suffix">property</span>
 	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/masterBacklog">&nbsp;&nbsp;masterBacklog</a></code>
-	</span>
-	<span class="task-item-suffix">property</span>
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/_registerJSCallbacks">&ndash;&nbsp;_registerJSCallbacks</a></code>
-	</span>
-	
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/_receivedFromServer_serverDidStart">&ndash;&nbsp;_receivedFromServer_serverDidStart</a></code>
-	</span>
-	
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/_receivedFromServer_remoteWebsocketDidClose:">&ndash;&nbsp;_receivedFromServer_remoteWebsocketDidClose:</a></code>
-	</span>
-	
-	
 </li>
 						</ul>
 						
@@ -448,17 +408,6 @@ Only one instance of the webserver should be running on a device.</p>
 </div>
 						
 						<div class="section-method">
-	<a name="//api/name/masterBacklog" title="masterBacklog"></a>
-	<h3 class="subsubtitle method-title">masterBacklog</h3>
-	
-	
-
-	<div class="method-subsection method-declaration"><code>@property (nonatomic, strong, readwrite) NSMutableArray *masterBacklog</code></div>
-
-    
-</div>
-						
-						<div class="section-method">
 	<a name="//api/name/state" title="state"></a>
 	<h3 class="subsubtitle method-title">state</h3>
 	
@@ -499,35 +448,10 @@ Only one instance of the webserver should be running on a device.</p>
 	<h3 class="subsubtitle method-title">webServer</h3>
 	
 	
-	
-	<div class="method-subsection brief-description">
-		<p>A Nodelike-specific subclass of JSContext that is used to execute code and for communication between Objective-C and the Nodelike server</p>
-	</div>		
-	
-    
 
 	<div class="method-subsection method-declaration"><code>@property (strong, readwrite) GCDWebServer *webServer</code></div>
 
     
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<div class="method-subsection declared-in-section">
-		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">CWServerManager.m</code><br />
-	</div>				
-	
-	
 </div>
 						
 						<div class="section-method">
@@ -561,124 +485,6 @@ Only one instance of the webserver should be running on a device.</p>
 					<div class="section section-methods">
 						<a title="Instance Methods" name="instance_methods"></a>
 						<h2 class="subtitle subtitle-methods">Instance Methods</h2>
-						
-						<div class="section-method">
-	<a name="//api/name/_receivedFromServer_remoteWebsocketDidClose:" title="_receivedFromServer_remoteWebsocketDidClose:"></a>
-	<h3 class="subsubtitle method-title">_receivedFromServer_remoteWebsocketDidClose:</h3>
-	
-	
-	
-	<div class="method-subsection brief-description">
-		<p>Called by the webserver script if the websocket connection of a remote device was closed (the remote disconnected)</p>
-	</div>		
-	
-    
-
-	<div class="method-subsection method-declaration"><code>- (void)_receivedFromServer_remoteWebsocketDidClose:(NSString *)<em>identifier</em></code></div>
-
-    
-	
-	<div class="method-subsection arguments-section parameters">
-		<h4 class="method-subtitle parameter-title">Parameters</h4>
-		
-		<dl class="argument-def parameter-def">
-			<dt><em>identifier</em></dt>
-			<dd><p>The device identifier of the device to which the connection was closed</p></dd>
-		</dl>
-		
-	</div>
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<div class="method-subsection declared-in-section">
-		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">CWServerManager.m</code><br />
-	</div>				
-	
-	
-</div>
-						
-						<div class="section-method">
-	<a name="//api/name/_receivedFromServer_serverDidStart" title="_receivedFromServer_serverDidStart"></a>
-	<h3 class="subsubtitle method-title">_receivedFromServer_serverDidStart</h3>
-	
-	
-	
-	<div class="method-subsection brief-description">
-		<p>Called by the webserver script if the server finished starting up and is ready to accept HTTP and Websocket connections</p>
-	</div>		
-	
-    
-
-	<div class="method-subsection method-declaration"><code>- (void)_receivedFromServer_serverDidStart</code></div>
-
-    
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<div class="method-subsection declared-in-section">
-		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">CWServerManager.m</code><br />
-	</div>				
-	
-	
-</div>
-						
-						<div class="section-method">
-	<a name="//api/name/_registerJSCallbacks" title="_registerJSCallbacks"></a>
-	<h3 class="subsubtitle method-title">_registerJSCallbacks</h3>
-	
-	
-	
-	<div class="method-subsection brief-description">
-		<p>Registers callback functions that the webserver script can call to execute native methods</p>
-	</div>		
-	
-    
-
-	<div class="method-subsection method-declaration"><code>- (void)_registerJSCallbacks</code></div>
-
-    
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<div class="method-subsection declared-in-section">
-		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">CWServerManager.m</code><br />
-	</div>				
-	
-	
-</div>
 						
 						<div class="section-method">
 	<a name="//api/name/connectionIDForIdentifier:" title="connectionIDForIdentifier:"></a>
@@ -924,7 +730,7 @@ Only one instance of the webserver should be running on a device.</p>
 				<div id="footer">
 					<hr />
 					<div class="footer-copyright">
-						<p><span class="copyright">&copy; 2015 Mario Schreiner. All rights reserved. (Last updated: 2015-05-27)</span><br />
+						<p><span class="copyright">&copy; 2015 Mario Schreiner. All rights reserved. (Last updated: 2015-06-13)</span><br />
 						
 						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2 (build 963)</a>.</span></p>
 						

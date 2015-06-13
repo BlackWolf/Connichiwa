@@ -1,0 +1,44 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "FD1855F54C7DDCF3F483FF38859A9A0B74A5A04E",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "FD1855F54C7DDCF3F483FF38859A9A0B74A5A04E" : 0,
+    "90C3FD88F8002F902A5FDF9D64063244571F233C" : 0,
+    "BC09C09DC2853BA9B3A84860F78F2E9FD790D8C3" : 0,
+    "7780E198A46684277B6C53D1786393EB194B54A1" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "750622AD-77CB-4DEE-9C68-82651879F5F2",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "FD1855F54C7DDCF3F483FF38859A9A0B74A5A04E" : "Connichiwa",
+    "90C3FD88F8002F902A5FDF9D64063244571F233C" : "ConnichiwaNodelike\/http-parser",
+    "BC09C09DC2853BA9B3A84860F78F2E9FD790D8C3" : "ConnichiwaNodelike\/libuv",
+    "7780E198A46684277B6C53D1786393EB194B54A1" : "ConnichiwaNodelike"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "Connichiwa",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 203,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "Connichiwa.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/BlackWolf\/Nodelike.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "7780E198A46684277B6C53D1786393EB194B54A1"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/joyent\/http-parser.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "90C3FD88F8002F902A5FDF9D64063244571F233C"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/joyent\/libuv.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "BC09C09DC2853BA9B3A84860F78F2E9FD790D8C3"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/BlackWolf\/Connichiwa.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "FD1855F54C7DDCF3F483FF38859A9A0B74A5A04E"
+    }
+  ]
+}

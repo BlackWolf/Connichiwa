@@ -175,17 +175,17 @@
 
 <li role="treeitem" id="task_treeitem"><span class="nodisclosure"></span><span class="sectionName"><a href="#tasks">Tasks</a></span><ul>
 	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_GETHandlers Methods">GETHandlers Methods</a></span></li>
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Extensions Methods">Extensions Methods</a></span></li>
 	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Handlers Methods">Handlers Methods</a></span></li>
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Logging Methods">Logging Methods</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Extension Methods">Extension Methods</a></span></li>
 	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Extensions Methods">Extensions Methods</a></span></li>
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Handlers Methods">Handlers Methods</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_GETHandlers Methods">GETHandlers Methods</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Testing Methods">Testing Methods</a></span></li>
-	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Logging Methods">Logging Methods</a></span></li>
 	
 </ul></li>
 
@@ -577,31 +577,43 @@ with GCDWebServer in your code (e.g. in the implementation of <a href="#//api/na
 						</ul>
 						
 						
-						<a title="GETHandlers Methods" name="task_GETHandlers Methods"></a>
-						<h3 class="subsubtitle task-title">GETHandlers Methods</h3>
+						<a title="Extensions Methods" name="task_Extensions Methods"></a>
+						<h3 class="subsubtitle task-title">Extensions Methods</h3>
 
 						<ul class="task-list">
 							<li>
 	<span class="tooltip">
-		<code><a href="#//api/name/addGETHandlerForPath:staticData:contentType:cacheAge:">&ndash;&nbsp;addGETHandlerForPath:staticData:contentType:cacheAge:</a></code>
+		<code><a href="#//api/name/serverURL">&nbsp;&nbsp;serverURL</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/bonjourServerURL">&nbsp;&nbsp;bonjourServerURL</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/start">&ndash;&nbsp;start</a></code>
 	</span>
 	
 	
 </li><li>
 	<span class="tooltip">
-		<code><a href="#//api/name/addGETHandlerForPath:filePath:isAttachment:cacheAge:allowRangeRequests:">&ndash;&nbsp;addGETHandlerForPath:filePath:isAttachment:cacheAge:allowRangeRequests:</a></code>
+		<code><a href="#//api/name/startWithPort:bonjourName:">&ndash;&nbsp;startWithPort:bonjourName:</a></code>
 	</span>
 	
 	
 </li><li>
 	<span class="tooltip">
-		<code><a href="#//api/name/addGETHandlerForBasePath:directoryPath:indexFilename:cacheAge:allowRangeRequests:">&ndash;&nbsp;addGETHandlerForBasePath:directoryPath:indexFilename:cacheAge:allowRangeRequests:</a></code>
+		<code><a href="#//api/name/runWithPort:bonjourName:">&ndash;&nbsp;runWithPort:bonjourName:</a></code>
 	</span>
 	
 	
 </li><li>
 	<span class="tooltip">
-		<code><a href="#//api/name/_responseWithContentsOfDirectory:">&ndash;&nbsp;_responseWithContentsOfDirectory:</a></code>
+		<code><a href="#//api/name/runWithOptions:error:">&ndash;&nbsp;runWithOptions:error:</a></code>
 	</span>
 	
 	
@@ -609,43 +621,43 @@ with GCDWebServer in your code (e.g. in the implementation of <a href="#//api/na
 						</ul>
 						
 						
-						<a title="Handlers Methods" name="task_Handlers Methods"></a>
-						<h3 class="subsubtitle task-title">Handlers Methods</h3>
+						<a title="Logging Methods" name="task_Logging Methods"></a>
+						<h3 class="subsubtitle task-title">Logging Methods</h3>
 
 						<ul class="task-list">
 							<li>
 	<span class="tooltip">
-		<code><a href="#//api/name/addDefaultHandlerForMethod:requestClass:processBlock:">&ndash;&nbsp;addDefaultHandlerForMethod:requestClass:processBlock:</a></code>
+		<code><a href="#//api/name/setLogLevel:">+&nbsp;setLogLevel:</a></code>
 	</span>
 	
 	
 </li><li>
 	<span class="tooltip">
-		<code><a href="#//api/name/addDefaultHandlerForMethod:requestClass:asyncProcessBlock:">&ndash;&nbsp;addDefaultHandlerForMethod:requestClass:asyncProcessBlock:</a></code>
+		<code><a href="#//api/name/logVerbose:">&ndash;&nbsp;logVerbose:</a></code>
 	</span>
 	
 	
 </li><li>
 	<span class="tooltip">
-		<code><a href="#//api/name/addHandlerForMethod:path:requestClass:processBlock:">&ndash;&nbsp;addHandlerForMethod:path:requestClass:processBlock:</a></code>
+		<code><a href="#//api/name/logInfo:">&ndash;&nbsp;logInfo:</a></code>
 	</span>
 	
 	
 </li><li>
 	<span class="tooltip">
-		<code><a href="#//api/name/addHandlerForMethod:path:requestClass:asyncProcessBlock:">&ndash;&nbsp;addHandlerForMethod:path:requestClass:asyncProcessBlock:</a></code>
+		<code><a href="#//api/name/logWarning:">&ndash;&nbsp;logWarning:</a></code>
 	</span>
 	
 	
 </li><li>
 	<span class="tooltip">
-		<code><a href="#//api/name/addHandlerForMethod:pathRegex:requestClass:processBlock:">&ndash;&nbsp;addHandlerForMethod:pathRegex:requestClass:processBlock:</a></code>
+		<code><a href="#//api/name/logError:">&ndash;&nbsp;logError:</a></code>
 	</span>
 	
 	
 </li><li>
 	<span class="tooltip">
-		<code><a href="#//api/name/addHandlerForMethod:pathRegex:requestClass:asyncProcessBlock:">&ndash;&nbsp;addHandlerForMethod:pathRegex:requestClass:asyncProcessBlock:</a></code>
+		<code><a href="#//api/name/logException:">&ndash;&nbsp;logException:</a></code>
 	</span>
 	
 	
@@ -697,43 +709,75 @@ with GCDWebServer in your code (e.g. in the implementation of <a href="#//api/na
 						</ul>
 						
 						
-						<a title="Extensions Methods" name="task_Extensions Methods"></a>
-						<h3 class="subsubtitle task-title">Extensions Methods</h3>
+						<a title="Handlers Methods" name="task_Handlers Methods"></a>
+						<h3 class="subsubtitle task-title">Handlers Methods</h3>
 
 						<ul class="task-list">
 							<li>
 	<span class="tooltip">
-		<code><a href="#//api/name/serverURL">&nbsp;&nbsp;serverURL</a></code>
-	</span>
-	<span class="task-item-suffix">property</span>
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/bonjourServerURL">&nbsp;&nbsp;bonjourServerURL</a></code>
-	</span>
-	<span class="task-item-suffix">property</span>
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/start">&ndash;&nbsp;start</a></code>
+		<code><a href="#//api/name/addDefaultHandlerForMethod:requestClass:processBlock:">&ndash;&nbsp;addDefaultHandlerForMethod:requestClass:processBlock:</a></code>
 	</span>
 	
 	
 </li><li>
 	<span class="tooltip">
-		<code><a href="#//api/name/startWithPort:bonjourName:">&ndash;&nbsp;startWithPort:bonjourName:</a></code>
+		<code><a href="#//api/name/addDefaultHandlerForMethod:requestClass:asyncProcessBlock:">&ndash;&nbsp;addDefaultHandlerForMethod:requestClass:asyncProcessBlock:</a></code>
 	</span>
 	
 	
 </li><li>
 	<span class="tooltip">
-		<code><a href="#//api/name/runWithPort:bonjourName:">&ndash;&nbsp;runWithPort:bonjourName:</a></code>
+		<code><a href="#//api/name/addHandlerForMethod:path:requestClass:processBlock:">&ndash;&nbsp;addHandlerForMethod:path:requestClass:processBlock:</a></code>
 	</span>
 	
 	
 </li><li>
 	<span class="tooltip">
-		<code><a href="#//api/name/runWithOptions:error:">&ndash;&nbsp;runWithOptions:error:</a></code>
+		<code><a href="#//api/name/addHandlerForMethod:path:requestClass:asyncProcessBlock:">&ndash;&nbsp;addHandlerForMethod:path:requestClass:asyncProcessBlock:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/addHandlerForMethod:pathRegex:requestClass:processBlock:">&ndash;&nbsp;addHandlerForMethod:pathRegex:requestClass:processBlock:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/addHandlerForMethod:pathRegex:requestClass:asyncProcessBlock:">&ndash;&nbsp;addHandlerForMethod:pathRegex:requestClass:asyncProcessBlock:</a></code>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+						
+						<a title="GETHandlers Methods" name="task_GETHandlers Methods"></a>
+						<h3 class="subsubtitle task-title">GETHandlers Methods</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/addGETHandlerForPath:staticData:contentType:cacheAge:">&ndash;&nbsp;addGETHandlerForPath:staticData:contentType:cacheAge:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/addGETHandlerForPath:filePath:isAttachment:cacheAge:allowRangeRequests:">&ndash;&nbsp;addGETHandlerForPath:filePath:isAttachment:cacheAge:allowRangeRequests:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/addGETHandlerForBasePath:directoryPath:indexFilename:cacheAge:allowRangeRequests:">&ndash;&nbsp;addGETHandlerForBasePath:directoryPath:indexFilename:cacheAge:allowRangeRequests:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/_responseWithContentsOfDirectory:">&ndash;&nbsp;_responseWithContentsOfDirectory:</a></code>
 	</span>
 	
 	
@@ -754,50 +798,6 @@ with GCDWebServer in your code (e.g. in the implementation of <a href="#//api/na
 </li><li>
 	<span class="tooltip">
 		<code><a href="#//api/name/runTestsWithOptions:inDirectory:">&ndash;&nbsp;runTestsWithOptions:inDirectory:</a></code>
-	</span>
-	
-	
-</li>
-						</ul>
-						
-						
-						<a title="Logging Methods" name="task_Logging Methods"></a>
-						<h3 class="subsubtitle task-title">Logging Methods</h3>
-
-						<ul class="task-list">
-							<li>
-	<span class="tooltip">
-		<code><a href="#//api/name/setLogLevel:">+&nbsp;setLogLevel:</a></code>
-	</span>
-	
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/logVerbose:">&ndash;&nbsp;logVerbose:</a></code>
-	</span>
-	
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/logInfo:">&ndash;&nbsp;logInfo:</a></code>
-	</span>
-	
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/logWarning:">&ndash;&nbsp;logWarning:</a></code>
-	</span>
-	
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/logError:">&ndash;&nbsp;logError:</a></code>
-	</span>
-	
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/logException:">&ndash;&nbsp;logException:</a></code>
 	</span>
 	
 	
@@ -2434,7 +2434,7 @@ continue to execute normally until completion.</p></div>
 				<div id="footer">
 					<hr />
 					<div class="footer-copyright">
-						<p><span class="copyright">&copy; 2015 Mario Schreiner. All rights reserved. (Last updated: 2015-05-27)</span><br />
+						<p><span class="copyright">&copy; 2015 Mario Schreiner. All rights reserved. (Last updated: 2015-06-13)</span><br />
 						
 						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2 (build 963)</a>.</span></p>
 						

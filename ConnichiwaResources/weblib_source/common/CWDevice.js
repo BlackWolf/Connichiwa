@@ -6,7 +6,7 @@
 
 /**
  * Constructs a new device with the given properties. **You should never
- *    constructor a CWDevice yourself**
+ *    construct a CWDevice yourself**
  * @param {Object} properties The device's reported properties that will be
  *    part of the CWDevice
  * @constructor
@@ -131,12 +131,26 @@ function CWDevice(properties)
    */
   this._ppi = CWSystemInfo.DEFAULT_PPI;
 
-  if (properties.launchDate) this._launchDate = properties.launchDate;
-  if (properties.ips) this._ips = properties.ips;
-  if (properties.port) this._port = properties.port;
-  if (properties.name) this._name = properties.name;
-  if (properties.ppi && properties.ppi > 0) this._ppi = properties.ppi;
+  this._setProperties(properties);
 }
+
+
+/**
+ * Sets the device properties given in the properties object to the given
+ *    values. Note that the device's identifier is immutable and cannot be set
+ *    using this method.
+ * @param {Object} properties An object containing key/value pairs with
+ *    properties to set
+ * @function
+ * @protected
+ */
+CWDevice.prototype._setProperties = function(properties) {
+  if (properties.launchDate)  this._launchDate = properties.launchDate;
+  if (properties.ips)         this._ips = properties.ips;
+  if (properties.port)        this._port = properties.port;
+  if (properties.name)        this._name = properties.name;
+  if (properties.ppi && properties.ppi > 0) this._ppi = properties.ppi;
+};
 
 
 //
@@ -338,11 +352,7 @@ CWDevice.prototype._replace = function(target, html, contentOnly) {
  */
 CWDevice.prototype.loadScript = function(url, callback) {
   var message = { url : url };
-  var messageID = this.send('_loadscript', message);
-
-  if (callback !== undefined) {
-    Connichiwa.on('__ack_message' + messageID, callback);
-  }
+  var messageID = this.send('_loadscript', message, callback);
 };
 
 
@@ -396,13 +406,17 @@ CWDevice.prototype.loadTemplates = function(paths) {
  *    DOM. This means that within this callback, you can be sure the content
  *    of the template exists in the remote DOM.
  */
-CWDevice.prototype.insertTemplate = function(templateName, target, data, callback) {
-  var message = { templateName: templateName, target: target, data: data };
-  var messageID = this.send('_inserttemplate', message);
+// CWDevice.prototype.insertTemplate = function(templateName, target, data, callback) {
+CWDevice.prototype.insertTemplate = function(templateName, options) {
+  if (options === undefined) options = {};
+  var onComplete = options.onComplete;
 
-  if (callback !== undefined) {
-    Connichiwa.on('__ack_message' + messageID, callback);
-  }
+  //Remove onComplete from options, we don't want to send that to the device
+  //Instead, we pass onComplete as the callback to .send()
+  options.onComplete = undefined;
+
+  var message = { templateName: templateName, options: options };
+  var messageID = this.send('_inserttemplate', message, onComplete);
 };
 
 /**
@@ -419,12 +433,14 @@ CWDevice.prototype.insertTemplate = function(templateName, target, data, callbac
  *    JSON.stringify. The object may not contain keys starting with an
  *    underscore. The message will be passed to the message event on the
  *    remote device.
+ * @param {Function} [callback] An optional callback that is called once we
+ *    received the acknowledgment that the message was received by the device
  */
-CWDevice.prototype.send = function(name, message) {
+CWDevice.prototype.send = function(name, message, callback) {
   message._name = name;
   message._source = Connichiwa.getIdentifier();
   message._target = this.getIdentifier();
-  return Connichiwa._sendObject(message);
+  return Connichiwa._sendObject(message, callback);
 };
 
 

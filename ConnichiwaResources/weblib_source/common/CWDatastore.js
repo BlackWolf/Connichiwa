@@ -33,29 +33,16 @@ CWDatastore._data = {};
 
 
 /**
- * Initializes CWDatastore, such as registering for events
- * @function
- * @private
- */
-CWDatastore.__constructor = function() {
-  //When a new device connects, we sync the entire data store to it so it
-  //has all the latest data. 
-  Connichiwa.on('deviceconnected', function(device) {
-    CWDebug.log(3, 'Syncing entire datastore to connected device');
-    CWDatastore._syncStoreToDevice(device.getIdentifier());
-  });
-}.bind(CWDatastore);
-
-
-/**
- * Stores or updates the given key/value pair in the given collection
+ * Stores or updates the given key/value pair in the given collection.
+ *
+ * See {@link CWDatastore.setMultiple} to set multiple values at once.
  * @param {String} [collection] The collection to write to. If no collection
  *    is provided, a default collection will be used. Collection names may not
  *    start with an underscore.
- * @param {String} key The key under which the value will be stored in
- *    the collection
- * @param {Object} value The value to store. Must be an object or value
- *    that can be converted to JSON. May not be a function or `undefined`.
+ * @param {String} key The key under which the value will be stored in the
+ *    collection
+ * @param {Object} value The value to store. Must be an object or value that
+ *    can be converted to JSON. May not be a function or `undefined`.
  * @function
  */
 CWDatastore.set = function(collection, key, value) {
@@ -66,7 +53,8 @@ CWDatastore.set = function(collection, key, value) {
 
 
 /**
- * Stores or updates the given key/value pairs in the given collection
+ * Stores or updates the given key/value pairs in the given collection. Works
+ *    the same as {@link CWDatastore.set}, but sets multiple values at once.
  * @param {String} [collection] The collection to write to. If no collection
  *    is provided, a default collection will be used. Collection names may not
  *    start with an underscore.
@@ -106,6 +94,7 @@ CWDatastore.setMultiple = function(collection, dict) {
  *    if we store a value that we received from another device (to prevent a
  *    sync loop)
  * @param {Boolean} isDict Determines if a single key/value pair or an entire 
+ * @fires _datastorechanged
  * @function
  * @protected
  */
@@ -244,9 +233,13 @@ CWDatastore._syncEntrys = function(collection, keys) {
  *    used with CAUTION!**
  * @param  {String} target A unique device identifies as returned by {@link
  *    CWDevice#getIdentifier}
+ * @param {Function} [callback] An optional callback that is called when the
+ *    datastore was synced to the other device.
  * @function
  * @protected
  */
-CWDatastore._syncStoreToDevice = function(target) {
-  Connichiwa.send(target, '_updatedatastore', { data: this._data });
+CWDatastore._syncStoreToDevice = function(target, callback) {
+  Connichiwa.send(target, '_updatedatastore', { data: this._data }, callback);
 }.bind(CWDatastore);
+
+CWModules.add('CWDatastore');

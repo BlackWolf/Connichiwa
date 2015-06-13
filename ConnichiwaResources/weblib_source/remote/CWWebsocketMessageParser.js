@@ -2,7 +2,7 @@
 'use strict';
 
 
-var CWWebsocketMessageParser = CWWebsocketMessageParser || {};
+var CWWebsocketMessageParser = CWModules.retrieve('CWWebsocketMessageParser');
 
 /**
  * (Available on remote devices only)
@@ -16,20 +16,25 @@ var CWWebsocketMessageParser = CWWebsocketMessageParser || {};
  * @protected
  */
 CWWebsocketMessageParser.parseOnRemote = function(message) {
+  var promise;
   switch (message._name) {
-    case '_debuginfo'      : this._parseDebugInfo(message); break;
-    case '_softdisconnect' : this._parseSoftDisconnect(message); break;
+    case '_debuginfo'      : promise = this._parseDebugInfo(message); break;
+    case '_softdisconnect' : promise = this._parseSoftDisconnect(message); break;
   }
+
+  return promise;
 }.bind(CWWebsocketMessageParser);
 
 
 CWWebsocketMessageParser._parseDebugInfo = function(message) {
   CWDebug._setDebugInfo(message);
+  return new $.Deferred().resolve();
 }.bind(CWWebsocketMessageParser);
 
 
 CWWebsocketMessageParser._parseSoftDisconnect = function(message) {
   Connichiwa._softDisconnectWebsocket();
+  return new $.Deferred().resolve();
 }.bind(CWWebsocketMessageParser);
 
 CWModules.add('CWWebsocketMessageParser');

@@ -59,16 +59,6 @@
 - (void)_receivedFromView_remoteDidConnect:(NSString *)identifier;
 
 /**
- *  Asks the web library to connect its websocket to the local webserver
- */
-- (void)_sendToView_connectWebsocket;
-
-/**
- *  Asks the web library to disconnect its websocket from the local webserver
- */
-- (void)_sendToView_disconnectWebsocket;
-
-/**
  *  Tells the web library if we are running in debug mode or not
  */
 - (void)_sendToView_debuginfo;
@@ -167,7 +157,6 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.webView setDelegate:self];
         [self.webView loadRequest:localhostURLRequest];
-//        [self createWebViewContext];
     });
 }
 
@@ -240,9 +229,7 @@
 
 
 -(void)_receivedFromView_libraryDidLoad {
-    CWLog(3, @"Weblibrary did fully load, opening websocket...");
-    [self _sendToView_debuginfo];
-    [self _sendToView_connectWebsocket];
+    CWLog(3, @"Weblibrary did fully load");
 }
 
 
@@ -252,6 +239,7 @@
     
     self.state = CWWebLibraryManagerStateConnected;
     
+    [self _sendToView_debuginfo];
     [self _sendToView_localInfo];
     
     if ([self.delegate respondsToSelector:@selector(webLibraryIsReady)])
@@ -285,24 +273,6 @@
     {
         [self.delegate remoteDidConnect:identifier];
     }
-}
-
-
-- (void)_sendToView_connectWebsocket
-{
-    NSDictionary *data = @{
-                           @"_name": @"connectwebsocket"
-                           };
-    [self _sendToView_dictionary:data];
-}
-
-
-- (void)_sendToView_disconnectWebsocket
-{
-    NSDictionary *data = @{
-                           @"_name": @"disconnectwebsocket"
-                           };
-    [self _sendToView_dictionary:data];
 }
 
 
@@ -381,6 +351,12 @@
 
 - (void)_sendToView_dictionary:(NSDictionary *)dictionary
 {
+//    NSMutableDictionary *mutableDictionary = [NSMutableDictionary dictionaryWithDictionary:dictionary];
+//    [mutableDictionary setObject:@"master" forKey:@"_source"];
+//    [mutableDictionary setObject:@"master" forKey:@"_target"];
+//    NSString *json = [CWUtil escapedJSONStringFromDictionary:mutableDictionary];
+//    NSData *data = [NSJSONSerialization dataWithJSONObject:mutableDictionary options:NSJSONWritingPrettyPrinted error:nil];
+//    NSString *json = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     NSString *json = [CWUtil escapedJSONStringFromDictionary:dictionary];
     [self _sendToView:json];
 }
@@ -393,7 +369,8 @@
     //stringByEvaluatingJavaScriptFromString: must be called on the main thread, but it seems buggy with dispatch_async, so we use performSelectorOnMainThread:
     //Also see http://stackoverflow.com/questions/11593900/uiwebview-stringbyevaluatingjavascriptfromstring-hangs-on-ios5-0-5-1-when-called
     CWLog(4, @"Sending message to web library: %@", message);
-    NSString *js = [NSString stringWithFormat:@"CWNativeBridge.parse('%@')", message];
+//    [self.serverManager sendWebsocketMessage:[message dataUsingEncoding:NSUTF8StringEncoding]];
+    NSString *js = [NSString stringWithFormat:@"CWNativeBridge.parse('%@');", message];
     [self.webView performSelectorOnMainThread:@selector(stringByEvaluatingJavaScriptFromString:) withObject:js waitUntilDone:NO];
 }
 

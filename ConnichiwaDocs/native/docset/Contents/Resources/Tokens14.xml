@@ -297,30 +297,6 @@ In order to do that, the manager needs a dedicated UIWebView on which the local 
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWWebLibraryManager/_sendToView_connectWebsocket</TokenIdentifier>
-			<Abstract type="html">Asks the web library to connect its websocket to the local webserver</Abstract>
-			<DeclaredIn>CWWebLibraryManager.m</DeclaredIn>
-			
-			<Declaration>- (void)_sendToView_connectWebsocket</Declaration>
-			
-			
-			<Anchor>//api/name/_sendToView_connectWebsocket</Anchor>
-            <NodeRef refid="14"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWWebLibraryManager/_sendToView_disconnectWebsocket</TokenIdentifier>
-			<Abstract type="html">Asks the web library to disconnect its websocket from the local webserver</Abstract>
-			<DeclaredIn>CWWebLibraryManager.m</DeclaredIn>
-			
-			<Declaration>- (void)_sendToView_disconnectWebsocket</Declaration>
-			
-			
-			<Anchor>//api/name/_sendToView_disconnectWebsocket</Anchor>
-            <NodeRef refid="14"/>
-		</Token>
-		
-		<Token>
 			<TokenIdentifier>//apple_ref/occ/instm/CWWebLibraryManager/_sendToView_debuginfo</TokenIdentifier>
 			<Abstract type="html">Tells the web library if we are running in debug mode or not</Abstract>
 			<DeclaredIn>CWWebLibraryManager.m</DeclaredIn>

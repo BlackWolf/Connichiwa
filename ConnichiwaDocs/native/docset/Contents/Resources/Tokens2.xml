@@ -145,6 +145,18 @@
 		</Token>
 		
 		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/BLWebSocketsServer/pushMessageToAll:except:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BLWebSocketsServer.h</DeclaredIn>
+			
+			<Declaration>- (void)pushMessageToAll:(NSData *)message except:(NSArray *)exceptions</Declaration>
+			
+			
+			<Anchor>//api/name/pushMessageToAll:except:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
 			<TokenIdentifier>//apple_ref/occ/instm/BLWebSocketsServer/init</TokenIdentifier>
 			<Abstract type="html"></Abstract>
 			<DeclaredIn>BLWebSocketsServer.m</DeclaredIn>
@@ -170,7 +182,7 @@
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/instm/BLWebSocketsServer/createProtocol:withName:callback:andSessionDataSize:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
+			<Abstract type="html">/    i.extensions = libwebsocketgetinternal_extensions;</Abstract>
 			<DeclaredIn>BLWebSocketsServer.m</DeclaredIn>
 			
 			<Declaration>- (void)createProtocol:(struct libwebsocket_protocols *)protocol withName:(NSString *)name callback:(callback_function)callback andSessionDataSize:(int)sessionDataSize</Declaration>

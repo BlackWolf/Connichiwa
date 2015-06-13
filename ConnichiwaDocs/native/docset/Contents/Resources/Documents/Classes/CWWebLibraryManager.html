@@ -70,8 +70,6 @@
 	
 	<option value="//api/name/_sendToView:">&nbsp;&nbsp;&nbsp;&nbsp;- _sendToView:</option>
 	
-	<option value="//api/name/_sendToView_connectWebsocket">&nbsp;&nbsp;&nbsp;&nbsp;- _sendToView_connectWebsocket</option>
-	
 	<option value="//api/name/_sendToView_debuginfo">&nbsp;&nbsp;&nbsp;&nbsp;- _sendToView_debuginfo</option>
 	
 	<option value="//api/name/_sendToView_device:changedDistance:">&nbsp;&nbsp;&nbsp;&nbsp;- _sendToView_device:changedDistance:</option>
@@ -83,8 +81,6 @@
 	<option value="//api/name/_sendToView_deviceLost:">&nbsp;&nbsp;&nbsp;&nbsp;- _sendToView_deviceLost:</option>
 	
 	<option value="//api/name/_sendToView_dictionary:">&nbsp;&nbsp;&nbsp;&nbsp;- _sendToView_dictionary:</option>
-	
-	<option value="//api/name/_sendToView_disconnectWebsocket">&nbsp;&nbsp;&nbsp;&nbsp;- _sendToView_disconnectWebsocket</option>
 	
 	<option value="//api/name/_sendToView_localInfo">&nbsp;&nbsp;&nbsp;&nbsp;- _sendToView_localInfo</option>
 	
@@ -166,8 +162,6 @@
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/_sendToView:">_sendToView:</a></span></li>
 	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/_sendToView_connectWebsocket">_sendToView_connectWebsocket</a></span></li>
-	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/_sendToView_debuginfo">_sendToView_debuginfo</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/_sendToView_device:changedDistance:">_sendToView_device:changedDistance:</a></span></li>
@@ -179,8 +173,6 @@
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/_sendToView_deviceLost:">_sendToView_deviceLost:</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/_sendToView_dictionary:">_sendToView_dictionary:</a></span></li>
-	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/_sendToView_disconnectWebsocket">_sendToView_disconnectWebsocket</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/_sendToView_localInfo">_sendToView_localInfo</a></span></li>
 	
@@ -359,18 +351,6 @@ In order to do that, the manager needs a dedicated UIWebView on which the local 
 </li><li>
 	<span class="tooltip">
 		<code><a href="#//api/name/_receivedFromView_remoteDidConnect:">&ndash;&nbsp;_receivedFromView_remoteDidConnect:</a></code>
-	</span>
-	
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/_sendToView_connectWebsocket">&ndash;&nbsp;_sendToView_connectWebsocket</a></code>
-	</span>
-	
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/_sendToView_disconnectWebsocket">&ndash;&nbsp;_sendToView_disconnectWebsocket</a></code>
 	</span>
 	
 	
@@ -921,42 +901,6 @@ In order to do that, the manager needs a dedicated UIWebView on which the local 
 </div>
 						
 						<div class="section-method">
-	<a name="//api/name/_sendToView_connectWebsocket" title="_sendToView_connectWebsocket"></a>
-	<h3 class="subsubtitle method-title">_sendToView_connectWebsocket</h3>
-	
-	
-	
-	<div class="method-subsection brief-description">
-		<p>Asks the web library to <a href="#//api/name/connect">connect</a> its websocket to the local webserver</p>
-	</div>		
-	
-    
-
-	<div class="method-subsection method-declaration"><code>- (void)_sendToView_connectWebsocket</code></div>
-
-    
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<div class="method-subsection declared-in-section">
-		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">CWWebLibraryManager.m</code><br />
-	</div>				
-	
-	
-</div>
-						
-						<div class="section-method">
 	<a name="//api/name/_sendToView_debuginfo" title="_sendToView_debuginfo"></a>
 	<h3 class="subsubtitle method-title">_sendToView_debuginfo</h3>
 	
@@ -1171,42 +1115,6 @@ In order to do that, the manager needs a dedicated UIWebView on which the local 
 		</dl>
 		
 	</div>
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<div class="method-subsection declared-in-section">
-		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">CWWebLibraryManager.m</code><br />
-	</div>				
-	
-	
-</div>
-						
-						<div class="section-method">
-	<a name="//api/name/_sendToView_disconnectWebsocket" title="_sendToView_disconnectWebsocket"></a>
-	<h3 class="subsubtitle method-title">_sendToView_disconnectWebsocket</h3>
-	
-	
-	
-	<div class="method-subsection brief-description">
-		<p>Asks the web library to dis<a href="#//api/name/connect">connect</a> its websocket from the local webserver</p>
-	</div>		
-	
-    
-
-	<div class="method-subsection method-declaration"><code>- (void)_sendToView_disconnectWebsocket</code></div>
-
-    
 	
 	
 	
@@ -1734,7 +1642,7 @@ In order to do that, the manager needs a dedicated UIWebView on which the local 
 				<div id="footer">
 					<hr />
 					<div class="footer-copyright">
-						<p><span class="copyright">&copy; 2015 Mario Schreiner. All rights reserved. (Last updated: 2015-05-27)</span><br />
+						<p><span class="copyright">&copy; 2015 Mario Schreiner. All rights reserved. (Last updated: 2015-06-13)</span><br />
 						
 						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2 (build 963)</a>.</span></p>
 						

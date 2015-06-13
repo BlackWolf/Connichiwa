@@ -32,14 +32,9 @@ CWNativeBridge._runsNative = false;
  * @private
  */
 CWNativeBridge.__constructor = function() {
-  // if (Connichiwa.isMaster()) {
-    // console.log("runsNative true")
-    // this._runsNative = true;
-  // } else {
-    if (window.RUN_BY_CONNICHIWA_NATIVE === true) {
-      this._runsNative = true;
-    } 
-  // }
+  if (window.RUN_BY_CONNICHIWA_NATIVE === true) {
+    this._runsNative = true;
+  } 
 }.bind(CWNativeBridge);
 
 
