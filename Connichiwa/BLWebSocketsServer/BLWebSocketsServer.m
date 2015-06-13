@@ -84,13 +84,30 @@ static BLWebSocketsServer *sharedInstance = nil;
 
 #pragma mark - Context management
 - (struct libwebsocket_context *)createContextWithProtocolName:(NSString *)protocolName callbackFunction:(callback_function)callback andPort:(int)port {
-    struct libwebsocket_protocols * protocols = (struct libwebsocket_protocols *) calloc(3, sizeof(struct libwebsocket_protocols));
+//    struct libwebsocket_protocols * protocols = (struct libwebsocket_protocols *) calloc(3, sizeof(struct libwebsocket_protocols));
+////
+////    /* first protocol must always be HTTP handler */
+//    [self createProtocol:protocols withName:HTTP_ONLY_PROTOCOL_NAME callback:callback_http andSessionDataSize:0];
+//    [self createProtocol:protocols+1 withName:protocolName callback:callback_websockets andSessionDataSize:sizeof(int)];
+//    [self createProtocol:protocols+2 withName:NULL callback:NULL andSessionDataSize:0];
     
-    /* first protocol must always be HTTP handler */
-    [self createProtocol:protocols withName:HTTP_ONLY_PROTOCOL_NAME callback:callback_http andSessionDataSize:0];
-    [self createProtocol:protocols+1 withName:protocolName callback:callback_websockets andSessionDataSize:sizeof(int)];
-    [self createProtocol:protocols+2 withName:NULL callback:NULL andSessionDataSize:0];
+    struct libwebsocket_protocols * protocols = (struct libwebsocket_protocols *) calloc(2, sizeof(struct libwebsocket_protocols));
+    [self createProtocol:protocols withName:protocolName callback:callback_websockets andSessionDataSize:sizeof(int)];
+    [self createProtocol:protocols+1 withName:NULL callback:NULL andSessionDataSize:0];
     
+//    struct lws_context_creation_info i;
+//    i.port = port;
+//    i.iface = NULL;
+//    i.gid = -1;
+//    i.uid = -1;
+//    i.options = 0;
+//    i.protocols = protocols;
+////    i.extensions = libwebsocket_get_internal_extensions;
+//    i.extensions = NULL;
+//    i.ssl_cert_filepath = NULL;
+//    i.ssl_private_key_filepath = NULL;
+//    lws_set_log_level(LLL_WARN | LLL_NOTICE | LLL_INFO | LLL_DEBUG | LLL_CLIENT | LLL_ERR, NULL);
+//    return libwebsocket_create_context(&i);
     return libwebsocket_create_context(port, NULL, protocols,
                                        libwebsocket_internal_extensions,
                                        NULL, NULL, NULL, -1, -1, 0, NULL);
@@ -138,11 +155,13 @@ static BLWebSocketsServer *sharedInstance = nil;
     
     self.timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, self.networkQueue);
     
-    dispatch_source_set_timer(self.timer, DISPATCH_TIME_NOW, 1, 1);
+    dispatch_source_set_timer(self.timer, DISPATCH_TIME_NOW, 1, 0);
+//    dispatch_source_set_timer(self.timer, DISPATCH_TIME_NOW, DEFAULT_POLLING_INTERVAL*NSEC_PER_USEC, (DEFAULT_POLLING_INTERVAL/2)*NSEC_PER_USEC);
     
     dispatch_source_set_event_handler(self.timer, ^{
         @autoreleasepool {
             libwebsocket_service(self.context, DEFAULT_POLLING_INTERVAL);
+//            libwebsocket_service(self.context, 0);
         }
     });
     
@@ -205,20 +224,24 @@ static BLWebSocketsServer *sharedInstance = nil;
     [connection enqueueOutgoingMessage:message];
     
     //Make sure the new message is sent as soon as the socket is writable
-    dispatch_async(self.networkQueue, ^{
-        libwebsocket_callback_on_writable(self.context, connection.socket);
-    });
+    libwebsocket_callback_on_writable(self.context, connection.socket);
+    libwebsocket_cancel_service(self.context);
 }
 
 - (void)pushMessageToAll:(NSData *)message {
+    [self pushMessageToAll:message except:nil];
+}
+
+
+- (void)pushMessageToAll:(NSData *)message except:(NSArray *)exceptions {
     for (BLWebSocketConnection *connection in self.connections.allValues) {
+        if ([exceptions containsObject:@(connection.ID)]) continue;
         [connection enqueueOutgoingMessage:message];
     }
     
     //Make sure all connections call the writable callback when they are ready
-    dispatch_async(self.networkQueue, ^{
-        libwebsocket_callback_on_writable_all_protocol(&(self.context->protocols[1]));
-    });
+    libwebsocket_callback_on_writable_all_protocol(&(self.context->protocols[0]));
+    libwebsocket_cancel_service(self.context);
 }
 
 
@@ -292,6 +315,7 @@ static int callback_websockets(struct libwebsocket_context * this,
                 BLWebSocketConnection *connection = [BLWebSocketsServer connectionForID:*connectionID];
                 NSData *message = [connection dequeueOutgoingMessage];
                 if (message != nil) {
+//                    NSLog(@"SENDING MESSAGE TO %d", *connectionID);
 //                    NSLog(@"SENDING MESSAGE %@", [[NSString alloc] initWithData:message encoding:NSUTF8StringEncoding]);
                     write_data_websockets(message, wsi);
                     

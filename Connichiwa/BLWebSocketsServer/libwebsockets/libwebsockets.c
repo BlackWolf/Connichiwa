@@ -84,6 +84,13 @@ insert_wsi_socket_into_fds(struct libwebsocket_context *context, struct libwebso
 
 	lwsl_info("insert_wsi_socket_into_fds: wsi=%p, sock=%d, fds pos=%d\n", wsi, wsi->sock, context->fds_count);
 
+    // START CONNICHIWA //
+    
+    // When a new file descriptor is established, requested_pollout flag is 0
+    context->fd_requested_pollout[context->fds_count] = 0;
+    
+    // END CONNICHIWA //
+    
 	context->lws_lookup[wsi->sock] = wsi;
 	wsi->position_in_fds_table = context->fds_count;
 	context->fds[context->fds_count].fd = wsi->sock;
@@ -123,6 +130,14 @@ remove_wsi_socket_from_fds(struct libwebsocket_context *context, struct libwebso
 	/* deletion guy's lws_lookup entry needs nuking */
 	context->lws_lookup[wsi->sock] = NULL; /* no WSI for the socket of the wsi being removed*/
 	wsi->position_in_fds_table = -1; /* removed wsi has no position any more */
+    
+    // START CONNICHIWA //
+    
+    //Also remove the slot in fd_requested_pollout
+    context->fd_requested_pollout[m] = context->fd_requested_pollout[context->fds_count];
+    context->fd_requested_pollout[context->fds_count] = 0;
+    
+    // END CONNICHIWA //
 
 do_ext:
 	/* remove also from external POLL support via protocol 0 */
@@ -756,7 +771,7 @@ libwebsocket_service_fd(struct libwebsocket_context *context,
 				/* even with extpoll, we prepared this internal fds for listen */
 				n = poll(&context->fds[0], 1, 0);
 				if (n > 0) { /* there's a connection waiting for us */
-					libwebsocket_service_fd(context, &context->fds[0]);
+					libwebsocket_service_fd(context, &context->fds[1]);
 					context->listen_service_extraseen++;
 				} else {
 					if (context->listen_service_extraseen)
@@ -952,6 +967,8 @@ libwebsocket_context_destroy(struct libwebsocket_context *context)
 
 #ifdef WIN32
 #else
+    close(context->dummy_pipe_fds[0]);
+    close(context->dummy_pipe_fds[1]);
 	close(context->fd_random);
 #endif
 
@@ -1033,8 +1050,25 @@ libwebsocket_service(struct libwebsocket_context *context, int timeout_ms)
 		return 1;
 
 	/* wait for something to need service */
-
+    
+    is_polling++;
 	n = poll(context->fds, context->fds_count, timeout_ms);
+    is_polling--;
+    
+    // START CONNICHIWA //
+    
+    //If the POLLOUT event for a fd has been requested while we were inside poll(),
+    //this would usually get lost, since poll() sets .events to 0
+    //Therefore, we remember such a request  and restore it here
+    for (n = 0; n < context->fds_count; n++) {
+        if (context->fd_requested_pollout[n] == 1) {
+            context->fds[n].events |= POLLOUT;
+            context->fd_requested_pollout[n] = 0;
+        }
+    }
+    
+    // END CONNICHIWA //
+
 	if (n == 0) /* poll timeout */
 		return 0;
 
@@ -1042,14 +1076,50 @@ libwebsocket_service(struct libwebsocket_context *context, int timeout_ms)
 		return -1;
 
 	/* any socket with events to service? */
-
-	for (n = 0; n < context->fds_count; n++)
-		if (context->fds[n].revents)
-			if (libwebsocket_service_fd(context,
-							&context->fds[n]) < 0)
-				return -1;
+    
+    for (n = 0; n < context->fds_count; n++) {
+		if (!context->fds[n].revents)
+            continue;
+        
+        // START CONNICHIWA //
+        
+        //If an event happened on the dummy pipe, empty it and be done
+        if (context->fds[n].fd == context->dummy_pipe_fds[0]) {
+            char buf;
+            if (read(context->fds[n].fd, &buf, 1) != 1)
+                lwsl_err("Cannot read from dummy pipe.");
+            continue;
+        }
+        
+        // END CONNICHIWA //
+        
+        if (libwebsocket_service_fd(context, &context->fds[n]) < 0)
+            return -1;
+    }
+    
 	return 0;
 }
+
+// START CONNICHIWA //
+
+/**
+ * libwebsocket_cancel_service() - Cancel servicing of pending websocket activity
+ * @context:	Websocket context
+ *
+ *	This function let a call to libwebsocket_service() waiting for a timeout
+ *	immediately return.
+ */
+void
+libwebsocket_cancel_service(struct libwebsocket_context *context)
+{
+    //Taken from newer libwebsockets: Write something to the dummy pipe so
+    //poll() will return
+    char buf = 0;
+    if (write(context->dummy_pipe_fds[1], &buf, sizeof(buf)) != 1)
+        lwsl_err("Cannot write to dummy pipe");
+}
+
+// END CONNICHIWA //
 
 #ifndef LWS_NO_EXTENSIONS
 int
@@ -1136,6 +1206,21 @@ libwebsocket_callback_on_writable(struct libwebsocket_context *context,
 	}
 
 	context->fds[wsi->position_in_fds_table].events |= POLLOUT;
+    
+    // START CONNICHIWA //
+    
+    //POLLOUT is a problem: If we are polling right now (we are inside poll()),
+    //we need to cancel poll() and call libwebsocket_service() again to make
+    //poll know about the POLLOUT event. But once poll() returns, it sets the
+    //.events to 0, so the POLLOUT request gets lost.
+    //The solution is "easy": We remember the pollout request here, and
+    //once poll() returns (for example due to a call to libwebsocket_cancel_service())
+    //we will set the pollout event again
+    if (is_polling > 0) {
+        context->fd_requested_pollout[wsi->position_in_fds_table] = 1;
+    }
+    
+    // END CONNICHIWA //
 
 	/* external POLL support via protocol 0 */
 	context->protocols[0].callback(context, wsi,
@@ -1514,6 +1599,15 @@ libwebsocket_create_context(int port, const char *interf,
 		free(context);
 		return NULL;
 	}
+    
+    // START CONNICHIWA //
+    
+    //Every file descriptor can have a pending pollout request, therefore we
+    //need fd_requested_pollout to have the same length as fds
+    context->fd_requested_pollout = (int *)malloc(sizeof(int) * context->max_fds);
+    
+    // END CONNICHIWA //
+    
 	context->lws_lookup = (struct libwebsocket **)malloc(sizeof(struct libwebsocket *) * context->max_fds);
 	if (context->lws_lookup == NULL) {
 		lwsl_err("Unable to allocate lws_lookup array for %d connections\n", context->max_fds);
@@ -1540,6 +1634,27 @@ libwebsocket_create_context(int port, const char *interf,
 		return NULL;
 	}
 #endif
+    
+    // START CONNICHIWA //
+    
+    //Create dummy pipe which we will use in cancel_service()
+    if (pipe(context->dummy_pipe_fds)) {
+        lwsl_err("Unable to create pipe\n");
+        return NULL;
+    }
+    
+    //The dummy pipe must be the first fd in the list of fds, and remain there
+    //It will therefore be handled first in service()
+    context->fds[0].fd = context->dummy_pipe_fds[0];
+    context->fds[0].events = POLLIN;
+    context->fds[0].revents = 0;
+    
+    context->fds_count = 1;
+    
+    //The dummy pipe should never have a pollout request
+    context->fd_requested_pollout[0] = 0;
+    
+    // END CONNICHIWA //
 
 #ifdef LWS_OPENSSL_SUPPORT
 	context->use_ssl = 0;

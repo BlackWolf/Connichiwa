@@ -24,5 +24,6 @@ typedef void (^BLWebSocketOnCloseHandler)(int connectionID);
 - (void)setOnCloseHandler:(BLWebSocketOnCloseHandler)handler forConnection:(int)connectionID;
 - (void)pushMessage:(NSData *)message toConnection:(int)connectionID;
 - (void)pushMessageToAll:(NSData *)message;
+- (void)pushMessageToAll:(NSData *)message except:(NSArray *)exceptions;
 
 @end

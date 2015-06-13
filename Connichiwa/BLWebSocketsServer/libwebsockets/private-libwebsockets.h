@@ -218,11 +218,14 @@ enum connection_mode {
 	LWS_CONNMODE_BROADCAST_PROXY
 };
 
+int is_polling;
+
 struct libwebsocket_protocols;
 struct libwebsocket;
 
 struct libwebsocket_context {
 	struct pollfd *fds;
+    int *fd_requested_pollout;
 	struct libwebsocket **lws_lookup; /* fd to wsi */
 	int fds_count;
 	int max_fds;
@@ -240,6 +243,10 @@ struct libwebsocket_context {
 	int listen_service_count;
 	int listen_service_fd;
 	int listen_service_extraseen;
+    
+#ifndef _WIN32
+    int dummy_pipe_fds[2];
+#endif
 
 #ifdef LWS_OPENSSL_SUPPORT
 	int use_ssl;

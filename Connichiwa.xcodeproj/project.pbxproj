@@ -28,25 +28,6 @@
 		330CBB8E193F14B60064AD99 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 330CBB8C193F14B60064AD99 /* InfoPlist.strings */; };
 		3317C6F01A714BCB008BD104 /* BLWebSocketsServer.h in Headers */ = {isa = PBXBuildFile; fileRef = 3317C6D61A714BCB008BD104 /* BLWebSocketsServer.h */; };
 		3317C6F11A714BCB008BD104 /* BLWebSocketsServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 3317C6D71A714BCB008BD104 /* BLWebSocketsServer.m */; settings = {COMPILER_FLAGS = "-w"; }; };
-		3317C6F21A714BCB008BD104 /* base64-decode.c in Sources */ = {isa = PBXBuildFile; fileRef = 3317C6D91A714BCB008BD104 /* base64-decode.c */; settings = {COMPILER_FLAGS = "-w"; }; };
-		3317C6F51A714BCB008BD104 /* client-handshake.c in Sources */ = {isa = PBXBuildFile; fileRef = 3317C6DC1A714BCB008BD104 /* client-handshake.c */; settings = {COMPILER_FLAGS = "-w"; }; };
-		3317C6F61A714BCB008BD104 /* client-parser.c in Sources */ = {isa = PBXBuildFile; fileRef = 3317C6DD1A714BCB008BD104 /* client-parser.c */; settings = {COMPILER_FLAGS = "-w"; }; };
-		3317C6F71A714BCB008BD104 /* client.c in Sources */ = {isa = PBXBuildFile; fileRef = 3317C6DE1A714BCB008BD104 /* client.c */; settings = {COMPILER_FLAGS = "-w"; }; };
-		3317C6F81A714BCB008BD104 /* daemonize.c in Sources */ = {isa = PBXBuildFile; fileRef = 3317C6DF1A714BCB008BD104 /* daemonize.c */; settings = {COMPILER_FLAGS = "-w"; }; };
-		3317C6F91A714BCB008BD104 /* extension-deflate-frame.c in Sources */ = {isa = PBXBuildFile; fileRef = 3317C6E01A714BCB008BD104 /* extension-deflate-frame.c */; settings = {COMPILER_FLAGS = "-w"; }; };
-		3317C6FA1A714BCB008BD104 /* extension-deflate-frame.h in Headers */ = {isa = PBXBuildFile; fileRef = 3317C6E11A714BCB008BD104 /* extension-deflate-frame.h */; };
-		3317C6FB1A714BCB008BD104 /* extension-deflate-stream.c in Sources */ = {isa = PBXBuildFile; fileRef = 3317C6E21A714BCB008BD104 /* extension-deflate-stream.c */; settings = {COMPILER_FLAGS = "-w"; }; };
-		3317C6FC1A714BCB008BD104 /* extension-deflate-stream.h in Headers */ = {isa = PBXBuildFile; fileRef = 3317C6E31A714BCB008BD104 /* extension-deflate-stream.h */; };
-		3317C6FD1A714BCB008BD104 /* extension.c in Sources */ = {isa = PBXBuildFile; fileRef = 3317C6E41A714BCB008BD104 /* extension.c */; settings = {COMPILER_FLAGS = "-w"; }; };
-		3317C7001A714BCB008BD104 /* handshake.c in Sources */ = {isa = PBXBuildFile; fileRef = 3317C6E71A714BCB008BD104 /* handshake.c */; settings = {COMPILER_FLAGS = "-w"; }; };
-		3317C7011A714BCB008BD104 /* libwebsockets.c in Sources */ = {isa = PBXBuildFile; fileRef = 3317C6E81A714BCB008BD104 /* libwebsockets.c */; settings = {COMPILER_FLAGS = "-w"; }; };
-		3317C7021A714BCB008BD104 /* libwebsockets.h in Headers */ = {isa = PBXBuildFile; fileRef = 3317C6E91A714BCB008BD104 /* libwebsockets.h */; };
-		3317C7031A714BCB008BD104 /* output.c in Sources */ = {isa = PBXBuildFile; fileRef = 3317C6EA1A714BCB008BD104 /* output.c */; settings = {COMPILER_FLAGS = "-w"; }; };
-		3317C7041A714BCB008BD104 /* parsers.c in Sources */ = {isa = PBXBuildFile; fileRef = 3317C6EB1A714BCB008BD104 /* parsers.c */; settings = {COMPILER_FLAGS = "-w"; }; };
-		3317C7051A714BCB008BD104 /* private-libwebsockets.h in Headers */ = {isa = PBXBuildFile; fileRef = 3317C6EC1A714BCB008BD104 /* private-libwebsockets.h */; };
-		3317C7061A714BCB008BD104 /* server-handshake.c in Sources */ = {isa = PBXBuildFile; fileRef = 3317C6ED1A714BCB008BD104 /* server-handshake.c */; settings = {COMPILER_FLAGS = "-w"; }; };
-		3317C7071A714BCB008BD104 /* server.c in Sources */ = {isa = PBXBuildFile; fileRef = 3317C6EE1A714BCB008BD104 /* server.c */; settings = {COMPILER_FLAGS = "-w"; }; };
-		3317C7081A714BCB008BD104 /* sha-1.c in Sources */ = {isa = PBXBuildFile; fileRef = 3317C6EF1A714BCB008BD104 /* sha-1.c */; settings = {COMPILER_FLAGS = "-w"; }; };
 		3321DCDB196AA6830090D39C /* CWBluetoothTransferManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 3321DCD9196AA6830090D39C /* CWBluetoothTransferManager.h */; };
 		3321DCDC196AA6830090D39C /* CWBluetoothTransferManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3321DCDA196AA6830090D39C /* CWBluetoothTransferManager.m */; };
 		332B686F1959A2B5004B0600 /* scripts in Resources */ = {isa = PBXBuildFile; fileRef = 332B686E1959A2B5004B0600 /* scripts */; };
@@ -97,6 +78,25 @@
 		3367186C194776C1000A7164 /* CWServerManagerDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 3367186B194776C1000A7164 /* CWServerManagerDelegate.h */; };
 		337FE7961977E07B00912293 /* weblib in Resources */ = {isa = PBXBuildFile; fileRef = 337FE7951977E07B00912293 /* weblib */; };
 		337FE7981977E2FA00912293 /* remote.html in Resources */ = {isa = PBXBuildFile; fileRef = 337FE7971977E2FA00912293 /* remote.html */; };
+		338EEBCC1B2C42A2009A5C3C /* base64-decode.c in Sources */ = {isa = PBXBuildFile; fileRef = 338EEBB91B2C42A2009A5C3C /* base64-decode.c */; };
+		338EEBCD1B2C42A2009A5C3C /* client-handshake.c in Sources */ = {isa = PBXBuildFile; fileRef = 338EEBBA1B2C42A2009A5C3C /* client-handshake.c */; };
+		338EEBCE1B2C42A2009A5C3C /* client-parser.c in Sources */ = {isa = PBXBuildFile; fileRef = 338EEBBB1B2C42A2009A5C3C /* client-parser.c */; };
+		338EEBCF1B2C42A2009A5C3C /* client.c in Sources */ = {isa = PBXBuildFile; fileRef = 338EEBBC1B2C42A2009A5C3C /* client.c */; };
+		338EEBD01B2C42A2009A5C3C /* daemonize.c in Sources */ = {isa = PBXBuildFile; fileRef = 338EEBBD1B2C42A2009A5C3C /* daemonize.c */; };
+		338EEBD11B2C42A2009A5C3C /* extension-deflate-frame.c in Sources */ = {isa = PBXBuildFile; fileRef = 338EEBBE1B2C42A2009A5C3C /* extension-deflate-frame.c */; };
+		338EEBD21B2C42A2009A5C3C /* extension-deflate-frame.h in Headers */ = {isa = PBXBuildFile; fileRef = 338EEBBF1B2C42A2009A5C3C /* extension-deflate-frame.h */; };
+		338EEBD31B2C42A2009A5C3C /* extension-deflate-stream.c in Sources */ = {isa = PBXBuildFile; fileRef = 338EEBC01B2C42A2009A5C3C /* extension-deflate-stream.c */; };
+		338EEBD41B2C42A2009A5C3C /* extension-deflate-stream.h in Headers */ = {isa = PBXBuildFile; fileRef = 338EEBC11B2C42A2009A5C3C /* extension-deflate-stream.h */; };
+		338EEBD51B2C42A2009A5C3C /* extension.c in Sources */ = {isa = PBXBuildFile; fileRef = 338EEBC21B2C42A2009A5C3C /* extension.c */; };
+		338EEBD61B2C42A2009A5C3C /* handshake.c in Sources */ = {isa = PBXBuildFile; fileRef = 338EEBC31B2C42A2009A5C3C /* handshake.c */; };
+		338EEBD71B2C42A2009A5C3C /* libwebsockets.c in Sources */ = {isa = PBXBuildFile; fileRef = 338EEBC41B2C42A2009A5C3C /* libwebsockets.c */; };
+		338EEBD81B2C42A2009A5C3C /* libwebsockets.h in Headers */ = {isa = PBXBuildFile; fileRef = 338EEBC51B2C42A2009A5C3C /* libwebsockets.h */; };
+		338EEBD91B2C42A2009A5C3C /* output.c in Sources */ = {isa = PBXBuildFile; fileRef = 338EEBC61B2C42A2009A5C3C /* output.c */; };
+		338EEBDA1B2C42A2009A5C3C /* parsers.c in Sources */ = {isa = PBXBuildFile; fileRef = 338EEBC71B2C42A2009A5C3C /* parsers.c */; };
+		338EEBDB1B2C42A2009A5C3C /* private-libwebsockets.h in Headers */ = {isa = PBXBuildFile; fileRef = 338EEBC81B2C42A2009A5C3C /* private-libwebsockets.h */; };
+		338EEBDC1B2C42A2009A5C3C /* server-handshake.c in Sources */ = {isa = PBXBuildFile; fileRef = 338EEBC91B2C42A2009A5C3C /* server-handshake.c */; };
+		338EEBDD1B2C42A2009A5C3C /* server.c in Sources */ = {isa = PBXBuildFile; fileRef = 338EEBCA1B2C42A2009A5C3C /* server.c */; };
+		338EEBDE1B2C42A2009A5C3C /* sha-1.c in Sources */ = {isa = PBXBuildFile; fileRef = 338EEBCB1B2C42A2009A5C3C /* sha-1.c */; };
 		33A05158193E61CC00FED071 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33A05157193E61CC00FED071 /* XCTest.framework */; };
 		33A0515E193E61CC00FED071 /* libConnichiwa.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 33A05146193E61CC00FED071 /* libConnichiwa.a */; };
 		33A05164193E61CC00FED071 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 33A05162193E61CC00FED071 /* InfoPlist.strings */; };
@@ -141,25 +141,6 @@
 		330CBB8F193F14B60064AD99 /* ConnichiwaResources-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ConnichiwaResources-Prefix.pch"; sourceTree = "<group>"; };
 		3317C6D61A714BCB008BD104 /* BLWebSocketsServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BLWebSocketsServer.h; sourceTree = "<group>"; };
 		3317C6D71A714BCB008BD104 /* BLWebSocketsServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BLWebSocketsServer.m; sourceTree = "<group>"; };
-		3317C6D91A714BCB008BD104 /* base64-decode.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "base64-decode.c"; sourceTree = "<group>"; };
-		3317C6DC1A714BCB008BD104 /* client-handshake.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "client-handshake.c"; sourceTree = "<group>"; };
-		3317C6DD1A714BCB008BD104 /* client-parser.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "client-parser.c"; sourceTree = "<group>"; };
-		3317C6DE1A714BCB008BD104 /* client.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = client.c; sourceTree = "<group>"; };
-		3317C6DF1A714BCB008BD104 /* daemonize.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = daemonize.c; sourceTree = "<group>"; };
-		3317C6E01A714BCB008BD104 /* extension-deflate-frame.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "extension-deflate-frame.c"; sourceTree = "<group>"; };
-		3317C6E11A714BCB008BD104 /* extension-deflate-frame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "extension-deflate-frame.h"; sourceTree = "<group>"; };
-		3317C6E21A714BCB008BD104 /* extension-deflate-stream.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "extension-deflate-stream.c"; sourceTree = "<group>"; };
-		3317C6E31A714BCB008BD104 /* extension-deflate-stream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "extension-deflate-stream.h"; sourceTree = "<group>"; };
-		3317C6E41A714BCB008BD104 /* extension.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = extension.c; sourceTree = "<group>"; };
-		3317C6E71A714BCB008BD104 /* handshake.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = handshake.c; sourceTree = "<group>"; };
-		3317C6E81A714BCB008BD104 /* libwebsockets.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = libwebsockets.c; sourceTree = "<group>"; };
-		3317C6E91A714BCB008BD104 /* libwebsockets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = libwebsockets.h; sourceTree = "<group>"; };
-		3317C6EA1A714BCB008BD104 /* output.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = output.c; sourceTree = "<group>"; };
-		3317C6EB1A714BCB008BD104 /* parsers.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = parsers.c; sourceTree = "<group>"; };
-		3317C6EC1A714BCB008BD104 /* private-libwebsockets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "private-libwebsockets.h"; sourceTree = "<group>"; };
-		3317C6ED1A714BCB008BD104 /* server-handshake.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "server-handshake.c"; sourceTree = "<group>"; };
-		3317C6EE1A714BCB008BD104 /* server.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = server.c; sourceTree = "<group>"; };
-		3317C6EF1A714BCB008BD104 /* sha-1.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "sha-1.c"; sourceTree = "<group>"; };
 		3321DCD9196AA6830090D39C /* CWBluetoothTransferManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWBluetoothTransferManager.h; sourceTree = "<group>"; };
 		3321DCDA196AA6830090D39C /* CWBluetoothTransferManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWBluetoothTransferManager.m; sourceTree = "<group>"; };
 		3321DCE1196AA6920090D39C /* CWBluetoothTransferManagerDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CWBluetoothTransferManagerDelegate.h; sourceTree = "<group>"; };
@@ -214,6 +195,25 @@
 		3367186B194776C1000A7164 /* CWServerManagerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWServerManagerDelegate.h; sourceTree = "<group>"; };
 		337FE7951977E07B00912293 /* weblib */ = {isa = PBXFileReference; lastKnownFileType = folder; path = weblib; sourceTree = "<group>"; };
 		337FE7971977E2FA00912293 /* remote.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = remote.html; sourceTree = "<group>"; };
+		338EEBB91B2C42A2009A5C3C /* base64-decode.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "base64-decode.c"; sourceTree = "<group>"; };
+		338EEBBA1B2C42A2009A5C3C /* client-handshake.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "client-handshake.c"; sourceTree = "<group>"; };
+		338EEBBB1B2C42A2009A5C3C /* client-parser.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "client-parser.c"; sourceTree = "<group>"; };
+		338EEBBC1B2C42A2009A5C3C /* client.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = client.c; sourceTree = "<group>"; };
+		338EEBBD1B2C42A2009A5C3C /* daemonize.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = daemonize.c; sourceTree = "<group>"; };
+		338EEBBE1B2C42A2009A5C3C /* extension-deflate-frame.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "extension-deflate-frame.c"; sourceTree = "<group>"; };
+		338EEBBF1B2C42A2009A5C3C /* extension-deflate-frame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "extension-deflate-frame.h"; sourceTree = "<group>"; };
+		338EEBC01B2C42A2009A5C3C /* extension-deflate-stream.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "extension-deflate-stream.c"; sourceTree = "<group>"; };
+		338EEBC11B2C42A2009A5C3C /* extension-deflate-stream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "extension-deflate-stream.h"; sourceTree = "<group>"; };
+		338EEBC21B2C42A2009A5C3C /* extension.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = extension.c; sourceTree = "<group>"; };
+		338EEBC31B2C42A2009A5C3C /* handshake.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = handshake.c; sourceTree = "<group>"; };
+		338EEBC41B2C42A2009A5C3C /* libwebsockets.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = libwebsockets.c; sourceTree = "<group>"; };
+		338EEBC51B2C42A2009A5C3C /* libwebsockets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = libwebsockets.h; sourceTree = "<group>"; };
+		338EEBC61B2C42A2009A5C3C /* output.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = output.c; sourceTree = "<group>"; };
+		338EEBC71B2C42A2009A5C3C /* parsers.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = parsers.c; sourceTree = "<group>"; };
+		338EEBC81B2C42A2009A5C3C /* private-libwebsockets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "private-libwebsockets.h"; sourceTree = "<group>"; };
+		338EEBC91B2C42A2009A5C3C /* server-handshake.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "server-handshake.c"; sourceTree = "<group>"; };
+		338EEBCA1B2C42A2009A5C3C /* server.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = server.c; sourceTree = "<group>"; };
+		338EEBCB1B2C42A2009A5C3C /* sha-1.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "sha-1.c"; sourceTree = "<group>"; };
 		33A05146193E61CC00FED071 /* libConnichiwa.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libConnichiwa.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		33A0514D193E61CC00FED071 /* Connichiwa-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Connichiwa-Prefix.pch"; sourceTree = "<group>"; };
 		33A0514E193E61CC00FED071 /* Connichiwa.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Connichiwa.h; sourceTree = "<group>"; };
@@ -308,25 +308,25 @@
 		3317C6D81A714BCB008BD104 /* libwebsockets */ = {
 			isa = PBXGroup;
 			children = (
-				3317C6D91A714BCB008BD104 /* base64-decode.c */,
-				3317C6DC1A714BCB008BD104 /* client-handshake.c */,
-				3317C6DD1A714BCB008BD104 /* client-parser.c */,
-				3317C6DE1A714BCB008BD104 /* client.c */,
-				3317C6DF1A714BCB008BD104 /* daemonize.c */,
-				3317C6E01A714BCB008BD104 /* extension-deflate-frame.c */,
-				3317C6E11A714BCB008BD104 /* extension-deflate-frame.h */,
-				3317C6E21A714BCB008BD104 /* extension-deflate-stream.c */,
-				3317C6E31A714BCB008BD104 /* extension-deflate-stream.h */,
-				3317C6E41A714BCB008BD104 /* extension.c */,
-				3317C6E71A714BCB008BD104 /* handshake.c */,
-				3317C6E81A714BCB008BD104 /* libwebsockets.c */,
-				3317C6E91A714BCB008BD104 /* libwebsockets.h */,
-				3317C6EA1A714BCB008BD104 /* output.c */,
-				3317C6EB1A714BCB008BD104 /* parsers.c */,
-				3317C6EC1A714BCB008BD104 /* private-libwebsockets.h */,
-				3317C6ED1A714BCB008BD104 /* server-handshake.c */,
-				3317C6EE1A714BCB008BD104 /* server.c */,
-				3317C6EF1A714BCB008BD104 /* sha-1.c */,
+				338EEBB91B2C42A2009A5C3C /* base64-decode.c */,
+				338EEBBA1B2C42A2009A5C3C /* client-handshake.c */,
+				338EEBBB1B2C42A2009A5C3C /* client-parser.c */,
+				338EEBBC1B2C42A2009A5C3C /* client.c */,
+				338EEBBD1B2C42A2009A5C3C /* daemonize.c */,
+				338EEBBE1B2C42A2009A5C3C /* extension-deflate-frame.c */,
+				338EEBBF1B2C42A2009A5C3C /* extension-deflate-frame.h */,
+				338EEBC01B2C42A2009A5C3C /* extension-deflate-stream.c */,
+				338EEBC11B2C42A2009A5C3C /* extension-deflate-stream.h */,
+				338EEBC21B2C42A2009A5C3C /* extension.c */,
+				338EEBC31B2C42A2009A5C3C /* handshake.c */,
+				338EEBC41B2C42A2009A5C3C /* libwebsockets.c */,
+				338EEBC51B2C42A2009A5C3C /* libwebsockets.h */,
+				338EEBC61B2C42A2009A5C3C /* output.c */,
+				338EEBC71B2C42A2009A5C3C /* parsers.c */,
+				338EEBC81B2C42A2009A5C3C /* private-libwebsockets.h */,
+				338EEBC91B2C42A2009A5C3C /* server-handshake.c */,
+				338EEBCA1B2C42A2009A5C3C /* server.c */,
+				338EEBCB1B2C42A2009A5C3C /* sha-1.c */,
 			);
 			path = libwebsockets;
 			sourceTree = "<group>";
@@ -390,6 +390,13 @@
 			path = Responses;
 			sourceTree = "<group>";
 		};
+		338EEBB81B2C2C2D009A5C3C /* Proximity Sensor */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "Proximity Sensor";
+			sourceTree = "<group>";
+		};
 		339A4BBD194F8D6C0072A4FC /* Bluetooth */ = {
 			isa = PBXGroup;
 			children = (
@@ -450,6 +457,7 @@
 				330BA3D1193F8CB300D9E54C /* CWServerManager.h */,
 				330BA3D2193F8CB300D9E54C /* CWServerManager.m */,
 				3367186B194776C1000A7164 /* CWServerManagerDelegate.h */,
+				338EEBB81B2C2C2D009A5C3C /* Proximity Sensor */,
 				339A4BBD194F8D6C0072A4FC /* Bluetooth */,
 				3306A7951940970D001B999A /* Helper */,
 				3317C6D51A714BCB008BD104 /* BLWebSocketsServer */,
@@ -493,6 +501,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3349D1FC198F90EF0050AF1A /* CWiDevice.h in Headers */,
+				338EEBD81B2C42A2009A5C3C /* libwebsockets.h in Headers */,
 				3338A7B21A71204300898D4E /* GCDWebServerMultiPartFormRequest.h in Headers */,
 				3338A7B01A71204300898D4E /* GCDWebServerFileRequest.h in Headers */,
 				3338A7B81A71204300898D4E /* GCDWebServerErrorResponse.h in Headers */,
@@ -500,7 +509,7 @@
 				3338A7AC1A71204300898D4E /* GCDWebServerResponse.h in Headers */,
 				330CBB74193E75890064AD99 /* Connichiwa.h in Headers */,
 				3338A7A91A71204300898D4E /* GCDWebServerPrivate.h in Headers */,
-				3317C6FC1A714BCB008BD104 /* extension-deflate-stream.h in Headers */,
+				338EEBD41B2C42A2009A5C3C /* extension-deflate-stream.h in Headers */,
 				3338A7A21A71204300898D4E /* GCDWebServer.h in Headers */,
 				3338A7BA1A71204300898D4E /* GCDWebServerFileResponse.h in Headers */,
 				3321DCDB196AA6830090D39C /* CWBluetoothTransferManager.h in Headers */,
@@ -514,7 +523,6 @@
 				3338A7A81A71204300898D4E /* GCDWebServerHTTPStatusCodes.h in Headers */,
 				3317C6F01A714BCB008BD104 /* BLWebSocketsServer.h in Headers */,
 				330BA3D3193F8CB300D9E54C /* CWServerManager.h in Headers */,
-				3317C7021A714BCB008BD104 /* libwebsockets.h in Headers */,
 				33A87DF71951037A001BDC09 /* CWBluetoothConnection.h in Headers */,
 				3338A7B61A71204300898D4E /* GCDWebServerDataResponse.h in Headers */,
 				3338A7AA1A71204300898D4E /* GCDWebServerRequest.h in Headers */,
@@ -524,8 +532,8 @@
 				33618AC8195DEDFE006FA51B /* CWWebLibraryManager.h in Headers */,
 				3338A7B41A71204300898D4E /* GCDWebServerURLEncodedFormRequest.h in Headers */,
 				3338A7AE1A71204300898D4E /* GCDWebServerDataRequest.h in Headers */,
-				3317C6FA1A714BCB008BD104 /* extension-deflate-frame.h in Headers */,
-				3317C7051A714BCB008BD104 /* private-libwebsockets.h in Headers */,
+				338EEBDB1B2C42A2009A5C3C /* private-libwebsockets.h in Headers */,
+				338EEBD21B2C42A2009A5C3C /* extension-deflate-frame.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -740,7 +748,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "PATH=$(bash -l -c 'echo $PATH')\n\nROOT_PATH=\"${PROJECT_DIR}/${PRODUCT_NAME}\"\nCONCAT_FILE=\"${ROOT_PATH}/weblib/connichiwa.js\"\nCONCAT_FILE_MIN=\"${ROOT_PATH}/weblib/connichiwa.min.js\"\nCONCAT_FILE_MAP=\"${CONCAT_FILE_MIN}.map\"\n\nrm -f ${CONCAT_FILE}\nrm -f ${CONCAT_FILE_MIN}\nrm -f ${CONCAT_FILE_MAP}\n\n# CONCATENATE\n# Concatenates everything in the weblib folder\n#cat \"${ROOT_PATH}/scripts/OOP.js\" >> ${CONCAT_FILE};\ncat \"${ROOT_PATH}/weblib_source/CWModules.js\" >> ${CONCAT_FILE}\nfor file in \"${ROOT_PATH}/weblib_source/common/*.js\"; do cat $file >> ${CONCAT_FILE}; done\nfor file in \"${ROOT_PATH}/weblib_source/master/*.js\"; do cat $file >> ${CONCAT_FILE}; done\ncat \"${ROOT_PATH}/weblib_source/init.js\" >> ${CONCAT_FILE}\n\n#UGLIFYJS\n# uglifyjs needs to be installed (npm install -g uglifyjs)\n# minifies the source file and creates a source map\nUGLIFYJS_PATH=\"uglifyjs\"\n#if [ -x $UGLIFYJS_PATH ]; then\nif [ -f $CONCAT_FILE ]; then\n\n${UGLIFYJS_PATH} ${CONCAT_FILE} -o ${CONCAT_FILE_MIN} --source-map ${CONCAT_FILE_MAP} --screw-ie8 --compress --mangle --prefix relative\n\nfi\n#else\n#echo \"install uglifyjs globally via npm to create minified JS library versions\"\n#fi;";
+			shellScript = "PATH=$(bash -l -c 'echo $PATH')\n\nROOT_PATH=\"${PROJECT_DIR}/${PRODUCT_NAME}\"\nCONCAT_FILE=\"${ROOT_PATH}/weblib/connichiwa.js\"\nCONCAT_FILE_MIN=\"${ROOT_PATH}/weblib/connichiwa.min.js\"\nCONCAT_FILE_MAP=\"${CONCAT_FILE_MIN}.map\"\n\nrm -f ${CONCAT_FILE}\nrm -f ${CONCAT_FILE_MIN}\nrm -f ${CONCAT_FILE_MAP}\n\n# CONCATENATE\n# Concatenates everything in the weblib folder\n#cat \"${ROOT_PATH}/scripts/OOP.js\" >> ${CONCAT_FILE};\ncat \"${ROOT_PATH}/weblib_source/CWModules.js\" >> ${CONCAT_FILE}\nfor file in \"${ROOT_PATH}/weblib_source/common/*.js\"; do cat $file >> ${CONCAT_FILE}; done\nfor file in \"${ROOT_PATH}/weblib_source/master/*.js\"; do cat $file >> ${CONCAT_FILE}; done\ncat \"${ROOT_PATH}/weblib_source/init.js\" >> ${CONCAT_FILE}\n\n#UGLIFYJS\n# uglifyjs needs to be installed (npm install -g uglifyjs)\n# minifies the source file and creates a source map\nUGLIFYJS_PATH=\"uglifyjs\"\n#if [ -x $UGLIFYJS_PATH ]; then\nif [ -f $CONCAT_FILE ]; then\n${UGLIFYJS_PATH} ${CONCAT_FILE} -o ${CONCAT_FILE_MIN} --source-map ${CONCAT_FILE_MAP} --screw-ie8 --compress --mangle --prefix relative\nfi\n#else\n#echo \"install uglifyjs globally via npm to create minified JS library versions\"\n#fi;";
 		};
 		33D197D9194B3D2100AE1E1D /* Touch Folder References Script */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -764,20 +772,21 @@
 			buildActionMask = 2147483647;
 			files = (
 				3338A7BD1A71204300898D4E /* GCDWebServerStreamedResponse.m in Sources */,
-				3317C6F91A714BCB008BD104 /* extension-deflate-frame.c in Sources */,
+				338EEBD11B2C42A2009A5C3C /* extension-deflate-frame.c in Sources */,
 				3338A7A51A71204300898D4E /* GCDWebServerConnection.m in Sources */,
 				33A87DF81951037A001BDC09 /* CWBluetoothConnection.m in Sources */,
 				330BA3D4193F8CB300D9E54C /* CWServerManager.m in Sources */,
 				3338A7B71A71204300898D4E /* GCDWebServerDataResponse.m in Sources */,
-				3317C7081A714BCB008BD104 /* sha-1.c in Sources */,
+				338EEBD91B2C42A2009A5C3C /* output.c in Sources */,
 				3338A7AD1A71204300898D4E /* GCDWebServerResponse.m in Sources */,
-				3317C7001A714BCB008BD104 /* handshake.c in Sources */,
+				338EEBDD1B2C42A2009A5C3C /* server.c in Sources */,
 				334AB758193FEC6000A15999 /* CWBundle.m in Sources */,
+				338EEBCC1B2C42A2009A5C3C /* base64-decode.c in Sources */,
+				338EEBCF1B2C42A2009A5C3C /* client.c in Sources */,
 				3338A7AB1A71204300898D4E /* GCDWebServerRequest.m in Sources */,
-				3317C6F71A714BCB008BD104 /* client.c in Sources */,
+				338EEBD01B2C42A2009A5C3C /* daemonize.c in Sources */,
 				3338A7B31A71204300898D4E /* GCDWebServerMultiPartFormRequest.m in Sources */,
-				3317C7031A714BCB008BD104 /* output.c in Sources */,
-				3317C6F81A714BCB008BD104 /* daemonize.c in Sources */,
+				338EEBD71B2C42A2009A5C3C /* libwebsockets.c in Sources */,
 				3338A7BB1A71204300898D4E /* GCDWebServerFileResponse.m in Sources */,
 				3338A7B51A71204300898D4E /* GCDWebServerURLEncodedFormRequest.m in Sources */,
 				33EE7EFB1955BC1500EFDE17 /* CWUtil.m in Sources */,
@@ -787,23 +796,22 @@
 				33618AC9195DEDFE006FA51B /* CWWebLibraryManager.m in Sources */,
 				3317C6F11A714BCB008BD104 /* BLWebSocketsServer.m in Sources */,
 				3349D1FD198F90EF0050AF1A /* CWiDevice.m in Sources */,
-				3317C7071A714BCB008BD104 /* server.c in Sources */,
 				33618AC1195DAD37006FA51B /* CWRemoteLibraryManager.m in Sources */,
 				3338A7AF1A71204300898D4E /* GCDWebServerDataRequest.m in Sources */,
 				3338A7A31A71204300898D4E /* GCDWebServer.m in Sources */,
 				3338A7B11A71204300898D4E /* GCDWebServerFileRequest.m in Sources */,
-				3317C6F21A714BCB008BD104 /* base64-decode.c in Sources */,
 				334AB748193FDADC00A15999 /* CWWebApplication.m in Sources */,
-				3317C6F61A714BCB008BD104 /* client-parser.c in Sources */,
 				333A80681953996D00420D5A /* CWBluetoothManager.m in Sources */,
-				3317C6F51A714BCB008BD104 /* client-handshake.c in Sources */,
-				3317C6FD1A714BCB008BD104 /* extension.c in Sources */,
-				3317C7041A714BCB008BD104 /* parsers.c in Sources */,
+				338EEBCE1B2C42A2009A5C3C /* client-parser.c in Sources */,
 				3321DCDC196AA6830090D39C /* CWBluetoothTransferManager.m in Sources */,
-				3317C6FB1A714BCB008BD104 /* extension-deflate-stream.c in Sources */,
-				3317C7061A714BCB008BD104 /* server-handshake.c in Sources */,
-				3317C7011A714BCB008BD104 /* libwebsockets.c in Sources */,
+				338EEBDA1B2C42A2009A5C3C /* parsers.c in Sources */,
+				338EEBDE1B2C42A2009A5C3C /* sha-1.c in Sources */,
+				338EEBDC1B2C42A2009A5C3C /* server-handshake.c in Sources */,
+				338EEBD61B2C42A2009A5C3C /* handshake.c in Sources */,
+				338EEBCD1B2C42A2009A5C3C /* client-handshake.c in Sources */,
+				338EEBD51B2C42A2009A5C3C /* extension.c in Sources */,
 				3362DB811A72C8BE0038985E /* BLWebSocketConnection.m in Sources */,
+				338EEBD31B2C42A2009A5C3C /* extension-deflate-stream.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
