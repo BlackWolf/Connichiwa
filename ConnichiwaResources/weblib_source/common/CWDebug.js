@@ -29,7 +29,7 @@
  *    however, change the defaults in {@link Connichiwa.event:onLoad}.
  * @namespace CWDebug
  */
-var CWDebug = CWDebug || {};
+var CWDebug = CWModules.retrieve('CWDebug');
 
 
 /**
@@ -38,8 +38,7 @@ var CWDebug = CWDebug || {};
  * @default false
  * @private
  */
-// CWDebug._debug = false;
-CWDebug._debug = true;
+CWDebug._debug = false;
 
 
 /**
@@ -48,8 +47,7 @@ CWDebug._debug = true;
  * @default 0
  * @private
  */
-// CWDebug._logLevel = 0;
-CWDebug._logLevel = 4;
+CWDebug._logLevel = 0;
 
 
 /**
@@ -62,7 +60,7 @@ CWDebug.__constructor = function() {
   //TODO: We might want to think about if Ractive.DEBUG should be set to
   //CWDebug._debug
   Ractive.DEBUG = false;
-}.bind(CWDebug);
+};
 
 
 /**
@@ -75,7 +73,7 @@ CWDebug.__constructor = function() {
 CWDebug._setDebugInfo = function(info) {
   if (info.debug)    CWDebug.setDebug(info.debug);
   if (info.logLevel) CWDebug.setLogLevel(info.logLevel);
-}.bind(CWDebug);
+};
 
 
 /**
@@ -87,7 +85,7 @@ CWDebug._setDebugInfo = function(info) {
  */
 CWDebug._getDebugInfo = function() {
   return { debug: this._debug, logLevel: this._logLevel };
-}.bind(CWDebug);
+};
 
 
 /**
@@ -106,7 +104,7 @@ CWDebug.log = function(level, msg) {
   if (this._debug && level <= this._logLevel) {
     console.log(level + '|' + msg);
   }
-}.bind(CWDebug);
+};
 
 
 /**
@@ -118,7 +116,7 @@ CWDebug.err = function(msg) {
   if (this._debug) {
     console.err(msg);
   }
-}.bind(CWDebug);
+};
 
 /**
  * Enables or disables debugging output
@@ -128,7 +126,7 @@ CWDebug.err = function(msg) {
  */
 CWDebug.setDebug = function(v) {
   this._debug = v;
-}.bind(CWDebug);
+};
 
 /**
  * Sets the log level. Can be a number from 0 to 5, whereas 0 means that no
@@ -140,6 +138,4 @@ CWDebug.setDebug = function(v) {
  */
 CWDebug.setLogLevel = function(v) {
   this._logLevel = v;
-}.bind(CWDebug);
-
-CWModules.add('CWDebug');
+};

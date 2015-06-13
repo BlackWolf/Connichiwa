@@ -39,7 +39,7 @@ CWStitchManager._devices = {};
  */
 CWStitchManager.getDeviceTransformation = function(device) {
   return this._getDeviceTransformation(device, false);
-}.bind(CWStitchManager);
+};
 
 
 /**
@@ -84,7 +84,7 @@ CWStitchManager._getDeviceTransformation = function(device, forceRecent) {
     rotation : data.rotation,
     scale    : data.scale
   };
-}.bind(CWStitchManager);
+};
 
 
 /**
@@ -142,7 +142,7 @@ CWStitchManager.detectedSwipe = function(data) {
 
   //If the swipe does not seem to be part of a stitch, remember it for later
   this._swipes[swipe.device] = swipe;
-}.bind(CWStitchManager);
+};
 
 
 /**
@@ -169,7 +169,7 @@ CWStitchManager.unstitchDevice = function(identifier) {
     //We do not unstitch the last device because once a global coordiante
     //system is established, it should be kept
   }
-}.bind(CWStitchManager);
+};
 
 
 
@@ -387,7 +387,7 @@ CWStitchManager._detectedStitch = function(firstSwipe, secondSwipe) {
     edge                 : stitchedSwipe.edge, //TODO should this be in here? and if so, should it be relative?
   };
   stitchedDevice.send('_gotstitchneighbor', gotneighborMessage);
-}.bind(CWStitchManager);
+};
 
 
 /**
@@ -411,7 +411,7 @@ CWStitchManager._createStitchData = function(device) {
     rotation   : 0,
     scale      : 1.0,
   };
-}.bind(CWStitchManager);
+};
 
 
 /**
@@ -429,7 +429,7 @@ CWStitchManager._createStitchData = function(device) {
 CWStitchManager._getStitchData = function(device) {
   if (CWDevice.prototype.isPrototypeOf(device)) device = device.getIdentifier();
   return this._devices[device];
-}.bind(CWStitchManager);
+};
 
 
 /**
@@ -452,7 +452,7 @@ CWStitchManager._indexForEdge = function(edge) {
   }
 
   return -1;
-}.bind(CWStitchManager);
+};
 
 
 /**
@@ -475,6 +475,4 @@ CWStitchManager._edgeForIndex = function(index) {
   }
 
   return 'invalid';
-}.bind(CWStitchManager);
-
-CWModules.add('CWStitchManager');
+};

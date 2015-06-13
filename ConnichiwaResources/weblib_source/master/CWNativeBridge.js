@@ -3,7 +3,7 @@
 
 
 
-var CWNativeBridge = CWNativeBridge || {};
+var CWNativeBridge = CWModules.retrieve('CWNativeBridge');
 
 
 /**
@@ -29,7 +29,7 @@ CWNativeBridge.parse = function(message) {
     case 'remoteconnectfailed':   this._parseRemoteConnectFailed(object); break;
     case 'remotedisconnected':    this._parseRemoteDisconnected(object); break;
   }
-}.bind(CWNativeBridge);
+};
 
 
 /**
@@ -44,7 +44,7 @@ CWNativeBridge.parse = function(message) {
  */
 CWNativeBridge._parseDebugInfo = function(message) {
   CWDebug._setDebugInfo(message);
-}.bind(CWNativeBridge);
+};
 
 
 /**
@@ -59,7 +59,7 @@ CWNativeBridge._parseDebugInfo = function(message) {
  */
 CWNativeBridge._parseLocalInfo = function(message) {
   CWDeviceManager.getLocalDevice()._setProperties(message);
-}.bind(CWNativeBridge);
+};
 
 
 /**
@@ -96,7 +96,7 @@ CWNativeBridge._parseDeviceDetected = function(message) {
       device.connect();
     }
   } 
-}.bind(CWNativeBridge);
+};
 
 
 /**
@@ -118,7 +118,7 @@ CWNativeBridge._parseDeviceDistanceChanged = function(message) {
   device._distance = parseFloat(message.distance);
   CWDebug.log(5, 'Updated distance of device ' + device.getIdentifier() + ' to ' + device.getDistance());
   CWEventManager.trigger('deviceDistanceChanged', device);
-}.bind(CWNativeBridge);
+};
 
 
 /**
@@ -139,7 +139,7 @@ CWNativeBridge._parseDeviceLost = function(message) {
 
   CWDebug.log(2, 'Lost device: ' + device.getIdentifier());
   CWEventManager.trigger('deviceLost', device);
-}.bind(CWNativeBridge);
+};
 
 
 /**
@@ -161,7 +161,7 @@ CWNativeBridge._parseRemoteConnectFailed = function(message) {
 
   CWDebug.log(2, 'Connection to remote device failed: ' + device.getIdentifier());
   CWEventManager.trigger('connectFailed', device);
-}.bind(CWNativeBridge);
+};
 
 
 /**
@@ -186,7 +186,4 @@ CWNativeBridge._parseRemoteDisconnected = function(message) {
 
   CWDebug.log(2, 'Device disconnected: ' + device.getIdentifier());
   CWEventManager.trigger('deviceDisconnected', device);
-}.bind(CWNativeBridge);
-
-
-CWModules.add('CWNativeBridge');
+};

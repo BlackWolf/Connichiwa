@@ -124,7 +124,7 @@
  *    Roman Rädle's work (roman.raedle@uni-konstanz.de).
  * @namespace  CWTemplates
  */
-var CWTemplates = CWTemplates || {};
+var CWTemplates = CWModules.retrieve('CWTemplates');
 
 /**
  * An array where every entry represents one template-file loading attempt.
@@ -183,7 +183,7 @@ CWTemplates.__constructor = function() {
       });
     }
   });
-}.bind(CWTemplates);
+};
 
 
 /**
@@ -244,7 +244,7 @@ CWTemplates.load = function(device, paths) {
       deferred.reject();
     });
   });
-}.bind(CWTemplates);
+};
 
 
  /**
@@ -349,7 +349,7 @@ CWTemplates.insert = function(device, templateName, options) {
 
     if (onComplete !== undefined) onComplete();
   });
-}.bind(CWTemplates);
+};
 
 
 /**
@@ -416,7 +416,7 @@ CWTemplates.set = function(collection, key, value) {
   }
 
   CWDatastore.set('_CWTemplates.'+collection, key, value);
-}.bind(CWTemplates);
+};
 
 
 /**
@@ -441,7 +441,7 @@ CWTemplates.setMultiple = function(collection, dict) {
   }
 
   CWDatastore.setMultiple('_CWTemplates.'+collection, dict);
-}.bind(CWTemplates);
+};
 
 
 /**
@@ -462,7 +462,7 @@ CWTemplates.get = function(collection, key) {
   }
 
   return CWDatastore.get('_CWTemplates.'+collection, key);
-}.bind(CWTemplates);
+};
 
 /**
  * Compiles the given piece of template code. All <template> tags that contain
@@ -502,6 +502,4 @@ CWTemplates._compile = function(templateData) {
 
   if (addedTemplates < 1) return false;
   return true;
-}.bind(CWTemplates);
-
-CWModules.add('CWTemplates');
+};

@@ -3,49 +3,45 @@
 
 var CWModules = {};
 
-CWModules._modules = [];
-CWModules._actualModules = {};
+// CWModules._modules = [];
+// CWModules._actualModules = {};
+CWModules._modules = {};
 CWModules._didInit = false;
 
 CWModules.retrieve = function(module) {
-  this.add(module);
-
-  if (module in this._actualModules === false) {
-    this._actualModules[module] = {};
+  if (module in this._modules === false) {
+    this._modules[module] = {};
   }
 
-  return this._actualModules[module];
+  return this._modules[module];
 }.bind(CWModules);
 
-CWModules.add = function(module) {
-  if (this._modules.indexOf(module) !== -1) return;
-
-  this._modules.push(module);
-}.bind(CWModules);
 
 CWModules.init = function() {
   if (this._didInit) throw 'Cannot initialize modules twice';
 
-  //We need to setTimeout the initialization to make sure that everything
+  //We need to setTimeout the initialization to make sure that everything else
   //is set up
   var that = this;
   window.setTimeout(function() {
-    for (var i = 0; i < that._modules.length; i++) {
-      var module = that._modules[i];
-      console.log('Initializing module ' + module + '...');
+    // for (var i = 0; i < that._modules.length; i++) {
+    for (var moduleName in that._modules) {
+      if (that._modules.hasOwnProperty(moduleName)) {
+        console.log('Initializing module ' + moduleName + '...');
 
-      var theMod = that._actualModules[module];
-      for (var key in theMod) {
-        // console.log("Checking "+key);
-        if (theMod.hasOwnProperty(key) && typeof(theMod[key]) === 'function') {
-          // console.log("Binding "+key);
-          // window[module][key] = window[module][key].bind(window[module]);
-          theMod[key] = theMod[key].bind(theMod);
+        var module = that._modules[moduleName];
+
+        //Bind every function in the module to it, so the module can use "this"
+        for (var key in module) {
+          if (module.hasOwnProperty(key) && typeof(module[key]) === 'function') {
+            module[key] = module[key].bind(module);
+          }
         }
-      }
 
-      if (window[module].__constructor) window[module].__constructor();
-    }  
+        //Call constructor if module has one
+        if (module.__constructor) module.__constructor();
+      }
+    }
 
     CWNativeBridge.callOnNative("nativeCallLibraryDidLoad");
   }, 0);
@@ -76,7 +72,7 @@ CWModules.init = function() {
  *    method. For example, you can **not** store functions in the data store.
  * @namespace CWDatastore
  */
-var CWDatastore = CWDatastore || {};
+var CWDatastore = CWModules.retrieve('CWDatastore');
 
 /**
  * The datastores stored data :-)
@@ -103,7 +99,7 @@ CWDatastore.set = function(collection, key, value) {
   var data = {};
   data[key] = value;
   this.setMultiple(collection, data);
-}.bind(CWDatastore);
+};
 
 
 /**
@@ -127,7 +123,7 @@ CWDatastore.setMultiple = function(collection, dict) {
   if (collection === undefined) collection = '_default';
 
   this._set(collection, dict, true);
-}.bind(CWDatastore);
+};
 
 
 /**
@@ -180,7 +176,7 @@ CWDatastore._set = function(collection, data, sync) {
 
   var reportedCollection = (collection === '_default') ? undefined : collection;
   CWEventManager.trigger('_datastorechanged', reportedCollection, reportedChanges);
-}.bind(CWDatastore);
+};
 
 
 /**
@@ -206,7 +202,7 @@ CWDatastore.get = function(collection, key) {
   }
 
   return this._data[collection][key];
-}.bind(CWDatastore);
+};
 
 
 /**
@@ -219,7 +215,7 @@ CWDatastore.get = function(collection, key) {
  */
 CWDatastore.getCollection = function(collection) {
   return this._getCollection(collection, true);
-}.bind(CWDatastore);
+};
 
 
 /**
@@ -248,7 +244,7 @@ CWDatastore._getCollection = function(collection, returnCopy) {
 
   if (returnCopy === false) return this._data[collection];
   return $.extend(true, {}, this._data[collection]);
-}.bind(CWDatastore);
+};
 
 
 /**
@@ -279,7 +275,7 @@ CWDatastore._syncEntrys = function(collection, keys) {
   }); 
 
   Connichiwa.broadcast('_updatedatastore', { data: syncData });
-}.bind(CWDatastore);
+};
 
 /**
  * Syncs the entire data store (all collections) to another device. This
@@ -294,9 +290,7 @@ CWDatastore._syncEntrys = function(collection, keys) {
  */
 CWDatastore._syncStoreToDevice = function(target, callback) {
   Connichiwa.send(target, '_updatedatastore', { data: this._data }, callback);
-}.bind(CWDatastore);
-
-CWModules.add('CWDatastore');
+};
 /* global CWModules */
 'use strict';
 
@@ -328,7 +322,7 @@ CWModules.add('CWDatastore');
  *    however, change the defaults in {@link Connichiwa.event:onLoad}.
  * @namespace CWDebug
  */
-var CWDebug = CWDebug || {};
+var CWDebug = CWModules.retrieve('CWDebug');
 
 
 /**
@@ -337,8 +331,7 @@ var CWDebug = CWDebug || {};
  * @default false
  * @private
  */
-// CWDebug._debug = false;
-CWDebug._debug = true;
+CWDebug._debug = false;
 
 
 /**
@@ -347,8 +340,7 @@ CWDebug._debug = true;
  * @default 0
  * @private
  */
-// CWDebug._logLevel = 0;
-CWDebug._logLevel = 4;
+CWDebug._logLevel = 0;
 
 
 /**
@@ -361,7 +353,7 @@ CWDebug.__constructor = function() {
   //TODO: We might want to think about if Ractive.DEBUG should be set to
   //CWDebug._debug
   Ractive.DEBUG = false;
-}.bind(CWDebug);
+};
 
 
 /**
@@ -374,7 +366,7 @@ CWDebug.__constructor = function() {
 CWDebug._setDebugInfo = function(info) {
   if (info.debug)    CWDebug.setDebug(info.debug);
   if (info.logLevel) CWDebug.setLogLevel(info.logLevel);
-}.bind(CWDebug);
+};
 
 
 /**
@@ -386,7 +378,7 @@ CWDebug._setDebugInfo = function(info) {
  */
 CWDebug._getDebugInfo = function() {
   return { debug: this._debug, logLevel: this._logLevel };
-}.bind(CWDebug);
+};
 
 
 /**
@@ -405,7 +397,7 @@ CWDebug.log = function(level, msg) {
   if (this._debug && level <= this._logLevel) {
     console.log(level + '|' + msg);
   }
-}.bind(CWDebug);
+};
 
 
 /**
@@ -417,7 +409,7 @@ CWDebug.err = function(msg) {
   if (this._debug) {
     console.err(msg);
   }
-}.bind(CWDebug);
+};
 
 /**
  * Enables or disables debugging output
@@ -427,7 +419,7 @@ CWDebug.err = function(msg) {
  */
 CWDebug.setDebug = function(v) {
   this._debug = v;
-}.bind(CWDebug);
+};
 
 /**
  * Sets the log level. Can be a number from 0 to 5, whereas 0 means that no
@@ -439,9 +431,7 @@ CWDebug.setDebug = function(v) {
  */
 CWDebug.setLogLevel = function(v) {
   this._logLevel = v;
-}.bind(CWDebug);
-
-CWModules.add('CWDebug');
+};
 /* global Connichiwa, CWSystemInfo, CWUtil */
 'use strict';
 
@@ -1080,7 +1070,7 @@ CWEventManager.register = function(event, callback) {
   if (!this._callbacks[event]) this._callbacks[event] = [];
   this._callbacks[event].push(callback);
   CWDebug.log(3, 'Attached callback to ' + event);
-}.bind(CWEventManager);
+};
 
 
 /**
@@ -1170,7 +1160,7 @@ CWEventManager.unregister = function(event, callback) {
       });
     }
   }, 0);
-}.bind(CWEventManager);
+};
 
 
 /**
@@ -1216,9 +1206,7 @@ CWEventManager.trigger = function(logPrio, event, var_args) {
     var callback = this._callbacks[event][i];
     callback.apply(null, args); //calls the callback with arguments args
   }
-}.bind(CWEventManager);
-
-CWModules.add('CWEventManager');
+};
 /* global CWEventManager, CWVector, CWUtil, CWDebug, CWModules */
 'use strict';
 
@@ -1231,7 +1219,7 @@ CWModules.add('CWEventManager');
  * @namespace CWGestures
  * @private
  */
-var CWGestures = CWGestures || {};
+var CWGestures = CWModules.retrieve('CWGestures');
 
 
 /**
@@ -1293,7 +1281,7 @@ CWGestures.__constructor = function() {
   $(document).ready(function() {
     that._captureOn($('body'));
   });
-}.bind(CWGestures);
+};
 
 
 /**
@@ -1305,7 +1293,7 @@ CWGestures.__constructor = function() {
  */
 CWGestures._onDown = function(e) {
   this._touchStart = CWUtil.getEventLocation(e, 'client');
-}.bind(CWGestures);
+};
 
 
 /**
@@ -1378,7 +1366,7 @@ CWGestures._onMove = function(e) {
   } 
 
   this._touchLast = newTouch;
-}.bind(CWGestures);
+};
 
 
 /**
@@ -1477,7 +1465,7 @@ CWGestures._onUp = function(e) {
     y    : swipeEnd.y
   };
   CWEventManager.trigger("stitchswipe", swipeData);
-}.bind(CWGestures);
+};
 
 
 /**
@@ -1502,12 +1490,7 @@ CWGestures._captureOn = function(el) {
   //el.on("mouseup touchend", this._onUp);
   el.addEventListener("mouseup",  this._onUp, true);
   el.addEventListener("touchend", this._onUp, true);
-}.bind(CWGestures);
-
-//Initalize module. Delayed call to make sure all modules are ready
-if (CWGestures.__constructor) window.setTimeout(CWGestures.__constructor, 0);
-
-CWModules.add('CWGestures');
+};
 /* global gyro, CWEventManager, CWModules */
 'use strict';
 
@@ -1548,7 +1531,7 @@ CWModules.add('CWGestures');
  *    events.
  * @namespace CWGyroscope
  */
-var CWGyroscope = CWGyroscope || {};
+var CWGyroscope = CWModules.retrieve('CWGyroscope');
 
 
 /**
@@ -1582,7 +1565,7 @@ CWGyroscope.__constructor = function() {
   //TODO we should only start tracking if necessary
   //necessary for now means the device has been stitched
   //but how do we best figure that out?
-}.bind(CWGyroscope);
+};
 
 
 /**
@@ -1653,7 +1636,7 @@ CWGyroscope._onUpdate = function(o) {
 
   //We need to copy the values of o because o will be altered by gyro
   this._lastMeasure = { x: o.x, y: o.y, z: o.z, alpha: alpha, beta: beta, gamma: gamma };
-}.bind(CWGyroscope);
+};
 
 
 /**
@@ -1669,7 +1652,7 @@ CWGyroscope.getLastGyroscopeMeasure = function() {
     beta  : this._lastMeasure.beta,
     gamma : this._lastMeasure.gamma
   };
-}.bind(CWGyroscope);
+};
 
 
 /**
@@ -1686,9 +1669,7 @@ CWGyroscope.getLastAccelerometerMeasure = function() {
     y : this._lastMeasure.y,
     z : this._lastMeasure.z
   };
-}.bind(CWGyroscope);
-
-CWModules.add('CWGyroscope');
+};
 /* global CWEventManager, CWStitchManager */
 'use strict';
 
@@ -2369,7 +2350,7 @@ CWLocation.fromSize = function(width, height, isLocal) {
  * @namespace CWNativeBridge
  * @protected
  */
-var CWNativeBridge = CWNativeBridge || {};
+var CWNativeBridge = CWModules.retrieve('CWNativeBridge');
 
 
 /**
@@ -2390,7 +2371,7 @@ CWNativeBridge.__constructor = function() {
   if (window.RUN_BY_CONNICHIWA_NATIVE === true) {
     this._runsNative = true;
   } 
-}.bind(CWNativeBridge);
+};
 
 
 /**
@@ -2402,7 +2383,7 @@ CWNativeBridge.__constructor = function() {
  */
 CWNativeBridge.isRunningNative = function() {
   return (this._runsNative === true);
-}.bind(CWNativeBridge);
+};
 
 
 /**
@@ -2428,7 +2409,7 @@ CWNativeBridge.callOnNative = function(methodName) {
   } else { 
     CWDebug.log(1, 'ERROR: Tried to call native method with name ' + methodName + ', but it doesn\'t exist!');
   }
-}.bind(CWNativeBridge);
+};
 
 
 /**
@@ -2441,9 +2422,6 @@ CWNativeBridge.callOnNative = function(methodName) {
  * @protected
  */
 CWNativeBridge.parse = function(message) { /* ABSTRACT */ };
-
-
-CWModules.add('CWNativeBridge');
 /* global Connichiwa, CWGyroscope, CWSystemInfo, CWUtil, CWModules */
 'use strict';
 
@@ -2545,7 +2523,7 @@ CWStitchManager.__constructor = function() {
   Connichiwa.on('wasUnstitched',       this._onWasUnstitched);
   Connichiwa.on('gyroscopeUpdate',     this._onGyroUpdate);
   Connichiwa.on('accelerometerUpdate', this._onAccelerometerUpdate);
-}.bind(CWStitchManager);
+};
 
 
 /**
@@ -2560,7 +2538,7 @@ CWStitchManager._onWasStitched = function(message) {
   this._isStitched = true;
 
   //TODO register for gyroscopeUpdate instead of in constructor
-}.bind(CWStitchManager);
+};
 
 
 /**
@@ -2575,7 +2553,7 @@ CWStitchManager._onWasUnstitched = function(message) {
   this._isStitched = false;
 
   //TODO unregister from gyroscopeUpdate
-}.bind(CWStitchManager);
+};
 
 
 /**
@@ -2589,7 +2567,7 @@ CWStitchManager._onLocalSwipe = function(swipeData) {
   swipeData.width  = CWSystemInfo.viewportWidth();
   swipeData.height = CWSystemInfo.viewportHeight();
   Connichiwa.send('master', '_stitchswipe', swipeData);
-}.bind(CWStitchManager);
+};
 
 
 /**
@@ -2626,7 +2604,7 @@ CWStitchManager._onGyroUpdate = function(gyroData) {
       (CWUtil.inArray('gamma', this.ignoreMoveAxis) === false && deltaGamma >= 20)) {
     this._quitStitch();
   }
-}.bind(CWStitchManager);
+};
 
 
 /**
@@ -2658,7 +2636,7 @@ CWStitchManager._onAccelerometerUpdate = function(accelData) {
       (CWUtil.inArray('z', this.ignoreMoveAxis) === false && z >= 1.0)) {
     this._quitStitch();
   }
-}.bind(CWStitchManager);
+};
 
 
 /**
@@ -2669,7 +2647,7 @@ CWStitchManager._onAccelerometerUpdate = function(accelData) {
 CWStitchManager._quitStitch = function() {
   var data = { device : Connichiwa.getIdentifier() };
   Connichiwa.send('master', '_quitstitch', data);
-}.bind(CWStitchManager);
+};
 
 
 /**
@@ -2681,7 +2659,7 @@ CWStitchManager._quitStitch = function() {
  */
 CWStitchManager.unstitch = function() {
   this._quitStitch();
-}.bind(CWStitchManager);
+};
 
 
 /**
@@ -2691,7 +2669,7 @@ CWStitchManager.unstitch = function() {
  */
 CWStitchManager.isStitched = function() {
   return this._isStitched;
-}.bind(CWStitchManager);
+};
 
 
 /**
@@ -2707,7 +2685,7 @@ CWStitchManager.getLocalDeviceTransformation = function() {
   }
   
   return this._deviceTransformation;
-}.bind(CWStitchManager);
+};
 
 
 /**
@@ -2727,10 +2705,7 @@ CWStitchManager.getDefaultDeviceTransformation = function() {
     rotation : 0, 
     scale    : 1.0 
   };
-}.bind(CWStitchManager);
-
-
-CWModules.add('CWStitchManager');
+};
 /* global CWModules */
 'use strict';
 
@@ -2742,7 +2717,7 @@ CWModules.add('CWStitchManager');
  *    the browser window resolution or the orientation
  * @namespace CWSystemInfo
  */
-var CWSystemInfo = CWSystemInfo || {};
+var CWSystemInfo = CWModules.retrieve('CWSystemInfo');
 
 
 /**
@@ -2788,7 +2763,7 @@ CWSystemInfo.PPI = function() {
   }
 
   return ppi;
-}.bind(CWSystemInfo);
+};
 
 
 /**
@@ -2799,7 +2774,7 @@ CWSystemInfo.PPI = function() {
  */
 CWSystemInfo.isLandscape = function() {
   return (window.innerHeight < window.innerWidth);
-}.bind(CWSystemInfo);
+};
 
 
 /**
@@ -2809,7 +2784,7 @@ CWSystemInfo.isLandscape = function() {
  */
 CWSystemInfo.viewportWidth = function() {
   return $(window).width();
-}.bind(CWSystemInfo);
+};
 
 
 /**
@@ -2823,9 +2798,7 @@ CWSystemInfo.viewportHeight = function() {
   //This seems to break in landscape when using meta-viewport 
   //height-device-height so basically for now: don't use that
   return $(window).height();
-}.bind(CWSystemInfo);
-
-CWModules.add('CWSystemInfo');
+};
 /* global Connichiwa, CWDevice, CWDeviceManager, Ractive, CWDatastore, CWUtil, CWDebug, CWModules */
 'use strict';
 
@@ -2952,7 +2925,7 @@ CWModules.add('CWSystemInfo');
  *    Roman Rädle's work (roman.raedle@uni-konstanz.de).
  * @namespace  CWTemplates
  */
-var CWTemplates = CWTemplates || {};
+var CWTemplates = CWModules.retrieve('CWTemplates');
 
 /**
  * An array where every entry represents one template-file loading attempt.
@@ -3011,7 +2984,7 @@ CWTemplates.__constructor = function() {
       });
     }
   });
-}.bind(CWTemplates);
+};
 
 
 /**
@@ -3072,7 +3045,7 @@ CWTemplates.load = function(device, paths) {
       deferred.reject();
     });
   });
-}.bind(CWTemplates);
+};
 
 
  /**
@@ -3177,7 +3150,7 @@ CWTemplates.insert = function(device, templateName, options) {
 
     if (onComplete !== undefined) onComplete();
   });
-}.bind(CWTemplates);
+};
 
 
 /**
@@ -3244,7 +3217,7 @@ CWTemplates.set = function(collection, key, value) {
   }
 
   CWDatastore.set('_CWTemplates.'+collection, key, value);
-}.bind(CWTemplates);
+};
 
 
 /**
@@ -3269,7 +3242,7 @@ CWTemplates.setMultiple = function(collection, dict) {
   }
 
   CWDatastore.setMultiple('_CWTemplates.'+collection, dict);
-}.bind(CWTemplates);
+};
 
 
 /**
@@ -3290,7 +3263,7 @@ CWTemplates.get = function(collection, key) {
   }
 
   return CWDatastore.get('_CWTemplates.'+collection, key);
-}.bind(CWTemplates);
+};
 
 /**
  * Compiles the given piece of template code. All <template> tags that contain
@@ -3330,9 +3303,7 @@ CWTemplates._compile = function(templateData) {
 
   if (addedTemplates < 1) return false;
   return true;
-}.bind(CWTemplates);
-
-CWModules.add('CWTemplates');
+};
 /*global CWModules */
 'use strict';
 
@@ -3342,8 +3313,7 @@ CWModules.add('CWTemplates');
  * Utility module providing often-needed utility functions
  * @namespace CWUtil
  */
-var CWUtil = CWUtil || {};
-
+var CWUtil = CWModules.retrieve('CWUtil');
 
 /**
  * Returns an object that parses the given URL into its parts
@@ -3357,7 +3327,7 @@ CWUtil.parseURL = function(url) {
   parser.href = url;
 
   return parser;
-}.bind(CWUtil);
+};
 
 
 /**
@@ -3373,7 +3343,7 @@ CWUtil.unescape = function(escaped) {
       .replace(/&gt;/g, '>')
       .replace(/&quot;/g, '"')
       .replace(/&#039;/g, "'");
-}.bind(CWUtil);
+};
 
 
 /**
@@ -3404,7 +3374,7 @@ CWUtil.getEventLocation = function(e, type) {
   }
 
   return pos;
-}.bind(CWUtil);
+};
 
 
 /**
@@ -3430,7 +3400,7 @@ CWUtil.randomInt = function(min, max) {
   }
 
   return Math.floor(Math.random() * (max - min + 1)) + min;
-}.bind(CWUtil);
+};
 
 
 /**
@@ -3441,7 +3411,7 @@ CWUtil.randomInt = function(min, max) {
  */
 CWUtil.isInt = function(value) {
   return (value === parseInt(value));
-}.bind(CWUtil);
+};
 
 
 /**
@@ -3452,7 +3422,7 @@ CWUtil.isInt = function(value) {
  */
 CWUtil.isString = function(value) {
   return (typeof(value) === 'string');
-}.bind(CWUtil);
+};
 
 
 /**
@@ -3463,7 +3433,7 @@ CWUtil.isString = function(value) {
  */
 CWUtil.isFunction = function(value) {
   return (typeof(value) === 'function');
-}.bind(CWUtil);
+};
 
 
 /**
@@ -3475,7 +3445,7 @@ CWUtil.isFunction = function(value) {
  */
 CWUtil.isObject = function(value) {
   return (typeof(value) === 'object' && value !== null);
-}.bind(CWUtil);
+};
 
 
 /**
@@ -3486,7 +3456,7 @@ CWUtil.isObject = function(value) {
  */
 CWUtil.isArray = function(value) {
   return Array.isArray(value);
-}.bind(CWUtil);
+};
 
 /**
  * Checks if the given value is in the given array.
@@ -3497,7 +3467,7 @@ CWUtil.isArray = function(value) {
  */
 CWUtil.inArray = function(value, array) {
   return (array.indexOf(value) > -1);
-}.bind(CWUtil);
+};
 
 /**
  * Creates a new random v4 UUID, thanks to {@link
@@ -3508,9 +3478,7 @@ CWUtil.inArray = function(value, array) {
  */
 CWUtil.createUUID = function(a) { 
   return a?(a ^ Math.random() * 16 >> a / 4).toString(16):([ 1e7 ] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g,CWUtil.createUUID);
-}.bind(CWUtil);
-
-CWModules.add('CWUtil');
+};
 'use strict';
 
 /**
@@ -3651,7 +3619,7 @@ CWWebsocketMessageParser.parse = function(message) {
   }
 
   return promise;
-}.bind(CWWebsocketMessageParser);
+};
 
 
 var chunks = {};
@@ -3671,7 +3639,7 @@ CWWebsocketMessageParser._parseChunk = function(message) {
   }
 
   return false; //we don't ack chunks
-}.bind(CWWebsocketMessageParser);
+};
 
 
 /**
@@ -3685,7 +3653,7 @@ CWWebsocketMessageParser._parseChunk = function(message) {
 CWWebsocketMessageParser._parseAck = function(message) {
   CWEventManager.trigger("__ack_message" + message.original._id);
   return false; //IMPORTANT: otherwise we sent an ack for an ack
-}.bind(CWWebsocketMessageParser);
+};
 
 
 /**
@@ -3699,7 +3667,7 @@ CWWebsocketMessageParser._parseAck = function(message) {
 CWWebsocketMessageParser._parseInsert = function(message) {
   $(message.selector).append(message.html);
   return new $.Deferred().resolve();
-}.bind(CWWebsocketMessageParser);
+};
 
 
 /**
@@ -3717,7 +3685,7 @@ CWWebsocketMessageParser._parseReplace = function(message) {
     $(message.selector).replaceWith(message.html);
   }
   return new $.Deferred().resolve();
-}.bind(CWWebsocketMessageParser);
+};
 
 
 /**
@@ -3738,7 +3706,7 @@ CWWebsocketMessageParser._parseLoadScript = function(message) {
     deferred.reject();
   });
   return deferred;
-}.bind(CWWebsocketMessageParser);
+};
 
 
 /**
@@ -3756,7 +3724,7 @@ CWWebsocketMessageParser._parseLoadCSS = function(message) {
   cssEntry.setAttribute("href", message.url);
   $("head").append(cssEntry);
   return new $.Deferred().resolve();
-}.bind(CWWebsocketMessageParser);
+};
 
 
 CWWebsocketMessageParser._parseLoadTemplate = function(message) {
@@ -3784,7 +3752,7 @@ CWWebsocketMessageParser._parseInsertTemplate = function(message) {
 CWWebsocketMessageParser._parseWasStitched = function(message) {
   CWEventManager.trigger("wasStitched", message);
   return new $.Deferred().resolve();
-}.bind(CWWebsocketMessageParser);
+};
 
 
 /**
@@ -3798,7 +3766,7 @@ CWWebsocketMessageParser._parseWasStitched = function(message) {
 CWWebsocketMessageParser._parseWasUnstitched = function(message) {
   CWEventManager.trigger("wasUnstitched", message);
   return new $.Deferred().resolve();
-}.bind(CWWebsocketMessageParser);
+};
 
 
 /**
@@ -3813,7 +3781,7 @@ CWWebsocketMessageParser._parseWasUnstitched = function(message) {
 CWWebsocketMessageParser._parseGotStitchNeighbor = function(message) {
   CWEventManager.trigger("gotstitchneighbor", message);
   return new $.Deferred().resolve();
-}.bind(CWWebsocketMessageParser);
+};
 
 
 /**
@@ -3837,9 +3805,7 @@ CWWebsocketMessageParser._parseUpdateDatastore = function(message) {
     // });
   });
   return new $.Deferred().resolve();
-}.bind(CWWebsocketMessageParser);
-
-CWModules.add('CWWebsocketMessageParser');
+};
 /* global CWEventManager, CWDevice, CWNativeBridge, CWUtil, CWDebug, CWModules */
 'use strict';
 
@@ -3852,7 +3818,7 @@ CWModules.add('CWWebsocketMessageParser');
  *    and other devices and more
  * @namespace Connichiwa
  */
-var Connichiwa = Connichiwa || {};
+var Connichiwa = CWModules.retrieve('Connichiwa');
 
 
 /**
@@ -3944,7 +3910,7 @@ Connichiwa.__constructor = function() {
   }
 
   this._connectWebsocket();
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -3970,7 +3936,7 @@ Connichiwa.on = function(eventName, callback) {
   } 
   
   CWEventManager.register(eventName, callback);
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -3993,7 +3959,7 @@ Connichiwa.on = function(eventName, callback) {
  */
 Connichiwa.off = function(eventName, callback) {
   CWEventManager.unregister(eventName, callback);
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -4009,7 +3975,7 @@ Connichiwa.off = function(eventName, callback) {
  */
 Connichiwa.onMessage = function(name, callback) {
   this.on('message' + name, callback);
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -4029,7 +3995,7 @@ Connichiwa.onLoad = function(callback) {
   } else {
     this.on('ready', callback);
   }
-}.bind(Connichiwa);
+};
 
 
 //TODO remove, find an easy way to send a message to the master
@@ -4038,7 +4004,7 @@ Connichiwa.send = function(target, name, message, callback) {
   message._source = Connichiwa.getIdentifier();
   message._target = target;
   return this._sendObject(message, callback);
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -4054,7 +4020,7 @@ Connichiwa.send = function(target, name, message, callback) {
  */
 Connichiwa.respond = function(originalMessage, name, responseObject) {
   this.send(originalMessage._source, name, responseObject);
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -4076,7 +4042,7 @@ Connichiwa.broadcast = function(name, message, sendToSelf) {
   }
   
   this.send('broadcast', name, message);
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -4091,7 +4057,7 @@ Connichiwa.broadcast = function(name, message, sendToSelf) {
 Connichiwa._sendAck = function(message) {
   var ackMessage = { original : { _id: message._id } };
   this.send(message._source, '_ack', ackMessage);
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -4167,7 +4133,7 @@ Connichiwa._sendObject = function(message, callback) {
   // }
 
   return message._id;
-}.bind(Connichiwa);
+};
 
 
 
@@ -4178,7 +4144,7 @@ Connichiwa._sendObject = function(message, callback) {
  */
 Connichiwa._disconnectWebsocket = function() {
   this._websocket.close();
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -4195,9 +4161,7 @@ Connichiwa._cleanupWebsocket = function() {
     this._websocket.onerror   = undefined;
     this._websocket           = undefined;
   }
-}.bind(Connichiwa);
-
-CWModules.add('Connichiwa');
+};
 /**
  * Represents a two-dimensional points
  * @typedef Point
@@ -4412,7 +4376,7 @@ $.when.all = function(deferreds) {
 
 
 
-var CWNativeBridge = CWNativeBridge || {};
+var CWNativeBridge = CWModules.retrieve('CWNativeBridge');
 
 
 /**
@@ -4429,7 +4393,7 @@ CWNativeBridge.parse = function(message) {
     case 'localinfo':           this._parseLocalInfo(object); break;
     case 'disconnectwebsocket': this._parseDisconnectWebsocket(object); break;
   }
-}.bind(CWNativeBridge);
+};
 
 
 /**
@@ -4446,7 +4410,7 @@ CWNativeBridge.parse = function(message) {
 CWNativeBridge._parseLocalInfo = function(message)  {
   Connichiwa._setLocalDevice(message);
   CWEventManager.trigger('ready'); 
-}.bind(CWNativeBridge);
+};
 
 
 
@@ -4463,9 +4427,7 @@ CWNativeBridge._parseLocalInfo = function(message)  {
  */
 CWNativeBridge._parseDisconnectWebsocket = function(message) {
   Connichiwa._disconnectWebsocket();  
-}.bind(CWNativeBridge);
-
-CWModules.add('CWNativeBridge');
+};
 /* global Connichiwa, CWEventManager, CWDebug, CWModules */
 'use strict';
 
@@ -4491,27 +4453,25 @@ CWWebsocketMessageParser.parseOnRemote = function(message) {
   }
 
   return promise;
-}.bind(CWWebsocketMessageParser);
+};
 
 
 CWWebsocketMessageParser._parseDebugInfo = function(message) {
   CWDebug._setDebugInfo(message);
   return new $.Deferred().resolve();
-}.bind(CWWebsocketMessageParser);
+};
 
 
 CWWebsocketMessageParser._parseSoftDisconnect = function(message) {
   Connichiwa._softDisconnectWebsocket();
   return new $.Deferred().resolve();
-}.bind(CWWebsocketMessageParser);
-
-CWModules.add('CWWebsocketMessageParser');
+};
 /* global CWEventManager, CWWebsocketMessageParser, CWDevice, CWNativeBridge, CWSystemInfo, CWUtil, CWDebug, CWModules */
 'use strict';
 
 
 
-var Connichiwa = Connichiwa || {};
+var Connichiwa = CWModules.retrieve('Connichiwa');
 
 
 
@@ -4544,7 +4504,7 @@ Connichiwa._isReconnecting = false;
  */
 Connichiwa.getLocalDevice = function() {
   return this._localDevice;
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -4553,7 +4513,7 @@ Connichiwa.getLocalDevice = function() {
  */
 Connichiwa.getIdentifier = function() {
   return this._localDevice.getIdentifier();
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -4562,7 +4522,7 @@ Connichiwa.getIdentifier = function() {
  */
 Connichiwa.isMaster = function() {
   return false;
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -4584,7 +4544,7 @@ Connichiwa._setLocalDevice = function(properties) {
   } else {
     this._localDevice._setProperties(properties);
   }
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -4607,7 +4567,7 @@ Connichiwa._connectWebsocket = function() {
   this._websocket.onmessage = this._onWebsocketMessage;
   this._websocket.onclose   = this._onWebsocketClose;
   this._websocket.onerror   = this._onWebsocketError;
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -4645,7 +4605,7 @@ Connichiwa._onWebsocketOpen = function() {
   //Important: This must be last, as every message before _remote_identification
   //is lost
   this.send("master", "remoteinfo", localInfo);
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -4692,7 +4652,7 @@ Connichiwa._onWebsocketMessage = function(e) {
       Connichiwa._sendAck(message);
     });
   });
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -4713,7 +4673,7 @@ Connichiwa._onWebsocketClose = function() {
   if (runsNative === false) {
     window.setTimeout(this._tryWebsocketReconnect, 2500);
   }
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -4723,14 +4683,14 @@ Connichiwa._onWebsocketClose = function() {
 Connichiwa._onWebsocketError = function() {
   CWDebug.log(3, "Error");
   this._onWebsocketClose();
-}.bind(Connichiwa);
+};
 
 
 Connichiwa._softDisconnectWebsocket = function() {
   this._softDisconnected = true;
   // nativeSoftDisconnect();
   CWNativeBridge.callOnNative("nativeSoftDisconnect");
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -4755,7 +4715,5 @@ Connichiwa._tryWebsocketReconnect = function() {
   CWDebug.log(3, "Try reconnect");
   this._connectWebsocket();
   window.setTimeout(this._tryWebsocketReconnect, 2500);
-}.bind(Connichiwa);
-
-CWModules.add('Connichiwa');
+};
 CWModules.init();

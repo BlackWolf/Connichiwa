@@ -14,7 +14,7 @@
  * @namespace CWNativeBridge
  * @protected
  */
-var CWNativeBridge = CWNativeBridge || {};
+var CWNativeBridge = CWModules.retrieve('CWNativeBridge');
 
 
 /**
@@ -35,7 +35,7 @@ CWNativeBridge.__constructor = function() {
   if (window.RUN_BY_CONNICHIWA_NATIVE === true) {
     this._runsNative = true;
   } 
-}.bind(CWNativeBridge);
+};
 
 
 /**
@@ -47,7 +47,7 @@ CWNativeBridge.__constructor = function() {
  */
 CWNativeBridge.isRunningNative = function() {
   return (this._runsNative === true);
-}.bind(CWNativeBridge);
+};
 
 
 /**
@@ -73,7 +73,7 @@ CWNativeBridge.callOnNative = function(methodName) {
   } else { 
     CWDebug.log(1, 'ERROR: Tried to call native method with name ' + methodName + ', but it doesn\'t exist!');
   }
-}.bind(CWNativeBridge);
+};
 
 
 /**
@@ -86,6 +86,3 @@ CWNativeBridge.callOnNative = function(methodName) {
  * @protected
  */
 CWNativeBridge.parse = function(message) { /* ABSTRACT */ };
-
-
-CWModules.add('CWNativeBridge');

@@ -38,7 +38,7 @@
  *    events.
  * @namespace CWGyroscope
  */
-var CWGyroscope = CWGyroscope || {};
+var CWGyroscope = CWModules.retrieve('CWGyroscope');
 
 
 /**
@@ -72,7 +72,7 @@ CWGyroscope.__constructor = function() {
   //TODO we should only start tracking if necessary
   //necessary for now means the device has been stitched
   //but how do we best figure that out?
-}.bind(CWGyroscope);
+};
 
 
 /**
@@ -143,7 +143,7 @@ CWGyroscope._onUpdate = function(o) {
 
   //We need to copy the values of o because o will be altered by gyro
   this._lastMeasure = { x: o.x, y: o.y, z: o.z, alpha: alpha, beta: beta, gamma: gamma };
-}.bind(CWGyroscope);
+};
 
 
 /**
@@ -159,7 +159,7 @@ CWGyroscope.getLastGyroscopeMeasure = function() {
     beta  : this._lastMeasure.beta,
     gamma : this._lastMeasure.gamma
   };
-}.bind(CWGyroscope);
+};
 
 
 /**
@@ -176,6 +176,4 @@ CWGyroscope.getLastAccelerometerMeasure = function() {
     y : this._lastMeasure.y,
     z : this._lastMeasure.z
   };
-}.bind(CWGyroscope);
-
-CWModules.add('CWGyroscope');
+};

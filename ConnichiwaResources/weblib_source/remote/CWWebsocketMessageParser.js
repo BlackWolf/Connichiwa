@@ -23,18 +23,16 @@ CWWebsocketMessageParser.parseOnRemote = function(message) {
   }
 
   return promise;
-}.bind(CWWebsocketMessageParser);
+};
 
 
 CWWebsocketMessageParser._parseDebugInfo = function(message) {
   CWDebug._setDebugInfo(message);
   return new $.Deferred().resolve();
-}.bind(CWWebsocketMessageParser);
+};
 
 
 CWWebsocketMessageParser._parseSoftDisconnect = function(message) {
   Connichiwa._softDisconnectWebsocket();
   return new $.Deferred().resolve();
-}.bind(CWWebsocketMessageParser);
-
-CWModules.add('CWWebsocketMessageParser');
+};

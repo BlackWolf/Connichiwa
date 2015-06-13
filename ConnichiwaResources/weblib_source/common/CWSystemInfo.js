@@ -9,7 +9,7 @@
  *    the browser window resolution or the orientation
  * @namespace CWSystemInfo
  */
-var CWSystemInfo = CWSystemInfo || {};
+var CWSystemInfo = CWModules.retrieve('CWSystemInfo');
 
 
 /**
@@ -55,7 +55,7 @@ CWSystemInfo.PPI = function() {
   }
 
   return ppi;
-}.bind(CWSystemInfo);
+};
 
 
 /**
@@ -66,7 +66,7 @@ CWSystemInfo.PPI = function() {
  */
 CWSystemInfo.isLandscape = function() {
   return (window.innerHeight < window.innerWidth);
-}.bind(CWSystemInfo);
+};
 
 
 /**
@@ -76,7 +76,7 @@ CWSystemInfo.isLandscape = function() {
  */
 CWSystemInfo.viewportWidth = function() {
   return $(window).width();
-}.bind(CWSystemInfo);
+};
 
 
 /**
@@ -90,6 +90,4 @@ CWSystemInfo.viewportHeight = function() {
   //This seems to break in landscape when using meta-viewport 
   //height-device-height so basically for now: don't use that
   return $(window).height();
-}.bind(CWSystemInfo);
-
-CWModules.add('CWSystemInfo');
+};

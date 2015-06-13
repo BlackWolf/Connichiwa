@@ -4,7 +4,7 @@
 'use strict';
 
 
-var Connichiwa = Connichiwa || {};
+var Connichiwa = CWModules.retrieve('Connichiwa');
 
 
 /**
@@ -53,7 +53,7 @@ Connichiwa.autoLoad = [];
  */
 Connichiwa.getLocalDevice = function() {
   return CWDeviceManager.getLocalDevice();
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -66,7 +66,7 @@ Connichiwa.getIdentifier = function()
   if (localDevice === undefined) return undefined;
 
   return localDevice.getIdentifier();
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -75,7 +75,7 @@ Connichiwa.getIdentifier = function()
  */
 Connichiwa.isMaster = function() {
   return true;
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -92,7 +92,7 @@ Connichiwa.getIPs = function() {
   if (localDevice === undefined) return undefined;
 
   return localDevice.getIPs();
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -109,7 +109,7 @@ Connichiwa.getPort = function() {
   if (localDevice === undefined) return undefined;
 
   return localDevice.getPort();
-}.bind(Connichiwa);
+};
 
 
 // WEBSOCKET
@@ -135,7 +135,7 @@ Connichiwa._connectWebsocket = function() {
   this._websocket.onerror   = this._onWebsocketError;
 
   this._connectionAttempts++;
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -162,7 +162,7 @@ Connichiwa._onWebsocketOpen = function() {
   CWNativeBridge.callOnNative('nativeCallWebsocketDidOpen');
 
   CWEventManager.trigger('ready');
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -201,7 +201,7 @@ Connichiwa._onWebsocketMessage = function(e) {
       Connichiwa._sendAck(message);
     });
   });
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -223,7 +223,7 @@ Connichiwa._onWebsocketClose = function(e) {
 
   //We can't allow this blashphemy! Try to reconnect!
   // setTimeout(function() { this._connectWebsocket(); }.bind(this), this._connectionAttempts * 1000);
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -232,6 +232,4 @@ Connichiwa._onWebsocketClose = function(e) {
  */
 Connichiwa._onWebsocketError = function() {
   this._onWebsocketClose();
-}.bind(Connichiwa);
-
-CWModules.add('Connichiwa');
+};

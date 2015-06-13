@@ -3,7 +3,7 @@
 
 
 
-var CWNativeBridge = CWNativeBridge || {};
+var CWNativeBridge = CWModules.retrieve('CWNativeBridge');
 
 
 /**
@@ -20,7 +20,7 @@ CWNativeBridge.parse = function(message) {
     case 'localinfo':           this._parseLocalInfo(object); break;
     case 'disconnectwebsocket': this._parseDisconnectWebsocket(object); break;
   }
-}.bind(CWNativeBridge);
+};
 
 
 /**
@@ -37,7 +37,7 @@ CWNativeBridge.parse = function(message) {
 CWNativeBridge._parseLocalInfo = function(message)  {
   Connichiwa._setLocalDevice(message);
   CWEventManager.trigger('ready'); 
-}.bind(CWNativeBridge);
+};
 
 
 
@@ -54,6 +54,4 @@ CWNativeBridge._parseLocalInfo = function(message)  {
  */
 CWNativeBridge._parseDisconnectWebsocket = function(message) {
   Connichiwa._disconnectWebsocket();  
-}.bind(CWNativeBridge);
-
-CWModules.add('CWNativeBridge');
+};

@@ -10,7 +10,7 @@
  *    and other devices and more
  * @namespace Connichiwa
  */
-var Connichiwa = Connichiwa || {};
+var Connichiwa = CWModules.retrieve('Connichiwa');
 
 
 /**
@@ -102,7 +102,7 @@ Connichiwa.__constructor = function() {
   }
 
   this._connectWebsocket();
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -128,7 +128,7 @@ Connichiwa.on = function(eventName, callback) {
   } 
   
   CWEventManager.register(eventName, callback);
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -151,7 +151,7 @@ Connichiwa.on = function(eventName, callback) {
  */
 Connichiwa.off = function(eventName, callback) {
   CWEventManager.unregister(eventName, callback);
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -167,7 +167,7 @@ Connichiwa.off = function(eventName, callback) {
  */
 Connichiwa.onMessage = function(name, callback) {
   this.on('message' + name, callback);
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -187,7 +187,7 @@ Connichiwa.onLoad = function(callback) {
   } else {
     this.on('ready', callback);
   }
-}.bind(Connichiwa);
+};
 
 
 //TODO remove, find an easy way to send a message to the master
@@ -196,7 +196,7 @@ Connichiwa.send = function(target, name, message, callback) {
   message._source = Connichiwa.getIdentifier();
   message._target = target;
   return this._sendObject(message, callback);
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -212,7 +212,7 @@ Connichiwa.send = function(target, name, message, callback) {
  */
 Connichiwa.respond = function(originalMessage, name, responseObject) {
   this.send(originalMessage._source, name, responseObject);
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -234,7 +234,7 @@ Connichiwa.broadcast = function(name, message, sendToSelf) {
   }
   
   this.send('broadcast', name, message);
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -249,7 +249,7 @@ Connichiwa.broadcast = function(name, message, sendToSelf) {
 Connichiwa._sendAck = function(message) {
   var ackMessage = { original : { _id: message._id } };
   this.send(message._source, '_ack', ackMessage);
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -325,7 +325,7 @@ Connichiwa._sendObject = function(message, callback) {
   // }
 
   return message._id;
-}.bind(Connichiwa);
+};
 
 
 
@@ -336,7 +336,7 @@ Connichiwa._sendObject = function(message, callback) {
  */
 Connichiwa._disconnectWebsocket = function() {
   this._websocket.close();
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -353,6 +353,4 @@ Connichiwa._cleanupWebsocket = function() {
     this._websocket.onerror   = undefined;
     this._websocket           = undefined;
   }
-}.bind(Connichiwa);
-
-CWModules.add('Connichiwa');
+};

@@ -130,18 +130,16 @@ CWWebsocketMessageParser._parseRemoteInfo = function(message) {
   }
 
   return deferred;
-}.bind(CWWebsocketMessageParser);
+};
 
 
 CWWebsocketMessageParser._parseStitchSwipe = function(message) {
   CWStitchManager.detectedSwipe(message);
   return new $.Deferred().resolve();
-}.bind(CWWebsocketMessageParser);
+};
 
 
 CWWebsocketMessageParser._parseQuitStitch = function(message) {
   CWStitchManager.unstitchDevice(message.device);
   return new $.Deferred().resolve();
-}.bind(CWWebsocketMessageParser);
-
-CWModules.add('CWWebsocketMessageParser');
+};

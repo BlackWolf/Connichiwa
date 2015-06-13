@@ -22,7 +22,7 @@
  *    method. For example, you can **not** store functions in the data store.
  * @namespace CWDatastore
  */
-var CWDatastore = CWDatastore || {};
+var CWDatastore = CWModules.retrieve('CWDatastore');
 
 /**
  * The datastores stored data :-)
@@ -49,7 +49,7 @@ CWDatastore.set = function(collection, key, value) {
   var data = {};
   data[key] = value;
   this.setMultiple(collection, data);
-}.bind(CWDatastore);
+};
 
 
 /**
@@ -73,7 +73,7 @@ CWDatastore.setMultiple = function(collection, dict) {
   if (collection === undefined) collection = '_default';
 
   this._set(collection, dict, true);
-}.bind(CWDatastore);
+};
 
 
 /**
@@ -126,7 +126,7 @@ CWDatastore._set = function(collection, data, sync) {
 
   var reportedCollection = (collection === '_default') ? undefined : collection;
   CWEventManager.trigger('_datastorechanged', reportedCollection, reportedChanges);
-}.bind(CWDatastore);
+};
 
 
 /**
@@ -152,7 +152,7 @@ CWDatastore.get = function(collection, key) {
   }
 
   return this._data[collection][key];
-}.bind(CWDatastore);
+};
 
 
 /**
@@ -165,7 +165,7 @@ CWDatastore.get = function(collection, key) {
  */
 CWDatastore.getCollection = function(collection) {
   return this._getCollection(collection, true);
-}.bind(CWDatastore);
+};
 
 
 /**
@@ -194,7 +194,7 @@ CWDatastore._getCollection = function(collection, returnCopy) {
 
   if (returnCopy === false) return this._data[collection];
   return $.extend(true, {}, this._data[collection]);
-}.bind(CWDatastore);
+};
 
 
 /**
@@ -225,7 +225,7 @@ CWDatastore._syncEntrys = function(collection, keys) {
   }); 
 
   Connichiwa.broadcast('_updatedatastore', { data: syncData });
-}.bind(CWDatastore);
+};
 
 /**
  * Syncs the entire data store (all collections) to another device. This
@@ -240,6 +240,4 @@ CWDatastore._syncEntrys = function(collection, keys) {
  */
 CWDatastore._syncStoreToDevice = function(target, callback) {
   Connichiwa.send(target, '_updatedatastore', { data: this._data }, callback);
-}.bind(CWDatastore);
-
-CWModules.add('CWDatastore');
+};

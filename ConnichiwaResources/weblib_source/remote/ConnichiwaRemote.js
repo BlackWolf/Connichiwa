@@ -3,7 +3,7 @@
 
 
 
-var Connichiwa = Connichiwa || {};
+var Connichiwa = CWModules.retrieve('Connichiwa');
 
 
 
@@ -36,7 +36,7 @@ Connichiwa._isReconnecting = false;
  */
 Connichiwa.getLocalDevice = function() {
   return this._localDevice;
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -45,7 +45,7 @@ Connichiwa.getLocalDevice = function() {
  */
 Connichiwa.getIdentifier = function() {
   return this._localDevice.getIdentifier();
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -54,7 +54,7 @@ Connichiwa.getIdentifier = function() {
  */
 Connichiwa.isMaster = function() {
   return false;
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -76,7 +76,7 @@ Connichiwa._setLocalDevice = function(properties) {
   } else {
     this._localDevice._setProperties(properties);
   }
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -99,7 +99,7 @@ Connichiwa._connectWebsocket = function() {
   this._websocket.onmessage = this._onWebsocketMessage;
   this._websocket.onclose   = this._onWebsocketClose;
   this._websocket.onerror   = this._onWebsocketError;
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -137,7 +137,7 @@ Connichiwa._onWebsocketOpen = function() {
   //Important: This must be last, as every message before _remote_identification
   //is lost
   this.send("master", "remoteinfo", localInfo);
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -184,7 +184,7 @@ Connichiwa._onWebsocketMessage = function(e) {
       Connichiwa._sendAck(message);
     });
   });
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -205,7 +205,7 @@ Connichiwa._onWebsocketClose = function() {
   if (runsNative === false) {
     window.setTimeout(this._tryWebsocketReconnect, 2500);
   }
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -215,14 +215,14 @@ Connichiwa._onWebsocketClose = function() {
 Connichiwa._onWebsocketError = function() {
   CWDebug.log(3, "Error");
   this._onWebsocketClose();
-}.bind(Connichiwa);
+};
 
 
 Connichiwa._softDisconnectWebsocket = function() {
   this._softDisconnected = true;
   // nativeSoftDisconnect();
   CWNativeBridge.callOnNative("nativeSoftDisconnect");
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -247,6 +247,4 @@ Connichiwa._tryWebsocketReconnect = function() {
   CWDebug.log(3, "Try reconnect");
   this._connectWebsocket();
   window.setTimeout(this._tryWebsocketReconnect, 2500);
-}.bind(Connichiwa);
-
-CWModules.add('Connichiwa');
+};

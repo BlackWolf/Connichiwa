@@ -7,8 +7,7 @@
  * Utility module providing often-needed utility functions
  * @namespace CWUtil
  */
-var CWUtil = CWUtil || {};
-
+var CWUtil = CWModules.retrieve('CWUtil');
 
 /**
  * Returns an object that parses the given URL into its parts
@@ -22,7 +21,7 @@ CWUtil.parseURL = function(url) {
   parser.href = url;
 
   return parser;
-}.bind(CWUtil);
+};
 
 
 /**
@@ -38,7 +37,7 @@ CWUtil.unescape = function(escaped) {
       .replace(/&gt;/g, '>')
       .replace(/&quot;/g, '"')
       .replace(/&#039;/g, "'");
-}.bind(CWUtil);
+};
 
 
 /**
@@ -69,7 +68,7 @@ CWUtil.getEventLocation = function(e, type) {
   }
 
   return pos;
-}.bind(CWUtil);
+};
 
 
 /**
@@ -95,7 +94,7 @@ CWUtil.randomInt = function(min, max) {
   }
 
   return Math.floor(Math.random() * (max - min + 1)) + min;
-}.bind(CWUtil);
+};
 
 
 /**
@@ -106,7 +105,7 @@ CWUtil.randomInt = function(min, max) {
  */
 CWUtil.isInt = function(value) {
   return (value === parseInt(value));
-}.bind(CWUtil);
+};
 
 
 /**
@@ -117,7 +116,7 @@ CWUtil.isInt = function(value) {
  */
 CWUtil.isString = function(value) {
   return (typeof(value) === 'string');
-}.bind(CWUtil);
+};
 
 
 /**
@@ -128,7 +127,7 @@ CWUtil.isString = function(value) {
  */
 CWUtil.isFunction = function(value) {
   return (typeof(value) === 'function');
-}.bind(CWUtil);
+};
 
 
 /**
@@ -140,7 +139,7 @@ CWUtil.isFunction = function(value) {
  */
 CWUtil.isObject = function(value) {
   return (typeof(value) === 'object' && value !== null);
-}.bind(CWUtil);
+};
 
 
 /**
@@ -151,7 +150,7 @@ CWUtil.isObject = function(value) {
  */
 CWUtil.isArray = function(value) {
   return Array.isArray(value);
-}.bind(CWUtil);
+};
 
 /**
  * Checks if the given value is in the given array.
@@ -162,7 +161,7 @@ CWUtil.isArray = function(value) {
  */
 CWUtil.inArray = function(value, array) {
   return (array.indexOf(value) > -1);
-}.bind(CWUtil);
+};
 
 /**
  * Creates a new random v4 UUID, thanks to {@link
@@ -173,6 +172,4 @@ CWUtil.inArray = function(value, array) {
  */
 CWUtil.createUUID = function(a) { 
   return a?(a ^ Math.random() * 16 >> a / 4).toString(16):([ 1e7 ] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g,CWUtil.createUUID);
-}.bind(CWUtil);
-
-CWModules.add('CWUtil');
+};

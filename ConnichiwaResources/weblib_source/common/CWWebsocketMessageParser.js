@@ -40,7 +40,7 @@ CWWebsocketMessageParser.parse = function(message) {
   }
 
   return promise;
-}.bind(CWWebsocketMessageParser);
+};
 
 
 var chunks = {};
@@ -60,7 +60,7 @@ CWWebsocketMessageParser._parseChunk = function(message) {
   }
 
   return false; //we don't ack chunks
-}.bind(CWWebsocketMessageParser);
+};
 
 
 /**
@@ -74,7 +74,7 @@ CWWebsocketMessageParser._parseChunk = function(message) {
 CWWebsocketMessageParser._parseAck = function(message) {
   CWEventManager.trigger("__ack_message" + message.original._id);
   return false; //IMPORTANT: otherwise we sent an ack for an ack
-}.bind(CWWebsocketMessageParser);
+};
 
 
 /**
@@ -88,7 +88,7 @@ CWWebsocketMessageParser._parseAck = function(message) {
 CWWebsocketMessageParser._parseInsert = function(message) {
   $(message.selector).append(message.html);
   return new $.Deferred().resolve();
-}.bind(CWWebsocketMessageParser);
+};
 
 
 /**
@@ -106,7 +106,7 @@ CWWebsocketMessageParser._parseReplace = function(message) {
     $(message.selector).replaceWith(message.html);
   }
   return new $.Deferred().resolve();
-}.bind(CWWebsocketMessageParser);
+};
 
 
 /**
@@ -127,7 +127,7 @@ CWWebsocketMessageParser._parseLoadScript = function(message) {
     deferred.reject();
   });
   return deferred;
-}.bind(CWWebsocketMessageParser);
+};
 
 
 /**
@@ -145,7 +145,7 @@ CWWebsocketMessageParser._parseLoadCSS = function(message) {
   cssEntry.setAttribute("href", message.url);
   $("head").append(cssEntry);
   return new $.Deferred().resolve();
-}.bind(CWWebsocketMessageParser);
+};
 
 
 CWWebsocketMessageParser._parseLoadTemplate = function(message) {
@@ -173,7 +173,7 @@ CWWebsocketMessageParser._parseInsertTemplate = function(message) {
 CWWebsocketMessageParser._parseWasStitched = function(message) {
   CWEventManager.trigger("wasStitched", message);
   return new $.Deferred().resolve();
-}.bind(CWWebsocketMessageParser);
+};
 
 
 /**
@@ -187,7 +187,7 @@ CWWebsocketMessageParser._parseWasStitched = function(message) {
 CWWebsocketMessageParser._parseWasUnstitched = function(message) {
   CWEventManager.trigger("wasUnstitched", message);
   return new $.Deferred().resolve();
-}.bind(CWWebsocketMessageParser);
+};
 
 
 /**
@@ -202,7 +202,7 @@ CWWebsocketMessageParser._parseWasUnstitched = function(message) {
 CWWebsocketMessageParser._parseGotStitchNeighbor = function(message) {
   CWEventManager.trigger("gotstitchneighbor", message);
   return new $.Deferred().resolve();
-}.bind(CWWebsocketMessageParser);
+};
 
 
 /**
@@ -226,6 +226,4 @@ CWWebsocketMessageParser._parseUpdateDatastore = function(message) {
     // });
   });
   return new $.Deferred().resolve();
-}.bind(CWWebsocketMessageParser);
-
-CWModules.add('CWWebsocketMessageParser');
+};

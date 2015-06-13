@@ -99,7 +99,7 @@ CWStitchManager.__constructor = function() {
   Connichiwa.on('wasUnstitched',       this._onWasUnstitched);
   Connichiwa.on('gyroscopeUpdate',     this._onGyroUpdate);
   Connichiwa.on('accelerometerUpdate', this._onAccelerometerUpdate);
-}.bind(CWStitchManager);
+};
 
 
 /**
@@ -114,7 +114,7 @@ CWStitchManager._onWasStitched = function(message) {
   this._isStitched = true;
 
   //TODO register for gyroscopeUpdate instead of in constructor
-}.bind(CWStitchManager);
+};
 
 
 /**
@@ -129,7 +129,7 @@ CWStitchManager._onWasUnstitched = function(message) {
   this._isStitched = false;
 
   //TODO unregister from gyroscopeUpdate
-}.bind(CWStitchManager);
+};
 
 
 /**
@@ -143,7 +143,7 @@ CWStitchManager._onLocalSwipe = function(swipeData) {
   swipeData.width  = CWSystemInfo.viewportWidth();
   swipeData.height = CWSystemInfo.viewportHeight();
   Connichiwa.send('master', '_stitchswipe', swipeData);
-}.bind(CWStitchManager);
+};
 
 
 /**
@@ -180,7 +180,7 @@ CWStitchManager._onGyroUpdate = function(gyroData) {
       (CWUtil.inArray('gamma', this.ignoreMoveAxis) === false && deltaGamma >= 20)) {
     this._quitStitch();
   }
-}.bind(CWStitchManager);
+};
 
 
 /**
@@ -212,7 +212,7 @@ CWStitchManager._onAccelerometerUpdate = function(accelData) {
       (CWUtil.inArray('z', this.ignoreMoveAxis) === false && z >= 1.0)) {
     this._quitStitch();
   }
-}.bind(CWStitchManager);
+};
 
 
 /**
@@ -223,7 +223,7 @@ CWStitchManager._onAccelerometerUpdate = function(accelData) {
 CWStitchManager._quitStitch = function() {
   var data = { device : Connichiwa.getIdentifier() };
   Connichiwa.send('master', '_quitstitch', data);
-}.bind(CWStitchManager);
+};
 
 
 /**
@@ -235,7 +235,7 @@ CWStitchManager._quitStitch = function() {
  */
 CWStitchManager.unstitch = function() {
   this._quitStitch();
-}.bind(CWStitchManager);
+};
 
 
 /**
@@ -245,7 +245,7 @@ CWStitchManager.unstitch = function() {
  */
 CWStitchManager.isStitched = function() {
   return this._isStitched;
-}.bind(CWStitchManager);
+};
 
 
 /**
@@ -261,7 +261,7 @@ CWStitchManager.getLocalDeviceTransformation = function() {
   }
   
   return this._deviceTransformation;
-}.bind(CWStitchManager);
+};
 
 
 /**
@@ -281,7 +281,4 @@ CWStitchManager.getDefaultDeviceTransformation = function() {
     rotation : 0, 
     scale    : 1.0 
   };
-}.bind(CWStitchManager);
-
-
-CWModules.add('CWStitchManager');
+};

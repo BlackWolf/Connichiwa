@@ -11,7 +11,7 @@
  *    track of the local device of the master.
  * @namespace CWDeviceManager
  */
-var CWDeviceManager = CWDeviceManager || {};
+var CWDeviceManager = CWModules.retrieve('CWDeviceManager');
 
 
 /**
@@ -55,7 +55,7 @@ CWDeviceManager.addDevice = function(newDevice) {
 
   this._remoteDevices.push(newDevice);
   return true;
-}.bind(CWDeviceManager);
+};
 
 
 /**
@@ -81,7 +81,7 @@ CWDeviceManager.removeDevice = function(identifier) {
   this._remoteDevices.splice(index, 1);
   
   return true;
-}.bind(CWDeviceManager);
+};
 
 
 /**
@@ -109,7 +109,7 @@ CWDeviceManager.getDeviceWithIdentifier = function(identifier) {
   }
 
   return null;
-}.bind(CWDeviceManager);
+};
 
 
 /**
@@ -129,7 +129,7 @@ CWDeviceManager.getConnectedDevices = function() {
   }
 
   return connectedDevices;
-}.bind(CWDeviceManager);
+};
 
 
 /**
@@ -154,7 +154,7 @@ CWDeviceManager.createLocalDevice = function(properties) {
   CWDebug.log(3, 'Created local device: ' + JSON.stringify(properties));
 
   return true;
-}.bind(CWDeviceManager);
+};
 
 
 /**
@@ -163,6 +163,4 @@ CWDeviceManager.createLocalDevice = function(properties) {
  */
 CWDeviceManager.getLocalDevice = function() {
   return this._localDevice;
-}.bind(CWDeviceManager);
-
-CWModules.add('CWDeviceManager');
+};

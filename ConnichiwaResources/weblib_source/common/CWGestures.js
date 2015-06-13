@@ -10,7 +10,7 @@
  * @namespace CWGestures
  * @private
  */
-var CWGestures = CWGestures || {};
+var CWGestures = CWModules.retrieve('CWGestures');
 
 
 /**
@@ -72,7 +72,7 @@ CWGestures.__constructor = function() {
   $(document).ready(function() {
     that._captureOn($('body'));
   });
-}.bind(CWGestures);
+};
 
 
 /**
@@ -84,7 +84,7 @@ CWGestures.__constructor = function() {
  */
 CWGestures._onDown = function(e) {
   this._touchStart = CWUtil.getEventLocation(e, 'client');
-}.bind(CWGestures);
+};
 
 
 /**
@@ -157,7 +157,7 @@ CWGestures._onMove = function(e) {
   } 
 
   this._touchLast = newTouch;
-}.bind(CWGestures);
+};
 
 
 /**
@@ -256,7 +256,7 @@ CWGestures._onUp = function(e) {
     y    : swipeEnd.y
   };
   CWEventManager.trigger("stitchswipe", swipeData);
-}.bind(CWGestures);
+};
 
 
 /**
@@ -281,9 +281,4 @@ CWGestures._captureOn = function(el) {
   //el.on("mouseup touchend", this._onUp);
   el.addEventListener("mouseup",  this._onUp, true);
   el.addEventListener("touchend", this._onUp, true);
-}.bind(CWGestures);
-
-//Initalize module. Delayed call to make sure all modules are ready
-if (CWGestures.__constructor) window.setTimeout(CWGestures.__constructor, 0);
-
-CWModules.add('CWGestures');
+};

@@ -51,7 +51,7 @@ CWEventManager.register = function(event, callback) {
   if (!this._callbacks[event]) this._callbacks[event] = [];
   this._callbacks[event].push(callback);
   CWDebug.log(3, 'Attached callback to ' + event);
-}.bind(CWEventManager);
+};
 
 
 /**
@@ -141,7 +141,7 @@ CWEventManager.unregister = function(event, callback) {
       });
     }
   }, 0);
-}.bind(CWEventManager);
+};
 
 
 /**
@@ -187,6 +187,4 @@ CWEventManager.trigger = function(logPrio, event, var_args) {
     var callback = this._callbacks[event][i];
     callback.apply(null, args); //calls the callback with arguments args
   }
-}.bind(CWEventManager);
-
-CWModules.add('CWEventManager');
+};
