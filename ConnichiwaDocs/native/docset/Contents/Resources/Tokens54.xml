@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Constants/GCDWebServerLoggingLevel.html">
+	<File path="Constants/CWiDeviceModel.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/c/tdef/GCDWebServerLoggingLevel</TokenIdentifier>
-			<Abstract type="html">If all of the above fail, then use GCDWebServer built-in
-logging facility.</Abstract>
-			<DeclaredIn>GCDWebServerPrivate.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/c/tdef/CWiDeviceModel</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWiDevice.h</DeclaredIn>
             
 			
 			<NodeRef refid="54"/>
@@ -15,61 +14,241 @@ logging facility.</Abstract>
 		
         
         <Token>
-            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerLoggingLevel_Debug</TokenIdentifier>
+            <TokenIdentifier>//apple_ref/c/econst/CWiDeviceModelUnknown</TokenIdentifier>
             <Abstract type="html"></Abstract>
-            <Declaration>kGCDWebServerLoggingLevel_Debug</Declaration>
+            <Declaration>CWiDeviceModelUnknown</Declaration>
             
-            <DeclaredIn>GCDWebServerPrivate.h</DeclaredIn>
+            <DeclaredIn>CWiDevice.h</DeclaredIn>
             
             <NodeRef refid="54"/>
         </Token>
         
         <Token>
-            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerLoggingLevel_Verbose</TokenIdentifier>
+            <TokenIdentifier>//apple_ref/c/econst/CWiDeviceModeliPhone1G</TokenIdentifier>
             <Abstract type="html"></Abstract>
-            <Declaration>kGCDWebServerLoggingLevel_Verbose</Declaration>
+            <Declaration>CWiDeviceModeliPhone1G</Declaration>
             
-            <DeclaredIn>GCDWebServerPrivate.h</DeclaredIn>
+            <DeclaredIn>CWiDevice.h</DeclaredIn>
             
             <NodeRef refid="54"/>
         </Token>
         
         <Token>
-            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerLoggingLevel_Info</TokenIdentifier>
+            <TokenIdentifier>//apple_ref/c/econst/CWiDeviceModeliPhone3G</TokenIdentifier>
             <Abstract type="html"></Abstract>
-            <Declaration>kGCDWebServerLoggingLevel_Info</Declaration>
+            <Declaration>CWiDeviceModeliPhone3G</Declaration>
             
-            <DeclaredIn>GCDWebServerPrivate.h</DeclaredIn>
+            <DeclaredIn>CWiDevice.h</DeclaredIn>
             
             <NodeRef refid="54"/>
         </Token>
         
         <Token>
-            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerLoggingLevel_Warning</TokenIdentifier>
+            <TokenIdentifier>//apple_ref/c/econst/CWiDeviceModeliPhone3GS</TokenIdentifier>
             <Abstract type="html"></Abstract>
-            <Declaration>kGCDWebServerLoggingLevel_Warning</Declaration>
+            <Declaration>CWiDeviceModeliPhone3GS</Declaration>
             
-            <DeclaredIn>GCDWebServerPrivate.h</DeclaredIn>
+            <DeclaredIn>CWiDevice.h</DeclaredIn>
             
             <NodeRef refid="54"/>
         </Token>
         
         <Token>
-            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerLoggingLevel_Error</TokenIdentifier>
+            <TokenIdentifier>//apple_ref/c/econst/CWiDeviceModeliPhone4</TokenIdentifier>
             <Abstract type="html"></Abstract>
-            <Declaration>kGCDWebServerLoggingLevel_Error</Declaration>
+            <Declaration>CWiDeviceModeliPhone4</Declaration>
             
-            <DeclaredIn>GCDWebServerPrivate.h</DeclaredIn>
+            <DeclaredIn>CWiDevice.h</DeclaredIn>
             
             <NodeRef refid="54"/>
         </Token>
         
         <Token>
-            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerLoggingLevel_Exception</TokenIdentifier>
+            <TokenIdentifier>//apple_ref/c/econst/CWiDeviceModeliPhone4S</TokenIdentifier>
             <Abstract type="html"></Abstract>
-            <Declaration>kGCDWebServerLoggingLevel_Exception</Declaration>
+            <Declaration>CWiDeviceModeliPhone4S</Declaration>
             
-            <DeclaredIn>GCDWebServerPrivate.h</DeclaredIn>
+            <DeclaredIn>CWiDevice.h</DeclaredIn>
+            
+            <NodeRef refid="54"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/CWiDeviceModeliPhone5</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>CWiDeviceModeliPhone5</Declaration>
+            
+            <DeclaredIn>CWiDevice.h</DeclaredIn>
+            
+            <NodeRef refid="54"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/CWiDeviceModeliPhone5C</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>CWiDeviceModeliPhone5C</Declaration>
+            
+            <DeclaredIn>CWiDevice.h</DeclaredIn>
+            
+            <NodeRef refid="54"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/CWiDeviceModeliPhone5S</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>CWiDeviceModeliPhone5S</Declaration>
+            
+            <DeclaredIn>CWiDevice.h</DeclaredIn>
+            
+            <NodeRef refid="54"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/CWiDeviceModeliPad1G</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>CWiDeviceModeliPad1G</Declaration>
+            
+            <DeclaredIn>CWiDevice.h</DeclaredIn>
+            
+            <NodeRef refid="54"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/CWiDeviceModeliPad2G</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>CWiDeviceModeliPad2G</Declaration>
+            
+            <DeclaredIn>CWiDevice.h</DeclaredIn>
+            
+            <NodeRef refid="54"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/CWiDeviceModeliPadMini1G</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>CWiDeviceModeliPadMini1G</Declaration>
+            
+            <DeclaredIn>CWiDevice.h</DeclaredIn>
+            
+            <NodeRef refid="54"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/CWiDeviceModeliPad3G</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>CWiDeviceModeliPad3G</Declaration>
+            
+            <DeclaredIn>CWiDevice.h</DeclaredIn>
+            
+            <NodeRef refid="54"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/CWiDeviceModeliPad4G</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>CWiDeviceModeliPad4G</Declaration>
+            
+            <DeclaredIn>CWiDevice.h</DeclaredIn>
+            
+            <NodeRef refid="54"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/CWiDeviceModeliPadAir</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>CWiDeviceModeliPadAir</Declaration>
+            
+            <DeclaredIn>CWiDevice.h</DeclaredIn>
+            
+            <NodeRef refid="54"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/CWiDeviceModeliPadMini2G</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>CWiDeviceModeliPadMini2G</Declaration>
+            
+            <DeclaredIn>CWiDevice.h</DeclaredIn>
+            
+            <NodeRef refid="54"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/CWiDeviceModeliPod1G</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>CWiDeviceModeliPod1G</Declaration>
+            
+            <DeclaredIn>CWiDevice.h</DeclaredIn>
+            
+            <NodeRef refid="54"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/CWiDeviceModeliPod2G</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>CWiDeviceModeliPod2G</Declaration>
+            
+            <DeclaredIn>CWiDevice.h</DeclaredIn>
+            
+            <NodeRef refid="54"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/CWiDeviceModeliPod3G</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>CWiDeviceModeliPod3G</Declaration>
+            
+            <DeclaredIn>CWiDevice.h</DeclaredIn>
+            
+            <NodeRef refid="54"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/CWiDeviceModeliPod4G</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>CWiDeviceModeliPod4G</Declaration>
+            
+            <DeclaredIn>CWiDevice.h</DeclaredIn>
+            
+            <NodeRef refid="54"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/CWiDeviceModeliPod5G</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>CWiDeviceModeliPod5G</Declaration>
+            
+            <DeclaredIn>CWiDevice.h</DeclaredIn>
+            
+            <NodeRef refid="54"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/CWiDeviceModelUnknowniPhone</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>CWiDeviceModelUnknowniPhone</Declaration>
+            
+            <DeclaredIn>CWiDevice.h</DeclaredIn>
+            
+            <NodeRef refid="54"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/CWiDeviceModelUnknowniPod</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>CWiDeviceModelUnknowniPod</Declaration>
+            
+            <DeclaredIn>CWiDevice.h</DeclaredIn>
+            
+            <NodeRef refid="54"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/CWiDeviceModelUnknowniPad</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>CWiDeviceModelUnknowniPad</Declaration>
+            
+            <DeclaredIn>CWiDevice.h</DeclaredIn>
             
             <NodeRef refid="54"/>
         </Token>

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Constants/GCDWebServerInformationalHTTPStatusCode.html">
+	<File path="Constants/CWWebLibraryManagerState.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/c/tdef/GCDWebServerInformationalHTTPStatusCode</TokenIdentifier>
-			<Abstract type="html">Convenience constants for &quot;informational&quot; HTTP status codes.</Abstract>
-			<DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/c/tdef/CWWebLibraryManagerState</TokenIdentifier>
+			<Abstract type="html">Represents the loading state of the web library on the web library&apos;s UIWebView</Abstract>
+			<DeclaredIn>CWWebLibraryManager.h</DeclaredIn>
             
 			
 			<NodeRef refid="53"/>
@@ -14,31 +14,45 @@
 		
         
         <Token>
-            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_Continue</TokenIdentifier>
-            <Abstract type="html"></Abstract>
-            <Declaration>kGCDWebServerHTTPStatusCode_Continue</Declaration>
+            <TokenIdentifier>//apple_ref/c/econst/CWWebLibraryManagerStateDisconnected</TokenIdentifier>
+            <Abstract type="html">This device is not connected to the web library
+     </Abstract>
+            <Declaration>CWWebLibraryManagerStateDisconnected</Declaration>
             
-            <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
-            
-            <NodeRef refid="53"/>
-        </Token>
-        
-        <Token>
-            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_SwitchingProtocols</TokenIdentifier>
-            <Abstract type="html"></Abstract>
-            <Declaration>kGCDWebServerHTTPStatusCode_SwitchingProtocols</Declaration>
-            
-            <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
+            <DeclaredIn>CWWebLibraryManager.h</DeclaredIn>
             
             <NodeRef refid="53"/>
         </Token>
         
         <Token>
-            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_Processing</TokenIdentifier>
-            <Abstract type="html"></Abstract>
-            <Declaration>kGCDWebServerHTTPStatusCode_Processing</Declaration>
+            <TokenIdentifier>//apple_ref/c/econst/CWWebLibraryManagerStateConnecting</TokenIdentifier>
+            <Abstract type="html">This device is currently connecting to the web library
+     </Abstract>
+            <Declaration>CWWebLibraryManagerStateConnecting</Declaration>
             
-            <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
+            <DeclaredIn>CWWebLibraryManager.h</DeclaredIn>
+            
+            <NodeRef refid="53"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/CWWebLibraryManagerStateConnected</TokenIdentifier>
+            <Abstract type="html">This device has established a connection to the web library
+     </Abstract>
+            <Declaration>CWWebLibraryManagerStateConnected</Declaration>
+            
+            <DeclaredIn>CWWebLibraryManager.h</DeclaredIn>
+            
+            <NodeRef refid="53"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/CWWebLibraryManagerStateDisconnecting</TokenIdentifier>
+            <Abstract type="html">This device is currently disconnecting from the web library
+     </Abstract>
+            <Declaration>CWWebLibraryManagerStateDisconnecting</Declaration>
+            
+            <DeclaredIn>CWWebLibraryManager.h</DeclaredIn>
             
             <NodeRef refid="53"/>
         </Token>

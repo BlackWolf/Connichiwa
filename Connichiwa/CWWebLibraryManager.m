@@ -58,6 +58,10 @@
  */
 - (void)_receivedFromView_remoteDidConnect:(NSString *)identifier;
 
+- (void)_receivedFromView_startProximityTracking;
+
+- (void)_receivedFromView_stopProximityTracking;
+
 /**
  *  Tells the web library if we are running in debug mode or not
  */
@@ -103,6 +107,8 @@
  *  @param identifier The identifier of the disconnected device
  */
 - (void)_sendToView_remoteDisconnected:(NSString *)identifier;
+
+- (void)_sendToView_proximityStateChanged:(BOOL)proximityState;
 
 /**
  *  Sends the given dictionary to the web library as a JSON string
@@ -190,6 +196,11 @@
     [self _sendToView_remoteDisconnected:identifier];
 }
 
+- (void)sendProximityStateChanged:(BOOL)proximityState
+{
+    [self _sendToView_proximityStateChanged:proximityState];
+}
+
 
 - (BOOL)isActive
 {
@@ -224,6 +235,14 @@
     
     self.webViewContext[@"nativeCallRemoteDidConnect"] = ^(NSString *identifier) {
         [weakSelf _receivedFromView_remoteDidConnect:identifier];
+    };
+    
+    self.webViewContext[@"nativeCallStartProximityTracking"] = ^{
+        [weakSelf _receivedFromView_startProximityTracking];
+    };
+    
+    self.webViewContext[@"nativeCallStopProximityTracking"] = ^{
+        [weakSelf _receivedFromView_stopProximityTracking];
     };
 }
 
@@ -272,6 +291,24 @@
     if ([self.delegate respondsToSelector:@selector(remoteDidConnect:)])
     {
         [self.delegate remoteDidConnect:identifier];
+    }
+}
+
+
+-(void)_receivedFromView_startProximityTracking {
+    CWLog(3, @"Web Library requested proximity tracking start.");
+    if ([self.delegate respondsToSelector:@selector(webLibraryRequestsProximityTrackingStart)])
+    {
+        [self.delegate webLibraryRequestsProximityTrackingStart];
+    }
+}
+
+
+-(void)_receivedFromView_stopProximityTracking {
+    CWLog(3, @"Web Library requested proximity tracking stop.");
+    if ([self.delegate respondsToSelector:@selector(webLibraryRequestsProximityTrackingStop)])
+    {
+        [self.delegate webLibraryRequestsProximityTrackingStop];
     }
 }
 
@@ -344,6 +381,15 @@
     NSDictionary *data = @{
                            @"_name": @"remotedisconnected",
                            @"identifier": identifier
+                           };
+    [self _sendToView_dictionary:data];
+}
+
+
+- (void)_sendToView_proximityStateChanged:(BOOL)proximityState; {
+    NSDictionary *data = @{
+                           @"_name": @"proximitystatechanged",
+                           @"proximityState": @(proximityState)
                            };
     [self _sendToView_dictionary:data];
 }

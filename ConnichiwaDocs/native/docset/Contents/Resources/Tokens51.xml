@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Constants/CWiDeviceModel.html">
+	<File path="Constants/CWRemoteLibraryManagerState.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/c/tdef/CWiDeviceModel</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>CWiDevice.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/c/tdef/CWRemoteLibraryManagerState</TokenIdentifier>
+			<Abstract type="html">The state of this device as a remote device</Abstract>
+			<DeclaredIn>CWRemoteLibraryManager.h</DeclaredIn>
             
 			
 			<NodeRef refid="51"/>
@@ -14,241 +14,56 @@
 		
         
         <Token>
-            <TokenIdentifier>//apple_ref/c/econst/CWiDeviceModelUnknown</TokenIdentifier>
-            <Abstract type="html"></Abstract>
-            <Declaration>CWiDeviceModelUnknown</Declaration>
+            <TokenIdentifier>//apple_ref/c/econst/CWRemoteLibraryManagerStateDisconnected</TokenIdentifier>
+            <Abstract type="html">This device is not connected to any other device as a remote
+     </Abstract>
+            <Declaration>CWRemoteLibraryManagerStateDisconnected</Declaration>
             
-            <DeclaredIn>CWiDevice.h</DeclaredIn>
-            
-            <NodeRef refid="51"/>
-        </Token>
-        
-        <Token>
-            <TokenIdentifier>//apple_ref/c/econst/CWiDeviceModeliPhone1G</TokenIdentifier>
-            <Abstract type="html"></Abstract>
-            <Declaration>CWiDeviceModeliPhone1G</Declaration>
-            
-            <DeclaredIn>CWiDevice.h</DeclaredIn>
+            <DeclaredIn>CWRemoteLibraryManager.h</DeclaredIn>
             
             <NodeRef refid="51"/>
         </Token>
         
         <Token>
-            <TokenIdentifier>//apple_ref/c/econst/CWiDeviceModeliPhone3G</TokenIdentifier>
-            <Abstract type="html"></Abstract>
-            <Declaration>CWiDeviceModeliPhone3G</Declaration>
+            <TokenIdentifier>//apple_ref/c/econst/CWRemoteLibraryManagerStateConnecting</TokenIdentifier>
+            <Abstract type="html">The device is currently connecting to another device as a remote
+     </Abstract>
+            <Declaration>CWRemoteLibraryManagerStateConnecting</Declaration>
             
-            <DeclaredIn>CWiDevice.h</DeclaredIn>
-            
-            <NodeRef refid="51"/>
-        </Token>
-        
-        <Token>
-            <TokenIdentifier>//apple_ref/c/econst/CWiDeviceModeliPhone3GS</TokenIdentifier>
-            <Abstract type="html"></Abstract>
-            <Declaration>CWiDeviceModeliPhone3GS</Declaration>
-            
-            <DeclaredIn>CWiDevice.h</DeclaredIn>
+            <DeclaredIn>CWRemoteLibraryManager.h</DeclaredIn>
             
             <NodeRef refid="51"/>
         </Token>
         
         <Token>
-            <TokenIdentifier>//apple_ref/c/econst/CWiDeviceModeliPhone4</TokenIdentifier>
-            <Abstract type="html"></Abstract>
-            <Declaration>CWiDeviceModeliPhone4</Declaration>
+            <TokenIdentifier>//apple_ref/c/econst/CWRemoteLibraryManagerStateConnected</TokenIdentifier>
+            <Abstract type="html">The device is currently used as a remote
+     </Abstract>
+            <Declaration>CWRemoteLibraryManagerStateConnected</Declaration>
             
-            <DeclaredIn>CWiDevice.h</DeclaredIn>
-            
-            <NodeRef refid="51"/>
-        </Token>
-        
-        <Token>
-            <TokenIdentifier>//apple_ref/c/econst/CWiDeviceModeliPhone4S</TokenIdentifier>
-            <Abstract type="html"></Abstract>
-            <Declaration>CWiDeviceModeliPhone4S</Declaration>
-            
-            <DeclaredIn>CWiDevice.h</DeclaredIn>
+            <DeclaredIn>CWRemoteLibraryManager.h</DeclaredIn>
             
             <NodeRef refid="51"/>
         </Token>
         
         <Token>
-            <TokenIdentifier>//apple_ref/c/econst/CWiDeviceModeliPhone5</TokenIdentifier>
-            <Abstract type="html"></Abstract>
-            <Declaration>CWiDeviceModeliPhone5</Declaration>
+            <TokenIdentifier>//apple_ref/c/econst/CWRemoteLibraryManagerStateDisconnecting</TokenIdentifier>
+            <Abstract type="html">The device is currently disconnecting from another device and about to give up its remote state
+     </Abstract>
+            <Declaration>CWRemoteLibraryManagerStateDisconnecting</Declaration>
             
-            <DeclaredIn>CWiDevice.h</DeclaredIn>
-            
-            <NodeRef refid="51"/>
-        </Token>
-        
-        <Token>
-            <TokenIdentifier>//apple_ref/c/econst/CWiDeviceModeliPhone5C</TokenIdentifier>
-            <Abstract type="html"></Abstract>
-            <Declaration>CWiDeviceModeliPhone5C</Declaration>
-            
-            <DeclaredIn>CWiDevice.h</DeclaredIn>
+            <DeclaredIn>CWRemoteLibraryManager.h</DeclaredIn>
             
             <NodeRef refid="51"/>
         </Token>
         
         <Token>
-            <TokenIdentifier>//apple_ref/c/econst/CWiDeviceModeliPhone5S</TokenIdentifier>
-            <Abstract type="html"></Abstract>
-            <Declaration>CWiDeviceModeliPhone5S</Declaration>
+            <TokenIdentifier>//apple_ref/c/econst/CWRemoteLibraryManagerStateSoftDisconnected</TokenIdentifier>
+            <Abstract type="html">The device has been soft-disconnected from another device - it is considered the same as the Disconnected state, but the connection is not physically closed yet
+     </Abstract>
+            <Declaration>CWRemoteLibraryManagerStateSoftDisconnected</Declaration>
             
-            <DeclaredIn>CWiDevice.h</DeclaredIn>
-            
-            <NodeRef refid="51"/>
-        </Token>
-        
-        <Token>
-            <TokenIdentifier>//apple_ref/c/econst/CWiDeviceModeliPad1G</TokenIdentifier>
-            <Abstract type="html"></Abstract>
-            <Declaration>CWiDeviceModeliPad1G</Declaration>
-            
-            <DeclaredIn>CWiDevice.h</DeclaredIn>
-            
-            <NodeRef refid="51"/>
-        </Token>
-        
-        <Token>
-            <TokenIdentifier>//apple_ref/c/econst/CWiDeviceModeliPad2G</TokenIdentifier>
-            <Abstract type="html"></Abstract>
-            <Declaration>CWiDeviceModeliPad2G</Declaration>
-            
-            <DeclaredIn>CWiDevice.h</DeclaredIn>
-            
-            <NodeRef refid="51"/>
-        </Token>
-        
-        <Token>
-            <TokenIdentifier>//apple_ref/c/econst/CWiDeviceModeliPadMini1G</TokenIdentifier>
-            <Abstract type="html"></Abstract>
-            <Declaration>CWiDeviceModeliPadMini1G</Declaration>
-            
-            <DeclaredIn>CWiDevice.h</DeclaredIn>
-            
-            <NodeRef refid="51"/>
-        </Token>
-        
-        <Token>
-            <TokenIdentifier>//apple_ref/c/econst/CWiDeviceModeliPad3G</TokenIdentifier>
-            <Abstract type="html"></Abstract>
-            <Declaration>CWiDeviceModeliPad3G</Declaration>
-            
-            <DeclaredIn>CWiDevice.h</DeclaredIn>
-            
-            <NodeRef refid="51"/>
-        </Token>
-        
-        <Token>
-            <TokenIdentifier>//apple_ref/c/econst/CWiDeviceModeliPad4G</TokenIdentifier>
-            <Abstract type="html"></Abstract>
-            <Declaration>CWiDeviceModeliPad4G</Declaration>
-            
-            <DeclaredIn>CWiDevice.h</DeclaredIn>
-            
-            <NodeRef refid="51"/>
-        </Token>
-        
-        <Token>
-            <TokenIdentifier>//apple_ref/c/econst/CWiDeviceModeliPadAir</TokenIdentifier>
-            <Abstract type="html"></Abstract>
-            <Declaration>CWiDeviceModeliPadAir</Declaration>
-            
-            <DeclaredIn>CWiDevice.h</DeclaredIn>
-            
-            <NodeRef refid="51"/>
-        </Token>
-        
-        <Token>
-            <TokenIdentifier>//apple_ref/c/econst/CWiDeviceModeliPadMini2G</TokenIdentifier>
-            <Abstract type="html"></Abstract>
-            <Declaration>CWiDeviceModeliPadMini2G</Declaration>
-            
-            <DeclaredIn>CWiDevice.h</DeclaredIn>
-            
-            <NodeRef refid="51"/>
-        </Token>
-        
-        <Token>
-            <TokenIdentifier>//apple_ref/c/econst/CWiDeviceModeliPod1G</TokenIdentifier>
-            <Abstract type="html"></Abstract>
-            <Declaration>CWiDeviceModeliPod1G</Declaration>
-            
-            <DeclaredIn>CWiDevice.h</DeclaredIn>
-            
-            <NodeRef refid="51"/>
-        </Token>
-        
-        <Token>
-            <TokenIdentifier>//apple_ref/c/econst/CWiDeviceModeliPod2G</TokenIdentifier>
-            <Abstract type="html"></Abstract>
-            <Declaration>CWiDeviceModeliPod2G</Declaration>
-            
-            <DeclaredIn>CWiDevice.h</DeclaredIn>
-            
-            <NodeRef refid="51"/>
-        </Token>
-        
-        <Token>
-            <TokenIdentifier>//apple_ref/c/econst/CWiDeviceModeliPod3G</TokenIdentifier>
-            <Abstract type="html"></Abstract>
-            <Declaration>CWiDeviceModeliPod3G</Declaration>
-            
-            <DeclaredIn>CWiDevice.h</DeclaredIn>
-            
-            <NodeRef refid="51"/>
-        </Token>
-        
-        <Token>
-            <TokenIdentifier>//apple_ref/c/econst/CWiDeviceModeliPod4G</TokenIdentifier>
-            <Abstract type="html"></Abstract>
-            <Declaration>CWiDeviceModeliPod4G</Declaration>
-            
-            <DeclaredIn>CWiDevice.h</DeclaredIn>
-            
-            <NodeRef refid="51"/>
-        </Token>
-        
-        <Token>
-            <TokenIdentifier>//apple_ref/c/econst/CWiDeviceModeliPod5G</TokenIdentifier>
-            <Abstract type="html"></Abstract>
-            <Declaration>CWiDeviceModeliPod5G</Declaration>
-            
-            <DeclaredIn>CWiDevice.h</DeclaredIn>
-            
-            <NodeRef refid="51"/>
-        </Token>
-        
-        <Token>
-            <TokenIdentifier>//apple_ref/c/econst/CWiDeviceModelUnknowniPhone</TokenIdentifier>
-            <Abstract type="html"></Abstract>
-            <Declaration>CWiDeviceModelUnknowniPhone</Declaration>
-            
-            <DeclaredIn>CWiDevice.h</DeclaredIn>
-            
-            <NodeRef refid="51"/>
-        </Token>
-        
-        <Token>
-            <TokenIdentifier>//apple_ref/c/econst/CWiDeviceModelUnknowniPod</TokenIdentifier>
-            <Abstract type="html"></Abstract>
-            <Declaration>CWiDeviceModelUnknowniPod</Declaration>
-            
-            <DeclaredIn>CWiDevice.h</DeclaredIn>
-            
-            <NodeRef refid="51"/>
-        </Token>
-        
-        <Token>
-            <TokenIdentifier>//apple_ref/c/econst/CWiDeviceModelUnknowniPad</TokenIdentifier>
-            <Abstract type="html"></Abstract>
-            <Declaration>CWiDeviceModelUnknowniPad</Declaration>
-            
-            <DeclaredIn>CWiDevice.h</DeclaredIn>
+            <DeclaredIn>CWRemoteLibraryManager.h</DeclaredIn>
             
             <NodeRef refid="51"/>
         </Token>

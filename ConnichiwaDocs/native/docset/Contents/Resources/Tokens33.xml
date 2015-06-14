@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Classes/GCDWebServerRequest.html">
+	<File path="Classes/GCDWebServerMultiPartFormRequest.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/cl/GCDWebServerRequest</TokenIdentifier>
-			<Abstract type="html">The GCDWebServerRequest class is instantiated by the GCDWebServerConnection
-after the HTTP headers have been received. Each instance wraps a single HTTP
-request. If a body is present, the methods from the GCDWebServerBodyWriter
-protocol will be called by the GCDWebServerConnection to receive it.</Abstract>
-			<DeclaredIn>GCDWebServerRequest.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/cl/GCDWebServerMultiPartFormRequest</TokenIdentifier>
+			<Abstract type="html">The GCDWebServerMultiPartFormRequest subclass of GCDWebServerRequest
+parses the body of the HTTP request as a multipart encoded form.</Abstract>
+			<DeclaredIn>GCDWebServerMultiPartFormRequest.h</DeclaredIn>
             
 			
 			<NodeRef refid="33"/>
@@ -16,420 +14,124 @@ protocol will be called by the GCDWebServerConnection to receive it.</Abstract>
 		
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerRequest/setMethod:</TokenIdentifier>
-			<Abstract type="html">Returns the HTTP method for the request.</Abstract>
-			<DeclaredIn>GCDWebServerRequest.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerMultiPartFormRequest/setArguments:</TokenIdentifier>
+			<Abstract type="html">Returns the argument parts from the multipart encoded form as
+name / GCDWebServerMultiPartArgument pairs.</Abstract>
+			<DeclaredIn>GCDWebServerMultiPartFormRequest.h</DeclaredIn>
 			
-			<Declaration>@property (nonatomic, readonly) NSString *method</Declaration>
+			<Declaration>@property (nonatomic, readonly) NSArray *arguments</Declaration>
 			
 			
-			<Anchor>//api/name/method</Anchor>
+			<Anchor>//api/name/arguments</Anchor>
             <NodeRef refid="33"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerRequest/method</TokenIdentifier>
-			<Abstract type="html">Returns the HTTP method for the request.</Abstract>
-			<DeclaredIn>GCDWebServerRequest.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerMultiPartFormRequest/arguments</TokenIdentifier>
+			<Abstract type="html">Returns the argument parts from the multipart encoded form as
+name / GCDWebServerMultiPartArgument pairs.</Abstract>
+			<DeclaredIn>GCDWebServerMultiPartFormRequest.h</DeclaredIn>
 			
-			<Declaration>@property (nonatomic, readonly) NSString *method</Declaration>
+			<Declaration>@property (nonatomic, readonly) NSArray *arguments</Declaration>
 			
 			
-			<Anchor>//api/name/method</Anchor>
+			<Anchor>//api/name/arguments</Anchor>
             <NodeRef refid="33"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/GCDWebServerRequest/method</TokenIdentifier>
-			<Abstract type="html">Returns the HTTP method for the request.</Abstract>
-			<DeclaredIn>GCDWebServerRequest.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instp/GCDWebServerMultiPartFormRequest/arguments</TokenIdentifier>
+			<Abstract type="html">Returns the argument parts from the multipart encoded form as
+name / GCDWebServerMultiPartArgument pairs.</Abstract>
+			<DeclaredIn>GCDWebServerMultiPartFormRequest.h</DeclaredIn>
 			
-			<Declaration>@property (nonatomic, readonly) NSString *method</Declaration>
+			<Declaration>@property (nonatomic, readonly) NSArray *arguments</Declaration>
 			
 			
-			<Anchor>//api/name/method</Anchor>
+			<Anchor>//api/name/arguments</Anchor>
             <NodeRef refid="33"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerRequest/setURL:</TokenIdentifier>
-			<Abstract type="html">Returns the URL for the request.</Abstract>
-			<DeclaredIn>GCDWebServerRequest.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerMultiPartFormRequest/setFiles:</TokenIdentifier>
+			<Abstract type="html">Returns the files parts from the multipart encoded form as
+name / GCDWebServerMultiPartFile pairs.</Abstract>
+			<DeclaredIn>GCDWebServerMultiPartFormRequest.h</DeclaredIn>
 			
-			<Declaration>@property (nonatomic, readonly) NSURL *URL</Declaration>
+			<Declaration>@property (nonatomic, readonly) NSArray *files</Declaration>
 			
 			
-			<Anchor>//api/name/URL</Anchor>
+			<Anchor>//api/name/files</Anchor>
             <NodeRef refid="33"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerRequest/URL</TokenIdentifier>
-			<Abstract type="html">Returns the URL for the request.</Abstract>
-			<DeclaredIn>GCDWebServerRequest.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerMultiPartFormRequest/files</TokenIdentifier>
+			<Abstract type="html">Returns the files parts from the multipart encoded form as
+name / GCDWebServerMultiPartFile pairs.</Abstract>
+			<DeclaredIn>GCDWebServerMultiPartFormRequest.h</DeclaredIn>
 			
-			<Declaration>@property (nonatomic, readonly) NSURL *URL</Declaration>
+			<Declaration>@property (nonatomic, readonly) NSArray *files</Declaration>
 			
 			
-			<Anchor>//api/name/URL</Anchor>
+			<Anchor>//api/name/files</Anchor>
             <NodeRef refid="33"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/GCDWebServerRequest/URL</TokenIdentifier>
-			<Abstract type="html">Returns the URL for the request.</Abstract>
-			<DeclaredIn>GCDWebServerRequest.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instp/GCDWebServerMultiPartFormRequest/files</TokenIdentifier>
+			<Abstract type="html">Returns the files parts from the multipart encoded form as
+name / GCDWebServerMultiPartFile pairs.</Abstract>
+			<DeclaredIn>GCDWebServerMultiPartFormRequest.h</DeclaredIn>
 			
-			<Declaration>@property (nonatomic, readonly) NSURL *URL</Declaration>
+			<Declaration>@property (nonatomic, readonly) NSArray *files</Declaration>
 			
 			
-			<Anchor>//api/name/URL</Anchor>
+			<Anchor>//api/name/files</Anchor>
             <NodeRef refid="33"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerRequest/setHeaders:</TokenIdentifier>
-			<Abstract type="html">Returns the HTTP headers for the request.</Abstract>
-			<DeclaredIn>GCDWebServerRequest.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/clm/GCDWebServerMultiPartFormRequest/mimeType</TokenIdentifier>
+			<Abstract type="html">Returns the MIME type for multipart encoded forms
+i.e. &quot;multipart/form-data&quot;.</Abstract>
+			<DeclaredIn>GCDWebServerMultiPartFormRequest.h</DeclaredIn>
 			
-			<Declaration>@property (nonatomic, readonly) NSDictionary *headers</Declaration>
+			<Declaration>+ (NSString *)mimeType</Declaration>
 			
 			
-			<Anchor>//api/name/headers</Anchor>
+			<Anchor>//api/name/mimeType</Anchor>
             <NodeRef refid="33"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerRequest/headers</TokenIdentifier>
-			<Abstract type="html">Returns the HTTP headers for the request.</Abstract>
-			<DeclaredIn>GCDWebServerRequest.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerMultiPartFormRequest/firstArgumentForControlName:</TokenIdentifier>
+			<Abstract type="html">Returns the first argument for a given control name or nil if not found.</Abstract>
+			<DeclaredIn>GCDWebServerMultiPartFormRequest.h</DeclaredIn>
 			
-			<Declaration>@property (nonatomic, readonly) NSDictionary *headers</Declaration>
+			<Declaration>- (GCDWebServerMultiPartArgument *)firstArgumentForControlName:(NSString *)name</Declaration>
 			
 			
-			<Anchor>//api/name/headers</Anchor>
+			<Anchor>//api/name/firstArgumentForControlName:</Anchor>
             <NodeRef refid="33"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/GCDWebServerRequest/headers</TokenIdentifier>
-			<Abstract type="html">Returns the HTTP headers for the request.</Abstract>
-			<DeclaredIn>GCDWebServerRequest.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerMultiPartFormRequest/firstFileForControlName:</TokenIdentifier>
+			<Abstract type="html">Returns the first file for a given control name or nil if not found.</Abstract>
+			<DeclaredIn>GCDWebServerMultiPartFormRequest.h</DeclaredIn>
 			
-			<Declaration>@property (nonatomic, readonly) NSDictionary *headers</Declaration>
+			<Declaration>- (GCDWebServerMultiPartFile *)firstFileForControlName:(NSString *)name</Declaration>
 			
 			
-			<Anchor>//api/name/headers</Anchor>
+			<Anchor>//api/name/firstFileForControlName:</Anchor>
             <NodeRef refid="33"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerRequest/setPath:</TokenIdentifier>
-			<Abstract type="html">Returns the path component of the URL for the request.</Abstract>
-			<DeclaredIn>GCDWebServerRequest.h</DeclaredIn>
-			
-			<Declaration>@property (nonatomic, readonly) NSString *path</Declaration>
-			
-			
-			<Anchor>//api/name/path</Anchor>
-            <NodeRef refid="33"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerRequest/path</TokenIdentifier>
-			<Abstract type="html">Returns the path component of the URL for the request.</Abstract>
-			<DeclaredIn>GCDWebServerRequest.h</DeclaredIn>
-			
-			<Declaration>@property (nonatomic, readonly) NSString *path</Declaration>
-			
-			
-			<Anchor>//api/name/path</Anchor>
-            <NodeRef refid="33"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/GCDWebServerRequest/path</TokenIdentifier>
-			<Abstract type="html">Returns the path component of the URL for the request.</Abstract>
-			<DeclaredIn>GCDWebServerRequest.h</DeclaredIn>
-			
-			<Declaration>@property (nonatomic, readonly) NSString *path</Declaration>
-			
-			
-			<Anchor>//api/name/path</Anchor>
-            <NodeRef refid="33"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerRequest/setQuery:</TokenIdentifier>
-			<Abstract type="html">Returns the parsed and unescaped query component of the URL for the request.</Abstract>
-			<DeclaredIn>GCDWebServerRequest.h</DeclaredIn>
-			
-			<Declaration>@property (nonatomic, readonly) NSDictionary *query</Declaration>
-			
-			
-			<Anchor>//api/name/query</Anchor>
-            <NodeRef refid="33"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerRequest/query</TokenIdentifier>
-			<Abstract type="html">Returns the parsed and unescaped query component of the URL for the request.</Abstract>
-			<DeclaredIn>GCDWebServerRequest.h</DeclaredIn>
-			
-			<Declaration>@property (nonatomic, readonly) NSDictionary *query</Declaration>
-			
-			
-			<Anchor>//api/name/query</Anchor>
-            <NodeRef refid="33"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/GCDWebServerRequest/query</TokenIdentifier>
-			<Abstract type="html">Returns the parsed and unescaped query component of the URL for the request.</Abstract>
-			<DeclaredIn>GCDWebServerRequest.h</DeclaredIn>
-			
-			<Declaration>@property (nonatomic, readonly) NSDictionary *query</Declaration>
-			
-			
-			<Anchor>//api/name/query</Anchor>
-            <NodeRef refid="33"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerRequest/setContentType:</TokenIdentifier>
-			<Abstract type="html">Returns the content type for the body of the request parsed from the
-&quot;Content-Type&quot; header.</Abstract>
-			<DeclaredIn>GCDWebServerRequest.h</DeclaredIn>
-			
-			<Declaration>@property (nonatomic, readonly) NSString *contentType</Declaration>
-			
-			
-			<Anchor>//api/name/contentType</Anchor>
-            <NodeRef refid="33"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerRequest/contentType</TokenIdentifier>
-			<Abstract type="html">Returns the content type for the body of the request parsed from the
-&quot;Content-Type&quot; header.</Abstract>
-			<DeclaredIn>GCDWebServerRequest.h</DeclaredIn>
-			
-			<Declaration>@property (nonatomic, readonly) NSString *contentType</Declaration>
-			
-			
-			<Anchor>//api/name/contentType</Anchor>
-            <NodeRef refid="33"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/GCDWebServerRequest/contentType</TokenIdentifier>
-			<Abstract type="html">Returns the content type for the body of the request parsed from the
-&quot;Content-Type&quot; header.</Abstract>
-			<DeclaredIn>GCDWebServerRequest.h</DeclaredIn>
-			
-			<Declaration>@property (nonatomic, readonly) NSString *contentType</Declaration>
-			
-			
-			<Anchor>//api/name/contentType</Anchor>
-            <NodeRef refid="33"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerRequest/setContentLength:</TokenIdentifier>
-			<Abstract type="html">Returns the content length for the body of the request parsed from the
-&quot;Content-Length&quot; header.</Abstract>
-			<DeclaredIn>GCDWebServerRequest.h</DeclaredIn>
-			
-			<Declaration>@property (nonatomic, readonly) NSUInteger contentLength</Declaration>
-			
-			
-			<Anchor>//api/name/contentLength</Anchor>
-            <NodeRef refid="33"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerRequest/contentLength</TokenIdentifier>
-			<Abstract type="html">Returns the content length for the body of the request parsed from the
-&quot;Content-Length&quot; header.</Abstract>
-			<DeclaredIn>GCDWebServerRequest.h</DeclaredIn>
-			
-			<Declaration>@property (nonatomic, readonly) NSUInteger contentLength</Declaration>
-			
-			
-			<Anchor>//api/name/contentLength</Anchor>
-            <NodeRef refid="33"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/GCDWebServerRequest/contentLength</TokenIdentifier>
-			<Abstract type="html">Returns the content length for the body of the request parsed from the
-&quot;Content-Length&quot; header.</Abstract>
-			<DeclaredIn>GCDWebServerRequest.h</DeclaredIn>
-			
-			<Declaration>@property (nonatomic, readonly) NSUInteger contentLength</Declaration>
-			
-			
-			<Anchor>//api/name/contentLength</Anchor>
-            <NodeRef refid="33"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerRequest/setIfModifiedSince:</TokenIdentifier>
-			<Abstract type="html">Returns the parsed &quot;If-Modified-Since&quot; header or nil if absent or malformed.</Abstract>
-			<DeclaredIn>GCDWebServerRequest.h</DeclaredIn>
-			
-			<Declaration>@property (nonatomic, readonly) NSDate *ifModifiedSince</Declaration>
-			
-			
-			<Anchor>//api/name/ifModifiedSince</Anchor>
-            <NodeRef refid="33"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerRequest/ifModifiedSince</TokenIdentifier>
-			<Abstract type="html">Returns the parsed &quot;If-Modified-Since&quot; header or nil if absent or malformed.</Abstract>
-			<DeclaredIn>GCDWebServerRequest.h</DeclaredIn>
-			
-			<Declaration>@property (nonatomic, readonly) NSDate *ifModifiedSince</Declaration>
-			
-			
-			<Anchor>//api/name/ifModifiedSince</Anchor>
-            <NodeRef refid="33"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/GCDWebServerRequest/ifModifiedSince</TokenIdentifier>
-			<Abstract type="html">Returns the parsed &quot;If-Modified-Since&quot; header or nil if absent or malformed.</Abstract>
-			<DeclaredIn>GCDWebServerRequest.h</DeclaredIn>
-			
-			<Declaration>@property (nonatomic, readonly) NSDate *ifModifiedSince</Declaration>
-			
-			
-			<Anchor>//api/name/ifModifiedSince</Anchor>
-            <NodeRef refid="33"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerRequest/setIfNoneMatch:</TokenIdentifier>
-			<Abstract type="html">Returns the parsed &quot;If-None-Match&quot; header or nil if absent or malformed.</Abstract>
-			<DeclaredIn>GCDWebServerRequest.h</DeclaredIn>
-			
-			<Declaration>@property (nonatomic, readonly) NSString *ifNoneMatch</Declaration>
-			
-			
-			<Anchor>//api/name/ifNoneMatch</Anchor>
-            <NodeRef refid="33"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerRequest/ifNoneMatch</TokenIdentifier>
-			<Abstract type="html">Returns the parsed &quot;If-None-Match&quot; header or nil if absent or malformed.</Abstract>
-			<DeclaredIn>GCDWebServerRequest.h</DeclaredIn>
-			
-			<Declaration>@property (nonatomic, readonly) NSString *ifNoneMatch</Declaration>
-			
-			
-			<Anchor>//api/name/ifNoneMatch</Anchor>
-            <NodeRef refid="33"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/GCDWebServerRequest/ifNoneMatch</TokenIdentifier>
-			<Abstract type="html">Returns the parsed &quot;If-None-Match&quot; header or nil if absent or malformed.</Abstract>
-			<DeclaredIn>GCDWebServerRequest.h</DeclaredIn>
-			
-			<Declaration>@property (nonatomic, readonly) NSString *ifNoneMatch</Declaration>
-			
-			
-			<Anchor>//api/name/ifNoneMatch</Anchor>
-            <NodeRef refid="33"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerRequest/setByteRange:</TokenIdentifier>
-			<Abstract type="html">Returns the parsed &quot;Range&quot; header or (NSUIntegerMax, 0) if absent or malformed.
-The range will be set to (offset, length) if expressed from the beginning
-of the entity body, or (NSUIntegerMax, length) if expressed from its end.</Abstract>
-			<DeclaredIn>GCDWebServerRequest.h</DeclaredIn>
-			
-			<Declaration>@property (nonatomic, readonly) NSRange byteRange</Declaration>
-			
-			
-			<Anchor>//api/name/byteRange</Anchor>
-            <NodeRef refid="33"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerRequest/byteRange</TokenIdentifier>
-			<Abstract type="html">Returns the parsed &quot;Range&quot; header or (NSUIntegerMax, 0) if absent or malformed.
-The range will be set to (offset, length) if expressed from the beginning
-of the entity body, or (NSUIntegerMax, length) if expressed from its end.</Abstract>
-			<DeclaredIn>GCDWebServerRequest.h</DeclaredIn>
-			
-			<Declaration>@property (nonatomic, readonly) NSRange byteRange</Declaration>
-			
-			
-			<Anchor>//api/name/byteRange</Anchor>
-            <NodeRef refid="33"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/GCDWebServerRequest/byteRange</TokenIdentifier>
-			<Abstract type="html">Returns the parsed &quot;Range&quot; header or (NSUIntegerMax, 0) if absent or malformed.
-The range will be set to (offset, length) if expressed from the beginning
-of the entity body, or (NSUIntegerMax, length) if expressed from its end.</Abstract>
-			<DeclaredIn>GCDWebServerRequest.h</DeclaredIn>
-			
-			<Declaration>@property (nonatomic, readonly) NSRange byteRange</Declaration>
-			
-			
-			<Anchor>//api/name/byteRange</Anchor>
-            <NodeRef refid="33"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerRequest/setAcceptsGzipContentEncoding:</TokenIdentifier>
-			<Abstract type="html">Returns YES if the client supports gzip content encoding according to the
-&quot;Accept-Encoding&quot; header.</Abstract>
-			<DeclaredIn>GCDWebServerRequest.h</DeclaredIn>
-			
-			<Declaration>@property (nonatomic, readonly) BOOL acceptsGzipContentEncoding</Declaration>
-			
-			
-			<Anchor>//api/name/acceptsGzipContentEncoding</Anchor>
-            <NodeRef refid="33"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerRequest/acceptsGzipContentEncoding</TokenIdentifier>
-			<Abstract type="html">Returns YES if the client supports gzip content encoding according to the
-&quot;Accept-Encoding&quot; header.</Abstract>
-			<DeclaredIn>GCDWebServerRequest.h</DeclaredIn>
-			
-			<Declaration>@property (nonatomic, readonly) BOOL acceptsGzipContentEncoding</Declaration>
-			
-			
-			<Anchor>//api/name/acceptsGzipContentEncoding</Anchor>
-            <NodeRef refid="33"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/GCDWebServerRequest/acceptsGzipContentEncoding</TokenIdentifier>
-			<Abstract type="html">Returns YES if the client supports gzip content encoding according to the
-&quot;Accept-Encoding&quot; header.</Abstract>
-			<DeclaredIn>GCDWebServerRequest.h</DeclaredIn>
-			
-			<Declaration>@property (nonatomic, readonly) BOOL acceptsGzipContentEncoding</Declaration>
-			
-			
-			<Anchor>//api/name/acceptsGzipContentEncoding</Anchor>
-            <NodeRef refid="33"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerRequest/initWithMethod:url:headers:path:query:</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerMultiPartFormRequest/initWithMethod:url:headers:path:query:</TokenIdentifier>
 			<Abstract type="html">This method is the designated initializer for the class.</Abstract>
-			<DeclaredIn>GCDWebServerRequest.h</DeclaredIn>
+			<DeclaredIn>GCDWebServerMultiPartFormRequest.m</DeclaredIn>
 			
 			<Declaration>- (instancetype)initWithMethod:(NSString *)method url:(NSURL *)url headers:(NSDictionary *)headers path:(NSString *)path query:(NSDictionary *)query</Declaration>
 			
@@ -439,45 +141,9 @@ of the entity body, or (NSUIntegerMax, length) if expressed from its end.</Abstr
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerRequest/hasBody</TokenIdentifier>
-			<Abstract type="html">Convenience method that checks if the contentType property is defined.</Abstract>
-			<DeclaredIn>GCDWebServerRequest.h</DeclaredIn>
-			
-			<Declaration>- (BOOL)hasBody</Declaration>
-			
-			
-			<Anchor>//api/name/hasBody</Anchor>
-            <NodeRef refid="33"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerRequest/hasByteRange</TokenIdentifier>
-			<Abstract type="html">Convenience method that checks if the byteRange property is defined.</Abstract>
-			<DeclaredIn>GCDWebServerRequest.h</DeclaredIn>
-			
-			<Declaration>- (BOOL)hasByteRange</Declaration>
-			
-			
-			<Anchor>//api/name/hasByteRange</Anchor>
-            <NodeRef refid="33"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerRequest/attributeForKey:</TokenIdentifier>
-			<Abstract type="html">Retrieves an attribute associated with this request using the given key.</Abstract>
-			<DeclaredIn>GCDWebServerRequest.h</DeclaredIn>
-			
-			<Declaration>- (id)attributeForKey:(NSString *)key</Declaration>
-			
-			<ReturnValue><Abstract type="html">The attribute value for the key.</Abstract></ReturnValue>
-			<Anchor>//api/name/attributeForKey:</Anchor>
-            <NodeRef refid="33"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerRequest/open:</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerMultiPartFormRequest/open:</TokenIdentifier>
 			<Abstract type="html"></Abstract>
-			<DeclaredIn>GCDWebServerRequest.m</DeclaredIn>
+			<DeclaredIn>GCDWebServerMultiPartFormRequest.m</DeclaredIn>
 			
 			<Declaration>- (BOOL)open:(NSError **)error</Declaration>
 			
@@ -487,9 +153,9 @@ of the entity body, or (NSUIntegerMax, length) if expressed from its end.</Abstr
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerRequest/writeData:error:</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerMultiPartFormRequest/writeData:error:</TokenIdentifier>
 			<Abstract type="html"></Abstract>
-			<DeclaredIn>GCDWebServerRequest.m</DeclaredIn>
+			<DeclaredIn>GCDWebServerMultiPartFormRequest.m</DeclaredIn>
 			
 			<Declaration>- (BOOL)writeData:(NSData *)data error:(NSError **)error</Declaration>
 			
@@ -499,9 +165,9 @@ of the entity body, or (NSUIntegerMax, length) if expressed from its end.</Abstr
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerRequest/close:</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerMultiPartFormRequest/close:</TokenIdentifier>
 			<Abstract type="html"></Abstract>
-			<DeclaredIn>GCDWebServerRequest.m</DeclaredIn>
+			<DeclaredIn>GCDWebServerMultiPartFormRequest.m</DeclaredIn>
 			
 			<Declaration>- (BOOL)close:(NSError **)error</Declaration>
 			
@@ -511,110 +177,14 @@ of the entity body, or (NSUIntegerMax, length) if expressed from its end.</Abstr
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerRequest/prepareForWriting</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerMultiPartFormRequest/description</TokenIdentifier>
 			<Abstract type="html"></Abstract>
-			<DeclaredIn>GCDWebServerPrivate.h</DeclaredIn>
-			
-			<Declaration>- (void)prepareForWriting</Declaration>
-			
-			
-			<Anchor>//api/name/prepareForWriting</Anchor>
-            <NodeRef refid="33"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerRequest/performOpen:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>GCDWebServerPrivate.h</DeclaredIn>
-			
-			<Declaration>- (BOOL)performOpen:(NSError **)error</Declaration>
-			
-			
-			<Anchor>//api/name/performOpen:</Anchor>
-            <NodeRef refid="33"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerRequest/performWriteData:error:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>GCDWebServerPrivate.h</DeclaredIn>
-			
-			<Declaration>- (BOOL)performWriteData:(NSData *)data error:(NSError **)error</Declaration>
-			
-			
-			<Anchor>//api/name/performWriteData:error:</Anchor>
-            <NodeRef refid="33"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerRequest/performClose:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>GCDWebServerPrivate.h</DeclaredIn>
-			
-			<Declaration>- (BOOL)performClose:(NSError **)error</Declaration>
-			
-			
-			<Anchor>//api/name/performClose:</Anchor>
-            <NodeRef refid="33"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerRequest/setAttribute:forKey:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>GCDWebServerPrivate.h</DeclaredIn>
-			
-			<Declaration>- (void)setAttribute:(id)attribute forKey:(NSString *)key</Declaration>
-			
-			
-			<Anchor>//api/name/setAttribute:forKey:</Anchor>
-            <NodeRef refid="33"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerRequest/description</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>GCDWebServerRequest.m</DeclaredIn>
+			<DeclaredIn>GCDWebServerMultiPartFormRequest.m</DeclaredIn>
 			
 			<Declaration>- (NSString *)description</Declaration>
 			
 			
 			<Anchor>//api/name/description</Anchor>
-            <NodeRef refid="33"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerRequest/setUsesChunkedTransferEncoding:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>GCDWebServerPrivate.h</DeclaredIn>
-			
-			<Declaration>@property (nonatomic, readonly) BOOL usesChunkedTransferEncoding</Declaration>
-			
-			
-			<Anchor>//api/name/usesChunkedTransferEncoding</Anchor>
-            <NodeRef refid="33"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerRequest/usesChunkedTransferEncoding</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>GCDWebServerPrivate.h</DeclaredIn>
-			
-			<Declaration>@property (nonatomic, readonly) BOOL usesChunkedTransferEncoding</Declaration>
-			
-			
-			<Anchor>//api/name/usesChunkedTransferEncoding</Anchor>
-            <NodeRef refid="33"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/GCDWebServerRequest/usesChunkedTransferEncoding</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>GCDWebServerPrivate.h</DeclaredIn>
-			
-			<Declaration>@property (nonatomic, readonly) BOOL usesChunkedTransferEncoding</Declaration>
-			
-			
-			<Anchor>//api/name/usesChunkedTransferEncoding</Anchor>
             <NodeRef refid="33"/>
 		</Token>
 		

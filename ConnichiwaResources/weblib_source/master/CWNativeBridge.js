@@ -28,6 +28,7 @@ CWNativeBridge.parse = function(message) {
     case 'devicelost':            this._parseDeviceLost(object); break;
     case 'remoteconnectfailed':   this._parseRemoteConnectFailed(object); break;
     case 'remotedisconnected':    this._parseRemoteDisconnected(object); break;
+    case 'proximitystatechanged': this._parseProximityStateChanged(object); break;
   }
 };
 
@@ -186,4 +187,9 @@ CWNativeBridge._parseRemoteDisconnected = function(message) {
 
   CWDebug.log(2, 'Device disconnected: ' + device.getIdentifier());
   CWEventManager.trigger('deviceDisconnected', device);
+};
+
+CWNativeBridge._parseProximityStateChanged = function(message) {
+  CWDebug.log(5, 'Proximity State Changed: ' + message.proximityState);
+  CWEventManager.trigger('proximityStateChanged', message.proximityState);
 };

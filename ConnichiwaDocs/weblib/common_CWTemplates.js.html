@@ -152,7 +152,7 @@
  *    Roman Rädle's work (roman.raedle@uni-konstanz.de).
  * @namespace  CWTemplates
  */
-var CWTemplates = CWTemplates || {};
+var CWTemplates = CWModules.retrieve('CWTemplates');
 
 /**
  * An array where every entry represents one template-file loading attempt.
@@ -211,7 +211,7 @@ CWTemplates.__constructor = function() {
       });
     }
   });
-}.bind(CWTemplates);
+};
 
 
 /**
@@ -272,7 +272,7 @@ CWTemplates.load = function(device, paths) {
       deferred.reject();
     });
   });
-}.bind(CWTemplates);
+};
 
 
  /**
@@ -377,7 +377,7 @@ CWTemplates.insert = function(device, templateName, options) {
 
     if (onComplete !== undefined) onComplete();
   });
-}.bind(CWTemplates);
+};
 
 
 /**
@@ -444,7 +444,7 @@ CWTemplates.set = function(collection, key, value) {
   }
 
   CWDatastore.set('_CWTemplates.'+collection, key, value);
-}.bind(CWTemplates);
+};
 
 
 /**
@@ -469,7 +469,7 @@ CWTemplates.setMultiple = function(collection, dict) {
   }
 
   CWDatastore.setMultiple('_CWTemplates.'+collection, dict);
-}.bind(CWTemplates);
+};
 
 
 /**
@@ -490,7 +490,7 @@ CWTemplates.get = function(collection, key) {
   }
 
   return CWDatastore.get('_CWTemplates.'+collection, key);
-}.bind(CWTemplates);
+};
 
 /**
  * Compiles the given piece of template code. All &lt;template> tags that contain
@@ -530,9 +530,7 @@ CWTemplates._compile = function(templateData) {
 
   if (addedTemplates &lt; 1) return false;
   return true;
-}.bind(CWTemplates);
-
-CWModules.add('CWTemplates');
+};
 </code></pre>
         </article>
     </section>
@@ -543,13 +541,13 @@ CWModules.add('CWTemplates');
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="CWDevice.html">CWDevice</a></li><li><a href="CWLocation.html">CWLocation</a></li><li><a href="CWVector.html">CWVector</a></li></ul><h3>Namespaces</h3><ul><li><a href="Connichiwa.html">Connichiwa</a></li><li><a href="CWDatastore.html">CWDatastore</a></li><li><a href="CWDebug.html">CWDebug</a></li><li><a href="CWDeviceManager.html">CWDeviceManager</a></li><li><a href="CWGyroscope.html">CWGyroscope</a></li><li><a href="CWStitchManager.html">CWStitchManager</a></li><li><a href="CWSystemInfo.html">CWSystemInfo</a></li><li><a href="CWTemplates.html">CWTemplates</a></li><li><a href="CWUtil.html">CWUtil</a></li></ul><h3>Events</h3><ul><li><a href="Connichiwa.html#.event:onLoad">onLoad</a></li><li><a href="global.html#event:accelerometerUpdate">accelerometerUpdate</a></li><li><a href="global.html#event:connectfailed">connectfailed</a></li><li><a href="global.html#event:deviceconnected">deviceconnected</a></li><li><a href="global.html#event:devicedetected">devicedetected</a></li><li><a href="global.html#event:devicedisconnected">devicedisconnected</a></li><li><a href="global.html#event:devicedistancechanged">devicedistancechanged</a></li><li><a href="global.html#event:devicelost">devicelost</a></li><li><a href="global.html#event:gotstitchneighbor">gotstitchneighbor</a></li><li><a href="global.html#event:gyroscopeUpdate">gyroscopeUpdate</a></li><li><a href="global.html#event:ready">ready</a></li><li><a href="global.html#event:wasStitched">wasStitched</a></li><li><a href="global.html#event:wasUnstitched">wasUnstitched</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="CWDevice.html">CWDevice</a></li><li><a href="CWLocation.html">CWLocation</a></li><li><a href="CWVector.html">CWVector</a></li></ul><h3>Namespaces</h3><ul><li><a href="Connichiwa.html">Connichiwa</a></li><li><a href="CWDatastore.html">CWDatastore</a></li><li><a href="CWDebug.html">CWDebug</a></li><li><a href="CWDeviceManager.html">CWDeviceManager</a></li><li><a href="CWGyroscope.html">CWGyroscope</a></li><li><a href="CWProximity.html">CWProximity</a></li><li><a href="CWStitchManager.html">CWStitchManager</a></li><li><a href="CWSystemInfo.html">CWSystemInfo</a></li><li><a href="CWTemplates.html">CWTemplates</a></li><li><a href="CWUtil.html">CWUtil</a></li></ul><h3>Events</h3><ul><li><a href="Connichiwa.html#.event:onLoad">onLoad</a></li><li><a href="global.html#event:accelerometerUpdate">accelerometerUpdate</a></li><li><a href="global.html#event:connectfailed">connectfailed</a></li><li><a href="global.html#event:deviceconnected">deviceconnected</a></li><li><a href="global.html#event:devicedetected">devicedetected</a></li><li><a href="global.html#event:devicedisconnected">devicedisconnected</a></li><li><a href="global.html#event:devicedistancechanged">devicedistancechanged</a></li><li><a href="global.html#event:devicelost">devicelost</a></li><li><a href="global.html#event:gotstitchneighbor">gotstitchneighbor</a></li><li><a href="global.html#event:gyroscopeUpdate">gyroscopeUpdate</a></li><li><a href="global.html#event:proximityStateChanged">proximityStateChanged</a></li><li><a href="global.html#event:ready">ready</a></li><li><a href="global.html#event:wasStitched">wasStitched</a></li><li><a href="global.html#event:wasUnstitched">wasUnstitched</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta2</a> on Sat Jun 13 2015 17:52:06 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta2</a> on Sun Jun 14 2015 11:27:31 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

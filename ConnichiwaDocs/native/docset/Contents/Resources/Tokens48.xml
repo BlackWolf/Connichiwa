@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Constants/CWRemoteLibraryManagerState.html">
+	<File path="Constants/CWBluetoothConnectionIPWriteState.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/c/tdef/CWRemoteLibraryManagerState</TokenIdentifier>
-			<Abstract type="html">The state of this device as a remote device</Abstract>
-			<DeclaredIn>CWRemoteLibraryManager.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/c/tdef/CWBluetoothConnectionIPWriteState</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
             
 			
 			<NodeRef refid="48"/>
@@ -14,56 +14,41 @@
 		
         
         <Token>
-            <TokenIdentifier>//apple_ref/c/econst/CWRemoteLibraryManagerStateDisconnected</TokenIdentifier>
-            <Abstract type="html">This device is not connected to any other device as a remote
-     </Abstract>
-            <Declaration>CWRemoteLibraryManagerStateDisconnected</Declaration>
+            <TokenIdentifier>//apple_ref/c/econst/CWBluetoothConnectionIPWriteStateDisconnected</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>CWBluetoothConnectionIPWriteStateDisconnected</Declaration>
             
-            <DeclaredIn>CWRemoteLibraryManager.h</DeclaredIn>
-            
-            <NodeRef refid="48"/>
-        </Token>
-        
-        <Token>
-            <TokenIdentifier>//apple_ref/c/econst/CWRemoteLibraryManagerStateConnecting</TokenIdentifier>
-            <Abstract type="html">The device is currently connecting to another device as a remote
-     </Abstract>
-            <Declaration>CWRemoteLibraryManagerStateConnecting</Declaration>
-            
-            <DeclaredIn>CWRemoteLibraryManager.h</DeclaredIn>
+            <DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
             
             <NodeRef refid="48"/>
         </Token>
         
         <Token>
-            <TokenIdentifier>//apple_ref/c/econst/CWRemoteLibraryManagerStateConnected</TokenIdentifier>
-            <Abstract type="html">The device is currently used as a remote
-     </Abstract>
-            <Declaration>CWRemoteLibraryManagerStateConnected</Declaration>
+            <TokenIdentifier>//apple_ref/c/econst/CWBluetoothConnectionIPWriteStateConnecting</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>CWBluetoothConnectionIPWriteStateConnecting</Declaration>
             
-            <DeclaredIn>CWRemoteLibraryManager.h</DeclaredIn>
-            
-            <NodeRef refid="48"/>
-        </Token>
-        
-        <Token>
-            <TokenIdentifier>//apple_ref/c/econst/CWRemoteLibraryManagerStateDisconnecting</TokenIdentifier>
-            <Abstract type="html">The device is currently disconnecting from another device and about to give up its remote state
-     </Abstract>
-            <Declaration>CWRemoteLibraryManagerStateDisconnecting</Declaration>
-            
-            <DeclaredIn>CWRemoteLibraryManager.h</DeclaredIn>
+            <DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
             
             <NodeRef refid="48"/>
         </Token>
         
         <Token>
-            <TokenIdentifier>//apple_ref/c/econst/CWRemoteLibraryManagerStateSoftDisconnected</TokenIdentifier>
-            <Abstract type="html">The device has been soft-disconnected from another device - it is considered the same as the Disconnected state, but the connection is not physically closed yet
-     </Abstract>
-            <Declaration>CWRemoteLibraryManagerStateSoftDisconnected</Declaration>
+            <TokenIdentifier>//apple_ref/c/econst/CWBluetoothConnectionIPWriteStateConnected</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>CWBluetoothConnectionIPWriteStateConnected</Declaration>
             
-            <DeclaredIn>CWRemoteLibraryManager.h</DeclaredIn>
+            <DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
+            
+            <NodeRef refid="48"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/CWBluetoothConnectionIPWriteStateSent</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>CWBluetoothConnectionIPWriteStateSent</Declaration>
+            
+            <DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
             
             <NodeRef refid="48"/>
         </Token>

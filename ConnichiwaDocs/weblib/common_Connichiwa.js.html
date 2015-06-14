@@ -38,7 +38,7 @@
  *    and other devices and more
  * @namespace Connichiwa
  */
-var Connichiwa = Connichiwa || {};
+var Connichiwa = CWModules.retrieve('Connichiwa');
 
 
 /**
@@ -130,7 +130,7 @@ Connichiwa.__constructor = function() {
   }
 
   this._connectWebsocket();
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -156,7 +156,7 @@ Connichiwa.on = function(eventName, callback) {
   } 
   
   CWEventManager.register(eventName, callback);
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -179,7 +179,7 @@ Connichiwa.on = function(eventName, callback) {
  */
 Connichiwa.off = function(eventName, callback) {
   CWEventManager.unregister(eventName, callback);
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -195,7 +195,7 @@ Connichiwa.off = function(eventName, callback) {
  */
 Connichiwa.onMessage = function(name, callback) {
   this.on('message' + name, callback);
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -215,7 +215,7 @@ Connichiwa.onLoad = function(callback) {
   } else {
     this.on('ready', callback);
   }
-}.bind(Connichiwa);
+};
 
 
 //TODO remove, find an easy way to send a message to the master
@@ -224,7 +224,7 @@ Connichiwa.send = function(target, name, message, callback) {
   message._source = Connichiwa.getIdentifier();
   message._target = target;
   return this._sendObject(message, callback);
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -240,7 +240,7 @@ Connichiwa.send = function(target, name, message, callback) {
  */
 Connichiwa.respond = function(originalMessage, name, responseObject) {
   this.send(originalMessage._source, name, responseObject);
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -262,7 +262,7 @@ Connichiwa.broadcast = function(name, message, sendToSelf) {
   }
   
   this.send('broadcast', name, message);
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -277,7 +277,7 @@ Connichiwa.broadcast = function(name, message, sendToSelf) {
 Connichiwa._sendAck = function(message) {
   var ackMessage = { original : { _id: message._id } };
   this.send(message._source, '_ack', ackMessage);
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -353,7 +353,7 @@ Connichiwa._sendObject = function(message, callback) {
   // }
 
   return message._id;
-}.bind(Connichiwa);
+};
 
 
 
@@ -364,7 +364,7 @@ Connichiwa._sendObject = function(message, callback) {
  */
 Connichiwa._disconnectWebsocket = function() {
   this._websocket.close();
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -381,9 +381,7 @@ Connichiwa._cleanupWebsocket = function() {
     this._websocket.onerror   = undefined;
     this._websocket           = undefined;
   }
-}.bind(Connichiwa);
-
-CWModules.add('Connichiwa');
+};
 </code></pre>
         </article>
     </section>
@@ -394,13 +392,13 @@ CWModules.add('Connichiwa');
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="CWDevice.html">CWDevice</a></li><li><a href="CWLocation.html">CWLocation</a></li><li><a href="CWVector.html">CWVector</a></li></ul><h3>Namespaces</h3><ul><li><a href="Connichiwa.html">Connichiwa</a></li><li><a href="CWDatastore.html">CWDatastore</a></li><li><a href="CWDebug.html">CWDebug</a></li><li><a href="CWDeviceManager.html">CWDeviceManager</a></li><li><a href="CWGyroscope.html">CWGyroscope</a></li><li><a href="CWStitchManager.html">CWStitchManager</a></li><li><a href="CWSystemInfo.html">CWSystemInfo</a></li><li><a href="CWTemplates.html">CWTemplates</a></li><li><a href="CWUtil.html">CWUtil</a></li></ul><h3>Events</h3><ul><li><a href="Connichiwa.html#.event:onLoad">onLoad</a></li><li><a href="global.html#event:accelerometerUpdate">accelerometerUpdate</a></li><li><a href="global.html#event:connectfailed">connectfailed</a></li><li><a href="global.html#event:deviceconnected">deviceconnected</a></li><li><a href="global.html#event:devicedetected">devicedetected</a></li><li><a href="global.html#event:devicedisconnected">devicedisconnected</a></li><li><a href="global.html#event:devicedistancechanged">devicedistancechanged</a></li><li><a href="global.html#event:devicelost">devicelost</a></li><li><a href="global.html#event:gotstitchneighbor">gotstitchneighbor</a></li><li><a href="global.html#event:gyroscopeUpdate">gyroscopeUpdate</a></li><li><a href="global.html#event:ready">ready</a></li><li><a href="global.html#event:wasStitched">wasStitched</a></li><li><a href="global.html#event:wasUnstitched">wasUnstitched</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="CWDevice.html">CWDevice</a></li><li><a href="CWLocation.html">CWLocation</a></li><li><a href="CWVector.html">CWVector</a></li></ul><h3>Namespaces</h3><ul><li><a href="Connichiwa.html">Connichiwa</a></li><li><a href="CWDatastore.html">CWDatastore</a></li><li><a href="CWDebug.html">CWDebug</a></li><li><a href="CWDeviceManager.html">CWDeviceManager</a></li><li><a href="CWGyroscope.html">CWGyroscope</a></li><li><a href="CWProximity.html">CWProximity</a></li><li><a href="CWStitchManager.html">CWStitchManager</a></li><li><a href="CWSystemInfo.html">CWSystemInfo</a></li><li><a href="CWTemplates.html">CWTemplates</a></li><li><a href="CWUtil.html">CWUtil</a></li></ul><h3>Events</h3><ul><li><a href="Connichiwa.html#.event:onLoad">onLoad</a></li><li><a href="global.html#event:accelerometerUpdate">accelerometerUpdate</a></li><li><a href="global.html#event:connectfailed">connectfailed</a></li><li><a href="global.html#event:deviceconnected">deviceconnected</a></li><li><a href="global.html#event:devicedetected">devicedetected</a></li><li><a href="global.html#event:devicedisconnected">devicedisconnected</a></li><li><a href="global.html#event:devicedistancechanged">devicedistancechanged</a></li><li><a href="global.html#event:devicelost">devicelost</a></li><li><a href="global.html#event:gotstitchneighbor">gotstitchneighbor</a></li><li><a href="global.html#event:gyroscopeUpdate">gyroscopeUpdate</a></li><li><a href="global.html#event:proximityStateChanged">proximityStateChanged</a></li><li><a href="global.html#event:ready">ready</a></li><li><a href="global.html#event:wasStitched">wasStitched</a></li><li><a href="global.html#event:wasUnstitched">wasUnstitched</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta2</a> on Sat Jun 13 2015 17:52:06 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta2</a> on Sun Jun 14 2015 11:27:31 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Classes/GCDWebServerMultiPart.html">
+	<File path="Classes/GCDWebServerMIMEStreamParser.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/cl/GCDWebServerMultiPart</TokenIdentifier>
-			<Abstract type="html">The GCDWebServerMultiPart class is an abstract class that wraps the content
-of a part.</Abstract>
-			<DeclaredIn>GCDWebServerMultiPartFormRequest.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/cl/GCDWebServerMIMEStreamParser</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerMultiPartFormRequest.m</DeclaredIn>
             
 			
 			<NodeRef refid="29"/>
@@ -14,125 +13,74 @@ of a part.</Abstract>
 		
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerMultiPart/setControlName:</TokenIdentifier>
-			<Abstract type="html">Returns the control name retrieved from the part headers.</Abstract>
-			<DeclaredIn>GCDWebServerMultiPartFormRequest.h</DeclaredIn>
-			
-			<Declaration>@property (nonatomic, readonly) NSString *controlName</Declaration>
-			
-			
-			<Anchor>//api/name/controlName</Anchor>
-            <NodeRef refid="29"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerMultiPart/controlName</TokenIdentifier>
-			<Abstract type="html">Returns the control name retrieved from the part headers.</Abstract>
-			<DeclaredIn>GCDWebServerMultiPartFormRequest.h</DeclaredIn>
-			
-			<Declaration>@property (nonatomic, readonly) NSString *controlName</Declaration>
-			
-			
-			<Anchor>//api/name/controlName</Anchor>
-            <NodeRef refid="29"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/GCDWebServerMultiPart/controlName</TokenIdentifier>
-			<Abstract type="html">Returns the control name retrieved from the part headers.</Abstract>
-			<DeclaredIn>GCDWebServerMultiPartFormRequest.h</DeclaredIn>
-			
-			<Declaration>@property (nonatomic, readonly) NSString *controlName</Declaration>
-			
-			
-			<Anchor>//api/name/controlName</Anchor>
-            <NodeRef refid="29"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerMultiPart/setContentType:</TokenIdentifier>
-			<Abstract type="html">Returns the content type retrieved from the part headers or &quot;text/plain&quot;
-if not available (per HTTP specifications).</Abstract>
-			<DeclaredIn>GCDWebServerMultiPartFormRequest.h</DeclaredIn>
-			
-			<Declaration>@property (nonatomic, readonly) NSString *contentType</Declaration>
-			
-			
-			<Anchor>//api/name/contentType</Anchor>
-            <NodeRef refid="29"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerMultiPart/contentType</TokenIdentifier>
-			<Abstract type="html">Returns the content type retrieved from the part headers or &quot;text/plain&quot;
-if not available (per HTTP specifications).</Abstract>
-			<DeclaredIn>GCDWebServerMultiPartFormRequest.h</DeclaredIn>
-			
-			<Declaration>@property (nonatomic, readonly) NSString *contentType</Declaration>
-			
-			
-			<Anchor>//api/name/contentType</Anchor>
-            <NodeRef refid="29"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/GCDWebServerMultiPart/contentType</TokenIdentifier>
-			<Abstract type="html">Returns the content type retrieved from the part headers or &quot;text/plain&quot;
-if not available (per HTTP specifications).</Abstract>
-			<DeclaredIn>GCDWebServerMultiPartFormRequest.h</DeclaredIn>
-			
-			<Declaration>@property (nonatomic, readonly) NSString *contentType</Declaration>
-			
-			
-			<Anchor>//api/name/contentType</Anchor>
-            <NodeRef refid="29"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerMultiPart/setMimeType:</TokenIdentifier>
-			<Abstract type="html">Returns the MIME type component of the content type for the part.</Abstract>
-			<DeclaredIn>GCDWebServerMultiPartFormRequest.h</DeclaredIn>
-			
-			<Declaration>@property (nonatomic, readonly) NSString *mimeType</Declaration>
-			
-			
-			<Anchor>//api/name/mimeType</Anchor>
-            <NodeRef refid="29"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerMultiPart/mimeType</TokenIdentifier>
-			<Abstract type="html">Returns the MIME type component of the content type for the part.</Abstract>
-			<DeclaredIn>GCDWebServerMultiPartFormRequest.h</DeclaredIn>
-			
-			<Declaration>@property (nonatomic, readonly) NSString *mimeType</Declaration>
-			
-			
-			<Anchor>//api/name/mimeType</Anchor>
-            <NodeRef refid="29"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/GCDWebServerMultiPart/mimeType</TokenIdentifier>
-			<Abstract type="html">Returns the MIME type component of the content type for the part.</Abstract>
-			<DeclaredIn>GCDWebServerMultiPartFormRequest.h</DeclaredIn>
-			
-			<Declaration>@property (nonatomic, readonly) NSString *mimeType</Declaration>
-			
-			
-			<Anchor>//api/name/mimeType</Anchor>
-            <NodeRef refid="29"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerMultiPart/initWithControlName:contentType:</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerMIMEStreamParser/initWithBoundary:defaultControlName:arguments:files:</TokenIdentifier>
 			<Abstract type="html"></Abstract>
 			<DeclaredIn>GCDWebServerMultiPartFormRequest.m</DeclaredIn>
 			
-			<Declaration>- (id)initWithControlName:(NSString *)name contentType:(NSString *)type</Declaration>
+			<Declaration>- (id)initWithBoundary:(NSString *)boundary defaultControlName:(NSString *)name arguments:(NSMutableArray *)arguments files:(NSMutableArray *)files</Declaration>
 			
 			
-			<Anchor>//api/name/initWithControlName:contentType:</Anchor>
+			<Anchor>//api/name/initWithBoundary:defaultControlName:arguments:files:</Anchor>
+            <NodeRef refid="29"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerMIMEStreamParser/appendBytes:length:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerMultiPartFormRequest.m</DeclaredIn>
+			
+			<Declaration>- (BOOL)appendBytes:(const void *)bytes length:(NSUInteger)length</Declaration>
+			
+			
+			<Anchor>//api/name/appendBytes:length:</Anchor>
+            <NodeRef refid="29"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerMIMEStreamParser/isAtEnd</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerMultiPartFormRequest.m</DeclaredIn>
+			
+			<Declaration>- (BOOL)isAtEnd</Declaration>
+			
+			
+			<Anchor>//api/name/isAtEnd</Anchor>
+            <NodeRef refid="29"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/GCDWebServerMIMEStreamParser/initialize</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerMultiPartFormRequest.m</DeclaredIn>
+			
+			<Declaration>+ (void)initialize</Declaration>
+			
+			
+			<Anchor>//api/name/initialize</Anchor>
+            <NodeRef refid="29"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerMIMEStreamParser/dealloc</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerMultiPartFormRequest.m</DeclaredIn>
+			
+			<Declaration>- (void)dealloc</Declaration>
+			
+			
+			<Anchor>//api/name/dealloc</Anchor>
+            <NodeRef refid="29"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerMIMEStreamParser/_parseData</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerMultiPartFormRequest.m</DeclaredIn>
+			
+			<Declaration>- (BOOL)_parseData</Declaration>
+			
+			
+			<Anchor>//api/name/_parseData</Anchor>
             <NodeRef refid="29"/>
 		</Token>
 		

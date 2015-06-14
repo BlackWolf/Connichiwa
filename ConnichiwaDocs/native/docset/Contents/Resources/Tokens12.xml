@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Classes/CWUtil.html">
+	<File path="Classes/CWServerManager.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/cl/CWUtil</TokenIdentifier>
-			<Abstract type="html">A utility helper class that contains some useful methods that are needed amongst different Connichiwa components</Abstract>
-			<DeclaredIn>CWUtil.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/cl/CWServerManager</TokenIdentifier>
+			<Abstract type="html">The CWWebserverManager class represents the local webserver run by Connichiwa in order to run local web applications.
+It is responsible for launching and managing the webserver that offers an HTTP and Websocket server. The manager also receives information about established or closed websocket connections.
+Only one instance of the webserver should be running on a device.</Abstract>
+			<DeclaredIn>CWServerManager.h</DeclaredIn>
             
 			
 			<NodeRef refid="12"/>
@@ -13,65 +15,375 @@
 		
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/clm/CWUtil/escapedJSONStringFromDictionary:</TokenIdentifier>
-			<Abstract type="html">Transforms a dictionary into a JSON string and escaped the string, so it can be used safely. The transformation is done via NSJSONSerialization, so the dictionary must contain only objects that can be serialized by NSJSONSerialization.</Abstract>
-			<DeclaredIn>CWUtil.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWServerManager/setDelegate:</TokenIdentifier>
+			<Abstract type="html">The delegate to receive events by this class</Abstract>
+			<DeclaredIn>CWServerManager.h</DeclaredIn>
 			
-			<Declaration>+ (NSString *)escapedJSONStringFromDictionary:(NSDictionary *)dictionary</Declaration>
-			<Parameters>
-				<Parameter>
-					<Name>dictionary</Name>
-					<Abstract type="html">The dictionary to transform</Abstract>
-				</Parameter>
-			</Parameters>
-			<ReturnValue><Abstract type="html">An escaped JSON string that represents the dictionary</Abstract></ReturnValue>
-			<Anchor>//api/name/escapedJSONStringFromDictionary:</Anchor>
+			<Declaration>@property (readwrite, strong) id&lt;CWServerManagerDelegate&gt; delegate</Declaration>
+			
+			
+			<Anchor>//api/name/delegate</Anchor>
             <NodeRef refid="12"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/clm/CWUtil/dictionaryFromJSONData:</TokenIdentifier>
-			<Abstract type="html">Transform a given JSON data object, as it is for example created by JSONDataFromDictionary: into a dictionary. NSJSONSerialization is used, to the JSON string must be decodable by NSJSONSerialization.</Abstract>
-			<DeclaredIn>CWUtil.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWServerManager/delegate</TokenIdentifier>
+			<Abstract type="html">The delegate to receive events by this class</Abstract>
+			<DeclaredIn>CWServerManager.h</DeclaredIn>
 			
-			<Declaration>+ (NSDictionary *)dictionaryFromJSONData:(NSData *)JSON</Declaration>
-			<Parameters>
-				<Parameter>
-					<Name>JSON</Name>
-					<Abstract type="html">The NSData object representing a JSON string</Abstract>
-				</Parameter>
-			</Parameters>
-			<ReturnValue><Abstract type="html">An NSDictionary that represents the JSON</Abstract></ReturnValue>
-			<Anchor>//api/name/dictionaryFromJSONData:</Anchor>
+			<Declaration>@property (readwrite, strong) id&lt;CWServerManagerDelegate&gt; delegate</Declaration>
+			
+			
+			<Anchor>//api/name/delegate</Anchor>
             <NodeRef refid="12"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/clm/CWUtil/JSONDataFromDictionary:</TokenIdentifier>
-			<Abstract type="html">Transforms a dictionary into a JSON data object. The resulting NSData object can then be decoded by using dictionaryFromJSONData: to retrieve the original dictionary. NSJSONSerialization is used, so the dictionary must contain only objects that can be serialized by NSJSONSerialization.</Abstract>
-			<DeclaredIn>CWUtil.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instp/CWServerManager/delegate</TokenIdentifier>
+			<Abstract type="html">The delegate to receive events by this class</Abstract>
+			<DeclaredIn>CWServerManager.h</DeclaredIn>
 			
-			<Declaration>+ (NSData *)JSONDataFromDictionary:(NSDictionary *)dictionary</Declaration>
-			<Parameters>
-				<Parameter>
-					<Name>dictionary</Name>
-					<Abstract type="html">The dictionary to transform</Abstract>
-				</Parameter>
-			</Parameters>
-			<ReturnValue><Abstract type="html">An NSData object that represents the JSON string for the dictioanry</Abstract></ReturnValue>
-			<Anchor>//api/name/JSONDataFromDictionary:</Anchor>
+			<Declaration>@property (readwrite, strong) id&lt;CWServerManagerDelegate&gt; delegate</Declaration>
+			
+			
+			<Anchor>//api/name/delegate</Anchor>
             <NodeRef refid="12"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/clm/CWUtil/deviceInterfaceAddresses</TokenIdentifier>
-			<Abstract type="html">Retrieves a filtered array of this device&apos;s network interface addresses. Only relevant addresses will be returned, which for example includes the WiFi address or a BT PAN address if present.</Abstract>
-			<DeclaredIn>CWUtil.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWServerManager/setState:</TokenIdentifier>
+			<Abstract type="html">The current state of this manager</Abstract>
+			<DeclaredIn>CWServerManager.h</DeclaredIn>
 			
-			<Declaration>+ (NSArray *)deviceInterfaceAddresses</Declaration>
+			<Declaration>@property (readonly) CWServerManagerState state</Declaration>
 			
-			<ReturnValue><Abstract type="html">An NSArray, each entry is a string that represents a relevant address of a network interface of this device.</Abstract></ReturnValue>
-			<Anchor>//api/name/deviceInterfaceAddresses</Anchor>
+			
+			<Anchor>//api/name/state</Anchor>
+            <NodeRef refid="12"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWServerManager/state</TokenIdentifier>
+			<Abstract type="html">The current state of this manager</Abstract>
+			<DeclaredIn>CWServerManager.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) CWServerManagerState state</Declaration>
+			
+			
+			<Anchor>//api/name/state</Anchor>
+            <NodeRef refid="12"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CWServerManager/state</TokenIdentifier>
+			<Abstract type="html">The current state of this manager</Abstract>
+			<DeclaredIn>CWServerManager.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) CWServerManagerState state</Declaration>
+			
+			
+			<Anchor>//api/name/state</Anchor>
+            <NodeRef refid="12"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWServerManager/setDocumentRoot:</TokenIdentifier>
+			<Abstract type="html">Path to the folder acting as the root of the web server. &apos;/&apos; on the web server will be mapped to this path.</Abstract>
+			<DeclaredIn>CWServerManager.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) NSString *documentRoot</Declaration>
+			
+			
+			<Anchor>//api/name/documentRoot</Anchor>
+            <NodeRef refid="12"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWServerManager/documentRoot</TokenIdentifier>
+			<Abstract type="html">Path to the folder acting as the root of the web server. &apos;/&apos; on the web server will be mapped to this path.</Abstract>
+			<DeclaredIn>CWServerManager.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) NSString *documentRoot</Declaration>
+			
+			
+			<Anchor>//api/name/documentRoot</Anchor>
+            <NodeRef refid="12"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CWServerManager/documentRoot</TokenIdentifier>
+			<Abstract type="html">Path to the folder acting as the root of the web server. &apos;/&apos; on the web server will be mapped to this path.</Abstract>
+			<DeclaredIn>CWServerManager.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) NSString *documentRoot</Declaration>
+			
+			
+			<Anchor>//api/name/documentRoot</Anchor>
+            <NodeRef refid="12"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWServerManager/initWithDocumentRoot:</TokenIdentifier>
+			<Abstract type="html">Initialize a new CWWebserverManager instance with the given document root (should point to the path where the web application resides). Calling this does not actually start the webserver, use startWebserver to do so.</Abstract>
+			<DeclaredIn>CWServerManager.h</DeclaredIn>
+			
+			<Declaration>- (instancetype)initWithDocumentRoot:(NSString *)documentRoot</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>documentRoot</Name>
+					<Abstract type="html">The document root of the webserver, usually pointing to the path of the web application. &apos;/&apos; on the web server will be mapped to this path.</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">A new CWWebserverManager instance</Abstract></ReturnValue>
+			<Anchor>//api/name/initWithDocumentRoot:</Anchor>
+            <NodeRef refid="12"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWServerManager/startWebserverWithDocumentRoot:onPort:</TokenIdentifier>
+			<Abstract type="html">Calling this method actually launches the webserver and initializes the HTTP and Websocket servers. The root of the webserver will be mapped to the given document root, the HTTP server will run on the given port and the websocket server will run on the given port + 1</Abstract>
+			<DeclaredIn>CWServerManager.h</DeclaredIn>
+			
+			<Declaration>- (void)startWebserverWithDocumentRoot:(NSString *)documentRoot onPort:(int)port</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>documentRoot</Name>
+					<Abstract type="html">The document root that contains the files that the webserver is supposed to serve</Abstract>
+				</Parameter><Parameter>
+					<Name>port</Name>
+					<Abstract type="html">The port the HTTP server will run</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/startWebserverWithDocumentRoot:onPort:</Anchor>
+            <NodeRef refid="12"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWServerManager/suspendWebserver</TokenIdentifier>
+			<Abstract type="html">Puts the webserver in a suspended state where it closes all remote connections and does not accept new ones</Abstract>
+			<DeclaredIn>CWServerManager.h</DeclaredIn>
+			
+			<Declaration>- (void)suspendWebserver</Declaration>
+			
+			
+			<Anchor>//api/name/suspendWebserver</Anchor>
+            <NodeRef refid="12"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWServerManager/resumeWebserver</TokenIdentifier>
+			<Abstract type="html">Resumes the webserver if it is in suspended state, making it possible to establish remote connections again</Abstract>
+			<DeclaredIn>CWServerManager.h</DeclaredIn>
+			
+			<Declaration>- (void)resumeWebserver</Declaration>
+			
+			
+			<Anchor>//api/name/resumeWebserver</Anchor>
+            <NodeRef refid="12"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWServerManager/onUnidentifiedWebsocketMessage</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWServerManager.m</DeclaredIn>
+			
+			<Declaration>- (BLWebSocketOnMessageHandler)onUnidentifiedWebsocketMessage</Declaration>
+			
+			
+			<Anchor>//api/name/onUnidentifiedWebsocketMessage</Anchor>
+            <NodeRef refid="12"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWServerManager/onIdentifiedWebsocketMessage</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWServerManager.m</DeclaredIn>
+			
+			<Declaration>- (BLWebSocketOnMessageHandler)onIdentifiedWebsocketMessage</Declaration>
+			
+			
+			<Anchor>//api/name/onIdentifiedWebsocketMessage</Anchor>
+            <NodeRef refid="12"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWServerManager/onIdentifiedWebsocketClosed</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWServerManager.m</DeclaredIn>
+			
+			<Declaration>- (BLWebSocketOnCloseHandler)onIdentifiedWebsocketClosed</Declaration>
+			
+			
+			<Anchor>//api/name/onIdentifiedWebsocketClosed</Anchor>
+            <NodeRef refid="12"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWServerManager/connectionIDForIdentifier:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWServerManager.m</DeclaredIn>
+			
+			<Declaration>- (int)connectionIDForIdentifier:(NSString *)targetIdentifier</Declaration>
+			
+			
+			<Anchor>//api/name/connectionIDForIdentifier:</Anchor>
+            <NodeRef refid="12"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWServerManager/identifierForConnectionID:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWServerManager.m</DeclaredIn>
+			
+			<Declaration>- (NSString *)identifierForConnectionID:(int)targetID</Declaration>
+			
+			
+			<Anchor>//api/name/identifierForConnectionID:</Anchor>
+            <NodeRef refid="12"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWServerManager/setWebServer:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWServerManager.m</DeclaredIn>
+			
+			<Declaration>@property (strong, readwrite) GCDWebServer *webServer</Declaration>
+			
+			
+			<Anchor>//api/name/webServer</Anchor>
+            <NodeRef refid="12"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWServerManager/webServer</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWServerManager.m</DeclaredIn>
+			
+			<Declaration>@property (strong, readwrite) GCDWebServer *webServer</Declaration>
+			
+			
+			<Anchor>//api/name/webServer</Anchor>
+            <NodeRef refid="12"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CWServerManager/webServer</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWServerManager.m</DeclaredIn>
+			
+			<Declaration>@property (strong, readwrite) GCDWebServer *webServer</Declaration>
+			
+			
+			<Anchor>//api/name/webServer</Anchor>
+            <NodeRef refid="12"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWServerManager/setWebsocketServer:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWServerManager.m</DeclaredIn>
+			
+			<Declaration>@property (strong, readwrite) BLWebSocketsServer *websocketServer</Declaration>
+			
+			
+			<Anchor>//api/name/websocketServer</Anchor>
+            <NodeRef refid="12"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWServerManager/websocketServer</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWServerManager.m</DeclaredIn>
+			
+			<Declaration>@property (strong, readwrite) BLWebSocketsServer *websocketServer</Declaration>
+			
+			
+			<Anchor>//api/name/websocketServer</Anchor>
+            <NodeRef refid="12"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CWServerManager/websocketServer</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWServerManager.m</DeclaredIn>
+			
+			<Declaration>@property (strong, readwrite) BLWebSocketsServer *websocketServer</Declaration>
+			
+			
+			<Anchor>//api/name/websocketServer</Anchor>
+            <NodeRef refid="12"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWServerManager/setLocalWebsocketID:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWServerManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite) int localWebsocketID</Declaration>
+			
+			
+			<Anchor>//api/name/localWebsocketID</Anchor>
+            <NodeRef refid="12"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWServerManager/localWebsocketID</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWServerManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite) int localWebsocketID</Declaration>
+			
+			
+			<Anchor>//api/name/localWebsocketID</Anchor>
+            <NodeRef refid="12"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CWServerManager/localWebsocketID</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWServerManager.m</DeclaredIn>
+			
+			<Declaration>@property (readwrite) int localWebsocketID</Declaration>
+			
+			
+			<Anchor>//api/name/localWebsocketID</Anchor>
+            <NodeRef refid="12"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWServerManager/setWebsocketIdentifiers:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWServerManager.m</DeclaredIn>
+			
+			<Declaration>@property (strong, readwrite) NSMutableDictionary *websocketIdentifiers</Declaration>
+			
+			
+			<Anchor>//api/name/websocketIdentifiers</Anchor>
+            <NodeRef refid="12"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWServerManager/websocketIdentifiers</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWServerManager.m</DeclaredIn>
+			
+			<Declaration>@property (strong, readwrite) NSMutableDictionary *websocketIdentifiers</Declaration>
+			
+			
+			<Anchor>//api/name/websocketIdentifiers</Anchor>
+            <NodeRef refid="12"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CWServerManager/websocketIdentifiers</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWServerManager.m</DeclaredIn>
+			
+			<Declaration>@property (strong, readwrite) NSMutableDictionary *websocketIdentifiers</Declaration>
+			
+			
+			<Anchor>//api/name/websocketIdentifiers</Anchor>
             <NodeRef refid="12"/>
 		</Token>
 		

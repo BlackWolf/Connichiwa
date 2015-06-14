@@ -127,7 +127,7 @@ CWStitchManager.__constructor = function() {
   Connichiwa.on('wasUnstitched',       this._onWasUnstitched);
   Connichiwa.on('gyroscopeUpdate',     this._onGyroUpdate);
   Connichiwa.on('accelerometerUpdate', this._onAccelerometerUpdate);
-}.bind(CWStitchManager);
+};
 
 
 /**
@@ -142,7 +142,7 @@ CWStitchManager._onWasStitched = function(message) {
   this._isStitched = true;
 
   //TODO register for gyroscopeUpdate instead of in constructor
-}.bind(CWStitchManager);
+};
 
 
 /**
@@ -157,7 +157,7 @@ CWStitchManager._onWasUnstitched = function(message) {
   this._isStitched = false;
 
   //TODO unregister from gyroscopeUpdate
-}.bind(CWStitchManager);
+};
 
 
 /**
@@ -171,7 +171,7 @@ CWStitchManager._onLocalSwipe = function(swipeData) {
   swipeData.width  = CWSystemInfo.viewportWidth();
   swipeData.height = CWSystemInfo.viewportHeight();
   Connichiwa.send('master', '_stitchswipe', swipeData);
-}.bind(CWStitchManager);
+};
 
 
 /**
@@ -208,7 +208,7 @@ CWStitchManager._onGyroUpdate = function(gyroData) {
       (CWUtil.inArray('gamma', this.ignoreMoveAxis) === false &amp;&amp; deltaGamma >= 20)) {
     this._quitStitch();
   }
-}.bind(CWStitchManager);
+};
 
 
 /**
@@ -240,7 +240,7 @@ CWStitchManager._onAccelerometerUpdate = function(accelData) {
       (CWUtil.inArray('z', this.ignoreMoveAxis) === false &amp;&amp; z >= 1.0)) {
     this._quitStitch();
   }
-}.bind(CWStitchManager);
+};
 
 
 /**
@@ -251,7 +251,7 @@ CWStitchManager._onAccelerometerUpdate = function(accelData) {
 CWStitchManager._quitStitch = function() {
   var data = { device : Connichiwa.getIdentifier() };
   Connichiwa.send('master', '_quitstitch', data);
-}.bind(CWStitchManager);
+};
 
 
 /**
@@ -263,7 +263,7 @@ CWStitchManager._quitStitch = function() {
  */
 CWStitchManager.unstitch = function() {
   this._quitStitch();
-}.bind(CWStitchManager);
+};
 
 
 /**
@@ -273,7 +273,7 @@ CWStitchManager.unstitch = function() {
  */
 CWStitchManager.isStitched = function() {
   return this._isStitched;
-}.bind(CWStitchManager);
+};
 
 
 /**
@@ -289,7 +289,7 @@ CWStitchManager.getLocalDeviceTransformation = function() {
   }
   
   return this._deviceTransformation;
-}.bind(CWStitchManager);
+};
 
 
 /**
@@ -309,10 +309,7 @@ CWStitchManager.getDefaultDeviceTransformation = function() {
     rotation : 0, 
     scale    : 1.0 
   };
-}.bind(CWStitchManager);
-
-
-CWModules.add('CWStitchManager');
+};
 </code></pre>
         </article>
     </section>
@@ -323,13 +320,13 @@ CWModules.add('CWStitchManager');
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="CWDevice.html">CWDevice</a></li><li><a href="CWLocation.html">CWLocation</a></li><li><a href="CWVector.html">CWVector</a></li></ul><h3>Namespaces</h3><ul><li><a href="Connichiwa.html">Connichiwa</a></li><li><a href="CWDatastore.html">CWDatastore</a></li><li><a href="CWDebug.html">CWDebug</a></li><li><a href="CWDeviceManager.html">CWDeviceManager</a></li><li><a href="CWGyroscope.html">CWGyroscope</a></li><li><a href="CWStitchManager.html">CWStitchManager</a></li><li><a href="CWSystemInfo.html">CWSystemInfo</a></li><li><a href="CWTemplates.html">CWTemplates</a></li><li><a href="CWUtil.html">CWUtil</a></li></ul><h3>Events</h3><ul><li><a href="Connichiwa.html#.event:onLoad">onLoad</a></li><li><a href="global.html#event:accelerometerUpdate">accelerometerUpdate</a></li><li><a href="global.html#event:connectfailed">connectfailed</a></li><li><a href="global.html#event:deviceconnected">deviceconnected</a></li><li><a href="global.html#event:devicedetected">devicedetected</a></li><li><a href="global.html#event:devicedisconnected">devicedisconnected</a></li><li><a href="global.html#event:devicedistancechanged">devicedistancechanged</a></li><li><a href="global.html#event:devicelost">devicelost</a></li><li><a href="global.html#event:gotstitchneighbor">gotstitchneighbor</a></li><li><a href="global.html#event:gyroscopeUpdate">gyroscopeUpdate</a></li><li><a href="global.html#event:ready">ready</a></li><li><a href="global.html#event:wasStitched">wasStitched</a></li><li><a href="global.html#event:wasUnstitched">wasUnstitched</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="CWDevice.html">CWDevice</a></li><li><a href="CWLocation.html">CWLocation</a></li><li><a href="CWVector.html">CWVector</a></li></ul><h3>Namespaces</h3><ul><li><a href="Connichiwa.html">Connichiwa</a></li><li><a href="CWDatastore.html">CWDatastore</a></li><li><a href="CWDebug.html">CWDebug</a></li><li><a href="CWDeviceManager.html">CWDeviceManager</a></li><li><a href="CWGyroscope.html">CWGyroscope</a></li><li><a href="CWProximity.html">CWProximity</a></li><li><a href="CWStitchManager.html">CWStitchManager</a></li><li><a href="CWSystemInfo.html">CWSystemInfo</a></li><li><a href="CWTemplates.html">CWTemplates</a></li><li><a href="CWUtil.html">CWUtil</a></li></ul><h3>Events</h3><ul><li><a href="Connichiwa.html#.event:onLoad">onLoad</a></li><li><a href="global.html#event:accelerometerUpdate">accelerometerUpdate</a></li><li><a href="global.html#event:connectfailed">connectfailed</a></li><li><a href="global.html#event:deviceconnected">deviceconnected</a></li><li><a href="global.html#event:devicedetected">devicedetected</a></li><li><a href="global.html#event:devicedisconnected">devicedisconnected</a></li><li><a href="global.html#event:devicedistancechanged">devicedistancechanged</a></li><li><a href="global.html#event:devicelost">devicelost</a></li><li><a href="global.html#event:gotstitchneighbor">gotstitchneighbor</a></li><li><a href="global.html#event:gyroscopeUpdate">gyroscopeUpdate</a></li><li><a href="global.html#event:proximityStateChanged">proximityStateChanged</a></li><li><a href="global.html#event:ready">ready</a></li><li><a href="global.html#event:wasStitched">wasStitched</a></li><li><a href="global.html#event:wasUnstitched">wasUnstitched</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta2</a> on Sat Jun 13 2015 17:52:06 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta2</a> on Sun Jun 14 2015 11:27:31 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -105,6 +105,8 @@ typedef NS_ENUM(NSInteger, CWWebLibraryManagerState)
  */
 - (void)sendRemoteDisconnected:(NSString *)identifier;
 
+- (void)sendProximityStateChanged:(BOOL)proximityState;
+
 /**
  *  Determines if the web library is currently running
  *

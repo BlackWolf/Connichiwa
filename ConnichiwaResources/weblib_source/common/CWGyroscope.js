@@ -66,12 +66,11 @@ CWGyroscope._alphaGammaFlipped = false;
  * @private
  */
 CWGyroscope.__constructor = function() {
-  gyro.frequency = 500;
-  gyro.startTracking(this._onUpdate.bind(this));    
-
   //TODO we should only start tracking if necessary
   //necessary for now means the device has been stitched
   //but how do we best figure that out?
+  gyro.frequency = 500;
+  gyro.startTracking(this._onUpdate.bind(this)); 
 };
 
 

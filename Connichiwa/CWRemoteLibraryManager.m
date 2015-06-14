@@ -59,6 +59,8 @@
  */
 - (void)_sendToView_localInfo;
 
+- (void)_sendToView_proximityStateChanged:(BOOL)proximityState;
+
 /**
  *  Sends the given dictionary to the remote library as a JSON string
  *
@@ -143,6 +145,12 @@
 }
 
 
+- (void)sendProximityStateChanged:(BOOL)proximityState
+{
+    [self _sendToView_proximityStateChanged:proximityState];
+}
+
+
 #pragma mark WebView Communication
 
 
@@ -162,6 +170,14 @@
     
     self.webViewContext[@"nativeSoftDisconnect"] = ^{
         [weakSelf _receivedfromView_softDisconnect];
+    };
+    
+    self.webViewContext[@"nativeCallStartProximityTracking"] = ^{
+        [weakSelf _receivedFromView_startProximityTracking];
+    };
+    
+    self.webViewContext[@"nativeCallStopProximityTracking"] = ^{
+        [weakSelf _receivedFromView_stopProximityTracking];
     };
 }
 
@@ -209,6 +225,24 @@
 }
 
 
+-(void)_receivedFromView_startProximityTracking {
+    CWLog(3, @"Remote Library requested proximity tracking start.");
+    if ([self.delegate respondsToSelector:@selector(remoteLibraryRequestsProximityTrackingStart)])
+    {
+        [self.delegate remoteLibraryRequestsProximityTrackingStart];
+    }
+}
+
+
+-(void)_receivedFromView_stopProximityTracking {
+    CWLog(3, @"Remote Library requested proximity tracking stop.");
+    if ([self.delegate respondsToSelector:@selector(remoteLibraryRequestsProximityTrackingStop)])
+    {
+        [self.delegate remoteLibraryRequestsProximityTrackingStop];
+    }
+}
+
+
 - (void)_sendToView_disconnectWebsocket
 {
     NSDictionary *data = @{
@@ -223,6 +257,15 @@
     NSMutableDictionary *data = [[self.appState deviceInfo] mutableCopy];
     [data setObject:@"localinfo" forKey:@"_name"];
     
+    [self _sendToView_dictionary:data];
+}
+
+
+- (void)_sendToView_proximityStateChanged:(BOOL)proximityState; {
+    NSDictionary *data = @{
+                           @"_name": @"proximitystatechanged",
+                           @"proximityState": @(proximityState)
+                           };
     [self _sendToView_dictionary:data];
 }
 

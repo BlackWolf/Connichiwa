@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Classes/GCDWebServerHandler.html">
+	<File path="Classes/GCDWebServerGZipEncoder.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/cl/GCDWebServerHandler</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/cl/GCDWebServerGZipEncoder</TokenIdentifier>
 			<Abstract type="html"></Abstract>
-			<DeclaredIn>GCDWebServer.m</DeclaredIn>
+			<DeclaredIn>GCDWebServerResponse.m</DeclaredIn>
             
 			
 			<NodeRef refid="27"/>
@@ -13,86 +13,50 @@
 		
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerHandler/initWithMatchBlock:asyncProcessBlock:</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerGZipEncoder/initWithResponse:reader:</TokenIdentifier>
 			<Abstract type="html"></Abstract>
-			<DeclaredIn>GCDWebServer.m</DeclaredIn>
+			<DeclaredIn>GCDWebServerResponse.m</DeclaredIn>
 			
-			<Declaration>- (id)initWithMatchBlock:(GCDWebServerMatchBlock)matchBlock asyncProcessBlock:(GCDWebServerAsyncProcessBlock)processBlock</Declaration>
+			<Declaration>- (id)initWithResponse:(GCDWebServerResponse *)response reader:(id&lt;GCDWebServerBodyReader&gt;)reader</Declaration>
 			
 			
-			<Anchor>//api/name/initWithMatchBlock:asyncProcessBlock:</Anchor>
+			<Anchor>//api/name/initWithResponse:reader:</Anchor>
             <NodeRef refid="27"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerHandler/setMatchBlock:</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerGZipEncoder/open:</TokenIdentifier>
 			<Abstract type="html"></Abstract>
-			<DeclaredIn>GCDWebServerPrivate.h</DeclaredIn>
+			<DeclaredIn>GCDWebServerResponse.m</DeclaredIn>
 			
-			<Declaration>@property (nonatomic, readonly) GCDWebServerMatchBlock matchBlock</Declaration>
+			<Declaration>- (BOOL)open:(NSError **)error</Declaration>
 			
 			
-			<Anchor>//api/name/matchBlock</Anchor>
+			<Anchor>//api/name/open:</Anchor>
             <NodeRef refid="27"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerHandler/matchBlock</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerGZipEncoder/readData:</TokenIdentifier>
 			<Abstract type="html"></Abstract>
-			<DeclaredIn>GCDWebServerPrivate.h</DeclaredIn>
+			<DeclaredIn>GCDWebServerResponse.m</DeclaredIn>
 			
-			<Declaration>@property (nonatomic, readonly) GCDWebServerMatchBlock matchBlock</Declaration>
+			<Declaration>- (NSData *)readData:(NSError **)error</Declaration>
 			
 			
-			<Anchor>//api/name/matchBlock</Anchor>
+			<Anchor>//api/name/readData:</Anchor>
             <NodeRef refid="27"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/GCDWebServerHandler/matchBlock</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerGZipEncoder/close</TokenIdentifier>
 			<Abstract type="html"></Abstract>
-			<DeclaredIn>GCDWebServerPrivate.h</DeclaredIn>
+			<DeclaredIn>GCDWebServerResponse.m</DeclaredIn>
 			
-			<Declaration>@property (nonatomic, readonly) GCDWebServerMatchBlock matchBlock</Declaration>
-			
-			
-			<Anchor>//api/name/matchBlock</Anchor>
-            <NodeRef refid="27"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerHandler/setAsyncProcessBlock:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>GCDWebServerPrivate.h</DeclaredIn>
-			
-			<Declaration>@property (nonatomic, readonly) GCDWebServerAsyncProcessBlock asyncProcessBlock</Declaration>
+			<Declaration>- (void)close</Declaration>
 			
 			
-			<Anchor>//api/name/asyncProcessBlock</Anchor>
-            <NodeRef refid="27"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerHandler/asyncProcessBlock</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>GCDWebServerPrivate.h</DeclaredIn>
-			
-			<Declaration>@property (nonatomic, readonly) GCDWebServerAsyncProcessBlock asyncProcessBlock</Declaration>
-			
-			
-			<Anchor>//api/name/asyncProcessBlock</Anchor>
-            <NodeRef refid="27"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/GCDWebServerHandler/asyncProcessBlock</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>GCDWebServerPrivate.h</DeclaredIn>
-			
-			<Declaration>@property (nonatomic, readonly) GCDWebServerAsyncProcessBlock asyncProcessBlock</Declaration>
-			
-			
-			<Anchor>//api/name/asyncProcessBlock</Anchor>
+			<Anchor>//api/name/close</Anchor>
             <NodeRef refid="27"/>
 		</Token>
 		

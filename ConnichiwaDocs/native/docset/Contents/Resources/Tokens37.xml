@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Protocols/CWBluetoothManagerDelegate.html">
+	<File path="Classes/GCDWebServerURLEncodedFormRequest.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/intf/CWBluetoothManagerDelegate</TokenIdentifier>
-			<Abstract type="html">A delegate protocol that receives different events from the CWBluetoothManager instance</Abstract>
-			<DeclaredIn>CWBluetoothManagerDelegate.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/cl/GCDWebServerURLEncodedFormRequest</TokenIdentifier>
+			<Abstract type="html">The GCDWebServerURLEncodedFormRequest subclass of GCDWebServerRequest
+parses the body of the HTTP request as a URL encoded form using
+GCDWebServerParseURLEncodedForm().</Abstract>
+			<DeclaredIn>GCDWebServerURLEncodedFormRequest.h</DeclaredIn>
             
 			
 			<NodeRef refid="37"/>
@@ -13,122 +15,75 @@
 		
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/intfm/CWBluetoothManagerDelegate/didStartScanning</TokenIdentifier>
-			<Abstract type="html">Called when the manager successfully started scanning for other BT devices</Abstract>
-			<DeclaredIn>CWBluetoothManagerDelegate.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerURLEncodedFormRequest/setArguments:</TokenIdentifier>
+			<Abstract type="html">Returns the unescaped control names and values for the URL encoded form.</Abstract>
+			<DeclaredIn>GCDWebServerURLEncodedFormRequest.h</DeclaredIn>
 			
-			<Declaration>- (void)didStartScanning</Declaration>
+			<Declaration>@property (nonatomic, readonly) NSDictionary *arguments</Declaration>
 			
 			
-			<Anchor>//api/name/didStartScanning</Anchor>
+			<Anchor>//api/name/arguments</Anchor>
             <NodeRef refid="37"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/intfm/CWBluetoothManagerDelegate/didStartAdvertisingWithIdentifier:</TokenIdentifier>
-			<Abstract type="html">Called when the manager successfully started advertising this device to other BT device with the given identifier</Abstract>
-			<DeclaredIn>CWBluetoothManagerDelegate.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerURLEncodedFormRequest/arguments</TokenIdentifier>
+			<Abstract type="html">Returns the unescaped control names and values for the URL encoded form.</Abstract>
+			<DeclaredIn>GCDWebServerURLEncodedFormRequest.h</DeclaredIn>
 			
-			<Declaration>- (void)didStartAdvertisingWithIdentifier:(NSString *)identifier</Declaration>
-			<Parameters>
-				<Parameter>
-					<Name>identifier</Name>
-					<Abstract type="html">The identifier under wich we are advertised to other devices</Abstract>
-				</Parameter>
-			</Parameters>
+			<Declaration>@property (nonatomic, readonly) NSDictionary *arguments</Declaration>
 			
-			<Anchor>//api/name/didStartAdvertisingWithIdentifier:</Anchor>
+			
+			<Anchor>//api/name/arguments</Anchor>
             <NodeRef refid="37"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/intfm/CWBluetoothManagerDelegate/deviceDetected:information:</TokenIdentifier>
-			<Abstract type="html">Called when a new device was detected</Abstract>
-			<DeclaredIn>CWBluetoothManagerDelegate.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instp/GCDWebServerURLEncodedFormRequest/arguments</TokenIdentifier>
+			<Abstract type="html">Returns the unescaped control names and values for the URL encoded form.</Abstract>
+			<DeclaredIn>GCDWebServerURLEncodedFormRequest.h</DeclaredIn>
 			
-			<Declaration>- (void)deviceDetected:(NSString *)identifier information:(NSDictionary *)deviceInfo</Declaration>
-			<Parameters>
-				<Parameter>
-					<Name>identifier</Name>
-					<Abstract type="html">The identifier of the newly detected device</Abstract>
-				</Parameter>
-			</Parameters>
+			<Declaration>@property (nonatomic, readonly) NSDictionary *arguments</Declaration>
 			
-			<Anchor>//api/name/deviceDetected:information:</Anchor>
+			
+			<Anchor>//api/name/arguments</Anchor>
             <NodeRef refid="37"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/intfm/CWBluetoothManagerDelegate/device:changedDistance:</TokenIdentifier>
-			<Abstract type="html">Called when the distance of a previously detected device changed</Abstract>
-			<DeclaredIn>CWBluetoothManagerDelegate.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/clm/GCDWebServerURLEncodedFormRequest/mimeType</TokenIdentifier>
+			<Abstract type="html">Returns the MIME type for URL encoded forms
+i.e. &quot;application/x-www-form-urlencoded&quot;.</Abstract>
+			<DeclaredIn>GCDWebServerURLEncodedFormRequest.h</DeclaredIn>
 			
-			<Declaration>- (void)device:(NSString *)identifier changedDistance:(double)distance</Declaration>
-			<Parameters>
-				<Parameter>
-					<Name>identifier</Name>
-					<Abstract type="html">The identifier of the changed device</Abstract>
-				</Parameter><Parameter>
-					<Name>distance</Name>
-					<Abstract type="html">The new distance of the device in meters</Abstract>
-				</Parameter>
-			</Parameters>
+			<Declaration>+ (NSString *)mimeType</Declaration>
 			
-			<Anchor>//api/name/device:changedDistance:</Anchor>
+			
+			<Anchor>//api/name/mimeType</Anchor>
             <NodeRef refid="37"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/intfm/CWBluetoothManagerDelegate/deviceLost:</TokenIdentifier>
-			<Abstract type="html">Called when a previously detected device was lost</Abstract>
-			<DeclaredIn>CWBluetoothManagerDelegate.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerURLEncodedFormRequest/close:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerURLEncodedFormRequest.m</DeclaredIn>
 			
-			<Declaration>- (void)deviceLost:(NSString *)identifier</Declaration>
-			<Parameters>
-				<Parameter>
-					<Name>identifier</Name>
-					<Abstract type="html">The identifier of the lost device</Abstract>
-				</Parameter>
-			</Parameters>
+			<Declaration>- (BOOL)close:(NSError **)error</Declaration>
 			
-			<Anchor>//api/name/deviceLost:</Anchor>
+			
+			<Anchor>//api/name/close:</Anchor>
             <NodeRef refid="37"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/intfm/CWBluetoothManagerDelegate/didReceiveDeviceURL:</TokenIdentifier>
-			<Abstract type="html">Called when we received an URL that points to another Connichiwa web application</Abstract>
-			<DeclaredIn>CWBluetoothManagerDelegate.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerURLEncodedFormRequest/description</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerURLEncodedFormRequest.m</DeclaredIn>
 			
-			<Declaration>- (void)didReceiveDeviceURL:(NSURL *)URL</Declaration>
-			<Parameters>
-				<Parameter>
-					<Name>URL</Name>
-					<Abstract type="html">The URL of the remote Connichiwa web application</Abstract>
-				</Parameter>
-			</Parameters>
+			<Declaration>- (NSString *)description</Declaration>
 			
-			<Anchor>//api/name/didReceiveDeviceURL:</Anchor>
-            <NodeRef refid="37"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/intfm/CWBluetoothManagerDelegate/didSendNetworkAddresses:success:</TokenIdentifier>
-			<Abstract type="html">Called when we finished sending our network interface addresses to another device in order to use it as a remote device.</Abstract>
-			<DeclaredIn>CWBluetoothManagerDelegate.h</DeclaredIn>
 			
-			<Declaration>- (void)didSendNetworkAddresses:(NSString *)deviceIdentifier success:(BOOL)success</Declaration>
-			<Parameters>
-				<Parameter>
-					<Name>deviceIdentifier</Name>
-					<Abstract type="html">The identifier of the device that received the addresses</Abstract>
-				</Parameter><Parameter>
-					<Name>success</Name>
-					<Abstract type="html">YES if the device reported a success for at least one of the addresses, NO if none of the addresses were accepted by the remote device</Abstract>
-				</Parameter>
-			</Parameters>
-			
-			<Anchor>//api/name/didSendNetworkAddresses:success:</Anchor>
+			<Anchor>//api/name/description</Anchor>
             <NodeRef refid="37"/>
 		</Token>
 		

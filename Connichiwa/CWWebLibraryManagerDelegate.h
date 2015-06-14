@@ -34,4 +34,8 @@
  */
 - (void)remoteDidConnect:(NSString *)identifier;
 
+- (void)webLibraryRequestsProximityTrackingStart;
+
+- (void)webLibraryRequestsProximityTrackingStop;
+
 @end

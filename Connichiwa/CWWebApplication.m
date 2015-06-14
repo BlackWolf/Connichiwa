@@ -15,6 +15,8 @@
 #import "CWRemoteLibraryManager.h"
 #import "CWWebLibraryManager.h"
 #import "CWWebLibraryManagerDelegate.h"
+#import "CWProximityManager.h"
+#import "CWProximityManagerDelegate.h"
 #import "CWUtil.h"
 #import "CWiDevice.h"
 #import "CWDebug.h"
@@ -27,7 +29,7 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
 
 
 
-@interface CWWebApplication () <CWServerManagerDelegate, CWBluetoothManagerDelegate, CWWebApplicationState, CWWebLibraryManagerDelegate>
+@interface CWWebApplication () <CWServerManagerDelegate, CWBluetoothManagerDelegate, CWWebApplicationState, CWWebLibraryManagerDelegate, CWProximityManagerDelegate, CWRemoteLibraryManagerDelegate>
 
 /**
  *  The unique identifier of this device that is used amongst all the different parts of Connichiwa
@@ -60,6 +62,8 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
  *  The main instance of CWBluetoothManager. Advertises this device via BT, looks for other BT devices and allows for data exchange with other BT devices.
  */
 @property (readwrite, strong) CWBluetoothManager *bluetoothManager;
+
+@property (readwrite, strong) CWProximityManager *proximityManager;
 
 /**
  *  The local UIWebView where the web application will be displayed on
@@ -120,6 +124,7 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
     [self.webLibManager setDelegate:self];
     
     self.remoteLibManager = [[CWRemoteLibraryManager alloc] initWithApplicationState:self];
+    [self.remoteLibManager setDelegate:self];
     
     self.webserverManager = [[CWServerManager alloc] init];
     [self.webserverManager setDelegate:self];
@@ -127,6 +132,9 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
     self.bluetoothManager = [[CWBluetoothManager alloc] initWithApplicationState:self];
     [self.bluetoothManager setDelegate:self];
     
+    self.proximityManager = [[CWProximityManager alloc] init];
+    [self.proximityManager setDelegate:self];
+
     NSArray *ips = [CWUtil deviceInterfaceAddresses];
     if ([ips count] > 0) {
         CWLog(1, @"IP: %@", [ips objectAtIndex:0]);
@@ -142,6 +150,10 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
     self.webserverPort = port;
     
     [self.webserverManager startWebserverWithDocumentRoot:documentRoot onPort:port];
+}
+
+-(void)proximitySensorStateChanged {
+    NSLog(@"CHANGE");
 }
 
 
@@ -316,6 +328,29 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
 }
 
 
+- (void)webLibraryRequestsProximityTrackingStart {
+    [self.proximityManager startMonitoring];
+}
+
+
+- (void)webLibraryRequestsProximityTrackingStop {
+    [self.proximityManager stopMonitoring];
+}
+
+
+#pragma mark CWRemoteLibraryManagerDelegate
+
+
+- (void)remoteLibraryRequestsProximityTrackingStart {
+    [self.proximityManager startMonitoring];
+}
+
+
+- (void)remoteLibraryRequestsProximityTrackingStop {
+    [self.proximityManager stopMonitoring];
+}
+
+
 #pragma mark CWWebserverManagerDelegate
 
 
@@ -415,6 +450,15 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
         [self.pendingRemoteDevices removeObject:deviceIdentifier];
         [self.webLibManager sendRemoteConnectFailed:deviceIdentifier];
     }
+}
+
+
+#pragma mark CWProximityManagerDelegate
+
+
+-(void)proximityStateChanged:(BOOL)proximityState {
+    [self.webLibManager sendProximityStateChanged:proximityState];
+    [self.remoteLibManager sendProximityStateChanged:proximityState];
 }
 
 

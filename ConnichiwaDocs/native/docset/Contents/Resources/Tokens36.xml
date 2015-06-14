@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Classes/GCDWebServerURLEncodedFormRequest.html">
+	<File path="Classes/GCDWebServerStreamedResponse.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/cl/GCDWebServerURLEncodedFormRequest</TokenIdentifier>
-			<Abstract type="html">The GCDWebServerURLEncodedFormRequest subclass of GCDWebServerRequest
-parses the body of the HTTP request as a URL encoded form using
-GCDWebServerParseURLEncodedForm().</Abstract>
-			<DeclaredIn>GCDWebServerURLEncodedFormRequest.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/cl/GCDWebServerStreamedResponse</TokenIdentifier>
+			<Abstract type="html">The GCDWebServerStreamedResponse subclass of GCDWebServerResponse streams
+the body of the HTTP response using a GCD block.</Abstract>
+			<DeclaredIn>GCDWebServerStreamedResponse.h</DeclaredIn>
             
 			
 			<NodeRef refid="36"/>
@@ -15,70 +14,69 @@ GCDWebServerParseURLEncodedForm().</Abstract>
 		
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerURLEncodedFormRequest/setArguments:</TokenIdentifier>
-			<Abstract type="html">Returns the unescaped control names and values for the URL encoded form.</Abstract>
-			<DeclaredIn>GCDWebServerURLEncodedFormRequest.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/clm/GCDWebServerStreamedResponse/responseWithContentType:streamBlock:</TokenIdentifier>
+			<Abstract type="html">Creates a response with streamed data and a given content type.</Abstract>
+			<DeclaredIn>GCDWebServerStreamedResponse.h</DeclaredIn>
 			
-			<Declaration>@property (nonatomic, readonly) NSDictionary *arguments</Declaration>
+			<Declaration>+ (instancetype)responseWithContentType:(NSString *)type streamBlock:(GCDWebServerStreamBlock)block</Declaration>
 			
 			
-			<Anchor>//api/name/arguments</Anchor>
+			<Anchor>//api/name/responseWithContentType:streamBlock:</Anchor>
             <NodeRef refid="36"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerURLEncodedFormRequest/arguments</TokenIdentifier>
-			<Abstract type="html">Returns the unescaped control names and values for the URL encoded form.</Abstract>
-			<DeclaredIn>GCDWebServerURLEncodedFormRequest.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/clm/GCDWebServerStreamedResponse/responseWithContentType:asyncStreamBlock:</TokenIdentifier>
+			<Abstract type="html">Creates a response with async streamed data and a given content type.</Abstract>
+			<DeclaredIn>GCDWebServerStreamedResponse.h</DeclaredIn>
 			
-			<Declaration>@property (nonatomic, readonly) NSDictionary *arguments</Declaration>
+			<Declaration>+ (instancetype)responseWithContentType:(NSString *)type asyncStreamBlock:(GCDWebServerAsyncStreamBlock)block</Declaration>
 			
 			
-			<Anchor>//api/name/arguments</Anchor>
+			<Anchor>//api/name/responseWithContentType:asyncStreamBlock:</Anchor>
             <NodeRef refid="36"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/GCDWebServerURLEncodedFormRequest/arguments</TokenIdentifier>
-			<Abstract type="html">Returns the unescaped control names and values for the URL encoded form.</Abstract>
-			<DeclaredIn>GCDWebServerURLEncodedFormRequest.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerStreamedResponse/initWithContentType:streamBlock:</TokenIdentifier>
+			<Abstract type="html">Initializes a response with streamed data and a given content type.</Abstract>
+			<DeclaredIn>GCDWebServerStreamedResponse.h</DeclaredIn>
 			
-			<Declaration>@property (nonatomic, readonly) NSDictionary *arguments</Declaration>
+			<Declaration>- (instancetype)initWithContentType:(NSString *)type streamBlock:(GCDWebServerStreamBlock)block</Declaration>
 			
 			
-			<Anchor>//api/name/arguments</Anchor>
+			<Anchor>//api/name/initWithContentType:streamBlock:</Anchor>
             <NodeRef refid="36"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/clm/GCDWebServerURLEncodedFormRequest/mimeType</TokenIdentifier>
-			<Abstract type="html">Returns the MIME type for URL encoded forms
-i.e. &quot;application/x-www-form-urlencoded&quot;.</Abstract>
-			<DeclaredIn>GCDWebServerURLEncodedFormRequest.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerStreamedResponse/initWithContentType:asyncStreamBlock:</TokenIdentifier>
+			<Abstract type="html">This method is the designated initializer for the class.</Abstract>
+			<DeclaredIn>GCDWebServerStreamedResponse.h</DeclaredIn>
 			
-			<Declaration>+ (NSString *)mimeType</Declaration>
+			<Declaration>- (instancetype)initWithContentType:(NSString *)type asyncStreamBlock:(GCDWebServerAsyncStreamBlock)block</Declaration>
 			
 			
-			<Anchor>//api/name/mimeType</Anchor>
+			<Anchor>//api/name/initWithContentType:asyncStreamBlock:</Anchor>
             <NodeRef refid="36"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerURLEncodedFormRequest/close:</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerStreamedResponse/asyncReadDataWithCompletion:</TokenIdentifier>
 			<Abstract type="html"></Abstract>
-			<DeclaredIn>GCDWebServerURLEncodedFormRequest.m</DeclaredIn>
+			<DeclaredIn>GCDWebServerStreamedResponse.m</DeclaredIn>
 			
-			<Declaration>- (BOOL)close:(NSError **)error</Declaration>
+			<Declaration>- (void)asyncReadDataWithCompletion:(GCDWebServerBodyReaderCompletionBlock)block</Declaration>
 			
 			
-			<Anchor>//api/name/close:</Anchor>
+			<Anchor>//api/name/asyncReadDataWithCompletion:</Anchor>
             <NodeRef refid="36"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerURLEncodedFormRequest/description</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerStreamedResponse/description</TokenIdentifier>
 			<Abstract type="html"></Abstract>
-			<DeclaredIn>GCDWebServerURLEncodedFormRequest.m</DeclaredIn>
+			<DeclaredIn>GCDWebServerStreamedResponse.m</DeclaredIn>
 			
 			<Declaration>- (NSString *)description</Declaration>
 			

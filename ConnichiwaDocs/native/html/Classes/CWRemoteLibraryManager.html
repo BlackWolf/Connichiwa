@@ -41,6 +41,8 @@
 	
 	<option value="//api/name/appState">&nbsp;&nbsp;&nbsp;&nbsp;appState</option>
 	
+	<option value="//api/name/delegate">&nbsp;&nbsp;&nbsp;&nbsp;delegate</option>
+	
 	<option value="//api/name/state">&nbsp;&nbsp;&nbsp;&nbsp;state</option>
 	
 	<option value="//api/name/webView">&nbsp;&nbsp;&nbsp;&nbsp;webView</option>
@@ -53,6 +55,10 @@
 	
 	
 	<option value="instance_methods">Instance Methods</option>
+	
+	<option value="//api/name/_receivedFromView_startProximityTracking">&nbsp;&nbsp;&nbsp;&nbsp;- _receivedFromView_startProximityTracking</option>
+	
+	<option value="//api/name/_receivedFromView_stopProximityTracking">&nbsp;&nbsp;&nbsp;&nbsp;- _receivedFromView_stopProximityTracking</option>
 	
 	<option value="//api/name/_receivedfromView_softDisconnect">&nbsp;&nbsp;&nbsp;&nbsp;- _receivedfromView_softDisconnect</option>
 	
@@ -70,6 +76,8 @@
 	
 	<option value="//api/name/_sendToView_localInfo">&nbsp;&nbsp;&nbsp;&nbsp;- _sendToView_localInfo</option>
 	
+	<option value="//api/name/_sendToView_proximityStateChanged:">&nbsp;&nbsp;&nbsp;&nbsp;- _sendToView_proximityStateChanged:</option>
+	
 	<option value="//api/name/connectToServer:">&nbsp;&nbsp;&nbsp;&nbsp;- connectToServer:</option>
 	
 	<option value="//api/name/disconnect">&nbsp;&nbsp;&nbsp;&nbsp;- disconnect</option>
@@ -77,6 +85,8 @@
 	<option value="//api/name/initWithApplicationState:">&nbsp;&nbsp;&nbsp;&nbsp;- initWithApplicationState:</option>
 	
 	<option value="//api/name/isActive">&nbsp;&nbsp;&nbsp;&nbsp;- isActive</option>
+	
+	<option value="//api/name/sendProximityStateChanged:">&nbsp;&nbsp;&nbsp;&nbsp;- sendProximityStateChanged:</option>
 	
 	
 	
@@ -106,6 +116,8 @@
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/appState">appState</a></span></li>
 	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/delegate">delegate</a></span></li>
+	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/state">state</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/webView">webView</a></span></li>
@@ -119,6 +131,10 @@
 
 
 <li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#instance_methods">Instance Methods</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/_receivedFromView_startProximityTracking">_receivedFromView_startProximityTracking</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/_receivedFromView_stopProximityTracking">_receivedFromView_stopProximityTracking</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/_receivedfromView_softDisconnect">_receivedfromView_softDisconnect</a></span></li>
 	
@@ -136,6 +152,8 @@
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/_sendToView_localInfo">_sendToView_localInfo</a></span></li>
 	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/_sendToView_proximityStateChanged:">_sendToView_proximityStateChanged:</a></span></li>
+	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/connectToServer:">connectToServer:</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/disconnect">disconnect</a></span></li>
@@ -143,6 +161,8 @@
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/initWithApplicationState:">initWithApplicationState:</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/isActive">isActive</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/sendProximityStateChanged:">sendProximityStateChanged:</a></span></li>
 	
 </ul></li>
 
@@ -200,6 +220,12 @@ In order to do all that, the manager needs a dedicated UIWebView where it will c
 						<ul class="task-list">
 							<li>
 	<span class="tooltip">
+		<code><a href="#//api/name/delegate">&nbsp;&nbsp;delegate</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
 		<code><a href="#//api/name/webView">&nbsp;&nbsp;webView</a></code>
 	</span>
 	<span class="task-item-suffix">property</span>
@@ -213,6 +239,12 @@ In order to do all that, the manager needs a dedicated UIWebView where it will c
 </li><li>
 	<span class="tooltip">
 		<code><a href="#//api/name/isActive">&ndash;&nbsp;isActive</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/sendProximityStateChanged:">&ndash;&nbsp;sendProximityStateChanged:</a></code>
 	</span>
 	
 	
@@ -262,6 +294,18 @@ In order to do all that, the manager needs a dedicated UIWebView where it will c
 	
 </li><li>
 	<span class="tooltip">
+		<code><a href="#//api/name/_receivedFromView_startProximityTracking">&ndash;&nbsp;_receivedFromView_startProximityTracking</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/_receivedFromView_stopProximityTracking">&ndash;&nbsp;_receivedFromView_stopProximityTracking</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
 		<code><a href="#//api/name/_sendToView_disconnectWebsocket">&ndash;&nbsp;_sendToView_disconnectWebsocket</a></code>
 	</span>
 	
@@ -269,6 +313,12 @@ In order to do all that, the manager needs a dedicated UIWebView where it will c
 </li><li>
 	<span class="tooltip">
 		<code><a href="#//api/name/_sendToView_localInfo">&ndash;&nbsp;_sendToView_localInfo</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/_sendToView_proximityStateChanged:">&ndash;&nbsp;_sendToView_proximityStateChanged:</a></code>
 	</span>
 	
 	
@@ -360,6 +410,42 @@ In order to do all that, the manager needs a dedicated UIWebView where it will c
 </div>
 						
 						<div class="section-method">
+	<a name="//api/name/delegate" title="delegate"></a>
+	<h3 class="subsubtitle method-title">delegate</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>The delegate this class sends events to</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (readwrite, strong) id&lt;CWRemoteLibraryManagerDelegate&gt; delegate</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">CWRemoteLibraryManager.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
 	<a name="//api/name/state" title="state"></a>
 	<h3 class="subsubtitle method-title">state</h3>
 	
@@ -402,7 +488,7 @@ In order to do all that, the manager needs a dedicated UIWebView where it will c
 	
 	
 	<div class="method-subsection brief-description">
-		<p>The remote webview where the connection to remote devices will be established. Must be set to a UIWebView that is not used for any other purposes. This class will become the delegate of that UIWebView. Also, the UIWebView will automatically be hidden/unhidden depending on the remote <a href="#//api/name/state">state</a> of this devie.</p>
+		<p>The remote webview where the connection to remote devices will be established. Must be set to a UIWebView that is not used for any other purposes. This class will become the <a href="#//api/name/delegate">delegate</a> of that UIWebView. Also, the UIWebView will automatically be hidden/unhidden depending on the remote <a href="#//api/name/state">state</a> of this devie.</p>
 	</div>		
 	
     
@@ -476,6 +562,28 @@ In order to do all that, the manager needs a dedicated UIWebView where it will c
 					<div class="section section-methods">
 						<a title="Instance Methods" name="instance_methods"></a>
 						<h2 class="subtitle subtitle-methods">Instance Methods</h2>
+						
+						<div class="section-method">
+	<a name="//api/name/_receivedFromView_startProximityTracking" title="_receivedFromView_startProximityTracking"></a>
+	<h3 class="subsubtitle method-title">_receivedFromView_startProximityTracking</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>- (void)_receivedFromView_startProximityTracking</code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/_receivedFromView_stopProximityTracking" title="_receivedFromView_stopProximityTracking"></a>
+	<h3 class="subsubtitle method-title">_receivedFromView_stopProximityTracking</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>- (void)_receivedFromView_stopProximityTracking</code></div>
+
+    
+</div>
 						
 						<div class="section-method">
 	<a name="//api/name/_receivedfromView_softDisconnect" title="_receivedfromView_softDisconnect"></a>
@@ -786,6 +894,17 @@ In order to do all that, the manager needs a dedicated UIWebView where it will c
 </div>
 						
 						<div class="section-method">
+	<a name="//api/name/_sendToView_proximityStateChanged:" title="_sendToView_proximityStateChanged:"></a>
+	<h3 class="subsubtitle method-title">_sendToView_proximityStateChanged:</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>- (void)_sendToView_proximityStateChanged:(BOOL)<em>proximityState</em></code></div>
+
+    
+</div>
+						
+						<div class="section-method">
 	<a name="//api/name/connectToServer:" title="connectToServer:"></a>
 	<h3 class="subsubtitle method-title">connectToServer:</h3>
 	
@@ -959,6 +1078,17 @@ In order to do all that, the manager needs a dedicated UIWebView where it will c
 	
 </div>
 						
+						<div class="section-method">
+	<a name="//api/name/sendProximityStateChanged:" title="sendProximityStateChanged:"></a>
+	<h3 class="subsubtitle method-title">sendProximityStateChanged:</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>- (void)sendProximityStateChanged:(BOOL)<em>proximityState</em></code></div>
+
+    
+</div>
+						
 					</div>
 					
 					
@@ -974,7 +1104,7 @@ In order to do all that, the manager needs a dedicated UIWebView where it will c
 				<div id="footer">
 					<hr />
 					<div class="footer-copyright">
-						<p><span class="copyright">&copy; 2015 Mario Schreiner. All rights reserved. (Last updated: 2015-06-13)</span><br />
+						<p><span class="copyright">&copy; 2015 Mario Schreiner. All rights reserved. (Last updated: 2015-06-14)</span><br />
 						
 						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2 (build 963)</a>.</span></p>
 						

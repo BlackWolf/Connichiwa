@@ -67,7 +67,7 @@ CWStitchManager._devices = {};
  */
 CWStitchManager.getDeviceTransformation = function(device) {
   return this._getDeviceTransformation(device, false);
-}.bind(CWStitchManager);
+};
 
 
 /**
@@ -112,7 +112,7 @@ CWStitchManager._getDeviceTransformation = function(device, forceRecent) {
     rotation : data.rotation,
     scale    : data.scale
   };
-}.bind(CWStitchManager);
+};
 
 
 /**
@@ -170,7 +170,7 @@ CWStitchManager.detectedSwipe = function(data) {
 
   //If the swipe does not seem to be part of a stitch, remember it for later
   this._swipes[swipe.device] = swipe;
-}.bind(CWStitchManager);
+};
 
 
 /**
@@ -197,7 +197,7 @@ CWStitchManager.unstitchDevice = function(identifier) {
     //We do not unstitch the last device because once a global coordiante
     //system is established, it should be kept
   }
-}.bind(CWStitchManager);
+};
 
 
 
@@ -415,7 +415,7 @@ CWStitchManager._detectedStitch = function(firstSwipe, secondSwipe) {
     edge                 : stitchedSwipe.edge, //TODO should this be in here? and if so, should it be relative?
   };
   stitchedDevice.send('_gotstitchneighbor', gotneighborMessage);
-}.bind(CWStitchManager);
+};
 
 
 /**
@@ -439,7 +439,7 @@ CWStitchManager._createStitchData = function(device) {
     rotation   : 0,
     scale      : 1.0,
   };
-}.bind(CWStitchManager);
+};
 
 
 /**
@@ -457,7 +457,7 @@ CWStitchManager._createStitchData = function(device) {
 CWStitchManager._getStitchData = function(device) {
   if (CWDevice.prototype.isPrototypeOf(device)) device = device.getIdentifier();
   return this._devices[device];
-}.bind(CWStitchManager);
+};
 
 
 /**
@@ -480,7 +480,7 @@ CWStitchManager._indexForEdge = function(edge) {
   }
 
   return -1;
-}.bind(CWStitchManager);
+};
 
 
 /**
@@ -503,9 +503,7 @@ CWStitchManager._edgeForIndex = function(index) {
   }
 
   return 'invalid';
-}.bind(CWStitchManager);
-
-CWModules.add('CWStitchManager');
+};
 </code></pre>
         </article>
     </section>
@@ -516,13 +514,13 @@ CWModules.add('CWStitchManager');
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="CWDevice.html">CWDevice</a></li><li><a href="CWLocation.html">CWLocation</a></li><li><a href="CWVector.html">CWVector</a></li></ul><h3>Namespaces</h3><ul><li><a href="Connichiwa.html">Connichiwa</a></li><li><a href="CWDatastore.html">CWDatastore</a></li><li><a href="CWDebug.html">CWDebug</a></li><li><a href="CWDeviceManager.html">CWDeviceManager</a></li><li><a href="CWGyroscope.html">CWGyroscope</a></li><li><a href="CWStitchManager.html">CWStitchManager</a></li><li><a href="CWSystemInfo.html">CWSystemInfo</a></li><li><a href="CWTemplates.html">CWTemplates</a></li><li><a href="CWUtil.html">CWUtil</a></li></ul><h3>Events</h3><ul><li><a href="Connichiwa.html#.event:onLoad">onLoad</a></li><li><a href="global.html#event:accelerometerUpdate">accelerometerUpdate</a></li><li><a href="global.html#event:connectfailed">connectfailed</a></li><li><a href="global.html#event:deviceconnected">deviceconnected</a></li><li><a href="global.html#event:devicedetected">devicedetected</a></li><li><a href="global.html#event:devicedisconnected">devicedisconnected</a></li><li><a href="global.html#event:devicedistancechanged">devicedistancechanged</a></li><li><a href="global.html#event:devicelost">devicelost</a></li><li><a href="global.html#event:gotstitchneighbor">gotstitchneighbor</a></li><li><a href="global.html#event:gyroscopeUpdate">gyroscopeUpdate</a></li><li><a href="global.html#event:ready">ready</a></li><li><a href="global.html#event:wasStitched">wasStitched</a></li><li><a href="global.html#event:wasUnstitched">wasUnstitched</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="CWDevice.html">CWDevice</a></li><li><a href="CWLocation.html">CWLocation</a></li><li><a href="CWVector.html">CWVector</a></li></ul><h3>Namespaces</h3><ul><li><a href="Connichiwa.html">Connichiwa</a></li><li><a href="CWDatastore.html">CWDatastore</a></li><li><a href="CWDebug.html">CWDebug</a></li><li><a href="CWDeviceManager.html">CWDeviceManager</a></li><li><a href="CWGyroscope.html">CWGyroscope</a></li><li><a href="CWProximity.html">CWProximity</a></li><li><a href="CWStitchManager.html">CWStitchManager</a></li><li><a href="CWSystemInfo.html">CWSystemInfo</a></li><li><a href="CWTemplates.html">CWTemplates</a></li><li><a href="CWUtil.html">CWUtil</a></li></ul><h3>Events</h3><ul><li><a href="Connichiwa.html#.event:onLoad">onLoad</a></li><li><a href="global.html#event:accelerometerUpdate">accelerometerUpdate</a></li><li><a href="global.html#event:connectfailed">connectfailed</a></li><li><a href="global.html#event:deviceconnected">deviceconnected</a></li><li><a href="global.html#event:devicedetected">devicedetected</a></li><li><a href="global.html#event:devicedisconnected">devicedisconnected</a></li><li><a href="global.html#event:devicedistancechanged">devicedistancechanged</a></li><li><a href="global.html#event:devicelost">devicelost</a></li><li><a href="global.html#event:gotstitchneighbor">gotstitchneighbor</a></li><li><a href="global.html#event:gyroscopeUpdate">gyroscopeUpdate</a></li><li><a href="global.html#event:proximityStateChanged">proximityStateChanged</a></li><li><a href="global.html#event:ready">ready</a></li><li><a href="global.html#event:wasStitched">wasStitched</a></li><li><a href="global.html#event:wasUnstitched">wasUnstitched</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta2</a> on Sat Jun 13 2015 17:52:06 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta2</a> on Sun Jun 14 2015 11:27:31 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

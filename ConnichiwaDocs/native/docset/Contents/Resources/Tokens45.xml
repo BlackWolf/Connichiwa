@@ -1,57 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Constants/CWBluetoothConnectionIPWriteState.html">
+	<File path="Protocols/GCDWebServerBodyReader.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/c/tdef/CWBluetoothConnectionIPWriteState</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/intf/GCDWebServerBodyReader</TokenIdentifier>
+			<Abstract type="html">This protocol is used by the GCDWebServerConnection to communicate with
+the GCDWebServerResponse and read the HTTP body data to send.</Abstract>
+			<DeclaredIn>GCDWebServerResponse.h</DeclaredIn>
             
 			
 			<NodeRef refid="45"/>
 		</Token>
 		
 		
-        
-        <Token>
-            <TokenIdentifier>//apple_ref/c/econst/CWBluetoothConnectionIPWriteStateDisconnected</TokenIdentifier>
-            <Abstract type="html"></Abstract>
-            <Declaration>CWBluetoothConnectionIPWriteStateDisconnected</Declaration>
-            
-            <DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
-            
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/GCDWebServerBodyReader/open:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerResponse.h</DeclaredIn>
+			
+			<Declaration>- (BOOL)open:(NSError **)error</Declaration>
+			
+			
+			<Anchor>//api/name/open:</Anchor>
             <NodeRef refid="45"/>
-        </Token>
-        
-        <Token>
-            <TokenIdentifier>//apple_ref/c/econst/CWBluetoothConnectionIPWriteStateConnecting</TokenIdentifier>
-            <Abstract type="html"></Abstract>
-            <Declaration>CWBluetoothConnectionIPWriteStateConnecting</Declaration>
-            
-            <DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
-            
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/GCDWebServerBodyReader/readData:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerResponse.h</DeclaredIn>
+			
+			<Declaration>- (NSData *)readData:(NSError **)error</Declaration>
+			
+			
+			<Anchor>//api/name/readData:</Anchor>
             <NodeRef refid="45"/>
-        </Token>
-        
-        <Token>
-            <TokenIdentifier>//apple_ref/c/econst/CWBluetoothConnectionIPWriteStateConnected</TokenIdentifier>
-            <Abstract type="html"></Abstract>
-            <Declaration>CWBluetoothConnectionIPWriteStateConnected</Declaration>
-            
-            <DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
-            
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/GCDWebServerBodyReader/close</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerResponse.h</DeclaredIn>
+			
+			<Declaration>- (void)close</Declaration>
+			
+			
+			<Anchor>//api/name/close</Anchor>
             <NodeRef refid="45"/>
-        </Token>
-        
-        <Token>
-            <TokenIdentifier>//apple_ref/c/econst/CWBluetoothConnectionIPWriteStateSent</TokenIdentifier>
-            <Abstract type="html"></Abstract>
-            <Declaration>CWBluetoothConnectionIPWriteStateSent</Declaration>
-            
-            <DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
-            
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/GCDWebServerBodyReader/asyncReadDataWithCompletion:</TokenIdentifier>
+			<Abstract type="html">If this method is implemented, it will be preferred over readData:.</Abstract>
+			<DeclaredIn>GCDWebServerResponse.h</DeclaredIn>
+			
+			<Declaration>- (void)asyncReadDataWithCompletion:(GCDWebServerBodyReaderCompletionBlock)block</Declaration>
+			
+			
+			<Anchor>//api/name/asyncReadDataWithCompletion:</Anchor>
             <NodeRef refid="45"/>
-        </Token>
+		</Token>
+		
         
 	</File>
 </Tokens>

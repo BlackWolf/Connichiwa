@@ -97,6 +97,8 @@
 		338EEBDC1B2C42A2009A5C3C /* server-handshake.c in Sources */ = {isa = PBXBuildFile; fileRef = 338EEBC91B2C42A2009A5C3C /* server-handshake.c */; };
 		338EEBDD1B2C42A2009A5C3C /* server.c in Sources */ = {isa = PBXBuildFile; fileRef = 338EEBCA1B2C42A2009A5C3C /* server.c */; };
 		338EEBDE1B2C42A2009A5C3C /* sha-1.c in Sources */ = {isa = PBXBuildFile; fileRef = 338EEBCB1B2C42A2009A5C3C /* sha-1.c */; };
+		3398CCDC1B2C9D9000EDD548 /* CWProximityManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 3398CCDA1B2C9D9000EDD548 /* CWProximityManager.h */; };
+		3398CCDD1B2C9D9000EDD548 /* CWProximityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3398CCDB1B2C9D9000EDD548 /* CWProximityManager.m */; };
 		33A05158193E61CC00FED071 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33A05157193E61CC00FED071 /* XCTest.framework */; };
 		33A0515E193E61CC00FED071 /* libConnichiwa.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 33A05146193E61CC00FED071 /* libConnichiwa.a */; };
 		33A05164193E61CC00FED071 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 33A05162193E61CC00FED071 /* InfoPlist.strings */; };
@@ -214,6 +216,10 @@
 		338EEBC91B2C42A2009A5C3C /* server-handshake.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "server-handshake.c"; sourceTree = "<group>"; };
 		338EEBCA1B2C42A2009A5C3C /* server.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = server.c; sourceTree = "<group>"; };
 		338EEBCB1B2C42A2009A5C3C /* sha-1.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "sha-1.c"; sourceTree = "<group>"; };
+		3398CCDA1B2C9D9000EDD548 /* CWProximityManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWProximityManager.h; sourceTree = "<group>"; };
+		3398CCDB1B2C9D9000EDD548 /* CWProximityManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWProximityManager.m; sourceTree = "<group>"; };
+		3398CCDE1B2C9E5A00EDD548 /* CWProximityManagerDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CWProximityManagerDelegate.h; sourceTree = "<group>"; };
+		3398CCDF1B2D79E000EDD548 /* CWRemoteLibraryManagerDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CWRemoteLibraryManagerDelegate.h; sourceTree = "<group>"; };
 		33A05146193E61CC00FED071 /* libConnichiwa.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libConnichiwa.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		33A0514D193E61CC00FED071 /* Connichiwa-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Connichiwa-Prefix.pch"; sourceTree = "<group>"; };
 		33A0514E193E61CC00FED071 /* Connichiwa.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Connichiwa.h; sourceTree = "<group>"; };
@@ -393,6 +399,9 @@
 		338EEBB81B2C2C2D009A5C3C /* Proximity Sensor */ = {
 			isa = PBXGroup;
 			children = (
+				3398CCDA1B2C9D9000EDD548 /* CWProximityManager.h */,
+				3398CCDB1B2C9D9000EDD548 /* CWProximityManager.m */,
+				3398CCDE1B2C9E5A00EDD548 /* CWProximityManagerDelegate.h */,
 			);
 			name = "Proximity Sensor";
 			sourceTree = "<group>";
@@ -454,6 +463,7 @@
 				33618ACA195E233D006FA51B /* CWWebLibraryManagerDelegate.h */,
 				33618ABE195DAD37006FA51B /* CWRemoteLibraryManager.h */,
 				33618ABF195DAD37006FA51B /* CWRemoteLibraryManager.m */,
+				3398CCDF1B2D79E000EDD548 /* CWRemoteLibraryManagerDelegate.h */,
 				330BA3D1193F8CB300D9E54C /* CWServerManager.h */,
 				330BA3D2193F8CB300D9E54C /* CWServerManager.m */,
 				3367186B194776C1000A7164 /* CWServerManagerDelegate.h */,
@@ -530,6 +540,7 @@
 				3367186C194776C1000A7164 /* CWServerManagerDelegate.h in Headers */,
 				334AB753193FDDF800A15999 /* CWDebug.h in Headers */,
 				33618AC8195DEDFE006FA51B /* CWWebLibraryManager.h in Headers */,
+				3398CCDC1B2C9D9000EDD548 /* CWProximityManager.h in Headers */,
 				3338A7B41A71204300898D4E /* GCDWebServerURLEncodedFormRequest.h in Headers */,
 				3338A7AE1A71204300898D4E /* GCDWebServerDataRequest.h in Headers */,
 				338EEBDB1B2C42A2009A5C3C /* private-libwebsockets.h in Headers */,
@@ -774,6 +785,7 @@
 				3338A7BD1A71204300898D4E /* GCDWebServerStreamedResponse.m in Sources */,
 				338EEBD11B2C42A2009A5C3C /* extension-deflate-frame.c in Sources */,
 				3338A7A51A71204300898D4E /* GCDWebServerConnection.m in Sources */,
+				3398CCDD1B2C9D9000EDD548 /* CWProximityManager.m in Sources */,
 				33A87DF81951037A001BDC09 /* CWBluetoothConnection.m in Sources */,
 				330BA3D4193F8CB300D9E54C /* CWServerManager.m in Sources */,
 				3338A7B71A71204300898D4E /* GCDWebServerDataResponse.m in Sources */,

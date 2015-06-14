@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Protocols/CWBluetoothTransferManagerDelegate.html">
+	<File path="Protocols/CWBluetoothManagerDelegate.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/intf/CWBluetoothTransferManagerDelegate</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>CWBluetoothTransferManagerDelegate.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/intf/CWBluetoothManagerDelegate</TokenIdentifier>
+			<Abstract type="html">A delegate protocol that receives different events from the CWBluetoothManager instance</Abstract>
+			<DeclaredIn>CWBluetoothManagerDelegate.h</DeclaredIn>
             
 			
 			<NodeRef refid="38"/>
@@ -13,26 +13,122 @@
 		
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/intfm/CWBluetoothTransferManagerDelegate/didReceiveMessage:fromPeripheral:withCharacteristic:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>CWBluetoothTransferManagerDelegate.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/intfm/CWBluetoothManagerDelegate/didStartScanning</TokenIdentifier>
+			<Abstract type="html">Called when the manager successfully started scanning for other BT devices</Abstract>
+			<DeclaredIn>CWBluetoothManagerDelegate.h</DeclaredIn>
 			
-			<Declaration>- (void)didReceiveMessage:(NSData *)data fromPeripheral:(CBPeripheral *)peripheral withCharacteristic:(CBCharacteristic *)characteristic</Declaration>
+			<Declaration>- (void)didStartScanning</Declaration>
 			
 			
-			<Anchor>//api/name/didReceiveMessage:fromPeripheral:withCharacteristic:</Anchor>
+			<Anchor>//api/name/didStartScanning</Anchor>
             <NodeRef refid="38"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/intfm/CWBluetoothTransferManagerDelegate/didReceiveMessage:fromCentral:withCharacteristic:lastWriteRequest:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>CWBluetoothTransferManagerDelegate.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/intfm/CWBluetoothManagerDelegate/didStartAdvertisingWithIdentifier:</TokenIdentifier>
+			<Abstract type="html">Called when the manager successfully started advertising this device to other BT device with the given identifier</Abstract>
+			<DeclaredIn>CWBluetoothManagerDelegate.h</DeclaredIn>
 			
-			<Declaration>- (void)didReceiveMessage:(NSData *)data fromCentral:(CBCentral *)central withCharacteristic:(CBCharacteristic *)characteristic lastWriteRequest:(CBATTRequest *)request</Declaration>
+			<Declaration>- (void)didStartAdvertisingWithIdentifier:(NSString *)identifier</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>identifier</Name>
+					<Abstract type="html">The identifier under wich we are advertised to other devices</Abstract>
+				</Parameter>
+			</Parameters>
 			
+			<Anchor>//api/name/didStartAdvertisingWithIdentifier:</Anchor>
+            <NodeRef refid="38"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/CWBluetoothManagerDelegate/deviceDetected:information:</TokenIdentifier>
+			<Abstract type="html">Called when a new device was detected</Abstract>
+			<DeclaredIn>CWBluetoothManagerDelegate.h</DeclaredIn>
 			
-			<Anchor>//api/name/didReceiveMessage:fromCentral:withCharacteristic:lastWriteRequest:</Anchor>
+			<Declaration>- (void)deviceDetected:(NSString *)identifier information:(NSDictionary *)deviceInfo</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>identifier</Name>
+					<Abstract type="html">The identifier of the newly detected device</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/deviceDetected:information:</Anchor>
+            <NodeRef refid="38"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/CWBluetoothManagerDelegate/device:changedDistance:</TokenIdentifier>
+			<Abstract type="html">Called when the distance of a previously detected device changed</Abstract>
+			<DeclaredIn>CWBluetoothManagerDelegate.h</DeclaredIn>
+			
+			<Declaration>- (void)device:(NSString *)identifier changedDistance:(double)distance</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>identifier</Name>
+					<Abstract type="html">The identifier of the changed device</Abstract>
+				</Parameter><Parameter>
+					<Name>distance</Name>
+					<Abstract type="html">The new distance of the device in meters</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/device:changedDistance:</Anchor>
+            <NodeRef refid="38"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/CWBluetoothManagerDelegate/deviceLost:</TokenIdentifier>
+			<Abstract type="html">Called when a previously detected device was lost</Abstract>
+			<DeclaredIn>CWBluetoothManagerDelegate.h</DeclaredIn>
+			
+			<Declaration>- (void)deviceLost:(NSString *)identifier</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>identifier</Name>
+					<Abstract type="html">The identifier of the lost device</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/deviceLost:</Anchor>
+            <NodeRef refid="38"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/CWBluetoothManagerDelegate/didReceiveDeviceURL:</TokenIdentifier>
+			<Abstract type="html">Called when we received an URL that points to another Connichiwa web application</Abstract>
+			<DeclaredIn>CWBluetoothManagerDelegate.h</DeclaredIn>
+			
+			<Declaration>- (void)didReceiveDeviceURL:(NSURL *)URL</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>URL</Name>
+					<Abstract type="html">The URL of the remote Connichiwa web application</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/didReceiveDeviceURL:</Anchor>
+            <NodeRef refid="38"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/CWBluetoothManagerDelegate/didSendNetworkAddresses:success:</TokenIdentifier>
+			<Abstract type="html">Called when we finished sending our network interface addresses to another device in order to use it as a remote device.</Abstract>
+			<DeclaredIn>CWBluetoothManagerDelegate.h</DeclaredIn>
+			
+			<Declaration>- (void)didSendNetworkAddresses:(NSString *)deviceIdentifier success:(BOOL)success</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>deviceIdentifier</Name>
+					<Abstract type="html">The identifier of the device that received the addresses</Abstract>
+				</Parameter><Parameter>
+					<Name>success</Name>
+					<Abstract type="html">YES if the device reported a success for at least one of the addresses, NO if none of the addresses were accepted by the remote device</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/didSendNetworkAddresses:success:</Anchor>
             <NodeRef refid="38"/>
 		</Token>
 		

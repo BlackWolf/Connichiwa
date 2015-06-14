@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Classes/GCDWebServerBodyEncoder.html">
+	<File path="Classes/GCDWebServerBodyDecoder.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/cl/GCDWebServerBodyEncoder</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/cl/GCDWebServerBodyDecoder</TokenIdentifier>
 			<Abstract type="html"></Abstract>
-			<DeclaredIn>GCDWebServerResponse.m</DeclaredIn>
+			<DeclaredIn>GCDWebServerRequest.m</DeclaredIn>
             
 			
 			<NodeRef refid="18"/>
@@ -13,21 +13,21 @@
 		
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerBodyEncoder/initWithResponse:reader:</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerBodyDecoder/initWithRequest:writer:</TokenIdentifier>
 			<Abstract type="html"></Abstract>
-			<DeclaredIn>GCDWebServerResponse.m</DeclaredIn>
+			<DeclaredIn>GCDWebServerRequest.m</DeclaredIn>
 			
-			<Declaration>- (id)initWithResponse:(GCDWebServerResponse *)response reader:(id&lt;GCDWebServerBodyReader&gt;)reader</Declaration>
+			<Declaration>- (id)initWithRequest:(GCDWebServerRequest *)request writer:(id&lt;GCDWebServerBodyWriter&gt;)writer</Declaration>
 			
 			
-			<Anchor>//api/name/initWithResponse:reader:</Anchor>
+			<Anchor>//api/name/initWithRequest:writer:</Anchor>
             <NodeRef refid="18"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerBodyEncoder/open:</TokenIdentifier>
-			<Abstract type="html">This method is called before any body data is sent.</Abstract>
-			<DeclaredIn>GCDWebServerResponse.m</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerBodyDecoder/open:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerRequest.m</DeclaredIn>
 			
 			<Declaration>- (BOOL)open:(NSError **)error</Declaration>
 			
@@ -37,26 +37,26 @@
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerBodyEncoder/readData:</TokenIdentifier>
-			<Abstract type="html">This method is called whenever body data is sent.</Abstract>
-			<DeclaredIn>GCDWebServerResponse.m</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerBodyDecoder/writeData:error:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerRequest.m</DeclaredIn>
 			
-			<Declaration>- (NSData *)readData:(NSError **)error</Declaration>
+			<Declaration>- (BOOL)writeData:(NSData *)data error:(NSError **)error</Declaration>
 			
 			
-			<Anchor>//api/name/readData:</Anchor>
+			<Anchor>//api/name/writeData:error:</Anchor>
             <NodeRef refid="18"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerBodyEncoder/close</TokenIdentifier>
-			<Abstract type="html">This method is called after all body data has been sent.</Abstract>
-			<DeclaredIn>GCDWebServerResponse.m</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerBodyDecoder/close:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerRequest.m</DeclaredIn>
 			
-			<Declaration>- (void)close</Declaration>
+			<Declaration>- (BOOL)close:(NSError **)error</Declaration>
 			
 			
-			<Anchor>//api/name/close</Anchor>
+			<Anchor>//api/name/close:</Anchor>
             <NodeRef refid="18"/>
 		</Token>
 		

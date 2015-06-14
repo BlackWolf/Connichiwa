@@ -62,6 +62,10 @@
 	
 	<option value="//api/name/_receivedFromView_remoteDidConnect:">&nbsp;&nbsp;&nbsp;&nbsp;- _receivedFromView_remoteDidConnect:</option>
 	
+	<option value="//api/name/_receivedFromView_startProximityTracking">&nbsp;&nbsp;&nbsp;&nbsp;- _receivedFromView_startProximityTracking</option>
+	
+	<option value="//api/name/_receivedFromView_stopProximityTracking">&nbsp;&nbsp;&nbsp;&nbsp;- _receivedFromView_stopProximityTracking</option>
+	
 	<option value="//api/name/_receivedfromView_websocketDidClose">&nbsp;&nbsp;&nbsp;&nbsp;- _receivedfromView_websocketDidClose</option>
 	
 	<option value="//api/name/_receivedfromView_websocketDidOpen">&nbsp;&nbsp;&nbsp;&nbsp;- _receivedfromView_websocketDidOpen</option>
@@ -84,6 +88,8 @@
 	
 	<option value="//api/name/_sendToView_localInfo">&nbsp;&nbsp;&nbsp;&nbsp;- _sendToView_localInfo</option>
 	
+	<option value="//api/name/_sendToView_proximityStateChanged:">&nbsp;&nbsp;&nbsp;&nbsp;- _sendToView_proximityStateChanged:</option>
+	
 	<option value="//api/name/_sendToView_remoteConnectFailed:">&nbsp;&nbsp;&nbsp;&nbsp;- _sendToView_remoteConnectFailed:</option>
 	
 	<option value="//api/name/_sendToView_remoteDisconnected:">&nbsp;&nbsp;&nbsp;&nbsp;- _sendToView_remoteDisconnected:</option>
@@ -99,6 +105,8 @@
 	<option value="//api/name/sendDeviceDetected:information:">&nbsp;&nbsp;&nbsp;&nbsp;- sendDeviceDetected:information:</option>
 	
 	<option value="//api/name/sendDeviceLost:">&nbsp;&nbsp;&nbsp;&nbsp;- sendDeviceLost:</option>
+	
+	<option value="//api/name/sendProximityStateChanged:">&nbsp;&nbsp;&nbsp;&nbsp;- sendProximityStateChanged:</option>
 	
 	<option value="//api/name/sendRemoteConnectFailed:">&nbsp;&nbsp;&nbsp;&nbsp;- sendRemoteConnectFailed:</option>
 	
@@ -154,6 +162,10 @@
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/_receivedFromView_remoteDidConnect:">_receivedFromView_remoteDidConnect:</a></span></li>
 	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/_receivedFromView_startProximityTracking">_receivedFromView_startProximityTracking</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/_receivedFromView_stopProximityTracking">_receivedFromView_stopProximityTracking</a></span></li>
+	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/_receivedfromView_websocketDidClose">_receivedfromView_websocketDidClose</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/_receivedfromView_websocketDidOpen">_receivedfromView_websocketDidOpen</a></span></li>
@@ -176,6 +188,8 @@
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/_sendToView_localInfo">_sendToView_localInfo</a></span></li>
 	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/_sendToView_proximityStateChanged:">_sendToView_proximityStateChanged:</a></span></li>
+	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/_sendToView_remoteConnectFailed:">_sendToView_remoteConnectFailed:</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/_sendToView_remoteDisconnected:">_sendToView_remoteDisconnected:</a></span></li>
@@ -191,6 +205,8 @@
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/sendDeviceDetected:information:">sendDeviceDetected:information:</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/sendDeviceLost:">sendDeviceLost:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/sendProximityStateChanged:">sendProximityStateChanged:</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/sendRemoteConnectFailed:">sendRemoteConnectFailed:</a></span></li>
 	
@@ -306,6 +322,12 @@ In order to do that, the manager needs a dedicated UIWebView on which the local 
 	
 </li><li>
 	<span class="tooltip">
+		<code><a href="#//api/name/sendProximityStateChanged:">&ndash;&nbsp;sendProximityStateChanged:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
 		<code><a href="#//api/name/isActive">&ndash;&nbsp;isActive</a></code>
 	</span>
 	
@@ -356,6 +378,18 @@ In order to do that, the manager needs a dedicated UIWebView on which the local 
 	
 </li><li>
 	<span class="tooltip">
+		<code><a href="#//api/name/_receivedFromView_startProximityTracking">&ndash;&nbsp;_receivedFromView_startProximityTracking</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/_receivedFromView_stopProximityTracking">&ndash;&nbsp;_receivedFromView_stopProximityTracking</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
 		<code><a href="#//api/name/_sendToView_debuginfo">&ndash;&nbsp;_sendToView_debuginfo</a></code>
 	</span>
 	
@@ -393,6 +427,12 @@ In order to do that, the manager needs a dedicated UIWebView on which the local 
 </li><li>
 	<span class="tooltip">
 		<code><a href="#//api/name/_sendToView_remoteDisconnected:">&ndash;&nbsp;_sendToView_remoteDisconnected:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/_sendToView_proximityStateChanged:">&ndash;&nbsp;_sendToView_proximityStateChanged:</a></code>
 	</span>
 	
 	
@@ -744,6 +784,28 @@ In order to do that, the manager needs a dedicated UIWebView on which the local 
 	</div>				
 	
 	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/_receivedFromView_startProximityTracking" title="_receivedFromView_startProximityTracking"></a>
+	<h3 class="subsubtitle method-title">_receivedFromView_startProximityTracking</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>- (void)_receivedFromView_startProximityTracking</code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/_receivedFromView_stopProximityTracking" title="_receivedFromView_stopProximityTracking"></a>
+	<h3 class="subsubtitle method-title">_receivedFromView_stopProximityTracking</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>- (void)_receivedFromView_stopProximityTracking</code></div>
+
+    
 </div>
 						
 						<div class="section-method">
@@ -1173,6 +1235,17 @@ In order to do that, the manager needs a dedicated UIWebView on which the local 
 </div>
 						
 						<div class="section-method">
+	<a name="//api/name/_sendToView_proximityStateChanged:" title="_sendToView_proximityStateChanged:"></a>
+	<h3 class="subsubtitle method-title">_sendToView_proximityStateChanged:</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>- (void)_sendToView_proximityStateChanged:(BOOL)<em>proximityState</em></code></div>
+
+    
+</div>
+						
+						<div class="section-method">
 	<a name="//api/name/_sendToView_remoteConnectFailed:" title="_sendToView_remoteConnectFailed:"></a>
 	<h3 class="subsubtitle method-title">_sendToView_remoteConnectFailed:</h3>
 	
@@ -1536,6 +1609,17 @@ In order to do that, the manager needs a dedicated UIWebView on which the local 
 </div>
 						
 						<div class="section-method">
+	<a name="//api/name/sendProximityStateChanged:" title="sendProximityStateChanged:"></a>
+	<h3 class="subsubtitle method-title">sendProximityStateChanged:</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>- (void)sendProximityStateChanged:(BOOL)<em>proximityState</em></code></div>
+
+    
+</div>
+						
+						<div class="section-method">
 	<a name="//api/name/sendRemoteConnectFailed:" title="sendRemoteConnectFailed:"></a>
 	<h3 class="subsubtitle method-title">sendRemoteConnectFailed:</h3>
 	
@@ -1642,7 +1726,7 @@ In order to do that, the manager needs a dedicated UIWebView on which the local 
 				<div id="footer">
 					<hr />
 					<div class="footer-copyright">
-						<p><span class="copyright">&copy; 2015 Mario Schreiner. All rights reserved. (Last updated: 2015-06-13)</span><br />
+						<p><span class="copyright">&copy; 2015 Mario Schreiner. All rights reserved. (Last updated: 2015-06-14)</span><br />
 						
 						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2 (build 963)</a>.</span></p>
 						

@@ -32,7 +32,7 @@
 'use strict';
 
 
-var Connichiwa = Connichiwa || {};
+var Connichiwa = CWModules.retrieve('Connichiwa');
 
 
 /**
@@ -81,7 +81,7 @@ Connichiwa.autoLoad = [];
  */
 Connichiwa.getLocalDevice = function() {
   return CWDeviceManager.getLocalDevice();
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -94,7 +94,7 @@ Connichiwa.getIdentifier = function()
   if (localDevice === undefined) return undefined;
 
   return localDevice.getIdentifier();
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -103,7 +103,7 @@ Connichiwa.getIdentifier = function()
  */
 Connichiwa.isMaster = function() {
   return true;
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -120,7 +120,7 @@ Connichiwa.getIPs = function() {
   if (localDevice === undefined) return undefined;
 
   return localDevice.getIPs();
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -137,7 +137,7 @@ Connichiwa.getPort = function() {
   if (localDevice === undefined) return undefined;
 
   return localDevice.getPort();
-}.bind(Connichiwa);
+};
 
 
 // WEBSOCKET
@@ -163,7 +163,7 @@ Connichiwa._connectWebsocket = function() {
   this._websocket.onerror   = this._onWebsocketError;
 
   this._connectionAttempts++;
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -190,7 +190,7 @@ Connichiwa._onWebsocketOpen = function() {
   CWNativeBridge.callOnNative('nativeCallWebsocketDidOpen');
 
   CWEventManager.trigger('ready');
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -229,7 +229,7 @@ Connichiwa._onWebsocketMessage = function(e) {
       Connichiwa._sendAck(message);
     });
   });
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -251,7 +251,7 @@ Connichiwa._onWebsocketClose = function(e) {
 
   //We can't allow this blashphemy! Try to reconnect!
   // setTimeout(function() { this._connectWebsocket(); }.bind(this), this._connectionAttempts * 1000);
-}.bind(Connichiwa);
+};
 
 
 /**
@@ -260,9 +260,7 @@ Connichiwa._onWebsocketClose = function(e) {
  */
 Connichiwa._onWebsocketError = function() {
   this._onWebsocketClose();
-}.bind(Connichiwa);
-
-CWModules.add('Connichiwa');
+};
 </code></pre>
         </article>
     </section>
@@ -273,13 +271,13 @@ CWModules.add('Connichiwa');
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="CWDevice.html">CWDevice</a></li><li><a href="CWLocation.html">CWLocation</a></li><li><a href="CWVector.html">CWVector</a></li></ul><h3>Namespaces</h3><ul><li><a href="Connichiwa.html">Connichiwa</a></li><li><a href="CWDatastore.html">CWDatastore</a></li><li><a href="CWDebug.html">CWDebug</a></li><li><a href="CWDeviceManager.html">CWDeviceManager</a></li><li><a href="CWGyroscope.html">CWGyroscope</a></li><li><a href="CWStitchManager.html">CWStitchManager</a></li><li><a href="CWSystemInfo.html">CWSystemInfo</a></li><li><a href="CWTemplates.html">CWTemplates</a></li><li><a href="CWUtil.html">CWUtil</a></li></ul><h3>Events</h3><ul><li><a href="Connichiwa.html#.event:onLoad">onLoad</a></li><li><a href="global.html#event:accelerometerUpdate">accelerometerUpdate</a></li><li><a href="global.html#event:connectfailed">connectfailed</a></li><li><a href="global.html#event:deviceconnected">deviceconnected</a></li><li><a href="global.html#event:devicedetected">devicedetected</a></li><li><a href="global.html#event:devicedisconnected">devicedisconnected</a></li><li><a href="global.html#event:devicedistancechanged">devicedistancechanged</a></li><li><a href="global.html#event:devicelost">devicelost</a></li><li><a href="global.html#event:gotstitchneighbor">gotstitchneighbor</a></li><li><a href="global.html#event:gyroscopeUpdate">gyroscopeUpdate</a></li><li><a href="global.html#event:ready">ready</a></li><li><a href="global.html#event:wasStitched">wasStitched</a></li><li><a href="global.html#event:wasUnstitched">wasUnstitched</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="CWDevice.html">CWDevice</a></li><li><a href="CWLocation.html">CWLocation</a></li><li><a href="CWVector.html">CWVector</a></li></ul><h3>Namespaces</h3><ul><li><a href="Connichiwa.html">Connichiwa</a></li><li><a href="CWDatastore.html">CWDatastore</a></li><li><a href="CWDebug.html">CWDebug</a></li><li><a href="CWDeviceManager.html">CWDeviceManager</a></li><li><a href="CWGyroscope.html">CWGyroscope</a></li><li><a href="CWProximity.html">CWProximity</a></li><li><a href="CWStitchManager.html">CWStitchManager</a></li><li><a href="CWSystemInfo.html">CWSystemInfo</a></li><li><a href="CWTemplates.html">CWTemplates</a></li><li><a href="CWUtil.html">CWUtil</a></li></ul><h3>Events</h3><ul><li><a href="Connichiwa.html#.event:onLoad">onLoad</a></li><li><a href="global.html#event:accelerometerUpdate">accelerometerUpdate</a></li><li><a href="global.html#event:connectfailed">connectfailed</a></li><li><a href="global.html#event:deviceconnected">deviceconnected</a></li><li><a href="global.html#event:devicedetected">devicedetected</a></li><li><a href="global.html#event:devicedisconnected">devicedisconnected</a></li><li><a href="global.html#event:devicedistancechanged">devicedistancechanged</a></li><li><a href="global.html#event:devicelost">devicelost</a></li><li><a href="global.html#event:gotstitchneighbor">gotstitchneighbor</a></li><li><a href="global.html#event:gyroscopeUpdate">gyroscopeUpdate</a></li><li><a href="global.html#event:proximityStateChanged">proximityStateChanged</a></li><li><a href="global.html#event:ready">ready</a></li><li><a href="global.html#event:wasStitched">wasStitched</a></li><li><a href="global.html#event:wasUnstitched">wasUnstitched</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta2</a> on Sat Jun 13 2015 17:52:06 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta2</a> on Sun Jun 14 2015 11:27:31 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -53,6 +53,8 @@
 	
 	<option value="//api/name/pendingRemoteDevices">&nbsp;&nbsp;&nbsp;&nbsp;pendingRemoteDevices</option>
 	
+	<option value="//api/name/proximityManager">&nbsp;&nbsp;&nbsp;&nbsp;proximityManager</option>
+	
 	<option value="//api/name/remoteDevices">&nbsp;&nbsp;&nbsp;&nbsp;remoteDevices</option>
 	
 	<option value="//api/name/remoteLibManager">&nbsp;&nbsp;&nbsp;&nbsp;remoteLibManager</option>
@@ -119,15 +121,27 @@
 	
 	<option value="//api/name/ppi">&nbsp;&nbsp;&nbsp;&nbsp;- ppi</option>
 	
+	<option value="//api/name/proximitySensorStateChanged">&nbsp;&nbsp;&nbsp;&nbsp;- proximitySensorStateChanged</option>
+	
+	<option value="//api/name/proximityStateChanged:">&nbsp;&nbsp;&nbsp;&nbsp;- proximityStateChanged:</option>
+	
 	<option value="//api/name/remoteDeviceConnectionTimeout:">&nbsp;&nbsp;&nbsp;&nbsp;- remoteDeviceConnectionTimeout:</option>
 	
 	<option value="//api/name/remoteDidConnect:">&nbsp;&nbsp;&nbsp;&nbsp;- remoteDidConnect:</option>
 	
 	<option value="//api/name/remoteDidDisconnect:">&nbsp;&nbsp;&nbsp;&nbsp;- remoteDidDisconnect:</option>
 	
+	<option value="//api/name/remoteLibraryRequestsProximityTrackingStart">&nbsp;&nbsp;&nbsp;&nbsp;- remoteLibraryRequestsProximityTrackingStart</option>
+	
+	<option value="//api/name/remoteLibraryRequestsProximityTrackingStop">&nbsp;&nbsp;&nbsp;&nbsp;- remoteLibraryRequestsProximityTrackingStop</option>
+	
 	<option value="//api/name/setRemoteWebView:">&nbsp;&nbsp;&nbsp;&nbsp;- setRemoteWebView:</option>
 	
 	<option value="//api/name/webLibraryIsReady">&nbsp;&nbsp;&nbsp;&nbsp;- webLibraryIsReady</option>
+	
+	<option value="//api/name/webLibraryRequestsProximityTrackingStart">&nbsp;&nbsp;&nbsp;&nbsp;- webLibraryRequestsProximityTrackingStart</option>
+	
+	<option value="//api/name/webLibraryRequestsProximityTrackingStop">&nbsp;&nbsp;&nbsp;&nbsp;- webLibraryRequestsProximityTrackingStop</option>
 	
 	
 	
@@ -168,6 +182,8 @@
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/localWebView">localWebView</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/pendingRemoteDevices">pendingRemoteDevices</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/proximityManager">proximityManager</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/remoteDevices">remoteDevices</a></span></li>
 	
@@ -237,15 +253,27 @@
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/ppi">ppi</a></span></li>
 	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/proximitySensorStateChanged">proximitySensorStateChanged</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/proximityStateChanged:">proximityStateChanged:</a></span></li>
+	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/remoteDeviceConnectionTimeout:">remoteDeviceConnectionTimeout:</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/remoteDidConnect:">remoteDidConnect:</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/remoteDidDisconnect:">remoteDidDisconnect:</a></span></li>
 	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/remoteLibraryRequestsProximityTrackingStart">remoteLibraryRequestsProximityTrackingStart</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/remoteLibraryRequestsProximityTrackingStop">remoteLibraryRequestsProximityTrackingStop</a></span></li>
+	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/setRemoteWebView:">setRemoteWebView:</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/webLibraryIsReady">webLibraryIsReady</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/webLibraryRequestsProximityTrackingStart">webLibraryRequestsProximityTrackingStart</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/webLibraryRequestsProximityTrackingStop">webLibraryRequestsProximityTrackingStop</a></span></li>
 	
 </ul></li>
 
@@ -382,6 +410,12 @@
 	
 </li><li>
 	<span class="tooltip">
+		<code><a href="#//api/name/proximitySensorStateChanged">&ndash;&nbsp;proximitySensorStateChanged</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
 		<code><a href="#//api/name/remoteDeviceConnectionTimeout:">&ndash;&nbsp;remoteDeviceConnectionTimeout:</a></code>
 	</span>
 	
@@ -442,6 +476,30 @@
 	
 </li><li>
 	<span class="tooltip">
+		<code><a href="#//api/name/webLibraryRequestsProximityTrackingStart">&ndash;&nbsp;webLibraryRequestsProximityTrackingStart</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/webLibraryRequestsProximityTrackingStop">&ndash;&nbsp;webLibraryRequestsProximityTrackingStop</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/remoteLibraryRequestsProximityTrackingStart">&ndash;&nbsp;remoteLibraryRequestsProximityTrackingStart</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/remoteLibraryRequestsProximityTrackingStop">&ndash;&nbsp;remoteLibraryRequestsProximityTrackingStop</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
 		<code><a href="#//api/name/didStartWebserver">&ndash;&nbsp;didStartWebserver</a></code>
 	</span>
 	
@@ -479,6 +537,12 @@
 </li><li>
 	<span class="tooltip">
 		<code><a href="#//api/name/didSendNetworkAddresses:success:">&ndash;&nbsp;didSendNetworkAddresses:success:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/proximityStateChanged:">&ndash;&nbsp;proximityStateChanged:</a></code>
 	</span>
 	
 	
@@ -529,6 +593,12 @@
 </li><li>
 	<span class="tooltip">
 		<code><a href="#//api/name/bluetoothManager">&nbsp;&nbsp;bluetoothManager</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/proximityManager">&nbsp;&nbsp;proximityManager</a></code>
 	</span>
 	<span class="task-item-suffix">property</span>
 	
@@ -769,6 +839,17 @@
 	</div>				
 	
 	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/proximityManager" title="proximityManager"></a>
+	<h3 class="subsubtitle method-title">proximityManager</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>@property (readwrite, strong) CWProximityManager *proximityManager</code></div>
+
+    
 </div>
 						
 						<div class="section-method">
@@ -1821,6 +1902,28 @@
 </div>
 						
 						<div class="section-method">
+	<a name="//api/name/proximitySensorStateChanged" title="proximitySensorStateChanged"></a>
+	<h3 class="subsubtitle method-title">proximitySensorStateChanged</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>- (void)proximitySensorStateChanged</code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/proximityStateChanged:" title="proximityStateChanged:"></a>
+	<h3 class="subsubtitle method-title">proximityStateChanged:</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>- (void)proximityStateChanged:(BOOL)<em>proximityState</em></code></div>
+
+    
+</div>
+						
+						<div class="section-method">
 	<a name="//api/name/remoteDeviceConnectionTimeout:" title="remoteDeviceConnectionTimeout:"></a>
 	<h3 class="subsubtitle method-title">remoteDeviceConnectionTimeout:</h3>
 	
@@ -1959,6 +2062,28 @@
 </div>
 						
 						<div class="section-method">
+	<a name="//api/name/remoteLibraryRequestsProximityTrackingStart" title="remoteLibraryRequestsProximityTrackingStart"></a>
+	<h3 class="subsubtitle method-title">remoteLibraryRequestsProximityTrackingStart</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>- (void)remoteLibraryRequestsProximityTrackingStart</code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/remoteLibraryRequestsProximityTrackingStop" title="remoteLibraryRequestsProximityTrackingStop"></a>
+	<h3 class="subsubtitle method-title">remoteLibraryRequestsProximityTrackingStop</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>- (void)remoteLibraryRequestsProximityTrackingStop</code></div>
+
+    
+</div>
+						
+						<div class="section-method">
 	<a name="//api/name/setRemoteWebView:" title="setRemoteWebView:"></a>
 	<h3 class="subsubtitle method-title">setRemoteWebView:</h3>
 	
@@ -2040,6 +2165,28 @@
 	
 </div>
 						
+						<div class="section-method">
+	<a name="//api/name/webLibraryRequestsProximityTrackingStart" title="webLibraryRequestsProximityTrackingStart"></a>
+	<h3 class="subsubtitle method-title">webLibraryRequestsProximityTrackingStart</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>- (void)webLibraryRequestsProximityTrackingStart</code></div>
+
+    
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/webLibraryRequestsProximityTrackingStop" title="webLibraryRequestsProximityTrackingStop"></a>
+	<h3 class="subsubtitle method-title">webLibraryRequestsProximityTrackingStop</h3>
+	
+	
+
+	<div class="method-subsection method-declaration"><code>- (void)webLibraryRequestsProximityTrackingStop</code></div>
+
+    
+</div>
+						
 					</div>
 					
 					
@@ -2055,7 +2202,7 @@
 				<div id="footer">
 					<hr />
 					<div class="footer-copyright">
-						<p><span class="copyright">&copy; 2015 Mario Schreiner. All rights reserved. (Last updated: 2015-06-13)</span><br />
+						<p><span class="copyright">&copy; 2015 Mario Schreiner. All rights reserved. (Last updated: 2015-06-14)</span><br />
 						
 						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2 (build 963)</a>.</span></p>
 						

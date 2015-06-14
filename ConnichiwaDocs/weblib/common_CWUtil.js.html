@@ -35,8 +35,7 @@
  * Utility module providing often-needed utility functions
  * @namespace CWUtil
  */
-var CWUtil = CWUtil || {};
-
+var CWUtil = CWModules.retrieve('CWUtil');
 
 /**
  * Returns an object that parses the given URL into its parts
@@ -50,7 +49,7 @@ CWUtil.parseURL = function(url) {
   parser.href = url;
 
   return parser;
-}.bind(CWUtil);
+};
 
 
 /**
@@ -66,7 +65,7 @@ CWUtil.unescape = function(escaped) {
       .replace(/&amp;gt;/g, '>')
       .replace(/&amp;quot;/g, '"')
       .replace(/&amp;#039;/g, "'");
-}.bind(CWUtil);
+};
 
 
 /**
@@ -97,7 +96,7 @@ CWUtil.getEventLocation = function(e, type) {
   }
 
   return pos;
-}.bind(CWUtil);
+};
 
 
 /**
@@ -123,7 +122,7 @@ CWUtil.randomInt = function(min, max) {
   }
 
   return Math.floor(Math.random() * (max - min + 1)) + min;
-}.bind(CWUtil);
+};
 
 
 /**
@@ -134,7 +133,7 @@ CWUtil.randomInt = function(min, max) {
  */
 CWUtil.isInt = function(value) {
   return (value === parseInt(value));
-}.bind(CWUtil);
+};
 
 
 /**
@@ -145,7 +144,7 @@ CWUtil.isInt = function(value) {
  */
 CWUtil.isString = function(value) {
   return (typeof(value) === 'string');
-}.bind(CWUtil);
+};
 
 
 /**
@@ -156,7 +155,7 @@ CWUtil.isString = function(value) {
  */
 CWUtil.isFunction = function(value) {
   return (typeof(value) === 'function');
-}.bind(CWUtil);
+};
 
 
 /**
@@ -168,7 +167,7 @@ CWUtil.isFunction = function(value) {
  */
 CWUtil.isObject = function(value) {
   return (typeof(value) === 'object' &amp;&amp; value !== null);
-}.bind(CWUtil);
+};
 
 
 /**
@@ -179,7 +178,7 @@ CWUtil.isObject = function(value) {
  */
 CWUtil.isArray = function(value) {
   return Array.isArray(value);
-}.bind(CWUtil);
+};
 
 /**
  * Checks if the given value is in the given array.
@@ -190,7 +189,7 @@ CWUtil.isArray = function(value) {
  */
 CWUtil.inArray = function(value, array) {
   return (array.indexOf(value) > -1);
-}.bind(CWUtil);
+};
 
 /**
  * Creates a new random v4 UUID, thanks to {@link
@@ -201,9 +200,7 @@ CWUtil.inArray = function(value, array) {
  */
 CWUtil.createUUID = function(a) { 
   return a?(a ^ Math.random() * 16 >> a / 4).toString(16):([ 1e7 ] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g,CWUtil.createUUID);
-}.bind(CWUtil);
-
-CWModules.add('CWUtil');
+};
 </code></pre>
         </article>
     </section>
@@ -214,13 +211,13 @@ CWModules.add('CWUtil');
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="CWDevice.html">CWDevice</a></li><li><a href="CWLocation.html">CWLocation</a></li><li><a href="CWVector.html">CWVector</a></li></ul><h3>Namespaces</h3><ul><li><a href="Connichiwa.html">Connichiwa</a></li><li><a href="CWDatastore.html">CWDatastore</a></li><li><a href="CWDebug.html">CWDebug</a></li><li><a href="CWDeviceManager.html">CWDeviceManager</a></li><li><a href="CWGyroscope.html">CWGyroscope</a></li><li><a href="CWStitchManager.html">CWStitchManager</a></li><li><a href="CWSystemInfo.html">CWSystemInfo</a></li><li><a href="CWTemplates.html">CWTemplates</a></li><li><a href="CWUtil.html">CWUtil</a></li></ul><h3>Events</h3><ul><li><a href="Connichiwa.html#.event:onLoad">onLoad</a></li><li><a href="global.html#event:accelerometerUpdate">accelerometerUpdate</a></li><li><a href="global.html#event:connectfailed">connectfailed</a></li><li><a href="global.html#event:deviceconnected">deviceconnected</a></li><li><a href="global.html#event:devicedetected">devicedetected</a></li><li><a href="global.html#event:devicedisconnected">devicedisconnected</a></li><li><a href="global.html#event:devicedistancechanged">devicedistancechanged</a></li><li><a href="global.html#event:devicelost">devicelost</a></li><li><a href="global.html#event:gotstitchneighbor">gotstitchneighbor</a></li><li><a href="global.html#event:gyroscopeUpdate">gyroscopeUpdate</a></li><li><a href="global.html#event:ready">ready</a></li><li><a href="global.html#event:wasStitched">wasStitched</a></li><li><a href="global.html#event:wasUnstitched">wasUnstitched</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="CWDevice.html">CWDevice</a></li><li><a href="CWLocation.html">CWLocation</a></li><li><a href="CWVector.html">CWVector</a></li></ul><h3>Namespaces</h3><ul><li><a href="Connichiwa.html">Connichiwa</a></li><li><a href="CWDatastore.html">CWDatastore</a></li><li><a href="CWDebug.html">CWDebug</a></li><li><a href="CWDeviceManager.html">CWDeviceManager</a></li><li><a href="CWGyroscope.html">CWGyroscope</a></li><li><a href="CWProximity.html">CWProximity</a></li><li><a href="CWStitchManager.html">CWStitchManager</a></li><li><a href="CWSystemInfo.html">CWSystemInfo</a></li><li><a href="CWTemplates.html">CWTemplates</a></li><li><a href="CWUtil.html">CWUtil</a></li></ul><h3>Events</h3><ul><li><a href="Connichiwa.html#.event:onLoad">onLoad</a></li><li><a href="global.html#event:accelerometerUpdate">accelerometerUpdate</a></li><li><a href="global.html#event:connectfailed">connectfailed</a></li><li><a href="global.html#event:deviceconnected">deviceconnected</a></li><li><a href="global.html#event:devicedetected">devicedetected</a></li><li><a href="global.html#event:devicedisconnected">devicedisconnected</a></li><li><a href="global.html#event:devicedistancechanged">devicedistancechanged</a></li><li><a href="global.html#event:devicelost">devicelost</a></li><li><a href="global.html#event:gotstitchneighbor">gotstitchneighbor</a></li><li><a href="global.html#event:gyroscopeUpdate">gyroscopeUpdate</a></li><li><a href="global.html#event:proximityStateChanged">proximityStateChanged</a></li><li><a href="global.html#event:ready">ready</a></li><li><a href="global.html#event:wasStitched">wasStitched</a></li><li><a href="global.html#event:wasUnstitched">wasUnstitched</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta2</a> on Sat Jun 13 2015 17:52:06 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta2</a> on Sun Jun 14 2015 11:27:31 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

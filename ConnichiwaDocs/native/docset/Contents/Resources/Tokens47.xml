@@ -1,47 +1,80 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Constants/CWBluetoothConnectionMCState.html">
+	<File path="Protocols/GCDWebServerDelegate.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/c/tdef/CWBluetoothConnectionMCState</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/intf/GCDWebServerDelegate</TokenIdentifier>
+			<Abstract type="html">Delegate methods for GCDWebServer.</Abstract>
+			<DeclaredIn>GCDWebServer.h</DeclaredIn>
             
 			
 			<NodeRef refid="47"/>
 		</Token>
 		
 		
-        
-        <Token>
-            <TokenIdentifier>//apple_ref/c/econst/CWBluetoothConnectionMCStateDisconnected</TokenIdentifier>
-            <Abstract type="html"></Abstract>
-            <Declaration>CWBluetoothConnectionMCStateDisconnected</Declaration>
-            
-            <DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
-            
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/GCDWebServerDelegate/webServerDidStart:</TokenIdentifier>
+			<Abstract type="html">This method is called after the server has successfully started.</Abstract>
+			<DeclaredIn>GCDWebServer.h</DeclaredIn>
+			
+			<Declaration>- (void)webServerDidStart:(GCDWebServer *)server</Declaration>
+			
+			
+			<Anchor>//api/name/webServerDidStart:</Anchor>
             <NodeRef refid="47"/>
-        </Token>
-        
-        <Token>
-            <TokenIdentifier>//apple_ref/c/econst/CWBluetoothConnectionMCStateSearching</TokenIdentifier>
-            <Abstract type="html"></Abstract>
-            <Declaration>CWBluetoothConnectionMCStateSearching</Declaration>
-            
-            <DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
-            
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/GCDWebServerDelegate/webServerDidCompleteBonjourRegistration:</TokenIdentifier>
+			<Abstract type="html">This method is called after the Bonjour registration for the server has
+successfully completed.</Abstract>
+			<DeclaredIn>GCDWebServer.h</DeclaredIn>
+			
+			<Declaration>- (void)webServerDidCompleteBonjourRegistration:(GCDWebServer *)server</Declaration>
+			
+			
+			<Anchor>//api/name/webServerDidCompleteBonjourRegistration:</Anchor>
             <NodeRef refid="47"/>
-        </Token>
-        
-        <Token>
-            <TokenIdentifier>//apple_ref/c/econst/CWBluetoothConnectionMCStateConnected</TokenIdentifier>
-            <Abstract type="html"></Abstract>
-            <Declaration>CWBluetoothConnectionMCStateConnected</Declaration>
-            
-            <DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
-            
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/GCDWebServerDelegate/webServerDidConnect:</TokenIdentifier>
+			<Abstract type="html">This method is called when the first GCDWebServerConnection is opened by the
+server to serve a series of HTTP requests.</Abstract>
+			<DeclaredIn>GCDWebServer.h</DeclaredIn>
+			
+			<Declaration>- (void)webServerDidConnect:(GCDWebServer *)server</Declaration>
+			
+			
+			<Anchor>//api/name/webServerDidConnect:</Anchor>
             <NodeRef refid="47"/>
-        </Token>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/GCDWebServerDelegate/webServerDidDisconnect:</TokenIdentifier>
+			<Abstract type="html">This method is called when the last GCDWebServerConnection is closed after
+the server has served a series of HTTP requests.</Abstract>
+			<DeclaredIn>GCDWebServer.h</DeclaredIn>
+			
+			<Declaration>- (void)webServerDidDisconnect:(GCDWebServer *)server</Declaration>
+			
+			
+			<Anchor>//api/name/webServerDidDisconnect:</Anchor>
+            <NodeRef refid="47"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/GCDWebServerDelegate/webServerDidStop:</TokenIdentifier>
+			<Abstract type="html">This method is called after the server has stopped.</Abstract>
+			<DeclaredIn>GCDWebServer.h</DeclaredIn>
+			
+			<Declaration>- (void)webServerDidStop:(GCDWebServer *)server</Declaration>
+			
+			
+			<Anchor>//api/name/webServerDidStop:</Anchor>
+            <NodeRef refid="47"/>
+		</Token>
+		
         
 	</File>
 </Tokens>

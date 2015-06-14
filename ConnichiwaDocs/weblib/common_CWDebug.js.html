@@ -57,7 +57,7 @@
  *    however, change the defaults in {@link Connichiwa.event:onLoad}.
  * @namespace CWDebug
  */
-var CWDebug = CWDebug || {};
+var CWDebug = CWModules.retrieve('CWDebug');
 
 
 /**
@@ -66,8 +66,7 @@ var CWDebug = CWDebug || {};
  * @default false
  * @private
  */
-// CWDebug._debug = false;
-CWDebug._debug = true;
+CWDebug._debug = false;
 
 
 /**
@@ -76,8 +75,7 @@ CWDebug._debug = true;
  * @default 0
  * @private
  */
-// CWDebug._logLevel = 0;
-CWDebug._logLevel = 4;
+CWDebug._logLevel = 0;
 
 
 /**
@@ -90,7 +88,7 @@ CWDebug.__constructor = function() {
   //TODO: We might want to think about if Ractive.DEBUG should be set to
   //CWDebug._debug
   Ractive.DEBUG = false;
-}.bind(CWDebug);
+};
 
 
 /**
@@ -103,7 +101,7 @@ CWDebug.__constructor = function() {
 CWDebug._setDebugInfo = function(info) {
   if (info.debug)    CWDebug.setDebug(info.debug);
   if (info.logLevel) CWDebug.setLogLevel(info.logLevel);
-}.bind(CWDebug);
+};
 
 
 /**
@@ -115,7 +113,7 @@ CWDebug._setDebugInfo = function(info) {
  */
 CWDebug._getDebugInfo = function() {
   return { debug: this._debug, logLevel: this._logLevel };
-}.bind(CWDebug);
+};
 
 
 /**
@@ -134,7 +132,7 @@ CWDebug.log = function(level, msg) {
   if (this._debug &amp;&amp; level &lt;= this._logLevel) {
     console.log(level + '|' + msg);
   }
-}.bind(CWDebug);
+};
 
 
 /**
@@ -146,7 +144,7 @@ CWDebug.err = function(msg) {
   if (this._debug) {
     console.err(msg);
   }
-}.bind(CWDebug);
+};
 
 /**
  * Enables or disables debugging output
@@ -156,7 +154,7 @@ CWDebug.err = function(msg) {
  */
 CWDebug.setDebug = function(v) {
   this._debug = v;
-}.bind(CWDebug);
+};
 
 /**
  * Sets the log level. Can be a number from 0 to 5, whereas 0 means that no
@@ -168,9 +166,7 @@ CWDebug.setDebug = function(v) {
  */
 CWDebug.setLogLevel = function(v) {
   this._logLevel = v;
-}.bind(CWDebug);
-
-CWModules.add('CWDebug');
+};
 </code></pre>
         </article>
     </section>
@@ -181,13 +177,13 @@ CWModules.add('CWDebug');
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="CWDevice.html">CWDevice</a></li><li><a href="CWLocation.html">CWLocation</a></li><li><a href="CWVector.html">CWVector</a></li></ul><h3>Namespaces</h3><ul><li><a href="Connichiwa.html">Connichiwa</a></li><li><a href="CWDatastore.html">CWDatastore</a></li><li><a href="CWDebug.html">CWDebug</a></li><li><a href="CWDeviceManager.html">CWDeviceManager</a></li><li><a href="CWGyroscope.html">CWGyroscope</a></li><li><a href="CWStitchManager.html">CWStitchManager</a></li><li><a href="CWSystemInfo.html">CWSystemInfo</a></li><li><a href="CWTemplates.html">CWTemplates</a></li><li><a href="CWUtil.html">CWUtil</a></li></ul><h3>Events</h3><ul><li><a href="Connichiwa.html#.event:onLoad">onLoad</a></li><li><a href="global.html#event:accelerometerUpdate">accelerometerUpdate</a></li><li><a href="global.html#event:connectfailed">connectfailed</a></li><li><a href="global.html#event:deviceconnected">deviceconnected</a></li><li><a href="global.html#event:devicedetected">devicedetected</a></li><li><a href="global.html#event:devicedisconnected">devicedisconnected</a></li><li><a href="global.html#event:devicedistancechanged">devicedistancechanged</a></li><li><a href="global.html#event:devicelost">devicelost</a></li><li><a href="global.html#event:gotstitchneighbor">gotstitchneighbor</a></li><li><a href="global.html#event:gyroscopeUpdate">gyroscopeUpdate</a></li><li><a href="global.html#event:ready">ready</a></li><li><a href="global.html#event:wasStitched">wasStitched</a></li><li><a href="global.html#event:wasUnstitched">wasUnstitched</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="CWDevice.html">CWDevice</a></li><li><a href="CWLocation.html">CWLocation</a></li><li><a href="CWVector.html">CWVector</a></li></ul><h3>Namespaces</h3><ul><li><a href="Connichiwa.html">Connichiwa</a></li><li><a href="CWDatastore.html">CWDatastore</a></li><li><a href="CWDebug.html">CWDebug</a></li><li><a href="CWDeviceManager.html">CWDeviceManager</a></li><li><a href="CWGyroscope.html">CWGyroscope</a></li><li><a href="CWProximity.html">CWProximity</a></li><li><a href="CWStitchManager.html">CWStitchManager</a></li><li><a href="CWSystemInfo.html">CWSystemInfo</a></li><li><a href="CWTemplates.html">CWTemplates</a></li><li><a href="CWUtil.html">CWUtil</a></li></ul><h3>Events</h3><ul><li><a href="Connichiwa.html#.event:onLoad">onLoad</a></li><li><a href="global.html#event:accelerometerUpdate">accelerometerUpdate</a></li><li><a href="global.html#event:connectfailed">connectfailed</a></li><li><a href="global.html#event:deviceconnected">deviceconnected</a></li><li><a href="global.html#event:devicedetected">devicedetected</a></li><li><a href="global.html#event:devicedisconnected">devicedisconnected</a></li><li><a href="global.html#event:devicedistancechanged">devicedistancechanged</a></li><li><a href="global.html#event:devicelost">devicelost</a></li><li><a href="global.html#event:gotstitchneighbor">gotstitchneighbor</a></li><li><a href="global.html#event:gyroscopeUpdate">gyroscopeUpdate</a></li><li><a href="global.html#event:proximityStateChanged">proximityStateChanged</a></li><li><a href="global.html#event:ready">ready</a></li><li><a href="global.html#event:wasStitched">wasStitched</a></li><li><a href="global.html#event:wasUnstitched">wasUnstitched</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta2</a> on Sat Jun 13 2015 17:52:06 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta2</a> on Sun Jun 14 2015 11:27:31 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

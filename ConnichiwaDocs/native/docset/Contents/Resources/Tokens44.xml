@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Protocols/GCDWebServerDelegate.html">
+	<File path="Protocols/CWWebLibraryManagerDelegate.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/intf/GCDWebServerDelegate</TokenIdentifier>
-			<Abstract type="html">Delegate methods for GCDWebServer.</Abstract>
-			<DeclaredIn>GCDWebServer.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/intf/CWWebLibraryManagerDelegate</TokenIdentifier>
+			<Abstract type="html">A delegate protocol that receives different events from the CWWebLibraryManager (and therefore also from the web library)</Abstract>
+			<DeclaredIn>CWWebLibraryManagerDelegate.h</DeclaredIn>
             
 			
 			<NodeRef refid="44"/>
@@ -13,65 +13,72 @@
 		
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/intfm/GCDWebServerDelegate/webServerDidStart:</TokenIdentifier>
-			<Abstract type="html">This method is called after the server has successfully started.</Abstract>
-			<DeclaredIn>GCDWebServer.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/intfm/CWWebLibraryManagerDelegate/webLibraryIsReady</TokenIdentifier>
+			<Abstract type="html">Called when the web library has been loaded and established a connection to the local webserver</Abstract>
+			<DeclaredIn>CWWebLibraryManagerDelegate.h</DeclaredIn>
 			
-			<Declaration>- (void)webServerDidStart:(GCDWebServer *)server</Declaration>
+			<Declaration>- (void)webLibraryIsReady</Declaration>
 			
 			
-			<Anchor>//api/name/webServerDidStart:</Anchor>
+			<Anchor>//api/name/webLibraryIsReady</Anchor>
             <NodeRef refid="44"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/intfm/GCDWebServerDelegate/webServerDidCompleteBonjourRegistration:</TokenIdentifier>
-			<Abstract type="html">This method is called after the Bonjour registration for the server has
-successfully completed.</Abstract>
-			<DeclaredIn>GCDWebServer.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/intfm/CWWebLibraryManagerDelegate/didReceiveConnectionRequestForRemote:</TokenIdentifier>
+			<Abstract type="html">Called when the web library requested the connection to another device</Abstract>
+			<DeclaredIn>CWWebLibraryManagerDelegate.h</DeclaredIn>
 			
-			<Declaration>- (void)webServerDidCompleteBonjourRegistration:(GCDWebServer *)server</Declaration>
+			<Declaration>- (void)didReceiveConnectionRequestForRemote:(NSString *)identifier</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>identifier</Name>
+					<Abstract type="html">The identifier of the device that should be used as a remote device</Abstract>
+				</Parameter>
+			</Parameters>
 			
-			
-			<Anchor>//api/name/webServerDidCompleteBonjourRegistration:</Anchor>
+			<Anchor>//api/name/didReceiveConnectionRequestForRemote:</Anchor>
             <NodeRef refid="44"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/intfm/GCDWebServerDelegate/webServerDidConnect:</TokenIdentifier>
-			<Abstract type="html">This method is called when the first GCDWebServerConnection is opened by the
-server to serve a series of HTTP requests.</Abstract>
-			<DeclaredIn>GCDWebServer.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/intfm/CWWebLibraryManagerDelegate/remoteDidConnect:</TokenIdentifier>
+			<Abstract type="html">Called when the connection to another device was successfully established</Abstract>
+			<DeclaredIn>CWWebLibraryManagerDelegate.h</DeclaredIn>
 			
-			<Declaration>- (void)webServerDidConnect:(GCDWebServer *)server</Declaration>
+			<Declaration>- (void)remoteDidConnect:(NSString *)identifier</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>identifier</Name>
+					<Abstract type="html">The identifier of the connected device</Abstract>
+				</Parameter>
+			</Parameters>
 			
-			
-			<Anchor>//api/name/webServerDidConnect:</Anchor>
+			<Anchor>//api/name/remoteDidConnect:</Anchor>
             <NodeRef refid="44"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/intfm/GCDWebServerDelegate/webServerDidDisconnect:</TokenIdentifier>
-			<Abstract type="html">This method is called when the last GCDWebServerConnection is closed after
-the server has served a series of HTTP requests.</Abstract>
-			<DeclaredIn>GCDWebServer.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/intfm/CWWebLibraryManagerDelegate/webLibraryRequestsProximityTrackingStart</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWWebLibraryManagerDelegate.h</DeclaredIn>
 			
-			<Declaration>- (void)webServerDidDisconnect:(GCDWebServer *)server</Declaration>
+			<Declaration>- (void)webLibraryRequestsProximityTrackingStart</Declaration>
 			
 			
-			<Anchor>//api/name/webServerDidDisconnect:</Anchor>
+			<Anchor>//api/name/webLibraryRequestsProximityTrackingStart</Anchor>
             <NodeRef refid="44"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/intfm/GCDWebServerDelegate/webServerDidStop:</TokenIdentifier>
-			<Abstract type="html">This method is called after the server has stopped.</Abstract>
-			<DeclaredIn>GCDWebServer.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/intfm/CWWebLibraryManagerDelegate/webLibraryRequestsProximityTrackingStop</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWWebLibraryManagerDelegate.h</DeclaredIn>
 			
-			<Declaration>- (void)webServerDidStop:(GCDWebServer *)server</Declaration>
+			<Declaration>- (void)webLibraryRequestsProximityTrackingStop</Declaration>
 			
 			
-			<Anchor>//api/name/webServerDidStop:</Anchor>
+			<Anchor>//api/name/webLibraryRequestsProximityTrackingStop</Anchor>
             <NodeRef refid="44"/>
 		</Token>
 		

@@ -77,6 +77,14 @@
  */
 
 /**
+ * This event is fired when the proximity sensor of the device reports that
+ *    its state changed
+ * @event proximityStateChanged
+ * @param {Bool} proximityState The new proximity state - `true` if something
+ *    is in front of the proximity sensor of the device, otherwise `false`
+ */
+
+/**
  * This event is fired when a new device is detected over Bluetooth
  * @event devicedetected
  * @param {CWDevice} device The detected device

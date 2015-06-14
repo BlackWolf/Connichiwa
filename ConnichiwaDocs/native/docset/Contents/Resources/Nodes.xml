@@ -47,6 +47,7 @@
 						<NodeRef refid="34"/>
 						<NodeRef refid="35"/>
 						<NodeRef refid="36"/>
+						<NodeRef refid="37"/>
 						
 					</Subnodes>
 				</Node>
@@ -57,7 +58,6 @@
 					<Name>Protocols</Name>
 					<Path>index.html</Path>
 					<Subnodes>
-						<NodeRef refid="37"/>
 						<NodeRef refid="38"/>
 						<NodeRef refid="39"/>
 						<NodeRef refid="40"/>
@@ -65,6 +65,9 @@
 						<NodeRef refid="42"/>
 						<NodeRef refid="43"/>
 						<NodeRef refid="44"/>
+						<NodeRef refid="45"/>
+						<NodeRef refid="46"/>
+						<NodeRef refid="47"/>
 						
 					</Subnodes>
 				</Node>
@@ -74,9 +77,6 @@
 					<Name>Constants</Name>
 					<Path>index.html</Path>
 					<Subnodes>
-						<NodeRef refid="45"/>
-						<NodeRef refid="46"/>
-						<NodeRef refid="47"/>
 						<NodeRef refid="48"/>
 						<NodeRef refid="49"/>
 						<NodeRef refid="50"/>
@@ -87,6 +87,9 @@
 						<NodeRef refid="55"/>
 						<NodeRef refid="56"/>
 						<NodeRef refid="57"/>
+						<NodeRef refid="58"/>
+						<NodeRef refid="59"/>
+						<NodeRef refid="60"/>
 						
 					</Subnodes>
 				</Node>
@@ -394,6 +397,39 @@
             
         </Node>
 		<Node id="10" type="file" documentType="reference">
+            <Name>CWProximityManager</Name>
+            <Path>Classes/CWProximityManager.html</Path>
+            
+                <Subnodes>
+                <Node type="section">
+                    <Path>Classes/CWProximityManager.html</Path>
+                    <Name>Overview</Name>
+                    <Anchor>overview</Anchor>
+                </Node>
+                <Node type="section">
+                    <Path>Classes/CWProximityManager.html</Path>
+                    <Name>Tasks</Name>
+                    <Anchor>tasks</Anchor>
+                </Node>
+                
+                <Node type="section">
+                    <Path>Classes/CWProximityManager.html</Path>
+                    <Name>Properties</Name>
+                    <Anchor>properties</Anchor>
+                </Node>
+                
+                
+                
+                <Node type="section">
+                    <Path>Classes/CWProximityManager.html</Path>
+                    <Name>Instance Methods</Name>
+                    <Anchor>instance_methods</Anchor>
+                </Node>
+                
+            </Subnodes>
+            
+        </Node>
+		<Node id="11" type="file" documentType="reference">
             <Name>CWRemoteLibraryManager</Name>
             <Path>Classes/CWRemoteLibraryManager.html</Path>
             
@@ -426,7 +462,7 @@
             </Subnodes>
             
         </Node>
-		<Node id="11" type="file" documentType="reference">
+		<Node id="12" type="file" documentType="reference">
             <Name>CWServerManager</Name>
             <Path>Classes/CWServerManager.html</Path>
             
@@ -459,7 +495,7 @@
             </Subnodes>
             
         </Node>
-		<Node id="12" type="file" documentType="reference">
+		<Node id="13" type="file" documentType="reference">
             <Name>CWUtil</Name>
             <Path>Classes/CWUtil.html</Path>
             
@@ -486,7 +522,7 @@
             </Subnodes>
             
         </Node>
-		<Node id="13" type="file" documentType="reference">
+		<Node id="14" type="file" documentType="reference">
             <Name>CWWebApplication</Name>
             <Path>Classes/CWWebApplication.html</Path>
             
@@ -525,7 +561,7 @@
             </Subnodes>
             
         </Node>
-		<Node id="14" type="file" documentType="reference">
+		<Node id="15" type="file" documentType="reference">
             <Name>CWWebLibraryManager</Name>
             <Path>Classes/CWWebLibraryManager.html</Path>
             
@@ -558,7 +594,7 @@
             </Subnodes>
             
         </Node>
-		<Node id="15" type="file" documentType="reference">
+		<Node id="16" type="file" documentType="reference">
             <Name>CWiDevice</Name>
             <Path>Classes/CWiDevice.html</Path>
             
@@ -585,7 +621,7 @@
             </Subnodes>
             
         </Node>
-		<Node id="16" type="file" documentType="reference">
+		<Node id="17" type="file" documentType="reference">
             <Name>GCDWebServer</Name>
             <Path>Classes/GCDWebServer.html</Path>
             
@@ -624,7 +660,7 @@
             </Subnodes>
             
         </Node>
-		<Node id="17" type="file" documentType="reference">
+		<Node id="18" type="file" documentType="reference">
             <Name>GCDWebServerBodyDecoder</Name>
             <Path>Classes/GCDWebServerBodyDecoder.html</Path>
             
@@ -651,7 +687,7 @@
             </Subnodes>
             
         </Node>
-		<Node id="18" type="file" documentType="reference">
+		<Node id="19" type="file" documentType="reference">
             <Name>GCDWebServerBodyEncoder</Name>
             <Path>Classes/GCDWebServerBodyEncoder.html</Path>
             
@@ -678,7 +714,7 @@
             </Subnodes>
             
         </Node>
-		<Node id="19" type="file" documentType="reference">
+		<Node id="20" type="file" documentType="reference">
             <Name>GCDWebServerConnection</Name>
             <Path>Classes/GCDWebServerConnection.html</Path>
             
@@ -717,7 +753,7 @@
             </Subnodes>
             
         </Node>
-		<Node id="20" type="file" documentType="reference">
+		<Node id="21" type="file" documentType="reference">
             <Name>GCDWebServerDataRequest</Name>
             <Path>Classes/GCDWebServerDataRequest.html</Path>
             
@@ -750,7 +786,7 @@
             </Subnodes>
             
         </Node>
-		<Node id="21" type="file" documentType="reference">
+		<Node id="22" type="file" documentType="reference">
             <Name>GCDWebServerDataResponse</Name>
             <Path>Classes/GCDWebServerDataResponse.html</Path>
             
@@ -783,7 +819,7 @@
             </Subnodes>
             
         </Node>
-		<Node id="22" type="file" documentType="reference">
+		<Node id="23" type="file" documentType="reference">
             <Name>GCDWebServerErrorResponse</Name>
             <Path>Classes/GCDWebServerErrorResponse.html</Path>
             
@@ -816,7 +852,7 @@
             </Subnodes>
             
         </Node>
-		<Node id="23" type="file" documentType="reference">
+		<Node id="24" type="file" documentType="reference">
             <Name>GCDWebServerFileRequest</Name>
             <Path>Classes/GCDWebServerFileRequest.html</Path>
             
@@ -849,7 +885,7 @@
             </Subnodes>
             
         </Node>
-		<Node id="24" type="file" documentType="reference">
+		<Node id="25" type="file" documentType="reference">
             <Name>GCDWebServerFileResponse</Name>
             <Path>Classes/GCDWebServerFileResponse.html</Path>
             
@@ -882,7 +918,7 @@
             </Subnodes>
             
         </Node>
-		<Node id="25" type="file" documentType="reference">
+		<Node id="26" type="file" documentType="reference">
             <Name>GCDWebServerGZipDecoder</Name>
             <Path>Classes/GCDWebServerGZipDecoder.html</Path>
             
@@ -909,7 +945,7 @@
             </Subnodes>
             
         </Node>
-		<Node id="26" type="file" documentType="reference">
+		<Node id="27" type="file" documentType="reference">
             <Name>GCDWebServerGZipEncoder</Name>
             <Path>Classes/GCDWebServerGZipEncoder.html</Path>
             
@@ -936,7 +972,7 @@
             </Subnodes>
             
         </Node>
-		<Node id="27" type="file" documentType="reference">
+		<Node id="28" type="file" documentType="reference">
             <Name>GCDWebServerHandler</Name>
             <Path>Classes/GCDWebServerHandler.html</Path>
             
@@ -969,7 +1005,7 @@
             </Subnodes>
             
         </Node>
-		<Node id="28" type="file" documentType="reference">
+		<Node id="29" type="file" documentType="reference">
             <Name>GCDWebServerMIMEStreamParser</Name>
             <Path>Classes/GCDWebServerMIMEStreamParser.html</Path>
             
@@ -1002,7 +1038,7 @@
             </Subnodes>
             
         </Node>
-		<Node id="29" type="file" documentType="reference">
+		<Node id="30" type="file" documentType="reference">
             <Name>GCDWebServerMultiPart</Name>
             <Path>Classes/GCDWebServerMultiPart.html</Path>
             
@@ -1035,7 +1071,7 @@
             </Subnodes>
             
         </Node>
-		<Node id="30" type="file" documentType="reference">
+		<Node id="31" type="file" documentType="reference">
             <Name>GCDWebServerMultiPartArgument</Name>
             <Path>Classes/GCDWebServerMultiPartArgument.html</Path>
             
@@ -1068,7 +1104,7 @@
             </Subnodes>
             
         </Node>
-		<Node id="31" type="file" documentType="reference">
+		<Node id="32" type="file" documentType="reference">
             <Name>GCDWebServerMultiPartFile</Name>
             <Path>Classes/GCDWebServerMultiPartFile.html</Path>
             
@@ -1101,7 +1137,7 @@
             </Subnodes>
             
         </Node>
-		<Node id="32" type="file" documentType="reference">
+		<Node id="33" type="file" documentType="reference">
             <Name>GCDWebServerMultiPartFormRequest</Name>
             <Path>Classes/GCDWebServerMultiPartFormRequest.html</Path>
             
@@ -1140,7 +1176,7 @@
             </Subnodes>
             
         </Node>
-		<Node id="33" type="file" documentType="reference">
+		<Node id="34" type="file" documentType="reference">
             <Name>GCDWebServerRequest</Name>
             <Path>Classes/GCDWebServerRequest.html</Path>
             
@@ -1173,7 +1209,7 @@
             </Subnodes>
             
         </Node>
-		<Node id="34" type="file" documentType="reference">
+		<Node id="35" type="file" documentType="reference">
             <Name>GCDWebServerResponse</Name>
             <Path>Classes/GCDWebServerResponse.html</Path>
             
@@ -1212,7 +1248,7 @@
             </Subnodes>
             
         </Node>
-		<Node id="35" type="file" documentType="reference">
+		<Node id="36" type="file" documentType="reference">
             <Name>GCDWebServerStreamedResponse</Name>
             <Path>Classes/GCDWebServerStreamedResponse.html</Path>
             
@@ -1245,7 +1281,7 @@
             </Subnodes>
             
         </Node>
-		<Node id="36" type="file" documentType="reference">
+		<Node id="37" type="file" documentType="reference">
             <Name>GCDWebServerURLEncodedFormRequest</Name>
             <Path>Classes/GCDWebServerURLEncodedFormRequest.html</Path>
             
@@ -1286,7 +1322,7 @@
         </Node>
 		
 		
-        <Node id="37" type="file" documentType="reference">
+        <Node id="38" type="file" documentType="reference">
             <Name>CWBluetoothManagerDelegate</Name>
             <Path>Protocols/CWBluetoothManagerDelegate.html</Path>
             
@@ -1313,7 +1349,7 @@
             </Subnodes>
             
         </Node>
-		<Node id="38" type="file" documentType="reference">
+		<Node id="39" type="file" documentType="reference">
             <Name>CWBluetoothTransferManagerDelegate</Name>
             <Path>Protocols/CWBluetoothTransferManagerDelegate.html</Path>
             
@@ -1340,7 +1376,61 @@
             </Subnodes>
             
         </Node>
-		<Node id="39" type="file" documentType="reference">
+		<Node id="40" type="file" documentType="reference">
+            <Name>CWProximityManagerDelegate</Name>
+            <Path>Protocols/CWProximityManagerDelegate.html</Path>
+            
+                <Subnodes>
+                <Node type="section">
+                    <Path>Protocols/CWProximityManagerDelegate.html</Path>
+                    <Name>Overview</Name>
+                    <Anchor>overview</Anchor>
+                </Node>
+                <Node type="section">
+                    <Path>Protocols/CWProximityManagerDelegate.html</Path>
+                    <Name>Tasks</Name>
+                    <Anchor>tasks</Anchor>
+                </Node>
+                
+                
+                
+                <Node type="section">
+                    <Path>Protocols/CWProximityManagerDelegate.html</Path>
+                    <Name>Instance Methods</Name>
+                    <Anchor>instance_methods</Anchor>
+                </Node>
+                
+            </Subnodes>
+            
+        </Node>
+		<Node id="41" type="file" documentType="reference">
+            <Name>CWRemoteLibraryManagerDelegate</Name>
+            <Path>Protocols/CWRemoteLibraryManagerDelegate.html</Path>
+            
+                <Subnodes>
+                <Node type="section">
+                    <Path>Protocols/CWRemoteLibraryManagerDelegate.html</Path>
+                    <Name>Overview</Name>
+                    <Anchor>overview</Anchor>
+                </Node>
+                <Node type="section">
+                    <Path>Protocols/CWRemoteLibraryManagerDelegate.html</Path>
+                    <Name>Tasks</Name>
+                    <Anchor>tasks</Anchor>
+                </Node>
+                
+                
+                
+                <Node type="section">
+                    <Path>Protocols/CWRemoteLibraryManagerDelegate.html</Path>
+                    <Name>Instance Methods</Name>
+                    <Anchor>instance_methods</Anchor>
+                </Node>
+                
+            </Subnodes>
+            
+        </Node>
+		<Node id="42" type="file" documentType="reference">
             <Name>CWServerManagerDelegate</Name>
             <Path>Protocols/CWServerManagerDelegate.html</Path>
             
@@ -1367,7 +1457,7 @@
             </Subnodes>
             
         </Node>
-		<Node id="40" type="file" documentType="reference">
+		<Node id="43" type="file" documentType="reference">
             <Name>CWWebApplicationState</Name>
             <Path>Protocols/CWWebApplicationState.html</Path>
             
@@ -1400,7 +1490,7 @@
             </Subnodes>
             
         </Node>
-		<Node id="41" type="file" documentType="reference">
+		<Node id="44" type="file" documentType="reference">
             <Name>CWWebLibraryManagerDelegate</Name>
             <Path>Protocols/CWWebLibraryManagerDelegate.html</Path>
             
@@ -1427,7 +1517,7 @@
             </Subnodes>
             
         </Node>
-		<Node id="42" type="file" documentType="reference">
+		<Node id="45" type="file" documentType="reference">
             <Name>GCDWebServerBodyReader</Name>
             <Path>Protocols/GCDWebServerBodyReader.html</Path>
             
@@ -1454,7 +1544,7 @@
             </Subnodes>
             
         </Node>
-		<Node id="43" type="file" documentType="reference">
+		<Node id="46" type="file" documentType="reference">
             <Name>GCDWebServerBodyWriter</Name>
             <Path>Protocols/GCDWebServerBodyWriter.html</Path>
             
@@ -1481,7 +1571,7 @@
             </Subnodes>
             
         </Node>
-		<Node id="44" type="file" documentType="reference">
+		<Node id="47" type="file" documentType="reference">
             <Name>GCDWebServerDelegate</Name>
             <Path>Protocols/GCDWebServerDelegate.html</Path>
             
@@ -1509,67 +1599,67 @@
             
         </Node>
 		
-        <Node id="45" type="file" documentType="reference">
+        <Node id="48" type="file" documentType="reference">
             <Name>CWBluetoothConnectionIPWriteState</Name>
             <Path>Constants/CWBluetoothConnectionIPWriteState.html</Path>
             
         </Node>
-		<Node id="46" type="file" documentType="reference">
+		<Node id="49" type="file" documentType="reference">
             <Name>CWBluetoothConnectionInitialDataState</Name>
             <Path>Constants/CWBluetoothConnectionInitialDataState.html</Path>
             
         </Node>
-		<Node id="47" type="file" documentType="reference">
+		<Node id="50" type="file" documentType="reference">
             <Name>CWBluetoothConnectionMCState</Name>
             <Path>Constants/CWBluetoothConnectionMCState.html</Path>
             
         </Node>
-		<Node id="48" type="file" documentType="reference">
+		<Node id="51" type="file" documentType="reference">
             <Name>CWRemoteLibraryManagerState</Name>
             <Path>Constants/CWRemoteLibraryManagerState.html</Path>
             
         </Node>
-		<Node id="49" type="file" documentType="reference">
+		<Node id="52" type="file" documentType="reference">
             <Name>CWServerManagerState</Name>
             <Path>Constants/CWServerManagerState.html</Path>
             
         </Node>
-		<Node id="50" type="file" documentType="reference">
+		<Node id="53" type="file" documentType="reference">
             <Name>CWWebLibraryManagerState</Name>
             <Path>Constants/CWWebLibraryManagerState.html</Path>
             
         </Node>
-		<Node id="51" type="file" documentType="reference">
+		<Node id="54" type="file" documentType="reference">
             <Name>CWiDeviceModel</Name>
             <Path>Constants/CWiDeviceModel.html</Path>
             
         </Node>
-		<Node id="52" type="file" documentType="reference">
+		<Node id="55" type="file" documentType="reference">
             <Name>GCDWebServerClientErrorHTTPStatusCode</Name>
             <Path>Constants/GCDWebServerClientErrorHTTPStatusCode.html</Path>
             
         </Node>
-		<Node id="53" type="file" documentType="reference">
+		<Node id="56" type="file" documentType="reference">
             <Name>GCDWebServerInformationalHTTPStatusCode</Name>
             <Path>Constants/GCDWebServerInformationalHTTPStatusCode.html</Path>
             
         </Node>
-		<Node id="54" type="file" documentType="reference">
+		<Node id="57" type="file" documentType="reference">
             <Name>GCDWebServerLoggingLevel</Name>
             <Path>Constants/GCDWebServerLoggingLevel.html</Path>
             
         </Node>
-		<Node id="55" type="file" documentType="reference">
+		<Node id="58" type="file" documentType="reference">
             <Name>GCDWebServerRedirectionHTTPStatusCode</Name>
             <Path>Constants/GCDWebServerRedirectionHTTPStatusCode.html</Path>
             
         </Node>
-		<Node id="56" type="file" documentType="reference">
+		<Node id="59" type="file" documentType="reference">
             <Name>GCDWebServerServerErrorHTTPStatusCode</Name>
             <Path>Constants/GCDWebServerServerErrorHTTPStatusCode.html</Path>
             
         </Node>
-		<Node id="57" type="file" documentType="reference">
+		<Node id="60" type="file" documentType="reference">
             <Name>GCDWebServerSuccessfulHTTPStatusCode</Name>
             <Path>Constants/GCDWebServerSuccessfulHTTPStatusCode.html</Path>
             

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Constants/CWServerManagerState.html">
+	<File path="Constants/CWBluetoothConnectionInitialDataState.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/c/tdef/CWServerManagerState</TokenIdentifier>
-			<Abstract type="html">Represents the state of the webserver controlled by this manager</Abstract>
-			<DeclaredIn>CWServerManager.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/c/tdef/CWBluetoothConnectionInitialDataState</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
             
 			
 			<NodeRef refid="49"/>
@@ -14,45 +14,41 @@
 		
         
         <Token>
-            <TokenIdentifier>//apple_ref/c/econst/CWServerManagerStateStopped</TokenIdentifier>
-            <Abstract type="html">The webserver is stopped
-     </Abstract>
-            <Declaration>CWServerManagerStateStopped</Declaration>
+            <TokenIdentifier>//apple_ref/c/econst/CWBluetoothConnectionInitialDataStateMissing</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>CWBluetoothConnectionInitialDataStateMissing</Declaration>
             
-            <DeclaredIn>CWServerManager.h</DeclaredIn>
-            
-            <NodeRef refid="49"/>
-        </Token>
-        
-        <Token>
-            <TokenIdentifier>//apple_ref/c/econst/CWServerManagerStateStarting</TokenIdentifier>
-            <Abstract type="html">The webserver is starting
-     </Abstract>
-            <Declaration>CWServerManagerStateStarting</Declaration>
-            
-            <DeclaredIn>CWServerManager.h</DeclaredIn>
+            <DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
             
             <NodeRef refid="49"/>
         </Token>
         
         <Token>
-            <TokenIdentifier>//apple_ref/c/econst/CWServerManagerStateStarted</TokenIdentifier>
-            <Abstract type="html">The webserver has started and accepts connections
-     </Abstract>
-            <Declaration>CWServerManagerStateStarted</Declaration>
+            <TokenIdentifier>//apple_ref/c/econst/CWBluetoothConnectionInitialDataStateConnecting</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>CWBluetoothConnectionInitialDataStateConnecting</Declaration>
             
-            <DeclaredIn>CWServerManager.h</DeclaredIn>
+            <DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
             
             <NodeRef refid="49"/>
         </Token>
         
         <Token>
-            <TokenIdentifier>//apple_ref/c/econst/CWServerManagerStateSuspended</TokenIdentifier>
-            <Abstract type="html">The webserver is currently suspended - it is still running but does not accept connections
-     </Abstract>
-            <Declaration>CWServerManagerStateSuspended</Declaration>
+            <TokenIdentifier>//apple_ref/c/econst/CWBluetoothConnectionInitialDataStateConnected</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>CWBluetoothConnectionInitialDataStateConnected</Declaration>
             
-            <DeclaredIn>CWServerManager.h</DeclaredIn>
+            <DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
+            
+            <NodeRef refid="49"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/CWBluetoothConnectionInitialDataStateReceived</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>CWBluetoothConnectionInitialDataStateReceived</Declaration>
+            
+            <DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
             
             <NodeRef refid="49"/>
         </Token>

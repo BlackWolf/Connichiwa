@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Classes/GCDWebServerFileRequest.html">
+	<File path="Classes/GCDWebServerErrorResponse.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/cl/GCDWebServerFileRequest</TokenIdentifier>
-			<Abstract type="html">The GCDWebServerFileRequest subclass of GCDWebServerRequest stores the body
-of the HTTP request to a file on disk.</Abstract>
-			<DeclaredIn>GCDWebServerFileRequest.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/cl/GCDWebServerErrorResponse</TokenIdentifier>
+			<Abstract type="html">The GCDWebServerDataResponse subclass of GCDWebServerDataResponse generates
+an HTML body from an HTTP status code and an error message.</Abstract>
+			<DeclaredIn>GCDWebServerErrorResponse.h</DeclaredIn>
             
 			
 			<NodeRef refid="23"/>
@@ -14,110 +14,114 @@ of the HTTP request to a file on disk.</Abstract>
 		
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerFileRequest/setTemporaryPath:</TokenIdentifier>
-			<Abstract type="html">Returns the path to the temporary file containing the request body.</Abstract>
-			<DeclaredIn>GCDWebServerFileRequest.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/clm/GCDWebServerErrorResponse/responseWithClientError:message:</TokenIdentifier>
+			<Abstract type="html">Creates a client error response with the corresponding HTTP status code.</Abstract>
+			<DeclaredIn>GCDWebServerErrorResponse.h</DeclaredIn>
 			
-			<Declaration>@property (nonatomic, readonly) NSString *temporaryPath</Declaration>
+			<Declaration>+ (instancetype)responseWithClientError:(GCDWebServerClientErrorHTTPStatusCode)errorCode message:(NSString *)format, ...</Declaration>
 			
 			
-			<Anchor>//api/name/temporaryPath</Anchor>
+			<Anchor>//api/name/responseWithClientError:message:</Anchor>
             <NodeRef refid="23"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerFileRequest/temporaryPath</TokenIdentifier>
-			<Abstract type="html">Returns the path to the temporary file containing the request body.</Abstract>
-			<DeclaredIn>GCDWebServerFileRequest.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/clm/GCDWebServerErrorResponse/responseWithServerError:message:</TokenIdentifier>
+			<Abstract type="html">Creates a server error response with the corresponding HTTP status code.</Abstract>
+			<DeclaredIn>GCDWebServerErrorResponse.h</DeclaredIn>
 			
-			<Declaration>@property (nonatomic, readonly) NSString *temporaryPath</Declaration>
+			<Declaration>+ (instancetype)responseWithServerError:(GCDWebServerServerErrorHTTPStatusCode)errorCode message:(NSString *)format, ...</Declaration>
 			
 			
-			<Anchor>//api/name/temporaryPath</Anchor>
+			<Anchor>//api/name/responseWithServerError:message:</Anchor>
             <NodeRef refid="23"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/GCDWebServerFileRequest/temporaryPath</TokenIdentifier>
-			<Abstract type="html">Returns the path to the temporary file containing the request body.</Abstract>
-			<DeclaredIn>GCDWebServerFileRequest.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/clm/GCDWebServerErrorResponse/responseWithClientError:underlyingError:message:</TokenIdentifier>
+			<Abstract type="html">Creates a client error response with the corresponding HTTP status code
+and an underlying NSError.</Abstract>
+			<DeclaredIn>GCDWebServerErrorResponse.h</DeclaredIn>
 			
-			<Declaration>@property (nonatomic, readonly) NSString *temporaryPath</Declaration>
+			<Declaration>+ (instancetype)responseWithClientError:(GCDWebServerClientErrorHTTPStatusCode)errorCode underlyingError:(NSError *)underlyingError message:(NSString *)format, ...</Declaration>
 			
 			
-			<Anchor>//api/name/temporaryPath</Anchor>
+			<Anchor>//api/name/responseWithClientError:underlyingError:message:</Anchor>
             <NodeRef refid="23"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerFileRequest/initWithMethod:url:headers:path:query:</TokenIdentifier>
-			<Abstract type="html">This method is the designated initializer for the class.</Abstract>
-			<DeclaredIn>GCDWebServerFileRequest.m</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/clm/GCDWebServerErrorResponse/responseWithServerError:underlyingError:message:</TokenIdentifier>
+			<Abstract type="html">Creates a server error response with the corresponding HTTP status code
+and an underlying NSError.</Abstract>
+			<DeclaredIn>GCDWebServerErrorResponse.h</DeclaredIn>
 			
-			<Declaration>- (instancetype)initWithMethod:(NSString *)method url:(NSURL *)url headers:(NSDictionary *)headers path:(NSString *)path query:(NSDictionary *)query</Declaration>
+			<Declaration>+ (instancetype)responseWithServerError:(GCDWebServerServerErrorHTTPStatusCode)errorCode underlyingError:(NSError *)underlyingError message:(NSString *)format, ...</Declaration>
 			
 			
-			<Anchor>//api/name/initWithMethod:url:headers:path:query:</Anchor>
+			<Anchor>//api/name/responseWithServerError:underlyingError:message:</Anchor>
             <NodeRef refid="23"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerFileRequest/dealloc</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerErrorResponse/initWithClientError:message:</TokenIdentifier>
+			<Abstract type="html">Initializes a client error response with the corresponding HTTP status code.</Abstract>
+			<DeclaredIn>GCDWebServerErrorResponse.h</DeclaredIn>
+			
+			<Declaration>- (instancetype)initWithClientError:(GCDWebServerClientErrorHTTPStatusCode)errorCode message:(NSString *)format, ...</Declaration>
+			
+			
+			<Anchor>//api/name/initWithClientError:message:</Anchor>
+            <NodeRef refid="23"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerErrorResponse/initWithServerError:message:</TokenIdentifier>
+			<Abstract type="html">Initializes a server error response with the corresponding HTTP status code.</Abstract>
+			<DeclaredIn>GCDWebServerErrorResponse.h</DeclaredIn>
+			
+			<Declaration>- (instancetype)initWithServerError:(GCDWebServerServerErrorHTTPStatusCode)errorCode message:(NSString *)format, ...</Declaration>
+			
+			
+			<Anchor>//api/name/initWithServerError:message:</Anchor>
+            <NodeRef refid="23"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerErrorResponse/initWithClientError:underlyingError:message:</TokenIdentifier>
+			<Abstract type="html">Initializes a client error response with the corresponding HTTP status code
+and an underlying NSError.</Abstract>
+			<DeclaredIn>GCDWebServerErrorResponse.h</DeclaredIn>
+			
+			<Declaration>- (instancetype)initWithClientError:(GCDWebServerClientErrorHTTPStatusCode)errorCode underlyingError:(NSError *)underlyingError message:(NSString *)format, ...</Declaration>
+			
+			
+			<Anchor>//api/name/initWithClientError:underlyingError:message:</Anchor>
+            <NodeRef refid="23"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerErrorResponse/initWithServerError:underlyingError:message:</TokenIdentifier>
+			<Abstract type="html">Initializes a server error response with the corresponding HTTP status code
+and an underlying NSError.</Abstract>
+			<DeclaredIn>GCDWebServerErrorResponse.h</DeclaredIn>
+			
+			<Declaration>- (instancetype)initWithServerError:(GCDWebServerServerErrorHTTPStatusCode)errorCode underlyingError:(NSError *)underlyingError message:(NSString *)format, ...</Declaration>
+			
+			
+			<Anchor>//api/name/initWithServerError:underlyingError:message:</Anchor>
+            <NodeRef refid="23"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerErrorResponse/initWithStatusCode:underlyingError:messageFormat:arguments:</TokenIdentifier>
 			<Abstract type="html"></Abstract>
-			<DeclaredIn>GCDWebServerFileRequest.m</DeclaredIn>
+			<DeclaredIn>GCDWebServerErrorResponse.m</DeclaredIn>
 			
-			<Declaration>- (void)dealloc</Declaration>
-			
-			
-			<Anchor>//api/name/dealloc</Anchor>
-            <NodeRef refid="23"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerFileRequest/open:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>GCDWebServerFileRequest.m</DeclaredIn>
-			
-			<Declaration>- (BOOL)open:(NSError **)error</Declaration>
+			<Declaration>- (instancetype)initWithStatusCode:(NSInteger)statusCode underlyingError:(NSError *)underlyingError messageFormat:(NSString *)format arguments:(va_list)arguments</Declaration>
 			
 			
-			<Anchor>//api/name/open:</Anchor>
-            <NodeRef refid="23"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerFileRequest/writeData:error:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>GCDWebServerFileRequest.m</DeclaredIn>
-			
-			<Declaration>- (BOOL)writeData:(NSData *)data error:(NSError **)error</Declaration>
-			
-			
-			<Anchor>//api/name/writeData:error:</Anchor>
-            <NodeRef refid="23"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerFileRequest/close:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>GCDWebServerFileRequest.m</DeclaredIn>
-			
-			<Declaration>- (BOOL)close:(NSError **)error</Declaration>
-			
-			
-			<Anchor>//api/name/close:</Anchor>
-            <NodeRef refid="23"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerFileRequest/description</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>GCDWebServerFileRequest.m</DeclaredIn>
-			
-			<Declaration>- (NSString *)description</Declaration>
-			
-			
-			<Anchor>//api/name/description</Anchor>
+			<Anchor>//api/name/initWithStatusCode:underlyingError:messageFormat:arguments:</Anchor>
             <NodeRef refid="23"/>
 		</Token>
 		

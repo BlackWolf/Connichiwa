@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Classes/GCDWebServerMIMEStreamParser.html">
+	<File path="Classes/GCDWebServerHandler.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/cl/GCDWebServerMIMEStreamParser</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/cl/GCDWebServerHandler</TokenIdentifier>
 			<Abstract type="html"></Abstract>
-			<DeclaredIn>GCDWebServerMultiPartFormRequest.m</DeclaredIn>
+			<DeclaredIn>GCDWebServer.m</DeclaredIn>
             
 			
 			<NodeRef refid="28"/>
@@ -13,74 +13,86 @@
 		
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerMIMEStreamParser/initWithBoundary:defaultControlName:arguments:files:</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerHandler/initWithMatchBlock:asyncProcessBlock:</TokenIdentifier>
 			<Abstract type="html"></Abstract>
-			<DeclaredIn>GCDWebServerMultiPartFormRequest.m</DeclaredIn>
+			<DeclaredIn>GCDWebServer.m</DeclaredIn>
 			
-			<Declaration>- (id)initWithBoundary:(NSString *)boundary defaultControlName:(NSString *)name arguments:(NSMutableArray *)arguments files:(NSMutableArray *)files</Declaration>
+			<Declaration>- (id)initWithMatchBlock:(GCDWebServerMatchBlock)matchBlock asyncProcessBlock:(GCDWebServerAsyncProcessBlock)processBlock</Declaration>
 			
 			
-			<Anchor>//api/name/initWithBoundary:defaultControlName:arguments:files:</Anchor>
+			<Anchor>//api/name/initWithMatchBlock:asyncProcessBlock:</Anchor>
             <NodeRef refid="28"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerMIMEStreamParser/appendBytes:length:</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerHandler/setMatchBlock:</TokenIdentifier>
 			<Abstract type="html"></Abstract>
-			<DeclaredIn>GCDWebServerMultiPartFormRequest.m</DeclaredIn>
+			<DeclaredIn>GCDWebServerPrivate.h</DeclaredIn>
 			
-			<Declaration>- (BOOL)appendBytes:(const void *)bytes length:(NSUInteger)length</Declaration>
+			<Declaration>@property (nonatomic, readonly) GCDWebServerMatchBlock matchBlock</Declaration>
 			
 			
-			<Anchor>//api/name/appendBytes:length:</Anchor>
+			<Anchor>//api/name/matchBlock</Anchor>
             <NodeRef refid="28"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerMIMEStreamParser/isAtEnd</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerHandler/matchBlock</TokenIdentifier>
 			<Abstract type="html"></Abstract>
-			<DeclaredIn>GCDWebServerMultiPartFormRequest.m</DeclaredIn>
+			<DeclaredIn>GCDWebServerPrivate.h</DeclaredIn>
 			
-			<Declaration>- (BOOL)isAtEnd</Declaration>
+			<Declaration>@property (nonatomic, readonly) GCDWebServerMatchBlock matchBlock</Declaration>
 			
 			
-			<Anchor>//api/name/isAtEnd</Anchor>
+			<Anchor>//api/name/matchBlock</Anchor>
             <NodeRef refid="28"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/clm/GCDWebServerMIMEStreamParser/initialize</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/instp/GCDWebServerHandler/matchBlock</TokenIdentifier>
 			<Abstract type="html"></Abstract>
-			<DeclaredIn>GCDWebServerMultiPartFormRequest.m</DeclaredIn>
+			<DeclaredIn>GCDWebServerPrivate.h</DeclaredIn>
 			
-			<Declaration>+ (void)initialize</Declaration>
+			<Declaration>@property (nonatomic, readonly) GCDWebServerMatchBlock matchBlock</Declaration>
 			
 			
-			<Anchor>//api/name/initialize</Anchor>
+			<Anchor>//api/name/matchBlock</Anchor>
             <NodeRef refid="28"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerMIMEStreamParser/dealloc</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerHandler/setAsyncProcessBlock:</TokenIdentifier>
 			<Abstract type="html"></Abstract>
-			<DeclaredIn>GCDWebServerMultiPartFormRequest.m</DeclaredIn>
+			<DeclaredIn>GCDWebServerPrivate.h</DeclaredIn>
 			
-			<Declaration>- (void)dealloc</Declaration>
+			<Declaration>@property (nonatomic, readonly) GCDWebServerAsyncProcessBlock asyncProcessBlock</Declaration>
 			
 			
-			<Anchor>//api/name/dealloc</Anchor>
+			<Anchor>//api/name/asyncProcessBlock</Anchor>
             <NodeRef refid="28"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerMIMEStreamParser/_parseData</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerHandler/asyncProcessBlock</TokenIdentifier>
 			<Abstract type="html"></Abstract>
-			<DeclaredIn>GCDWebServerMultiPartFormRequest.m</DeclaredIn>
+			<DeclaredIn>GCDWebServerPrivate.h</DeclaredIn>
 			
-			<Declaration>- (BOOL)_parseData</Declaration>
+			<Declaration>@property (nonatomic, readonly) GCDWebServerAsyncProcessBlock asyncProcessBlock</Declaration>
 			
 			
-			<Anchor>//api/name/_parseData</Anchor>
+			<Anchor>//api/name/asyncProcessBlock</Anchor>
+            <NodeRef refid="28"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/GCDWebServerHandler/asyncProcessBlock</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerPrivate.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly) GCDWebServerAsyncProcessBlock asyncProcessBlock</Declaration>
+			
+			
+			<Anchor>//api/name/asyncProcessBlock</Anchor>
             <NodeRef refid="28"/>
 		</Token>
 		

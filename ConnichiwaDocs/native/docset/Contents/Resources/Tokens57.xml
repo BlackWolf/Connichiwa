@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Constants/GCDWebServerSuccessfulHTTPStatusCode.html">
+	<File path="Constants/GCDWebServerLoggingLevel.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/c/tdef/GCDWebServerSuccessfulHTTPStatusCode</TokenIdentifier>
-			<Abstract type="html">Convenience constants for &quot;successful&quot; HTTP status codes.</Abstract>
-			<DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/c/tdef/GCDWebServerLoggingLevel</TokenIdentifier>
+			<Abstract type="html">If all of the above fail, then use GCDWebServer built-in
+logging facility.</Abstract>
+			<DeclaredIn>GCDWebServerPrivate.h</DeclaredIn>
             
 			
 			<NodeRef refid="57"/>
@@ -14,91 +15,61 @@
 		
         
         <Token>
-            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_OK</TokenIdentifier>
+            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerLoggingLevel_Debug</TokenIdentifier>
             <Abstract type="html"></Abstract>
-            <Declaration>kGCDWebServerHTTPStatusCode_OK</Declaration>
+            <Declaration>kGCDWebServerLoggingLevel_Debug</Declaration>
             
-            <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
+            <DeclaredIn>GCDWebServerPrivate.h</DeclaredIn>
             
             <NodeRef refid="57"/>
         </Token>
         
         <Token>
-            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_Created</TokenIdentifier>
+            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerLoggingLevel_Verbose</TokenIdentifier>
             <Abstract type="html"></Abstract>
-            <Declaration>kGCDWebServerHTTPStatusCode_Created</Declaration>
+            <Declaration>kGCDWebServerLoggingLevel_Verbose</Declaration>
             
-            <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
+            <DeclaredIn>GCDWebServerPrivate.h</DeclaredIn>
             
             <NodeRef refid="57"/>
         </Token>
         
         <Token>
-            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_Accepted</TokenIdentifier>
+            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerLoggingLevel_Info</TokenIdentifier>
             <Abstract type="html"></Abstract>
-            <Declaration>kGCDWebServerHTTPStatusCode_Accepted</Declaration>
+            <Declaration>kGCDWebServerLoggingLevel_Info</Declaration>
             
-            <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
+            <DeclaredIn>GCDWebServerPrivate.h</DeclaredIn>
             
             <NodeRef refid="57"/>
         </Token>
         
         <Token>
-            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_NonAuthoritativeInformation</TokenIdentifier>
+            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerLoggingLevel_Warning</TokenIdentifier>
             <Abstract type="html"></Abstract>
-            <Declaration>kGCDWebServerHTTPStatusCode_NonAuthoritativeInformation</Declaration>
+            <Declaration>kGCDWebServerLoggingLevel_Warning</Declaration>
             
-            <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
+            <DeclaredIn>GCDWebServerPrivate.h</DeclaredIn>
             
             <NodeRef refid="57"/>
         </Token>
         
         <Token>
-            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_NoContent</TokenIdentifier>
+            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerLoggingLevel_Error</TokenIdentifier>
             <Abstract type="html"></Abstract>
-            <Declaration>kGCDWebServerHTTPStatusCode_NoContent</Declaration>
+            <Declaration>kGCDWebServerLoggingLevel_Error</Declaration>
             
-            <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
+            <DeclaredIn>GCDWebServerPrivate.h</DeclaredIn>
             
             <NodeRef refid="57"/>
         </Token>
         
         <Token>
-            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_ResetContent</TokenIdentifier>
+            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerLoggingLevel_Exception</TokenIdentifier>
             <Abstract type="html"></Abstract>
-            <Declaration>kGCDWebServerHTTPStatusCode_ResetContent</Declaration>
+            <Declaration>kGCDWebServerLoggingLevel_Exception</Declaration>
             
-            <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
-            
-            <NodeRef refid="57"/>
-        </Token>
-        
-        <Token>
-            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_PartialContent</TokenIdentifier>
-            <Abstract type="html"></Abstract>
-            <Declaration>kGCDWebServerHTTPStatusCode_PartialContent</Declaration>
-            
-            <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
-            
-            <NodeRef refid="57"/>
-        </Token>
-        
-        <Token>
-            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_MultiStatus</TokenIdentifier>
-            <Abstract type="html"></Abstract>
-            <Declaration>kGCDWebServerHTTPStatusCode_MultiStatus</Declaration>
-            
-            <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
-            
-            <NodeRef refid="57"/>
-        </Token>
-        
-        <Token>
-            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_AlreadyReported</TokenIdentifier>
-            <Abstract type="html"></Abstract>
-            <Declaration>kGCDWebServerHTTPStatusCode_AlreadyReported</Declaration>
-            
-            <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
+            <DeclaredIn>GCDWebServerPrivate.h</DeclaredIn>
             
             <NodeRef refid="57"/>
         </Token>

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Classes/GCDWebServerMultiPartArgument.html">
+	<File path="Classes/GCDWebServerMultiPart.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/cl/GCDWebServerMultiPartArgument</TokenIdentifier>
-			<Abstract type="html">The GCDWebServerMultiPartArgument subclass of GCDWebServerMultiPart wraps
-the content of a part as data in memory.</Abstract>
+			<TokenIdentifier>//apple_ref/occ/cl/GCDWebServerMultiPart</TokenIdentifier>
+			<Abstract type="html">The GCDWebServerMultiPart class is an abstract class that wraps the content
+of a part.</Abstract>
 			<DeclaredIn>GCDWebServerMultiPartFormRequest.h</DeclaredIn>
             
 			
@@ -14,101 +14,125 @@ the content of a part as data in memory.</Abstract>
 		
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerMultiPartArgument/setData:</TokenIdentifier>
-			<Abstract type="html">Returns the data for the part.</Abstract>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerMultiPart/setControlName:</TokenIdentifier>
+			<Abstract type="html">Returns the control name retrieved from the part headers.</Abstract>
 			<DeclaredIn>GCDWebServerMultiPartFormRequest.h</DeclaredIn>
 			
-			<Declaration>@property (nonatomic, readonly) NSData *data</Declaration>
+			<Declaration>@property (nonatomic, readonly) NSString *controlName</Declaration>
 			
 			
-			<Anchor>//api/name/data</Anchor>
+			<Anchor>//api/name/controlName</Anchor>
             <NodeRef refid="30"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerMultiPartArgument/data</TokenIdentifier>
-			<Abstract type="html">Returns the data for the part.</Abstract>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerMultiPart/controlName</TokenIdentifier>
+			<Abstract type="html">Returns the control name retrieved from the part headers.</Abstract>
 			<DeclaredIn>GCDWebServerMultiPartFormRequest.h</DeclaredIn>
 			
-			<Declaration>@property (nonatomic, readonly) NSData *data</Declaration>
+			<Declaration>@property (nonatomic, readonly) NSString *controlName</Declaration>
 			
 			
-			<Anchor>//api/name/data</Anchor>
+			<Anchor>//api/name/controlName</Anchor>
             <NodeRef refid="30"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/GCDWebServerMultiPartArgument/data</TokenIdentifier>
-			<Abstract type="html">Returns the data for the part.</Abstract>
+			<TokenIdentifier>//apple_ref/occ/instp/GCDWebServerMultiPart/controlName</TokenIdentifier>
+			<Abstract type="html">Returns the control name retrieved from the part headers.</Abstract>
 			<DeclaredIn>GCDWebServerMultiPartFormRequest.h</DeclaredIn>
 			
-			<Declaration>@property (nonatomic, readonly) NSData *data</Declaration>
+			<Declaration>@property (nonatomic, readonly) NSString *controlName</Declaration>
 			
 			
-			<Anchor>//api/name/data</Anchor>
+			<Anchor>//api/name/controlName</Anchor>
             <NodeRef refid="30"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerMultiPartArgument/setString:</TokenIdentifier>
-			<Abstract type="html">Returns the data for the part interpreted as text. If the content
-type of the part is not a text one, or if an error occurs, nil is returned.</Abstract>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerMultiPart/setContentType:</TokenIdentifier>
+			<Abstract type="html">Returns the content type retrieved from the part headers or &quot;text/plain&quot;
+if not available (per HTTP specifications).</Abstract>
 			<DeclaredIn>GCDWebServerMultiPartFormRequest.h</DeclaredIn>
 			
-			<Declaration>@property (nonatomic, readonly) NSString *string</Declaration>
+			<Declaration>@property (nonatomic, readonly) NSString *contentType</Declaration>
 			
 			
-			<Anchor>//api/name/string</Anchor>
+			<Anchor>//api/name/contentType</Anchor>
             <NodeRef refid="30"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerMultiPartArgument/string</TokenIdentifier>
-			<Abstract type="html">Returns the data for the part interpreted as text. If the content
-type of the part is not a text one, or if an error occurs, nil is returned.</Abstract>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerMultiPart/contentType</TokenIdentifier>
+			<Abstract type="html">Returns the content type retrieved from the part headers or &quot;text/plain&quot;
+if not available (per HTTP specifications).</Abstract>
 			<DeclaredIn>GCDWebServerMultiPartFormRequest.h</DeclaredIn>
 			
-			<Declaration>@property (nonatomic, readonly) NSString *string</Declaration>
+			<Declaration>@property (nonatomic, readonly) NSString *contentType</Declaration>
 			
 			
-			<Anchor>//api/name/string</Anchor>
+			<Anchor>//api/name/contentType</Anchor>
             <NodeRef refid="30"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/GCDWebServerMultiPartArgument/string</TokenIdentifier>
-			<Abstract type="html">Returns the data for the part interpreted as text. If the content
-type of the part is not a text one, or if an error occurs, nil is returned.</Abstract>
+			<TokenIdentifier>//apple_ref/occ/instp/GCDWebServerMultiPart/contentType</TokenIdentifier>
+			<Abstract type="html">Returns the content type retrieved from the part headers or &quot;text/plain&quot;
+if not available (per HTTP specifications).</Abstract>
 			<DeclaredIn>GCDWebServerMultiPartFormRequest.h</DeclaredIn>
 			
-			<Declaration>@property (nonatomic, readonly) NSString *string</Declaration>
+			<Declaration>@property (nonatomic, readonly) NSString *contentType</Declaration>
 			
 			
-			<Anchor>//api/name/string</Anchor>
+			<Anchor>//api/name/contentType</Anchor>
             <NodeRef refid="30"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerMultiPartArgument/initWithControlName:contentType:data:</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerMultiPart/setMimeType:</TokenIdentifier>
+			<Abstract type="html">Returns the MIME type component of the content type for the part.</Abstract>
+			<DeclaredIn>GCDWebServerMultiPartFormRequest.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly) NSString *mimeType</Declaration>
+			
+			
+			<Anchor>//api/name/mimeType</Anchor>
+            <NodeRef refid="30"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerMultiPart/mimeType</TokenIdentifier>
+			<Abstract type="html">Returns the MIME type component of the content type for the part.</Abstract>
+			<DeclaredIn>GCDWebServerMultiPartFormRequest.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly) NSString *mimeType</Declaration>
+			
+			
+			<Anchor>//api/name/mimeType</Anchor>
+            <NodeRef refid="30"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/GCDWebServerMultiPart/mimeType</TokenIdentifier>
+			<Abstract type="html">Returns the MIME type component of the content type for the part.</Abstract>
+			<DeclaredIn>GCDWebServerMultiPartFormRequest.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly) NSString *mimeType</Declaration>
+			
+			
+			<Anchor>//api/name/mimeType</Anchor>
+            <NodeRef refid="30"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerMultiPart/initWithControlName:contentType:</TokenIdentifier>
 			<Abstract type="html"></Abstract>
 			<DeclaredIn>GCDWebServerMultiPartFormRequest.m</DeclaredIn>
 			
-			<Declaration>- (id)initWithControlName:(NSString *)name contentType:(NSString *)type data:(NSData *)data</Declaration>
+			<Declaration>- (id)initWithControlName:(NSString *)name contentType:(NSString *)type</Declaration>
 			
 			
-			<Anchor>//api/name/initWithControlName:contentType:data:</Anchor>
-            <NodeRef refid="30"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerMultiPartArgument/description</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>GCDWebServerMultiPartFormRequest.m</DeclaredIn>
-			
-			<Declaration>- (NSString *)description</Declaration>
-			
-			
-			<Anchor>//api/name/description</Anchor>
+			<Anchor>//api/name/initWithControlName:contentType:</Anchor>
             <NodeRef refid="30"/>
 		</Token>
 		

@@ -10,6 +10,7 @@
 #import <UIKit/UIKit.h>
 #import <JavaScriptCore/JavaScriptCore.h>
 #import "CWWebApplicationState.h"
+#import "CWRemoteLibraryManagerDelegate.h"
 
 
 
@@ -48,6 +49,12 @@ typedef NS_ENUM(NSInteger, CWRemoteLibraryManagerState)
  */
 @interface CWRemoteLibraryManager : NSObject
 
+
+/**
+ *  The delegate this class sends events to
+ */
+@property (readwrite, strong) id<CWRemoteLibraryManagerDelegate> delegate;
+
 /**
  *  The remote webview where the connection to remote devices will be established. Must be set to a UIWebView that is not used for any other purposes. This class will become the delegate of that UIWebView. Also, the UIWebView will automatically be hidden/unhidden depending on the remote state of this devie.
  */
@@ -68,6 +75,8 @@ typedef NS_ENUM(NSInteger, CWRemoteLibraryManagerState)
  *  @return true if we are currently connected as a remote device, otherwise false
  */
 - (BOOL)isActive;
+
+- (void)sendProximityStateChanged:(BOOL)proximityState;
 
 /**
  *  Connects us as a remote device to the connichiwa webserver at the given URL

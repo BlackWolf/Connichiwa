@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Constants/CWWebLibraryManagerState.html">
+	<File path="Constants/CWBluetoothConnectionMCState.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/c/tdef/CWWebLibraryManagerState</TokenIdentifier>
-			<Abstract type="html">Represents the loading state of the web library on the web library&apos;s UIWebView</Abstract>
-			<DeclaredIn>CWWebLibraryManager.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/c/tdef/CWBluetoothConnectionMCState</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
             
 			
 			<NodeRef refid="50"/>
@@ -14,45 +14,31 @@
 		
         
         <Token>
-            <TokenIdentifier>//apple_ref/c/econst/CWWebLibraryManagerStateDisconnected</TokenIdentifier>
-            <Abstract type="html">This device is not connected to the web library
-     </Abstract>
-            <Declaration>CWWebLibraryManagerStateDisconnected</Declaration>
+            <TokenIdentifier>//apple_ref/c/econst/CWBluetoothConnectionMCStateDisconnected</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>CWBluetoothConnectionMCStateDisconnected</Declaration>
             
-            <DeclaredIn>CWWebLibraryManager.h</DeclaredIn>
-            
-            <NodeRef refid="50"/>
-        </Token>
-        
-        <Token>
-            <TokenIdentifier>//apple_ref/c/econst/CWWebLibraryManagerStateConnecting</TokenIdentifier>
-            <Abstract type="html">This device is currently connecting to the web library
-     </Abstract>
-            <Declaration>CWWebLibraryManagerStateConnecting</Declaration>
-            
-            <DeclaredIn>CWWebLibraryManager.h</DeclaredIn>
+            <DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
             
             <NodeRef refid="50"/>
         </Token>
         
         <Token>
-            <TokenIdentifier>//apple_ref/c/econst/CWWebLibraryManagerStateConnected</TokenIdentifier>
-            <Abstract type="html">This device has established a connection to the web library
-     </Abstract>
-            <Declaration>CWWebLibraryManagerStateConnected</Declaration>
+            <TokenIdentifier>//apple_ref/c/econst/CWBluetoothConnectionMCStateSearching</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>CWBluetoothConnectionMCStateSearching</Declaration>
             
-            <DeclaredIn>CWWebLibraryManager.h</DeclaredIn>
+            <DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
             
             <NodeRef refid="50"/>
         </Token>
         
         <Token>
-            <TokenIdentifier>//apple_ref/c/econst/CWWebLibraryManagerStateDisconnecting</TokenIdentifier>
-            <Abstract type="html">This device is currently disconnecting from the web library
-     </Abstract>
-            <Declaration>CWWebLibraryManagerStateDisconnecting</Declaration>
+            <TokenIdentifier>//apple_ref/c/econst/CWBluetoothConnectionMCStateConnected</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>CWBluetoothConnectionMCStateConnected</Declaration>
             
-            <DeclaredIn>CWWebLibraryManager.h</DeclaredIn>
+            <DeclaredIn>CWBluetoothConnection.h</DeclaredIn>
             
             <NodeRef refid="50"/>
         </Token>

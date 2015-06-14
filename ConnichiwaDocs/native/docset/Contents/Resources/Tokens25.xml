@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Classes/GCDWebServerGZipDecoder.html">
+	<File path="Classes/GCDWebServerFileResponse.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/cl/GCDWebServerGZipDecoder</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>GCDWebServerRequest.m</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/cl/GCDWebServerFileResponse</TokenIdentifier>
+			<Abstract type="html">The GCDWebServerFileResponse subclass of GCDWebServerResponse reads the body
+of the HTTP response from a file on disk.</Abstract>
+			<DeclaredIn>GCDWebServerFileResponse.h</DeclaredIn>
             
 			
 			<NodeRef refid="25"/>
@@ -13,9 +14,128 @@
 		
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerGZipDecoder/open:</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/clm/GCDWebServerFileResponse/responseWithFile:</TokenIdentifier>
+			<Abstract type="html">Creates a response with the contents of a file.</Abstract>
+			<DeclaredIn>GCDWebServerFileResponse.h</DeclaredIn>
+			
+			<Declaration>+ (instancetype)responseWithFile:(NSString *)path</Declaration>
+			
+			
+			<Anchor>//api/name/responseWithFile:</Anchor>
+            <NodeRef refid="25"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/GCDWebServerFileResponse/responseWithFile:isAttachment:</TokenIdentifier>
+			<Abstract type="html">Creates a response like responseWithFile: and sets the &quot;Content-Disposition&quot;
+HTTP header for a download if the &quot;attachment&quot; argument is YES.</Abstract>
+			<DeclaredIn>GCDWebServerFileResponse.h</DeclaredIn>
+			
+			<Declaration>+ (instancetype)responseWithFile:(NSString *)path isAttachment:(BOOL)attachment</Declaration>
+			
+			
+			<Anchor>//api/name/responseWithFile:isAttachment:</Anchor>
+            <NodeRef refid="25"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/GCDWebServerFileResponse/responseWithFile:byteRange:</TokenIdentifier>
+			<Abstract type="html">Creates a response like responseWithFile: but restricts the file contents
+to a specific byte range.</Abstract>
+			<DeclaredIn>GCDWebServerFileResponse.h</DeclaredIn>
+			
+			<Declaration>+ (instancetype)responseWithFile:(NSString *)path byteRange:(NSRange)range</Declaration>
+			
+			
+			<Anchor>//api/name/responseWithFile:byteRange:</Anchor>
+            <NodeRef refid="25"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/GCDWebServerFileResponse/responseWithFile:byteRange:isAttachment:</TokenIdentifier>
+			<Abstract type="html">Creates a response like responseWithFile:byteRange: and sets the
+&quot;Content-Disposition&quot; HTTP header for a download if the &quot;attachment&quot;
+argument is YES.</Abstract>
+			<DeclaredIn>GCDWebServerFileResponse.h</DeclaredIn>
+			
+			<Declaration>+ (instancetype)responseWithFile:(NSString *)path byteRange:(NSRange)range isAttachment:(BOOL)attachment</Declaration>
+			
+			
+			<Anchor>//api/name/responseWithFile:byteRange:isAttachment:</Anchor>
+            <NodeRef refid="25"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerFileResponse/initWithFile:</TokenIdentifier>
+			<Abstract type="html">Initializes a response with the contents of a file.</Abstract>
+			<DeclaredIn>GCDWebServerFileResponse.h</DeclaredIn>
+			
+			<Declaration>- (instancetype)initWithFile:(NSString *)path</Declaration>
+			
+			
+			<Anchor>//api/name/initWithFile:</Anchor>
+            <NodeRef refid="25"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerFileResponse/initWithFile:isAttachment:</TokenIdentifier>
+			<Abstract type="html">Initializes a response like responseWithFile: and sets the
+&quot;Content-Disposition&quot; HTTP header for a download if the &quot;attachment&quot;
+argument is YES.</Abstract>
+			<DeclaredIn>GCDWebServerFileResponse.h</DeclaredIn>
+			
+			<Declaration>- (instancetype)initWithFile:(NSString *)path isAttachment:(BOOL)attachment</Declaration>
+			
+			
+			<Anchor>//api/name/initWithFile:isAttachment:</Anchor>
+            <NodeRef refid="25"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerFileResponse/initWithFile:byteRange:</TokenIdentifier>
+			<Abstract type="html">Initializes a response like initWithFile: but restricts the file contents
+to a specific byte range. This range should be set to (NSUIntegerMax, 0) for
+the full file, (offset, length) if expressed from the beginning of the file,
+or (NSUIntegerMax, length) if expressed from the end of the file. The &quot;offset&quot;
+and &quot;length&quot; values will be automatically adjusted to be compatible with the
+actual size of the file.</Abstract>
+			<DeclaredIn>GCDWebServerFileResponse.h</DeclaredIn>
+			
+			<Declaration>- (instancetype)initWithFile:(NSString *)path byteRange:(NSRange)range</Declaration>
+			
+			
+			<Anchor>//api/name/initWithFile:byteRange:</Anchor>
+            <NodeRef refid="25"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerFileResponse/initWithFile:byteRange:isAttachment:</TokenIdentifier>
+			<Abstract type="html">This method is the designated initializer for the class.</Abstract>
+			<DeclaredIn>GCDWebServerFileResponse.h</DeclaredIn>
+			
+			<Declaration>- (instancetype)initWithFile:(NSString *)path byteRange:(NSRange)range isAttachment:(BOOL)attachment</Declaration>
+			
+			
+			<Anchor>//api/name/initWithFile:byteRange:isAttachment:</Anchor>
+            <NodeRef refid="25"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/GCDWebServerFileResponse/t-</TokenIdentifier>
 			<Abstract type="html"></Abstract>
-			<DeclaredIn>GCDWebServerRequest.m</DeclaredIn>
+			<DeclaredIn>GCDWebServerFileResponse.m</DeclaredIn>
+			
+			<Declaration>+ (NSTimeInterval)t-</Declaration>
+			
+			
+			<Anchor>//api/name/t-</Anchor>
+            <NodeRef refid="25"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerFileResponse/open:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerFileResponse.m</DeclaredIn>
 			
 			<Declaration>- (BOOL)open:(NSError **)error</Declaration>
 			
@@ -25,26 +145,38 @@
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerGZipDecoder/writeData:error:</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerFileResponse/readData:</TokenIdentifier>
 			<Abstract type="html"></Abstract>
-			<DeclaredIn>GCDWebServerRequest.m</DeclaredIn>
+			<DeclaredIn>GCDWebServerFileResponse.m</DeclaredIn>
 			
-			<Declaration>- (BOOL)writeData:(NSData *)data error:(NSError **)error</Declaration>
+			<Declaration>- (NSData *)readData:(NSError **)error</Declaration>
 			
 			
-			<Anchor>//api/name/writeData:error:</Anchor>
+			<Anchor>//api/name/readData:</Anchor>
             <NodeRef refid="25"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerGZipDecoder/close:</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerFileResponse/close</TokenIdentifier>
 			<Abstract type="html"></Abstract>
-			<DeclaredIn>GCDWebServerRequest.m</DeclaredIn>
+			<DeclaredIn>GCDWebServerFileResponse.m</DeclaredIn>
 			
-			<Declaration>- (BOOL)close:(NSError **)error</Declaration>
+			<Declaration>- (void)close</Declaration>
 			
 			
-			<Anchor>//api/name/close:</Anchor>
+			<Anchor>//api/name/close</Anchor>
+            <NodeRef refid="25"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerFileResponse/description</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerFileResponse.m</DeclaredIn>
+			
+			<Declaration>- (NSString *)description</Declaration>
+			
+			
+			<Anchor>//api/name/description</Anchor>
             <NodeRef refid="25"/>
 		</Token>
 		

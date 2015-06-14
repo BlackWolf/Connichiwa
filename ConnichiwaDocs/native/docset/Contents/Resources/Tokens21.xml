@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Classes/GCDWebServerDataResponse.html">
+	<File path="Classes/GCDWebServerDataRequest.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/cl/GCDWebServerDataResponse</TokenIdentifier>
-			<Abstract type="html">The GCDWebServerDataResponse subclass of GCDWebServerResponse reads the body
-of the HTTP response from memory.</Abstract>
-			<DeclaredIn>GCDWebServerDataResponse.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/cl/GCDWebServerDataRequest</TokenIdentifier>
+			<Abstract type="html">The GCDWebServerDataRequest subclass of GCDWebServerRequest stores the body
+of the HTTP request in memory.</Abstract>
+			<DeclaredIn>GCDWebServerDataRequest.h</DeclaredIn>
             
 			
 			<NodeRef refid="21"/>
@@ -14,45 +14,81 @@ of the HTTP response from memory.</Abstract>
 		
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/clm/GCDWebServerDataResponse/responseWithData:contentType:</TokenIdentifier>
-			<Abstract type="html">Creates a response with data in memory and a given content type.</Abstract>
-			<DeclaredIn>GCDWebServerDataResponse.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerDataRequest/setData:</TokenIdentifier>
+			<Abstract type="html">Returns the data for the request body.</Abstract>
+			<DeclaredIn>GCDWebServerDataRequest.h</DeclaredIn>
 			
-			<Declaration>+ (instancetype)responseWithData:(NSData *)data contentType:(NSString *)type</Declaration>
+			<Declaration>@property (nonatomic, readonly) NSData *data</Declaration>
 			
 			
-			<Anchor>//api/name/responseWithData:contentType:</Anchor>
+			<Anchor>//api/name/data</Anchor>
             <NodeRef refid="21"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerDataResponse/initWithData:contentType:</TokenIdentifier>
-			<Abstract type="html">This method is the designated initializer for the class.</Abstract>
-			<DeclaredIn>GCDWebServerDataResponse.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerDataRequest/data</TokenIdentifier>
+			<Abstract type="html">Returns the data for the request body.</Abstract>
+			<DeclaredIn>GCDWebServerDataRequest.h</DeclaredIn>
 			
-			<Declaration>- (instancetype)initWithData:(NSData *)data contentType:(NSString *)type</Declaration>
+			<Declaration>@property (nonatomic, readonly) NSData *data</Declaration>
 			
 			
-			<Anchor>//api/name/initWithData:contentType:</Anchor>
+			<Anchor>//api/name/data</Anchor>
             <NodeRef refid="21"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerDataResponse/readData:</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/instp/GCDWebServerDataRequest/data</TokenIdentifier>
+			<Abstract type="html">Returns the data for the request body.</Abstract>
+			<DeclaredIn>GCDWebServerDataRequest.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, readonly) NSData *data</Declaration>
+			
+			
+			<Anchor>//api/name/data</Anchor>
+            <NodeRef refid="21"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerDataRequest/open:</TokenIdentifier>
 			<Abstract type="html"></Abstract>
-			<DeclaredIn>GCDWebServerDataResponse.m</DeclaredIn>
+			<DeclaredIn>GCDWebServerDataRequest.m</DeclaredIn>
 			
-			<Declaration>- (NSData *)readData:(NSError **)error</Declaration>
+			<Declaration>- (BOOL)open:(NSError **)error</Declaration>
 			
 			
-			<Anchor>//api/name/readData:</Anchor>
+			<Anchor>//api/name/open:</Anchor>
             <NodeRef refid="21"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerDataResponse/description</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerDataRequest/writeData:error:</TokenIdentifier>
 			<Abstract type="html"></Abstract>
-			<DeclaredIn>GCDWebServerDataResponse.m</DeclaredIn>
+			<DeclaredIn>GCDWebServerDataRequest.m</DeclaredIn>
+			
+			<Declaration>- (BOOL)writeData:(NSData *)data error:(NSError **)error</Declaration>
+			
+			
+			<Anchor>//api/name/writeData:error:</Anchor>
+            <NodeRef refid="21"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerDataRequest/close:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerDataRequest.m</DeclaredIn>
+			
+			<Declaration>- (BOOL)close:(NSError **)error</Declaration>
+			
+			
+			<Anchor>//api/name/close:</Anchor>
+            <NodeRef refid="21"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerDataRequest/description</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>GCDWebServerDataRequest.m</DeclaredIn>
 			
 			<Declaration>- (NSString *)description</Declaration>
 			
@@ -62,127 +98,80 @@ of the HTTP response from memory.</Abstract>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/clm/GCDWebServerDataResponse/responseWithText:</TokenIdentifier>
-			<Abstract type="html">Creates a data response from text encoded using UTF-8.</Abstract>
-			<DeclaredIn>GCDWebServerDataResponse.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerDataRequest/setText:</TokenIdentifier>
+			<Abstract type="html">Returns the data for the request body interpreted as text. If the content
+type of the body is not a text one, or if an error occurs, nil is returned.</Abstract>
+			<DeclaredIn>GCDWebServerDataRequest.h</DeclaredIn>
 			
-			<Declaration>+ (instancetype)responseWithText:(NSString *)text</Declaration>
+			<Declaration>@property (nonatomic, readonly) NSString *text</Declaration>
 			
 			
-			<Anchor>//api/name/responseWithText:</Anchor>
+			<Anchor>//api/name/text</Anchor>
             <NodeRef refid="21"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/clm/GCDWebServerDataResponse/responseWithHTML:</TokenIdentifier>
-			<Abstract type="html">Creates a data response from HTML encoded using UTF-8.</Abstract>
-			<DeclaredIn>GCDWebServerDataResponse.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerDataRequest/text</TokenIdentifier>
+			<Abstract type="html">Returns the data for the request body interpreted as text. If the content
+type of the body is not a text one, or if an error occurs, nil is returned.</Abstract>
+			<DeclaredIn>GCDWebServerDataRequest.h</DeclaredIn>
 			
-			<Declaration>+ (instancetype)responseWithHTML:(NSString *)html</Declaration>
+			<Declaration>@property (nonatomic, readonly) NSString *text</Declaration>
 			
 			
-			<Anchor>//api/name/responseWithHTML:</Anchor>
+			<Anchor>//api/name/text</Anchor>
             <NodeRef refid="21"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/clm/GCDWebServerDataResponse/responseWithHTMLTemplate:variables:</TokenIdentifier>
-			<Abstract type="html">Creates a data response from an HTML template encoded using UTF-8.
-See initWithHTMLTemplate:variables: for details.</Abstract>
-			<DeclaredIn>GCDWebServerDataResponse.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instp/GCDWebServerDataRequest/text</TokenIdentifier>
+			<Abstract type="html">Returns the data for the request body interpreted as text. If the content
+type of the body is not a text one, or if an error occurs, nil is returned.</Abstract>
+			<DeclaredIn>GCDWebServerDataRequest.h</DeclaredIn>
 			
-			<Declaration>+ (instancetype)responseWithHTMLTemplate:(NSString *)path variables:(NSDictionary *)variables</Declaration>
+			<Declaration>@property (nonatomic, readonly) NSString *text</Declaration>
 			
 			
-			<Anchor>//api/name/responseWithHTMLTemplate:variables:</Anchor>
+			<Anchor>//api/name/text</Anchor>
             <NodeRef refid="21"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/clm/GCDWebServerDataResponse/responseWithJSONObject:</TokenIdentifier>
-			<Abstract type="html">Creates a data response from a serialized JSON object and the default
-&quot;application/json&quot; content type.</Abstract>
-			<DeclaredIn>GCDWebServerDataResponse.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerDataRequest/setJsonObject:</TokenIdentifier>
+			<Abstract type="html">Returns the data for the request body interpreted as a JSON object. If the
+content type of the body is not JSON, or if an error occurs, nil is returned.</Abstract>
+			<DeclaredIn>GCDWebServerDataRequest.h</DeclaredIn>
 			
-			<Declaration>+ (instancetype)responseWithJSONObject:(id)object</Declaration>
+			<Declaration>@property (nonatomic, readonly) id jsonObject</Declaration>
 			
 			
-			<Anchor>//api/name/responseWithJSONObject:</Anchor>
+			<Anchor>//api/name/jsonObject</Anchor>
             <NodeRef refid="21"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/clm/GCDWebServerDataResponse/responseWithJSONObject:contentType:</TokenIdentifier>
-			<Abstract type="html">Creates a data response from a serialized JSON object and a custom
-content type.</Abstract>
-			<DeclaredIn>GCDWebServerDataResponse.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerDataRequest/jsonObject</TokenIdentifier>
+			<Abstract type="html">Returns the data for the request body interpreted as a JSON object. If the
+content type of the body is not JSON, or if an error occurs, nil is returned.</Abstract>
+			<DeclaredIn>GCDWebServerDataRequest.h</DeclaredIn>
 			
-			<Declaration>+ (instancetype)responseWithJSONObject:(id)object contentType:(NSString *)type</Declaration>
+			<Declaration>@property (nonatomic, readonly) id jsonObject</Declaration>
 			
 			
-			<Anchor>//api/name/responseWithJSONObject:contentType:</Anchor>
+			<Anchor>//api/name/jsonObject</Anchor>
             <NodeRef refid="21"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerDataResponse/initWithText:</TokenIdentifier>
-			<Abstract type="html">Initializes a data response from text encoded using UTF-8.</Abstract>
-			<DeclaredIn>GCDWebServerDataResponse.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instp/GCDWebServerDataRequest/jsonObject</TokenIdentifier>
+			<Abstract type="html">Returns the data for the request body interpreted as a JSON object. If the
+content type of the body is not JSON, or if an error occurs, nil is returned.</Abstract>
+			<DeclaredIn>GCDWebServerDataRequest.h</DeclaredIn>
 			
-			<Declaration>- (instancetype)initWithText:(NSString *)text</Declaration>
-			
-			
-			<Anchor>//api/name/initWithText:</Anchor>
-            <NodeRef refid="21"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerDataResponse/initWithHTML:</TokenIdentifier>
-			<Abstract type="html">Initializes a data response from HTML encoded using UTF-8.</Abstract>
-			<DeclaredIn>GCDWebServerDataResponse.h</DeclaredIn>
-			
-			<Declaration>- (instancetype)initWithHTML:(NSString *)html</Declaration>
+			<Declaration>@property (nonatomic, readonly) id jsonObject</Declaration>
 			
 			
-			<Anchor>//api/name/initWithHTML:</Anchor>
-            <NodeRef refid="21"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerDataResponse/initWithHTMLTemplate:variables:</TokenIdentifier>
-			<Abstract type="html">Initializes a data response from an HTML template encoded using UTF-8.</Abstract>
-			<DeclaredIn>GCDWebServerDataResponse.h</DeclaredIn>
-			
-			<Declaration>- (instancetype)initWithHTMLTemplate:(NSString *)path variables:(NSDictionary *)variables</Declaration>
-			
-			
-			<Anchor>//api/name/initWithHTMLTemplate:variables:</Anchor>
-            <NodeRef refid="21"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerDataResponse/initWithJSONObject:</TokenIdentifier>
-			<Abstract type="html">Initializes a data response from a serialized JSON object and the default
-&quot;application/json&quot; content type.</Abstract>
-			<DeclaredIn>GCDWebServerDataResponse.h</DeclaredIn>
-			
-			<Declaration>- (instancetype)initWithJSONObject:(id)object</Declaration>
-			
-			
-			<Anchor>//api/name/initWithJSONObject:</Anchor>
-            <NodeRef refid="21"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/GCDWebServerDataResponse/initWithJSONObject:contentType:</TokenIdentifier>
-			<Abstract type="html">Initializes a data response from a serialized JSON object and a custom
-content type.</Abstract>
-			<DeclaredIn>GCDWebServerDataResponse.h</DeclaredIn>
-			
-			<Declaration>- (instancetype)initWithJSONObject:(id)object contentType:(NSString *)type</Declaration>
-			
-			
-			<Anchor>//api/name/initWithJSONObject:contentType:</Anchor>
+			<Anchor>//api/name/jsonObject</Anchor>
             <NodeRef refid="21"/>
 		</Token>
 		

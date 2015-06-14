@@ -882,7 +882,7 @@ double const URL_CHECK_TIMEOUT = 2.0;
     }
     else
     {
-        BTLog(5, @"Re-discovered existing device %@", existingConnection.identifier);
+        BTLog(6, @"Re-discovered existing device %@", existingConnection.identifier);
         [existingConnection updateLastSeen];
         [self _addRSSIMeasure:[RSSI doubleValue] toConnection:existingConnection];
     }

@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Classes/CWServerManager.html">
+	<File path="Classes/CWRemoteLibraryManager.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/cl/CWServerManager</TokenIdentifier>
-			<Abstract type="html">The CWWebserverManager class represents the local webserver run by Connichiwa in order to run local web applications.
-It is responsible for launching and managing the webserver that offers an HTTP and Websocket server. The manager also receives information about established or closed websocket connections.
-Only one instance of the webserver should be running on a device.</Abstract>
-			<DeclaredIn>CWServerManager.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/cl/CWRemoteLibraryManager</TokenIdentifier>
+			<Abstract type="html">The RemoteLibraryManager manages this device as a remote device. It is responsible for making sure that we connect to another device as a remote if the device requested it - it manages the remote webview, receives (and delegates) messages from the remote web library and also sends messages to the remote web library.
+In order to do all that, the manager needs a dedicated UIWebView where it will connect to a Connichiwa master device and retrieve the remote web library when requested. This will allow the master device to send messages to this device.</Abstract>
+			<DeclaredIn>CWRemoteLibraryManager.h</DeclaredIn>
             
 			
 			<NodeRef refid="11"/>
@@ -15,23 +14,11 @@ Only one instance of the webserver should be running on a device.</Abstract>
 		
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWServerManager/setDelegate:</TokenIdentifier>
-			<Abstract type="html">The delegate to receive events by this class</Abstract>
-			<DeclaredIn>CWServerManager.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWRemoteLibraryManager/setDelegate:</TokenIdentifier>
+			<Abstract type="html">The delegate this class sends events to</Abstract>
+			<DeclaredIn>CWRemoteLibraryManager.h</DeclaredIn>
 			
-			<Declaration>@property (readwrite, strong) id&lt;CWServerManagerDelegate&gt; delegate</Declaration>
-			
-			
-			<Anchor>//api/name/delegate</Anchor>
-            <NodeRef refid="11"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWServerManager/delegate</TokenIdentifier>
-			<Abstract type="html">The delegate to receive events by this class</Abstract>
-			<DeclaredIn>CWServerManager.h</DeclaredIn>
-			
-			<Declaration>@property (readwrite, strong) id&lt;CWServerManagerDelegate&gt; delegate</Declaration>
+			<Declaration>@property (readwrite, strong) id&lt;CWRemoteLibraryManagerDelegate&gt; delegate</Declaration>
 			
 			
 			<Anchor>//api/name/delegate</Anchor>
@@ -39,11 +26,11 @@ Only one instance of the webserver should be running on a device.</Abstract>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/CWServerManager/delegate</TokenIdentifier>
-			<Abstract type="html">The delegate to receive events by this class</Abstract>
-			<DeclaredIn>CWServerManager.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWRemoteLibraryManager/delegate</TokenIdentifier>
+			<Abstract type="html">The delegate this class sends events to</Abstract>
+			<DeclaredIn>CWRemoteLibraryManager.h</DeclaredIn>
 			
-			<Declaration>@property (readwrite, strong) id&lt;CWServerManagerDelegate&gt; delegate</Declaration>
+			<Declaration>@property (readwrite, strong) id&lt;CWRemoteLibraryManagerDelegate&gt; delegate</Declaration>
 			
 			
 			<Anchor>//api/name/delegate</Anchor>
@@ -51,339 +38,370 @@ Only one instance of the webserver should be running on a device.</Abstract>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWServerManager/setState:</TokenIdentifier>
-			<Abstract type="html">The current state of this manager</Abstract>
-			<DeclaredIn>CWServerManager.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instp/CWRemoteLibraryManager/delegate</TokenIdentifier>
+			<Abstract type="html">The delegate this class sends events to</Abstract>
+			<DeclaredIn>CWRemoteLibraryManager.h</DeclaredIn>
 			
-			<Declaration>@property (readonly) CWServerManagerState state</Declaration>
+			<Declaration>@property (readwrite, strong) id&lt;CWRemoteLibraryManagerDelegate&gt; delegate</Declaration>
 			
 			
-			<Anchor>//api/name/state</Anchor>
+			<Anchor>//api/name/delegate</Anchor>
             <NodeRef refid="11"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWServerManager/state</TokenIdentifier>
-			<Abstract type="html">The current state of this manager</Abstract>
-			<DeclaredIn>CWServerManager.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWRemoteLibraryManager/setWebView:</TokenIdentifier>
+			<Abstract type="html">The remote webview where the connection to remote devices will be established. Must be set to a UIWebView that is not used for any other purposes. This class will become the delegate of that UIWebView. Also, the UIWebView will automatically be hidden/unhidden depending on the remote state of this devie.</Abstract>
+			<DeclaredIn>CWRemoteLibraryManager.h</DeclaredIn>
 			
-			<Declaration>@property (readonly) CWServerManagerState state</Declaration>
+			<Declaration>@property (readwrite, strong) UIWebView *webView</Declaration>
 			
 			
-			<Anchor>//api/name/state</Anchor>
+			<Anchor>//api/name/webView</Anchor>
             <NodeRef refid="11"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/CWServerManager/state</TokenIdentifier>
-			<Abstract type="html">The current state of this manager</Abstract>
-			<DeclaredIn>CWServerManager.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWRemoteLibraryManager/webView</TokenIdentifier>
+			<Abstract type="html">The remote webview where the connection to remote devices will be established. Must be set to a UIWebView that is not used for any other purposes. This class will become the delegate of that UIWebView. Also, the UIWebView will automatically be hidden/unhidden depending on the remote state of this devie.</Abstract>
+			<DeclaredIn>CWRemoteLibraryManager.h</DeclaredIn>
 			
-			<Declaration>@property (readonly) CWServerManagerState state</Declaration>
+			<Declaration>@property (readwrite, strong) UIWebView *webView</Declaration>
 			
 			
-			<Anchor>//api/name/state</Anchor>
+			<Anchor>//api/name/webView</Anchor>
             <NodeRef refid="11"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWServerManager/setDocumentRoot:</TokenIdentifier>
-			<Abstract type="html">Path to the folder acting as the root of the web server. &apos;/&apos; on the web server will be mapped to this path.</Abstract>
-			<DeclaredIn>CWServerManager.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instp/CWRemoteLibraryManager/webView</TokenIdentifier>
+			<Abstract type="html">The remote webview where the connection to remote devices will be established. Must be set to a UIWebView that is not used for any other purposes. This class will become the delegate of that UIWebView. Also, the UIWebView will automatically be hidden/unhidden depending on the remote state of this devie.</Abstract>
+			<DeclaredIn>CWRemoteLibraryManager.h</DeclaredIn>
 			
-			<Declaration>@property (readonly) NSString *documentRoot</Declaration>
+			<Declaration>@property (readwrite, strong) UIWebView *webView</Declaration>
 			
 			
-			<Anchor>//api/name/documentRoot</Anchor>
+			<Anchor>//api/name/webView</Anchor>
             <NodeRef refid="11"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWServerManager/documentRoot</TokenIdentifier>
-			<Abstract type="html">Path to the folder acting as the root of the web server. &apos;/&apos; on the web server will be mapped to this path.</Abstract>
-			<DeclaredIn>CWServerManager.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWRemoteLibraryManager/initWithApplicationState:</TokenIdentifier>
+			<Abstract type="html">Initializes a new manager with the given application state</Abstract>
+			<DeclaredIn>CWRemoteLibraryManager.h</DeclaredIn>
 			
-			<Declaration>@property (readonly) NSString *documentRoot</Declaration>
-			
-			
-			<Anchor>//api/name/documentRoot</Anchor>
-            <NodeRef refid="11"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/CWServerManager/documentRoot</TokenIdentifier>
-			<Abstract type="html">Path to the folder acting as the root of the web server. &apos;/&apos; on the web server will be mapped to this path.</Abstract>
-			<DeclaredIn>CWServerManager.h</DeclaredIn>
-			
-			<Declaration>@property (readonly) NSString *documentRoot</Declaration>
-			
-			
-			<Anchor>//api/name/documentRoot</Anchor>
-            <NodeRef refid="11"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWServerManager/initWithDocumentRoot:</TokenIdentifier>
-			<Abstract type="html">Initialize a new CWWebserverManager instance with the given document root (should point to the path where the web application resides). Calling this does not actually start the webserver, use startWebserver to do so.</Abstract>
-			<DeclaredIn>CWServerManager.h</DeclaredIn>
-			
-			<Declaration>- (instancetype)initWithDocumentRoot:(NSString *)documentRoot</Declaration>
+			<Declaration>- (instancetype)initWithApplicationState:(id&lt;CWWebApplicationState&gt;)appState</Declaration>
 			<Parameters>
 				<Parameter>
-					<Name>documentRoot</Name>
-					<Abstract type="html">The document root of the webserver, usually pointing to the path of the web application. &apos;/&apos; on the web server will be mapped to this path.</Abstract>
+					<Name>appState</Name>
+					<Abstract type="html">The application state object of this application</Abstract>
 				</Parameter>
 			</Parameters>
-			<ReturnValue><Abstract type="html">A new CWWebserverManager instance</Abstract></ReturnValue>
-			<Anchor>//api/name/initWithDocumentRoot:</Anchor>
+			<ReturnValue><Abstract type="html">a new manager instance</Abstract></ReturnValue>
+			<Anchor>//api/name/initWithApplicationState:</Anchor>
             <NodeRef refid="11"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWServerManager/startWebserverWithDocumentRoot:onPort:</TokenIdentifier>
-			<Abstract type="html">Calling this method actually launches the webserver and initializes the HTTP and Websocket servers. The root of the webserver will be mapped to the given document root, the HTTP server will run on the given port and the websocket server will run on the given port + 1</Abstract>
-			<DeclaredIn>CWServerManager.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWRemoteLibraryManager/isActive</TokenIdentifier>
+			<Abstract type="html">Determines if this device is currently active as a remote</Abstract>
+			<DeclaredIn>CWRemoteLibraryManager.h</DeclaredIn>
 			
-			<Declaration>- (void)startWebserverWithDocumentRoot:(NSString *)documentRoot onPort:(int)port</Declaration>
+			<Declaration>- (BOOL)isActive</Declaration>
+			
+			<ReturnValue><Abstract type="html">true if we are currently connected as a remote device, otherwise false</Abstract></ReturnValue>
+			<Anchor>//api/name/isActive</Anchor>
+            <NodeRef refid="11"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWRemoteLibraryManager/sendProximityStateChanged:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CWRemoteLibraryManager.h</DeclaredIn>
+			
+			<Declaration>- (void)sendProximityStateChanged:(BOOL)proximityState</Declaration>
+			
+			
+			<Anchor>//api/name/sendProximityStateChanged:</Anchor>
+            <NodeRef refid="11"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWRemoteLibraryManager/connectToServer:</TokenIdentifier>
+			<Abstract type="html">Connects us as a remote device to the connichiwa webserver at the given URL</Abstract>
+			<DeclaredIn>CWRemoteLibraryManager.h</DeclaredIn>
+			
+			<Declaration>- (void)connectToServer:(NSURL *)URL</Declaration>
 			<Parameters>
 				<Parameter>
-					<Name>documentRoot</Name>
-					<Abstract type="html">The document root that contains the files that the webserver is supposed to serve</Abstract>
-				</Parameter><Parameter>
-					<Name>port</Name>
-					<Abstract type="html">The port the HTTP server will run</Abstract>
+					<Name>URL</Name>
+					<Abstract type="html">The URL of a connichiwa webserver</Abstract>
 				</Parameter>
 			</Parameters>
 			
-			<Anchor>//api/name/startWebserverWithDocumentRoot:onPort:</Anchor>
+			<Anchor>//api/name/connectToServer:</Anchor>
             <NodeRef refid="11"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWServerManager/suspendWebserver</TokenIdentifier>
-			<Abstract type="html">Puts the webserver in a suspended state where it closes all remote connections and does not accept new ones</Abstract>
-			<DeclaredIn>CWServerManager.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWRemoteLibraryManager/disconnect</TokenIdentifier>
+			<Abstract type="html">Disconnects this device from its currently connected master device if it is connected</Abstract>
+			<DeclaredIn>CWRemoteLibraryManager.h</DeclaredIn>
 			
-			<Declaration>- (void)suspendWebserver</Declaration>
+			<Declaration>- (void)disconnect</Declaration>
 			
 			
-			<Anchor>//api/name/suspendWebserver</Anchor>
+			<Anchor>//api/name/disconnect</Anchor>
             <NodeRef refid="11"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWServerManager/resumeWebserver</TokenIdentifier>
-			<Abstract type="html">Resumes the webserver if it is in suspended state, making it possible to establish remote connections again</Abstract>
-			<DeclaredIn>CWServerManager.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWRemoteLibraryManager/_registerJSCallbacks</TokenIdentifier>
+			<Abstract type="html">Registers callback functions that the remote library can call to execute native methods</Abstract>
+			<DeclaredIn>CWRemoteLibraryManager.m</DeclaredIn>
 			
-			<Declaration>- (void)resumeWebserver</Declaration>
+			<Declaration>- (void)_registerJSCallbacks</Declaration>
 			
 			
-			<Anchor>//api/name/resumeWebserver</Anchor>
+			<Anchor>//api/name/_registerJSCallbacks</Anchor>
             <NodeRef refid="11"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWServerManager/onUnidentifiedWebsocketMessage</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/instm/CWRemoteLibraryManager/_receivedfromView_websocketDidOpen</TokenIdentifier>
+			<Abstract type="html">Called by the remote library once the websocket to the master device was established</Abstract>
+			<DeclaredIn>CWRemoteLibraryManager.m</DeclaredIn>
+			
+			<Declaration>- (void)_receivedfromView_websocketDidOpen</Declaration>
+			
+			
+			<Anchor>//api/name/_receivedfromView_websocketDidOpen</Anchor>
+            <NodeRef refid="11"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWRemoteLibraryManager/_receivedfromView_websocketDidClose</TokenIdentifier>
+			<Abstract type="html">Called by the remote library when the websocket to the master device was closed (the master disconnected)</Abstract>
+			<DeclaredIn>CWRemoteLibraryManager.m</DeclaredIn>
+			
+			<Declaration>- (void)_receivedfromView_websocketDidClose</Declaration>
+			
+			
+			<Anchor>//api/name/_receivedfromView_websocketDidClose</Anchor>
+            <NodeRef refid="11"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWRemoteLibraryManager/_receivedfromView_softDisconnect</TokenIdentifier>
+			<Abstract type="html">Called by the remote library if we should softdisconnect from the master</Abstract>
+			<DeclaredIn>CWRemoteLibraryManager.m</DeclaredIn>
+			
+			<Declaration>- (void)_receivedfromView_softDisconnect</Declaration>
+			
+			
+			<Anchor>//api/name/_receivedfromView_softDisconnect</Anchor>
+            <NodeRef refid="11"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CWRemoteLibraryManager/_receivedFromView_startProximityTracking</TokenIdentifier>
 			<Abstract type="html"></Abstract>
-			<DeclaredIn>CWServerManager.m</DeclaredIn>
+			<DeclaredIn>CWRemoteLibraryManager.m</DeclaredIn>
 			
-			<Declaration>- (BLWebSocketOnMessageHandler)onUnidentifiedWebsocketMessage</Declaration>
+			<Declaration>- (void)_receivedFromView_startProximityTracking</Declaration>
 			
 			
-			<Anchor>//api/name/onUnidentifiedWebsocketMessage</Anchor>
+			<Anchor>//api/name/_receivedFromView_startProximityTracking</Anchor>
             <NodeRef refid="11"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWServerManager/onIdentifiedWebsocketMessage</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/instm/CWRemoteLibraryManager/_receivedFromView_stopProximityTracking</TokenIdentifier>
 			<Abstract type="html"></Abstract>
-			<DeclaredIn>CWServerManager.m</DeclaredIn>
+			<DeclaredIn>CWRemoteLibraryManager.m</DeclaredIn>
 			
-			<Declaration>- (BLWebSocketOnMessageHandler)onIdentifiedWebsocketMessage</Declaration>
+			<Declaration>- (void)_receivedFromView_stopProximityTracking</Declaration>
 			
 			
-			<Anchor>//api/name/onIdentifiedWebsocketMessage</Anchor>
+			<Anchor>//api/name/_receivedFromView_stopProximityTracking</Anchor>
             <NodeRef refid="11"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWServerManager/onIdentifiedWebsocketClosed</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>CWServerManager.m</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWRemoteLibraryManager/_sendToView_disconnectWebsocket</TokenIdentifier>
+			<Abstract type="html">Asks the remote library to disconnect its websocket from the master</Abstract>
+			<DeclaredIn>CWRemoteLibraryManager.m</DeclaredIn>
 			
-			<Declaration>- (BLWebSocketOnCloseHandler)onIdentifiedWebsocketClosed</Declaration>
+			<Declaration>- (void)_sendToView_disconnectWebsocket</Declaration>
 			
 			
-			<Anchor>//api/name/onIdentifiedWebsocketClosed</Anchor>
+			<Anchor>//api/name/_sendToView_disconnectWebsocket</Anchor>
             <NodeRef refid="11"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWServerManager/connectionIDForIdentifier:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>CWServerManager.m</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWRemoteLibraryManager/_sendToView_localInfo</TokenIdentifier>
+			<Abstract type="html">Tells the remote library the unique connichiwa identifier we are known under</Abstract>
+			<DeclaredIn>CWRemoteLibraryManager.m</DeclaredIn>
 			
-			<Declaration>- (int)connectionIDForIdentifier:(NSString *)targetIdentifier</Declaration>
+			<Declaration>- (void)_sendToView_localInfo</Declaration>
 			
 			
-			<Anchor>//api/name/connectionIDForIdentifier:</Anchor>
+			<Anchor>//api/name/_sendToView_localInfo</Anchor>
             <NodeRef refid="11"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWServerManager/identifierForConnectionID:</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/instm/CWRemoteLibraryManager/_sendToView_proximityStateChanged:</TokenIdentifier>
 			<Abstract type="html"></Abstract>
-			<DeclaredIn>CWServerManager.m</DeclaredIn>
+			<DeclaredIn>CWRemoteLibraryManager.m</DeclaredIn>
 			
-			<Declaration>- (NSString *)identifierForConnectionID:(int)targetID</Declaration>
+			<Declaration>- (void)_sendToView_proximityStateChanged:(BOOL)proximityState</Declaration>
 			
 			
-			<Anchor>//api/name/identifierForConnectionID:</Anchor>
+			<Anchor>//api/name/_sendToView_proximityStateChanged:</Anchor>
             <NodeRef refid="11"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWServerManager/setWebServer:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>CWServerManager.m</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWRemoteLibraryManager/_sendToView_dictionary:</TokenIdentifier>
+			<Abstract type="html">Sends the given dictionary to the remote library as a JSON string</Abstract>
+			<DeclaredIn>CWRemoteLibraryManager.m</DeclaredIn>
 			
-			<Declaration>@property (strong, readwrite) GCDWebServer *webServer</Declaration>
+			<Declaration>- (void)_sendToView_dictionary:(NSDictionary *)dictionary</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>dictionary</Name>
+					<Abstract type="html">The dictionary to send. Every entry of the dictionary must be convertable by [CWUtil escapedJSONStringFromDictionary:]</Abstract>
+				</Parameter>
+			</Parameters>
 			
-			
-			<Anchor>//api/name/webServer</Anchor>
+			<Anchor>//api/name/_sendToView_dictionary:</Anchor>
             <NodeRef refid="11"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWServerManager/webServer</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>CWServerManager.m</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWRemoteLibraryManager/_sendToView:</TokenIdentifier>
+			<Abstract type="html">Sends the given string to the remote library</Abstract>
+			<DeclaredIn>CWRemoteLibraryManager.m</DeclaredIn>
 			
-			<Declaration>@property (strong, readwrite) GCDWebServer *webServer</Declaration>
+			<Declaration>- (void)_sendToView:(NSString *)message</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>message</Name>
+					<Abstract type="html">The message string to send</Abstract>
+				</Parameter>
+			</Parameters>
 			
-			
-			<Anchor>//api/name/webServer</Anchor>
+			<Anchor>//api/name/_sendToView:</Anchor>
             <NodeRef refid="11"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/CWServerManager/webServer</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>CWServerManager.m</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWRemoteLibraryManager/setAppState:</TokenIdentifier>
+			<Abstract type="html">The application state of this connichiwa application</Abstract>
+			<DeclaredIn>CWRemoteLibraryManager.m</DeclaredIn>
 			
-			<Declaration>@property (strong, readwrite) GCDWebServer *webServer</Declaration>
+			<Declaration>@property (readwrite, weak) id&lt;CWWebApplicationState&gt; appState</Declaration>
 			
 			
-			<Anchor>//api/name/webServer</Anchor>
+			<Anchor>//api/name/appState</Anchor>
             <NodeRef refid="11"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWServerManager/setWebsocketServer:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>CWServerManager.m</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWRemoteLibraryManager/appState</TokenIdentifier>
+			<Abstract type="html">The application state of this connichiwa application</Abstract>
+			<DeclaredIn>CWRemoteLibraryManager.m</DeclaredIn>
 			
-			<Declaration>@property (strong, readwrite) BLWebSocketsServer *websocketServer</Declaration>
+			<Declaration>@property (readwrite, weak) id&lt;CWWebApplicationState&gt; appState</Declaration>
 			
 			
-			<Anchor>//api/name/websocketServer</Anchor>
+			<Anchor>//api/name/appState</Anchor>
             <NodeRef refid="11"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWServerManager/websocketServer</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>CWServerManager.m</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instp/CWRemoteLibraryManager/appState</TokenIdentifier>
+			<Abstract type="html">The application state of this connichiwa application</Abstract>
+			<DeclaredIn>CWRemoteLibraryManager.m</DeclaredIn>
 			
-			<Declaration>@property (strong, readwrite) BLWebSocketsServer *websocketServer</Declaration>
+			<Declaration>@property (readwrite, weak) id&lt;CWWebApplicationState&gt; appState</Declaration>
 			
 			
-			<Anchor>//api/name/websocketServer</Anchor>
+			<Anchor>//api/name/appState</Anchor>
             <NodeRef refid="11"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/CWServerManager/websocketServer</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>CWServerManager.m</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWRemoteLibraryManager/setState:</TokenIdentifier>
+			<Abstract type="html">The current state of this manager</Abstract>
+			<DeclaredIn>CWRemoteLibraryManager.m</DeclaredIn>
 			
-			<Declaration>@property (strong, readwrite) BLWebSocketsServer *websocketServer</Declaration>
+			<Declaration>@property (readwrite) CWRemoteLibraryManagerState state</Declaration>
 			
 			
-			<Anchor>//api/name/websocketServer</Anchor>
+			<Anchor>//api/name/state</Anchor>
             <NodeRef refid="11"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWServerManager/setLocalWebsocketID:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>CWServerManager.m</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWRemoteLibraryManager/state</TokenIdentifier>
+			<Abstract type="html">The current state of this manager</Abstract>
+			<DeclaredIn>CWRemoteLibraryManager.m</DeclaredIn>
 			
-			<Declaration>@property (readwrite) int localWebsocketID</Declaration>
+			<Declaration>@property (readwrite) CWRemoteLibraryManagerState state</Declaration>
 			
 			
-			<Anchor>//api/name/localWebsocketID</Anchor>
+			<Anchor>//api/name/state</Anchor>
             <NodeRef refid="11"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWServerManager/localWebsocketID</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>CWServerManager.m</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instp/CWRemoteLibraryManager/state</TokenIdentifier>
+			<Abstract type="html">The current state of this manager</Abstract>
+			<DeclaredIn>CWRemoteLibraryManager.m</DeclaredIn>
 			
-			<Declaration>@property (readwrite) int localWebsocketID</Declaration>
+			<Declaration>@property (readwrite) CWRemoteLibraryManagerState state</Declaration>
 			
 			
-			<Anchor>//api/name/localWebsocketID</Anchor>
+			<Anchor>//api/name/state</Anchor>
             <NodeRef refid="11"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/CWServerManager/localWebsocketID</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>CWServerManager.m</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWRemoteLibraryManager/setWebViewContext:</TokenIdentifier>
+			<Abstract type="html">The JSContext of the web view. nil if the device is not currently connected as a remote device.</Abstract>
+			<DeclaredIn>CWRemoteLibraryManager.m</DeclaredIn>
 			
-			<Declaration>@property (readwrite) int localWebsocketID</Declaration>
+			<Declaration>@property (readwrite, strong) JSContext *webViewContext</Declaration>
 			
 			
-			<Anchor>//api/name/localWebsocketID</Anchor>
+			<Anchor>//api/name/webViewContext</Anchor>
             <NodeRef refid="11"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWServerManager/setWebsocketIdentifiers:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>CWServerManager.m</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CWRemoteLibraryManager/webViewContext</TokenIdentifier>
+			<Abstract type="html">The JSContext of the web view. nil if the device is not currently connected as a remote device.</Abstract>
+			<DeclaredIn>CWRemoteLibraryManager.m</DeclaredIn>
 			
-			<Declaration>@property (strong, readwrite) NSMutableDictionary *websocketIdentifiers</Declaration>
+			<Declaration>@property (readwrite, strong) JSContext *webViewContext</Declaration>
 			
 			
-			<Anchor>//api/name/websocketIdentifiers</Anchor>
+			<Anchor>//api/name/webViewContext</Anchor>
             <NodeRef refid="11"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CWServerManager/websocketIdentifiers</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>CWServerManager.m</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instp/CWRemoteLibraryManager/webViewContext</TokenIdentifier>
+			<Abstract type="html">The JSContext of the web view. nil if the device is not currently connected as a remote device.</Abstract>
+			<DeclaredIn>CWRemoteLibraryManager.m</DeclaredIn>
 			
-			<Declaration>@property (strong, readwrite) NSMutableDictionary *websocketIdentifiers</Declaration>
-			
-			
-			<Anchor>//api/name/websocketIdentifiers</Anchor>
-            <NodeRef refid="11"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/CWServerManager/websocketIdentifiers</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>CWServerManager.m</DeclaredIn>
-			
-			<Declaration>@property (strong, readwrite) NSMutableDictionary *websocketIdentifiers</Declaration>
+			<Declaration>@property (readwrite, strong) JSContext *webViewContext</Declaration>
 			
 			
-			<Anchor>//api/name/websocketIdentifiers</Anchor>
+			<Anchor>//api/name/webViewContext</Anchor>
             <NodeRef refid="11"/>
 		</Token>
 		

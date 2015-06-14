@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Constants/GCDWebServerRedirectionHTTPStatusCode.html">
+	<File path="Constants/GCDWebServerClientErrorHTTPStatusCode.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/c/tdef/GCDWebServerRedirectionHTTPStatusCode</TokenIdentifier>
-			<Abstract type="html">Convenience constants for &quot;redirection&quot; HTTP status codes.</Abstract>
+			<TokenIdentifier>//apple_ref/c/tdef/GCDWebServerClientErrorHTTPStatusCode</TokenIdentifier>
+			<Abstract type="html">Convenience constants for &quot;client error&quot; HTTP status codes.</Abstract>
 			<DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
             
 			
@@ -14,9 +14,9 @@
 		
         
         <Token>
-            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_MultipleChoices</TokenIdentifier>
+            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_BadRequest</TokenIdentifier>
             <Abstract type="html"></Abstract>
-            <Declaration>kGCDWebServerHTTPStatusCode_MultipleChoices</Declaration>
+            <Declaration>kGCDWebServerHTTPStatusCode_BadRequest</Declaration>
             
             <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
             
@@ -24,9 +24,9 @@
         </Token>
         
         <Token>
-            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_MovedPermanently</TokenIdentifier>
+            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_Unauthorized</TokenIdentifier>
             <Abstract type="html"></Abstract>
-            <Declaration>kGCDWebServerHTTPStatusCode_MovedPermanently</Declaration>
+            <Declaration>kGCDWebServerHTTPStatusCode_Unauthorized</Declaration>
             
             <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
             
@@ -34,9 +34,9 @@
         </Token>
         
         <Token>
-            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_Found</TokenIdentifier>
+            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_PaymentRequired</TokenIdentifier>
             <Abstract type="html"></Abstract>
-            <Declaration>kGCDWebServerHTTPStatusCode_Found</Declaration>
+            <Declaration>kGCDWebServerHTTPStatusCode_PaymentRequired</Declaration>
             
             <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
             
@@ -44,9 +44,9 @@
         </Token>
         
         <Token>
-            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_SeeOther</TokenIdentifier>
+            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_Forbidden</TokenIdentifier>
             <Abstract type="html"></Abstract>
-            <Declaration>kGCDWebServerHTTPStatusCode_SeeOther</Declaration>
+            <Declaration>kGCDWebServerHTTPStatusCode_Forbidden</Declaration>
             
             <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
             
@@ -54,9 +54,9 @@
         </Token>
         
         <Token>
-            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_NotModified</TokenIdentifier>
+            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_NotFound</TokenIdentifier>
             <Abstract type="html"></Abstract>
-            <Declaration>kGCDWebServerHTTPStatusCode_NotModified</Declaration>
+            <Declaration>kGCDWebServerHTTPStatusCode_NotFound</Declaration>
             
             <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
             
@@ -64,9 +64,9 @@
         </Token>
         
         <Token>
-            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_UseProxy</TokenIdentifier>
+            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_MethodNotAllowed</TokenIdentifier>
             <Abstract type="html"></Abstract>
-            <Declaration>kGCDWebServerHTTPStatusCode_UseProxy</Declaration>
+            <Declaration>kGCDWebServerHTTPStatusCode_MethodNotAllowed</Declaration>
             
             <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
             
@@ -74,9 +74,9 @@
         </Token>
         
         <Token>
-            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_TemporaryRedirect</TokenIdentifier>
+            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_NotAcceptable</TokenIdentifier>
             <Abstract type="html"></Abstract>
-            <Declaration>kGCDWebServerHTTPStatusCode_TemporaryRedirect</Declaration>
+            <Declaration>kGCDWebServerHTTPStatusCode_NotAcceptable</Declaration>
             
             <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
             
@@ -84,9 +84,179 @@
         </Token>
         
         <Token>
-            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_PermanentRedirect</TokenIdentifier>
+            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_ProxyAuthenticationRequired</TokenIdentifier>
             <Abstract type="html"></Abstract>
-            <Declaration>kGCDWebServerHTTPStatusCode_PermanentRedirect</Declaration>
+            <Declaration>kGCDWebServerHTTPStatusCode_ProxyAuthenticationRequired</Declaration>
+            
+            <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
+            
+            <NodeRef refid="55"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_RequestTimeout</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>kGCDWebServerHTTPStatusCode_RequestTimeout</Declaration>
+            
+            <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
+            
+            <NodeRef refid="55"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_Conflict</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>kGCDWebServerHTTPStatusCode_Conflict</Declaration>
+            
+            <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
+            
+            <NodeRef refid="55"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_Gone</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>kGCDWebServerHTTPStatusCode_Gone</Declaration>
+            
+            <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
+            
+            <NodeRef refid="55"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_LengthRequired</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>kGCDWebServerHTTPStatusCode_LengthRequired</Declaration>
+            
+            <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
+            
+            <NodeRef refid="55"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_PreconditionFailed</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>kGCDWebServerHTTPStatusCode_PreconditionFailed</Declaration>
+            
+            <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
+            
+            <NodeRef refid="55"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_RequestEntityTooLarge</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>kGCDWebServerHTTPStatusCode_RequestEntityTooLarge</Declaration>
+            
+            <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
+            
+            <NodeRef refid="55"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_RequestURITooLong</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>kGCDWebServerHTTPStatusCode_RequestURITooLong</Declaration>
+            
+            <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
+            
+            <NodeRef refid="55"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_UnsupportedMediaType</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>kGCDWebServerHTTPStatusCode_UnsupportedMediaType</Declaration>
+            
+            <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
+            
+            <NodeRef refid="55"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_RequestedRangeNotSatisfiable</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>kGCDWebServerHTTPStatusCode_RequestedRangeNotSatisfiable</Declaration>
+            
+            <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
+            
+            <NodeRef refid="55"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_ExpectationFailed</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>kGCDWebServerHTTPStatusCode_ExpectationFailed</Declaration>
+            
+            <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
+            
+            <NodeRef refid="55"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_UnprocessableEntity</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>kGCDWebServerHTTPStatusCode_UnprocessableEntity</Declaration>
+            
+            <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
+            
+            <NodeRef refid="55"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_Locked</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>kGCDWebServerHTTPStatusCode_Locked</Declaration>
+            
+            <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
+            
+            <NodeRef refid="55"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_FailedDependency</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>kGCDWebServerHTTPStatusCode_FailedDependency</Declaration>
+            
+            <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
+            
+            <NodeRef refid="55"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_UpgradeRequired</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>kGCDWebServerHTTPStatusCode_UpgradeRequired</Declaration>
+            
+            <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
+            
+            <NodeRef refid="55"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_PreconditionRequired</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>kGCDWebServerHTTPStatusCode_PreconditionRequired</Declaration>
+            
+            <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
+            
+            <NodeRef refid="55"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_TooManyRequests</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>kGCDWebServerHTTPStatusCode_TooManyRequests</Declaration>
+            
+            <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
+            
+            <NodeRef refid="55"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_RequestHeaderFieldsTooLarge</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>kGCDWebServerHTTPStatusCode_RequestHeaderFieldsTooLarge</Declaration>
             
             <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
             
