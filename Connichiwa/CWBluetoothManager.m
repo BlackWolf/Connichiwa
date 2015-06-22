@@ -489,7 +489,8 @@ double const URL_CHECK_TIMEOUT = 2.0;
         
         double distance = [connection averageDistance];
         double lastSentDistance = [connection lastSentDistance];
-        if ([connection timeSinceLastSentRSSI] > 0.1 && ([connection timeSinceLastSentRSSI] >= 5.0 || fabs(distance-lastSentDistance) > 0.1))
+//        if ([connection timeSinceLastSentRSSI] > 0.1 && ([connection timeSinceLastSentRSSI] >= 5.0 || fabs(distance-lastSentDistance) > 0.1))
+        if (fabs(distance-lastSentDistance) > 0.1)
         {
             [self.delegate device:connection.identifier changedDistance:distance];
             [connection didSendDistance];

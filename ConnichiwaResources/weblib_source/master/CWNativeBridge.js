@@ -60,6 +60,7 @@ CWNativeBridge._parseDebugInfo = function(message) {
  */
 CWNativeBridge._parseLocalInfo = function(message) {
   CWDeviceManager.getLocalDevice()._setProperties(message);
+  CWEventManager.trigger('localDeviceChanged', CWDeviceManager.getLocalDevice());
 };
 
 

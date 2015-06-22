@@ -162,6 +162,10 @@ Connichiwa._onWebsocketOpen = function() {
   CWNativeBridge.callOnNative('nativeCallWebsocketDidOpen');
 
   CWEventManager.trigger('ready');
+
+  //localDeviceChanged must be after ready, so that code in Connichiwa.onLoad
+  //can react to the inital localDevice data
+  CWEventManager.trigger('localDeviceChanged', CWDeviceManager.getLocalDevice());
 };
 
 

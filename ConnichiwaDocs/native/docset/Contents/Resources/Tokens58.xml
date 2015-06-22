@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Constants/GCDWebServerRedirectionHTTPStatusCode.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/c/tdef/GCDWebServerRedirectionHTTPStatusCode</TokenIdentifier>
+			<Abstract type="html">Convenience constants for &quot;redirection&quot; HTTP status codes.</Abstract>
+			<DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
+            
+			
+			<NodeRef refid="58"/>
+		</Token>
+		
+		
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_MultipleChoices</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>kGCDWebServerHTTPStatusCode_MultipleChoices</Declaration>
+            
+            <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
+            
+            <NodeRef refid="58"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_MovedPermanently</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>kGCDWebServerHTTPStatusCode_MovedPermanently</Declaration>
+            
+            <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
+            
+            <NodeRef refid="58"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_Found</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>kGCDWebServerHTTPStatusCode_Found</Declaration>
+            
+            <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
+            
+            <NodeRef refid="58"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_SeeOther</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>kGCDWebServerHTTPStatusCode_SeeOther</Declaration>
+            
+            <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
+            
+            <NodeRef refid="58"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_NotModified</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>kGCDWebServerHTTPStatusCode_NotModified</Declaration>
+            
+            <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
+            
+            <NodeRef refid="58"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_UseProxy</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>kGCDWebServerHTTPStatusCode_UseProxy</Declaration>
+            
+            <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
+            
+            <NodeRef refid="58"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_TemporaryRedirect</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>kGCDWebServerHTTPStatusCode_TemporaryRedirect</Declaration>
+            
+            <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
+            
+            <NodeRef refid="58"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_PermanentRedirect</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>kGCDWebServerHTTPStatusCode_PermanentRedirect</Declaration>
+            
+            <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
+            
+            <NodeRef refid="58"/>
+        </Token>
+        
+	</File>
+</Tokens>

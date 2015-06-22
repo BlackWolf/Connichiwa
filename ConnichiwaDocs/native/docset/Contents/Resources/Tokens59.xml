@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Constants/GCDWebServerServerErrorHTTPStatusCode.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/c/tdef/GCDWebServerServerErrorHTTPStatusCode</TokenIdentifier>
+			<Abstract type="html">Convenience constants for &quot;server error&quot; HTTP status codes.</Abstract>
+			<DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
+            
+			
+			<NodeRef refid="59"/>
+		</Token>
+		
+		
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_InternalServerError</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>kGCDWebServerHTTPStatusCode_InternalServerError</Declaration>
+            
+            <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
+            
+            <NodeRef refid="59"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_NotImplemented</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>kGCDWebServerHTTPStatusCode_NotImplemented</Declaration>
+            
+            <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
+            
+            <NodeRef refid="59"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_BadGateway</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>kGCDWebServerHTTPStatusCode_BadGateway</Declaration>
+            
+            <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
+            
+            <NodeRef refid="59"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_ServiceUnavailable</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>kGCDWebServerHTTPStatusCode_ServiceUnavailable</Declaration>
+            
+            <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
+            
+            <NodeRef refid="59"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_GatewayTimeout</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>kGCDWebServerHTTPStatusCode_GatewayTimeout</Declaration>
+            
+            <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
+            
+            <NodeRef refid="59"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_HTTPVersionNotSupported</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>kGCDWebServerHTTPStatusCode_HTTPVersionNotSupported</Declaration>
+            
+            <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
+            
+            <NodeRef refid="59"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_InsufficientStorage</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>kGCDWebServerHTTPStatusCode_InsufficientStorage</Declaration>
+            
+            <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
+            
+            <NodeRef refid="59"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_LoopDetected</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>kGCDWebServerHTTPStatusCode_LoopDetected</Declaration>
+            
+            <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
+            
+            <NodeRef refid="59"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_NotExtended</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>kGCDWebServerHTTPStatusCode_NotExtended</Declaration>
+            
+            <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
+            
+            <NodeRef refid="59"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_NetworkAuthenticationRequired</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>kGCDWebServerHTTPStatusCode_NetworkAuthenticationRequired</Declaration>
+            
+            <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
+            
+            <NodeRef refid="59"/>
+        </Token>
+        
+	</File>
+</Tokens>

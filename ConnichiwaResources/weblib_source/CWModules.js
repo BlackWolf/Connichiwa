@@ -39,7 +39,10 @@ CWModules.init = function() {
         }
 
         //Call constructor if module has one
-        if (module.__constructor) module.__constructor();
+        //Delay call to make sure all module have been initialized
+        if (module.__constructor) {
+          window.setTimeout(module.__constructor, 0);
+        }
       }
     }
 

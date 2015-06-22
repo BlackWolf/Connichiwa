@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Constants/GCDWebServerSuccessfulHTTPStatusCode.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/c/tdef/GCDWebServerSuccessfulHTTPStatusCode</TokenIdentifier>
+			<Abstract type="html">Convenience constants for &quot;successful&quot; HTTP status codes.</Abstract>
+			<DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
+            
+			
+			<NodeRef refid="60"/>
+		</Token>
+		
+		
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_OK</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>kGCDWebServerHTTPStatusCode_OK</Declaration>
+            
+            <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
+            
+            <NodeRef refid="60"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_Created</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>kGCDWebServerHTTPStatusCode_Created</Declaration>
+            
+            <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
+            
+            <NodeRef refid="60"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_Accepted</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>kGCDWebServerHTTPStatusCode_Accepted</Declaration>
+            
+            <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
+            
+            <NodeRef refid="60"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_NonAuthoritativeInformation</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>kGCDWebServerHTTPStatusCode_NonAuthoritativeInformation</Declaration>
+            
+            <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
+            
+            <NodeRef refid="60"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_NoContent</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>kGCDWebServerHTTPStatusCode_NoContent</Declaration>
+            
+            <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
+            
+            <NodeRef refid="60"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_ResetContent</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>kGCDWebServerHTTPStatusCode_ResetContent</Declaration>
+            
+            <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
+            
+            <NodeRef refid="60"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_PartialContent</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>kGCDWebServerHTTPStatusCode_PartialContent</Declaration>
+            
+            <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
+            
+            <NodeRef refid="60"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_MultiStatus</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>kGCDWebServerHTTPStatusCode_MultiStatus</Declaration>
+            
+            <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
+            
+            <NodeRef refid="60"/>
+        </Token>
+        
+        <Token>
+            <TokenIdentifier>//apple_ref/c/econst/kGCDWebServerHTTPStatusCode_AlreadyReported</TokenIdentifier>
+            <Abstract type="html"></Abstract>
+            <Declaration>kGCDWebServerHTTPStatusCode_AlreadyReported</Declaration>
+            
+            <DeclaredIn>GCDWebServerHTTPStatusCodes.h</DeclaredIn>
+            
+            <NodeRef refid="60"/>
+        </Token>
+        
+	</File>
+</Tokens>

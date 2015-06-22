@@ -45,7 +45,8 @@ CWNativeBridge.parse = function(message) {
  */
 CWNativeBridge._parseLocalInfo = function(message)  {
   Connichiwa._setLocalDevice(message);
-  CWEventManager.trigger('ready'); 
+  CWEventManager.trigger('localDeviceChanged', Connichiwa.getLocalDevice());
+  // CWEventManager.trigger('ready'); 
 };
 
 
