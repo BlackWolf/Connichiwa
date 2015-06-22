@@ -299,7 +299,11 @@
     //this variable and by that know that a native layer is running in the background.
 //    self.webViewContext = [self.webView valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
     [self createWebViewContext];
-    NSString *js = [NSString stringWithFormat:@"var RUN_BY_CONNICHIWA_NATIVE = true;"];
+//    NSString *js = [NSString stringWithFormat:@"var RUN_BY_CONNICHIWA_NATIVE = true;"];
+    //The web library determines our identifier, which is saved in the appstate
+    //We need to make sure we use the same identifier everywhere, therefore force the remote library
+    //to use our identifier
+    NSString *js = [NSString stringWithFormat:@"var _CW_NATIVE = { identifier: '%@' };", [self.appState identifier]];
     [self.webView performSelectorOnMainThread:@selector(stringByEvaluatingJavaScriptFromString:) withObject:js waitUntilDone:NO];
 }
 

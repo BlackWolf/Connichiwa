@@ -32,7 +32,7 @@ CWNativeBridge._runsNative = false;
  * @private
  */
 CWNativeBridge.__constructor = function() {
-  if (window.RUN_BY_CONNICHIWA_NATIVE === true) {
+  if (window._CW_NATIVE !== undefined) {
     this._runsNative = true;
   } 
 };

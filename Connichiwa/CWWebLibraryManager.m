@@ -217,6 +217,10 @@
     
     __weak typeof(self) weakSelf = self;
     
+    self.webViewContext[@"nativeCallLocalInfo"] = ^(NSDictionary *info) {
+        [weakSelf _receivedFromView_localInfo:info];
+    };
+    
     self.webViewContext[@"nativeCallLibraryDidLoad"] = ^{
         [weakSelf _receivedFromView_libraryDidLoad];
     };
@@ -244,6 +248,15 @@
     self.webViewContext[@"nativeCallStopProximityTracking"] = ^{
         [weakSelf _receivedFromView_stopProximityTracking];
     };
+}
+
+
+-(void)_receivedFromView_localInfo:(NSDictionary *)info {
+    if ([self.delegate respondsToSelector:@selector(webLibrarySentLocalInfo:)])
+    {
+        [self.delegate webLibrarySentLocalInfo:info];
+    }
+//    [self.appState setIdentifier:[info objectForKey:@"identifier"]];
 }
 
 
@@ -431,7 +444,7 @@
     //this variable and by that know that a native layer is running in the background.
 //    self.webViewContext = [self.webView valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
     [self createWebViewContext];
-    NSString *js = [NSString stringWithFormat:@"var RUN_BY_CONNICHIWA_NATIVE = true;"];
+    NSString *js = [NSString stringWithFormat:@"var _CW_NATIVE = {};"];
     [self.webView performSelectorOnMainThread:@selector(stringByEvaluatingJavaScriptFromString:) withObject:js waitUntilDone:NO];
 }
 

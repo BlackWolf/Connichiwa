@@ -115,8 +115,8 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
     
     self = [super init];
     
-    self.identifier = [[NSUUID UUID] UUIDString];
-    self.launchDate = [NSDate date];
+//    self.identifier = [[NSUUID UUID] UUIDString];
+//    self.launchDate = [NSDate date];
     self.pendingRemoteDevices = [NSMutableArray array];
     self.remoteDevices = [NSMutableArray array];
     
@@ -277,6 +277,18 @@ double const CLEANUP_TASK_TIMEOUT = 10.0;
 
 
 #pragma mark CWWebLibraryManagerDelegate
+
+
+-(void)webLibrarySentLocalInfo:(NSDictionary *)info {
+    if ([info objectForKey:@"identifier"] != nil) {
+        [self setIdentifier:[info objectForKey:@"identifier"]];
+    }
+    
+    if ([info objectForKey:@"launchDate"] != nil) {
+        NSDate *launchDate = [NSDate dateWithTimeIntervalSince1970:[[info objectForKey:@"launchDate"] doubleValue]];
+        [self setLaunchDate:launchDate];
+    }
+}
 
 
 /**

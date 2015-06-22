@@ -155,6 +155,8 @@ Connichiwa._onWebsocketOpen = function() {
   CWDeviceManager.createLocalDevice(localInfo);
 
   Connichiwa.send("server", "_master_identification", { identifier: localInfo.identifier });
+
+  CWNativeBridge.callOnNative('nativeCallLocalInfo', localInfo);
   // Connichiwa.send("master", "localinfo", localInfo);
 
   this._connectionAttempts = 0;

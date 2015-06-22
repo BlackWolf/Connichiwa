@@ -15,6 +15,8 @@
  */
 @protocol CWWebLibraryManagerDelegate <NSObject>
 
+-(void)webLibrarySentLocalInfo:(NSDictionary *)info;
+
 /**
  *  Called when the web library has been loaded and established a connection to the local webserver
  */
