@@ -18,3 +18,5 @@
 *.xcuserstate
 xcuserdata/
 
+ConnichiwaResources/weblib/*
+
