@@ -59,8 +59,15 @@
 
 + (NSDictionary *)dictionaryFromJSONData:(NSData *)JSON
 {
-    if (JSON == nil) return [NSDictionary dictionary];
+    if (JSON == nil || [JSON length] < 1) return [NSDictionary dictionary];
     return [NSJSONSerialization JSONObjectWithData:JSON options:0 error:nil];
+}
+
+
++ (NSDictionary *)dictionaryFromJSONString:(NSString *)JSON
+{
+    NSData *data = [JSON dataUsingEncoding:NSUTF8StringEncoding];
+    return [CWUtil dictionaryFromJSONData:data];
 }
 
 

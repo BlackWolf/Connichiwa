@@ -33,6 +33,8 @@
  */
 + (NSDictionary *)dictionaryFromJSONData:(NSData *)JSON;
 
++ (NSDictionary *)dictionaryFromJSONString:(NSString *)JSON;
+
 /**
  *  Transforms a dictionary into a JSON data object. The resulting NSData object can then be decoded by using dictionaryFromJSONData: to retrieve the original dictionary. NSJSONSerialization is used, so the dictionary must contain only objects that can be serialized by NSJSONSerialization.
  *

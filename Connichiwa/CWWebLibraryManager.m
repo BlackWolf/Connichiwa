@@ -217,8 +217,8 @@
     
     __weak typeof(self) weakSelf = self;
     
-    self.webViewContext[@"nativeCallLocalInfo"] = ^(NSDictionary *info) {
-        [weakSelf _receivedFromView_localInfo:info];
+    self.webViewContext[@"nativeCallLocalInfo"] = ^(NSString *infoString) {
+        [weakSelf _receivedFromView_localInfo:infoString];
     };
     
     self.webViewContext[@"nativeCallLibraryDidLoad"] = ^{
@@ -251,12 +251,12 @@
 }
 
 
--(void)_receivedFromView_localInfo:(NSDictionary *)info {
+-(void)_receivedFromView_localInfo:(NSString *)infoString {
+    NSDictionary *info = [CWUtil dictionaryFromJSONString:infoString];
     if ([self.delegate respondsToSelector:@selector(webLibrarySentLocalInfo:)])
     {
         [self.delegate webLibrarySentLocalInfo:info];
     }
-//    [self.appState setIdentifier:[info objectForKey:@"identifier"]];
 }
 
 

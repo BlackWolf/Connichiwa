@@ -124,7 +124,7 @@ Connichiwa._onWebsocketOpen = function() {
   //Create local device
   //This device might be extended by the native layer in the future
   var localInfo = {
-    identifier : window._CW_NATIVE.identifier,
+    identifier : CWNativeBridge.isRunningNative() ? window._CW_NATIVE.identifier : CWUtil.createUUID(),
     launchDate : Date.now() / 1000.0,
     ppi        : CWSystemInfo.PPI()
   };

@@ -156,7 +156,7 @@ Connichiwa._onWebsocketOpen = function() {
 
   Connichiwa.send("server", "_master_identification", { identifier: localInfo.identifier });
 
-  CWNativeBridge.callOnNative('nativeCallLocalInfo', localInfo);
+  CWNativeBridge.callOnNative('nativeCallLocalInfo', JSON.stringify(localInfo));
   // Connichiwa.send("master", "localinfo", localInfo);
 
   this._connectionAttempts = 0;
