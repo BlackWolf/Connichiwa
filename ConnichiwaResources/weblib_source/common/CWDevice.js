@@ -10,7 +10,7 @@
  * @param {Object} properties The device's reported properties that will be
  *    part of the CWDevice
  * @constructor
- * 
+ *
  * @class CWDevice
  * @classdesc Represents a physical device. When the master device detects a
  *    device over Bluetooth, or when a device connects through a webbrowser, a
@@ -56,7 +56,7 @@
  * **IMPORTANT**: **You should never construct a CWDevice yourself**. CWDevice
  *    objects represent a physical device detected by the Connichiwa framework
  *    and are handed to your application through events such as {@link
- *    event:devicedetected} or {@link event:deviceconnected}. 
+ *    event:devicedetected} or {@link event:deviceconnected}.
  */
 function CWDevice(properties)
 {
@@ -155,7 +155,7 @@ CWDevice.prototype._setProperties = function(properties) {
 
 //
 // STATE
-// 
+//
 
 /**
  * Indicates whether the CWDevice instance represents the current device
@@ -184,8 +184,8 @@ CWDevice.prototype.isNearby = function() {
  * @return {Boolean} true if the device can be connected, otherwise false
  * @private
  */
-CWDevice.prototype._canBeConnected = function() { 
-  return (this._connectionState === CWDevice.ConnectionState.DISCONNECTED && 
+CWDevice.prototype._canBeConnected = function() {
+  return (this._connectionState === CWDevice.ConnectionState.DISCONNECTED &&
     this._discoveryState === CWDevice.DiscoveryState.DISCOVERED);
 };
 
@@ -204,7 +204,7 @@ CWDevice.prototype.isConnected = function() {
 
 //
 // DEVICE COMMUNICATION
-// 
+//
 
 
 /**
@@ -234,8 +234,8 @@ CWDevice.prototype.insert = function(target, html) {
     target = $(target);
     target = '#' + target.attr('id');
   }
-  
-  //html can be a DOM or jQuery element - if so, send the outerHTML including 
+
+  //html can be a DOM or jQuery element - if so, send the outerHTML including
   //all styles
   if (CWUtil.isObject(html) === true) {
     var el = $(html);
@@ -323,8 +323,8 @@ CWDevice.prototype._replace = function(target, html, contentOnly) {
   if (CWUtil.isObject(target)) {
     target = '#' + $(target).attr('id');
   }
-  
-  //html can be a DOM or jQuery element - if so, send the outerHTML including 
+
+  //html can be a DOM or jQuery element - if so, send the outerHTML including
   //all styles
   if (CWUtil.isObject(html) === true) {
     var el = $(html);
@@ -361,9 +361,9 @@ CWDevice.prototype.loadScript = function(url, callback) {
  *    into the DOM.
  * @param  {String}   url An URL to a valid CSS file
  */
-CWDevice.prototype.loadCSS = function(url) {
+CWDevice.prototype.loadCSS = function(url, callback) {
   var message = { url  : url };
-  this.send('_loadcss', message);
+  this.send('_loadcss', message, callback);
 };
 
 
@@ -409,11 +409,16 @@ CWDevice.prototype.loadTemplates = function(paths) {
 // CWDevice.prototype.insertTemplate = function(templateName, target, data, callback) {
 CWDevice.prototype.insertTemplate = function(templateName, options) {
   if (options === undefined) options = {};
-  var onComplete = options.onComplete;
 
-  //Remove onComplete from options, we don't want to send that to the device
+  //Remove functions from options, we don't want to send that to the device
   //Instead, we pass onComplete as the callback to .send()
+  //onBefore is invoked immediately
+  var onBefore = options.onBefore;
+  var onComplete = options.onComplete;
+  options.onBefore = undefined;
   options.onComplete = undefined;
+
+  onBefore();
 
   var message = { templateName: templateName, options: options };
   var messageID = this.send('_inserttemplate', message, onComplete);
@@ -469,8 +474,8 @@ CWDevice.prototype.toString = function() {
  * Returns the unique identifier of the device, which is a v4 UUID
  * @return {String} The unique identifier of the device
  */
-CWDevice.prototype.getIdentifier = function() { 
-  return this._identifier; 
+CWDevice.prototype.getIdentifier = function() {
+  return this._identifier;
 };
 
 
@@ -489,8 +494,8 @@ CWDevice.prototype.getDistance = function() {
  * @return {Date} The Date the device launched the web application
  * @protected
  */
-CWDevice.prototype.getLaunchDate = function() { 
-  return this._launchDate; 
+CWDevice.prototype.getLaunchDate = function() {
+  return this._launchDate;
 };
 
 
@@ -501,8 +506,8 @@ CWDevice.prototype.getLaunchDate = function() {
  *    device's webserver is reachable
  * @protected
  */
-CWDevice.prototype.getIPs = function() { 
-  return this._ips; 
+CWDevice.prototype.getIPs = function() {
+  return this._ips;
 };
 
 
@@ -512,8 +517,8 @@ CWDevice.prototype.getIPs = function() {
  *    the port is unknown or the device does not run a webserver
  * @protected
  */
-CWDevice.prototype.getPort = function() { 
-  return this._port; 
+CWDevice.prototype.getPort = function() {
+  return this._port;
 };
 
 
@@ -522,8 +527,8 @@ CWDevice.prototype.getPort = function() {
  * @return {String} The canonical name of the device or "remote device" if the
  *    name is unknown
  */
-CWDevice.prototype.getName = function() { 
-  return this._name; 
+CWDevice.prototype.getName = function() {
+  return this._name;
 };
 
 
@@ -533,8 +538,8 @@ CWDevice.prototype.getName = function() {
  *    the available information about the device, this can be exact or just an
  *    approximation
  */
-CWDevice.prototype.getPPI = function() { 
-  return this._ppi; 
+CWDevice.prototype.getPPI = function() {
+  return this._ppi;
 };
 
 /**

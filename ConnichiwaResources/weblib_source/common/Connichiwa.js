@@ -22,6 +22,9 @@ var Connichiwa = CWModules.retrieve('Connichiwa');
 Connichiwa._websocket = undefined;
 
 
+Connichiwa._isReady = false;
+
+
 /**
  * Returns the {@link CWDevice} instance that represents the current device
  * @return {CWDevice} The {@link CWDevice} instance that represents this
@@ -101,6 +104,11 @@ Connichiwa.__constructor = function() {
     return;
   }
 
+  var that = this;
+  Connichiwa.onLoad(function() {
+    that._isReady = true;
+  });
+
   this._connectWebsocket();
 };
 
@@ -125,8 +133,8 @@ Connichiwa.on = function(eventName, callback) {
   if (eventName === 'load') {
     this.onLoad(callback);
     return;
-  } 
-  
+  }
+
   CWEventManager.register(eventName, callback);
 };
 
@@ -177,12 +185,12 @@ Connichiwa.onMessage = function(name, callback) {
  *    have been loaded. Most Connichiwa-related code should be wrapped by this
  *    function. If this method is called after Connichiwa is ready, the
  *    callback will be invoked on the next run loop.
- * @param  {Function} callback The callback to invoke once Connichiwa is ready 
+ * @param  {Function} callback The callback to invoke once Connichiwa is ready
  * @function
  */
 Connichiwa.onLoad = function(callback) {
-  if (document.readyState === 'complete') {
-    //Timeout so the callback is always called asynchronously
+  if (this._isReady) {
+    // Timeout so the callback is always called asynchronously
     window.setTimeout(callback, 0);
   } else {
     this.on('ready', callback);
@@ -232,14 +240,14 @@ Connichiwa.broadcast = function(name, message, sendToSelf) {
   if (sendToSelf) {
     message._broadcastToSource = true;
   }
-  
+
   this.send('broadcast', name, message);
 };
 
 
 /**
  * Sends an acknowledgement message (with name `_ack`) back to the device
- *    where the given message originated from. The original message's ID will 
+ *    where the given message originated from. The original message's ID will
  *    be attached to the acknowledgement.
  * @param  {Object} message A valid message object that was received from a
  *    device
@@ -270,7 +278,7 @@ Connichiwa._sendObject = function(message, callback) {
     return;
   }
 
-  message._id = CWUtil.randomInt(0, 9999999999); 
+  message._id = CWUtil.randomInt(0, 9999999999);
   message._name = message._name.toLowerCase();
 
   var messageString = JSON.stringify(message);
@@ -291,7 +299,7 @@ Connichiwa._sendObject = function(message, callback) {
   // var SIZE = 16000;
   // if (messageString.length > SIZE) {
   //   var pos = 0;
-  //   while (pos < messageString.length) { 
+  //   while (pos < messageString.length) {
   //     var chunkMessage = {
   //       _id        : CWUtil.randomInt(0, 9999999999),
   //       _name      : "_chunk",

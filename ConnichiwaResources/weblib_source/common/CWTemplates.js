@@ -18,7 +18,7 @@
  *
  * ```html
  * <template name="myTemplate">
- * 
+ *
  * <!-- template content goes here --&gt;
  *
  * </template>
@@ -38,15 +38,15 @@
  *
  * 1. **Load the template**: This will download the template file from the
  *    server and parse it. This step makes all containing templates known to
- *    the system. Loading a template is done using {@link CWTemplates.load}:  
- *      
+ *    the system. Loading a template is done using {@link CWTemplates.load}:
+ *
  *    ```js
  *    CWTemplates.load('templates.html');
  *    ```
  *
  * 2. **Insert the template**: After loading a template file, you can insert
- *    any template it contains into the DOM using {@link CWTemplates.insert}:  
- *      
+ *    any template it contains into the DOM using {@link CWTemplates.insert}:
+ *
  *    ```js
  *    CWTemplates.insert('myTemplate');
  *    ```
@@ -168,12 +168,12 @@ CWTemplates._templates = { raw: {}, compiled: [] };
 CWTemplates.__constructor = function() {
   var that = this;
 
-  //People call CWTemplates.set to change template data, which in turn calls 
+  //People call CWTemplates.set to change template data, which in turn calls
   //CWDatastore.set, which in turn fires _datastorechanged - we need to make
   //sure that the Ractive templates also know that the data changed
   Connichiwa.on("_datastorechanged", function(collection, changes) {
-    //All template-related collections must start with _CWTemplates. Since we 
-    //don't know which expressions are used in which templates, we just call 
+    //All template-related collections must start with _CWTemplates. Since we
+    //don't know which expressions are used in which templates, we just call
     //update on ALL Ractives if a key changes
     if (collection && collection.indexOf('_CWTemplates') === 0) {
       $.each(changes, function(key, entry) {
@@ -208,7 +208,7 @@ CWTemplates.load = function(device, paths) {
   // if (CWDevice.prototype.isPrototypeOf(device) === true) {
     // device = device.getIdentifier();
   // }
-  // 
+  //
   //TODO
   if (CWUtil.isString(device)) {
     device = CWDeviceManager.getDeviceWithIdentifier(device);
@@ -221,7 +221,7 @@ CWTemplates.load = function(device, paths) {
   if (device !== undefined) {
     device.loadTemplates(paths);
     return;
-  } 
+  }
 
   //If we want to load something on this device, let's do that now
   //Download the file & compile it
@@ -230,7 +230,7 @@ CWTemplates.load = function(device, paths) {
     //Don't load files twice
     if (path in that._files) return true;
 
-    //We need to create our own Promise because we want the Promise to resolve 
+    //We need to create our own Promise because we want the Promise to resolve
     //after the file was COMPILED, not after it was loaded
     var deferred = new $.Deferred();
     that._files.push(deferred);
@@ -267,14 +267,14 @@ CWTemplates.load = function(device, paths) {
   * @param  {Object}   options Options that configures the insertion. All
   *    settings are optional. The following options are available:
   *
-  * * **target** (default: `'body'`)  
-  *     
+  * * **target** (default: `'body'`)
+  *
   *   A jQuery selector that represents a DOM element on the target device. The
   *    template is inserted into the DOM element(s) represented by this
   *    selector.
   *
   * * **dataSource**
-  *     
+  *
   *   By default, the template data comes from the default template data store
   *    (see {@link CWTemplates.set}). If `dataSource` is set to a String, a
   *    sub-datastore with the given name will be used. So if you set this to
@@ -285,7 +285,7 @@ CWTemplates.load = function(device, paths) {
   *    datastore.
   *
   * * **onComplete**
-  *     
+  *
   *   A callback function that is executed if the template has been inserted.
   * @function
  */
@@ -317,6 +317,7 @@ CWTemplates.insert = function(device, templateName, options) {
 
   var target     = options.target || 'body';
   var dataSource = options.dataSource;
+  var onBefore   = options.onBefore;
   var onComplete = options.onComplete;
 
   //Inserting into local DOM
@@ -338,14 +339,16 @@ CWTemplates.insert = function(device, templateName, options) {
       ractiveData = dataSource;
     }
 
-    var ractive = new Ractive({ 
-      template: that._templates.raw[templateName], 
+    if (onBefore != undefined) onBefore();
+
+    var ractive = new Ractive({
+      template: that._templates.raw[templateName],
       data: ractiveData,
       el: $(target),
       append: true,
       partials: that._templates.raw
     });
-    that._templates.compiled.push(ractive); 
+    that._templates.compiled.push(ractive);
 
     if (onComplete !== undefined) onComplete();
   });
@@ -359,7 +362,7 @@ CWTemplates.insert = function(device, templateName, options) {
  * The expressions in your templates will be replaced by values with the same
  *    key in the template data store. For example, the expression `{{name}}` will be replaced by
  *    whatever value was set using:
- *    
+ *
  *    ```js
  *    CWTemplates.set('name', value);
  *    ```
@@ -379,18 +382,18 @@ CWTemplates.insert = function(device, templateName, options) {
  *    template collection. If you provide the name of a sub collection, your
  *    template will react only to data changes in that collection. For
  *    example, if you insert a template using
- *    
+ *
  *    ```js
  *    CWTemplates.insert('myTemplate', { dataSource: 'myCollection'} );
  *    ```
- *    
- *    calling `CWTemplates.set('name', 'Paul')` will not affect that template. 
- *    Instead, you must call 
- *    
+ *
+ *    calling `CWTemplates.set('name', 'Paul')` will not affect that template.
+ *    Instead, you must call
+ *
  *    ```js
  *    CWTemplates.set('myCollection', 'name', 'Paul');
- *    ``` 
- *    
+ *    ```
+ *
  *    to update that particular template.
  *
  * Use {@link CWTemplates.setMultiple} to set multiple values at once.
@@ -407,7 +410,7 @@ CWTemplates.insert = function(device, templateName, options) {
  *    that can be converted to JSON. May not be a function or `undefined`.
  * @function
  */
-CWTemplates.set = function(collection, key, value) {  
+CWTemplates.set = function(collection, key, value) {
   if (value === undefined) {
     //Args: key, value
     value = key;
@@ -476,29 +479,35 @@ CWTemplates.get = function(collection, key) {
  * @private
  */
 CWTemplates._compile = function(templateData) {
-  //Wrap templateData in a tag, so we can use .find() to search through it
-  var content = $('<wrapper>');
-  content.html(templateData);
-
-  var that = this;
-
-  var templates = content.find('template');
+  //We cannot use jQuery DOM stuff to find the <template> tags in the data,
+  //since the expressions become text nodes and can mess up our DOM tree.
+  //Therefore, we need to manually parse the templates via regexp
+  //This means that something like this will break:
+  // <template name="t"> content <!-- </template> --> </template>
+  //But I guess we can live with that for now
+  var regexp = /^(?:(?!<template)[\s\S])*<template name=(?:"|')([^"']+)(?:"|')>(((?!<\/template>)[\s\S])*)<\/template>/i;
+  var remainingTemplateData = templateData;
+  var match;
   var addedTemplates = 0;
-  templates.each(function(index, template) {
-    template = $(template);
+  do {
+    match = regexp.exec(remainingTemplateData);
 
-    var name = template.attr('name');
-    var content = CWUtil.unescape(template.html());
+    if (match) {
+      var name = match[1];
+      var content = match[2];
 
-    if (name === undefined || name.length === 0) {
-      CWDebug.err(1, "Found template without name - template is ignored. Template Content: "+content);
-      return true;
+      remainingTemplateData = remainingTemplateData.substring(match[0].length);
+
+      // if (name === undefined || name.length === 0) {
+        // CWDebug.err(1, "Found template without name - template is ignored. Template Content: "+content);
+        // continue;
+      // }
+
+      CWDebug.log(3, "Registering template: "+name);
+      this._templates.raw[name] = content;
+      addedTemplates++;
     }
-
-    CWDebug.log(3, "Registering template: "+name);
-    that._templates.raw[name] = content;
-    addedTemplates++;
-  });
+  } while (match && remainingTemplateData.length > 0);
 
   if (addedTemplates < 1) return false;
   return true;

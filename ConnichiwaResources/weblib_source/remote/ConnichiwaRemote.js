@@ -89,7 +89,7 @@ Connichiwa._connectWebsocket = function() {
   //If we replace the websocket (or re-connect) we don't want to call onWebsocketClose
   //Therefore, first cleanup, then close
   var oldWebsocket = this._websocket;
-  this._cleanupWebsocket();    
+  this._cleanupWebsocket();
   if (oldWebsocket !== undefined) oldWebsocket.close();
 
   var parsedURL = new CWUtil.parseURL(document.URL);
@@ -136,13 +136,13 @@ Connichiwa._onWebsocketOpen = function() {
 
   //Important: This must be last, as every message before _remote_identification
   //is lost
-  this.send("master", "remoteinfo", localInfo);
+  this.send("master", "remoteinfo", localInfo, function() {
+    CWEventManager.trigger('ready');
 
-  CWEventManager.trigger('ready'); 
-
-  //localDeviceChanged must be after ready, so that code in Connichiwa.onLoad
-  //can react to the inital localDevice data
-  CWEventManager.trigger('localDeviceChanged', Connichiwa.getLocalDevice());
+    //localDeviceChanged must be after ready, so that code in Connichiwa.onLoad
+    //can react to the inital localDevice data
+    CWEventManager.trigger('localDeviceChanged', Connichiwa.getLocalDevice());
+  });
 };
 
 
@@ -155,8 +155,8 @@ Connichiwa._onWebsocketMessage = function(e) {
 
   //Filter messages that were broadcasted by us and do not have the
   //"_broadcastToSource" flag set
-  if (message._target === "broadcast" && 
-    message._source === this.getLocalDevice().getIdentifier() && 
+  if (message._target === "broadcast" &&
+    message._source === this.getLocalDevice().getIdentifier() &&
     message._broadcastToSource !== true) {
     return;
   }
@@ -179,7 +179,7 @@ Connichiwa._onWebsocketMessage = function(e) {
     //If any of them explicitly returns false, we don't send back an ack
     //All other return values are not allowed
     if (p1 === false || p2 === false) return;
-    
+
     //Prefer p2 over p1, if both are undefined we return an ack immediately by
     //creating a resolved promise
     var promise = p2;
