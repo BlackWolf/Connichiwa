@@ -67,7 +67,7 @@ typedef NS_ENUM(NSInteger, CWServerManagerState)
  *
  *  @return A new CWWebserverManager instance
  */
-- (instancetype)initWithDocumentRoot:(NSString *)documentRoot;
+//- (instancetype)initWithDocumentRoot:(NSString *)documentRoot;
 
 /**
  *  Calling this method actually launches the webserver and initializes the HTTP and Websocket servers. The root of the webserver will be mapped to the given document root, the HTTP server will run on the given port and the websocket server will run on the given port + 1

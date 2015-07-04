@@ -24,6 +24,7 @@
 @property (strong, readwrite) BLWebSocketsServer *websocketServer;
 @property (readwrite) int localWebsocketID;
 @property (strong, readwrite) NSMutableDictionary *websocketIdentifiers;
+@property (strong, readwrite) NSMutableArray *masterBacklog;
 
 @end
 
@@ -32,13 +33,11 @@
 @implementation CWServerManager
 
 
-- (instancetype)initWithDocumentRoot:(NSString *)documentRoot
+- (instancetype)init
 {
     self = [super init];
     
     self.state = CWServerManagerStateStopped;
-    self.documentRoot = documentRoot;
-    self.localWebsocketID = -1;
     
     return self;
 }
@@ -51,7 +50,9 @@
     self.state = CWServerManagerStateStarting;
     
     self.documentRoot = documentRoot;
+    self.localWebsocketID = -1;
     self.websocketIdentifiers = [NSMutableDictionary dictionary];
+    self.masterBacklog = [NSMutableArray array];
 
     //
     // WEBSERVER
@@ -177,6 +178,16 @@
             [weakSelf.websocketServer setOnMessageHandler:[weakSelf onIdentifiedWebsocketMessage] forConnection:connectionID];
             [weakSelf.websocketServer setOnCloseHandler:[weakSelf onIdentifiedWebsocketClosed] forConnection:connectionID];
         }
+        
+        //If the message identifies the local weblib's websocket, we can send
+        //any message that arrived for it before this point
+        if ([[message objectForKey:@"_name"] isEqualToString:@"_master_identification"]) {
+            for (NSDictionary *backlog in self.masterBacklog) {
+                int backlogCnnectionID = [[backlog objectForKey:@"connectionID"] intValue];
+                WSLog(4, @"Delivering backlogged message from %@ to master", [self identifierForConnectionID:backlogCnnectionID]);
+                [self _deliverMessage:[backlog objectForKey:@"messageData"] fromConnection:backlogCnnectionID];
+            }
+        }
     };
 }
 
@@ -184,32 +195,44 @@
     __weak typeof(self) weakSelf = self;
     
     return ^void (int connectionID, NSData *messageData) {
-        NSDictionary *message = [CWUtil dictionaryFromJSONData:messageData];
-        
-        NSNumber *value = [NSNumber numberWithInt:connectionID];
-        WSLog(4, @"Websocket message from %@ to %@: %@", [self.websocketIdentifiers allKeysForObject:value][0], [message objectForKey:@"_target"],[[NSString alloc] initWithData:messageData encoding:NSUTF8StringEncoding]);
-        
-        //For identified websocket messages, the server basically acts as a message relay
-        //Check where the message is supposed to be sent to and deliver it
-        NSString *target = [message objectForKey:@"_target"];
-        
-        //Messages with target broadcast are sent to everyone
-        //the _broadcastToSource key decides if the messages is sent back to
-        //its source
-        if ([target isEqualToString:@"broadcast"]) {
-            BOOL backToSource = [[message objectForKey:@"_broadcastToSource"] boolValue];
-            if (backToSource) {
-                [weakSelf.websocketServer pushMessageToAll:messageData];
-            } else {
-                [weakSelf.websocketServer pushMessageToAll:messageData except:@[ @(connectionID) ]];
-            }
-            
-            return;
+        if (self.localWebsocketID < 0) {
+            //Master is not ready yet, backlog the message until he is
+            WSLog(4, @"Backlogging message from %@ to master: %@", [self identifierForConnectionID:connectionID],[[NSString alloc] initWithData:messageData encoding:NSUTF8StringEncoding]);
+            [self.masterBacklog addObject:@{ @"connectionID" : @(connectionID), @"messageData" : messageData}];
+        } else {
+            //Everything ready, deliver message
+            [weakSelf _deliverMessage:messageData fromConnection:connectionID];
+        }
+    };
+}
+
+
+- (void)_deliverMessage:(NSData *)messageData fromConnection:(int)connectionID {
+    NSDictionary *message = [CWUtil dictionaryFromJSONData:messageData];
+    
+//    NSNumber *value = [NSNumber numberWithInt:connectionID];
+    WSLog(4, @"Websocket message from %@ to %@: %@", [self identifierForConnectionID:connectionID], [message objectForKey:@"_target"],[[NSString alloc] initWithData:messageData encoding:NSUTF8StringEncoding]);
+    
+    //For identified websocket messages, the server basically acts as a message relay
+    //Check where the message is supposed to be sent to and deliver it
+    NSString *target = [message objectForKey:@"_target"];
+    
+    //Messages with target broadcast are sent to everyone
+    //the _broadcastToSource key decides if the messages is sent back to
+    //its source
+    if ([target isEqualToString:@"broadcast"]) {
+        BOOL backToSource = [[message objectForKey:@"_broadcastToSource"] boolValue];
+        if (backToSource) {
+            [self.websocketServer pushMessageToAll:messageData];
+        } else {
+            [self.websocketServer pushMessageToAll:messageData except:@[ @(connectionID) ]];
         }
         
-        //For all other targets, just try to deliver to the right websocket
-        [weakSelf.websocketServer pushMessage:messageData toConnection:[weakSelf connectionIDForIdentifier:target]];
-    };
+        return;
+    }
+    
+    //For all other targets, just try to deliver to the right websocket
+    [self.websocketServer pushMessage:messageData toConnection:[self connectionIDForIdentifier:target]];
 }
 
 - (BLWebSocketOnCloseHandler)onIdentifiedWebsocketClosed {
