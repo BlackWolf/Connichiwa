@@ -46,6 +46,13 @@ CWDatastore._data = {};
  * @function
  */
 CWDatastore.set = function(collection, key, value) {
+  if (value === undefined) {
+    //Args: key, value
+    value = key;
+    key = collection;
+    collection = undefined;
+  }
+
   var data = {};
   data[key] = value;
   this.setMultiple(collection, data);
@@ -93,13 +100,13 @@ CWDatastore.setMultiple = function(collection, dict) {
  *    to other devices. Should almost always be `true`, the only exception is
  *    if we store a value that we received from another device (to prevent a
  *    sync loop)
- * @param {Boolean} isDict Determines if a single key/value pair or an entire 
+ * @param {Boolean} isDict Determines if a single key/value pair or an entire
  * @fires _datastorechanged
  * @function
  * @protected
  */
-// CWDatastore._set = function(collection, key, value, sync, isDict) {  
-CWDatastore._set = function(collection, data, sync) {  
+// CWDatastore._set = function(collection, key, value, sync, isDict) {
+CWDatastore._set = function(collection, data, sync) {
   //Create collection if it doesn't exist
   if ((collection in this._data) === false) {
     this._data[collection] = {};
@@ -137,7 +144,7 @@ CWDatastore._set = function(collection, data, sync) {
  * @return {Object} The current value of the given key in the given
  *    collection. If the collection does not exist or the key does not exist
  *    in that collection, returns `undefined`.
- * @function 
+ * @function
  */
 CWDatastore.get = function(collection, key) {
   //If only 1 argument was given, colletion was omitted and defaults to _default
@@ -146,7 +153,7 @@ CWDatastore.get = function(collection, key) {
     collection = '_default';
   }
 
-  if (collection in this._data === false || 
+  if (collection in this._data === false ||
     key in this._data[collection] === false) {
     return undefined;
   }
@@ -179,7 +186,7 @@ CWDatastore.getCollection = function(collection) {
  *    without using {@link CWDatastore.set}. Only set this to `false` if you
  *    are absolutely sure that you use the collection read-only.
  * @return {Object} An object of key/value pairs, each representing one entry
- *    in the collection. 
+ *    in the collection.
  * @function
  * @private
  */
@@ -213,7 +220,7 @@ CWDatastore._syncEntrys = function(collection, keys) {
 
   //keys can be an array of keys. If it isnt, make it an array of one key
   if (CWUtil.isArray(keys) === false) keys = [ keys ];
-  
+
   //Walk over the keys to sync, get their current value and write it to the
   //data that will be sent to other devices
   var that = this;
@@ -222,7 +229,7 @@ CWDatastore._syncEntrys = function(collection, keys) {
     if (value !== undefined) {
       syncData[collection][key] = value;
     }
-  }); 
+  });
 
   Connichiwa.broadcast('_updatedatastore', { data: syncData });
 };
