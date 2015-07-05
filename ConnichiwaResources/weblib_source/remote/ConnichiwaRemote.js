@@ -112,13 +112,11 @@ Connichiwa._onWebsocketOpen = function() {
 
   var runsNative = CWNativeBridge.isRunningNative();
 
-  if (runsNative === false) {
-    //If we have no native layer and are reconnecting we now need to refresh the
-    //page to reset the remote's state
-    if (this._isReconnecting === true) {
-      location.reload(true);
-      return;
-    }
+  //If we are trying to reconnect and the websocket opened, that means the
+  //server became available again. Refresh the page to reset the remote's state
+  if (this._isReconnecting === true) {
+    location.reload(true);
+    return;
   }
 
   //Create local device
@@ -206,9 +204,11 @@ Connichiwa._onWebsocketClose = function() {
   var runsNative = CWNativeBridge.isRunningNative();
 
   //If we are running natively, the remote webview will be cleared and a connection
-  //can be reestablished over Bluetooth. If we are running native-less we
-  //try to reconnect to the master
-  if (runsNative === false) {
+  //can be reestablished over Bluetooth.
+  //If we are running native-less we try to reconnect to the master
+  //CAUTION: The close method is also called after a failed reconnect attempt,
+  //therefore we need to check if we are already reconnecting
+  if (runsNative === false && this._isReconnecting === false) {
     window.setTimeout(this._tryWebsocketReconnect, 2500);
   }
 };
@@ -239,10 +239,12 @@ Connichiwa._softDisconnectWebsocket = function() {
  * @private
  */
 Connichiwa._tryWebsocketReconnect = function() {
+  //We have a connection, no need to reconnect
   if (this._websocket !== undefined && this._websocket.readyState === WebSocket.OPEN) {
     return;
   }
 
+  //We are already trying to connect, no need to abort that
   if (this._websocket !== undefined && this._websocket.readyState === WebSocket.CONNECTING) {
     window.setTimeout(this._tryWebsocketReconnect, 1000);
     return;
