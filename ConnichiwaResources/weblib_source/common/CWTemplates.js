@@ -127,6 +127,15 @@
 var CWTemplates = CWModules.retrieve('CWTemplates');
 
 /**
+ * An array where every entry represents one template-file that is either
+ *    currently being downloaded and compiled or already has been. Each entry
+ *    of this array is the template's file path represented by a string.
+ * @type {Array}
+ * @private
+ **/
+CWTemplates._loadedFiles = [];
+
+/**
  * An array where every entry represents one template-file loading attempt.
  *    Each entry is a jQuery Promise of the ajax request to a template file.
  *    The Promise can have 3 possible states:
@@ -138,10 +147,10 @@ var CWTemplates = CWModules.retrieve('CWTemplates');
  *
  * * If the request failed or the template file could not be compiled, the
  *    Promise is rejected
- * @type {Object}
+ * @type {Array}
  * @private
  */
-CWTemplates._files = [];
+CWTemplates._fileRequests = [];
 
 /**
  * An object containing the individual templates. It has two keys:
@@ -205,11 +214,9 @@ CWTemplates.load = function(device, paths) {
     device = undefined;
   }
 
-  // if (CWDevice.prototype.isPrototypeOf(device) === true) {
-    // device = device.getIdentifier();
-  // }
-  //
   //TODO
+  //works on master only, passing a string on a remote causes
+  //an error
   if (CWUtil.isString(device)) {
     device = CWDeviceManager.getDeviceWithIdentifier(device);
   }
@@ -228,19 +235,20 @@ CWTemplates.load = function(device, paths) {
   var that = this;
   $.each(paths, function(i, path) {
     //Don't load files twice
-    if (path in that._files) return true;
+    if (that._loadedFiles.indexOf(path) > -1) return true;
 
     //We need to create our own Promise because we want the Promise to resolve
     //after the file was COMPILED, not after it was loaded
     var deferred = new $.Deferred();
-    that._files.push(deferred);
+    that._fileRequests.push(deferred);
+    that._loadedFiles.push(path);
     $.get(path).done(function(data) {
       CWDebug.log(3, "Compiling template file "+path);
       var success = that._compile(data);
       if (success) deferred.resolve();
       else deferred.reject();
     }).fail(function() {
-      CWDebug.err("Template file " + path +" does not exist");
+      CWDebug.err("Template file " + path +" does not exist or could not be loaded");
       deferred.reject();
     });
   });
@@ -304,6 +312,8 @@ CWTemplates.insert = function(device, templateName, options) {
   if (options === undefined) options = {};
 
   //TODO
+  //only works on master, passing a string on a remote will
+  //cause an error
   if (CWUtil.isString(device)) {
     device = CWDeviceManager.getDeviceWithIdentifier(device);
   }
@@ -322,7 +332,10 @@ CWTemplates.insert = function(device, templateName, options) {
 
   //Inserting into local DOM
   var that = this;
-  $.when.all(this._files).always(function() {
+  $.when.all(this._fileRequests).always(function() {
+    //Check if file loading was successful
+    if ((templateName in that._templates.raw) === false) return;
+
     CWDebug.log(3, "Inserting template " + templateName + " into DOM");
 
     //Grab the template data:
