@@ -101,6 +101,8 @@ CWDebug._getDebugInfo = function() {
  * @function
  */
 CWDebug.log = function(level, msg) {
+  if (console === undefined) return;
+
   if (this._debug && level <= this._logLevel) {
     console.log(level + '|' + msg);
   }
@@ -113,8 +115,12 @@ CWDebug.log = function(level, msg) {
  * @function
  */
 CWDebug.err = function(msg) {
+  if (console === undefined) return;
+
   if (this._debug) {
-    console.err(msg);
+    if (console.err)        console.err(msg);
+    else if (console.error) console.error(msg);
+    else                    console.log("ERROR: "+msg);
   }
 };
 
